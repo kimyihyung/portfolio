@@ -548,7 +548,9 @@
     <script src=" https://cdn.jsdelivr.net/npm/skrollr@0.6.26/dist/skrollr.min.js">
     </script>
     <script>
-        const s = skrollr.init();
+        var s = skrollr.init({
+            smoothScrolling: true
+        });
 
         //재귀 함수
         function scroll() {
