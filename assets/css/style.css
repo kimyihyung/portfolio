@@ -37,7 +37,7 @@ body {
   position: fixed;
   display: flex;
   left: 0;
-  top: 25%;
+  top: 32%;
 }
 
 /* header */
@@ -163,6 +163,7 @@ body {
 #section2 .sec_ani img {
   margin: 1vw;
   width: 33vw;
+  height: 20vw;
   border: 0.35vw solid #000;
 }
 
