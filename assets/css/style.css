@@ -169,6 +169,7 @@ body {
 #section2 .sec_ani h3 {
   font-size: 5vw;
   font-family: "pretendard";
+  text-transform: uppercase;
   font-weight: 900;
   margin: 1.5vw 0;
 }
