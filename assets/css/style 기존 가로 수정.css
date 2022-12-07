@@ -143,77 +143,9 @@ body {
   text-transform: uppercase;
   color: #93906c;
 }
-#section1 .sec2_ani1 {
-  border: 0.35vw solid #000;
-  background: url(../img/site1.jpg);
-}
-#section1 .sec2_ani_1 {
-  font-size: 7vw;
-  font-family: "pretendard";
-  font-weight: 900;
-  text-transform: uppercase;
-  line-height: 1;
-  color: #93906c;
-}
-#section1 .sec2_ani2 {
-  border: 0.35vw solid #000;
-  background: url(../img/site2.jpg);
-}
-#section1 .sec2_ani_1 {
-  font-size: 7vw;
-  font-family: "pretendard";
-  font-weight: 900;
-  text-transform: uppercase;
-  line-height: 1;
-  color: #93906c;
-}
-#section1 .sec2_ani3 {
-  border: 0.35vw solid #000;
-  background: url(../img/phpblog.jpg);
-}
-#section1 .sec2_ani_1 {
-  font-size: 7vw;
-  font-family: "pretendard";
-  font-weight: 900;
-  text-transform: uppercase;
-  line-height: 1;
-  color: #93906c;
-}
-
-#section1 .sec2_ani4 {
-  border: 0.35vw solid #000;
-  background: url(../img/phpproject.jpg);
-}
-#section1 .sec2_ani_1 {
-  font-size: 7vw;
-  font-family: "pretendard";
-  font-weight: 900;
-  text-transform: uppercase;
-  line-height: 1;
-  color: #93906c;
-}
-#section1 .sec2_ani_2 {
-  color: #fff;
-  font-size: 1.6vw;
-  font-family: "nanumsquare";
-  font-weight: 500;
-  text-align: left;
-}
-#section1 .sec2_ani_2 button {
-  margin-top: 1vw;
-  padding: 0.5vw;
-  border: 1px solid #fff;
-  background: rgb(168, 159, 113);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  width: 4.5vw;
-  cursor: pointer;
-  font-size: 1vw;
-  color: #000;
-}
 
 /* section2 */
-/* #section2 .sec1 {
+#section2 .sec1 {
   width: 400vw;
   height: 100vh;
   background-color: #3a6440;
@@ -247,4 +179,4 @@ body {
   font-family: "nanumsquare";
   margin: 2vw 0;
   font-size: 1.7vw;
-} */
+}
