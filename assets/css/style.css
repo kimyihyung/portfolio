@@ -75,7 +75,7 @@ body {
 }
 #section1 .sec3 {
   background: #3a6440;
-  height: 6000px;
+  height: 7000px;
 }
 #section1 .sec1_ani1 {
   width: 98%;
@@ -142,13 +142,6 @@ body {
   font-weight: 900;
   text-transform: uppercase;
   color: #93906c;
-}
-
-/* section2 */
-#section2 .sec1 {
-  width: 400vw;
-  height: 100vh;
-  background-color: #3a6440;
 }
 
 /* section2 */
