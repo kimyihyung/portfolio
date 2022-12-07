@@ -146,36 +146,13 @@ body {
 
 /* section2 */
 #section2 .sec1 {
-  width: 400vw;
+  width: 200vw;
   height: 100vh;
-  background-color: #3a6440;
+  background-color: #000;
 }
-
-.box {
-  width: 100vw;
-}
-
-#section2 .sec_ani {
-  margin-left: 50vh;
-  width: 100vh;
-  display: flex;
-}
-#section2 .sec_ani img {
-  margin: 1vw;
+#section2 .sec1 > div img {
   width: 33vw;
   height: 20vw;
   border: 0.35vw solid #000;
-}
-
-#section2 .sec_ani h3 {
-  font-size: 5vw;
-  font-family: "pretendard";
-  text-transform: uppercase;
-  font-weight: 900;
-  line-height: 1.1;
-}
-#section2 .sec_ani p {
-  font-family: "nanumsquare";
-  margin: 2vw 0;
-  font-size: 1.7vw;
+  margin-left: 20vh;
 }
