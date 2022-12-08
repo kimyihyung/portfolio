@@ -111,7 +111,7 @@ body {
   background: #000;
   background-size: cover;
   background-position: center center;
-  width: 80.8vh;
+  width: 80.8vw;
   height: 83.8vh;
   transform: translate(-50%, -50%);
 }
