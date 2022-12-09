@@ -161,6 +161,8 @@ body {
   text-transform: uppercase;
   line-height: 0.8;
   text-align: center;
+  -webkit-text-stroke: 0.2vw #000;
+  color: rgba(255, 255, 255, 0);
   display: flex;
   justify-content: center;
   z-index: -1;
@@ -173,8 +175,6 @@ body {
   text-transform: uppercase;
   line-height: 0.8;
   text-align: center;
-  -webkit-text-stroke: 0.2vw #000;
-  color: rgba(255, 255, 255, 0);
   display: flex;
   justify-content: center;
   z-index: -3;
@@ -187,9 +187,11 @@ body {
   text-transform: uppercase;
   line-height: 0.8;
   text-align: center;
-  z-index: -2;
+  -webkit-text-stroke: 0.2vw #000;
+  color: rgba(255, 255, 255, 0);
   display: flex;
   justify-content: center;
+  z-index: -2;
 }
 #section1 .sec2_ani2 {
   font-family: "pretendard";
@@ -351,8 +353,8 @@ body {
   background: url(../img/css_r.jpg);
   background-size: cover;
   background-position: center center;
-  width: 17vw;
-  height: 22vw;
+  width: 27vw;
+  height: 32vw;
   z-index: 1;
   border: 0.35vw solid #000;
 }
@@ -360,8 +362,8 @@ body {
   background: url(../img/html_r.jpg);
   background-size: cover;
   background-position: center center;
-  width: 17vw;
-  height: 22vw;
+  width: 27vw;
+  height: 32vw;
   z-index: 1;
   border: 0.35vw solid #000;
 }
@@ -369,8 +371,8 @@ body {
   background: url(../img/javascript_r.jpg);
   background-size: cover;
   background-position: center center;
-  width: 17vw;
-  height: 22vw;
+  width: 27vw;
+  height: 32vw;
   z-index: 1;
   border: 0.35vw solid #000;
 }
@@ -378,28 +380,28 @@ body {
   background: url(../img/main_r.jpg);
   background-size: cover;
   background-position: center center;
-  width: 17vw;
-  height: 22vw;
+  width: 27vw;
+  height: 32vw;
   z-index: 1;
   border: 0.35vw solid #000;
 }
 #section3 .sec1_ani7_t {
   font-family: "pretendard";
   font-weight: 900;
-  -webkit-text-stroke: 0.2vw #d7d2ce;
+  -webkit-text-stroke: 0.2vw #c5b097;
   color: rgba(255, 255, 255, 0);
   text-align: center;
   line-height: 0.85;
-  font-size: 13vw;
+  font-size: 10vw;
   text-transform: uppercase;
 }
 #section3 .sec1_ani7_b {
   font-family: "pretendard";
   font-weight: 900;
-  color: #d7d2ce;
+  color: #c5b097;
   text-align: center;
   line-height: 0.85;
-  font-size: 13vw;
+  font-size: 10vw;
   text-transform: uppercase;
 }
 
