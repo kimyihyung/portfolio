@@ -273,30 +273,30 @@ body {
   text-align: center;
 }
 
-#section2 .sec2_ani1 {
-  border: 0.35vw solid #000;
-  background: url(../img/site1.jpg);
-}
 #section2 .sec2_ani_1 {
   font-size: 7vw;
   font-family: "pretendard";
   font-weight: 900;
   text-transform: uppercase;
   line-height: 1;
-  color: #93906c;
+  color: #aeb486;
+}
+#section2 .sec2_ani1 {
+  border: 0.5vw solid rgba(155, 217, 166, 0.506);
+  background: url(../img/site1.jpg);
 }
 #section2 .sec2_ani2 {
-  border: 0.35vw solid #000;
+  border: 0.5vw solid rgba(155, 217, 166, 0.506);
   background: url(../img/site2.jpg);
 }
 
 #section2 .sec2_ani3 {
-  border: 0.35vw solid #000;
+  border: 0.5vw solid rgba(155, 217, 166, 0.506);
   background: url(../img/phpblog.jpg);
 }
 
 #section2 .sec2_ani4 {
-  border: 0.35vw solid #000;
+  border: 0.5vw solid rgba(155, 217, 166, 0.506);
   background: url(../img/phpproject.jpg);
 }
 
