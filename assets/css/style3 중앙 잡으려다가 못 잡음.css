@@ -33,6 +33,7 @@ body {
   top: 50%;
   transform: translate(-50%, -50%);
 }
+
 .fixed_s {
   position: fixed;
   display: flex;
@@ -81,8 +82,13 @@ body {
   height: 7000px;
 }
 #section1 .sec4 {
-  background: #a58e74;
-  height: 9000px;
+  background: #786655;
+  height: 6500px;
+}
+#section1 .sec5 {
+  /* background: #d7d2ce; */
+  background: #000;
+  height: 10000px;
 }
 #section1 .sec1_ani1 {
   width: 98%;
@@ -308,7 +314,6 @@ body {
   text-align: left;
   background: rgba(122, 177, 131, 0.253);
   padding: 1vw;
-  text-transform: uppercase;
 }
 #section2 .sec2_ani_2 button {
   margin-top: 1vw;
@@ -323,6 +328,11 @@ body {
   color: #000;
 }
 
+/* section3 */
+/* #section3 .sec1 {
+  background: #786655;
+  height: 7000px;
+} */
 #section3 .sec1_ani1 {
   font-family: "pretendard";
   font-weight: 900;
