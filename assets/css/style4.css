@@ -312,6 +312,7 @@ body {
   backdrop-filter: blur(10px);
   padding: 1vw;
   text-transform: uppercase;
+  z-index: 10;
 }
 #section2 .sec2_ani_2 button {
   cursor: pointer;
