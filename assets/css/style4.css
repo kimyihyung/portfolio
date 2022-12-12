@@ -78,11 +78,11 @@ body {
 }
 #section1 .sec3 {
   background: #629460;
-  height: 7000px;
+  height: 6000px;
 }
 #section1 .sec4 {
   background: #bdc1b6;
-  height: 9000px;
+  height: 10000px;
 }
 #section1 .sec1_ani1 {
   width: 98%;
@@ -314,6 +314,7 @@ body {
   text-transform: uppercase;
 }
 #section2 .sec2_ani_2 button {
+  cursor: pointer;
   margin-top: 1vw;
   padding: 0.3vw;
   border: 0.1vw solid #fff;
