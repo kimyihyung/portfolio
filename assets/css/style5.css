@@ -620,7 +620,7 @@ body {
   text-transform: uppercase;
   z-index: 10;
   width: 30vw;
-  border-radius: 20px;
+  border-radius: 1.39vw;
 }
 
 #section5 .sec2_text_1 button {
@@ -634,7 +634,7 @@ body {
   width: 4.5vw;
   font-size: 0.85vw;
   color: #fff;
-  border-radius: 50px;
+  border-radius: 3.47vw;
 }
 .img_text_t {
   font-family: "pretendard";
@@ -665,4 +665,16 @@ body {
   width: 4.5vw;
   font-size: 0.85vw;
   color: #000;
+}
+#section6 .sec1_ani1 {
+  width: 27.64vw;
+  height: 44.2vw;
+  border: 0.3vw solid #000;
+  background: #30593e;
+  border-radius: 1.39vw;
+  text-align: center;
+}
+#section6 .sec1_ani1 img {
+  border-radius: 1.39vw;
+  width: 25vw;
 }
