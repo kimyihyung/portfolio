@@ -697,8 +697,8 @@ body {
 .sec1_ani4 {
   width: 10vw;
   height: 10vw;
-  top: 10%;
-  left: 75%;
+  top: 15%;
+  left: 73%;
   background-image: url(../img/github.svg);
   background-size: cover;
   animation: rotate1 120s linear infinite;
