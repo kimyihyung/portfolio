@@ -650,9 +650,9 @@ body {
   text-transform: uppercase;
   z-index: 10;
 }
-.img_text_b button {
+.img_text-btn button {
   cursor: pointer;
-  margin: 1vw 1vw 0 1vw;
+  margin: 0 1vw 0 1vw;
   padding: 0.3vw;
   border: 0.1vw solid #000;
   background: rgba(255, 255, 255, 0);
