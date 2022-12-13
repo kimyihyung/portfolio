@@ -652,7 +652,7 @@ body {
 }
 .img_text_b button {
   cursor: pointer;
-  margin-top: 1vw;
+  margin: 1vw 1vw 0 1vw;
   padding: 0.3vw;
   border: 0.1vw solid #000;
   background: rgba(255, 255, 255, 0);
