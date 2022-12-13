@@ -620,6 +620,7 @@ body {
   text-transform: uppercase;
   z-index: 10;
   width: 30vw;
+  border-radius: 20px;
 }
 #section5 .sec2_text_1 button {
   cursor: pointer;
