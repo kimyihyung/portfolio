@@ -55,10 +55,12 @@ body {
   font-family: "LINESeedKR-Bd";
   text-transform: uppercase;
   padding: 40px;
+  z-index: 100;
 }
 #header h1 {
   font-size: 16px;
   font-weight: 800;
+  z-index: 100;
 }
 
 /* section1 */
