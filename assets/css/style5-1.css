@@ -656,13 +656,6 @@ body {
   font-size: 0.85vw;
   color: #000;
 }
-/* #section6 .sec1_ani1 {
-  width: 27.64vw;
-  height: 46vw;
-  border: 0.3vw solid #000;
-  background: #3a6440;
-  border-radius: 1.39vw;
-} */
 #section6 .sec1_ani1 img {
   width: 23vw;
 }
@@ -676,12 +669,58 @@ body {
   text-transform: uppercase;
 }
 #section6 .sec1_ani3 {
+  text-align: center;
+  animation: marquee 60s linear infinite;
 }
 #section6 .sec1_ani3 a {
   font-family: "pretendard";
   font-weight: 900;
-  color: #fff;
-  text-align: center;
+  color: #adad8a;
   font-size: 7vw;
   text-transform: uppercase;
+}
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.sec1_ani4 {
+  width: 10vw;
+  height: 10vw;
+  top: 15%;
+  left: 73%;
+  background-image: url(../img/github.svg);
+  background-size: cover;
+  animation: rotate1 120s linear infinite;
+}
+.sec1_ani5 {
+  width: 10vw;
+  height: 10vw;
+  top: 40%;
+  left: 5%;
+  background-image: url(../img/codepen.svg);
+  background-size: cover;
+  animation: rotate2 120s linear infinite;
+}
+.sec1_ani6 {
+  width: 9vw;
+  height: 9vw;
+  top: 60%;
+  left: 80%;
+  background-image: url(../img/tistory.png);
+  background-size: cover;
+  animation: rotate2 120s linear infinite;
+}
+@keyframes rotate1 {
+  100% {
+    rotate: 360deg;
+  }
+}
+@keyframes rotate2 {
+  100% {
+    rotate: -360deg;
+  }
 }
