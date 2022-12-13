@@ -80,12 +80,12 @@ body {
 }
 #section1 .sec4 {
   background: #bdc1b6;
-  height: 100000px;
+  height: 33000px;
 }
 #section1 .sec1_ani1 {
   width: 98%;
   height: 96vh;
-  background-image: url(https://images.unsplash.com/photo-1551970634-747846a548cb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80);
+  background-image: url(../img/forest.jpg);
   background-size: cover;
   filter: saturate(10%);
 }
@@ -440,34 +440,6 @@ body {
   width: 200vw;
   height: 100vh;
 }
-/* #section4 .sec1_ani1 {
-  font-family: "pretendard";
-  font-weight: 900;
-  color: #000;
-  text-align: left;
-  line-height: 0.85;
-  font-size: 13vw;
-  text-transform: uppercase;
-} */
-/* #section4 .sec1_ani1_t {
-  font-family: "pretendard";
-  font-weight: 900;
-  color: #3a6440;
-  text-align: left;
-  line-height: 0.85;
-  font-size: 13vw;
-  text-transform: uppercase;
-}
-#section4 .sec1_ani1_b {
-  font-family: "pretendard";
-  font-weight: 900;
-  text-align: left;
-  line-height: 0.85;
-  font-size: 13vw;
-  text-transform: uppercase;
-  -webkit-text-stroke: 0.2vw #3a6440;
-  color: rgba(255, 255, 255, 0);
-} */
 
 /* #section5 */
 #section5 .sec1_ani1 {
@@ -527,7 +499,7 @@ body {
   transform: translate(0, 0);
 }
 #section5 .sec2-img2 {
-  background: url(../img/Mockup-reactyoutube.jpg) no-repeat center center;
+  background: url(../img/Mockup-reactyoutube-min.jpg) no-repeat center center;
   width: 100vw;
   height: 100vh;
   background-size: cover;
@@ -538,7 +510,7 @@ body {
   transform: translate(0, 0);
 }
 #section5 .sec3-img1 {
-  background: url(../img/Mockup-reactproject.jpg) no-repeat center center;
+  background: url(../img/Mockup-reactproject-min.jpg) no-repeat center center;
   width: 10vw;
   height: 10vh;
   background-size: cover;
@@ -549,7 +521,7 @@ body {
   transform: translate(0, 0);
 }
 #section5 .sec3-img2 {
-  background: url(../img/Mockup-reactproject.jpg) no-repeat center center;
+  background: url(../img/Mockup-reactproject-min.jpg) no-repeat center center;
   width: 100vw;
   height: 100vh;
   background-size: cover;
