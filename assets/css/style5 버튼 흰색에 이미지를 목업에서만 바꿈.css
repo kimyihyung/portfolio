@@ -82,13 +82,8 @@ body {
 }
 #section1 .sec4 {
   background: #bdc1b6;
-  height: 30000px;
+  height: 33000px;
 }
-#section1 .sec5 {
-  background: #3c4236;
-  height: 3000px;
-}
-
 #section1 .sec1_ani1 {
   width: 98%;
   height: 96vh;
@@ -431,6 +426,16 @@ body {
   justify-content: center;
 }
 
+/* .ani1_Sm {
+  color: #000;
+  font-size: 1.8vw;
+  width: 17vw;
+  font-family: "nanumsquare";
+  font-weight: 500;
+  text-align: center;
+  z-index: 3;
+} */
+
 /* #section4 */
 #section4 .sec1 {
   background: #d7d2ce;
@@ -462,7 +467,6 @@ body {
   display: flex;
   justify-content: center;
 }
-
 #section5 .sec1-img1 {
   background: url(../img/Mockup-reactapi.jpg) no-repeat center center;
   width: 10vw;
@@ -473,6 +477,7 @@ body {
   left: auto;
   top: auto;
   transform: translate(0, 0);
+  z-index: 1;
 }
 #section5 .sec1-img2 {
   background: url(../img/Mockup-reactapi.jpg) no-repeat center center;
@@ -484,6 +489,7 @@ body {
   right: auto;
   bottom: auto;
   transform: translate(0, 0);
+  z-index: 1;
 }
 #section5 .sec2-img1 {
   background: url(../img/Mockup-reactyoutube.jpg) no-repeat center center;
@@ -495,6 +501,7 @@ body {
   left: auto;
   top: auto;
   transform: translate(0, 0);
+  z-index: 1;
 }
 #section5 .sec2-img2 {
   background: url(../img/Mockup-reactyoutube-min.jpg) no-repeat center center;
@@ -506,6 +513,7 @@ body {
   right: auto;
   bottom: auto;
   transform: translate(0, 0);
+  z-index: 1;
 }
 #section5 .sec3-img1 {
   background: url(../img/Mockup-reactproject-min.jpg) no-repeat center center;
@@ -517,6 +525,7 @@ body {
   left: auto;
   top: auto;
   transform: translate(0, 0);
+  z-index: 1;
 }
 #section5 .sec3-img2 {
   background: url(../img/Mockup-reactproject-min.jpg) no-repeat center center;
@@ -528,6 +537,7 @@ body {
   right: auto;
   bottom: auto;
   transform: translate(0, 0);
+  z-index: 1;
 }
 
 #section5 .sec2_ani1 {
@@ -600,11 +610,11 @@ body {
   z-index: 10;
 }
 #section5 .sec2_text_1 {
-  color: #000;
-  font-size: 1.2vw;
+  color: #fff;
+  font-size: 1vw;
   font-family: "nanumsquare";
   font-weight: 500;
-  background: rgba(233, 239, 234, 0.253);
+  background: rgba(51, 61, 52, 0.253);
   backdrop-filter: blur(10px);
   padding: 1vw;
   text-transform: uppercase;
@@ -617,13 +627,13 @@ body {
   cursor: pointer;
   margin-top: 1vw;
   padding: 0.3vw;
-  border: 0.1vw solid #000;
-  background: rgb(183, 221, 174);
+  border: 0.1vw solid #fff;
+  background: rgb(107, 145, 98);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   width: 4.5vw;
   font-size: 0.85vw;
-  color: #000;
+  color: #fff;
   border-radius: 3.47vw;
 }
 .img_text_t {
@@ -656,32 +666,15 @@ body {
   font-size: 0.85vw;
   color: #000;
 }
-/* #section6 .sec1_ani1 {
+#section6 .sec1_ani1 {
   width: 27.64vw;
   height: 46vw;
   border: 0.3vw solid #000;
-  background: #3a6440;
+  background: #30593e;
   border-radius: 1.39vw;
-} */
+}
 #section6 .sec1_ani1 img {
+  margin: 1vw 2vw 0 2vw;
+  border-radius: 1.39vw;
   width: 23vw;
-}
-#section6 .sec1_ani2 {
-  font-family: "pretendard";
-  font-weight: 900;
-  -webkit-text-stroke: 0.2vw #adad8a;
-  color: rgba(255, 255, 255, 0);
-  text-align: center;
-  font-size: 9.5vw;
-  text-transform: uppercase;
-}
-#section6 .sec1_ani3 {
-}
-#section6 .sec1_ani3 a {
-  font-family: "pretendard";
-  font-weight: 900;
-  color: #fff;
-  text-align: center;
-  font-size: 9vw;
-  text-transform: uppercase;
 }

@@ -8,18 +8,69 @@
     <title>Document</title>
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="assets/css/reset.css">
-    <link rel="stylesheet" href="assets/css/style5.css">
+    <link rel="stylesheet" href="assets/css/style5-1.css">
+    <link rel="stylesheet" href="assets/css/loader.css">
     <link rel="stylesheet" as="style" crossorigin
         href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
 </head>
 
 <body>
+    <div class="loader">
+        <div class="loader__cols">
+            <div class="loader__col loader__col--1">
+                <div class="loader__item dope">YH ®</div>
+                <div class="loader__item dope">YH ®</div>
+                <div class="loader__item dope">YH ®</div>
+                <div class="loader__item dope">YH ®</div>
+                <div class="loader__item dope">YH ®</div>
+            </div>
+            <div class="loader__col loader__col--2">
+                <!--[-->
+                <div class="loader__item dope">YH ®</div>
+                <div class="loader__item dope">YH ®</div>
+                <div class="loader__item dope">YH ®</div>
+                <div class="loader__item dope">YH ®</div>
+                <div class="loader__item dope">YH ®</div>
+                <!--]-->
+            </div>
+            <div class="loader__col loader__col--3">
+                <!--[-->
+                <div class="loader__item dope loader__item--ctt">YH ®</div>
+                <div class="loader__item dope loader__item--ct">YH ®</div>
+                <!--[-->
+                <div class="loader__item loader__item--c">YH ®</div>
+                <!--[-->
+                <div class="loader__item dope loader__item--cb">YH ®</div>
+                <div class="loader__item dope loader__item--cbb">YH ®</div>
+
+                <!--]-->
+            </div>
+            <div class="loader__col loader__col--4">
+                <!--[-->
+                <div class="loader__item dope">YH ®</div>
+                <div class="loader__item dope">YH ®</div>
+                <div class="loader__item dope">YH ®</div>
+                <div class="loader__item dope">YH ®</div>
+                <div class="loader__item dope">YH ®</div>
+                <!--]-->
+            </div>
+            <div class="loader__col loader__col--5">
+                <!--[-->
+                <div class="loader__item dope">YH ®</div>
+                <div class="loader__item dope">YH ®</div>
+                <div class="loader__item dope">YH ®</div>
+                <div class="loader__item dope">YH ®</div>
+                <div class="loader__item dope">YH ®</div>
+                <!--]-->
+            </div>
+        </div>
+    </div>
 
     <div class="scroll">0</div>
 
     <header id="header">
-        <h1><a href="">[portfolio]</a></h1>
-        <nav><a href="">[menu]</a></nav>
+        <h1><a href="https://github.com/kimyihyung">[github]</a></h1>
+        <nav><a href="https://yhcode.tistory.com/">[blog]</a></nav>
     </header>
     <!-- //header -->
 
@@ -946,10 +997,9 @@
                     data-47010="opacity:1; top:10%; z-index:-1;">
                     CONTACT</div>
             </div>
-            <!-- <div class="sec1_ani3 fixed" data-47001="opacity:0; top:90%; z-index:1;"
-                data-47010="opacity:1; top:90%; z-index:1;"><a
-                    href='mailto:kimlh3743@gmail.com'>kimlh3743@gmail.com&nbsp;kimlh3743@gmail.com&nbsp;kimlh3743@gmail.com</a>
-            </div> -->
+            <div class="sec1_ani3 fixed" data-47001="opacity:0; top:90%; z-index:1;"
+                data-47010="opacity:1; top:90%; z-index:1;"><a href='mailto:kimlh3743@gmail.com'>kimlh3743@gmail.com</a>
+            </div>
         </div>
     </section>
     <!-- //section6 -->
@@ -968,6 +1018,195 @@
             requestAnimationFrame(scroll);
         }
         scroll();
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@latest/bundled/lenis.js"></script>
+    <script>
+        const splitText = (selector) => {
+            const elem = document.querySelector(selector);
+
+            const text = elem.innerText;
+            const chars = text.split('');
+            for (let index = 0; index < chars.length; index++) {
+                if (chars[index] === ' ') {
+                    chars[index] = '&nbsp;';
+                }
+            }
+
+            const charsContainer = document.createElement('div');
+            const charsArray = [];
+
+            charsContainer.style.position = 'relative';
+            charsContainer.style.display = 'inline-block';
+
+            chars.forEach((char) => {
+                const charContainer = document.createElement('span');
+
+                charContainer.style.position = 'relative';
+                charContainer.style.display = 'inline-block';
+                charContainer.innerHTML = char;
+                charsContainer.appendChild(charContainer);
+
+                charsArray.push(charContainer);
+            });
+            // remove current text
+            elem.innerHTML = '';
+            // append new structure
+            elem.appendChild(charsContainer);
+
+            return charsArray;
+        };
+
+        var tl = gsap.timeline({ repeat: 0, repeatDelay: 0 });
+        const chars = splitText('.loader__item--c');
+        tl.to('.loader__item--c', { opacity: 1, duration: 0 });
+        tl.from(
+            chars,
+            {
+                duration: 1.5,
+                y: 50,
+                opacity: 0,
+                stagger: 0.1,
+                delay: 0.5,
+                ease: Elastic.easeOut.config(1, 0.3),
+            },
+            '-=0.5'
+        );
+        tl.fromTo(
+            '.loader__item--ct',
+            {
+                opacity: 0,
+                y: '400%',
+            },
+            {
+                opacity: 1,
+                y: 0,
+                duration: 1.5,
+            },
+            '-=1'
+        );
+        tl.fromTo(
+            '.loader__item--cb',
+            {
+                opacity: 0,
+                y: '-400%',
+            },
+            {
+                opacity: 1,
+                y: 0,
+                duration: 1.5,
+            },
+            '-=1.5'
+        );
+
+        tl.fromTo(
+            '.loader__item--ctt',
+            {
+                opacity: 0,
+                y: '400%',
+            },
+            {
+                opacity: 1,
+                y: 0,
+                duration: 1.5,
+            },
+            '-=0.5'
+        );
+        tl.fromTo(
+            '.loader__item--cbb',
+            {
+                opacity: 0,
+                y: '-400%',
+            },
+            {
+                opacity: 1,
+                y: 0,
+                duration: 1.5,
+            },
+            '-=1.5'
+        );
+
+        tl.fromTo(
+            '.loader__col--2 .loader__item',
+            {
+                opacity: 0,
+                x: '80%',
+            },
+            {
+                opacity: 1,
+                x: 0,
+                duration: 1,
+            },
+            '-=0'
+        );
+        tl.fromTo(
+            '.loader__col--4 .loader__item',
+            {
+                opacity: 0,
+                x: '-80%',
+            },
+            {
+                opacity: 1,
+                x: 0,
+                duration: 1,
+            },
+            '-=1'
+        );
+
+        tl.fromTo(
+            '.loader__col--1 .loader__item',
+            {
+                opacity: 0,
+                x: '80%',
+            },
+            {
+                opacity: 1,
+                x: 0,
+                duration: 1,
+            },
+            '-=0.3'
+        );
+        tl.fromTo(
+            '.loader__col--5 .loader__item',
+            {
+                opacity: 0,
+                x: '-80%',
+            },
+            {
+                opacity: 1,
+                x: 0,
+                duration: 1,
+            },
+            '-=1'
+        );
+        tl.to(
+            '.dope',
+            {
+                delay: 0.2,
+                opacity: 0,
+                duration: 1,
+            },
+            '-=0.2'
+        );
+        tl.to('.loader__item--c', {
+            scale: 40,
+            duration: 1.5,
+            ease: Sine.easeOut,
+        });
+
+        tl.to(
+            '.loader__item--c',
+            {
+                opacity: 0,
+                duration: 1,
+            },
+            '-=0.3'
+        );
+        tl.to('.loader', {
+            className: 'dnone',
+        });
     </script>
 </body>
 
