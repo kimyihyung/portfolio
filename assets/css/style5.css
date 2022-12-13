@@ -701,16 +701,16 @@ body {
   left: 75%;
   background-image: url(../img/github.svg);
   background-size: cover;
-  animation: rotate1 60s linear infinite;
+  animation: rotate1 120s linear infinite;
 }
 .sec1_ani5 {
   width: 10vw;
   height: 10vw;
   top: 40%;
-  left: 15%;
+  left: 5%;
   background-image: url(../img/codepen.svg);
   background-size: cover;
-  animation: rotate2 60s linear infinite;
+  animation: rotate2 120s linear infinite;
 }
 .sec1_ani6 {
   width: 9vw;
@@ -719,7 +719,7 @@ body {
   left: 80%;
   background-image: url(../img/tistory.png);
   background-size: cover;
-  animation: rotate2 60s linear infinite;
+  animation: rotate2 120s linear infinite;
 }
 @keyframes rotate1 {
   100% {
