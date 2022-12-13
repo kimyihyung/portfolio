@@ -672,9 +672,9 @@ body {
   border: 0.3vw solid #000;
   background: #30593e;
   border-radius: 1.39vw;
-  text-align: center;
 }
 #section6 .sec1_ani1 img {
+  margin: 1vw 2vw 0 2vw;
   border-radius: 1.39vw;
-  width: 25vw;
+  width: 23vw;
 }
