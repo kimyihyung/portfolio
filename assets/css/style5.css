@@ -670,7 +670,7 @@ body {
 }
 #section6 .sec1_ani3 {
   text-align: center;
-  animation: marquee 60s linear infinite;
+  animation: marquee 180s linear infinite;
 }
 #section6 .sec1_ani3 a {
   font-family: "pretendard";
