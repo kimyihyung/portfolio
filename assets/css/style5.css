@@ -656,13 +656,6 @@ body {
   font-size: 0.85vw;
   color: #000;
 }
-/* #section6 .sec1_ani1 {
-  width: 27.64vw;
-  height: 46vw;
-  border: 0.3vw solid #000;
-  background: #3a6440;
-  border-radius: 1.39vw;
-} */
 #section6 .sec1_ani1 img {
   width: 23vw;
 }
@@ -707,7 +700,7 @@ body {
   width: 10vw;
   height: 10vw;
   top: 40%;
-  left: 5%;
+  left: 10%;
   background-image: url(../img/codepen.svg);
   background-size: cover;
   animation: rotate2 120s linear infinite;
