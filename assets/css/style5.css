@@ -288,6 +288,7 @@ body {
   text-transform: uppercase;
   text-align: center;
   z-index: 0;
+  width: 100vh;
 }
 
 #section2 .sec2_ani_1 {
@@ -297,28 +298,39 @@ body {
   text-transform: uppercase;
   line-height: 1;
   color: #fff;
+  width: 74vw;
 }
 #section2 .sec2_ani1 {
   border: 0.5vw solid rgba(155, 217, 166, 0.506);
   background: url(../img/site1.jpg);
+  width: 45vw;
+  height: 25vw;
 }
 #section2 .sec2_ani2 {
   border: 0.5vw solid rgba(155, 217, 166, 0.506);
   background: url(../img/site2.jpg);
+  width: 45vw;
+  height: 25vw;
 }
 
 #section2 .sec2_ani3 {
   border: 0.5vw solid rgba(155, 217, 166, 0.506);
   background: url(../img/phpblog.jpg);
+  width: 45vw;
+  height: 25vw;
 }
 
 #section2 .sec2_ani4 {
   border: 0.5vw solid rgba(155, 217, 166, 0.506);
   background: url(../img/phpproject.jpg);
+  width: 45vw;
+  height: 25vw;
 }
 #section2 .sec2_ani5 {
   border: 0.5vw solid rgba(155, 217, 166, 0.506);
   background: url(../img/vueapi.jpg);
+  width: 45vw;
+  height: 25vw;
 }
 
 #section2 .sec2_ani_2 {
@@ -332,6 +344,7 @@ body {
   padding: 1vw;
   text-transform: uppercase;
   z-index: 10;
+  width: 30vw;
 }
 #section2 .sec2_ani_2 button {
   cursor: pointer;
@@ -356,6 +369,7 @@ body {
   text-transform: uppercase;
   display: flex;
   justify-content: center;
+  width: 100vh;
 }
 #section3 .sec1_ani2 {
   font-family: "pretendard";
@@ -368,6 +382,7 @@ body {
   color: rgba(255, 255, 255, 0);
   display: flex;
   justify-content: center;
+  width: 100vh;
 }
 
 /* #section3 이미지 */
@@ -743,6 +758,7 @@ body {
   background-size: cover;
   animation: rotate1 120s linear infinite;
 }
+
 #section6 .sec1_ani5 {
   width: 10vw;
   height: 10vw;
@@ -752,6 +768,7 @@ body {
   background-size: cover;
   animation: rotate2 120s linear infinite;
 }
+
 #section6 .sec1_ani6 {
   width: 9vw;
   height: 9vw;
@@ -761,6 +778,7 @@ body {
   background-size: cover;
   animation: rotate2 120s linear infinite;
 }
+
 @keyframes rotate1 {
   100% {
     rotate: 360deg;
@@ -769,5 +787,138 @@ body {
 @keyframes rotate2 {
   100% {
     rotate: -360deg;
+  }
+}
+
+/* 반응형 */
+@media (max-width: 780px) {
+  #section1 .sec2_ani1_1 {
+    width: 100vh;
+  }
+  #section1 .sec2_ani1 {
+    font-size: 3.5vw;
+  }
+  .sec2-img1-wrap {
+    width: 30vw;
+    height: 30vw;
+    padding: 10px;
+  }
+  .sec2-img1-wrap div {
+    position: absolute;
+    top: -50%;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    width: 20vw;
+    height: 20vw;
+    overflow: hidden;
+    border-radius: 50%;
+  }
+  #section2 .sec2_text {
+    font-size: 17vw;
+  }
+  #section2 .sec2_ani_2 {
+    font-size: 2vw;
+    padding: 3vw;
+    width: 70vw;
+  }
+  #section2 .sec2_ani_2 button {
+    cursor: pointer;
+    padding: 0.7vw;
+    border: 0.1vw solid #fff;
+    width: 10vw;
+    font-size: 1vw;
+    color: #fff;
+  }
+  #section2 .sec2_ani_1 {
+    font-size: 8vw;
+    width: 90vw;
+  }
+  #section2 .sec2_ani1 {
+    width: 90vw;
+    height: 50vw;
+  }
+  #section2 .sec2_ani2 {
+    width: 90vw;
+    height: 50vw;
+  }
+
+  #section2 .sec2_ani3 {
+    width: 90vw;
+    height: 50vw;
+  }
+
+  #section2 .sec2_ani4 {
+    width: 90vw;
+    height: 50vw;
+  }
+  #section2 .sec2_ani5 {
+    width: 90vw;
+    height: 50vw;
+  }
+  #section3 .sec1_ani1 {
+    font-size: 17vw;
+  }
+  #section3 .sec1_ani2 {
+    font-size: 17vw;
+  }
+  #section3 .sec1_ani3 {
+    width: 38vw;
+    height: 45vw;
+  }
+  #section3 .sec1_ani4 {
+    width: 38vw;
+    height: 45vw;
+  }
+  #section3 .sec1_ani5 {
+    width: 38vw;
+    height: 45vw;
+  }
+  #section3 .sec1_ani6 {
+    width: 38vw;
+    height: 45vw;
+  }
+  #section3 .sec1_ani7_t {
+    font-size: 15vw;
+  }
+  #section3 .sec1_ani7_b {
+    font-size: 15vw;
+  }
+  .ani1_La {
+    font-size: 5vw;
+  }
+  #section5 .sec1_ani1 {
+    font-size: 15vw;
+  }
+  #section5 .sec1_ani2 {
+    font-size: 15vw;
+  }
+  .img_text_t {
+    font-size: 9.5vw;
+  }
+  .img_text_b {
+    font-size: 2.3vw;
+  }
+  .img_text-btn button {
+    width: 8.5vw;
+  }
+  #section5 .sec2_text_1 {
+    width: 50vw;
+  }
+  #section6 .sec1_ani1 img {
+    width: 50vw;
+  }
+  #section5 .sec2_text_1 button {
+    width: 9.5vw;
+  }
+  .sec2_text {
+    font-size: 10vw;
+  }
+  #section6 .sec1_ani2 {
+    font-size: 17.5vw;
+  }
+  #section6 .sec1_ani3 a {
+    font-size: 13vw;
   }
 }
