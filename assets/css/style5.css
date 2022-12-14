@@ -89,6 +89,15 @@ body {
   height: 3000px;
 }
 
+#section1 .sec1_text {
+  font-family: "pretendard";
+  font-weight: 900;
+  font-size: 11vw;
+  color: #000;
+  text-transform: uppercase;
+  line-height: 1;
+  text-align: center;
+}
 #section1 .sec1_ani1 {
   width: 98%;
   height: 96vh;
