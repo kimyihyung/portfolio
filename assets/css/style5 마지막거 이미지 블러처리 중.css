@@ -88,6 +88,7 @@ body {
   background: #3c4236;
   height: 3000px;
 }
+
 #section1 .sec1_text {
   font-family: "pretendard";
   font-weight: 900;
@@ -541,11 +542,16 @@ body {
 #section5 .sec2_ani1 {
   width: 98%;
   height: 98vh;
+  z-index: 6;
+}
+#section5 .sec2_ani1_1 {
+  width: 100%;
+  height: 100%;
   background: url(../img/gameEffect.jpg);
   background-size: cover;
   background-position: center center;
   background-repeat: repeat;
-  z-index: 6;
+  filter: blur(0.8px);
 }
 
 #section5 .sec2_ani2 {
@@ -558,13 +564,19 @@ body {
   text-transform: uppercase;
 }
 
-#section5 .sec2_ani3 {
-  width: 98vh;
+.sec2_ani3_1 #section5 .sec2_ani3 {
+  width: 98%;
   height: 98vh;
+  z-index: 6;
+}
+#section5 .sec2_ani3_1 {
+  width: 100%;
+  height: 100%;
   background: url(../img/quizEffect.jpg);
   background-size: cover;
   background-position: center center;
   background-repeat: repeat;
+  filter: blur(0.8px);
 }
 #section5 .sec2_ani4 {
   width: 98vh;
