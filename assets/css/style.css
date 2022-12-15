@@ -526,10 +526,11 @@ body {
   text-transform: uppercase;
 }
 
-#section5 .sec2_ani3 {
+#section5 .effect_cover {
+  left: 1%;
+  top: 1%;
   width: 98%;
   height: 98vh;
-  z-index: 6;
 }
 #section5 .sec2_ani3_1 {
   width: 100%;
@@ -540,12 +541,7 @@ body {
   background-repeat: repeat;
   filter: blur(0.8px) brightness(70%);
 }
-/*  */
-#section5 .sec2_ani4 {
-  width: 98%;
-  height: 98vh;
-  z-index: 6;
-}
+
 #section5 .sec2_ani4_1 {
   width: 100%;
   height: 100%;
@@ -554,11 +550,6 @@ body {
   background-position: center center;
   background-repeat: repeat;
   filter: blur(0.8px) brightness(70%);
-}
-#section5 .sec2_ani5 {
-  width: 98%;
-  height: 98vh;
-  z-index: 6;
 }
 #section5 .sec2_ani5_1 {
   width: 100%;
@@ -569,11 +560,7 @@ body {
   background-repeat: repeat;
   filter: blur(0.8px) brightness(70%);
 }
-#section5 .sec2_ani6 {
-  width: 98%;
-  height: 98vh;
-  z-index: 6;
-}
+
 #section5 .sec2_ani6_1 {
   width: 100%;
   height: 100%;
@@ -582,11 +569,6 @@ body {
   background-position: center center;
   background-repeat: repeat;
   filter: blur(0.8px) brightness(70%);
-}
-#section5 .sec2_ani7 {
-  width: 98%;
-  height: 98vh;
-  z-index: 6;
 }
 #section5 .sec2_ani7_1 {
   width: 100%;
