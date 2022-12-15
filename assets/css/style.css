@@ -650,7 +650,7 @@ body {
   filter: blur(0.8px) brightness(70%);
 }
 
-.sec2_text {
+#section5 .sec2_text {
   font-family: "pretendard";
   font-weight: 900;
   color: #fff;
@@ -910,7 +910,8 @@ body {
     width: 50vw;
   }
   #section5 .sec2_text_1 button {
-    width: 9.5vw;
+    width: 13.5vw;
+    font-size: 3.5vw;
   }
   .sec2_text {
     font-size: 10vw;
