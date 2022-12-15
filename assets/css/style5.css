@@ -287,7 +287,6 @@ body {
   color: #2d4b37;
   text-transform: uppercase;
   text-align: center;
-  z-index: 0;
   width: 100vh;
 }
 
@@ -904,7 +903,8 @@ body {
     width: 9vw;
   }
   #section5 .sec2_text_1 {
-    width: 50vw;
+    width: 60vw;
+    font-size: 3.5vw;
   }
   #section6 .sec1_ani1 img {
     width: 50vw;
