@@ -790,12 +790,12 @@ body {
 }
 
 /* 반응형 */
-@media (max-width: 780px) {
+@media (max-width: 480px) {
   #section1 .sec2_ani1_1 {
     width: 100vh;
   }
   #section1 .sec2_ani1 {
-    font-size: 3.5vw;
+    font-size: 4vw;
   }
   .sec2-img1-wrap {
     width: 30vw;
@@ -809,8 +809,8 @@ body {
     bottom: 0;
     right: 0;
     margin: auto;
-    width: 20vw;
-    height: 20vw;
+    width: 25vw;
+    height: 25vw;
     overflow: hidden;
     border-radius: 50%;
   }
@@ -818,43 +818,39 @@ body {
     font-size: 17vw;
   }
   #section2 .sec2_ani_2 {
-    font-size: 2vw;
+    font-size: 4vw;
     padding: 3vw;
-    width: 70vw;
+    width: 65vw;
   }
   #section2 .sec2_ani_2 button {
-    cursor: pointer;
-    padding: 0.7vw;
-    border: 0.1vw solid #fff;
-    width: 10vw;
-    font-size: 1vw;
-    color: #fff;
+    width: 15vw;
+    font-size: 4vw;
   }
   #section2 .sec2_ani_1 {
-    font-size: 8vw;
+    font-size: 13vw;
     width: 90vw;
   }
   #section2 .sec2_ani1 {
-    width: 90vw;
-    height: 50vw;
+    width: 100vw;
+    height: 60vw;
   }
   #section2 .sec2_ani2 {
-    width: 90vw;
-    height: 50vw;
+    width: 100vw;
+    height: 60vw;
   }
 
   #section2 .sec2_ani3 {
-    width: 90vw;
-    height: 50vw;
+    width: 100vw;
+    height: 60vw;
   }
 
   #section2 .sec2_ani4 {
-    width: 90vw;
-    height: 50vw;
+    width: 100vw;
+    height: 60vw;
   }
   #section2 .sec2_ani5 {
-    width: 90vw;
-    height: 50vw;
+    width: 100vw;
+    height: 60vw;
   }
   #section3 .sec1_ani1 {
     font-size: 17vw;
@@ -894,17 +890,21 @@ body {
     font-size: 15vw;
   }
   .img_text_t {
-    font-size: 9.5vw;
+    font-size: 11.5vw;
   }
   .img_text_b {
-    font-size: 2.3vw;
+    width: 75vw;
+    font-size: 3.8vw;
   }
   .img_text-btn button {
-    width: 9vw;
+    width: 13vw;
+    margin: 20vw 2.5vw 0vw 1vw;
+    font-size: 3.85vw;
   }
   #section5 .sec2_text_1 {
-    width: 60vw;
-    font-size: 3.5vw;
+    width: 75vw;
+    font-size: 4vw;
+    padding: 3vw;
   }
   #section6 .sec1_ani1 img {
     width: 50vw;
@@ -913,8 +913,8 @@ body {
     width: 13.5vw;
     font-size: 3.5vw;
   }
-  .sec2_text {
-    font-size: 10vw;
+  #section5 .sec2_text {
+    font-size: 15vw;
   }
   #section6 .sec1_ani2 {
     font-size: 17.5vw;
