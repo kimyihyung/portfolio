@@ -228,7 +228,7 @@ body {
   background: #629460;
 }
 /* site text */
-#section2 .site_text {
+#section2 .site_main {
   font-family: "pretendard";
   font-weight: 900;
   font-size: 11vw;
@@ -759,7 +759,7 @@ body {
     overflow: hidden;
     border-radius: 50%;
   }
-  #section2 .site_text {
+  #section2 .site_main {
     font-size: 17vw;
   }
   #section2 .site_text {
