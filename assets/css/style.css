@@ -66,7 +66,7 @@ body {
   height: 5000px;
   background: #93906c;
 }
-#section2 .sec2 {
+#section2 .site {
   background: #629460;
   height: 8000px;
 }
@@ -226,9 +226,7 @@ body {
   height: 10vh;
   background: #629460;
 }
-#section2 .sec2 {
-}
-#section2 .sec2_text {
+#section2 .site_text {
   font-family: "pretendard";
   font-weight: 900;
   font-size: 11vw;
@@ -238,7 +236,7 @@ body {
   width: 100vh;
 }
 
-#section2 .sec2_ani_1 {
+#section2 .site_title {
   font-size: 4.5vw;
   font-family: "pretendard";
   font-weight: 900;
@@ -247,40 +245,40 @@ body {
   color: #fff;
   width: 74vw;
 }
-#section2 .sec2_ani1 {
+#section2 .site_img1 {
   border: 0.5vw solid rgba(155, 217, 166, 0.506);
   background: url(../img/site1.jpg);
   width: 45vw;
   height: 25vw;
 }
-#section2 .sec2_ani2 {
+#section2 .site_img2 {
   border: 0.5vw solid rgba(155, 217, 166, 0.506);
   background: url(../img/site2.jpg);
   width: 45vw;
   height: 25vw;
 }
 
-#section2 .sec2_ani3 {
+#section2 .site_img3 {
   border: 0.5vw solid rgba(155, 217, 166, 0.506);
   background: url(../img/phpblog.jpg);
   width: 45vw;
   height: 25vw;
 }
 
-#section2 .sec2_ani4 {
+#section2 .site_img4 {
   border: 0.5vw solid rgba(155, 217, 166, 0.506);
   background: url(../img/phpproject.jpg);
   width: 45vw;
   height: 25vw;
 }
-#section2 .sec2_ani5 {
+#section2 .site_img5 {
   border: 0.5vw solid rgba(155, 217, 166, 0.506);
   background: url(../img/vueapi.jpg);
   width: 45vw;
   height: 25vw;
 }
 
-#section2 .sec2_ani_2 {
+#section2 .site_text {
   color: #fff;
   font-size: 1vw;
   font-family: "nanumsquare";
@@ -293,7 +291,7 @@ body {
   z-index: 10;
   width: 30vw;
 }
-#section2 .sec2_ani_2 button {
+#section2 .site_text button {
   cursor: pointer;
   margin-top: 1vw;
   padding: 0.3vw;
@@ -306,7 +304,8 @@ body {
   color: #fff;
 }
 
-#section3 .sec1_ani1 {
+/* section3 */
+#section3 .basic_bottom {
   font-family: "pretendard";
   font-weight: 900;
   color: #629460;
@@ -318,7 +317,7 @@ body {
   justify-content: center;
   width: 100vh;
 }
-#section3 .sec1_ani2 {
+#section3 .basic_top {
   font-family: "pretendard";
   font-weight: 900;
   text-align: center;
@@ -333,7 +332,7 @@ body {
 }
 
 /* #section3 이미지 */
-#section3 .sec1_ani3 {
+#section3 .basic_css {
   background: url(../img/css_r.jpg);
   background-size: cover;
   background-position: center center;
@@ -342,7 +341,7 @@ body {
   z-index: 1;
   border: 0.35vw solid #000;
 }
-#section3 .sec1_ani4 {
+#section3 .basic_html {
   background: url(../img/html_r.jpg);
   background-size: cover;
   background-position: center center;
@@ -351,7 +350,7 @@ body {
   z-index: 1;
   border: 0.35vw solid #000;
 }
-#section3 .sec1_ani5 {
+#section3 .basic_js {
   background: url(../img/javascript_r.jpg);
   background-size: cover;
   background-position: center center;
@@ -360,7 +359,7 @@ body {
   z-index: 1;
   border: 0.35vw solid #000;
 }
-#section3 .sec1_ani6 {
+#section3 .basic_main {
   background: url(../img/main_r.jpg);
   background-size: cover;
   background-position: center center;
@@ -369,7 +368,7 @@ body {
   z-index: 1;
   border: 0.35vw solid #000;
 }
-#section3 .sec1_ani7_t {
+#section3 .basic_refer_t {
   font-family: "pretendard";
   font-weight: 900;
   -webkit-text-stroke: 0.2vw #dce0d6;
@@ -379,7 +378,7 @@ body {
   font-size: 10vw;
   text-transform: uppercase;
 }
-#section3 .sec1_ani7_b {
+#section3 .basic_refer_b {
   font-family: "pretendard";
   font-weight: 900;
   color: #dce0d6;
@@ -389,8 +388,7 @@ body {
   text-transform: uppercase;
 }
 
-/* #section3 글 */
-.ani1_La {
+.refer_title {
   font-family: "pretendard";
   font-weight: 900;
   color: #000;
@@ -410,7 +408,7 @@ body {
 }
 
 /* #section5 */
-#section5 .react_bom {
+#section5 .react_bottom {
   font-family: "pretendard";
   font-weight: 900;
   color: #3a6440;
@@ -434,7 +432,7 @@ body {
   justify-content: center;
 }
 
-#section5 .sec1-img1 {
+#section5 .react1-img1 {
   background: url(../img/Mockup-reactapi.jpg) no-repeat center center;
   width: 10vw;
   height: 10vh;
@@ -445,7 +443,7 @@ body {
   top: auto;
   transform: translate(0, 0);
 }
-#section5 .sec1-img2 {
+#section5 .react1-img2 {
   background: url(../img/Mockup-reactapi.jpg) no-repeat center center;
   width: 100vw;
   height: 100vh;
@@ -456,7 +454,7 @@ body {
   bottom: auto;
   transform: translate(0, 0);
 }
-#section5 .sec2-img1 {
+#section5 .react2-img1 {
   background: url(../img/Mockup-reactyoutube.jpg) no-repeat center center;
   width: 10vw;
   height: 10vh;
@@ -467,7 +465,7 @@ body {
   top: auto;
   transform: translate(0, 0);
 }
-#section5 .sec2-img2 {
+#section5 .react2-img2 {
   background: url(../img/Mockup-reactyoutube-min.jpg) no-repeat center center;
   width: 100vw;
   height: 100vh;
@@ -478,7 +476,7 @@ body {
   bottom: auto;
   transform: translate(0, 0);
 }
-#section5 .sec3-img1 {
+#section5 .react3-img1 {
   background: url(../img/Mockup-reactproject-min.jpg) no-repeat center center;
   width: 10vw;
   height: 10vh;
@@ -489,7 +487,7 @@ body {
   top: auto;
   transform: translate(0, 0);
 }
-#section5 .sec3-img2 {
+#section5 .react3-img2 {
   background: url(../img/Mockup-reactproject-min.jpg) no-repeat center center;
   width: 100vw;
   height: 100vh;
@@ -501,22 +499,9 @@ body {
   transform: translate(0, 0);
 }
 
-#section5 .sec2_ani1 {
-  width: 98%;
-  height: 98vh;
-  z-index: 6;
-}
-#section5 .sec2_ani1_1 {
-  width: 100%;
-  height: 100%;
-  background: url(../img/gameEffect.jpg);
-  background-size: cover;
-  background-position: center center;
-  background-repeat: repeat;
-  filter: blur(0.8px) brightness(70%);
-}
+/* effect */
 
-#section5 .sec2_ani2 {
+#section5 .effect_main {
   font-family: "pretendard";
   font-weight: 900;
   color: #7c936c;
@@ -526,13 +511,29 @@ body {
   text-transform: uppercase;
 }
 
+#section5 .effect_start {
+  width: 98%;
+  height: 98vh;
+  z-index: 6;
+}
+
 #section5 .effect_cover {
   left: 1%;
   top: 1%;
   width: 98%;
   height: 98vh;
 }
-#section5 .sec2_ani3_1 {
+#section5 .effect_game {
+  width: 100%;
+  height: 100%;
+  background: url(../img/gameEffect.jpg);
+  background-size: cover;
+  background-position: center center;
+  background-repeat: repeat;
+  filter: blur(0.8px) brightness(70%);
+}
+
+#section5 .effect_quiz {
   width: 100%;
   height: 100%;
   background: url(../img/quizEffect.jpg);
@@ -542,7 +543,7 @@ body {
   filter: blur(0.8px) brightness(70%);
 }
 
-#section5 .sec2_ani4_1 {
+#section5 .effect_search {
   width: 100%;
   height: 100%;
   background: url(../img/searchEffect.jpg);
@@ -551,7 +552,7 @@ body {
   background-repeat: repeat;
   filter: blur(0.8px) brightness(70%);
 }
-#section5 .sec2_ani5_1 {
+#section5 .effect_mouse {
   width: 100%;
   height: 100%;
   background: url(../img/mouseEffect.jpg);
@@ -561,7 +562,7 @@ body {
   filter: blur(0.8px) brightness(70%);
 }
 
-#section5 .sec2_ani6_1 {
+#section5 .effect_slider {
   width: 100%;
   height: 100%;
   background: url(../img/sliderEffect.jpg);
@@ -570,7 +571,7 @@ body {
   background-repeat: repeat;
   filter: blur(0.8px) brightness(70%);
 }
-#section5 .sec2_ani7_1 {
+#section5 .effect_parallax {
   width: 100%;
   height: 100%;
   background: url(../img/parallaxEffect.jpg);
@@ -580,7 +581,8 @@ body {
   filter: blur(0.8px) brightness(70%);
 }
 
-#section5 .sec2_text {
+/* effeffect text */
+#section5 .effect_title {
   font-family: "pretendard";
   font-weight: 900;
   color: #fff;
@@ -589,7 +591,7 @@ body {
   text-transform: uppercase;
   z-index: 10;
 }
-#section5 .sec2_text_1 {
+#section5 .effect_text {
   color: #000;
   font-size: 1.2vw;
   font-family: "nanumsquare";
@@ -603,7 +605,7 @@ body {
   border-radius: 1.39vw;
 }
 
-#section5 .sec2_text_1 button {
+#section5 .effect_text button {
   cursor: pointer;
   margin-top: 1vw;
   padding: 0.3vw;
@@ -617,6 +619,7 @@ body {
   border-radius: 3.47vw;
   margin: 1vw 0.5vw 0 0.5vw;
 }
+
 .img_text_t {
   font-family: "pretendard";
   font-weight: 900;
@@ -647,10 +650,10 @@ body {
   font-size: 0.85vw;
   color: #000;
 }
-#section6 .sec1_ani1 img {
+#section6 .contact_ani1 img {
   width: 23vw;
 }
-#section6 .sec1_ani2 {
+#section6 .contact_ani2 {
   font-family: "pretendard";
   font-weight: 900;
   -webkit-text-stroke: 0.2vw #adad8a;
@@ -659,11 +662,11 @@ body {
   font-size: 9.5vw;
   text-transform: uppercase;
 }
-#section6 .sec1_ani3 {
+#section6 .contact_ani3 {
   text-align: center;
   animation: marquee 180s linear infinite;
 }
-#section6 .sec1_ani3 a {
+#section6 .contact_ani3 a {
   font-family: "pretendard";
   font-weight: 900;
   color: #adad8a;
@@ -678,7 +681,7 @@ body {
     transform: translateX(-50%);
   }
 }
-#section6 .sec1_ani4 {
+#section6 .contact_ani4 {
   width: 10vw;
   height: 10vw;
   top: 15%;
@@ -688,7 +691,7 @@ body {
   animation: rotate1 120s linear infinite;
 }
 
-#section6 .sec1_ani5 {
+#section6 .contact_ani5 {
   width: 10vw;
   height: 10vw;
   top: 40%;
@@ -698,7 +701,7 @@ body {
   animation: rotate2 120s linear infinite;
 }
 
-#section6 .sec1_ani6 {
+#section6 .contact_ani6 {
   width: 9vw;
   height: 9vw;
   top: 60%;
@@ -745,73 +748,73 @@ body {
     overflow: hidden;
     border-radius: 50%;
   }
-  #section2 .sec2_text {
+  #section2 .site_text {
     font-size: 17vw;
   }
-  #section2 .sec2_ani_2 {
+  #section2 .site_text {
     font-size: 4vw;
     padding: 3vw;
     width: 65vw;
   }
-  #section2 .sec2_ani_2 button {
+  #section2 .site_text button {
     width: 15vw;
     font-size: 4vw;
   }
-  #section2 .sec2_ani_1 {
+  #section2 .site_title {
     font-size: 13vw;
     width: 90vw;
   }
-  #section2 .sec2_ani1 {
+  #section2 .site_img1 {
     width: 100vw;
     height: 60vw;
   }
-  #section2 .sec2_ani2 {
-    width: 100vw;
-    height: 60vw;
-  }
-
-  #section2 .sec2_ani3 {
+  #section2 .site_img2 {
     width: 100vw;
     height: 60vw;
   }
 
-  #section2 .sec2_ani4 {
+  #section2 .site_img3 {
     width: 100vw;
     height: 60vw;
   }
-  #section2 .sec2_ani5 {
+
+  #section2 .site_img4 {
     width: 100vw;
     height: 60vw;
   }
-  #section3 .sec1_ani1 {
+  #section2 .site_img5 {
+    width: 100vw;
+    height: 60vw;
+  }
+  #section3 .basic_ani1 {
     font-size: 17vw;
   }
-  #section3 .sec1_ani2 {
+  #section3 .basic_ani2 {
     font-size: 17vw;
   }
-  #section3 .sec1_ani3 {
+  #section3 .basic_css {
     width: 38vw;
     height: 45vw;
   }
-  #section3 .sec1_ani4 {
+  #section3 .basic_html {
     width: 38vw;
     height: 45vw;
   }
-  #section3 .sec1_ani5 {
+  #section3 .basic_js {
     width: 38vw;
     height: 45vw;
   }
-  #section3 .sec1_ani6 {
+  #section3 .basic_main {
     width: 38vw;
     height: 45vw;
   }
-  #section3 .sec1_ani7_t {
+  #section3 .basic_ani7_t {
     font-size: 15vw;
   }
-  #section3 .sec1_ani7_b {
+  #section3 .basic_ani7_b {
     font-size: 15vw;
   }
-  .ani1_La {
+  .refer_title {
     font-size: 5vw;
   }
   #section5 .react_bom {
@@ -819,6 +822,18 @@ body {
   }
   #section5 .react_top {
     font-size: 15vw;
+  }
+  #section5 .effect_title {
+    font-size: 15vw;
+  }
+  #section5 .effect_text {
+    width: 75vw;
+    font-size: 4vw;
+    padding: 3vw;
+  }
+  #section5 .effect_text button {
+    width: 13.5vw;
+    font-size: 3.5vw;
   }
   .img_text_t {
     font-size: 11.5vw;
@@ -832,25 +847,15 @@ body {
     margin: 20vw 2.5vw 0vw 1vw;
     font-size: 3.85vw;
   }
-  #section5 .sec2_text_1 {
-    width: 75vw;
-    font-size: 4vw;
-    padding: 3vw;
-  }
-  #section6 .sec1_ani1 img {
+
+  #section6 .contact_ani1 img {
     width: 50vw;
   }
-  #section5 .sec2_text_1 button {
-    width: 13.5vw;
-    font-size: 3.5vw;
-  }
-  #section5 .sec2_text {
-    font-size: 15vw;
-  }
-  #section6 .sec1_ani2 {
+
+  #section6 .contact_ani2 {
     font-size: 17.5vw;
   }
-  #section6 .sec1_ani3 a {
+  #section6 .contact_ani3 a {
     font-size: 13vw;
   }
 }
