@@ -1157,12 +1157,12 @@
         tl.from(
             chars,
             {
-                duration: 1.5,
+                duration: 1,
                 y: 50,
                 opacity: 0,
-                stagger: 0.1,
+                stagger: 0.3,
                 delay: 0.5,
-                ease: Elastic.easeOut.config(1, 0.3),
+                ease: Back.easeOut.config(1.7),
             },
             '-=0.5'
         );
@@ -1175,7 +1175,7 @@
             {
                 opacity: 1,
                 y: 0,
-                duration: 1.5,
+                duration: 1,
             },
             '-=1'
         );
@@ -1188,7 +1188,7 @@
             {
                 opacity: 1,
                 y: 0,
-                duration: 1.5,
+                duration: 1,
             },
             '-=1.5'
         );
@@ -1202,7 +1202,7 @@
             {
                 opacity: 1,
                 y: 0,
-                duration: 1.5,
+                duration: 1,
             },
             '-=0.5'
         );
@@ -1215,7 +1215,7 @@
             {
                 opacity: 1,
                 y: 0,
-                duration: 1.5,
+                duration: 1,
             },
             '-=1.5'
         );
@@ -1284,7 +1284,7 @@
         );
         tl.to('.loader__item--c', {
             scale: 40,
-            duration: 1.5,
+            duration: 1,
             ease: Sine.easeOut,
         });
 
