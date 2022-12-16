@@ -217,6 +217,7 @@ body {
 }
 
 /* section2 */
+/* 초록색 효과 */
 #section2 .sec1-box1 {
   width: 100%;
   height: 100vh;
@@ -226,6 +227,7 @@ body {
   height: 10vh;
   background: #629460;
 }
+/* site text */
 #section2 .site_text {
   font-family: "pretendard";
   font-weight: 900;
@@ -245,6 +247,33 @@ body {
   color: #fff;
   width: 74vw;
 }
+
+#section2 .site_text {
+  color: #fff;
+  font-size: 1vw;
+  font-family: "nanumsquare";
+  font-weight: 500;
+  text-align: left;
+  background: rgba(51, 61, 52, 0.253);
+  backdrop-filter: blur(10px);
+  padding: 1vw;
+  text-transform: uppercase;
+  z-index: 10;
+  width: 30vw;
+}
+#section2 .site_text button {
+  cursor: pointer;
+  margin-top: 1vw;
+  padding: 0.3vw;
+  border: 0.1vw solid #fff;
+  background: rgb(107, 145, 98);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  width: 4.5vw;
+  font-size: 0.85vw;
+  color: #fff;
+}
+/* site img */
 #section2 .site_img1 {
   border: 0.5vw solid rgba(155, 217, 166, 0.506);
   background: url(../img/site1.jpg);
@@ -278,33 +307,8 @@ body {
   height: 25vw;
 }
 
-#section2 .site_text {
-  color: #fff;
-  font-size: 1vw;
-  font-family: "nanumsquare";
-  font-weight: 500;
-  text-align: left;
-  background: rgba(51, 61, 52, 0.253);
-  backdrop-filter: blur(10px);
-  padding: 1vw;
-  text-transform: uppercase;
-  z-index: 10;
-  width: 30vw;
-}
-#section2 .site_text button {
-  cursor: pointer;
-  margin-top: 1vw;
-  padding: 0.3vw;
-  border: 0.1vw solid #fff;
-  background: rgb(107, 145, 98);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  width: 4.5vw;
-  font-size: 0.85vw;
-  color: #fff;
-}
-
 /* section3 */
+/* basic */
 #section3 .basic_bottom {
   font-family: "pretendard";
   font-weight: 900;
@@ -331,7 +335,7 @@ body {
   width: 100vh;
 }
 
-/* #section3 이미지 */
+/* img */
 #section3 .basic_css {
   background: url(../img/css_r.jpg);
   background-size: cover;
@@ -368,6 +372,7 @@ body {
   z-index: 1;
   border: 0.35vw solid #000;
 }
+/* refer */
 #section3 .basic_refer_t {
   font-family: "pretendard";
   font-weight: 900;
@@ -387,7 +392,7 @@ body {
   font-size: 10vw;
   text-transform: uppercase;
 }
-
+/* 이미지 위 텍스트 */
 .refer_title {
   font-family: "pretendard";
   font-weight: 900;
@@ -401,6 +406,7 @@ body {
 }
 
 /* #section4 */
+/* 화면 전환 효과 */
 #section4 .sec1 {
   background: #d7d2ce;
   width: 200vw;
@@ -408,6 +414,7 @@ body {
 }
 
 /* #section5 */
+/* react */
 #section5 .react_bottom {
   font-family: "pretendard";
   font-weight: 900;
@@ -432,6 +439,7 @@ body {
   justify-content: center;
 }
 
+/* react img */
 #section5 .react1-img1 {
   background: url(../img/Mockup-reactapi.jpg) no-repeat center center;
   width: 10vw;
@@ -498,9 +506,39 @@ body {
   bottom: auto;
   transform: translate(0, 0);
 }
-
+/* react text */
+.img_text_t {
+  font-family: "pretendard";
+  font-weight: 900;
+  -webkit-text-stroke: 0.2vw #000;
+  color: rgba(255, 255, 255, 0);
+  text-align: center;
+  font-size: 9.5vw;
+  text-transform: uppercase;
+}
+.img_text_b {
+  color: #000;
+  font-size: 1.3vw;
+  font-family: "nanumsquare";
+  font-weight: 500;
+  text-align: center;
+  text-transform: uppercase;
+  z-index: 10;
+}
+.img_text-btn button {
+  cursor: pointer;
+  margin: 0vw 2.5vw 0vw 1vw;
+  padding: 0.3vw;
+  border: 0.1vw solid #000;
+  background: rgba(255, 255, 255, 0);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  width: 4.5vw;
+  font-size: 0.85vw;
+  color: #000;
+}
 /* effect */
-
+/* effect main title */
 #section5 .effect_main {
   font-family: "pretendard";
   font-weight: 900;
@@ -511,6 +549,7 @@ body {
   text-transform: uppercase;
 }
 
+/* effect img size */
 #section5 .effect_start {
   width: 98%;
   height: 98vh;
@@ -523,6 +562,7 @@ body {
   width: 98%;
   height: 98vh;
 }
+/* effect img */
 #section5 .effect_game {
   width: 100%;
   height: 100%;
@@ -620,36 +660,7 @@ body {
   margin: 1vw 0.5vw 0 0.5vw;
 }
 
-.img_text_t {
-  font-family: "pretendard";
-  font-weight: 900;
-  -webkit-text-stroke: 0.2vw #000;
-  color: rgba(255, 255, 255, 0);
-  text-align: center;
-  font-size: 9.5vw;
-  text-transform: uppercase;
-}
-.img_text_b {
-  color: #000;
-  font-size: 1.3vw;
-  font-family: "nanumsquare";
-  font-weight: 500;
-  text-align: center;
-  text-transform: uppercase;
-  z-index: 10;
-}
-.img_text-btn button {
-  cursor: pointer;
-  margin: 0vw 2.5vw 0vw 1vw;
-  padding: 0.3vw;
-  border: 0.1vw solid #000;
-  background: rgba(255, 255, 255, 0);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  width: 4.5vw;
-  font-size: 0.85vw;
-  color: #000;
-}
+/* section6 contact */
 #section6 .contact_ani1 img {
   width: 23vw;
 }
