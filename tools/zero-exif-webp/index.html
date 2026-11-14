@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="ko" data-theme="dark">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#0a0b0d">
-<meta name="description" content="사진을 서버로 보내지 않고 브라우저 안에서만 EXIF·GPS 메타데이터를 제거하고 WebP로 변환합니다. 업로드 0바이트, 설치 없음.">
-<meta property="og:title" content="무업로드 EXIF 삭제 · WebP 변환기">
-<meta property="og:description" content="서버 전송 0% · 브라우저 내 100% 로컬 처리 · EXIF/GPS 완전 제거">
-<title>무업로드 EXIF 삭제 · WebP 변환기</title>
+<meta name="description" content="Strip EXIF and GPS metadata from photos and convert them to WebP entirely inside your browser. Zero bytes uploaded, nothing to install.">
+<meta property="og:title" content="Zero-Upload EXIF Remover · WebP Converter">
+<meta property="og:description" content="0% sent to a server · 100% in-browser processing · EXIF/GPS fully removed">
+<title>Zero-Upload EXIF Remover · WebP Converter</title>
 <link rel="icon" href="data:,">
 <style>
 @view-transition { navigation: auto; }
@@ -85,6 +85,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 12px;
   padding: 22px 0 0;
 }
@@ -131,6 +132,31 @@ html[data-theme="light"] .ico-moon { display: none; }
   transition: color .2s, border-color .2s, transform .15s;
 }
 .back:hover { color: var(--ink); border-color: var(--line2); transform: translateY(-1px); }
+
+.lang-toggle {
+  appearance: none;
+  font-family: var(--font);
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--muted2);
+  height: 36px;
+  padding: 0 11px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  line-height: 1;
+  transition: color .2s, border-color .2s, transform .15s, background .2s;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.94); }
+.lang-toggle .lt { transition: color .2s; }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; letter-spacing: 0; }
 
 /* ── hero ───────────────────────────────────────────── */
 .hero { padding: 54px 0 30px; }
@@ -480,6 +506,7 @@ footer .sep { opacity: .4; }
   .brand-txt { font-size: 10.5px; letter-spacing: .08em; }
   .top { gap: 8px; }
   .back { padding: 7px 10px; font-size: 12px; }
+  .lang-toggle { height: 32px; padding: 0 8px; gap: 5px; font-size: 10.5px; }
   .card { grid-template-columns: 52px 1fr; grid-template-areas: "thumb info" "act act"; row-gap: 10px; }
   .thumb { width: 52px; height: 52px; grid-area: thumb; }
   .info { grid-area: info; }
@@ -499,122 +526,124 @@ footer .sep { opacity: .4; }
 <div class="wrap">
 
   <header class="top">
-    <a class="brand" href="../../" aria-label="포트폴리오로 돌아가기">
+    <a class="brand" href="../../" aria-label="Back to the portfolio" data-i18n-aria="brandAria">
       <span class="mark">▣</span>
       <span class="brand-txt">Zero&nbsp;Server Tools</span>
     </a>
     <div class="top-actions">
-      <button class="icon-btn" id="themeBtn" type="button" title="테마 전환" aria-label="라이트/다크 테마 전환">
+      <button class="lang-toggle" id="langToggle" type="button" title="View in Korean" aria-label="View in Korean">
+        <span class="lt on" data-lt="en">EN</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="ko">KO</span>
+      </button>
+      <button class="icon-btn" id="themeBtn" type="button" title="Toggle theme" data-i18n-title="themeTitle" aria-label="Switch to dark theme">
         <svg class="ico ico-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 13.6A8.6 8.6 0 1 1 10.4 3.5a6.9 6.9 0 0 0 10.1 10.1Z"/></svg>
         <svg class="ico ico-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2m0 14v2M3 12h2m14 0h2M5.6 5.6l1.4 1.4m10 10 1.4 1.4M18.4 5.6l-1.4 1.4m-10 10-1.4 1.4"/></svg>
       </button>
-      <a class="back" href="../../">← 포트폴리오</a>
+      <a class="back" href="../../" data-i18n="back">← Portfolio</a>
     </div>
   </header>
 
   <section class="hero">
     <div class="badge-row">
-      <span class="pill pill--live"><span class="dot"></span><b>서버 전송 0%</b></span>
-      <span class="pill">브라우저 내 <b>100% 로컬 처리</b></span>
-      <span class="pill"><b>EXIF / GPS</b> 완전 제거</span>
+      <span class="pill pill--live"><span class="dot"></span><b data-i18n="pillServer">0% sent to a server</b></span>
+      <span class="pill" data-i18n-html="pillLocal">In-browser <b>100% local</b></span>
+      <span class="pill" data-i18n-html="pillExif"><b>EXIF / GPS</b> fully removed</span>
     </div>
-    <h1>사진을 올리지 않고<br><span class="dim">찍은 곳까지 지운다.</span></h1>
-    <p class="lede">사진 파일에는 촬영 위치·기기·시각이 조용히 남아 있습니다. 이 도구는 사진을 단 한 바이트도 전송하지 않고, 브라우저 안에서 그 기록을 지운 뒤 용량을 줄여 다시 저장합니다.</p>
+    <h1 data-i18n-html="h1">Upload nothing.<br><span class="dim">Erase where it was taken.</span></h1>
+    <p class="lede" data-i18n="lede">A photo file quietly keeps the place, the device and the time it was taken. This tool sends not a single byte of it anywhere — it wipes that record inside your browser, shrinks the file and hands it back.</p>
   </section>
 
-  <div class="drop" id="drop" role="button" tabindex="0" aria-label="이미지 파일 선택 또는 끌어다 놓기">
+  <div class="drop" id="drop" role="button" tabindex="0" aria-label="Choose image files or drop them here" data-i18n-aria="dropAria">
     <div class="drop-ico" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5"/>
         <path d="M3.5 15v3.5A1.5 1.5 0 0 0 5 20h14a1.5 1.5 0 0 0 1.5-1.5V15"/>
       </svg>
     </div>
-    <p class="drop-title">이미지를 여기에 끌어다 놓으세요</p>
-    <p class="drop-sub">또는 클릭해서 선택 · 여러 장 동시 선택 가능 · <kbd>⌘V</kbd> 붙여넣기</p>
-    <p class="drop-fmt">JPEG · PNG · WebP · HEIC(브라우저 지원 시)</p>
+    <p class="drop-title" data-i18n="dropTitle">Drop images here</p>
+    <p class="drop-sub" data-i18n-html="dropSub">or click to choose · several at once · paste with <kbd>⌘V</kbd></p>
+    <p class="drop-fmt" data-i18n="dropFmt">JPEG · PNG · WebP · HEIC (where the browser supports it)</p>
     <input class="visually-hidden" id="fileInput" type="file" accept="image/*,.heic,.heif" multiple>
   </div>
 
-  <section class="controls panel" aria-label="출력 설정">
+  <section class="controls panel" aria-label="Output settings" data-i18n-aria="controlsAria">
     <div class="ctrl-row">
-      <label class="ctrl-label" for="quality">압축 품질 <span class="num" id="qualityOut">85%</span></label>
+      <label class="ctrl-label" for="quality"><span data-i18n="qualityLabel">Quality</span> <span class="num" id="qualityOut">85%</span></label>
       <div class="range-wrap">
         <input type="range" id="quality" min="40" max="100" step="1" value="85" aria-describedby="qualityHint">
       </div>
-      <p class="hint" id="qualityHint">낮을수록 가볍고, 높을수록 원본에 가깝습니다. 사진은 80~88%면 육안 차이가 거의 없습니다.</p>
+      <p class="hint" id="qualityHint" data-i18n="qualityHint">Lower is lighter, higher is closer to the original. At 80–88% a photo looks the same to the eye.</p>
     </div>
 
     <div class="ctrl-row">
-      <span class="ctrl-label">최대 가로 길이</span>
-      <div class="seg" id="widthSeg" role="group" aria-label="최대 가로 길이">
-        <button class="seg-btn" type="button" data-width="0" aria-pressed="true">원본 유지</button>
-        <button class="seg-btn" type="button" data-width="1200" aria-pressed="false">1200px · 블로그</button>
-        <button class="seg-btn" type="button" data-width="800" aria-pressed="false">800px · 썸네일</button>
+      <span class="ctrl-label" data-i18n="maxWidthLabel">Max width</span>
+      <div class="seg" id="widthSeg" role="group" aria-label="Max width" data-i18n-aria="maxWidthLabel">
+        <button class="seg-btn" type="button" data-width="0" aria-pressed="true" data-i18n="widthOriginal">Keep original</button>
+        <button class="seg-btn" type="button" data-width="1200" aria-pressed="false" data-i18n="width1200">1200px · Blog</button>
+        <button class="seg-btn" type="button" data-width="800" aria-pressed="false" data-i18n="width800">800px · Thumbnail</button>
       </div>
     </div>
 
     <div class="ctrl-row">
-      <span class="ctrl-label">출력 형식</span>
-      <div class="seg" id="formatSeg" role="group" aria-label="출력 형식">
+      <span class="ctrl-label" data-i18n="formatLabel">Output format</span>
+      <div class="seg" id="formatSeg" role="group" aria-label="Output format" data-i18n-aria="formatLabel">
         <button class="seg-btn" type="button" data-fmt="webp" aria-pressed="true">WebP</button>
         <button class="seg-btn" type="button" data-fmt="jpeg" aria-pressed="false">JPEG</button>
         <button class="seg-btn" type="button" data-fmt="png" aria-pressed="false">PNG</button>
       </div>
-      <p class="hint" id="formatHint">WebP는 같은 화질에서 JPEG보다 25~35% 작습니다. 형식·크기를 바꾸면 목록이 즉시 다시 처리됩니다.</p>
+      <p class="hint" id="formatHint">WebP is 25–35% smaller than JPEG at the same quality. Changing format or size re-processes the list instantly.</p>
     </div>
   </section>
 
-  <section class="results" id="results" aria-label="변환 결과">
+  <section class="results" id="results" aria-label="Conversion results" data-i18n-aria="resultsAria">
     <div class="summary panel">
       <div class="stat">
-        <span class="stat-k">파일</span>
+        <span class="stat-k" data-i18n="statFiles">Files</span>
         <span class="stat-v" id="statCount">–</span>
       </div>
       <div class="stat">
-        <span class="stat-k">원본 → 결과</span>
+        <span class="stat-k" data-i18n="statSize">Original → result</span>
         <span class="stat-v" id="statSize">–</span>
       </div>
       <div class="stat">
-        <span class="stat-k">절감</span>
+        <span class="stat-k" data-i18n="statSave">Saved</span>
         <span class="stat-v" id="statSave">–</span>
       </div>
       <span class="spacer"></span>
       <button class="btn btn--primary" id="zipBtn" type="button">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
-        <span id="zipLabel">전체 ZIP으로 저장</span>
+        <span id="zipLabel" data-i18n="zip">Download all as ZIP</span>
       </button>
-      <button class="btn btn--ghost" id="clearBtn" type="button">목록 비우기</button>
+      <button class="btn btn--ghost" id="clearBtn" type="button" data-i18n="clear">Clear list</button>
     </div>
     <div class="list" id="list"></div>
     <p class="caveat" id="statusLine" role="status" aria-live="polite"></p>
   </section>
 
-  <section class="notes" aria-label="동작 원리">
+  <section class="notes" aria-label="How it works" data-i18n-aria="notesAria">
     <div class="note">
-      <h3><span>01</span> 메모리에서만 해독</h3>
-      <p>선택한 파일은 브라우저 메모리로 바로 들어옵니다. 네트워크 요청은 한 번도 발생하지 않으며, 서버·로그·CDN 어디에도 사본이 남지 않습니다.</p>
+      <h3 data-i18n-html="note1h"><span>01</span> Decoded in memory only</h3>
+      <p data-i18n="note1d">Your files go straight into browser memory. No network request is ever made, so no copy is left on a server, a log or a CDN.</p>
     </div>
     <div class="note">
-      <h3><span>02</span> 픽셀만 다시 그린다</h3>
-      <p>캔버스에 이미지를 다시 그려 새 파일로 인코딩합니다. 이 과정에서 EXIF·GPS·XMP·ICC 프로필·썸네일·촬영 시각은 구조적으로 따라오지 못합니다.</p>
+      <h3 data-i18n-html="note2h"><span>02</span> Only the pixels are redrawn</h3>
+      <p data-i18n="note2d">The image is redrawn onto a canvas and encoded as a new file. EXIF, GPS, XMP, ICC profiles, thumbnails and capture times cannot survive that structurally.</p>
     </div>
     <div class="note">
-      <h3><span>03</span> 결과물 자체 검사</h3>
-      <p>만들어진 파일의 바이트를 다시 읽어 EXIF/GPS 마커가 0건인지 확인한 뒤 카드에 표시합니다. 말이 아니라 실측입니다.</p>
+      <h3 data-i18n-html="note3h"><span>03</span> The result is inspected too</h3>
+      <p data-i18n="note3d">The new file’s bytes are read back and checked for a zero count of EXIF/GPS markers before the card reports it. Measured, not claimed.</p>
     </div>
   </section>
 
-  <p class="caveat">
-    <strong>참고.</strong> 다시 인코딩하므로 원본과 화질이 미세하게 달라질 수 있습니다. 되돌릴 수 없는 작업이니 원본은 보관해 두세요.
-    HEIC는 브라우저가 직접 열 수 있는 경우에만 처리됩니다 — 열리지 않으면 아이폰 [설정 › 카메라 › 포맷 › 호환성 우선]으로 촬영하거나 사진 앱에서 JPEG로 내보낸 뒤 사용하세요.
-  </p>
+  <p class="caveat" data-i18n-html="caveat"><strong>Note.</strong> Re-encoding can shift quality very slightly, and it cannot be undone — keep your originals. HEIC is handled only when the browser can open it; if it cannot, shoot with iPhone [Settings › Camera › Formats › Most Compatible] or export the photo as JPEG from Photos first.</p>
 
   <footer>
-    <span>업로드 0 · 서버 0 · 쿠키 0 · 외부 요청 0</span>
+    <span data-i18n="foot1">0 uploads · 0 servers · 0 cookies · 0 external requests</span>
     <span class="sep">/</span>
-    <span>모든 처리는 이 탭 안에서 끝납니다</span>
+    <span data-i18n="foot2">Everything finishes inside this tab</span>
     <span class="sep">/</span>
-    <span>탭을 닫으면 남는 것 없음</span>
+    <span data-i18n="foot3">Close the tab and nothing remains</span>
   </footer>
 </div>
 
@@ -627,6 +656,7 @@ footer .sep { opacity: .4; }
   /* ───────────────────────── 설정·상태 ───────────────────────── */
   var state = {
     items: [],
+    lang: 'en',
     quality: 0.85,
     maxWidth: 0,
     format: 'webp',
@@ -646,6 +676,207 @@ footer .sep { opacity: .4; }
   var EXT = { webp: 'webp', jpeg: 'jpg', png: 'png' };
 
   var $ = function (id) { return document.getElementById(id); };
+
+  /* ───────────────────────── 언어 (EN 기본 · 1탭 KO) ───────────────────────── */
+  var LANG_KEY = 'zeroexif.lang';
+
+  var I18N = {
+    en: {
+      docTitle: 'Zero-Upload EXIF Remover · WebP Converter',
+      metaDesc: 'Strip EXIF and GPS metadata from photos and convert them to WebP entirely inside your browser. Zero bytes uploaded, nothing to install.',
+      ogTitle: 'Zero-Upload EXIF Remover · WebP Converter',
+      ogDesc: '0% sent to a server · 100% in-browser processing · EXIF/GPS fully removed',
+      themeTitle: 'Toggle theme',
+      switchToLight: 'Switch to light theme',
+      switchToDark: 'Switch to dark theme',
+      brandAria: 'Back to the portfolio',
+      back: '← Portfolio',
+      pillServer: '0% sent to a server',
+      pillLocal: 'In-browser <b>100% local</b>',
+      pillExif: '<b>EXIF / GPS</b> fully removed',
+      h1: 'Upload nothing.<br><span class="dim">Erase where it was taken.</span>',
+      lede: 'A photo file quietly keeps the place, the device and the time it was taken. This tool sends not a single byte of it anywhere — it wipes that record inside your browser, shrinks the file and hands it back.',
+      dropAria: 'Choose image files or drop them here',
+      dropTitle: 'Drop images here',
+      dropSub: 'or click to choose · several at once · paste with <kbd>⌘V</kbd>',
+      dropFmt: 'JPEG · PNG · WebP · HEIC (where the browser supports it)',
+      controlsAria: 'Output settings',
+      qualityLabel: 'Quality',
+      qualityHint: 'Lower is lighter, higher is closer to the original. At 80–88% a photo looks the same to the eye.',
+      maxWidthLabel: 'Max width',
+      widthOriginal: 'Keep original',
+      width1200: '1200px · Blog',
+      width800: '800px · Thumbnail',
+      formatLabel: 'Output format',
+      hintWebp: 'WebP is 25–35% smaller than JPEG at the same quality. Changing format or size re-processes the list instantly.',
+      hintJpeg: 'JPEG opens everywhere. Transparent areas are filled with white.',
+      hintPng: 'PNG is lossless, so the quality slider is off — WebP is the better choice for photos.',
+      resultsAria: 'Conversion results',
+      statFiles: 'Files',
+      statSize: 'Original → result',
+      statSave: 'Saved',
+      zip: 'Download all as ZIP',
+      clear: 'Clear list',
+      notesAria: 'How it works',
+      note1h: '<span>01</span> Decoded in memory only',
+      note1d: 'Your files go straight into browser memory. No network request is ever made, so no copy is left on a server, a log or a CDN.',
+      note2h: '<span>02</span> Only the pixels are redrawn',
+      note2d: 'The image is redrawn onto a canvas and encoded as a new file. EXIF, GPS, XMP, ICC profiles, thumbnails and capture times cannot survive that structurally.',
+      note3h: '<span>03</span> The result is inspected too',
+      note3d: 'The new file’s bytes are read back and checked for a zero count of EXIF/GPS markers before the card reports it. Measured, not claimed.',
+      caveat: '<strong>Note.</strong> Re-encoding can shift quality very slightly, and it cannot be undone — keep your originals. HEIC is handled only when the browser can open it; if it cannot, shoot with iPhone [Settings › Camera › Formats › Most Compatible] or export the photo as JPEG from Photos first.',
+      foot1: '0 uploads · 0 servers · 0 cookies · 0 external requests',
+      foot2: 'Everything finishes inside this tab',
+      foot3: 'Close the tab and nothing remains',
+      decoding: 'Decoding…',
+      waiting: 'Waiting',
+      converting: 'Converting…',
+      failedTag: 'Failed',
+      tagHeic: 'HEIC unsupported',
+      tagCant: 'Cannot convert',
+      errHeic: 'This browser cannot open HEIC — export it as JPEG from the Photos app and try again.',
+      errDecode: 'The file could not be decoded. It may be damaged or in an unsupported format.',
+      save: 'Save',
+      remove: 'Remove this file',
+      metaUnreadable: 'Original metadata: unreadable',
+      metaNone: 'Original metadata: none',
+      metaHad: 'On the original: ',
+      inspectClean: 'Result check: 0 metadata markers ✓',
+      inspectIcc: ' (color profile kept)',
+      inspectLeft: 'Result check: ',
+      inspectTail: ' still present',
+      inspectUnknown: 'unverified',
+      zipBuilding: 'Building ZIP…',
+      zipFailed: 'ZIP creation failed. Save the files one by one instead.',
+      webpNoTitle: 'This browser cannot encode WebP',
+      webpHint: 'This browser cannot encode WebP, so files are saved as JPEG.',
+      statusDone: 'All files processed · the results were made inside this browser only.',
+      kindDate: 'capture time',
+      kindThumb: 'thumbnail',
+      kindText: 'text chunk'
+    },
+    ko: {
+      docTitle: '무업로드 EXIF 삭제 · WebP 변환기',
+      metaDesc: '사진을 서버로 보내지 않고 브라우저 안에서만 EXIF·GPS 메타데이터를 제거하고 WebP로 변환합니다. 업로드 0바이트, 설치 없음.',
+      ogTitle: '무업로드 EXIF 삭제 · WebP 변환기',
+      ogDesc: '서버 전송 0% · 브라우저 내 100% 로컬 처리 · EXIF/GPS 완전 제거',
+      themeTitle: '테마 전환',
+      switchToLight: '라이트 테마로 전환',
+      switchToDark: '다크 테마로 전환',
+      brandAria: '포트폴리오로 돌아가기',
+      back: '← 포트폴리오',
+      pillServer: '서버 전송 0%',
+      pillLocal: '브라우저 내 <b>100% 로컬 처리</b>',
+      pillExif: '<b>EXIF / GPS</b> 완전 제거',
+      h1: '사진을 올리지 않고<br><span class="dim">찍은 곳까지 지운다.</span>',
+      lede: '사진 파일에는 촬영 위치·기기·시각이 조용히 남아 있습니다. 이 도구는 사진을 단 한 바이트도 전송하지 않고, 브라우저 안에서 그 기록을 지운 뒤 용량을 줄여 다시 저장합니다.',
+      dropAria: '이미지 파일 선택 또는 끌어다 놓기',
+      dropTitle: '이미지를 여기에 끌어다 놓으세요',
+      dropSub: '또는 클릭해서 선택 · 여러 장 동시 선택 가능 · <kbd>⌘V</kbd> 붙여넣기',
+      dropFmt: 'JPEG · PNG · WebP · HEIC(브라우저 지원 시)',
+      controlsAria: '출력 설정',
+      qualityLabel: '압축 품질',
+      qualityHint: '낮을수록 가볍고, 높을수록 원본에 가깝습니다. 사진은 80~88%면 육안 차이가 거의 없습니다.',
+      maxWidthLabel: '최대 가로 길이',
+      widthOriginal: '원본 유지',
+      width1200: '1200px · 블로그',
+      width800: '800px · 썸네일',
+      formatLabel: '출력 형식',
+      hintWebp: 'WebP는 같은 화질에서 JPEG보다 25~35% 작습니다. 형식·크기를 바꾸면 목록이 즉시 다시 처리됩니다.',
+      hintJpeg: 'JPEG는 모든 곳에서 열립니다. 투명 배경은 흰색으로 채워집니다.',
+      hintPng: 'PNG는 무손실이라 품질 슬라이더를 쓰지 않습니다 — 사진에는 WebP를 권장합니다.',
+      resultsAria: '변환 결과',
+      statFiles: '파일',
+      statSize: '원본 → 결과',
+      statSave: '절감',
+      zip: '전체 ZIP으로 저장',
+      clear: '목록 비우기',
+      notesAria: '동작 원리',
+      note1h: '<span>01</span> 메모리에서만 해독',
+      note1d: '선택한 파일은 브라우저 메모리로 바로 들어옵니다. 네트워크 요청은 한 번도 발생하지 않으며, 서버·로그·CDN 어디에도 사본이 남지 않습니다.',
+      note2h: '<span>02</span> 픽셀만 다시 그린다',
+      note2d: '캔버스에 이미지를 다시 그려 새 파일로 인코딩합니다. 이 과정에서 EXIF·GPS·XMP·ICC 프로필·썸네일·촬영 시각은 구조적으로 따라오지 못합니다.',
+      note3h: '<span>03</span> 결과물 자체 검사',
+      note3d: '만들어진 파일의 바이트를 다시 읽어 EXIF/GPS 마커가 0건인지 확인한 뒤 카드에 표시합니다. 말이 아니라 실측입니다.',
+      caveat: '<strong>참고.</strong> 다시 인코딩하므로 원본과 화질이 미세하게 달라질 수 있습니다. 되돌릴 수 없는 작업이니 원본은 보관해 두세요. HEIC는 브라우저가 직접 열 수 있는 경우에만 처리됩니다 — 열리지 않으면 아이폰 [설정 › 카메라 › 포맷 › 호환성 우선]으로 촬영하거나 사진 앱에서 JPEG로 내보낸 뒤 사용하세요.',
+      foot1: '업로드 0 · 서버 0 · 쿠키 0 · 외부 요청 0',
+      foot2: '모든 처리는 이 탭 안에서 끝납니다',
+      foot3: '탭을 닫으면 남는 것 없음',
+      decoding: '해독 중…',
+      waiting: '대기',
+      converting: '변환 중…',
+      failedTag: '실패',
+      tagHeic: 'HEIC 미지원',
+      tagCant: '변환 불가',
+      errHeic: '이 브라우저가 HEIC를 열지 못합니다 — 아이폰 사진 앱에서 JPEG로 내보낸 뒤 다시 시도해 주세요.',
+      errDecode: '파일을 해독할 수 없습니다. 손상되었거나 지원되지 않는 형식입니다.',
+      save: '저장',
+      remove: '이 파일 제거',
+      metaUnreadable: '원본 메타데이터: 판독 불가',
+      metaNone: '원본 메타데이터: 없음',
+      metaHad: '원본에 있던 것: ',
+      inspectClean: '결과물 검사: 메타데이터 0건 ✓',
+      inspectIcc: ' (색상 프로필만 유지)',
+      inspectLeft: '결과물 검사: ',
+      inspectTail: ' 잔존',
+      inspectUnknown: '미확인',
+      zipBuilding: 'ZIP 만드는 중…',
+      zipFailed: 'ZIP 생성에 실패했습니다. 개별 저장을 이용해 주세요.',
+      webpNoTitle: '이 브라우저는 WebP 인코딩을 지원하지 않습니다',
+      webpHint: '이 브라우저는 WebP 인코딩을 지원하지 않아 JPEG로 저장합니다.',
+      statusDone: '모든 파일 처리 완료 · 결과물은 이 브라우저 안에서만 만들어졌습니다.',
+      kindDate: '촬영시각',
+      kindThumb: '썸네일',
+      kindText: '텍스트'
+    }
+  };
+
+  var KIND_KEY = { date: 'kindDate', thumb: 'kindThumb', text: 'kindText' };
+
+  function isKo() { return state.lang === 'ko'; }
+
+  function t(key) {
+    var d = I18N[state.lang] || I18N.en;
+    return d[key] != null ? d[key] : I18N.en[key];
+  }
+
+  function kindsText(list) {
+    var out = [];
+    for (var i = 0; i < list.length; i++) out.push(KIND_KEY[list[i]] ? t(KIND_KEY[list[i]]) : list[i]);
+    return out.join(' · ');
+  }
+
+  function countN(n) { return isKo() ? n + '개' : (n === 1 ? '1 file' : n + ' files'); }
+
+  function skippedMsg(n) {
+    return isKo() ? n + '개 파일은 이미지가 아니어서 건너뛰었습니다.'
+      : (n === 1 ? 'Skipped 1 file — it is not an image.' : 'Skipped ' + n + ' files — they are not images.');
+  }
+
+  function failedMsg(n) {
+    return isKo() ? n + '개 파일을 처리하지 못했습니다.'
+      : (n === 1 ? '1 file could not be processed.' : n + ' files could not be processed.');
+  }
+
+  function zipMsg(n) {
+    return isKo() ? n + '개 파일을 ZIP으로 저장했습니다.'
+      : (n === 1 ? '1 file saved as a ZIP.' : n + ' files saved as a ZIP.');
+  }
+
+  function workLine(done, total) {
+    return isKo() ? '처리 중… ' + done + '/' + total + ' 완료' : 'Processing… ' + done + '/' + total + ' done';
+  }
+
+  function savedWord(saved) {
+    if (isKo()) return saved >= 0 ? ' 절약' : ' 증가';
+    return saved >= 0 ? ' saved' : ' more';
+  }
+
+  function updateFormatHint() {
+    var key = state.format === 'png' ? 'hintPng' : (state.format === 'jpeg' ? 'hintJpeg' : 'hintWebp');
+    if (state.format === 'jpeg' && !WEBP_OK) key = 'webpHint';
+    $('formatHint').textContent = t(key);
+  }
 
   /* ───────────────────────── 작은 도구들 ───────────────────────── */
   function fmtBytes(n) {
@@ -864,7 +1095,7 @@ footer .sep { opacity: .4; }
               if (tif) {
                 if (tif.gps) { info.gps = true; add('GPS'); }
                 if (tif.camera) info.camera = tif.camera;
-                if (tif.date) { info.date = true; add('촬영시각'); }
+                if (tif.date) { info.date = true; add('date'); }
               }
             } else if (bytesToStr(b, s0, s0 + 28).indexOf('http://ns.adobe.com/xap') === 0) {
               add('XMP');
@@ -874,7 +1105,7 @@ footer .sep { opacity: .4; }
           } else if (mk === 0xE2) {
             info.icc = true;
           } else if (mk === 0xEE) {
-            add('썸네일');
+            add('thumb');
           }
           i = i + 2 + len;
         }
@@ -890,7 +1121,7 @@ footer .sep { opacity: .4; }
             if (t2) {
               if (t2.gps) { info.gps = true; add('GPS'); }
               if (t2.camera) info.camera = t2.camera;
-              if (t2.date) { info.date = true; add('촬영시각'); }
+              if (t2.date) { info.date = true; add('date'); }
             }
           } else if (id === 'XMP ') { add('XMP'); }
           else if (id === 'ICCP') { info.icc = true; }
@@ -906,7 +1137,7 @@ footer .sep { opacity: .4; }
             add('EXIF');
             var t3 = parseTiff(b, q + 8, Math.min(b.length, q + 8 + ln));
             if (t3 && t3.gps) { info.gps = true; add('GPS'); }
-          } else if (ty === 'tEXt' || ty === 'iTXt' || ty === 'zTXt') { add('텍스트'); }
+          } else if (ty === 'tEXt' || ty === 'iTXt' || ty === 'zTXt') { add('text'); }
           else if (ty === 'iCCP') { info.icc = true; }
           else if (ty === 'IEND') break;
           q += 12 + ln;
@@ -1039,7 +1270,7 @@ footer .sep { opacity: .4; }
       added++;
     }
 
-    if (skipped) toast(skipped + '개 파일은 이미지가 아니어서 건너뛰었습니다.');
+    if (skipped) toast(skippedMsg(skipped));
     if (added) {
       results.classList.add('on');
       requestProcess();
@@ -1060,7 +1291,7 @@ footer .sep { opacity: .4; }
     name.title = item.name;
     info.appendChild(name);
 
-    var dims = el('p', 'dims', '해독 중…');
+    var dims = el('p', 'dims', t('decoding'));
     info.appendChild(dims);
 
     var sizes = el('div', 'sizes');
@@ -1083,7 +1314,7 @@ footer .sep { opacity: .4; }
     card.appendChild(info);
 
     var act = el('div', 'act');
-    var dl = el('button', 'btn btn--ghost btn--sm', '저장');
+    var dl = el('button', 'btn btn--ghost btn--sm', t('save'));
     dl.type = 'button';
     dl.disabled = true;
     dl.addEventListener('click', function () {
@@ -1091,8 +1322,8 @@ footer .sep { opacity: .4; }
     });
     var rm = el('button', 'icon-btn', '×');
     rm.type = 'button';
-    rm.title = '이 파일 제거';
-    rm.setAttribute('aria-label', '이 파일 제거');
+    rm.title = t('remove');
+    rm.setAttribute('aria-label', t('remove'));
     rm.style.width = '30px';
     rm.style.height = '30px';
     rm.addEventListener('click', function () { removeItem(item); });
@@ -1133,7 +1364,7 @@ footer .sep { opacity: .4; }
     }
 
     if (item.status === 'working') {
-      e.after.textContent = '변환 중…';
+      e.after.textContent = t('converting');
       e.after.style.opacity = '.55';
       e.tag.style.display = 'none';
       e.fill.style.width = '35%';
@@ -1147,14 +1378,12 @@ footer .sep { opacity: .4; }
 
     if (item.status === 'error') {
       var heic = item.errorKind === 'heic';
-      e.after.textContent = '실패';
+      e.after.textContent = t('failedTag');
       e.tag.style.display = '';
       e.tag.className = 'tag tag--err';
-      e.tag.textContent = heic ? 'HEIC 미지원' : '변환 불가';
+      e.tag.textContent = heic ? t('tagHeic') : t('tagCant');
       e.fill.style.width = '100%';
-      e.meta.textContent = heic
-        ? '이 브라우저가 HEIC를 열지 못합니다 — 아이폰 사진 앱에서 JPEG로 내보낸 뒤 다시 시도해 주세요.'
-        : '파일을 해독할 수 없습니다. 손상되었거나 지원되지 않는 형식입니다.';
+      e.meta.textContent = heic ? t('errHeic') : t('errDecode');
       e.dl.disabled = true;
       return;
     }
@@ -1181,22 +1410,24 @@ footer .sep { opacity: .4; }
       e.meta.appendChild(el('span', 'kv', srcTxt.text));
       var clean = item.metaOut && item.metaOut.kinds.length === 0;
       var outTxt = clean
-        ? '결과물 검사: 메타데이터 0건 ✓' + (item.metaOut.icc ? ' (색상 프로필만 유지)' : '')
-        : '결과물 검사: ' + (item.metaOut ? item.metaOut.kinds.join('·') + ' 잔존' : '미확인');
+        ? t('inspectClean') + (item.metaOut.icc ? t('inspectIcc') : '')
+        : t('inspectLeft') + (item.metaOut ? kindsText(item.metaOut.kinds) + t('inspectTail') : t('inspectUnknown'));
       e.meta.appendChild(el('span', 'kv' + (clean ? ' ok' : ' no'), outTxt));
       e.dl.disabled = false;
       return;
     }
 
-    e.after.textContent = '대기';
+    e.after.textContent = t('waiting');
+    if (!item.origW) e.dims.textContent = t('decoding');
   }
 
   function metaSummaryIn(m) {
-    if (!m) return { text: '원본 메타데이터: 판독 불가', warn: false };
-    if (!m.kinds.length) return { text: '원본 메타데이터: 없음', warn: false };
-    var parts = m.kinds.slice();
+    if (!m) return { text: t('metaUnreadable'), warn: false };
+    if (!m.kinds.length) return { text: t('metaNone'), warn: false };
+    var parts = [];
+    for (var i = 0; i < m.kinds.length; i++) parts.push(KIND_KEY[m.kinds[i]] ? t(KIND_KEY[m.kinds[i]]) : m.kinds[i]);
     if (m.camera) parts.push(m.camera);
-    return { text: '원본에 있던 것: ' + parts.join(' · '), warn: m.gps };
+    return { text: t('metaHad') + parts.join(' · '), warn: m.gps };
   }
 
   /* ───────────────────────── 변환 파이프라인 ───────────────────────── */
@@ -1301,7 +1532,7 @@ footer .sep { opacity: .4; }
       else if (it.status === 'pending') working++;
     }
 
-    $('statCount').textContent = total ? (total + '개') : '–';
+    $('statCount').textContent = total ? countN(total) : '–';
     if (done) {
       $('statSize').textContent = fmtBytes(o) + ' → ' + fmtBytes(out);
       var saved = o - out;
@@ -1311,7 +1542,7 @@ footer .sep { opacity: .4; }
       var em = document.createElement('em');
       em.textContent = (saved >= 0 ? '−' : '+') + Math.abs(pct) + '%';
       v.appendChild(em);
-      v.appendChild(document.createTextNode(' · ' + fmtBytes(Math.abs(saved)) + (saved >= 0 ? ' 절약' : ' 증가')));
+      v.appendChild(document.createTextNode(' · ' + fmtBytes(Math.abs(saved)) + savedWord(saved)));
     } else {
       $('statSize').textContent = '–';
       $('statSave').textContent = '–';
@@ -1321,10 +1552,10 @@ footer .sep { opacity: .4; }
     $('clearBtn').disabled = total === 0;
 
     var line = '';
-    if (working) line = '처리 중… ' + done + '/' + total + ' 완료';
+    if (working) line = workLine(done, total);
     else if (total === 0) line = '';
-    else if (failed) line = failed + '개 파일을 처리하지 못했습니다.';
-    else line = '모든 파일 처리 완료 · 결과물은 이 브라우저 안에서만 만들어졌습니다.';
+    else if (failed) line = failedMsg(failed);
+    else line = t('statusDone');
     $('statusLine').textContent = line;
   }
 
@@ -1366,7 +1597,7 @@ footer .sep { opacity: .4; }
     var label = $('zipLabel');
     var prev = label.textContent;
     btn.disabled = true;
-    label.textContent = 'ZIP 만드는 중…';
+    label.textContent = t('zipBuilding');
 
     setTimeout(function () {
       try {
@@ -1379,9 +1610,9 @@ footer .sep { opacity: .4; }
         var stamp = d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0')
           + '-' + String(d.getHours()).padStart(2, '0') + String(d.getMinutes()).padStart(2, '0');
         saveBlob(zipStore(entries), 'zero-exif-webp-' + stamp + '.zip');
-        toast(ready.length + '개 파일을 ZIP으로 저장했습니다.');
+        toast(zipMsg(ready.length));
       } catch (e) {
-        toast('ZIP 생성에 실패했습니다. 개별 저장을 이용해 주세요.');
+        toast(t('zipFailed'));
       }
       label.textContent = prev;
       btn.disabled = false;
@@ -1495,13 +1726,8 @@ footer .sep { opacity: .4; }
     var btns = $('formatSeg').querySelectorAll('button');
     for (var i = 0; i < btns.length; i++) btns[i].setAttribute('aria-pressed', btns[i] === b ? 'true' : 'false');
     state.format = b.dataset.fmt;
-    var isPng = state.format === 'png';
-    quality.disabled = isPng;
-    $('formatHint').textContent = isPng
-      ? 'PNG는 무손실이라 품질 슬라이더를 쓰지 않습니다 — 사진에는 WebP를 권장합니다.'
-      : (state.format === 'jpeg'
-        ? 'JPEG는 모든 곳에서 열립니다. 투명 배경은 흰색으로 채워집니다.'
-        : 'WebP는 같은 화질에서 JPEG보다 25~35% 작습니다. 형식·크기를 바꾸면 목록이 즉시 다시 처리됩니다.');
+    quality.disabled = state.format === 'png';
+    updateFormatHint();
     scheduleReprocess();
   });
 
@@ -1510,11 +1736,11 @@ footer .sep { opacity: .4; }
 
   /* 테마 */
   var themeBtn = $('themeBtn');
-  function setTheme(t) {
-    document.documentElement.setAttribute('data-theme', t);
-    themeBtn.setAttribute('aria-label', t === 'dark' ? '라이트 테마로 전환' : '다크 테마로 전환');
+  function setTheme(mode) {
+    document.documentElement.setAttribute('data-theme', mode);
+    themeBtn.setAttribute('aria-label', mode === 'dark' ? t('switchToLight') : t('switchToDark'));
     var meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', t === 'dark' ? '#0a0b0d' : '#f4f6f2');
+    if (meta) meta.setAttribute('content', mode === 'dark' ? '#0a0b0d' : '#f4f6f2');
   }
   try {
     var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
@@ -1530,12 +1756,105 @@ footer .sep { opacity: .4; }
     if (wb) {
       wb.disabled = true;
       wb.setAttribute('aria-pressed', 'false');
-      wb.title = '이 브라우저는 WebP 인코딩을 지원하지 않습니다';
+      wb.title = t('webpNoTitle');
     }
     var jb = $('formatSeg').querySelector('button[data-fmt="jpeg"]');
     if (jb) jb.setAttribute('aria-pressed', 'true');
     state.format = 'jpeg';
-    $('formatHint').textContent = '이 브라우저는 WebP 인코딩을 지원하지 않아 JPEG로 저장합니다.';
+    updateFormatHint();
+  }
+
+
+  /* ───────────────────────── 언어 적용 ───────────────────────── */
+  function initialLang() {
+    var q = '';
+    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
+    if (q === 'ko' || q === 'en') return q;
+    try {
+      var saved = localStorage.getItem(LANG_KEY);
+      if (saved === 'ko' || saved === 'en') return saved;
+    } catch (e) { /* 저장소 접근 불가는 EN 기본으로 흡수 */ }
+    return 'en';
+  }
+
+  function applyLang(lang) {
+    state.lang = lang === 'ko' ? 'ko' : 'en';
+    var ko = isKo();
+
+    document.documentElement.setAttribute('lang', state.lang);
+    document.title = t('docTitle');
+    var md = document.querySelector('meta[name="description"]');
+    if (md) md.setAttribute('content', t('metaDesc'));
+    var ogt = document.querySelector('meta[property="og:title"]');
+    if (ogt) ogt.setAttribute('content', t('ogTitle'));
+    var ogd = document.querySelector('meta[property="og:description"]');
+    if (ogd) ogd.setAttribute('content', t('ogDesc'));
+
+    var i, n, k, v;
+    var texts = document.querySelectorAll('[data-i18n]');
+    for (i = 0; i < texts.length; i++) {
+      k = texts[i].getAttribute('data-i18n');
+      v = t(k);
+      if (v != null) texts[i].textContent = v;
+    }
+    var htmls = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < htmls.length; i++) {
+      k = htmls[i].getAttribute('data-i18n-html');
+      v = t(k);
+      if (v != null) htmls[i].innerHTML = v;
+    }
+    var arias = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < arias.length; i++) {
+      v = t(arias[i].getAttribute('data-i18n-aria'));
+      if (v != null) arias[i].setAttribute('aria-label', v);
+    }
+    var titles = document.querySelectorAll('[data-i18n-title]');
+    for (i = 0; i < titles.length; i++) {
+      v = t(titles[i].getAttribute('data-i18n-title'));
+      if (v != null) titles[i].setAttribute('title', v);
+    }
+
+    var ltBtn = $('langToggle');
+    if (ltBtn) {
+      var lts = ltBtn.querySelectorAll('[data-lt]');
+      for (i = 0; i < lts.length; i++) {
+        lts[i].classList.toggle('on', lts[i].getAttribute('data-lt') === state.lang);
+      }
+      var next = ko ? 'View in English' : 'View in Korean';
+      ltBtn.setAttribute('aria-label', next);
+      ltBtn.setAttribute('title', next);
+    }
+
+    /* 이미 화면에 있는 카드·요약·힌트를 현재 언어로 다시 그린다 */
+    setTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+    updateFormatHint();
+    for (n = 0; n < state.items.length; n++) paintItem(state.items[n]);
+    var saveBtns = document.querySelectorAll('#list .act .btn--ghost');
+    for (i = 0; i < saveBtns.length; i++) saveBtns[i].textContent = t('save');
+    var rmBtns = document.querySelectorAll('#list .act .icon-btn');
+    for (i = 0; i < rmBtns.length; i++) {
+      rmBtns[i].title = t('remove');
+      rmBtns[i].setAttribute('aria-label', t('remove'));
+    }
+    updateSummary();
+
+    try { localStorage.setItem(LANG_KEY, state.lang); } catch (e) { /* 저장 실패는 무해 */ }
+  }
+
+  applyLang(initialLang());
+
+  var langToggle = $('langToggle');
+  if (langToggle) {
+    langToggle.addEventListener('click', function () {
+      applyLang(isKo() ? 'en' : 'ko');
+      try {
+        var u = new URL(location.href);
+        if (u.searchParams.get('lang')) {
+          u.searchParams.set('lang', state.lang);
+          history.replaceState(null, '', u.pathname + u.search + u.hash);
+        }
+      } catch (e) { /* 주소 갱신 실패는 무해 */ }
+    });
   }
 
   updateSummary();
