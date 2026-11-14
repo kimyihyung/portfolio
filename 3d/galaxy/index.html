@@ -639,6 +639,7 @@ function toast(msg) {
   toastT = setTimeout(() => t.classList.remove('on'), 1900);
 }
 
+$('#orbit').classList.toggle('on', orbitOn);
 $('#orbit').addEventListener('click', () => {
   orbitOn = !orbitOn;
   $('#orbit').classList.toggle('on', orbitOn);

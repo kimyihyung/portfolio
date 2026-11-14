@@ -625,6 +625,7 @@ $('#openBtn').addEventListener('click', () => openModal(selected));
 $('#prevBtn').addEventListener('click', () => goTo(selected - 1));
 $('#nextBtn').addEventListener('click', () => goTo(selected + 1));
 document.addEventListener('keydown', (e) => {
+  if (modal.classList.contains('on')) return;
   if (e.key === 'ArrowLeft') { goTo(selected - 1); e.preventDefault(); }
   if (e.key === 'ArrowRight') { goTo(selected + 1); e.preventDefault(); }
   if (e.key === 'Enter') openModal(selected);
