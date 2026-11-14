@@ -1250,6 +1250,7 @@ window.addEventListener('keydown', function (e) {
   }
   if (tour.on) stopTour(true);
   if (e.code === 'Escape') {
+    if (document.pointerLockElement === canvas) { document.exitPointerLock(); e.preventDefault(); return; }
     if (state.mode === 'focus') { exitFocus(); e.preventDefault(); }
     else if (state.mode === 'walk') { openPause(); }
     else if (document.getElementById('help').classList.contains('hidden') === false) { toggleHelp(false); }
