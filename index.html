@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Kim Yihyung · Portfolio</title>
+    <meta name="description" content="2022년에 만든 첫 포트폴리오. HTML·CSS·JavaScript로 익힌 웹표준 사이트와 React·Vue 작업을 스크롤 연출로 담았습니다.">
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="./css/style8.css">
     <link href="https://fonts.googleapis.com/css2?family=Jost&display=swap" rel="stylesheet">
@@ -15,7 +16,6 @@
 </head>
 
 <body>
-    <div class="scrollTop">0</div>
 
     <header>
         <div>[ PORTFOLIO ]</div>
@@ -24,8 +24,8 @@
 
     <section id="section1">
         <div class="sec1">
-            <div class="sec1_ani1 fixed" data-0="transform: translate(-50%, -50%) scale(1); filter: brightness(0%);"
-                data-3000="transform: translate(-50%, -50%) scale(1); filter: brightness(50%);"
+            <div class="sec1_ani1 fixed" data-0="transform: translate(-50%, -50%) scale(1); filter: brightness(100%);"
+                data-3000="transform: translate(-50%, -50%) scale(1); filter: brightness(100%);"
                 data-4000="transform: translate(-50%, -50%) scale(1); filter: brightness(100%); opacity:1;"
                 data-5000="transform: translate(-50%, -50%) scale(0.5); filter: brightness(0%); opacity:0;"
                 data-6000="transform: translate(-50%, -50%) scale(0); filter: brightness(0%);">
@@ -160,13 +160,13 @@
                         </h3>
                         <p>snifwio</p>
                     </div>
-                    <img src="./img/site1.png" alt="">
+                    <img src="./img/site1.jpg" alt="webstandard site1 썸네일">
                 </div>
             </div>
             <div class="box">
                 <div class="sec_ani">
                     <div>
-                        <img src="./img/site1.png" alt="">
+                        <img src="./img/site2.jpg" alt="webstandard site2 썸네일">
                         <h3>
                             webstandard site2
                         </h3>
@@ -176,7 +176,7 @@
             </div>
             <div class="box">
                 <div class="sec_ani">
-                    <img src="./img/site1.png" alt="">
+                    <img src="./img/phpblog.jpg" alt="PHP BLOG 썸네일">
                     <div>
                         <h3>
                             PHP BLOG
@@ -192,7 +192,7 @@
                             PHP PROJECT
                         </h3>
                         <p>snifwio</p>
-                        <img src="./img/site1.png" alt="">
+                        <img src="./img/phpproject.jpg" alt="PHP PROJECT 썸네일">
                     </div>
                 </div>
             </div>
@@ -551,20 +551,6 @@
         var s = skrollr.init({
             smoothScrolling: true
         });
-
-        //재귀 함수
-        function scroll() {
-            let scrollTop = window.pageYoffest || document.documentElement.scrollTop || window.screenY;
-
-            document.querySelector(".scrollTop").innerText = Math.ceil(scrollTop);
-
-            // document.querySelector(".sec1_text2 em").style.filter = hueRotate(scrollTop+"deg");
-            // document.querySelector(".sec1_text2").style.fontWeight = scrollTop*50;
-
-            // if(scrollTop > 1300) document.querySelector(".sec1_text2").style.opacity = 0;
-            requestAnimationFrame(scroll);
-        }
-        scroll(); //함수 호출
     </script>
 </body>
 
