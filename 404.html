@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0b0d">
+<meta name="robots" content="noindex, follow">
+<title>404 — 페이지를 찾을 수 없습니다 · Kim Yihyung</title>
+<meta name="description" content="요청한 페이지가 없습니다. 포트폴리오의 작업물로 이동하는 길잡이 페이지입니다.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b0d'/%3E%3Cpath d='M9 22V10h2.6v5h5.2v-5H19.4v12h-2.6v-4.8h-5.2V22z' fill='%236ef2b0'/%3E%3C/svg%3E">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #05070c; --panel: rgba(16, 20, 27, .72); --line: rgba(255,255,255,.10);
+    --ink: #f5f2ea; --muted: #9aa6b6; --mint: #6ef2b0; --gold: #e5b45c;
+  }
+  html, body { height: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    display: grid; place-items: center; padding: 32px 22px;
+    background-image:
+      radial-gradient(70% 60% at 85% 12%, rgba(127,176,255,.16), transparent 70%),
+      radial-gradient(70% 60% at 10% 92%, rgba(110,242,176,.12), transparent 70%),
+      linear-gradient(#05070c, #0e141d);
+  }
+  main { width: 100%; max-width: 720px; }
+  .eyebrow {
+    font-size: 11px; letter-spacing: .34em; text-transform: uppercase;
+    color: var(--mint); margin-bottom: 26px;
+  }
+  .code {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(84px, 18vw, 148px); line-height: .9; letter-spacing: -.02em;
+    margin: 0 0 10px; color: var(--ink);
+  }
+  h1 { font-size: clamp(20px, 3.4vw, 27px); font-weight: 600; margin: 0 0 14px; letter-spacing: -.01em; }
+  p { color: var(--muted); font-size: 15px; line-height: 1.75; margin: 0 0 30px; }
+  .rule { height: 1px; background: var(--line); margin: 0 0 28px; }
+  nav { display: grid; gap: 10px; }
+  @media (min-width: 620px) { nav { grid-template-columns: 1fr 1fr; } }
+  a.card {
+    display: flex; align-items: center; justify-content: space-between; gap: 14px;
+    padding: 16px 18px; border: 1px solid var(--line); border-radius: 12px;
+    background: var(--panel); color: var(--ink); text-decoration: none;
+    transition: border-color .2s, transform .2s, background .2s;
+  }
+  a.card:hover, a.card:focus-visible { border-color: rgba(110,242,176,.45); transform: translateY(-1px); }
+  a.card b { font-weight: 600; font-size: 14.5px; letter-spacing: .01em; }
+  a.card span { display: block; margin-top: 5px; font-size: 12px; color: var(--muted); }
+  a.card i { font-style: normal; color: var(--mint); font-size: 15px; }
+  footer { margin-top: 36px; font-size: 11.5px; letter-spacing: .16em; color: rgba(154,166,182,.6); text-transform: uppercase; }
+</style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">Page not found</div>
+  <p class="code">404</p>
+  <h1>이 주소에는 페이지가 없습니다 · Nothing lives here</h1>
+  <p>링크가 오래됐거나 주소가 바뀌었습니다. 아래에서 원하는 작업으로 바로 들어가세요.<br>
+     This address moved or never existed — every live build is one tap away.</p>
+  <div class="rule"></div>
+  <nav>
+    <a class="card" href="/portfolio/tools/"><b>Browser Tools<span>업로드 없는 도구 5종</span></b><i>→</i></a>
+    <a class="card" href="/portfolio/3d/"><b>3D Project Portal<span>여덟 개의 포탈, Three.js</span></b><i>→</i></a>
+    <a class="card" href="/portfolio/gallery/"><b>Virtual Gallery<span>네 개의 전시실을 걷는 3D 전시관</span></b><i>→</i></a>
+    <a class="card" href="/portfolio/"><b>Portfolio<span>메인 포트폴리오로 돌아가기</span></b><i>→</i></a>
+  </nav>
+  <footer>Kim Yihyung · kimyihyung.github.io/portfolio</footer>
+</main>
+</body>
+</html>
