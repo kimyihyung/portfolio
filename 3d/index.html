@@ -77,15 +77,13 @@ html,body{height:100%;overflow:hidden;background:#04070e;color:#e9f1fb;
 #fallback button{margin-top:6px;padding:13px 24px;border-radius:12px;border:0;cursor:pointer;font-family:inherit;
   background:linear-gradient(160deg,#69b4ff,#4a86e0);color:#03121f;font-weight:700;font-size:13px}
 .hidden{display:none!important}
-@media (max-width:720px){
-  #brand h1{font-size:11px;letter-spacing:.26em}
-  #brand p{display:none}
-  #hint{display:none}
-  #selName{font-size:17px}
-  #selDesc{font-size:11px}
-  #hud{bottom:calc(env(safe-area-inset-bottom) + 12px)}
-  .arrow{width:38px;height:38px;font-size:15px}
-}
+html.m #brand h1{font-size:11px;letter-spacing:.26em}
+html.m #brand p{display:none}
+html.m #hint{display:none}
+html.m #selName{font-size:17px}
+html.m #selDesc{font-size:11px}
+html.m #hud{bottom:calc(env(safe-area-inset-bottom) + 12px)}
+html.m .arrow{width:38px;height:38px;font-size:15px}
 </style>
 </head>
 <body>
@@ -176,7 +174,10 @@ function fail(msg) {
 
 /* ───────────────── renderer ───────────────── */
 const canvas = $('#scene');
-const isSmall = window.matchMedia('(max-width: 720px)').matches;
+const forceMobile = /[?&]m=1/.test(location.search);
+const isSmall = forceMobile || window.matchMedia('(max-width: 720px)').matches;
+const PORTRAIT = window.innerWidth / window.innerHeight < 0.9;
+document.documentElement.classList.toggle('m', isSmall);
 let renderer = null;
 try {
   const probe = document.createElement('canvas');
@@ -193,8 +194,8 @@ try {
 if (!renderer) throw new Error('WebGL renderer init failed');
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(isSmall ? 58 : 46, window.innerWidth / window.innerHeight, 0.1, 400);
-camera.position.set(0, 2.75, isSmall ? 18.5 : 17.4);
+const camera = new THREE.PerspectiveCamera(PORTRAIT ? 62 : 46, window.innerWidth / window.innerHeight, 0.1, 400);
+camera.position.set(0, 2.75, PORTRAIT ? 19.6 : 17.4);
 camera.lookAt(0, 2.0, 0);
 const clock = new THREE.Clock();
 
@@ -688,7 +689,9 @@ let camTargetX = 0;
 function onResize() {
   const w = window.innerWidth, h = window.innerHeight;
   camera.aspect = w / h;
+  camera.fov = w / h < 0.9 ? 62 : 46;
   camera.updateProjectionMatrix();
+  document.documentElement.classList.toggle('m', w <= 720);
   renderer.setSize(w, h, false);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 }

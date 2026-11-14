@@ -86,15 +86,13 @@ body.break #fill{background:linear-gradient(90deg,#43d9b0,#a7f5dd)}
 #fallback button{margin-top:6px;padding:13px 24px;border-radius:12px;border:0;cursor:pointer;font-family:inherit;
   background:linear-gradient(160deg,#69b4ff,#4a86e0);color:#03121f;font-weight:700;font-size:13px}
 .hidden{display:none!important}
-@media (max-width:430px){
-  #clock{font-size:32px}
-  #hint{display:none}
-  #side{bottom:calc(env(safe-area-inset-bottom) + 162px)}
-  .pb{padding:10px 12px;font-size:11.5px}
-  #panel{padding:12px 13px 13px;border-radius:18px}
-  #brand h1{font-size:11px;letter-spacing:.24em}
-  #brand p{display:none}
-}
+html.m #clock{font-size:32px}
+html.m #hint{display:none}
+html.m #side{bottom:calc(env(safe-area-inset-bottom) + 162px)}
+html.m .pb{padding:10px 12px;font-size:11.5px}
+html.m #panel{padding:12px 13px 13px;border-radius:18px}
+html.m #brand h1{font-size:11px;letter-spacing:.24em}
+html.m #brand p{display:none}
 </style>
 </head>
 <body>
@@ -195,7 +193,11 @@ function fail(msg) {
 
 /* ───────────────── renderer ───────────────── */
 const canvas = $('#scene');
-const isSmall = window.matchMedia('(max-width: 720px)').matches;
+const forceMobile = /[?&]m=1/.test(location.search);
+const isSmall = forceMobile || window.matchMedia('(max-width: 720px)').matches;
+const PORTRAIT = window.innerWidth / window.innerHeight < 0.9;
+document.documentElement.classList.toggle('m', isSmall);
+document.documentElement.classList.toggle('ms', window.innerWidth <= 430);
 
 let renderer = null;
 try {
@@ -216,7 +218,7 @@ if (!renderer) throw new Error('WebGL renderer init failed');
 
 const scene = new THREE.Scene();
 scene.fog = new THREE.Fog(0x0a1220, 22, 54);
-const camera = new THREE.PerspectiveCamera(52, window.innerWidth / window.innerHeight, 0.1, 140);
+const camera = new THREE.PerspectiveCamera(PORTRAIT ? 68 : 52, window.innerWidth / window.innerHeight, 0.1, 140);
 const clock = new THREE.Clock();
 
 /* ───────────────── helpers ───────────────── */
@@ -1122,8 +1124,11 @@ function tickTimer() {
 renderTimer();
 
 /* ───────────────── camera rig ───────────────── */
+const R_MIN = isSmall ? 4.4 : 3.6;
+const R_MAX = isSmall ? 8.6 : 7.2;
+const R_HOME = isSmall ? 7.0 : 6.0;
 const rig = {
-  az: 0.05, pol: 1.21, r: 6.0,
+  az: 0.05, pol: 1.21, r: R_HOME,
   vAz: 0, vPol: 0,
   target: new THREE.Vector3(0, 1.42, -0.9),
   idle: 0
@@ -1172,7 +1177,7 @@ canvas.addEventListener('pointermove', (e) => {
   } else if (pointers.size === 2) {
     dragged += 20;
     const d = pointerDist();
-    if (pinchStart > 10 && d > 10) rig.r = clamp(pinchR * (pinchStart / d), 3.6, 7.2);
+    if (pinchStart > 10 && d > 10) rig.r = clamp(pinchR * (pinchStart / d), R_MIN, R_MAX);
   }
 });
 function endPointer(e) {
@@ -1222,10 +1227,10 @@ function tapAt(cx, cy) {
 }
 
 /* zoom + reset + sound buttons */
-$('#zoomin').addEventListener('click', () => { rig.r = clamp(rig.r - 0.7, 3.6, 7.2); Audio.init(); });
-$('#zoomout').addEventListener('click', () => { rig.r = clamp(rig.r + 0.7, 3.6, 7.2); Audio.init(); });
+$('#zoomin').addEventListener('click', () => { rig.r = clamp(rig.r - 0.7, R_MIN, R_MAX); Audio.init(); });
+$('#zoomout').addEventListener('click', () => { rig.r = clamp(rig.r + 0.7, R_MIN, R_MAX); Audio.init(); });
 $('#reset').addEventListener('click', () => {
-  rig.az = 0.05; rig.pol = 1.21; rig.r = 6.0; rig.vAz = 0; rig.vPol = 0;
+  rig.az = 0.05; rig.pol = 1.21; rig.r = R_HOME; rig.vAz = 0; rig.vPol = 0;
   toast('시점을 처음 자리로 돌렸습니다');
 });
 $('#sound').addEventListener('click', () => {
@@ -1257,7 +1262,10 @@ window.addEventListener('keydown', (e) => {
 function onResize() {
   const w = window.innerWidth, h = window.innerHeight;
   camera.aspect = w / h;
+  camera.fov = w / h < 0.9 ? 68 : 52;
   camera.updateProjectionMatrix();
+  document.documentElement.classList.toggle('m', w <= 720);
+  document.documentElement.classList.toggle('ms', w <= 430);
   renderer.setSize(w, h, false);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 }
@@ -1384,7 +1392,7 @@ function animate() {
   rig.vAz *= damp;
   rig.vPol *= damp;
   rig.pol = clamp(rig.pol, 0.75, 1.55);
-  rig.r = clamp(rig.r, 3.6, 7.2);
+  rig.r = clamp(rig.r, R_MIN, R_MAX);
   if (rig.idle > 7 && pointers.size === 0) rig.az += dt * 0.028;
   applyCamera();
 
