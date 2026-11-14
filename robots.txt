@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Image folders are public assets; nothing private lives on this site.
+Sitemap: https://kimyihyung.github.io/portfolio/sitemap.xml
