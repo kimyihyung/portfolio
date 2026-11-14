@@ -1277,10 +1277,10 @@ document.addEventListener('mousemove', function (e) {
 
 
 /* 마우스 드래그(포인터 잠금이 안 될 때) */
-let dragLook = false, dragX = 0, dragY = 0, dragMoved = 0;
+let dragLook = false, dragX = 0, dragY = 0, dragMoved = 0, swallowClick = false;
 canvas.addEventListener('pointerdown', function (e) {
   lastPointerType = e.pointerType || 'mouse';
-  if (tour.on) { stopTour(true); return; }
+  if (tour.on) { stopTour(true); swallowClick = true; return; }
   if (e.pointerType === 'touch') {
     document.body.classList.add('touch');
     touchStart(e);
@@ -1343,6 +1343,7 @@ function touchEnd(e) {
 
 
 canvas.addEventListener('click', function (e) {
+  if (swallowClick) { swallowClick = false; return; }
   if (lastPointerType === 'touch') return;
   if (state.mode === 'focus') { exitFocus(); return; }
   if (state.mode !== 'walk') return;
