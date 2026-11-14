@@ -1172,7 +1172,9 @@ input[type="range"]:focus-visible { outline: 2px solid rgba(255, 255, 255, .45);
   }
 
   function resize() {
-    var dpr = Math.min(window.devicePixelRatio || 1, 2) * quality;
+    var base = Math.min(window.devicePixelRatio || 1, 2);
+    // adaptive scaling drops resolution on slow GPUs, but never into mush
+    var dpr = Math.max(0.75, Math.min(2, base * quality));
     var w = Math.max(1, Math.round(window.innerWidth * dpr));
     var h = Math.max(1, Math.round(window.innerHeight * dpr));
     if (canvas.width !== w || canvas.height !== h) {
@@ -1209,7 +1211,7 @@ input[type="range"]:focus-visible { outline: 2px solid rgba(255, 255, 255, .45);
       lastResizeCheck = now;
       var avg = fpsWindow.reduce(function (a, b) { return a + b; }, 0) / fpsWindow.length;
       frameMs = avg;
-      if (avg > 26 && quality > 0.55) { quality = Math.max(0.55, quality * 0.85); resize(); }
+      if (avg > 26 && quality > 0.6) { quality = Math.max(0.6, quality * 0.85); resize(); }
       else if (avg < 13 && quality < 1) { quality = Math.min(1, quality * 1.08); resize(); }
     }
 
