@@ -161,11 +161,14 @@ button { font-family: inherit; color: inherit; }
 .filters {
   position: sticky; top: 0; z-index: 20;
   margin: 4px 0 0;
-  padding: 10px 0;
-  background: linear-gradient(to bottom, rgba(11,11,13,.94) 60%, rgba(11,11,13,0));
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  padding: 12px 0 10px;
+  background: rgba(11,11,13,.97);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid transparent;
+  transition: border-color .2s ease;
 }
+.filters.is-stuck { border-bottom-color: var(--line); }
 .filter-row {
   display: flex; align-items: center; gap: 8px;
   overflow-x: auto; overflow-y: hidden;
@@ -613,6 +616,18 @@ button { font-family: inherit; color: inherit; }
   var initial = (location.hash || '').replace('#', '');
   var valid = chips.some(function (c) { return c.getAttribute('data-filter') === initial; });
   apply(valid ? initial : 'all', false);
+
+  // Hairline under the filter bar only once it is actually stuck to the top.
+  var bar = document.querySelector('.filters');
+  var sentinel = document.createElement('div');
+  sentinel.setAttribute('aria-hidden', 'true');
+  sentinel.style.cssText = 'height:1px;margin-bottom:-1px;';
+  bar.parentNode.insertBefore(sentinel, bar);
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      bar.classList.toggle('is-stuck', !entries[0].isIntersecting);
+    }).observe(sentinel);
+  }
 })();
 </script>
 </body>
