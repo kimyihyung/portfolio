@@ -326,9 +326,9 @@ const FILTER_MAP = { all: ['note', 'tech', 'life'], note: ['note'], eb: ['tech',
 
 /* portrait screens get a vertical constellation layout */
 if (PORTRAIT) {
-  CLUSTERS[0].center.set(-1.9, 7.6, 0);
-  CLUSTERS[1].center.set(2.2, 0.2, -3);
-  CLUSTERS[2].center.set(-0.3, -7.7, 1.4);
+  CLUSTERS[0].center.set(-1.9, 6.4, 0);
+  CLUSTERS[1].center.set(2.2, -0.3, -3);
+  CLUSTERS[2].center.set(-0.3, -7.2, 1.4);
 }
 const SPREAD = PORTRAIT ? 0.52 : 1;
 const LABEL_OFF = PORTRAIT ? 5.2 : 6.6;
@@ -521,7 +521,7 @@ const bridgeLines = new THREE.LineSegments(bridgeGeo, bridgeMat);
 scene.add(bridgeLines);
 
 /* ───────────────── camera view ───────────────── */
-const OVERVIEW = { target: new THREE.Vector3(0, -0.4, 0), r: PORTRAIT ? 27 : (isSmall ? 30 : 27) };
+const OVERVIEW = { target: new THREE.Vector3(0, PORTRAIT ? -0.6 : -0.4, 0), r: PORTRAIT ? 28 : (isSmall ? 30 : 27) };
 const view = { target: OVERVIEW.target.clone(), r: OVERVIEW.r, az: 0.15, pol: 1.36 };
 const tw = { active: false, t: 0, dur: 1.0, fr: 0, tr: 0, ft: new THREE.Vector3(), tt: new THREE.Vector3() };
 
