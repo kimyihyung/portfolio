@@ -1228,7 +1228,7 @@ input[type="range"]:focus-visible { outline: 2px solid rgba(255, 255, 255, .45);
       if (ext) {
         var raw = String(gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) || '');
         var m = raw.match(/(Apple M\d[^,)]*|Apple GPU|Adreno[^,)]*|Mali[^,)]*|Intel[^,)]*|GeForce[^,)]*|Radeon[^,)]*|SwiftShader[^,)]*|PowerVR[^,)]*)/i);
-        if (m) return m[1].replace(/\s+/g, ' ').trim().slice(0, 30);
+        if (m) return m[1].replace(/\s*\([^)]*$/, '').replace(/\s+/g, ' ').trim().slice(0, 30);
       }
     } catch (e) {}
     return '';
