@@ -99,7 +99,7 @@ body {
   background: var(--panel);
   box-shadow: inset 0 0 0 1px rgba(110, 242, 176, .06);
 }
-.brand-txt { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.brand-txt { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; white-space: nowrap; }
 .top-actions { display: flex; align-items: center; gap: 8px; }
 
 .icon-btn {
@@ -121,6 +121,7 @@ html[data-theme="light"] .ico-moon { display: none; }
 .icon-btn:active { transform: scale(.94); }
 
 .back {
+  white-space: nowrap;
   font-size: 12.5px;
   color: var(--muted);
   text-decoration: none;
@@ -476,6 +477,9 @@ footer .sep { opacity: .4; }
 }
 @media (max-width: 560px) {
   .wrap { padding: 0 14px 60px; }
+  .brand-txt { font-size: 10.5px; letter-spacing: .08em; }
+  .top { gap: 8px; }
+  .back { padding: 7px 10px; font-size: 12px; }
   .card { grid-template-columns: 52px 1fr; grid-template-areas: "thumb info" "act act"; row-gap: 10px; }
   .thumb { width: 52px; height: 52px; grid-area: thumb; }
   .info { grid-area: info; }
