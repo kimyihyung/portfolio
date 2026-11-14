@@ -34,13 +34,21 @@ button:hover{background:#fff;transform:translateY(-1px)}
 button.ghost{background:transparent;color:#e9e4da;border:1px solid rgba(255,255,255,.3)}
 button.ghost:hover{background:rgba(255,255,255,.08);color:#fff}
 .fine{margin-top:22px;font-size:11px;line-height:1.6;color:rgba(242,239,233,.34)}
-#topbar{position:absolute;top:0;left:0;right:0;display:flex;align-items:flex-start;justify-content:space-between;padding:22px 26px}
+#topbar{position:absolute;top:0;left:0;right:0;display:flex;align-items:flex-start;justify-content:space-between;padding:22px 26px;gap:12px}
 #roomname{font-family:Georgia,serif;font-size:17px;letter-spacing:.04em;transition:opacity .3s}
 #roomsub{display:block;margin-top:5px;font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:rgba(242,239,233,.42);font-style:normal}
-#meta{display:flex;align-items:center;gap:12px}
+#meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 #progress{font-size:10px;letter-spacing:.22em;padding:7px 11px;border:1px solid rgba(255,255,255,.16);border-radius:2px;color:rgba(242,239,233,.7)}
-#helpbtn{background:transparent;border:1px solid rgba(255,255,255,.16);color:rgba(242,239,233,.7);padding:7px 11px;font-size:10px;letter-spacing:.22em;border-radius:2px;cursor:pointer;pointer-events:auto}
-#helpbtn:hover{background:rgba(255,255,255,.08);color:#fff}
+.hudbtn{background:rgba(10,11,13,.55);border:1px solid rgba(255,255,255,.18);color:rgba(242,239,233,.78);padding:7px 10px;font-size:10px;letter-spacing:.14em;border-radius:2px;cursor:pointer;pointer-events:auto;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.hudbtn:hover{background:rgba(255,255,255,.12);color:#fff}
+.hudbtn.active{border-color:#c9a97c;color:#c9a97c}
+#roombar{position:absolute;left:26px;bottom:26px;display:flex;gap:6px;flex-wrap:wrap;pointer-events:auto;z-index:12}
+.rbtn{background:rgba(10,11,13,.58);border:1px solid rgba(255,255,255,.16);color:rgba(242,239,233,.72);padding:7px 10px;font-size:10px;letter-spacing:.08em;border-radius:2px;cursor:pointer;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.rbtn:hover,.rbtn.on{border-color:#c9a97c;color:#f2efe9;background:rgba(201,169,124,.18)}
+body.focusing #roombar{display:none}
+#cardActions{display:none;margin-top:14px;gap:8px;align-items:center}
+#card.focus #cardActions{display:flex}
+#cardActions button{padding:9px 13px;font-size:11px;letter-spacing:.1em}
 #dot{position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;
   background:rgba(255,255,255,.75);box-shadow:0 0 8px rgba(0,0,0,.6);transition:opacity .25s,transform .25s}
 #dot.off{opacity:0;transform:scale(.4)}
@@ -49,8 +57,6 @@ button.ghost:hover{background:rgba(255,255,255,.08);color:#fff}
   opacity:0;transform:translateY(10px);transition:opacity .4s ease,transform .4s ease,width .4s ease;pointer-events:none}
 #card.on{opacity:1;transform:none}
 #card.focus{width:400px;pointer-events:auto}
-#cardClose{display:none;margin-top:12px;padding:10px 16px;font-size:11px;letter-spacing:.14em}
-#card.focus #cardClose{display:inline-block}
 body.focusing #joy{display:none}
 #card .idx{font-size:10px;letter-spacing:.26em;color:#c9a97c}
 #card h3{font-family:Georgia,serif;font-weight:400;font-size:22px;line-height:1.3;margin:11px 0 9px}
@@ -75,8 +81,9 @@ body.touch .nohover{display:none}
   #card{right:14px;left:14px;width:auto;bottom:14px}
   #card.focus{width:auto}
   #map{display:none}
-  #topbar{padding:16px 16px}
-  #joy{left:20px;bottom:24px}
+  #topbar{padding:14px 14px}
+  #joy{left:18px;bottom:68px}
+  #roombar{left:14px;right:14px;bottom:14px;justify-content:center}
 }
 </style>
 </head>
@@ -92,7 +99,8 @@ body.touch .nohover{display:none}
     </div>
     <div id="meta">
       <span id="progress">0 / 20</span>
-      <button id="helpbtn" type="button">도움말</button>
+      <button id="invertbtn" class="hudbtn touchonly" type="button">상하 반전</button>
+      <button id="helpbtn" class="hudbtn" type="button">도움말</button>
     </div>
   </div>
   <div id="dot"></div>
@@ -102,7 +110,19 @@ body.touch .nohover{display:none}
     <h3 id="cardTitle">작품 1</h3>
     <p id="cardDesc"></p>
     <div class="hint" id="cardHint">클릭하여 확대</div>
-    <button id="cardClose" type="button" class="ghost">돌아가기</button>
+    <div id="cardActions">
+      <button id="cardPrev" type="button" class="ghost">‹ 이전</button>
+      <button id="cardNext" type="button" class="ghost">다음 ›</button>
+      <button id="cardClose" type="button" style="margin-left:auto">돌아가기</button>
+    </div>
+  </div>
+  <div id="roombar">
+    <button class="rbtn" data-room="vest" type="button">입구</button>
+    <button class="rbtn" data-room="atrium" type="button">아트리움</button>
+    <button class="rbtn" data-room="A" type="button">1실</button>
+    <button class="rbtn" data-room="B" type="button">2실</button>
+    <button class="rbtn" data-room="C" type="button">3실</button>
+    <button class="rbtn" data-room="D" type="button">4실</button>
   </div>
   <div id="joy"><div id="joyknob"></div></div>
   <div id="toast"></div>
@@ -1127,11 +1147,15 @@ window.addEventListener('pointerup', function (e) {
 });
 
 
-/* 터치: 드래그 시점 · 탭 이동/확대 · 포커스 해제 */
+/* 터치: 자연스러운 드래그 시점(관성 포함) · 탭 이동/확대 · 포커스 해제 */
 let touchId = -1, tX = 0, tY = 0, tMoved = 0;
+let lookVelX = 0, lookVelY = 0;
+let invertTouch = false;
+try { invertTouch = localStorage.getItem('gallery_invert_touch') === '1'; } catch (e) {}
 function touchStart(e) {
   if (joystick.contains(e.target)) return;
   touchId = e.pointerId; tX = e.clientX; tY = e.clientY; tMoved = 0;
+  lookVelX = 0; lookVelY = 0;
 }
 function touchMove(e) {
   if (e.pointerId !== touchId) return;
@@ -1139,14 +1163,20 @@ function touchMove(e) {
   tX = e.clientX; tY = e.clientY;
   tMoved += Math.abs(dx) + Math.abs(dy);
   if (state.mode === 'walk') {
-    state.yaw -= dx * 0.005;
-    state.pitch = clampPitch(state.pitch - dy * 0.005);
+    const sy = invertTouch ? -0.0038 : 0.0038;
+    const vx = dx * 0.0042;
+    const vy = dy * sy;
+    state.yaw += vx;
+    state.pitch = clampPitch(state.pitch + vy);
+    lookVelX = vx;
+    lookVelY = vy;
   }
 }
 function touchEnd(e) {
   if (e.pointerId !== touchId) return;
   touchId = -1;
   if (tMoved < 12) {
+    lookVelX = 0; lookVelY = 0;
     if (state.mode === 'focus') { exitFocus(); return; }
     if (state.mode === 'walk') tapAt(e.clientX, e.clientY);
   }
@@ -1327,6 +1357,9 @@ function updateZone() {
   fogTarget.setHex(z.fog);
   scene.fog.near = z.near;
   scene.fog.far = z.far;
+  document.querySelectorAll('#roombar .rbtn').forEach(function (b) {
+    b.classList.toggle('on', b.getAttribute('data-room') === key);
+  });
 }
 
 
@@ -1430,6 +1463,13 @@ function updateWalk(dt) {
   const targetBob = sp > 0.15 ? Math.sin(state.phase * 2) * 0.018 : 0;
   state.bob += (targetBob - state.bob) * Math.min(1, dt * 10);
 
+  if (touchId === -1 && (Math.abs(lookVelX) > 0.0001 || Math.abs(lookVelY) > 0.0001)) {
+    state.yaw += lookVelX;
+    state.pitch = clampPitch(state.pitch + lookVelY);
+    const damp = Math.exp(-dt * 9);
+    lookVelX *= damp;
+    lookVelY *= damp;
+  }
 
   updateZone();
   updateProximity();
@@ -1526,6 +1566,57 @@ function toggleHelp(force) {
 document.getElementById('helpbtn').addEventListener('click', function () { toggleHelp(true); });
 document.getElementById('helpclose').addEventListener('click', function () { toggleHelp(false); });
 document.getElementById('resumebtn').addEventListener('click', closePause);
+const invertBtn = document.getElementById('invertbtn');
+if (invertBtn) {
+  invertBtn.classList.toggle('active', invertTouch);
+  invertBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    invertTouch = !invertTouch;
+    invertBtn.classList.toggle('active', invertTouch);
+    try { localStorage.setItem('gallery_invert_touch', invertTouch ? '1' : '0'); } catch (err) {}
+    toast(invertTouch ? '터치 상하 시선: 반전됨' : '터치 상하 시선: 기본(끌어당기기)');
+  });
+}
+const ROOM_SPOTS = {
+  vest: { x: 0, z: 11.3, yaw: 0 },
+  atrium: { x: 0, z: 2.0, yaw: -Math.PI / 2 },
+  A: { x: 14.5, z: -6.2, yaw: 0 },
+  B: { x: 24.2, z: 6.2, yaw: Math.PI },
+  C: { x: 33.3, z: -7.5, yaw: 0 },
+  D: { x: 36.3, z: 6.0, yaw: Math.PI }
+};
+document.querySelectorAll('#roombar .rbtn').forEach(function (b) {
+  b.addEventListener('click', function (e) {
+    e.stopPropagation();
+    const id = b.getAttribute('data-room');
+    const sp = ROOM_SPOTS[id];
+    if (!sp) return;
+    if (state.mode === 'focus') exitFocus();
+    state.mode = 'walk';
+    state.moveTo = null;
+    state.vel.set(0, 0, 0);
+    state.pos.set(sp.x, EYE, sp.z);
+    state.yaw = sp.yaw;
+    state.pitch = 0;
+    updateZone();
+  });
+});
+document.getElementById('cardPrev').addEventListener('click', function (e) {
+  e.stopPropagation();
+  if (!RECORDS.length) return;
+  const cur = state.focus && state.focus.rec ? state.focus.rec.index : 0;
+  const prev = (cur - 1 + RECORDS.length) % RECORDS.length;
+  state.mode = 'walk';
+  focusOn(RECORDS[prev]);
+});
+document.getElementById('cardNext').addEventListener('click', function (e) {
+  e.stopPropagation();
+  if (!RECORDS.length) return;
+  const cur = state.focus && state.focus.rec ? state.focus.rec.index : 0;
+  const next = (cur + 1) % RECORDS.length;
+  state.mode = 'walk';
+  focusOn(RECORDS[next]);
+});
 document.getElementById('cardClose').addEventListener('click', function (e) {
   e.stopPropagation();
   exitFocus();
@@ -1568,8 +1659,11 @@ function joyMove(e) {
   const d = Math.sqrt(dx * dx + dy * dy);
   if (d > max) { dx = dx / d * max; dy = dy / d * max; }
   knob.style.transform = 'translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px)';
-  joy.x = dx / max;
-  joy.y = dy / max;
+  const norm = Math.min(1, d / max);
+  if (norm < 0.10) { joy.x = 0; joy.y = 0; return; }
+  const mag = Math.pow((norm - 0.10) / 0.90, 1.25);
+  joy.x = (dx / d) * mag;
+  joy.y = (dy / d) * mag;
 }
 function joyEnd(e) {
   if (e && e.pointerId !== undefined && e.pointerId !== joyId) return;
