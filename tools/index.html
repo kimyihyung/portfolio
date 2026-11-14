@@ -167,12 +167,15 @@ button { font-family: inherit; color: inherit; }
 }
 .filters.is-stuck { border-bottom-color: var(--line); }
 .filter-row {
-  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;
   padding-bottom: 2px;
 }
+.chip { justify-content: center; }
 .filter-row::-webkit-scrollbar { display: none; }
 .chip {
   flex: none;
+  display: inline-flex; align-items: center;
+  justify-content: center;
   appearance: none; cursor: pointer;
   border: 1px solid var(--line);
   background: rgba(255,255,255,.02);
@@ -354,6 +357,8 @@ button { font-family: inherit; color: inherit; }
     -webkit-backdrop-filter: blur(14px);
     backdrop-filter: blur(14px);
   }
+  .filter-row { display: flex; flex-wrap: wrap; align-items: center; }
+  .chip { justify-content: flex-start; }
   .filters.is-stuck { border-bottom-color: var(--line); }
   .card { padding: 26px 24px 22px; }
   .card p { font-size: 14px; }
