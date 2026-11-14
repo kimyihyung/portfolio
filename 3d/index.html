@@ -77,7 +77,7 @@ html,body{height:100%;overflow:hidden;background:#04070e;color:#e9f1fb;
 #fallback button{margin-top:6px;padding:13px 24px;border-radius:12px;border:0;cursor:pointer;font-family:inherit;
   background:linear-gradient(160deg,#69b4ff,#4a86e0);color:#03121f;font-weight:700;font-size:13px}
 .hidden{display:none!important}
-html.m #brand h1{font-size:11px;letter-spacing:.26em}
+html.m #brand h1{font-size:11px;letter-spacing:.2em;white-space:nowrap}
 html.m #brand p{display:none}
 html.m #hint{display:none}
 html.m #selName{font-size:17px}
@@ -195,7 +195,7 @@ if (!renderer) throw new Error('WebGL renderer init failed');
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(PORTRAIT ? 62 : 46, window.innerWidth / window.innerHeight, 0.1, 400);
-camera.position.set(0, 2.75, PORTRAIT ? 19.6 : 17.4);
+camera.position.set(0, 2.75, PORTRAIT ? 17.8 : 17.4);
 camera.lookAt(0, 2.0, 0);
 const clock = new THREE.Clock();
 scene.fog = new THREE.Fog(0x04070e, 15, 54);
