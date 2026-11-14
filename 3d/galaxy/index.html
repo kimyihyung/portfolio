@@ -86,7 +86,9 @@ html,body{height:100%;overflow:hidden;background:#03050c;color:#e9f0fb;
 html.m #brand h1{font-size:11px;letter-spacing:.24em}
 html.m #brand p{display:none}
 html.m #hint{display:none}
-html.m #legend{display:none}
+html.m #legend{display:flex;flex-direction:row;flex-wrap:wrap;gap:5px 14px;bottom:auto;left:14px;top:calc(env(safe-area-inset-top) + 60px)}
+html.m .lg{font-size:9.5px}
+html.m .lg em{display:none}
 html.m .lg{font-size:9.5px}
 html.m #card{right:0;left:0;top:auto;bottom:0;width:100%;transform:translateY(14px) scale(1);border-radius:22px 22px 0 0;
 html.m padding:20px 20px calc(env(safe-area-inset-bottom) + 18px);max-height:62vh;overscroll-behavior:contain}
@@ -459,6 +461,7 @@ CLUSTERS.forEach((cl, ci) => {
   label.scale.set(PORTRAIT ? 6.0 : 7.4, PORTRAIT ? 1.5 : 1.85, 1);
   label.position.set(cl.center.x, cl.center.y + LABEL_OFF, cl.center.z);
   scene.add(label);
+  label.visible = !PORTRAIT;
   cl.label = label;
   cl.labelBase = 0.95;
 });
