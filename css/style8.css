@@ -69,6 +69,48 @@ header {
   z-index: 100;
 }
 
+/* 헤더 우측 — 다른 작업 바로가기 (기존 [ MENU ] 라벨은 동작이 없어 대체) */
+header .header_nav {
+  display: flex;
+  align-items: center;
+  gap: 2vh;
+}
+header .header_nav a {
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  opacity: 0.72;
+  transition: opacity 0.2s ease;
+}
+header .header_nav a:hover,
+header .header_nav a:focus-visible {
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 0.35em;
+}
+
+/* 좁은 화면에서는 링크가 두 줄로 내려가도 겹치지 않게 */
+@media (max-width: 900px) {
+  header {
+    font-size: 2vh;
+  }
+  header .header_nav {
+    gap: 1.4vh;
+  }
+}
+@media (max-width: 700px) {
+  header {
+    font-size: 1.7vh;
+    flex-wrap: wrap;
+    row-gap: 0.6vh;
+  }
+  header .header_nav {
+    flex: 1 1 100%;
+    justify-content: flex-start;
+    gap: 1.6vh;
+  }
+}
+
 /* section1 */
 #section1 {
 }
