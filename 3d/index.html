@@ -198,6 +198,7 @@ const camera = new THREE.PerspectiveCamera(PORTRAIT ? 62 : 46, window.innerWidth
 camera.position.set(0, 2.75, PORTRAIT ? 19.6 : 17.4);
 camera.lookAt(0, 2.0, 0);
 const clock = new THREE.Clock();
+scene.fog = new THREE.Fog(0x04070e, 15, 54);
 
 /* ───────────────── textures ───────────────── */
 function canvasTexture(w, h, draw) {
@@ -258,7 +259,7 @@ const skyTex = canvasTexture(512, 512, (ctx, w, h) => {
 });
 const sky = new THREE.Mesh(
   new THREE.SphereGeometry(140, 32, 24),
-  new THREE.MeshBasicMaterial({ map: skyTex, side: THREE.BackSide, toneMapped: false })
+  new THREE.MeshBasicMaterial({ map: skyTex, side: THREE.BackSide, toneMapped: false, fog: false })
 );
 scene.add(sky);
 
@@ -277,8 +278,8 @@ scene.add(sky);
   }
   g.setAttribute('position', new THREE.BufferAttribute(p, 3));
   const m = new THREE.PointsMaterial({
-    color: 0xcfe2ff, size: 0.55, transparent: true, opacity: 0.7,
-    blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true
+    color: 0xcfe2ff, size: 0.9, map: glowTex, alphaTest: 0.2, transparent: true, opacity: 0.75,
+    blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true, fog: false
   });
   const stars = new THREE.Points(g, m);
   scene.add(stars);
@@ -289,8 +290,8 @@ const floorTex = canvasTexture(1024, 1024, (ctx, w, h) => {
   ctx.fillStyle = '#05080f'; ctx.fillRect(0, 0, w, h);
   const cx = w / 2, cy = h / 2;
   const rg = ctx.createRadialGradient(cx, cy, 10, cx, cy, w / 2);
-  rg.addColorStop(0, 'rgba(70,120,200,.26)');
-  rg.addColorStop(0.35, 'rgba(40,70,130,.10)');
+  rg.addColorStop(0, 'rgba(70,120,200,.17)');
+  rg.addColorStop(0.35, 'rgba(40,70,130,.06)');
   rg.addColorStop(1, 'rgba(0,0,0,0)');
   ctx.fillStyle = rg; ctx.fillRect(0, 0, w, h);
   ctx.strokeStyle = 'rgba(130,180,255,.20)';
@@ -308,7 +309,7 @@ const floorTex = canvasTexture(1024, 1024, (ctx, w, h) => {
 });
 const floor = new THREE.Mesh(
   new THREE.CircleGeometry(60, 72),
-  new THREE.MeshStandardMaterial({ map: floorTex, roughness: 0.32, metalness: 0.8, color: 0x6d86a8 })
+  new THREE.MeshStandardMaterial({ map: floorTex, roughness: 0.38, metalness: 0.65, color: 0x5b718f })
 );
 floor.rotation.x = -Math.PI / 2;
 floor.position.y = -0.02;
@@ -344,7 +345,7 @@ for (let i = 0; i < DUST; i++) {
 }
 dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
 const dust = new THREE.Points(dustGeo, new THREE.PointsMaterial({
-  color: 0xa8c8ff, size: 0.06, transparent: true, opacity: 0.55,
+  color: 0xa8c8ff, size: 0.14, map: glowTex, alphaTest: 0.15, transparent: true, opacity: 0.5,
   blending: THREE.AdditiveBlending, depthWrite: false
 }));
 scene.add(dust);
@@ -495,8 +496,9 @@ ITEMS.forEach((item, i) => {
   group.rotation.y = a;
   carousel.add(group);
 
+  const tint = new THREE.Color(item.accent).lerp(new THREE.Color(0x0a1424), 0.78);
   const glassMat = new THREE.MeshPhysicalMaterial({
-    color: 0x0a1424, metalness: 0.55, roughness: 0.07,
+    color: tint, metalness: 0.55, roughness: 0.07,
     transparent: true, opacity: 0.42, clearcoat: 1, clearcoatRoughness: 0.06,
     side: THREE.DoubleSide, envMapIntensity: 1.9
   });

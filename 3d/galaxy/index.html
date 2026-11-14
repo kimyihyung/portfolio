@@ -363,7 +363,7 @@ for (let i = 0; i < BG_N; i++) {
 bgGeo.setAttribute('position', new THREE.BufferAttribute(bgPos, 3));
 bgGeo.setAttribute('color', new THREE.BufferAttribute(bgCol, 3));
 const bgMat = new THREE.PointsMaterial({
-  size: 1.5, vertexColors: true, map: GLOW, alphaTest: 0.01, transparent: true, opacity: 0.8,
+  size: 1.35, vertexColors: true, map: GLOW, alphaTest: 0.22, transparent: true, opacity: 0.8,
   blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true
 });
 const bgStars = new THREE.Points(bgGeo, bgMat);
