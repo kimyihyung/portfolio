@@ -1,0 +1,782 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<meta name="theme-color" content="#04060f" />
+<meta name="description" content="3D 지식 은하계 — 기록노트와 EB_note의 글 주제를 별자리로 엮은 인터랙티브 3D 지식 지도" />
+<title>지식 은하계 · Knowledge Galaxy</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:#03050c;color:#e9f0fb;
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Malgun Gothic","Helvetica Neue",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;overscroll-behavior:none}
+#scene{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+#scene.dragging{cursor:grabbing}
+.ui{position:fixed;z-index:10}
+#top{top:0;left:0;right:0;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;
+  padding:calc(env(safe-area-inset-top) + 16px) 16px 0 16px;pointer-events:none}
+#brand h1{font-size:13px;letter-spacing:.32em;font-weight:600;color:#dbe7f8;text-transform:uppercase}
+#brand p{margin-top:6px;font-size:10.5px;letter-spacing:.14em;color:#7188a8}
+#brand b{color:#9fc4ff;font-weight:600}
+#controls{display:flex;flex-direction:column;align-items:flex-end;gap:7px;pointer-events:auto}
+#filters{display:flex;gap:4px;padding:3px;border-radius:999px;background:rgba(10,16,28,.62);
+  border:1px solid rgba(130,165,215,.18);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+.fb{border:0;background:transparent;color:#8ea3c0;font-family:inherit;font-size:11px;letter-spacing:.02em;
+  padding:7px 12px;border-radius:999px;cursor:pointer;transition:all .25s;white-space:nowrap}
+.fb.on{background:rgba(120,170,255,.2);color:#eaf3ff;box-shadow:inset 0 0 0 1px rgba(140,190,255,.35)}
+.fb:hover{color:#dfeaf9}
+#orbit{display:flex;align-items:center;gap:7px;padding:7px 12px;border-radius:999px;cursor:pointer;
+  background:rgba(10,16,28,.62);border:1px solid rgba(130,165,215,.18);color:#a7bcd8;font-family:inherit;
+  font-size:11px;letter-spacing:.02em;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);transition:all .25s}
+#orbit .dot{width:7px;height:7px;border-radius:50%;background:#54657f;transition:all .3s}
+#orbit.on{color:#eaf3ff;border-color:rgba(140,190,255,.45)}
+#orbit.on .dot{background:#7fd0ff;box-shadow:0 0 10px #7fd0ff}
+#legend{left:16px;bottom:calc(env(safe-area-inset-bottom) + 16px);display:flex;flex-direction:column;gap:6px;pointer-events:none}
+.lg{display:flex;align-items:center;gap:8px;font-size:10.5px;letter-spacing:.04em;color:#8ea3c0}
+.lg i{width:8px;height:8px;border-radius:50%;display:block}
+.lg em{font-style:normal;color:#63748e}
+#hint{right:16px;bottom:calc(env(safe-area-inset-bottom) + 16px);font-size:10px;line-height:1.7;letter-spacing:.06em;
+  color:#6a7e99;text-align:right;pointer-events:none}
+#tip{position:fixed;z-index:12;padding:6px 10px;border-radius:8px;font-size:11.5px;color:#eaf3ff;
+  background:rgba(8,14,26,.9);border:1px solid rgba(140,180,240,.28);pointer-events:none;
+  transform:translate(-50%,-160%);opacity:0;transition:opacity .18s;white-space:nowrap;max-width:76vw;overflow:hidden;text-overflow:ellipsis}
+#tip.on{opacity:1}
+#card{position:fixed;z-index:20;right:20px;top:50%;transform:translate(0,-50%) scale(.97);
+  width:min(360px,calc(100vw - 32px));padding:22px 22px 20px;border-radius:18px;
+  background:linear-gradient(165deg,rgba(14,22,38,.94),rgba(8,13,24,.96));
+  border:1px solid rgba(140,180,240,.22);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);
+  box-shadow:0 30px 90px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,255,255,.06);
+  opacity:0;pointer-events:none;transition:opacity .32s ease,transform .32s cubic-bezier(.2,.8,.2,1)}
+#card.on{opacity:1;pointer-events:auto;transform:translate(0,-50%) scale(1)}
+#chip{display:inline-flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  padding:5px 10px;border-radius:999px;background:rgba(120,170,255,.12);color:#a8c8ff;border:1px solid rgba(140,190,255,.22)}
+#chip i{width:6px;height:6px;border-radius:50%;background:currentColor;display:block}
+#ctitle{margin-top:13px;font-size:20px;font-weight:700;line-height:1.35;letter-spacing:-.01em;color:#f4f9ff}
+#csum{margin-top:10px;font-size:12.5px;line-height:1.75;color:#9db0c9}
+#cmeta{margin-top:13px;padding-top:12px;border-top:1px solid rgba(140,180,240,.13);
+  font-size:10.5px;letter-spacing:.05em;color:#6e82a0;display:flex;justify-content:space-between;gap:8px}
+#cactions{margin-top:15px;display:flex;gap:8px}
+.cbtn{flex:1;text-align:center;text-decoration:none;font-family:inherit;font-size:12px;font-weight:600;letter-spacing:.02em;
+  padding:12px 10px;border-radius:11px;border:1px solid rgba(140,190,255,.3);color:#dceaff;background:rgba(255,255,255,.04);
+  cursor:pointer;transition:all .22s}
+.cbtn:hover{background:rgba(130,190,255,.18);border-color:rgba(150,205,255,.55);color:#fff}
+.cbtn.primary{background:linear-gradient(160deg,#5c9cff,#3d6ee0);border-color:transparent;color:#04101f;
+  box-shadow:0 10px 26px rgba(60,120,230,.35)}
+.cbtn.primary:hover{filter:brightness(1.08)}
+#nextnav{display:flex;gap:8px;margin-top:8px}
+#nextnav button{flex:1;font-family:inherit;font-size:11px;letter-spacing:.03em;padding:9px;border-radius:9px;cursor:pointer;
+  background:transparent;border:1px solid rgba(140,180,240,.18);color:#8ea3c0;transition:all .2s}
+#nextnav button:hover{color:#dfeaf9;border-color:rgba(150,200,255,.4)}
+#loading,#fallback{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:16px;padding:28px;text-align:center;background:radial-gradient(120% 120% at 50% 40%,#0a1224,#03050c 70%)}
+#loading{transition:opacity .7s}
+#loading .ring{width:34px;height:34px;border-radius:50%;border:2px solid rgba(255,255,255,.12);
+  border-top-color:#7fb0ff;animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#loading p{font-size:11.5px;letter-spacing:.24em;color:#7188a8}
+#fallback{display:none}
+#fallback.on{display:flex}
+#fallback h2{font-size:19px;font-weight:600}
+#fallback p{font-size:13px;line-height:1.85;color:#8ea3c0;max-width:390px}
+#fallback button{margin-top:6px;padding:13px 24px;border-radius:12px;border:0;cursor:pointer;font-family:inherit;
+  background:linear-gradient(160deg,#69b4ff,#4a86e0);color:#03121f;font-weight:700;font-size:13px}
+.hidden{display:none!important}
+@media (max-width:720px){
+  #brand h1{font-size:11px;letter-spacing:.24em}
+  #brand p{display:none}
+  #hint{display:none}
+  #legend{bottom:auto;top:calc(env(safe-area-inset-top) + 92px);left:14px;gap:4px}
+  .lg{font-size:9.5px}
+  #card{right:0;left:0;top:auto;bottom:0;width:100%;transform:translateY(14px) scale(1);border-radius:22px 22px 0 0;
+    padding:20px 20px calc(env(safe-area-inset-bottom) + 18px);max-height:62vh;overscroll-behavior:contain}
+  #card.on{transform:translateY(0) scale(1)}
+  #ctitle{font-size:18px}
+}
+</style>
+</head>
+<body>
+<canvas id="scene" aria-label="3D 지식 은하계 화면"></canvas>
+
+<header id="top" class="ui">
+  <div id="brand">
+    <h1>Knowledge Galaxy</h1>
+    <p><b>기록노트</b>와 <b>EB_note</b>의 글 주제를 별자리로 엮은 3D 지식 지도</p>
+  </div>
+  <div id="controls">
+    <div id="filters">
+      <button class="fb on" data-f="all">전체</button>
+      <button class="fb" data-f="note">기록노트</button>
+      <button class="fb" data-f="eb">EB_note</button>
+    </div>
+    <button id="orbit" class="on"><span class="dot"></span>자동 공전</button>
+  </div>
+</header>
+
+<div id="legend" class="ui">
+  <div class="lg"><i style="background:#6ea8ff;box-shadow:0 0 10px #6ea8ff"></i>인문·철학·사회 <em>기록노트</em></div>
+  <div class="lg"><i style="background:#b07bff;box-shadow:0 0 10px #b07bff"></i>AI·글로벌 테크 <em>EB_note</em></div>
+  <div class="lg"><i style="background:#ffb36b;box-shadow:0 0 10px #ffb36b"></i>생활·생산성 <em>EB_note</em></div>
+</div>
+
+<div id="hint" class="ui">별을 탭하면 그 글로 줌인합니다<br />드래그로 회전 · 두 손가락으로 확대 · 휠로 줌</div>
+<div id="tip" class="ui"></div>
+
+<section id="card" class="ui" aria-live="polite">
+  <span id="chip"><i></i><span id="chiptext">기록노트 · 인문·철학·사회</span></span>
+  <h2 id="ctitle">제목</h2>
+  <p id="csum">요약</p>
+  <div id="cmeta"><span id="cblog">blog.naver.com/branson_note</span><span id="cidx">01 / 50</span></div>
+  <div id="cactions">
+    <a class="cbtn primary" id="copen" href="#" target="_blank" rel="noopener">블로그 글 열기</a>
+    <button class="cbtn" id="cclose">닫기</button>
+  </div>
+  <div id="nextnav">
+    <button id="prev">← 이전 별</button>
+    <button id="next">다음 별 →</button>
+  </div>
+</section>
+
+<div id="loading"><div class="ring"></div><p>UNFOLDING GALAXY</p></div>
+
+<div id="fallback">
+  <h2>은하계를 열 수 없어요</h2>
+  <p id="fbreason">이 브라우저에서 WebGL을 사용할 수 없거나 3D 라이브러리를 불러오지 못했습니다.<br />최신 Chrome · Safari · Edge에서 다시 열어 주세요. 사내망이나 광고 차단 확장 프로그램이 CDN을 막는 경우에도 같은 증상이 나타납니다.</p>
+  <button onclick="location.reload()">다시 시도</button>
+</div>
+
+<script>
+  window.__errors = [];
+  window.addEventListener('error', function (e) {
+    window.__errors.push(String((e && (e.message || e.type)) || 'error') + ' @ ' + String((e && e.filename) || ''));
+  }, true);
+  window.addEventListener('unhandledrejection', function (e) {
+    window.__errors.push('promise: ' + String((e && e.reason && (e.reason.message || e.reason)) || 'rejection'));
+  });
+  window.__galaxyReady = false;
+  setTimeout(function () {
+    if (!window.__galaxyReady) {
+      document.getElementById('loading').classList.add('hidden');
+      document.getElementById('fallback').classList.add('on');
+      var r = document.getElementById('fbreason');
+      if (r && window.__errors.length) r.innerHTML = '로딩 중 문제가 발생했습니다.<br /><span style="opacity:.7;font-size:11px">' + window.__errors.join('<br />') + '</span>';
+    }
+  }, 9000);
+</script>
+
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js" } }
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+
+const $ = (s) => document.querySelector(s);
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+function fail(msg) {
+  window.__errors.push(msg);
+  $('#loading').classList.add('hidden');
+  $('#fallback').classList.add('on');
+  const r = $('#fbreason');
+  if (r) r.innerHTML = '3D 은하계를 여는 중 문제가 발생했습니다.<br /><span style="opacity:.65;font-size:11px">' + msg + '</span>';
+}
+
+/* ───────────────── renderer ───────────────── */
+const canvas = $('#scene');
+const isSmall = window.matchMedia('(max-width: 720px)').matches;
+let renderer = null;
+try {
+  const probe = document.createElement('canvas');
+  const gl = probe.getContext('webgl2') || probe.getContext('webgl');
+  if (!gl) throw new Error('이 브라우저에서 WebGL을 사용할 수 없습니다');
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isSmall ? 2 : 1.85));
+  renderer.setSize(window.innerWidth, window.innerHeight, false);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.18;
+} catch (err) {
+  fail(String(err && err.message ? err.message : err));
+}
+if (!renderer) throw new Error('WebGL renderer init failed');
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(52, window.innerWidth / window.innerHeight, 0.1, 400);
+const clock = new THREE.Clock();
+
+/* ───────────────── textures ───────────────── */
+function canvasTexture(w, h, draw) {
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  draw(c.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 4;
+  return t;
+}
+let glowTex = null;
+function getGlow() {
+  if (glowTex) return glowTex;
+  glowTex = canvasTexture(128, 128, (ctx, w, h) => {
+    const g = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2);
+    g.addColorStop(0, 'rgba(255,255,255,1)');
+    g.addColorStop(0.18, 'rgba(255,255,255,.78)');
+    g.addColorStop(0.42, 'rgba(255,255,255,.22)');
+    g.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+  });
+  return glowTex;
+}
+
+/* ───────────────── data ───────────────── */
+const CLUSTERS = [
+  {
+    id: 'note',
+    name: '인문·철학·사회',
+    blog: '기록노트',
+    blogHost: 'blog.naver.com/branson_note',
+    url: 'https://blog.naver.com/branson_note',
+    color: 0x6ea8ff,
+    css: '#6ea8ff',
+    center: new THREE.Vector3(-11.5, 3.2, -2.5),
+    nodes: [
+      ['거부권 행위자 (Veto Player)', '형식상 다수결이 있어도, 실제 결정은 소수 연합의 거부권이 쥔다. 제도 설계를 읽는 가장 실용적인 도구.', 0.95],
+      ['지향적 불일치 (Ideological Misalignment)', '연립정부에서 정당 간 이념적 거리와 권력 배분이 만나는 균형점을 게임이론으로 본다.', 0.7],
+      ['하이에크 삼각형', '우회생산 기간과 자본 구조의 시간적 깊이로 경기변동을 설명하는 틀.', 0.75],
+      ['차선의 정리 (Second Best)', '최선이 불가능한 조건에서 무엇이 차선인지를 다시 계산하는 후생경제학.', 0.68],
+      ['착각적 역행 (Retrograde Movement)', '과거의 가능성을 현재의 관점으로 소급해 왜곡하는 인식의 함정.', 0.62],
+      ['프랙탈 시장 가설', '정규분포를 벗어난 팻테일 리스크와 여러 시간지평이 겹치는 시장의 구조.', 0.85],
+      ['양도세 비과세 조건', '실수요자 기준과 보유·거주 요건, 헷갈리는 예외를 한 번에 정리.', 0.8],
+      ['구조적 폭력', '직접적인 폭력 없이 제도와 관행이 만들어내는 불평등을 읽는 개념.', 0.9],
+      ['상징 자본', '취향과 교양이 계급을 재생산하고, 문화가 권력이 되는 방식을 추적한다.', 0.9],
+      ['하버마스, 생활세계의 식민화', '돈과 권력의 논리가 일상의 소통을 밀어내는 과정과 그 저항의 지점.', 0.88],
+      ['허시먼의 이탈·항의·충성', '조직이 쇠퇴할 때 사람이 택하는 세 가지 반응과 그 결과.', 0.9],
+      ['만델-토빈 효과', '자본의 이동성이 세금과 규제를 무력화하는 경로를 추적한다.', 0.85],
+      ['민스키의 금융불안정성 가설', '안정이 스스로 불안정을 키우는 메커니즘. 호황일수록 위험이 쌓인다.', 0.92],
+      ['루만의 체계이론', '사회를 사람이 아니라 소통 체계들의 관계로 읽는 관점.', 0.72],
+      ['지라르의 모방 욕망', '타인의 욕망을 따라 하며 갈등이 증폭되는 구조와 희생양 메커니즘.', 0.95],
+      ['베이트슨의 이중구속', '상반된 메시지가 동시에 와서 빠져나갈 수 없게 만드는 상황.', 0.8],
+      ['그릿(Grit)', '재능보다 지속성이 성과를 만든다는 가설, 그리고 그에 대한 반론.', 0.75],
+      ['진지전', '정면 충돌을 피하고 시간을 끌며 판을 바꾸는 전략의 문법.', 0.7]
+    ]
+  },
+  {
+    id: 'tech',
+    name: 'AI·글로벌 테크',
+    blog: 'EB_note',
+    blogHost: 'blog.naver.com/op213y',
+    url: 'https://blog.naver.com/op213y',
+    color: 0xb07bff,
+    css: '#b07bff',
+    center: new THREE.Vector3(11.5, 4.4, -3.4),
+    nodes: [
+      ['챗GPT 월렛, AI가 결제까지 한다', '정보를 찾던 AI가 승인 아래 장바구니와 결제까지 끝내는 흐름, 그리고 우리에게 남는 일.', 0.95],
+      ['플랫폼에 올린 운전면허증, 왜 AI 업체에서 털렸을까', '우버 운전자 정보가 외부 AI 클라우드 사고로 유출된 사건으로 본 제3자 위험과 점검법.', 0.98],
+      ['아이소메트릭 SF, 도시를 그리는 시선', '아이소메트릭으로 그려낸 가까운 미래 도시의 장면 미학.', 0.7],
+      ['제미니 안경, 안경형 AI의 현재', '얼굴에 쓰는 AI 기기가 어디까지 왔는지 실사용 관점에서 정리.', 0.8],
+      ['젠슨 황 사임과 엔비디아 리더십 전환', '창업자의 전격 사임이 반도체 시장 판도에 던지는 질문.', 0.9],
+      ['스페이스X-테슬라 합병 시나리오', '두 회사의 결합설이 현실이 될 때 바뀌는 것들.', 0.76],
+      ['앤스로픽 IPO, 주문이 몰린 이유', '공모 주문이 크게 몰린 초대형 상장을 어떻게 읽어야 하는가.', 0.84],
+      ['Gemini 4와 코딩 AI의 세대교체', '구글의 차세대 모델이 개발자의 일을 어떻게 바꾸는지.', 0.86],
+      ['1초에 1,300제곱마일 도시를 그리는 AI 지도', '초저비용 지도 생성 프로젝트가 바꾸는 게임·영상 제작의 속도.', 0.8],
+      ['엔비디아 차기 CEO 후보와 Arm 주가', '차기 리더십을 둘러싼 관측이 반도체 주가에 반영되는 방식.', 0.72],
+      ['마이크로소프트 글로벌 클라우드 장애', '한 번의 장애가 전 세계 업무를 멈추게 하는 구조와 대비법.', 0.8],
+      ['프롬프트 캐싱', '같은 맥락을 재사용해 비용과 지연을 동시에 줄이는 기술.', 0.7],
+      ['제미나이 디시전스 벤치마크', '에이전트가 실제로 의사결정을 잘하는지 재는 새로운 기준.', 0.64],
+      ['오픈소스 AI 툴 레이더', '매주 쓸 만한 도구만 골라 실전 용도와 함께 소개.', 0.72],
+      ['모닝 테크 브리핑', '하루의 글로벌 테크 이슈를 한 편으로 압축해 읽는 아침 루틴.', 0.74],
+      ['AI 요금제, 실제로 얼마 드나', '모델별 토큰 단가와 캐싱을 반영한 실제 비용 비교.', 0.7]
+    ]
+  },
+  {
+    id: 'life',
+    name: '생활·생산성',
+    blog: 'EB_note',
+    blogHost: 'blog.naver.com/op213y',
+    url: 'https://blog.naver.com/op213y',
+    color: 0xffb36b,
+    css: '#ffb36b',
+    center: new THREE.Vector3(0.5, -7.6, 3.2),
+    nodes: [
+      ['사진 속 사람 지우기, 1분이면 끝', '앱 설치 없이 브라우저에서 배경의 사람을 지우고 자연스럽게 채우는 방법.', 0.96],
+      ['카톡방 안 나가고 저장공간 10GB 비우기', '대화는 그대로 두고 사진·영상만 정리해 용량을 되찾는 순서.', 0.96],
+      ['스마트폰 사진·영상 용량 정리', '중복 사진과 긴 영상을 찾아 지우는 가장 빠른 동선.', 0.8],
+      ['안 쓰는 앱 권한 회수하기', '위치·연락처·사진 접근 권한을 한 번에 점검하는 법.', 0.78],
+      ['배터리를 오래 쓰는 설정', '백그라운드·화면·충전 습관에서 실제로 효과가 큰 항목만.', 0.82],
+      ['중고폰 팔기 전 초기화와 개인정보 삭제', '계정 잠금부터 데이터 완전 삭제까지 빠뜨리면 안 되는 순서.', 0.8],
+      ['PDF 무료로 편집하고 서명하기', '유료 결제 없이 텍스트·서명을 넣는 방법.', 0.74],
+      ['구글 포토·드라이브 용량 관리', '무료 용량이 꽉 찼을 때 가장 먼저 확인할 것들.', 0.68],
+      ['엑셀 자동 채우기와 단축키', '반복 작업 시간을 절반으로 줄이는 기본기.', 0.7],
+      ['문서 스캔을 깔끔하게 뜨는 법', '그림자·기울기 없이 스캔본처럼 만드는 요령.', 0.64],
+      ['와이파이 비밀번호 공유와 재설정', '비밀번호를 알려주지 않고도 접속시키는 방법.', 0.6],
+      ['카톡 백업과 복원', '기기 변경 때 대화와 사진을 잃지 않는 절차.', 0.72],
+      ['스마트폰 화면 녹화와 편집', '녹화부터 자르기·자막까지 폰 하나로 끝내기.', 0.6],
+      ['공공 와이파이 안전하게 쓰기', '편리함과 위험 사이에서 지킬 것들.', 0.7],
+      ['휴대폰 요금제 비교와 알뜰폰 전환', '같은 데이터에 더 적게 내는 조합 찾기.', 0.76],
+      ['사진 보정, 앱 하나로 끝내기', '보정 앱을 여러 개 쓰지 않아도 되는 이유.', 0.58]
+    ]
+  }
+];
+
+const FILTER_MAP = { all: ['note', 'tech', 'life'], note: ['note'], eb: ['tech', 'life'] };
+
+/* ───────────────── seeded layout ───────────────── */
+let seed = 20261114;
+function rnd() {
+  seed = (seed * 1664525 + 1013904223) % 4294967296;
+  return seed / 4294967296;
+}
+
+const GLOW = getGlow();
+
+/* background starfield */
+const BG_N = isSmall ? 900 : 1600;
+const bgGeo = new THREE.BufferGeometry();
+const bgPos = new Float32Array(BG_N * 3);
+const bgCol = new Float32Array(BG_N * 3);
+const bgSize = new Float32Array(BG_N);
+for (let i = 0; i < BG_N; i++) {
+  const r = 70 + rnd() * 110;
+  const th = rnd() * Math.PI * 2;
+  const ph = Math.acos(2 * rnd() - 1);
+  bgPos[i * 3] = r * Math.sin(ph) * Math.cos(th);
+  bgPos[i * 3 + 1] = r * Math.cos(ph) * 0.8;
+  bgPos[i * 3 + 2] = r * Math.sin(ph) * Math.sin(th);
+  const t = rnd();
+  const c = new THREE.Color().setHSL(0.58 + t * 0.12, 0.5, 0.62 + rnd() * 0.35);
+  bgCol[i * 3] = c.r; bgCol[i * 3 + 1] = c.g; bgCol[i * 3 + 2] = c.b;
+  bgSize[i] = 0.5 + rnd() * 1.6;
+}
+bgGeo.setAttribute('position', new THREE.BufferAttribute(bgPos, 3));
+bgGeo.setAttribute('color', new THREE.BufferAttribute(bgCol, 3));
+const bgMat = new THREE.PointsMaterial({
+  size: 1.1, vertexColors: true, transparent: true, opacity: 0.85,
+  blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true
+});
+const bgStars = new THREE.Points(bgGeo, bgMat);
+bgStars.frustumCulled = false;
+scene.add(bgStars);
+
+/* nebula clouds */
+CLUSTERS.forEach((cl) => {
+  for (let i = 0; i < 3; i++) {
+    const sp = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: GLOW, color: cl.color, transparent: true, opacity: 0.11,
+      blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false
+    }));
+    const s = 16 + rnd() * 12;
+    sp.scale.set(s, s * 0.8, 1);
+    sp.position.set(
+      cl.center.x + (rnd() - 0.5) * 8,
+      cl.center.y + (rnd() - 0.5) * 6,
+      cl.center.z + (rnd() - 0.5) * 8 - 3
+    );
+    sp.renderOrder = -2;
+    scene.add(sp);
+  }
+});
+
+/* ───────────────── nodes ───────────────── */
+const nodes = [];
+const allNodes = [];
+
+CLUSTERS.forEach((cl, ci) => {
+  const baseColor = new THREE.Color(cl.color);
+  const coreColor = baseColor.clone().lerp(new THREE.Color(0xffffff), 0.42);
+
+  cl.nodeObjs = cl.nodes.map(([title, summary, imp], ni) => {
+    // spiral-ish scatter inside a flattened ellipsoid
+    const rr = 2.3 + Math.pow(rnd(), 0.7) * 3.6;
+    const th = rnd() * Math.PI * 2;
+    const ph = Math.acos(2 * rnd() - 1);
+    const pos = new THREE.Vector3(
+      cl.center.x + rr * Math.sin(ph) * Math.cos(th),
+      cl.center.y + rr * Math.cos(ph) * 0.72,
+      cl.center.z + rr * Math.sin(ph) * Math.sin(th) * 0.85
+    );
+
+    const rad = 0.15 + imp * 0.15;
+    const mat = new THREE.MeshBasicMaterial({ color: coreColor.clone(), transparent: true, opacity: 1, toneMapped: false });
+    const mesh = new THREE.Mesh(new THREE.SphereGeometry(rad, 18, 14), mat);
+    mesh.position.copy(pos);
+    scene.add(mesh);
+
+    const glowMat = new THREE.SpriteMaterial({
+      map: GLOW, color: baseColor, transparent: true, opacity: 0.85,
+      blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false
+    });
+    const glow = new THREE.Sprite(glowMat);
+    const gs = (1.1 + imp * 1.5) * (isSmall ? 1.15 : 1);
+    glow.scale.set(gs, gs, 1);
+    glow.position.copy(pos);
+    scene.add(glow);
+
+    const obj = {
+      title, summary, imp,
+      cluster: cl, ci, ni,
+      pos, mesh, glow, mat, glowMat,
+      baseScale: 1, targetScale: 1, targetOpacity: 1, glowTarget: 0.85,
+      phase: rnd() * Math.PI * 2
+    };
+    allNodes.push(obj);
+    nodes.push(obj);
+    return obj;
+  });
+
+  /* cluster label sprite */
+  const labelTex = canvasTexture(640, 160, (ctx, w, h) => {
+    ctx.clearRect(0, 0, w, h);
+    ctx.textAlign = 'center';
+    ctx.fillStyle = cl.css;
+    ctx.globalAlpha = 0.95;
+    ctx.font = '600 44px -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+    ctx.fillText(cl.name, w / 2, 62);
+    ctx.globalAlpha = 0.6;
+    ctx.font = '500 26px -apple-system, "Apple SD Gothic Neo", sans-serif';
+    ctx.fillStyle = '#cfe0f7';
+    ctx.fillText(cl.blog + ' · ' + cl.nodes.length + ' stars', w / 2, 108);
+    ctx.globalAlpha = 0.35;
+    ctx.strokeStyle = cl.css;
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(w / 2 - 60, 130); ctx.lineTo(w / 2 + 60, 130); ctx.stroke();
+  });
+  const label = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: labelTex, transparent: true, opacity: 0.95, depthWrite: false, toneMapped: false
+  }));
+  label.scale.set(8.4, 2.1, 1);
+  label.position.set(cl.center.x, cl.center.y + 5.6, cl.center.z);
+  scene.add(label);
+  cl.label = label;
+  cl.labelBase = 0.95;
+});
+
+/* ───────────────── constellation lines ───────────────── */
+function buildLines(list, color, opacity) {
+  const pts = [];
+  const used = {};
+  for (let i = 0; i < list.length; i++) {
+    const dists = [];
+    for (let j = 0; j < list.length; j++) {
+      if (i === j) continue;
+      dists.push([j, list[i].pos.distanceTo(list[j].pos)]);
+    }
+    dists.sort((a, b) => a[1] - b[1]);
+    const links = dists.slice(0, 2);
+    links.forEach(([j]) => {
+      const key = i < j ? i + '-' + j : j + '-' + i;
+      if (used[key]) return;
+      used[key] = 1;
+      pts.push(list[i].pos.x, list[i].pos.y, list[i].pos.z, list[j].pos.x, list[j].pos.y, list[j].pos.z);
+    });
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3));
+  const m = new THREE.LineBasicMaterial({
+    color: color, transparent: true, opacity: opacity, blending: THREE.AdditiveBlending, depthWrite: false
+  });
+  const seg = new THREE.LineSegments(g, m);
+  scene.add(seg);
+  return seg;
+}
+CLUSTERS.forEach((cl) => {
+  cl.lines = buildLines(cl.nodeObjs, cl.color, 0.34);
+  cl.linesBase = 0.34;
+});
+
+/* inter-cluster bridges */
+const bridgePts = [];
+const bridgePairs = [
+  [CLUSTERS[0], CLUSTERS[1]],
+  [CLUSTERS[1], CLUSTERS[2]],
+  [CLUSTERS[0], CLUSTERS[2]]
+];
+bridgePairs.forEach(([a, b]) => {
+  const na = a.nodeObjs[0], nb = b.nodeObjs[0];
+  bridgePts.push(na.pos.x, na.pos.y, na.pos.z, nb.pos.x, nb.pos.y, nb.pos.z);
+});
+const extraPairs = [[0, 0, 1, 1], [0, 8, 2, 0], [1, 3, 2, 1], [1, 12, 2, 2], [0, 15, 1, 0]];
+extraPairs.forEach(([ca, ia, cb, ib]) => {
+  const a = CLUSTERS[ca].nodeObjs[ia], b = CLUSTERS[cb].nodeObjs[ib];
+  if (a && b) bridgePts.push(a.pos.x, a.pos.y, a.pos.z, b.pos.x, b.pos.y, b.pos.z);
+});
+const bridgeGeo = new THREE.BufferGeometry();
+bridgeGeo.setAttribute('position', new THREE.Float32BufferAttribute(bridgePts, 3));
+const bridgeMat = new THREE.LineBasicMaterial({
+  color: 0x8fb6ff, transparent: true, opacity: 0.12, blending: THREE.AdditiveBlending, depthWrite: false
+});
+const bridgeLines = new THREE.LineSegments(bridgeGeo, bridgeMat);
+scene.add(bridgeLines);
+
+/* ───────────────── camera view ───────────────── */
+const OVERVIEW = { target: new THREE.Vector3(0, -0.6, 0), r: isSmall ? 30 : 27 };
+const view = { target: OVERVIEW.target.clone(), r: OVERVIEW.r, az: 0.15, pol: 1.36 };
+const tw = { active: false, t: 0, dur: 1.0, fr: 0, tr: 0, ft: new THREE.Vector3(), tt: new THREE.Vector3() };
+
+function applyCam() {
+  const sp = Math.sin(view.pol);
+  camera.position.set(
+    view.target.x + view.r * sp * Math.sin(view.az),
+    view.target.y + view.r * Math.cos(view.pol),
+    view.target.z + view.r * sp * Math.cos(view.az)
+  );
+  camera.lookAt(view.target);
+}
+applyCam();
+
+function flyTo(target, r, dur) {
+  tw.active = true; tw.t = 0; tw.dur = dur || 1.0;
+  tw.fr = view.r; tw.tr = r;
+  tw.ft.copy(view.target); tw.tt.copy(target);
+}
+
+/* ───────────────── state ───────────────── */
+let orbitOn = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let filter = 'all';
+let focused = null;
+const pointerState = new Map();
+let moved = 0, lastX = 0, lastY = 0, pinchStart = 0, pinchR = 0, dragging = false;
+let hoverAt = 0;
+
+const activeList = () => allNodes.filter((n) => n.active);
+
+/* ───────────────── card ───────────────── */
+const cardEl = $('#card');
+function openCard(node) {
+  focused = node;
+  const cl = node.cluster;
+  const chip = $('#chip');
+  chip.style.color = cl.css;
+  chip.style.background = 'rgba(255,255,255,.05)';
+  chip.style.borderColor = cl.css + '55';
+  $('#chiptext').textContent = cl.blog + ' · ' + cl.name;
+  $('#ctitle').textContent = node.title;
+  $('#csum').textContent = node.summary;
+  $('#cblog').textContent = cl.blogHost;
+  const list = activeList();
+  const idx = list.indexOf(node);
+  $('#cidx').textContent = String(idx + 1).padStart(2, '0') + ' / ' + list.length;
+  const open = $('#copen');
+  open.href = cl.url;
+  cardEl.classList.add('on');
+  flyTo(node.pos, isSmall ? 5.4 : 4.8, 1.05);
+  document.body.classList.add('focused');
+}
+function closeCard(keepView) {
+  focused = null;
+  cardEl.classList.remove('on');
+  document.body.classList.remove('focused');
+  if (!keepView) flyTo(OVERVIEW.target, OVERVIEW.r, 0.95);
+}
+function step(dir) {
+  const list = activeList();
+  if (!list.length) return;
+  let i = focused ? list.indexOf(focused) : -1;
+  i = (i + dir + list.length) % list.length;
+  const n = list[i];
+  openCard(n);
+}
+$('#cclose').addEventListener('click', () => closeCard(false));
+$('#next').addEventListener('click', () => step(1));
+$('#prev').addEventListener('click', () => step(-1));
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeCard(false);
+  if (e.key === 'ArrowRight' && focused) step(1);
+  if (e.key === 'ArrowLeft' && focused) step(-1);
+  if (!focused) {
+    if (e.key === 'ArrowRight') view.az -= 0.16;
+    if (e.key === 'ArrowLeft') view.az += 0.16;
+  }
+});
+
+/* ───────────────── filter ───────────────── */
+function setFilter(f) {
+  filter = f;
+  const allowed = FILTER_MAP[f];
+  document.querySelectorAll('.fb').forEach((b) => b.classList.toggle('on', b.dataset.f === f));
+  allNodes.forEach((n) => {
+    const on = allowed.indexOf(n.cluster.id) >= 0;
+    n.active = on;
+    n.targetScale = on ? 1 : 0.32;
+    n.targetOpacity = on ? 1 : 0.05;
+    n.glowTarget = on ? 0.85 : 0.04;
+  });
+  CLUSTERS.forEach((cl) => {
+    const on = allowed.indexOf(cl.id) >= 0;
+    cl.label.material.opacity = on ? cl.labelBase : 0.06;
+    cl.lines.material.opacity = on ? cl.linesBase : 0.02;
+  });
+  bridgeMat.opacity = f === 'all' ? 0.12 : 0.03;
+  if (focused && focused.cluster.id && allowed.indexOf(focused.cluster.id) < 0) closeCard(false);
+  const counts = activeList().length;
+  if (f !== 'all') toast(counts + '개의 별만 남겼습니다');
+}
+
+let toastT = 0;
+function toast(msg) {
+  const t = $('#tip');
+  t.textContent = msg;
+  t.style.left = '50%';
+  t.style.top = '76px';
+  t.style.transform = 'translate(-50%,0)';
+  t.classList.add('on');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => t.classList.remove('on'), 1900);
+}
+
+$('#orbit').addEventListener('click', () => {
+  orbitOn = !orbitOn;
+  $('#orbit').classList.toggle('on', orbitOn);
+});
+document.querySelectorAll('.fb').forEach((b) => {
+  b.addEventListener('click', () => setFilter(b.dataset.f));
+});
+
+/* ───────────────── picking ───────────────── */
+const projected = new THREE.Vector3();
+function pick(cx, cy) {
+  const rect = canvas.getBoundingClientRect();
+  let best = null, bestD = 1e9;
+  const limit = isSmall ? 38 : 26;
+  for (let i = 0; i < allNodes.length; i++) {
+    const n = allNodes[i];
+    if (!n.active) continue;
+    projected.copy(n.pos).project(camera);
+    if (projected.z > 1) continue;
+    const sx = (projected.x * 0.5 + 0.5) * rect.width;
+    const sy = (-projected.y * 0.5 + 0.5) * rect.height;
+    const d = Math.hypot(sx - (cx - rect.left), sy - (cy - rect.top));
+    if (d < bestD) { bestD = d; best = n; }
+  }
+  return bestD <= limit ? best : null;
+}
+
+const tipEl = $('#tip');
+function showTip(node, x, y) {
+  if (!node) { tipEl.classList.remove('on'); return; }
+  tipEl.textContent = node.title;
+  tipEl.style.left = clamp(x, 80, window.innerWidth - 80) + 'px';
+  tipEl.style.top = Math.max(y - 6, 70) + 'px';
+  tipEl.style.transform = 'translate(-50%,-100%)';
+  tipEl.classList.add('on');
+}
+
+/* ───────────────── pointer ───────────────── */
+canvas.addEventListener('pointerdown', (e) => {
+  canvas.setPointerCapture(e.pointerId);
+  pointerState.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (pointerState.size === 1) { moved = 0; dragging = true; lastX = e.clientX; lastY = e.clientY; canvas.classList.add('dragging'); }
+  if (pointerState.size === 2) { pinchStart = pinchDist(); pinchR = view.r; }
+});
+function pinchDist() {
+  const p = Array.from(pointerState.values());
+  if (p.length < 2) return 0;
+  return Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y);
+}
+canvas.addEventListener('pointermove', (e) => {
+  const prev = pointerState.get(e.pointerId);
+  if (!prev) {
+    // hover only
+    const now = performance.now();
+    if (now - hoverAt > 90) {
+      hoverAt = now;
+      const n = pick(e.clientX, e.clientY);
+      showTip(n, e.clientX, e.clientY);
+      canvas.style.cursor = n ? 'pointer' : 'grab';
+    }
+    return;
+  }
+  const dx = e.clientX - prev.x, dy = e.clientY - prev.y;
+  pointerState.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (pointerState.size === 1) {
+    moved += Math.abs(dx) + Math.abs(dy);
+    view.az -= dx * 0.0052;
+    view.pol = clamp(view.pol - dy * 0.0042, 0.42, 2.6);
+    if (tw.active && tw.t > 0.35) { tw.active = false; }
+  } else if (pointerState.size === 2) {
+    moved += 30;
+    const d = pinchDist();
+    if (pinchStart > 10 && d > 10) view.r = clamp(pinchR * (pinchStart / d), 3.2, 46);
+  }
+});
+function endP(e) {
+  if (!pointerState.has(e.pointerId)) return;
+  const single = pointerState.size === 1;
+  pointerState.delete(e.pointerId);
+  if (pointerState.size < 2) pinchStart = 0;
+  if (pointerState.size === 0) { dragging = false; canvas.classList.remove('dragging'); }
+  if (single && moved < 10) {
+    const n = pick(e.clientX, e.clientY);
+    if (n) { openCard(n); showTip(null); }
+    else if (focused) { /* keep */ }
+  }
+}
+canvas.addEventListener('pointerup', endP);
+canvas.addEventListener('pointercancel', (e) => { pointerState.delete(e.pointerId); pinchStart = 0; dragging = false; canvas.classList.remove('dragging'); });
+canvas.addEventListener('pointerleave', () => showTip(null));
+canvas.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  view.r = clamp(view.r * (1 + e.deltaY * 0.0011), 3.2, 46);
+  if (tw.active) tw.active = false;
+}, { passive: false });
+
+/* ───────────────── resize ───────────────── */
+function onResize() {
+  const w = window.innerWidth, h = window.innerHeight;
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h, false);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+}
+window.addEventListener('resize', onResize);
+window.addEventListener('orientationchange', () => setTimeout(onResize, 240));
+
+/* ───────────────── loop ───────────────── */
+function animate() {
+  requestAnimationFrame(animate);
+  const dt = Math.min(clock.getDelta(), 0.05);
+  const t = clock.elapsedTime;
+
+  if (orbitOn && !focused && !dragging && pointerState.size === 0) view.az += dt * 0.05;
+
+  if (tw.active) {
+    tw.t += dt / tw.dur;
+    const k = easeInOut(clamp(tw.t, 0, 1));
+    view.r = lerp(tw.fr, tw.tr, k);
+    view.target.lerpVectors(tw.ft, tw.tt, k);
+    if (tw.t >= 1) tw.active = false;
+  }
+  applyCam();
+  bgStars.rotation.y += dt * 0.005;
+
+  const ease = Math.min(1, dt * 7);
+  for (let i = 0; i < allNodes.length; i++) {
+    const n = allNodes[i];
+    const pulse = 0.82 + 0.26 * Math.sin(t * 1.5 + n.phase);
+    n.mat.opacity = lerp(n.mat.opacity, n.targetOpacity, ease);
+    n.glowMat.opacity = lerp(n.glowMat.opacity, n.glowTarget * pulse, ease);
+    const focusBoost = n === focused ? 1.45 : 1;
+    n.mesh.scale.setScalar(lerp(n.mesh.scale.x, n.targetScale * focusBoost, ease));
+    const glowBase = (1.1 + n.imp * 1.5) * (isSmall ? 1.15 : 1);
+    n.glow.scale.setScalar(lerp(n.glow.scale.x, glowBase * n.targetScale * focusBoost * (n === focused ? 1.1 : 1), ease));
+  }
+
+  renderer.render(scene, camera);
+}
+
+/* ───────────────── boot ───────────────── */
+setFilter('all');
+allNodes.forEach((n) => { n.mesh.scale.setScalar(n.targetScale); });
+animate();
+
+setTimeout(() => {
+  $('#loading').style.opacity = '0';
+  setTimeout(() => $('#loading').classList.add('hidden'), 700);
+  window.__galaxyReady = true;
+  window.__galaxyInfo = { nodes: allNodes.length, clusters: CLUSTERS.length };
+}, 380);
+</script>
+</body>
+</html>
