@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0b0b0d">
+<title>Editorial Card Studio — Instagram Magazine Carousel Maker (1080×1350)</title>
+<meta name="description" content="Design 2026-style Instagram editorial magazine cards at 1080×1350 with zero uploads. Full-bleed photo, bold condensed headline with [accent] words, 6-slide carousel, PNG/ZIP export. Free, nothing leaves your browser. 인스타 에디토리얼 매거진 카드 생성기 — 무업로드 1080×1350 PNG·ZIP.">
+<meta name="keywords" content="instagram carousel maker, editorial card generator, magazine headline, 1080x1350, instagram story template, 인스타 카드뉴스, 매거진 카드, 캐러셀 생성기">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Editorial Card Studio — Instagram Magazine Carousel Maker">
+<meta property="og:description" content="Zero-upload editorial carousel maker. Bold condensed headlines, photo full-bleed, 1080×1350 PNG · 6-slide carousel.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:,">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Editorial Card Studio","alternateName":"에디토리얼 카드 스튜디오","applicationCategory":"DesignApplication","operatingSystem":"Any (web browser)","inLanguage":["en","ko"],"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Client-side Instagram editorial magazine carousel generator at 1080x1350 with zero uploads and PNG/ZIP export."}
+</script>
+<style>
+@view-transition { navigation: auto; }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: .3s; animation-timing-function: cubic-bezier(.2,.7,.2,1); }
+
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  --bg: #0b0b0d;
+  --bg2: #101014;
+  --panel: #141419;
+  --panel2: #1a1a20;
+  --line: rgba(255,255,255,.08);
+  --line2: rgba(255,255,255,.18);
+  --ink: #f5f2ea;
+  --muted: #a29c90;
+  --muted2: #726c62;
+  --accent: #e5b45c;
+  --accent2: #c9973f;
+  --on-accent: #191104;
+  --danger: #ff7a70;
+  --radius: 16px;
+  --radius-sm: 11px;
+  --shadow: 0 26px 70px rgba(0,0,0,.55);
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --display: "Helvetica Neue", "Segoe UI", Arial, system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html[data-theme="light"] {
+  --bg: #f6f3ec;
+  --bg2: #efeae0;
+  --panel: #fffdf8;
+  --panel2: #f7f2e8;
+  --line: rgba(30,22,10,.10);
+  --line2: rgba(30,22,10,.22);
+  --ink: #171310;
+  --muted: #6a6358;
+  --muted2: #8d8578;
+  --accent: #a8752a;
+  --accent2: #8b5d1c;
+  --on-accent: #fffdf8;
+  --danger: #c0392b;
+  --shadow: 0 20px 50px rgba(40,30,10,.14);
+}
+
+html, body { margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--bg);
+  background-image:
+    radial-gradient(120% 65% at 50% -18%, rgba(229,180,92,.10), transparent 62%),
+    radial-gradient(80% 50% at 100% 0%, rgba(229,180,92,.05), transparent 55%);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: 1.5;
+  transition: background-color .3s ease, color .3s ease;
+}
+::selection { background: var(--accent); color: var(--on-accent); }
+button { font-family: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+
+.wrap { width: 100%; max-width: 1240px; margin: 0 auto; padding: 26px 20px 70px; }
+
+/* ---------- header ---------- */
+.top { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; flex-wrap: wrap; margin-bottom: 22px; }
+.brand { display: flex; align-items: center; gap: 14px; }
+.logo {
+  width: 44px; height: 44px; flex: none; border-radius: 12px;
+  display: grid; place-items: center;
+  font-family: var(--display); font-weight: 800; font-size: 22px; letter-spacing: -.04em;
+  background: var(--accent); color: var(--on-accent);
+  box-shadow: 0 10px 26px rgba(229,180,92,.28);
+}
+.brand h1 { margin: 0; font-size: clamp(19px, 2.4vw, 25px); font-weight: 800; letter-spacing: -.028em; line-height: 1.12; }
+.brand p { margin: 3px 0 0; font-size: 12.5px; color: var(--muted); letter-spacing: .01em; }
+.top-actions { display: flex; align-items: center; gap: 9px; }
+
+.seg { display: inline-flex; background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+.seg button {
+  border: 0; background: transparent; color: var(--muted);
+  font-size: 12.5px; font-weight: 700; letter-spacing: .02em;
+  padding: 6px 13px; border-radius: 999px; cursor: pointer; transition: .18s;
+}
+.seg button.on { background: var(--accent); color: var(--on-accent); }
+.seg button:not(.on):hover { color: var(--ink); }
+
+.iconbtn {
+  width: 36px; height: 36px; border-radius: 10px; cursor: pointer;
+  background: var(--panel); border: 1px solid var(--line); color: var(--ink);
+  font-size: 15px; display: grid; place-items: center; transition: .18s;
+}
+.iconbtn:hover { border-color: var(--line2); }
+
+/* ---------- layout ---------- */
+.layout { display: grid; grid-template-columns: 372px minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 1000px) { .layout { grid-template-columns: 1fr; } .stage { order: -1; } }
+
+.panel { display: flex; flex-direction: column; gap: 12px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 15px 15px 16px; }
+.sec {
+  margin: 0 0 11px; font-size: 11px; font-weight: 800; letter-spacing: .13em;
+  text-transform: uppercase; color: var(--muted2);
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+.sec b { color: var(--accent); font-weight: 800; letter-spacing: .06em; text-transform: none; font-size: 11px; }
+
+/* ---------- drop zone ---------- */
+.drop {
+  border: 1.5px dashed var(--line2); border-radius: var(--radius-sm);
+  padding: 20px 14px; text-align: center; cursor: pointer;
+  display: block; width: 100%; background: var(--panel2); color: var(--ink);
+  transition: .18s;
+}
+.drop:hover, .drop.over { border-color: var(--accent); background: rgba(229,180,92,.07); }
+.drop .dq { font-size: 20px; line-height: 1; margin-bottom: 7px; color: var(--accent); }
+.drop strong { display: block; font-size: 13.5px; font-weight: 700; letter-spacing: -.01em; }
+.drop span { display: block; font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+
+.bgtabs { display: flex; gap: 6px; margin: 10px 0 9px; }
+.bgtabs button {
+  flex: 1; border: 1px solid var(--line); background: var(--panel2); color: var(--muted);
+  font-size: 12px; font-weight: 700; padding: 7px 0; border-radius: 8px; cursor: pointer; transition: .16s;
+}
+.bgtabs button.on { background: rgba(229,180,92,.14); border-color: var(--accent); color: var(--accent); }
+.bgtabs button[disabled] { opacity: .38; cursor: not-allowed; }
+
+.gswatches { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+.gswatches button {
+  aspect-ratio: 1/1.15; border-radius: 8px; border: 1.5px solid transparent; cursor: pointer;
+  position: relative; overflow: hidden; padding: 0; transition: .16s;
+}
+.gswatches button:hover { transform: translateY(-1px); }
+.gswatches button.on { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(229,180,92,.22); }
+.gswatches button span {
+  position: absolute; left: 0; right: 0; bottom: 0; font-size: 8.5px; font-weight: 700;
+  color: #fff; background: rgba(0,0,0,.45); padding: 2px 1px; letter-spacing: .01em;
+}
+
+/* ---------- sliders ---------- */
+.slider { margin-top: 11px; }
+.slider .lab { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--muted); margin-bottom: 4px; }
+.slider .lab i { font-style: normal; color: var(--ink); font-variant-numeric: tabular-nums; font-size: 11px; }
+input[type=range] {
+  -webkit-appearance: none; appearance: none; width: 100%; height: 18px; background: transparent; cursor: pointer; margin: 0;
+}
+input[type=range]::-webkit-slider-runnable-track { height: 4px; border-radius: 4px; background: var(--line2); }
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 14px; height: 14px; margin-top: -5px; border-radius: 50%;
+  background: var(--accent); border: 2px solid var(--panel); box-shadow: 0 1px 4px rgba(0,0,0,.4);
+}
+input[type=range]::-moz-range-track { height: 4px; border-radius: 4px; background: var(--line2); }
+input[type=range]::-moz-range-thumb { width: 12px; height: 12px; border-radius: 50%; background: var(--accent); border: 2px solid var(--panel); }
+
+.checks { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 12px; }
+.check { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: var(--muted); cursor: pointer; user-select: none; }
+.check input { appearance: none; -webkit-appearance: none; width: 15px; height: 15px; border-radius: 4px; border: 1.5px solid var(--line2); background: var(--panel2); margin: 0; cursor: pointer; position: relative; }
+.check input:checked { background: var(--accent); border-color: var(--accent); }
+.check input:checked::after { content: ""; position: absolute; left: 4px; top: 1px; width: 4px; height: 8px; border: solid var(--on-accent); border-width: 0 2px 2px 0; transform: rotate(42deg); }
+.check:hover { color: var(--ink); }
+
+/* ---------- presets ---------- */
+.presets { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.presets button {
+  display: flex; align-items: center; gap: 9px; text-align: left;
+  border: 1px solid var(--line); background: var(--panel2); border-radius: 9px;
+  padding: 8px 9px; cursor: pointer; transition: .16s;
+}
+.presets button:hover { border-color: var(--line2); }
+.presets button.on { border-color: var(--accent); background: rgba(229,180,92,.10); }
+.presets svg { flex: none; border-radius: 3px; overflow: hidden; }
+.presets em { font-style: normal; font-size: 11px; font-weight: 650; line-height: 1.15; color: var(--ink); letter-spacing: -.01em; }
+.presets button.on em { color: var(--accent); }
+
+/* ---------- fields ---------- */
+.field { margin-top: 10px; }
+.field:first-of-type { margin-top: 0; }
+.field label { display: block; font-size: 11.5px; color: var(--muted); margin-bottom: 4px; }
+.field .fh { font-size: 10.5px; color: var(--muted2); margin-top: 4px; line-height: 1.35; }
+.inp {
+  width: 100%; background: var(--panel2); border: 1px solid var(--line); color: var(--ink);
+  border-radius: 8px; padding: 9px 10px; font-size: 13px; font-family: inherit; line-height: 1.4;
+  transition: .16s;
+}
+.inp:focus { outline: none; border-color: var(--accent); background: var(--bg); }
+textarea.inp { resize: vertical; min-height: 62px; }
+.inp::placeholder { color: var(--muted2); }
+
+.accent-row { display: flex; gap: 7px; margin-top: 4px; align-items: center; }
+.accent-row button {
+  width: 26px; height: 26px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; padding: 0;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.25); transition: .16s;
+}
+.accent-row button.on { border-color: var(--ink); transform: scale(1.06); }
+.accent-row .an { font-size: 10.5px; color: var(--muted2); margin-left: 2px; }
+
+/* ---------- export ---------- */
+.segsm { display: flex; gap: 6px; margin-bottom: 10px; }
+.segsm button {
+  flex: 1; border: 1px solid var(--line); background: var(--panel2); color: var(--muted);
+  font-size: 11.5px; font-weight: 700; padding: 7px 0; border-radius: 8px; cursor: pointer; font-variant-numeric: tabular-nums; transition: .16s;
+}
+.segsm button.on { background: rgba(229,180,92,.14); border-color: var(--accent); color: var(--accent); }
+.btn {
+  display: flex; align-items: center; justify-content: center; gap: 7px; width: 100%;
+  border: 0; border-radius: 10px; padding: 12px 14px; cursor: pointer;
+  font-size: 13px; font-weight: 800; letter-spacing: -.01em; transition: .16s;
+}
+.btn.primary { background: var(--accent); color: var(--on-accent); box-shadow: 0 8px 22px rgba(229,180,92,.24); }
+.btn.primary:hover { background: var(--accent2); }
+.btn.ghost { background: var(--panel2); color: var(--ink); border: 1px solid var(--line2); margin-top: 7px; }
+.btn.ghost:hover { border-color: var(--accent); color: var(--accent); }
+.btn[disabled] { opacity: .5; cursor: not-allowed; }
+.btn small { font-weight: 600; opacity: .75; font-size: 11px; }
+
+/* ---------- stage ---------- */
+.stage { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; box-shadow: var(--shadow); position: sticky; top: 14px; }
+@media (max-width: 1000px) { .stage { position: static; } }
+.stage-head { display: flex; align-items: center; gap: 7px; margin-bottom: 11px; flex-wrap: wrap; }
+.pill { font-size: 10.5px; font-weight: 700; letter-spacing: .05em; color: var(--on-accent); background: var(--accent); padding: 4px 9px; border-radius: 999px; font-variant-numeric: tabular-nums; }
+.pill.ghost { background: var(--panel2); color: var(--muted); border: 1px solid var(--line); }
+.stage-actions { margin-left: auto; display: flex; gap: 5px; }
+.mini {
+  border: 1px solid var(--line); background: var(--panel2); color: var(--muted);
+  font-size: 11.5px; font-weight: 700; padding: 5px 9px; border-radius: 7px; cursor: pointer; transition: .16s;
+}
+.mini:hover { color: var(--ink); border-color: var(--line2); }
+.mini.danger:hover { color: var(--danger); border-color: var(--danger); }
+
+.canvas-wrap {
+  background:
+    linear-gradient(45deg, rgba(255,255,255,.03) 25%, transparent 25%, transparent 75%, rgba(255,255,255,.03) 75%) 0 0/22px 22px,
+    #070708;
+  border-radius: 10px; padding: 10px; display: flex; justify-content: center;
+}
+html[data-theme="light"] .canvas-wrap { background: #ded7c8; background: repeating-conic-gradient(#e6dfd1 0% 25%, #dcd4c4 0% 50%) 50%/24px 24px; }
+#cv { display: block; width: 100%; max-width: 460px; height: auto; border-radius: 4px; box-shadow: 0 12px 34px rgba(0,0,0,.42); background: #111; }
+
+.strip-wrap { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+.strip { display: flex; gap: 7px; overflow-x: auto; padding: 2px 2px 6px; flex: 1; scrollbar-width: thin; }
+.strip::-webkit-scrollbar { height: 5px; }
+.strip::-webkit-scrollbar-thumb { background: var(--line2); border-radius: 4px; }
+.thumb {
+  position: relative; flex: none; border: 2px solid transparent; border-radius: 6px; padding: 0;
+  background: none; cursor: pointer; line-height: 0; transition: .16s; opacity: .62;
+}
+.thumb:hover { opacity: .88; }
+.thumb.on { border-color: var(--accent); opacity: 1; }
+.thumb canvas { display: block; width: 56px; height: auto; border-radius: 4px; }
+.thumb i {
+  position: absolute; top: -1px; left: -1px; background: rgba(0,0,0,.62); color: #fff;
+  font-style: normal; font-size: 8.5px; font-weight: 800; padding: 1px 4px; border-radius: 5px 0 5px 0;
+  font-variant-numeric: tabular-nums;
+}
+.addslide {
+  flex: none; border: 1.5px dashed var(--line2); background: transparent; color: var(--muted);
+  height: 72px; width: 52px; border-radius: 6px; cursor: pointer; font-size: 10.5px; font-weight: 700;
+  display: grid; place-items: center; gap: 2px; transition: .16s; line-height: 1.1;
+}
+.addslide:hover { border-color: var(--accent); color: var(--accent); }
+.hint { margin: 8px 2px 0; font-size: 11px; color: var(--muted2); }
+
+/* ---------- toast ---------- */
+.toast {
+  position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 18px);
+  background: var(--ink); color: var(--bg); font-size: 12.5px; font-weight: 700;
+  padding: 10px 18px; border-radius: 999px; box-shadow: 0 14px 34px rgba(0,0,0,.4);
+  opacity: 0; pointer-events: none; transition: .26s; z-index: 99;
+}
+.toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+footer.foot { margin-top: 26px; text-align: center; font-size: 11.5px; color: var(--muted2); line-height: 1.7; }
+footer.foot a { color: var(--muted); text-decoration: none; border-bottom: 1px dotted var(--line2); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">
+      <div class="logo">E</div>
+      <div>
+        <h1 data-i18n="title">Editorial Card Studio</h1>
+        <p data-i18n="tagline">Zero-upload Instagram magazine carousel maker</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="seg" id="langSeg" role="group" aria-label="Language">
+        <button data-lang="en" class="on">EN</button>
+        <button data-lang="ko">한국어</button>
+      </div>
+      <button class="iconbtn" id="themeBtn" aria-label="Toggle theme"><span id="themeIco">☾</span></button>
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside class="panel">
+
+      <section class="card">
+        <h2 class="sec"><span data-i18n="secBg"></span><b id="bgState"></b></h2>
+
+        <button class="drop" id="drop" type="button">
+          <div class="dq">＋</div>
+          <strong data-i18n="dropTitle"></strong>
+          <span data-i18n="dropHint"></span>
+        </button>
+        <input type="file" id="file" accept="image/*" hidden>
+
+        <div class="bgtabs">
+          <button data-bg="photo" id="bgPhoto" class="on" data-i18n="bgPhoto"></button>
+          <button data-bg="grad" id="bgGrad" data-i18n="bgGrad"></button>
+        </div>
+
+        <div class="gswatches" id="gswatches"></div>
+
+        <div class="slider">
+          <div class="lab"><span data-i18n="scrim"></span><i id="scrimV">60%</i></div>
+          <input type="range" id="scrim" min="0" max="100" value="60">
+        </div>
+        <div class="slider">
+          <div class="lab"><span data-i18n="zoom"></span><i id="zoomV">1.00×</i></div>
+          <input type="range" id="zoom" min="100" max="260" value="100">
+        </div>
+        <div class="slider">
+          <div class="lab"><span data-i18n="posY"></span><i id="pyV">50%</i></div>
+          <input type="range" id="py" min="0" max="100" value="50">
+        </div>
+
+        <div class="checks">
+          <label class="check"><input type="checkbox" id="applyAll"><span data-i18n="applyAll"></span></label>
+          <label class="check"><input type="checkbox" id="grain" checked><span data-i18n="grain"></span></label>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 class="sec"><span data-i18n="secLayout"></span></h2>
+        <div class="presets" id="presets"></div>
+      </section>
+
+      <section class="card">
+        <h2 class="sec"><span data-i18n="secText"></span></h2>
+
+        <div class="field">
+          <label data-i18n="headline"></label>
+          <textarea class="inp" id="headline" rows="3" spellcheck="false"></textarea>
+          <div class="fh" data-i18n="headlineHint"></div>
+        </div>
+
+        <div class="field">
+          <label data-i18n="sub"></label>
+          <textarea class="inp" id="sub" rows="2" spellcheck="false"></textarea>
+        </div>
+
+        <div class="field">
+          <label data-i18n="badge"></label>
+          <input class="inp" id="badge" type="text" spellcheck="false">
+        </div>
+
+        <div class="field">
+          <label data-i18n="source"></label>
+          <input class="inp" id="source" type="text" spellcheck="false">
+        </div>
+
+        <div class="field">
+          <label data-i18n="accentLabel"></label>
+          <div class="accent-row" id="accents">
+            <button data-accent="#E9B44C" style="background:#E9B44C" class="on" title="Gold"></button>
+            <button data-accent="#3DDC97" style="background:#3DDC97" title="Emerald"></button>
+            <button data-accent="#FF5A5F" style="background:#FF5A5F" title="Crimson"></button>
+            <button data-accent="#38D6F0" style="background:#38D6F0" title="Cyan"></button>
+            <button data-accent="#FFFFFF" style="background:#FFFFFF" title="White"></button>
+            <span class="an" id="accName">Gold</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 class="sec"><span data-i18n="secExport"></span><b id="sizeNote">1080×1350</b></h2>
+        <div class="segsm" id="ratios">
+          <button data-ratio="4:5" class="on">4:5</button>
+          <button data-ratio="1:1">1:1</button>
+          <button data-ratio="9:16">9:16</button>
+        </div>
+        <button class="btn primary" id="exportOne"><span data-i18n="exportOne"></span></button>
+        <button class="btn ghost" id="exportAll"><span data-i18n="exportAll"></span> <small id="allCount">×6</small></button>
+      </section>
+
+    </aside>
+
+    <main class="stage">
+      <div class="stage-head">
+        <span class="pill" id="sizePill">1080 × 1350</span>
+        <span class="pill ghost" id="slidePill">1 / 6</span>
+        <div class="stage-actions">
+          <button class="mini" id="dupBtn" data-i18n="duplicate"></button>
+          <button class="mini" id="leftBtn" aria-label="previous">←</button>
+          <button class="mini" id="rightBtn" aria-label="next">→</button>
+          <button class="mini danger" id="delBtn" data-i18n="delete"></button>
+        </div>
+      </div>
+
+      <div class="canvas-wrap" id="canvasWrap">
+        <canvas id="cv" width="1080" height="1350"></canvas>
+      </div>
+
+      <div class="strip-wrap">
+        <div class="strip" id="strip"></div>
+        <button class="addslide" id="addBtn">＋<span data-i18n="addShort"></span></button>
+      </div>
+      <p class="hint" data-i18n="maxSlides"></p>
+    </main>
+
+  </div>
+
+  <footer class="foot">
+    <span data-i18n="footer"></span>
+  </footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   Editorial Card Studio — 100% client-side, zero upload, no CDN
+   ============================================================ */
+"use strict";
+
+/* ---------- 1. i18n (inline dictionary, no external files) ---------- */
+const I18N = {
+  en: {
+    docTitle: "Editorial Card Studio — Instagram Magazine Carousel Maker (1080×1350)",
+    metaDesc: "Design 2026-style Instagram editorial magazine cards at 1080×1350 with zero uploads. Full-bleed photo, bold condensed headline with [accent] words, 6-slide carousel, PNG/ZIP export. Free, nothing leaves your browser.",
+    title: "Editorial Card Studio",
+    tagline: "Zero-upload Instagram magazine carousel maker · 1080×1350",
+    secBg: "Background",
+    dropTitle: "Drop a photo",
+    dropHint: "or click · paste with ⌘/Ctrl+V — stays on your device",
+    bgPhoto: "Photo",
+    bgGrad: "Gradient",
+    scrim: "Vignette strength",
+    zoom: "Zoom",
+    posY: "Vertical framing",
+    applyAll: "Apply photo to all slides",
+    grain: "Film grain",
+    secLayout: "Layout preset",
+    layoutMagazine: "Magazine · bottom third",
+    layoutQuote: "Quote · top",
+    layoutBreaking: "Breaking news bar",
+    layoutSplit: "Split panel",
+    secText: "Copy",
+    headline: "Headline",
+    headlineHint: "Wrap any word in [brackets] to paint it in the accent color.",
+    sub: "Sub-caption",
+    badge: "Issue badge",
+    source: "Source tag",
+    accentLabel: "Accent color",
+    secExport: "Export",
+    exportOne: "Download PNG",
+    exportAll: "Download all slides",
+    addShort: "slide",
+    maxSlides: "6 slides max — beyond six, saves and follows drop off.",
+    duplicate: "Duplicate",
+    delete: "Delete",
+    footer: "100% in-browser · no upload · no tracking · no CDN. Type [brackets] for accent words.",
+    toastExport: "PNG exported",
+    toastZip: "ZIP with {n} slides exported",
+    toastMax: "6 slides max — that keeps the format tight",
+    toastMin: "At least one slide is needed",
+    toastCopied: "Slide duplicated",
+    warnBig: "Image is large — it stays in memory, nothing is uploaded",
+    phHeadline: "The quiet [collapse] of the middle class",
+    phSub: "Incomes rose. So did the cost of being ordinary.",
+    phBadge: "PART 01",
+    phSource: "SOURCE · FEDERAL RESERVE, 2026",
+    ratioLabel: "Size"
+  },
+  ko: {
+    docTitle: "에디토리얼 카드 스튜디오 — 인스타 매거진 캐러셀 생성기 (1080×1350)",
+    metaDesc: "사진 업로드 없이 브라우저에서만 2026 인스타 에디토리얼 매거진 카드를 1080×1350으로 만듭니다. 실사 배경, [강조] 굵은 헤드라인, 6장 캐러셀, PNG·ZIP 내보내기. 무료, 무업로드.",
+    title: "에디토리얼 카드 스튜디오",
+    tagline: "무업로드 인스타 매거진 캐러셀 생성기 · 1080×1350",
+    secBg: "배경",
+    dropTitle: "사진을 끌어다 놓으세요",
+    dropHint: "클릭하거나 ⌘/Ctrl+V로 붙여넣기 — 기기 밖으로 나가지 않습니다",
+    bgPhoto: "사진",
+    bgGrad: "그라디안",
+    scrim: "비네트 강도",
+    zoom: "확대",
+    posY: "세로 위치",
+    applyAll: "모든 슬라이드에 사진 적용",
+    grain: "필름 그레인",
+    secLayout: "레이아웃 프리셋",
+    layoutMagazine: "매거진 · 하단 1/3",
+    layoutQuote: "인용 · 상단",
+    layoutBreaking: "속보 바",
+    layoutSplit: "분할 패널",
+    secText: "문구",
+    headline: "헤드라인",
+    headlineHint: "[대괄호]로 감싼 단어가 강조 색으로 칠해집니다.",
+    sub: "서브 캡션",
+    badge: "이슈 배지",
+    source: "출처 태그",
+    accentLabel: "강조 색",
+    secExport: "내보내기",
+    exportOne: "PNG 다운로드",
+    exportAll: "전체 슬라이드 받기",
+    addShort: "장 추가",
+    maxSlides: "최대 6장 — 6장을 넘으면 저장·팔로우 전환이 떨어집니다.",
+    duplicate: "복제",
+    delete: "삭제",
+    footer: "100% 브라우저 처리 · 업로드 0 · 추적 0 · CDN 없음. [대괄호]로 강조 단어를 지정합니다.",
+    toastExport: "PNG 내보냈습니다",
+    toastZip: "{n}장 ZIP으로 내보냈습니다",
+    toastMax: "최대 6장까지 — 그 선을 지켜야 포맷이 살아납니다",
+    toastMin: "슬라이드가 최소 1장 필요합니다",
+    toastCopied: "슬라이드 복제됨",
+    warnBig: "이미지가 큽니다 — 메모리에만 있고 업로드되지 않습니다",
+    phHeadline: "중산층의 [조용한] 붕괴",
+    phSub: "소득은 올랐다. 평범하게 사는 값도 함께 올랐다.",
+    phBadge: "PART 01",
+    phSource: "출처 · 통계청, 2026",
+    ratioLabel: "크기"
+  }
+};
+const ACCENTS = [
+  { hex: "#E9B44C", en: "Gold", ko: "골드" },
+  { hex: "#3DDC97", en: "Emerald", ko: "에메랄드" },
+  { hex: "#FF5A5F", en: "Crimson", ko: "크림슨" },
+  { hex: "#38D6F0", en: "Cyan", ko: "시안" },
+  { hex: "#FFFFFF", en: "White", ko: "화이트" }
+];
+const GRADS = {
+  noir:    { en: "Noir", ko: "누아르", c: ["#24262e", "#0a0b0e", "#000000"], g: ["rgba(130,150,255,.20)", "rgba(255,255,255,.06)"] },
+  gold:    { en: "Gold", ko: "골드", c: ["#4b3411", "#191107", "#050402"], g: ["rgba(255,176,64,.32)", "rgba(255,96,32,.12)"] },
+  teal:    { en: "Teal", ko: "틸", c: ["#0c3b3a", "#06191a", "#020707"], g: ["rgba(0,255,196,.20)", "rgba(96,255,224,.08)"] },
+  crimson: { en: "Crimson", ko: "크림슨", c: ["#4c0d17", "#190508", "#050002"], g: ["rgba(255,58,80,.28)", "rgba(255,140,60,.10)"] },
+  slate:   { en: "Slate", ko: "슬레이트", c: ["#2c323a", "#111519", "#040607"], g: ["rgba(168,196,226,.20)", "rgba(255,255,255,.05)"] },
+  ink:     { en: "Ink", ko: "잉크", c: ["#0b1a33", "#050c17", "#010306"], g: ["rgba(64,128,255,.24)", "rgba(150,90,255,.12)"] }
+};
+const LAYOUTS = ["magazine", "quote", "breaking", "split"];
+
+/* ---------- 2. sample decks (EN default, KO mirror) ---------- */
+const SAMPLES = {
+  en: [
+    { layout: "magazine", grad: "noir", badge: "PART 01",
+      headline: "The [quiet] death of the 9-to-5",
+      sub: "Flexible work didn't set us free. It followed us home.",
+      source: "SOURCE · ILO, 2026" },
+    { layout: "quote", grad: "ink", badge: "PART 02",
+      headline: "[63%] of remote workers check email before breakfast",
+      sub: "The office hour was never the problem. The always-on hour is.",
+      source: "SOURCE · WORKPLACE SURVEY, 2026" },
+    { layout: "breaking", grad: "crimson", badge: "BREAKING",
+      headline: "AI wrote [41%] of the code shipped this year",
+      sub: "Review, not writing, is now the bottleneck.",
+      source: "SOURCE · DEVINDEX REPORT" },
+    { layout: "split", grad: "slate", badge: "PART 04",
+      headline: "The four-day week isn't a perk. It's a [strategy].",
+      sub: "Output held. Resignations fell by a third.",
+      source: "SOURCE · PILOT DATA, 3 YEARS" },
+    { layout: "magazine", grad: "gold", badge: "PART 05",
+      headline: "Attention is the only currency that [compounds]",
+      sub: "Every post is a deposit or a withdrawal. There is no neutral.",
+      source: "SAVE FOR LATER" },
+    { layout: "quote", grad: "teal", badge: "SAVE THIS",
+      headline: "Read it again in a month. It will read [differently].",
+      sub: "Part 02 drops Friday — follow for the full series.",
+      source: "@yourhandle" }
+  ],
+  ko: [
+    { layout: "magazine", grad: "noir", badge: "PART 01",
+      headline: "9시 출근의 [조용한] 종말",
+      sub: "유연근무는 우리를 풀어주지 않았다. 집까지 따라왔다.",
+      source: "출처 · ILO, 2026" },
+    { layout: "quote", grad: "ink", badge: "PART 02",
+      headline: "재택근무자 [63%]가 아침 식사 전에 메일을 연다",
+      sub: "문제는 사무실 시간이 아니었다. 항상 켜져 있는 시간이었다.",
+      source: "출처 · 직장인 설문, 2026" },
+    { layout: "breaking", grad: "crimson", badge: "속보",
+      headline: "올해 배포된 코드 [41%]를 AI가 작성했다",
+      sub: "이제 병목은 작성이 아니라 검토다.",
+      source: "출처 · 개발지수 보고서" },
+    { layout: "split", grad: "slate", badge: "PART 04",
+      headline: "주 4일제는 복지가 아니다. [전략]이다.",
+      sub: "산출은 유지됐고, 퇴사율은 3분의 1로 떨어졌다.",
+      source: "출처 · 3년 실증 데이터" },
+    { layout: "magazine", grad: "gold", badge: "PART 05",
+      headline: "주목도만이 [복리]로 쌓이는 유일한 화폐다",
+      sub: "모든 게시물은 예금이거나 인출이다. 중립은 없다.",
+      source: "저장해 두세요" },
+    { layout: "quote", grad: "teal", badge: "저장",
+      headline: "한 달 뒤 다시 읽어보라. [다르게] 읽힐 것이다",
+      sub: "Part 02는 금요일 공개 — 시리즈 팔로우.",
+      source: "@yourhandle" }
+  ]
+};
+
+/* ---------- 3. state ---------- */
+const RATIOS = { "4:5": [1080, 1350], "1:1": [1080, 1080], "9:16": [1080, 1920] };
+let uid = 0;
+const newId = () => "s" + (++uid) + "_" + Math.random().toString(36).slice(2, 7);
+
+const state = {
+  lang: "en",
+  theme: "dark",
+  ratio: "4:5",
+  accent: ACCENTS[0].hex,
+  active: 0,
+  slides: []
+};
+
+function sampleSlide(src, lang) {
+  return {
+    id: newId(),
+    bgType: "grad",
+    grad: src.grad,
+    img: null,
+    imgName: "",
+    scrim: 60,
+    zoom: 100,
+    py: 50,
+    grain: true,
+    layout: src.layout,
+    badge: src.badge,
+    headline: src.headline,
+    sub: src.sub,
+    source: src.source,
+    sample: lang + "|" + src.headline
+  };
+}
+function loadSamples(lang) {
+  state.slides = SAMPLES[lang].map(s => sampleSlide(s, lang));
+  state.active = 0;
+}
+
+/* ---------- 4. text helpers ---------- */
+const FONT_KO = '"Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", "Nanum Gothic", system-ui, sans-serif';
+const FONT_EN = '"Helvetica Neue", Helvetica, "Segoe UI", Arial, "Liberation Sans", system-ui, sans-serif';
+
+function hasHangul(s) { return /[\u1100-\u11FF\u3131-\u318E\uAC00-\uD7A3]/.test(s || ""); }
+function hasLatin(s) { return /[A-Za-z]/.test(s || ""); }
+
+function fontFor(text) {
+  // Latin headline → condensed editorial sans; Hangul → heavy Korean sans
+  return hasHangul(text) && !hasLatin(text) ? FONT_KO : (hasHangul(text) ? FONT_KO : FONT_EN);
+}
+function setFont(ctx, family, weight, size) {
+  ctx.font = weight + " " + size + "px " + family;
+}
+function setTracking(ctx, px) {
+  try { ctx.letterSpacing = px + "px"; } catch (e) { /* older engines: no-op */ }
+}
+
+// "[accent]" syntax → runs
+function parseRuns(str) {
+  const runs = [];
+  let hl = false, buf = "";
+  for (const ch of (str || "")) {
+    if (ch === "[" || ch === "【") { if (buf) runs.push({ t: buf, hl }); buf = ""; hl = true; }
+    else if (ch === "]" || ch === "】") { if (buf) runs.push({ t: buf, hl }); buf = ""; hl = false; }
+    else buf += ch;
+  }
+  if (buf) runs.push({ t: buf, hl });
+  if (!runs.length) runs.push({ t: "", hl: false });
+  return runs;
+}
+function plain(str) { return (str || "").replace(/[\[\]【】]/g, ""); }
+
+// split runs into breakable atoms: CJK chars alone, latin words+trailing space, spaces alone
+function atomsOf(runs) {
+  const out = [];
+  for (const r of runs) {
+    const toks = r.t.match(/[\u3131-\u318E\u4E00-\u9FFF\uFF01-\uFF60]|[^\s\u3131-\u318E\u4E00-\u9FFF\uFF01-\uFF60]+|\s+/g) || [];
+    for (const t of toks) out.push({ t, hl: r.hl });
+  }
+  return out;
+}
+function wrapAtoms(ctx, atoms, maxW) {
+  const lines = [];
+  let cur = [], curW = 0, lastSpace = -1;
+  const w = a => ctx.measureText(a.t).width;
+  for (const a of atoms) {
+    const aw = w(a);
+    const isSpace = /^\s+$/.test(a.t);
+    if (cur.length && curW + aw > maxW) {
+      if (lastSpace >= 0 && lastSpace < cur.length - 1) {
+        const head = cur.slice(0, lastSpace + 1);
+        const tail = cur.slice(lastSpace + 1);
+        lines.push(head);
+        cur = tail;
+        curW = tail.reduce((s, x) => s + w(x), 0);
+        lastSpace = -1;
+        for (let i = 0; i < cur.length; i++) if (/^\s+$/.test(cur[i].t)) lastSpace = i;
+      } else {
+        lines.push(cur);
+        cur = []; curW = 0; lastSpace = -1;
+      }
+    }
+    cur.push(a); curW += aw;
+    if (isSpace) lastSpace = cur.length - 1;
+  }
+  if (cur.length) lines.push(cur);
+  return lines;
+}
+function runsOfLine(line) {
+  const out = [];
+  for (const a of line) {
+    if (out.length && out[out.length - 1].hl === a.hl) out[out.length - 1].t += a.t;
+    else out.push({ t: a.t, hl: a.hl });
+  }
+  return out.map(r => ({ t: r.t.replace(/\s+$/, ""), hl: r.hl })).filter(r => r.t.length);
+}
+// shrink font size until the block fits
+function fitHeadline(ctx, text, maxW, maxH, startSize, minSize, lineGap, tracking, scaleX) {
+  const family = fontFor(text);
+  const atoms = atomsOf(parseRuns(text));
+  const weight = hasHangul(text) ? 800 : 800;
+  let size = startSize, best = null;
+  const inner = maxW / (scaleX || 1);
+  while (size >= minSize) {
+    setFont(ctx, family, weight, size);
+    setTracking(ctx, tracking * size);
+    const lines = wrapAtoms(ctx, atoms, inner);
+    const lh = size * lineGap;
+    best = { size, lines, lh, family, tracking: tracking * size };
+    if (lines.length * lh <= maxH && lines.length <= 5) return best;
+    size -= Math.max(2, Math.round(size * 0.045));
+  }
+  return best;
+}
+function drawLine(ctx, lineRuns, x, y, size, opts) {
+  const scaleX = opts.scaleX || 1;
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(scaleX, 1);
+  setFont(ctx, opts.family, opts.weight || 800, size);
+  setTracking(ctx, opts.tracking || 0);
+  let cx = 0;
+  for (const r of lineRuns) {
+    ctx.fillStyle = r.hl ? opts.accent : opts.color;
+    ctx.fillText(r.t, cx, 0);
+    cx += ctx.measureText(r.t).width;
+  }
+  ctx.restore();
+}
+function drawTextBlock(ctx, block, x, topY, opts) {
+  const size = block.size, lh = block.lh;
+  let y = topY + size * 0.86;
+  const out = [];
+  for (const line of block.lines) {
+    const runs = runsOfLine(line);
+    drawLine(ctx, runs, x, y, size, {
+      family: block.family,
+      tracking: block.tracking,
+      scaleX: opts.scaleX,
+      accent: opts.accent,
+      color: opts.color
+    });
+    y += lh;
+  }
+  out.push(y - lh + size * 0.05);
+  return y - lh + size * 0.05; // bottom of last line
+}
+function blockHeight(block) { return block.lines.length * block.lh; }
+
+function drawTag(ctx, text, x, y, opts) {
+  // small uppercase label with tracking
+  const size = opts.size, weight = opts.weight || 700;
+  ctx.save();
+  setFont(ctx, opts.family || FONT_EN, weight, size);
+  setTracking(ctx, opts.tracking || size * 0.18);
+  ctx.fillStyle = opts.color;
+  ctx.textAlign = opts.align || "left";
+  ctx.textBaseline = "alphabetic";
+  const t = hasHangul(text) ? text : text.toUpperCase();
+  ctx.fillText(t, x, y);
+  const w = ctx.measureText(t).width;
+  ctx.restore();
+  return w;
+}
+
+/* ---------- 5. background painting ---------- */
+let noiseCv = null;
+function noisePattern(ctx) {
+  if (!noiseCv) {
+    noiseCv = document.createElement("canvas");
+    noiseCv.width = noiseCv.height = 180;
+    const c = noiseCv.getContext("2d");
+    const d = c.createImageData(180, 180);
+    for (let i = 0; i < d.data.length; i += 4) {
+      const v = 128 + (Math.random() * 2 - 1) * 120;
+      d.data[i] = d.data[i + 1] = d.data[i + 2] = v;
+      d.data[i + 3] = Math.random() * 40;
+    }
+    c.putImageData(d, 0, 0);
+  }
+  return ctx.createPattern(noiseCv, "repeat");
+}
+function addGrain(ctx, W, H, alpha) {
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  const p = noisePattern(ctx);
+  ctx.fillStyle = p;
+  ctx.fillRect(0, 0, W, H);
+  ctx.restore();
+}
+function vignette(ctx, W, H, strength) {
+  const rg = ctx.createRadialGradient(W / 2, H * 0.44, W * 0.22, W / 2, H * 0.44, W * 0.98);
+  rg.addColorStop(0, "rgba(0,0,0,0)");
+  rg.addColorStop(1, "rgba(0,0,0," + (0.30 * strength).toFixed(3) + ")");
+  ctx.fillStyle = rg;
+  ctx.fillRect(0, 0, W, H);
+}
+function drawPhoto(ctx, img, W, H, s) {
+  const zoom = (s.zoom || 100) / 100;
+  const scale = Math.max(W / img.width, H / img.height) * zoom;
+  const dw = img.width * scale, dh = img.height * scale;
+  const dx = (W - dw) / 2;
+  const dy = (H - dh) * ((s.py == null ? 50 : s.py) / 100);
+  ctx.save();
+  ctx.beginPath(); ctx.rect(0, 0, W, H); ctx.clip();
+  ctx.drawImage(img, dx, dy, dw, dh);
+  ctx.restore();
+}
+function drawGradient(ctx, s, W, H) {
+  const g = GRADS[s.grad] || GRADS.noir;
+  const lg = ctx.createLinearGradient(0, 0, W * 0.78, H);
+  lg.addColorStop(0, g.c[0]);
+  lg.addColorStop(0.55, g.c[1]);
+  lg.addColorStop(1, g.c[2]);
+  ctx.fillStyle = lg;
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.save();
+  ctx.globalCompositeOperation = "lighter";
+  const blobs = [
+    { x: W * 0.16, y: H * 0.14, r: W * 0.66, c: g.g[0] },
+    { x: W * 0.93, y: H * 0.70, r: W * 0.58, c: g.g[1] }
+  ];
+  for (const b of blobs) {
+    const rg = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
+    rg.addColorStop(0, b.c);
+    rg.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = rg;
+    ctx.fillRect(0, 0, W, H);
+  }
+  ctx.restore();
+
+  // editorial geometry: thin concentric arcs, off-canvas right
+  ctx.save();
+  ctx.strokeStyle = "rgba(255,255,255,0.055)";
+  ctx.lineWidth = Math.max(1.5, W * 0.0018);
+  for (let i = 0; i < 3; i++) {
+    ctx.beginPath();
+    ctx.arc(W * 1.06, H * 0.30, W * (0.46 + i * 0.20), 0, Math.PI * 2);
+    ctx.stroke();
+  }
+  ctx.restore();
+
+  vignette(ctx, W, H, 0.9);
+}
+
+/* ---------- 6. layout blocks ---------- */
+function makeBlock(ctx, text, o) {
+  const family = o.family || fontFor(text);
+  const size = o.size;
+  const tracking = (o.tracking || 0) * size;
+  const lh = size * (o.lineGap || 1.45);
+  setFont(ctx, family, o.weight || 500, size);
+  setTracking(ctx, tracking);
+  const lines = wrapAtoms(ctx, atomsOf(parseRuns(text)), o.maxW);
+  setTracking(ctx, 0);
+  return { size, lh, family, tracking, lines, weight: o.weight || 500 };
+}
+function blockHeight(b) { return b.lines.length * b.lh; }
+function drawTextBlock(ctx, block, x, topY, opts) {
+  const o = opts || {};
+  const scaleX = o.scaleX || 1;
+  let y = topY + block.size * 0.80;
+  for (const line of block.lines) {
+    drawLine(ctx, runsOfLine(line), x, y, block.size, {
+      family: block.family,
+      tracking: block.tracking,
+      scaleX: scaleX,
+      accent: o.accent || "#fff",
+      color: o.color || "#fff",
+      weight: block.weight
+    });
+    y += block.lh;
+  }
+  return topY + block.lh * block.lines.length;
+}
+function fitBlock(ctx, text, o) {
+  const hangul = hasHangul(text);
+  const family = fontFor(text);
+  const scaleX = o.scaleX || (hangul ? 1 : 0.935);
+  const trackingEm = hangul ? -0.010 : -0.022;
+  const lineGap = hangul ? 1.17 : 1.045;
+  const inner = o.maxW / scaleX;
+  let size = o.start, best = null;
+  while (size >= o.min) {
+    best = makeBlock(ctx, text, { family, size, weight: 800, tracking: trackingEm, maxW: inner, lineGap });
+    if (best.lines.length * best.lh <= o.maxH && best.lines.length <= (o.maxLines || 4)) break;
+    size -= Math.max(2, Math.round(size * 0.05));
+  }
+  best.scaleX = scaleX;
+  return best;
+}
+function drawBadge(ctx, text, x, baseline, size, accent, align) {
+  if (!text) return;
+  const sq = size * 0.60;
+  const label = hasHangul(text) ? text : text.toUpperCase();
+  ctx.save();
+  setFont(ctx, fontFor(text), 800, size);
+  setTracking(ctx, size * 0.17);
+  const tw = ctx.measureText(label).width;
+  let bx = x;
+  if (align === "right") bx = x - (tw + sq + size * 0.5);
+  ctx.fillStyle = accent;
+  ctx.fillRect(bx, baseline - sq * 0.94, sq, sq);
+  ctx.fillStyle = "rgba(255,255,255,0.94)";
+  ctx.fillText(label, bx + sq + size * 0.5, baseline);
+  ctx.restore();
+  setTracking(ctx, 0);
+}
+
+/* ---------- 7. layouts ---------- */
+function layoutMagazine(ctx, s, W, H) {
+  const pad = W * 0.072;
+  const sc = (s.scrim == null ? 60 : s.scrim) / 100;
+  const gTop = H * 0.30;
+  const lg = ctx.createLinearGradient(0, gTop, 0, H);
+  lg.addColorStop(0, "rgba(0,0,0,0)");
+  lg.addColorStop(0.42, "rgba(0,0,0," + (0.10 + 0.40 * sc).toFixed(3) + ")");
+  lg.addColorStop(1, "rgba(0,0,0," + (0.60 + 0.36 * sc).toFixed(3) + ")");
+  ctx.fillStyle = lg;
+  ctx.fillRect(0, gTop, W, H - gTop);
+
+  const tg = ctx.createLinearGradient(0, 0, 0, H * 0.20);
+  tg.addColorStop(0, "rgba(0,0,0," + (0.20 + 0.26 * sc).toFixed(3) + ")");
+  tg.addColorStop(1, "rgba(0,0,0,0)");
+  ctx.fillStyle = tg;
+  ctx.fillRect(0, 0, W, H * 0.20);
+
+  const srcBase = H - pad * 0.55;
+  let cursor = srcBase - (s.source ? pad * 0.92 : 0);
+  if (s.sub) {
+    const sub = makeBlock(ctx, s.sub, { size: W * 0.0295, weight: 500, maxW: W - pad * 2.1, lineGap: 1.48 });
+    cursor -= blockHeight(sub);
+    drawTextBlock(ctx, sub, pad, cursor, { color: "rgba(255,255,255,0.86)", accent: state.accent });
+  }
+  const head = fitBlock(ctx, s.headline || " ", { start: W * 0.098, min: W * 0.050, maxW: W - pad * 2, maxH: H * 0.315, maxLines: 3 });
+  const headTop = cursor - pad * 0.34 - blockHeight(head);
+  drawTextBlock(ctx, head, pad, headTop, { color: "#ffffff", accent: state.accent, scaleX: head.scaleX });
+
+  if (s.badge) drawBadge(ctx, s.badge, pad, headTop - pad * 0.42, W * 0.0225, state.accent);
+
+  if (s.source) {
+    drawTag(ctx, s.source, pad, srcBase, { size: W * 0.0205, color: "rgba(255,255,255,0.52)", tracking: W * 0.0042, weight: 600 });
+  }
+}
+
+function layoutQuote(ctx, s, W, H) {
+  const pad = W * 0.072;
+  const sc = (s.scrim == null ? 60 : s.scrim) / 100;
+  const lg = ctx.createLinearGradient(0, 0, 0, H);
+  lg.addColorStop(0, "rgba(0,0,0," + (0.42 + 0.36 * sc).toFixed(3) + ")");
+  lg.addColorStop(0.55, "rgba(0,0,0," + (0.14 + 0.30 * sc).toFixed(3) + ")");
+  lg.addColorStop(1, "rgba(0,0,0," + (0.34 + 0.36 * sc).toFixed(3) + ")");
+  ctx.fillStyle = lg;
+  ctx.fillRect(0, 0, W, H);
+
+  // oversized quote mark
+  ctx.save();
+  ctx.globalAlpha = 0.92;
+  ctx.fillStyle = state.accent;
+  ctx.font = "700 " + (W * 0.20).toFixed(1) + "px Georgia, 'Times New Roman', serif";
+  ctx.textBaseline = "alphabetic";
+  ctx.fillText("\u201C", pad * 0.86, H * 0.118 + W * 0.075);
+  ctx.restore();
+
+  if (s.badge) drawBadge(ctx, s.badge, W - pad, pad * 1.05, W * 0.0215, state.accent, "right");
+
+  const headTop = H * 0.175;
+  const head = fitBlock(ctx, s.headline || " ", { start: W * 0.104, min: W * 0.052, maxW: W - pad * 2, maxH: H * 0.40, maxLines: 5 });
+  const headBottom = drawTextBlock(ctx, head, pad, headTop, { color: "#ffffff", accent: state.accent, scaleX: head.scaleX });
+
+  const ruleY = headBottom + pad * 0.46;
+  ctx.fillStyle = state.accent;
+  ctx.fillRect(pad, ruleY, W * 0.12, Math.max(2, W * 0.0032));
+
+  if (s.sub) {
+    const sub = makeBlock(ctx, s.sub, { size: W * 0.0295, weight: 500, maxW: W - pad * 2.1, lineGap: 1.5 });
+    const subTop = ruleY + pad * 0.42;
+    if (subTop + blockHeight(sub) < H - pad) {
+      drawTextBlock(ctx, sub, pad, subTop, { color: "rgba(255,255,255,0.86)", accent: state.accent });
+    }
+  }
+  if (s.source) {
+    drawTag(ctx, s.source, pad, H - pad * 0.8, { size: W * 0.0195, color: "rgba(255,255,255,0.50)", tracking: W * 0.0038, weight: 600 });
+  }
+}
+
+function layoutBreaking(ctx, s, W, H) {
+  const pad = W * 0.072;
+  const sc = (s.scrim == null ? 60 : s.scrim) / 100;
+  ctx.fillStyle = "rgba(0,0,0," + (0.06 + 0.26 * sc).toFixed(3) + ")";
+  ctx.fillRect(0, 0, W, H);
+
+  const bandTop = H * 0.600;
+  const fg = ctx.createLinearGradient(0, bandTop - H * 0.10, 0, bandTop);
+  fg.addColorStop(0, "rgba(7,7,9,0)");
+  fg.addColorStop(1, "rgba(7,7,9,0.94)");
+  ctx.fillStyle = fg;
+  ctx.fillRect(0, bandTop - H * 0.10, W, H * 0.10);
+  ctx.fillStyle = "rgba(7,7,9,0.93)";
+  ctx.fillRect(0, bandTop, W, H - bandTop);
+  ctx.fillStyle = state.accent;
+  ctx.fillRect(0, bandTop - 3, W, Math.max(3, W * 0.0035));
+
+  // top breaking bar
+  const barH = Math.max(44, W * 0.064);
+  ctx.fillStyle = state.accent;
+  ctx.fillRect(0, 0, W, barH);
+  const label = s.badge || (state.lang === "ko" ? "속보" : "BREAKING");
+  ctx.save();
+  setFont(ctx, fontFor(label), 800, barH * 0.42);
+  setTracking(ctx, barH * 0.10);
+  ctx.fillStyle = "rgba(9,9,11,0.92)";
+  ctx.textBaseline = "middle";
+  ctx.fillText(hasHangul(label) ? label : label.toUpperCase(), pad, barH * 0.54);
+  ctx.restore();
+  setTracking(ctx, 0);
+
+  const headTop = bandTop + pad * 0.62;
+  const head = fitBlock(ctx, s.headline || " ", { start: W * 0.086, min: W * 0.046, maxW: W - pad * 2, maxH: H * 0.236, maxLines: 3 });
+  const headBottom = drawTextBlock(ctx, head, pad, headTop, { color: "#ffffff", accent: state.accent, scaleX: head.scaleX });
+
+  if (s.sub) {
+    const sub = makeBlock(ctx, s.sub, { size: W * 0.028, weight: 500, maxW: W - pad * 2.1, lineGap: 1.45 });
+    const subTop = headBottom + pad * 0.34;
+    if (subTop + blockHeight(sub) < H - pad * 0.9) {
+      drawTextBlock(ctx, sub, pad, subTop, { color: "rgba(255,255,255,0.74)", accent: state.accent });
+    }
+  }
+  if (s.source) {
+    drawTag(ctx, s.source, W - pad, H - pad * 0.42, { size: W * 0.0185, color: "rgba(255,255,255,0.46)", tracking: W * 0.0036, weight: 600, align: "right" });
+  }
+}
+
+function layoutSplit(ctx, s, W, H) {
+  const pad = W * 0.072;
+  const splitY = H * 0.575;
+  const pg = ctx.createLinearGradient(0, splitY, 0, H);
+  pg.addColorStop(0, "#101013");
+  pg.addColorStop(1, "#060607");
+  ctx.fillStyle = pg;
+  ctx.fillRect(0, splitY, W, H - splitY);
+  ctx.fillStyle = state.accent;
+  ctx.fillRect(0, splitY - Math.max(3, W * 0.0035), W, Math.max(3, W * 0.0035));
+
+  if (s.badge) drawBadge(ctx, s.badge, pad, splitY + pad * 0.86, W * 0.0215, state.accent);
+
+  const headTop = splitY + pad * (s.badge ? 1.5 : 0.9);
+  const head = fitBlock(ctx, s.headline || " ", { start: W * 0.086, min: W * 0.046, maxW: W - pad * 2, maxH: H * 0.20, maxLines: 3 });
+  const headBottom = drawTextBlock(ctx, head, pad, headTop, { color: "#ffffff", accent: state.accent, scaleX: head.scaleX });
+
+  if (s.sub) {
+    const sub = makeBlock(ctx, s.sub, { size: W * 0.0275, weight: 500, maxW: W - pad * 2.1, lineGap: 1.45 });
+    const subTop = headBottom + pad * 0.30;
+    if (subTop + blockHeight(sub) < H - pad * 0.8) {
+      drawTextBlock(ctx, sub, pad, subTop, { color: "rgba(255,255,255,0.70)", accent: state.accent });
+    }
+  }
+  if (s.source) {
+    drawTag(ctx, s.source, pad, H - pad * 0.42, { size: W * 0.0185, color: "rgba(255,255,255,0.42)", tracking: W * 0.0036, weight: 600 });
+  }
+}
+
+/* ---------- 8. render entry ---------- */
+const LAYOUT_FN = { magazine: layoutMagazine, quote: layoutQuote, breaking: layoutBreaking, split: layoutSplit };
+function renderSlide(canvas, s, W, H) {
+  canvas.width = Math.round(W);
+  canvas.height = Math.round(H);
+  const ctx = canvas.getContext("2d");
+  ctx.save();
+  ctx.fillStyle = "#050506";
+  ctx.fillRect(0, 0, W, H);
+
+  const split = s.layout === "split";
+  const bgH = split ? H * 0.575 : H;
+  if (s.bgType === "photo" && s.img) {
+    drawPhoto(ctx, s.img, W, bgH, s);
+    vignette(ctx, W, bgH, (s.scrim == null ? 60 : s.scrim) / 100);
+  } else {
+    ctx.save();
+    ctx.beginPath(); ctx.rect(0, 0, W, bgH); ctx.clip();
+    drawGradient(ctx, s, W, bgH);
+    ctx.restore();
+  }
+
+  const fn = LAYOUT_FN[s.layout] || layoutMagazine;
+  fn(ctx, s, W, H);
+
+  if (s.grain) addGrain(ctx, W, H, 0.07);
+  ctx.restore();
+}
+
+/* ---------- 9. DOM + state helpers ---------- */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const D = () => I18N[state.lang];
+const S = () => state.slides[state.active];
+const dims = () => RATIOS[state.ratio];
+const PRE_ICON = {
+  magazine: '<svg width="26" height="32" viewBox="0 0 26 32" aria-hidden="true"><rect width="26" height="32" rx="3" fill="#33343a"/><rect y="17" width="26" height="15" fill="#111"/><rect x="3" y="20" width="15" height="3" fill="#fff"/><rect x="3" y="25" width="10" height="2" fill="#8b8b93"/></svg>',
+  quote: '<svg width="26" height="32" viewBox="0 0 26 32" aria-hidden="true"><rect width="26" height="32" rx="3" fill="#2f3238"/><rect x="3" y="4" width="4" height="4" fill="#e9b44c"/><rect x="3" y="10" width="16" height="3" fill="#fff"/><rect x="3" y="15" width="12" height="2" fill="#b9b9c2"/></svg>',
+  breaking: '<svg width="26" height="32" viewBox="0 0 26 32" aria-hidden="true"><rect width="26" height="32" rx="3" fill="#2b2d33"/><rect width="26" height="5" fill="#e9b44c"/><rect y="19" width="26" height="13" fill="#0d0d10"/><rect x="3" y="22" width="16" height="3" fill="#fff"/></svg>',
+  split: '<svg width="26" height="32" viewBox="0 0 26 32" aria-hidden="true"><rect width="26" height="32" rx="3" fill="#2b2d33"/><rect y="18" width="26" height="14" fill="#0b0b0e"/><rect y="18" width="26" height="2" fill="#e9b44c"/><rect x="3" y="22" width="15" height="3" fill="#fff"/><rect x="3" y="27" width="9" height="2" fill="#8b8b93"/></svg>'
+};
+
+let toastT = null;
+function toast(msg) {
+  const el = $("#toast");
+  el.textContent = msg;
+  el.classList.add("on");
+  clearTimeout(toastT);
+  toastT = setTimeout(() => el.classList.remove("on"), 2400);
+}
+
+let pending = false;
+function schedule() {
+  if (pending) return;
+  pending = true;
+  requestAnimationFrame(() => { pending = false; renderAll(); });
+}
+function renderAll() {
+  const c = dims();
+  if (S()) renderSlide(cv, S(), c[0], c[1]);
+  renderThumbs();
+  updateMeta();
+}
+
+/* ---------- 10. strip / meta ---------- */
+let thumbNodes = [];
+function buildStrip() {
+  const strip = $("#strip");
+  strip.innerHTML = "";
+  thumbNodes = state.slides.map((s, i) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "thumb" + (i === state.active ? " on" : "");
+    const c = document.createElement("canvas");
+    const i2 = document.createElement("i");
+    i2.textContent = String(i + 1);
+    b.appendChild(c);
+    b.appendChild(i2);
+    b.addEventListener("click", () => {
+      state.active = i;
+      syncFields();
+      renderAll();
+    });
+    strip.appendChild(b);
+    return { btn: b, canvas: c };
+  });
+  renderThumbs();
+}
+function renderThumbs() {
+  const d = dims();
+  const tw = 112, th = Math.round(tw * d[1] / d[0]);
+  thumbNodes.forEach((t, i) => {
+    if (!state.slides[i]) return;
+    t.btn.classList.toggle("on", i === state.active);
+    t.btn.title = (state.lang === "ko" ? "슬라이드 " : "Slide ") + (i + 1);
+    t.btn.setAttribute("aria-label", t.btn.title);
+    renderSlide(t.canvas, state.slides[i], tw, th);
+  });
+}
+function updateMeta() {
+  const d = dims();
+  $("#sizePill").textContent = d[0] + " × " + d[1];
+  $("#sizeNote").textContent = d[0] + "×" + d[1];
+  $("#slidePill").textContent = (state.active + 1) + " / " + state.slides.length;
+  $("#allCount").textContent = "×" + state.slides.length;
+  $("#delBtn").disabled = state.slides.length <= 1;
+}
+function updateAccName() {
+  const a = ACCENTS.find(x => x.hex.toLowerCase() === state.accent.toLowerCase());
+  $("#accName").textContent = a ? a[state.lang] : state.accent;
+}
+function syncBg() {
+  const s = S();
+  if (!s) return;
+  const isPhoto = s.bgType === "photo" && !!s.img;
+  $("#bgPhoto").classList.toggle("on", isPhoto);
+  $("#bgGrad").classList.toggle("on", !isPhoto);
+  $("#bgPhoto").disabled = !s.img;
+  const g = GRADS[s.grad] || GRADS.noir;
+  $("#bgState").textContent = isPhoto ? (state.lang === "ko" ? "사진" : "PHOTO") : (g[state.lang] || g.en).toUpperCase();
+  $$("[data-grad]").forEach(b => b.classList.toggle("on", !isPhoto && b.dataset.grad === s.grad));
+}
+function syncFields() {
+  const s = S();
+  if (!s) return;
+  $("#headline").value = s.headline || "";
+  $("#sub").value = s.sub || "";
+  $("#badge").value = s.badge || "";
+  $("#source").value = s.source || "";
+  $("#scrim").value = s.scrim;
+  $("#scrimV").textContent = s.scrim + "%";
+  $("#zoom").value = s.zoom;
+  $("#zoomV").textContent = (s.zoom / 100).toFixed(2) + "×";
+  $("#py").value = s.py;
+  $("#pyV").textContent = s.py + "%";
+  $("#grain").checked = !!s.grain;
+  $$("[data-layout]").forEach(b => b.classList.toggle("on", b.dataset.layout === s.layout));
+  $$("#accents button").forEach(b => b.classList.toggle("on", b.dataset.accent.toLowerCase() === state.accent.toLowerCase()));
+  $$("#ratios button").forEach(b => b.classList.toggle("on", b.dataset.ratio === state.ratio));
+  updateAccName();
+  syncBg();
+  updateMeta();
+}
+
+/* ---------- 11. language ---------- */
+function localizeSamples(prev, lang) {
+  const src = SAMPLES[prev] || [];
+  state.slides.forEach(s => {
+    const idx = src.findIndex(x => x.headline === s.headline);
+    if (idx < 0) return;
+    const t = (SAMPLES[lang] || [])[idx];
+    if (!t) return;
+    s.headline = t.headline;
+    s.badge = t.badge;
+    s.sub = t.sub;
+    s.source = t.source;
+  });
+}
+function applyLang(lang) {
+  const prev = state.lang;
+  state.lang = lang;
+  document.documentElement.lang = lang;
+  const d = I18N[lang];
+  document.title = d.docTitle;
+  const md = document.querySelector('meta[name="description"]');
+  if (md) md.setAttribute("content", d.metaDesc);
+  const og = document.querySelector('meta[property="og:title"]');
+  if (og) og.setAttribute("content", d.docTitle);
+  $$("[data-i18n]").forEach(el => {
+    const k = el.getAttribute("data-i18n");
+    if (d[k] != null) el.textContent = d[k];
+  });
+  $("#headline").placeholder = d.phHeadline;
+  $("#sub").placeholder = d.phSub;
+  $("#badge").placeholder = d.phBadge;
+  $("#source").placeholder = d.phSource;
+  $$("#langSeg button").forEach(b => b.classList.toggle("on", b.dataset.lang === lang));
+  $$("[data-grad]").forEach(b => {
+    const g = GRADS[b.dataset.grad];
+    b.title = g[lang] || g.en;
+    const sp = b.querySelector("span");
+    if (sp) sp.textContent = g[lang] || g.en;
+  });
+  $$("[data-layout]").forEach(b => {
+    const k = "layout" + b.dataset.layout.charAt(0).toUpperCase() + b.dataset.layout.slice(1);
+    b.title = d[k] || k;
+  });
+  $("#leftBtn").setAttribute("aria-label", lang === "ko" ? "이전 슬라이드" : "Previous slide");
+  $("#rightBtn").setAttribute("aria-label", lang === "ko" ? "다음 슬라이드" : "Next slide");
+  $("#themeBtn").setAttribute("aria-label", lang === "ko" ? "테마 전환" : "Toggle theme");
+  if (prev !== lang) localizeSamples(prev, lang);
+  updateAccName();
+  syncFields();
+  renderAll();
+}
+
+/* ---------- 12. photo ---------- */
+async function setPhoto(file) {
+  if (!file || !/^image\//.test(file.type || "")) return;
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await new Promise((res, rej) => {
+      const im = new Image();
+      im.onload = () => res(im);
+      im.onerror = () => rej(new Error("image decode failed"));
+      im.src = url;
+    });
+    const targets = $("#applyAll").checked ? state.slides : [S()];
+    targets.forEach(s => { s.img = img; s.imgName = file.name || "pasted"; s.bgType = "photo"; });
+    if (file.size > 12 * 1024 * 1024) toast(D().warnBig);
+    syncBg();
+    schedule();
+  } catch (e) {
+    toast(String(e.message || e));
+  } finally {
+    setTimeout(() => URL.revokeObjectURL(url), 30000);
+  }
+}
+
+/* ---------- 13. export ---------- */
+function slugify(t) {
+  const s = plain(t).trim().toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-+|-+$/g, "").slice(0, 40);
+  return s || "slide";
+}
+function canvasFor(i) {
+  const d = dims();
+  const c = document.createElement("canvas");
+  renderSlide(c, state.slides[i], d[0], d[1]);
+  return c;
+}
+function blobOf(c) { return new Promise(res => c.toBlob(b => res(b), "image/png")); }
+function saveBlob(b, name) {
+  const a = document.createElement("a");
+  const url = URL.createObjectURL(b);
+  a.href = url;
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 15000);
+}
+const CRC_TABLE = (() => {
+  const t = new Uint32Array(256);
+  for (let n = 0; n < 256; n++) {
+    let c = n;
+    for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+    t[n] = c >>> 0;
+  }
+  return t;
+})();
+function crc32(buf) {
+  let c = 0xFFFFFFFF;
+  for (let i = 0; i < buf.length; i++) c = CRC_TABLE[(c ^ buf[i]) & 0xFF] ^ (c >>> 8);
+  return (c ^ 0xFFFFFFFF) >>> 0;
+}
+// minimal store-only ZIP (no library, works offline)
+function zipStore(files) {
+  const enc = new TextEncoder();
+  const now = new Date();
+  const dosTime = ((now.getHours() << 11) | (now.getMinutes() << 5) | (now.getSeconds() >> 1)) & 0xFFFF;
+  const dosDate = (((now.getFullYear() - 1980) << 9) | ((now.getMonth() + 1) << 5) | now.getDate()) & 0xFFFF;
+  const parts = [];
+  const central = [];
+  let offset = 0;
+  for (const f of files) {
+    const name = enc.encode(f.name);
+    const crc = crc32(f.data);
+    const lh = new DataView(new ArrayBuffer(30));
+    lh.setUint32(0, 0x04034b50, true);
+    lh.setUint16(4, 20, true);
+    lh.setUint16(6, 0x0800, true);
+    lh.setUint16(8, 0, true);
+    lh.setUint16(10, dosTime, true);
+    lh.setUint16(12, dosDate, true);
+    lh.setUint32(14, crc, true);
+    lh.setUint32(18, f.data.length, true);
+    lh.setUint32(22, f.data.length, true);
+    lh.setUint16(26, name.length, true);
+    lh.setUint16(28, 0, true);
+    parts.push(new Uint8Array(lh.buffer), name, f.data);
+    const ch = new DataView(new ArrayBuffer(46));
+    ch.setUint32(0, 0x02014b50, true);
+    ch.setUint16(4, 20, true);
+    ch.setUint16(6, 20, true);
+    ch.setUint16(8, 0x0800, true);
+    ch.setUint16(10, 0, true);
+    ch.setUint16(12, dosTime, true);
+    ch.setUint16(14, dosDate, true);
+    ch.setUint32(16, crc, true);
+    ch.setUint32(20, f.data.length, true);
+    ch.setUint32(24, f.data.length, true);
+    ch.setUint16(28, name.length, true);
+    ch.setUint16(30, 0, true);
+    ch.setUint16(32, 0, true);
+    ch.setUint16(34, 0, true);
+    ch.setUint16(36, 0, true);
+    ch.setUint32(38, 0, true);
+    ch.setUint32(42, offset, true);
+    central.push(new Uint8Array(ch.buffer), name);
+    offset += 30 + name.length + f.data.length;
+  }
+  let cdSize = 0;
+  for (const c of central) cdSize += c.length;
+  const eo = new DataView(new ArrayBuffer(22));
+  eo.setUint32(0, 0x06054b50, true);
+  eo.setUint16(4, 0, true);
+  eo.setUint16(6, 0, true);
+  eo.setUint16(8, files.length, true);
+  eo.setUint16(10, files.length, true);
+  eo.setUint32(12, cdSize, true);
+  eo.setUint32(16, offset, true);
+  eo.setUint16(20, 0, true);
+  return new Blob([...parts, ...central, new Uint8Array(eo.buffer)], { type: "application/zip" });
+}
+
+/* ---------- 14. build controls ---------- */
+function buildGradients() {
+  const wrap = $("#gswatches");
+  wrap.innerHTML = "";
+  Object.keys(GRADS).forEach(k => {
+    const g = GRADS[k];
+    const b = document.createElement("button");
+    b.type = "button";
+    b.dataset.grad = k;
+    b.style.background = "linear-gradient(158deg, " + g.c[0] + ", " + g.c[1] + " 56%, " + g.c[2] + ")";
+    const sp = document.createElement("span");
+    sp.textContent = g[state.lang] || g.en;
+    b.appendChild(sp);
+    b.addEventListener("click", () => { const s = S(); s.grad = k; s.bgType = "grad"; syncBg(); schedule(); });
+    wrap.appendChild(b);
+  });
+}
+function buildPresets() {
+  const wrap = $("#presets");
+  wrap.innerHTML = "";
+  LAYOUTS.forEach(k => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.dataset.layout = k;
+    b.innerHTML = PRE_ICON[k] + '<em data-i18n="layout' + k.charAt(0).toUpperCase() + k.slice(1) + '"></em>';
+    b.addEventListener("click", () => { S().layout = k; syncFields(); schedule(); });
+    wrap.appendChild(b);
+  });
+}
+
+/* ---------- 15. wiring ---------- */
+function cloneSlide(s, blank) {
+  const n = Object.assign({}, s);
+  n.id = newId();
+  if (blank) {
+    n.headline = "";
+    n.sub = "";
+    n.source = "";
+    n.badge = "PART 0" + Math.min(9, state.slides.length + 1);
+  }
+  return n;
+}
+function addSlide(blank) {
+  if (state.slides.length >= 6) { toast(D().toastMax); return; }
+  state.slides.push(cloneSlide(S(), blank));
+  state.active = state.slides.length - 1;
+  buildStrip();
+  syncFields();
+  renderAll();
+}
+function deleteSlide() {
+  if (state.slides.length <= 1) { toast(D().toastMin); return; }
+  state.slides.splice(state.active, 1);
+  if (state.active >= state.slides.length) state.active = state.slides.length - 1;
+  buildStrip();
+  syncFields();
+  renderAll();
+}
+function go(delta) {
+  const n = state.slides.length;
+  state.active = (state.active + delta + n) % n;
+  syncFields();
+  renderAll();
+}
+
+function init() {
+  loadSamples("en");
+  state.lang = "en";
+  buildGradients();
+  buildPresets();
+  applyLang("en");
+  buildStrip();
+  syncFields();
+  renderAll();
+
+  // language + theme
+  $$("#langSeg button").forEach(b => b.addEventListener("click", () => { if (b.dataset.lang !== state.lang) applyLang(b.dataset.lang); }));
+  $("#themeBtn").addEventListener("click", () => {
+    state.theme = state.theme === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = state.theme;
+    $("#themeIco").textContent = state.theme === "dark" ? "☾" : "☀";
+  });
+
+  // copy fields
+  ["headline", "sub", "badge", "source"].forEach(k => {
+    const el = $("#" + k);
+    el.addEventListener("input", () => { S()[k] = el.value; schedule(); });
+  });
+
+  // sliders / toggles
+  $("#scrim").addEventListener("input", e => { S().scrim = +e.target.value; $("#scrimV").textContent = e.target.value + "%"; schedule(); });
+  $("#zoom").addEventListener("input", e => { S().zoom = +e.target.value; $("#zoomV").textContent = (e.target.value / 100).toFixed(2) + "×"; schedule(); });
+  $("#py").addEventListener("input", e => { S().py = +e.target.value; $("#pyV").textContent = e.target.value + "%"; schedule(); });
+  $("#grain").addEventListener("change", e => { S().grain = e.target.checked; schedule(); });
+
+  // background tabs + accents + ratios
+  $$("[data-bg]").forEach(b => b.addEventListener("click", () => {
+    const t = b.dataset.bg;
+    if (t === "photo" && !S().img) return;
+    S().bgType = t;
+    syncBg();
+    schedule();
+  }));
+  $$("#accents button").forEach(b => b.addEventListener("click", () => {
+    state.accent = b.dataset.accent;
+    syncFields();
+    schedule();
+  }));
+  $$("#ratios button").forEach(b => b.addEventListener("click", () => {
+    state.ratio = b.dataset.ratio;
+    syncFields();
+    renderAll();
+  }));
+
+  // slide actions
+  $("#addBtn").addEventListener("click", () => addSlide(true));
+  $("#dupBtn").addEventListener("click", () => addSlide(false));
+  $("#delBtn").addEventListener("click", deleteSlide);
+  $("#leftBtn").addEventListener("click", () => go(-1));
+  $("#rightBtn").addEventListener("click", () => go(1));
+
+  // photo input
+  const file = $("#file");
+  const drop = $("#drop");
+  drop.addEventListener("click", () => file.click());
+  file.addEventListener("change", e => { const f = e.target.files && e.target.files[0]; if (f) setPhoto(f); file.value = ""; });
+  [drop, $("#canvasWrap")].forEach(el => {
+    el.addEventListener("dragover", e => { e.preventDefault(); drop.classList.add("over"); });
+    el.addEventListener("dragleave", () => drop.classList.remove("over"));
+    el.addEventListener("drop", e => {
+      e.preventDefault();
+      drop.classList.remove("over");
+      const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (f) setPhoto(f);
+    });
+  });
+  window.addEventListener("paste", e => {
+    const items = e.clipboardData && e.clipboardData.items;
+    if (!items) return;
+    for (const it of items) {
+      if (it.type && it.type.indexOf("image/") === 0) {
+        const f = it.getAsFile();
+        if (f) { e.preventDefault(); setPhoto(f); }
+        break;
+      }
+    }
+  });
+
+  // keyboard
+  window.addEventListener("keydown", e => {
+    const tag = (e.target.tagName || "").toLowerCase();
+    if (tag === "input" || tag === "textarea") return;
+    if (e.key === "ArrowRight") { e.preventDefault(); go(1); }
+    else if (e.key === "ArrowLeft") { e.preventDefault(); go(-1); }
+  });
+
+  // export
+  $("#exportOne").addEventListener("click", async () => {
+    const d = dims();
+    const i = state.active;
+    const c = canvasFor(i);
+    const b = await blobOf(c);
+    const name = String(i + 1).padStart(2, "0") + "-" + slugify(state.slides[i].headline) + "-" + d[0] + "x" + d[1] + ".png";
+    saveBlob(b, name);
+    toast(D().toastExport);
+  });
+  $("#exportAll").addEventListener("click", async () => {
+    const btn = $("#exportAll");
+    const lab = btn.querySelector("span");
+    if (btn.disabled) return;
+    btn.disabled = true;
+    const d = dims();
+    const files = [];
+    try {
+      for (let i = 0; i < state.slides.length; i++) {
+        lab.textContent = (state.lang === "ko" ? "만드는 중 " : "Rendering ") + (i + 1) + "/" + state.slides.length;
+        await new Promise(r => setTimeout(r, 0));
+        const b = await blobOf(canvasFor(i));
+        const buf = new Uint8Array(await b.arrayBuffer());
+        files.push({ name: String(i + 1).padStart(2, "0") + "-" + slugify(state.slides[i].headline) + "-" + d[0] + "x" + d[1] + ".png", data: buf });
+      }
+      saveBlob(zipStore(files), "editorial-carousel-" + d[0] + "x" + d[1] + "-" + files.length + "slides.zip");
+      toast(D().toastZip.replace("{n}", files.length));
+    } catch (e) {
+      toast(String((e && e.message) || e));
+    } finally {
+      btn.disabled = false;
+      lab.textContent = I18N[state.lang].exportAll;
+    }
+  });
+}
+
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+else init();
+</script>
+</body>
+</html>
