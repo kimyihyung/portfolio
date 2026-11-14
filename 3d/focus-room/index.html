@@ -633,27 +633,6 @@ lampGlow.scale.set(1.5, 1.5, 1);
 lampGlow.position.copy(lampBulb.position);
 lampGroup.add(lampGlow);
 
-/* chair */
-const chair = new THREE.Group();
-chair.position.set(0.1, 0, 0.85);
-chair.rotation.y = 2.9;
-root.add(chair);
-const seat = box(0.86, 0.1, 0.84, 0x2b2f38, { roughness: 0.85 });
-seat.position.y = 0.48;
-const back = box(0.84, 0.92, 0.1, 0x2b2f38, { roughness: 0.85 });
-back.position.set(0, 0.95, -0.38);
-chair.add(seat, back);
-const chairPole = cylinder(0.06, 0.06, 0.42, 0x1e2228, 12, { metalness: 0.6 });
-chairPole.position.y = 0.24;
-chair.add(chairPole);
-for (let i = 0; i < 5; i++) {
-  const a = (i / 5) * Math.PI * 2;
-  const arm = box(0.4, 0.05, 0.07, 0x1e2228, { metalness: 0.6 });
-  arm.position.set(Math.cos(a) * 0.2, 0.06, Math.sin(a) * 0.2);
-  arm.rotation.y = -a;
-  chair.add(arm);
-}
-
 /* floor plant */
 const plantGroup = new THREE.Group();
 plantGroup.position.set(-5.6, 0, -4.6);
@@ -738,7 +717,7 @@ ceilG.add(ceilGlow);
 
 /* ───────────────── hologram clock ───────────────── */
 const holo = new THREE.Group();
-holo.position.set(1.95, 2.62, -1.35);
+holo.position.set(2.95, 2.72, -1.5);
 root.add(holo);
 
 const holoCanvas = document.createElement('canvas');
@@ -750,7 +729,7 @@ const holoMat = new THREE.MeshBasicMaterial({
   map: holoTex, transparent: true, opacity: 0.96, blending: THREE.AdditiveBlending,
   depthWrite: false, toneMapped: false
 });
-const holoPlane = new THREE.Mesh(new THREE.PlaneGeometry(1.95, 1.1), holoMat);
+const holoPlane = new THREE.Mesh(new THREE.PlaneGeometry(1.72, 0.97), holoMat);
 holo.add(holoPlane);
 
 const holoGlow = new THREE.Sprite(new THREE.SpriteMaterial({
@@ -854,12 +833,12 @@ scene.add(rimLight);
 /* ───────────────── environment presets ───────────────── */
 const ENV = {
   rain: {
-    hemiSky: 0x4c6684, hemiGround: 0x080c12, hemiInt: 1.05,
+    hemiSky: 0x4c6684, hemiGround: 0x080c12, hemiInt: 1.3,
     keyColor: 0x9dbbee, keyInt: 1.7,
     winFill: 0x86aef0, winInt: 8,
     lamp: 0xffb070, lampInt: 6.5, lampColor: 0xffc089,
-    ceil: 0x54698c, ceilInt: 2.2,
-    rim: 0x4466bb, rimInt: 2.6,
+    ceil: 0x54698c, ceilInt: 3.2,
+    rim: 0x4466bb, rimInt: 3.6,
     fog: 0x0b121c, fogNear: 22, fogFar: 52,
     rain: 0.85, star: 0, dust: 0,
     exposure: 1.12, accent: '120,205,255', bulb: 0xffcb8a
@@ -876,12 +855,12 @@ const ENV = {
     exposure: 1.18, accent: '255,196,130', bulb: 0xffc79a
   },
   night: {
-    hemiSky: 0x1b2b52, hemiGround: 0x03060c, hemiInt: 0.75,
+    hemiSky: 0x1b2b52, hemiGround: 0x03060c, hemiInt: 1.0,
     keyColor: 0x6f8fd8, keyInt: 0.9,
     winFill: 0x5b79d6, winInt: 4.5,
-    lamp: 0xffb26a, lampInt: 4.6, lampColor: 0xffc089,
-    ceil: 0x3a4a74, ceilInt: 1.1,
-    rim: 0x7a5cff, rimInt: 2.4,
+    lamp: 0xffb26a, lampInt: 5.6, lampColor: 0xffc089,
+    ceil: 0x3a4a74, ceilInt: 2.1,
+    rim: 0x7a5cff, rimInt: 3.2,
     fog: 0x050a14, fogNear: 18, fogFar: 46,
     rain: 0, star: 1, dust: 0,
     exposure: 1.05, accent: '170,200,255', bulb: 0xffd9b0
@@ -1144,7 +1123,7 @@ renderTimer();
 
 /* ───────────────── camera rig ───────────────── */
 const rig = {
-  az: 0.05, pol: 1.19, r: 6.5,
+  az: 0.05, pol: 1.21, r: 6.0,
   vAz: 0, vPol: 0,
   target: new THREE.Vector3(0, 1.42, -0.9),
   idle: 0
@@ -1246,7 +1225,7 @@ function tapAt(cx, cy) {
 $('#zoomin').addEventListener('click', () => { rig.r = clamp(rig.r - 0.7, 3.6, 7.2); Audio.init(); });
 $('#zoomout').addEventListener('click', () => { rig.r = clamp(rig.r + 0.7, 3.6, 7.2); Audio.init(); });
 $('#reset').addEventListener('click', () => {
-  rig.az = 0.05; rig.pol = 1.19; rig.r = 6.5; rig.vAz = 0; rig.vPol = 0;
+  rig.az = 0.05; rig.pol = 1.21; rig.r = 6.0; rig.vAz = 0; rig.vPol = 0;
   toast('시점을 처음 자리로 돌렸습니다');
 });
 $('#sound').addEventListener('click', () => {
@@ -1411,8 +1390,8 @@ function animate() {
 
   // hologram billboard
   holo.quaternion.copy(camera.quaternion);
-  holo.position.y = 2.62 + Math.sin(t * 0.85) * 0.022;
-  holo.position.x = 1.95 + Math.sin(t * 0.5) * 0.01;
+  holo.position.y = 2.72 + Math.sin(t * 0.85) * 0.022;
+  holo.position.x = 2.95 + Math.sin(t * 0.5) * 0.01;
   const sec = Math.ceil(timer.remaining);
   const p = progress();
   if (sec !== lastHoloSec || Math.floor(t * 4) % 4 === 0) {

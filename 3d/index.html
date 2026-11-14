@@ -36,8 +36,7 @@ html,body{height:100%;overflow:hidden;background:#04070e;color:#e9f1fb;
   background:rgba(10,16,26,.55);border:1px solid rgba(140,175,225,.2);color:#cfe0f5;cursor:pointer;font-family:inherit;
   -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);transition:all .25s}
 .arrow:hover{background:rgba(120,175,255,.2);color:#fff}
-#openbar{position:fixed;z-index:12;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 128px);
-  pointer-events:none}
+#openbar{position:static;margin-top:14px;pointer-events:auto}
 #openBtn{pointer-events:auto;font-family:inherit;font-size:12px;font-weight:700;letter-spacing:.06em;padding:13px 26px;border-radius:999px;
   border:0;cursor:pointer;background:linear-gradient(160deg,#6ba8ff,#3f6fe0);color:#03101f;
   box-shadow:0 12px 34px rgba(70,130,235,.4);transition:filter .25s,transform .25s}
@@ -85,7 +84,6 @@ html,body{height:100%;overflow:hidden;background:#04070e;color:#e9f1fb;
   #selName{font-size:17px}
   #selDesc{font-size:11px}
   #hud{bottom:calc(env(safe-area-inset-bottom) + 12px)}
-  #openbar{bottom:calc(env(safe-area-inset-bottom) + 118px)}
   .arrow{width:38px;height:38px;font-size:15px}
 }
 </style>
@@ -106,14 +104,11 @@ html,body{height:100%;overflow:hidden;background:#04070e;color:#e9f1fb;
   <button class="arrow" id="nextBtn" aria-label="다음 포탈">›</button>
 </div>
 
-<div id="openbar">
-  <button id="openBtn">가운데 포탈 열기</button>
-</div>
-
 <section id="hud" class="ui">
   <div id="selName">몰입 집중 스튜디오</div>
   <div id="selDesc">3D 데스크 룸에서 실제로 작동하는 포모도로 타이머</div>
   <div id="selType">THREE.JS</div>
+  <div id="openbar"><button id="openBtn">가운데 포탈 열기</button></div>
   <div id="dots"></div>
 </section>
 
@@ -293,8 +288,8 @@ const floorTex = canvasTexture(1024, 1024, (ctx, w, h) => {
   ctx.fillStyle = '#05080f'; ctx.fillRect(0, 0, w, h);
   const cx = w / 2, cy = h / 2;
   const rg = ctx.createRadialGradient(cx, cy, 10, cx, cy, w / 2);
-  rg.addColorStop(0, 'rgba(70,120,200,.45)');
-  rg.addColorStop(0.35, 'rgba(40,70,130,.18)');
+  rg.addColorStop(0, 'rgba(70,120,200,.26)');
+  rg.addColorStop(0.35, 'rgba(40,70,130,.10)');
   rg.addColorStop(1, 'rgba(0,0,0,0)');
   ctx.fillStyle = rg; ctx.fillRect(0, 0, w, h);
   ctx.strokeStyle = 'rgba(130,180,255,.20)';
@@ -311,8 +306,8 @@ const floorTex = canvasTexture(1024, 1024, (ctx, w, h) => {
   }
 });
 const floor = new THREE.Mesh(
-  new THREE.CircleGeometry(30, 72),
-  new THREE.MeshStandardMaterial({ map: floorTex, roughness: 0.28, metalness: 0.85, color: 0x8fa8c8 })
+  new THREE.CircleGeometry(60, 72),
+  new THREE.MeshStandardMaterial({ map: floorTex, roughness: 0.32, metalness: 0.8, color: 0x6d86a8 })
 );
 floor.rotation.x = -Math.PI / 2;
 floor.position.y = -0.02;
@@ -326,10 +321,10 @@ scene.add(key);
 const blue = new THREE.PointLight(0x4f8dff, 55, 34, 2);
 blue.position.set(-9, 5.5, 4);
 scene.add(blue);
-const violet = new THREE.PointLight(0xa46bff, 45, 32, 2);
+const violet = new THREE.PointLight(0xa46bff, 36, 32, 2);
 violet.position.set(9, 6.5, -3);
 scene.add(violet);
-const warm = new THREE.PointLight(0xffb673, 32, 24, 2);
+const warm = new THREE.PointLight(0xffb673, 20, 22, 2);
 warm.position.set(0, 3.2, 9);
 scene.add(warm);
 

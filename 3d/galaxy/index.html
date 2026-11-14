@@ -353,7 +353,7 @@ for (let i = 0; i < BG_N; i++) {
 bgGeo.setAttribute('position', new THREE.BufferAttribute(bgPos, 3));
 bgGeo.setAttribute('color', new THREE.BufferAttribute(bgCol, 3));
 const bgMat = new THREE.PointsMaterial({
-  size: 1.1, vertexColors: true, transparent: true, opacity: 0.85,
+  size: 1.5, vertexColors: true, map: GLOW, alphaTest: 0.01, transparent: true, opacity: 0.8,
   blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true
 });
 const bgStars = new THREE.Points(bgGeo, bgMat);
@@ -409,7 +409,7 @@ CLUSTERS.forEach((cl, ci) => {
       blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false
     });
     const glow = new THREE.Sprite(glowMat);
-    const gs = (1.1 + imp * 1.5) * (isSmall ? 1.15 : 1);
+    const gs = (0.88 + imp * 1.15) * (isSmall ? 1.1 : 1);
     glow.scale.set(gs, gs, 1);
     glow.position.copy(pos);
     scene.add(glow);
@@ -446,8 +446,8 @@ CLUSTERS.forEach((cl, ci) => {
   const label = new THREE.Sprite(new THREE.SpriteMaterial({
     map: labelTex, transparent: true, opacity: 0.95, depthWrite: false, toneMapped: false
   }));
-  label.scale.set(8.4, 2.1, 1);
-  label.position.set(cl.center.x, cl.center.y + 5.6, cl.center.z);
+  label.scale.set(7.4, 1.85, 1);
+  label.position.set(cl.center.x, cl.center.y + 6.6, cl.center.z);
   scene.add(label);
   cl.label = label;
   cl.labelBase = 0.95;
@@ -505,7 +505,7 @@ extraPairs.forEach(([ca, ia, cb, ib]) => {
 const bridgeGeo = new THREE.BufferGeometry();
 bridgeGeo.setAttribute('position', new THREE.Float32BufferAttribute(bridgePts, 3));
 const bridgeMat = new THREE.LineBasicMaterial({
-  color: 0x8fb6ff, transparent: true, opacity: 0.12, blending: THREE.AdditiveBlending, depthWrite: false
+  color: 0x8fb6ff, transparent: true, opacity: 0.09, blending: THREE.AdditiveBlending, depthWrite: false
 });
 const bridgeLines = new THREE.LineSegments(bridgeGeo, bridgeMat);
 scene.add(bridgeLines);
@@ -561,7 +561,7 @@ function openCard(node) {
   const open = $('#copen');
   open.href = cl.url;
   cardEl.classList.add('on');
-  flyTo(node.pos, isSmall ? 5.4 : 4.8, 1.05);
+  flyTo(node.pos, isSmall ? 9.2 : 8.0, 1.05);
   document.body.classList.add('focused');
 }
 function closeCard(keepView) {
@@ -608,7 +608,7 @@ function setFilter(f) {
     cl.label.material.opacity = on ? cl.labelBase : 0.06;
     cl.lines.material.opacity = on ? cl.linesBase : 0.02;
   });
-  bridgeMat.opacity = f === 'all' ? 0.12 : 0.03;
+  bridgeMat.opacity = f === 'all' ? 0.09 : 0.025;
   if (focused && focused.cluster.id && allowed.indexOf(focused.cluster.id) < 0) closeCard(false);
   const counts = activeList().length;
   if (f !== 'all') toast(counts + '개의 별만 남겼습니다');
@@ -757,9 +757,9 @@ function animate() {
     const pulse = 0.82 + 0.26 * Math.sin(t * 1.5 + n.phase);
     n.mat.opacity = lerp(n.mat.opacity, n.targetOpacity, ease);
     n.glowMat.opacity = lerp(n.glowMat.opacity, n.glowTarget * pulse, ease);
-    const focusBoost = n === focused ? 1.45 : 1;
+    const focusBoost = n === focused ? 1.22 : 1;
     n.mesh.scale.setScalar(lerp(n.mesh.scale.x, n.targetScale * focusBoost, ease));
-    const glowBase = (1.1 + n.imp * 1.5) * (isSmall ? 1.15 : 1);
+    const glowBase = (0.88 + n.imp * 1.15) * (isSmall ? 1.1 : 1);
     n.glow.scale.setScalar(lerp(n.glow.scale.x, glowBase * n.targetScale * focusBoost * (n === focused ? 1.1 : 1), ease));
   }
 
