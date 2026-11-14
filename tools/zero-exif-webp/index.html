@@ -825,9 +825,10 @@ footer .sep { opacity: .4; }
     return out;
   }
 
-  /* 파일 앞부분을 읽어 어떤 개인정보 흔적이 있는지 센다. 결과물 검사에도 같은 함수를 쓴다. */
+  /* 파일 앞부분을 읽어 어떤 개인정보 흔적이 있는지 센다. 결과물 검사에도 같은 함수를 쓴다.
+     ICC 색상 프로필은 개인 식별 정보가 아니므로 kinds에서 빼고 icc 플래그로만 기록한다. */
   function inspectMeta(b) {
-    var info = { exif: false, gps: false, camera: null, date: false, kinds: [] };
+    var info = { exif: false, gps: false, camera: null, date: false, icc: false, kinds: [] };
     function add(k) { if (info.kinds.indexOf(k) < 0) info.kinds.push(k); }
 
     try {
@@ -859,7 +860,7 @@ footer .sep { opacity: .4; }
           } else if (mk === 0xED) {
             add('IPTC');
           } else if (mk === 0xE2) {
-            add('ICC');
+            info.icc = true;
           } else if (mk === 0xEE) {
             add('썸네일');
           }
@@ -880,7 +881,7 @@ footer .sep { opacity: .4; }
               if (t2.date) { info.date = true; add('촬영시각'); }
             }
           } else if (id === 'XMP ') { add('XMP'); }
-          else if (id === 'ICCP') { add('ICC'); }
+          else if (id === 'ICCP') { info.icc = true; }
           p += 8 + size + (size % 2);
         }
       } else if (b.length > 16 && b[0] === 0x89 && bytesToStr(b, 1, 4) === 'PNG') {
@@ -894,6 +895,7 @@ footer .sep { opacity: .4; }
             var t3 = parseTiff(b, q + 8, Math.min(b.length, q + 8 + ln));
             if (t3 && t3.gps) { info.gps = true; add('GPS'); }
           } else if (ty === 'tEXt' || ty === 'iTXt' || ty === 'zTXt') { add('텍스트'); }
+          else if (ty === 'iCCP') { info.icc = true; }
           else if (ty === 'IEND') break;
           q += 12 + ln;
         }
@@ -1167,7 +1169,7 @@ footer .sep { opacity: .4; }
       e.meta.appendChild(el('span', 'kv' + (srcTxt.warn ? ' no' : ''), srcTxt.text));
       var clean = item.metaOut && item.metaOut.kinds.length === 0;
       var outTxt = clean
-        ? '결과물 검사: 메타데이터 0건 ✓'
+        ? '결과물 검사: 메타데이터 0건 ✓' + (item.metaOut.icc ? ' (색상 프로필만 유지)' : '')
         : '결과물 검사: ' + (item.metaOut ? item.metaOut.kinds.join('·') + ' 잔존' : '미확인');
       e.meta.appendChild(el('span', 'kv' + (clean ? ' ok' : ' no'), outTxt));
       e.dl.disabled = false;
