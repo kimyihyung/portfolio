@@ -33,6 +33,24 @@ html,body{height:100%;overflow:hidden;background:#03050c;color:#e9f0fb;
 #orbit .dot{width:7px;height:7px;border-radius:50%;background:#54657f;transition:all .3s}
 #orbit.on{color:#eaf3ff;border-color:rgba(140,190,255,.45)}
 #orbit.on .dot{background:#7fd0ff;box-shadow:0 0 10px #7fd0ff}
+/* ── sound control ── */
+.snd{display:flex;align-items:center;gap:7px;pointer-events:auto}
+.sndbtn{display:inline-flex;align-items:center;gap:6px;font-family:inherit;font-size:11px;letter-spacing:.02em;
+  padding:7px 11px;border-radius:999px;cursor:pointer;color:#8ea3c0;white-space:nowrap;
+  background:rgba(10,16,28,.62);border:1px solid rgba(130,165,215,.18);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);transition:all .25s}
+.sndbtn:hover{color:#dfeaf9;border-color:rgba(150,200,255,.42)}
+.snd.on .sndbtn{color:#eaf3ff;border-color:rgba(140,190,255,.5);background:rgba(120,170,255,.16);
+  box-shadow:0 0 22px rgba(90,170,255,.2)}
+.sndvol{-webkit-appearance:none;appearance:none;width:0;height:16px;opacity:0;background:transparent;cursor:pointer;
+  transition:width .32s ease,opacity .32s ease;accent-color:#7fb0ff}
+.snd.on .sndvol{width:66px;opacity:1}
+.sndvol::-webkit-slider-runnable-track{height:3px;border-radius:2px;background:rgba(150,185,225,.28)}
+.sndvol::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;margin-top:-4.5px;border-radius:50%;background:#9fd2ff;box-shadow:0 0 10px rgba(120,195,255,.7)}
+.sndvol::-moz-range-track{height:3px;border-radius:2px;background:rgba(150,185,225,.28)}
+.sndvol::-moz-range-thumb{width:12px;height:12px;border:0;border-radius:50%;background:#9fd2ff}
+.snd.hint .sndbtn{animation:sndpulse 1.9s ease 3}
+@keyframes sndpulse{0%,100%{box-shadow:0 0 0 0 rgba(120,190,255,0)}50%{box-shadow:0 0 0 6px rgba(120,190,255,.16);border-color:rgba(160,215,255,.65)}}
 #legend{left:16px;bottom:calc(env(safe-area-inset-bottom) + 16px);display:flex;flex-direction:column;gap:6px;pointer-events:none}
 .lg{display:flex;align-items:center;gap:8px;font-size:10.5px;letter-spacing:.04em;color:#8ea3c0}
 .lg i{width:8px;height:8px;border-radius:50%;display:block}
@@ -91,9 +109,12 @@ html.m .lg{font-size:9.5px}
 html.m .lg em{display:none}
 html.m .lg{font-size:9.5px}
 html.m #card{right:0;left:0;top:auto;bottom:0;width:100%;transform:translateY(14px) scale(1);border-radius:22px 22px 0 0;
-html.m padding:20px 20px calc(env(safe-area-inset-bottom) + 18px);max-height:62vh;overscroll-behavior:contain}
+  padding:20px 20px calc(env(safe-area-inset-bottom) + 18px);max-height:62vh;overflow-y:auto;overscroll-behavior:contain}
 html.m #card.on{transform:translateY(0) scale(1)}
 html.m #ctitle{font-size:18px}
+html.m .sndbtn{padding:7px 9px;font-size:10.5px}
+html.m .snd .sndlbl{display:none}
+html.m .snd.on .sndvol{width:54px}
 </style>
 </head>
 <body>
@@ -111,6 +132,12 @@ html.m #ctitle{font-size:18px}
       <button class="fb" data-f="eb">EB_note</button>
     </div>
     <button id="orbit" class="on"><span class="dot"></span>자동 공전</button>
+    <div class="snd" data-snd>
+      <button class="sndbtn" type="button" aria-pressed="false" aria-label="사운드 켜기" title="사운드 켜기">
+        <span class="sndico">🔇</span><span class="sndlbl">사운드</span>
+      </button>
+      <input class="sndvol" type="range" min="0" max="100" step="1" value="55" aria-label="볼륨" />
+    </div>
   </div>
 </header>
 
@@ -165,6 +192,7 @@ html.m #ctitle{font-size:18px}
   }, 9000);
 </script>
 
+<script src="../sound.js"></script>
 <script type="importmap">
 { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js" } }
 </script>
@@ -176,6 +204,12 @@ const $ = (s) => document.querySelector(s);
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const lerp = (a, b, t) => a + (b - a) * t;
 const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+const SFX = window.PortalSound || null;
+if (SFX) {
+  SFX.boot('galaxy');
+  SFX.ui($('[data-snd]'));
+  SFX.hintPulse();
+}
 
 function fail(msg) {
   window.__errors.push(msg);
@@ -559,8 +593,7 @@ const activeList = () => allNodes.filter((n) => n.active);
 const cardEl = $('#card');
 function openCard(node) {
   focused = node;
-  const cl = node.cluster;
-  const chip = $('#chip');
+  const cl = node.cluster;  const chip = $('#chip');
   chip.style.color = cl.css;
   chip.style.background = 'rgba(255,255,255,.05)';
   chip.style.borderColor = cl.css + '55';
@@ -576,12 +609,15 @@ function openCard(node) {
   cardEl.classList.add('on');
   flyTo(node.pos, PORTRAIT ? 7.4 : 8.0, 1.05);
   document.body.classList.add('focused');
+  if (SFX) SFX.play('star', { n: Math.max(0, list.indexOf(node)) });
 }
 function closeCard(keepView) {
+  const was = !!focused;
   focused = null;
   cardEl.classList.remove('on');
   document.body.classList.remove('focused');
   if (!keepView) flyTo(OVERVIEW.target, OVERVIEW.r, 0.95);
+  if (was && SFX) SFX.play('close');
 }
 function step(dir) {
   const list = activeList();
@@ -625,6 +661,7 @@ function setFilter(f) {
   if (focused && focused.cluster.id && allowed.indexOf(focused.cluster.id) < 0) closeCard(false);
   const counts = activeList().length;
   if (f !== 'all') toast(counts + '개의 별만 남겼습니다');
+  if (SFX) SFX.play('filter');
 }
 
 let toastT = 0;
@@ -643,6 +680,7 @@ $('#orbit').classList.toggle('on', orbitOn);
 $('#orbit').addEventListener('click', () => {
   orbitOn = !orbitOn;
   $('#orbit').classList.toggle('on', orbitOn);
+  if (SFX) SFX.play('tick');
 });
 document.querySelectorAll('.fb').forEach((b) => {
   b.addEventListener('click', () => setFilter(b.dataset.f));

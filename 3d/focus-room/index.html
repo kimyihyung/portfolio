@@ -23,6 +23,7 @@ body.break #vignette{background:radial-gradient(115% 100% at 50% 45%,rgba(0,0,0,
 #brand{pointer-events:auto}
 #brand h1{font-size:13px;letter-spacing:.32em;font-weight:600;color:#dfe9f5;text-transform:uppercase}
 #brand p{margin-top:6px;font-size:10.5px;letter-spacing:.14em;color:#7f93ad}
+#topright{display:flex;flex-direction:column;align-items:flex-end;gap:8px;pointer-events:none}
 #modes{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;pointer-events:auto}
 .chip{-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
   background:rgba(12,17,26,.5);border:1px solid rgba(160,190,230,.2);color:#a9bdd4;
@@ -32,6 +33,24 @@ body.break #vignette{background:radial-gradient(115% 100% at 50% 45%,rgba(0,0,0,
 .chip.on{background:rgba(120,190,255,.16);border-color:rgba(140,205,255,.65);color:#eaf6ff;
   box-shadow:0 0 22px rgba(90,170,255,.22)}
 #side{right:14px;bottom:calc(env(safe-area-inset-bottom) + 150px);display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+/* ── sound control ── */
+.snd{display:flex;align-items:center;gap:7px;pointer-events:auto}
+.sndbtn{display:inline-flex;align-items:center;gap:6px;font-family:inherit;font-size:11px;letter-spacing:.02em;
+  padding:7px 11px;border-radius:999px;cursor:pointer;color:#93a8c0;white-space:nowrap;
+  background:rgba(12,17,26,.55);border:1px solid rgba(160,190,230,.2);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);transition:all .25s}
+.sndbtn:hover{color:#eaf3ff;border-color:rgba(180,215,255,.45)}
+.snd.on .sndbtn{color:#eaf6ff;border-color:rgba(140,205,255,.6);background:rgba(120,190,255,.16);
+  box-shadow:0 0 22px rgba(90,170,255,.22)}
+.sndvol{-webkit-appearance:none;appearance:none;width:0;height:16px;opacity:0;background:transparent;cursor:pointer;
+  transition:width .32s ease,opacity .32s ease,color .2s;accent-color:#7dc0ff}
+.snd.on .sndvol{width:66px;opacity:1}
+.sndvol::-webkit-slider-runnable-track{height:3px;border-radius:2px;background:rgba(160,190,230,.28)}
+.sndvol::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;margin-top:-4.5px;border-radius:50%;background:#9fd2ff;box-shadow:0 0 10px rgba(120,195,255,.7)}
+.sndvol::-moz-range-track{height:3px;border-radius:2px;background:rgba(160,190,230,.28)}
+.sndvol::-moz-range-thumb{width:12px;height:12px;border:0;border-radius:50%;background:#9fd2ff}
+.snd.hint .sndbtn{animation:sndpulse 1.9s ease 3}
+@keyframes sndpulse{0%,100%{box-shadow:0 0 0 0 rgba(120,190,255,0)}50%{box-shadow:0 0 0 6px rgba(120,190,255,.16);border-color:rgba(160,215,255,.65)}}
 .sq{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:16px;line-height:1;cursor:pointer;
   background:rgba(12,17,26,.52);border:1px solid rgba(160,190,230,.2);color:#c3d6ec;font-family:inherit;
   -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);transition:all .25s}
@@ -89,6 +108,9 @@ body.break #fill{background:linear-gradient(90deg,#43d9b0,#a7f5dd)}
 html.m #clock{font-size:32px}
 html.m #hint{display:none}
 html.m #side{bottom:calc(env(safe-area-inset-bottom) + 162px)}
+html.m .sndbtn{padding:7px 9px;font-size:10.5px}
+html.m .snd .sndlbl{display:none}
+html.m .snd.on .sndvol{width:54px}
 html.m .pb{padding:10px 12px;font-size:11.5px}
 html.m #panel{padding:12px 13px 13px;border-radius:18px}
 html.m #brand h1{font-size:11px;letter-spacing:.24em}
@@ -104,10 +126,18 @@ html.m #brand p{display:none}
     <h1>Focus Room</h1>
     <p>3D 몰입 집중 스튜디오</p>
   </div>
-  <div id="modes">
-    <button class="chip on" data-mode="rain">비 오는 밤</button>
-    <button class="chip" data-mode="sunset">따뜻한 노을</button>
-    <button class="chip" data-mode="night">심야 별빛</button>
+  <div id="topright">
+    <div id="modes">
+      <button class="chip on" data-mode="rain">비 오는 밤</button>
+      <button class="chip" data-mode="sunset">따뜻한 노을</button>
+      <button class="chip" data-mode="night">심야 별빛</button>
+    </div>
+    <div class="snd" id="sndbox">
+      <button class="sndbtn" id="sound2" type="button" aria-pressed="true" aria-label="사운드 끄기" title="사운드 끄기">
+        <span class="sndico">🔊</span><span class="sndlbl">사운드 켜짐</span>
+      </button>
+      <input class="sndvol" id="vol" type="range" min="0" max="100" step="1" value="85" aria-label="볼륨" />
+    </div>
   </div>
 </header>
 
@@ -115,7 +145,7 @@ html.m #brand p{display:none}
   <button class="sq" id="zoomin" aria-label="확대">+</button>
   <button class="sq" id="zoomout" aria-label="축소">−</button>
   <button class="sq" id="reset" aria-label="시점 초기화">⌖</button>
-  <button class="sq" id="sound" aria-label="소리 켜기/끄기">🔊</button>
+  <button class="sq" id="sound" aria-label="소리 켜기/끄기" title="소리 켜기/끄기">🔊</button>
 </div>
 
 <div id="hint" class="ui">드래그로 360° 시점 회전 · 두 손가락으로 확대<br />램프를 탭하면 조명이 꺼지고, 창문을 탭하면 밖의 밤이 바뀝니다</div>
@@ -898,8 +928,10 @@ function toast(msg) {
 }
 
 /* ───────────────── Web Audio room sound ───────────────── */
+const SND_KEY = 'focus-room-sound';
 const Audio = {
-  ctx: null, master: null, rainGain: null, rainFilter: null, droneGain: null, enabled: true, ready: false,
+  ctx: null, master: null, rainGain: null, rainFilter: null, droneGain: null,
+  enabled: true, ready: false, volume: 0.85,
   init() {
     if (this.ctx) { this.resume(); return; }
     const AC = window.AudioContext || window.webkitAudioContext;
@@ -907,8 +939,12 @@ const Audio = {
     try {
       this.ctx = new AC();
       this.master = this.ctx.createGain();
-      this.master.gain.value = this.enabled ? 0.85 : 0;
+      this.master.gain.value = this.enabled ? this._level() : 0;
       this.master.connect(this.ctx.destination);
+      /* iOS Safari only starts playback after a buffer source runs inside a
+         real user gesture — a silent one-sample buffer is enough. */
+      this._silent();
+      this.resume();
 
       // room noise bed (rain / air)
       const len = this.ctx.sampleRate * 2.4;
@@ -953,13 +989,42 @@ const Audio = {
       window.__errors.push('audio: ' + err);
     }
   },
+  _level() {
+    return Math.max(0, Math.min(1, this.volume)) * 0.85;
+  },
+  _silent() {
+    if (!this.ctx) return;
+    try {
+      const b = this.ctx.createBuffer(1, 1, 22050);
+      const s = this.ctx.createBufferSource();
+      s.buffer = b;
+      s.connect(this.ctx.destination);
+      s.start(0);
+    } catch (e) { /* ignore */ }
+  },
   resume() {
-    if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+    const ctx = this.ctx;
+    if (!ctx) return;
+    if (ctx.state !== 'running') {
+      try {
+        const p = ctx.resume();
+        if (p && p.catch) p.catch(() => {});
+      } catch (e) { /* ignore */ }
+      this._silent();
+    }
+  },
+  setVolume(v) {
+    this.volume = Math.max(0, Math.min(1, v));
+    if (this.master && this.ctx && this.enabled) {
+      const now = this.ctx.currentTime;
+      this.master.gain.cancelScheduledValues(now);
+      this.master.gain.linearRampToValueAtTime(this._level(), now + 0.15);
+    }
   },
   setMode(m, instant) {
     if (!this.ready) return;
     const now = this.ctx.currentTime;
-    const rainTarget = m === 'rain' ? 0.20 : m === 'night' ? 0.035 : 0.014;
+    const rainTarget = m === 'rain' ? 0.24 : m === 'night' ? 0.04 : 0.016;
     const droneTarget = m === 'sunset' ? 0.16 : m === 'night' ? 0.12 : 0.06;
     const t = instant ? 0.01 : 1.6;
     this.rainGain.gain.cancelScheduledValues(now);
@@ -1008,7 +1073,7 @@ const Audio = {
     if (this.master && this.ctx) {
       const now = this.ctx.currentTime;
       this.master.gain.cancelScheduledValues(now);
-      this.master.gain.linearRampToValueAtTime(v ? 0.85 : 0.0, now + 0.35);
+      this.master.gain.linearRampToValueAtTime(v ? this._level() : 0.0, now + 0.35);
     }
   }
 };
@@ -1233,13 +1298,42 @@ $('#reset').addEventListener('click', () => {
   rig.az = 0.05; rig.pol = 1.21; rig.r = R_HOME; rig.vAz = 0; rig.vPol = 0;
   toast('시점을 처음 자리로 돌렸습니다');
 });
-$('#sound').addEventListener('click', () => {
+$('#sound').addEventListener('click', toggleSound);
+$('#sound2').addEventListener('click', toggleSound);
+$('#vol').addEventListener('input', (e) => {
+  Audio.init();
+  Audio.setVolume(parseFloat(e.target.value) / 100);
+  try { localStorage.setItem(SND_KEY + '-vol', String(Audio.volume)); } catch (err) {}
+});
+$('#vol').addEventListener('pointerdown', (e) => e.stopPropagation());
+function toggleSound() {
   Audio.init();
   Audio.setEnabled(!Audio.enabled);
-  $('#sound').textContent = Audio.enabled ? '🔊' : '🔇';
-  $('#sound').style.opacity = Audio.enabled ? '1' : '.55';
-  toast(Audio.enabled ? '방의 소리를 켰습니다' : '소리를 껐습니다');
-});
+  try { localStorage.setItem(SND_KEY, Audio.enabled ? '1' : '0'); } catch (err) {}
+  syncSoundUI();
+  toast(Audio.enabled ? '방의 소리를 켰습니다 · 볼륨은 상단 슬라이더로' : '소리를 껐습니다');
+}
+function syncSoundUI() {
+  const box = $('#sndbox');
+  const btn = $('#sound2');
+  if (box) box.classList.toggle('on', Audio.enabled);
+  if (btn) {
+    const ico = btn.querySelector('.sndico');
+    const lbl = btn.querySelector('.sndlbl');
+    btn.setAttribute('aria-pressed', Audio.enabled ? 'true' : 'false');
+    btn.setAttribute('aria-label', Audio.enabled ? '사운드 끄기' : '사운드 켜기');
+    btn.title = Audio.enabled ? '사운드 끄기' : '사운드 켜기';
+    if (ico) ico.textContent = Audio.enabled ? '🔊' : '🔇';
+    if (lbl) lbl.textContent = Audio.enabled ? '사운드 켜짐' : '사운드';
+  }
+  const range = $('#vol');
+  if (range) range.value = String(Math.round(Audio.volume * 100));
+  const sq = $('#sound');
+  if (sq) {
+    sq.textContent = Audio.enabled ? '🔊' : '🔇';
+    sq.style.opacity = Audio.enabled ? '1' : '.55';
+  }
+}
 document.querySelectorAll('.chip').forEach((b) => {
   b.addEventListener('click', () => { Audio.init(); setMode(b.dataset.mode, true); });
 });
@@ -1251,6 +1345,24 @@ $('#toggle').addEventListener('click', () => {
 $('#resetc').addEventListener('click', resetTimer);
 document.querySelectorAll('.db').forEach((b) => {
   b.addEventListener('click', () => { Audio.init(); setDuration(Number(b.dataset.dur)); });
+});
+/* remember the listener's own sound choice + level */
+try {
+  const s = localStorage.getItem(SND_KEY);
+  if (s !== null) Audio.enabled = s !== '0';
+  const v = parseFloat(localStorage.getItem(SND_KEY + '-vol'));
+  if (!isNaN(v)) Audio.volume = Math.max(0, Math.min(1, v));
+} catch (e) {}
+syncSoundUI();
+/* any first real gesture may unlock audio — iOS needs it inside the event */
+['pointerdown', 'touchstart', 'keydown'].forEach((ev) => {
+  document.addEventListener(ev, () => {
+    if (Audio.ctx) Audio.resume();
+    else if (Audio.enabled) Audio.init();
+  }, { capture: true, passive: true });
+});
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && Audio.enabled) Audio.resume();
 });
 window.addEventListener('keydown', (e) => {
   if (e.code === 'Space') { e.preventDefault(); timer.running ? pauseTimer() : startTimer(); }

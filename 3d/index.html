@@ -21,6 +21,25 @@ html,body{height:100%;overflow:hidden;background:#04070e;color:#e9f1fb;
 #brand p{margin-top:7px;font-size:10.5px;letter-spacing:.12em;color:#7488a6;line-height:1.6}
 #count{font-size:10px;letter-spacing:.18em;color:#6d81a0;border:1px solid rgba(140,175,225,.2);
   border-radius:999px;padding:7px 12px;background:rgba(10,16,26,.5);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+#topright{display:flex;flex-direction:column;align-items:flex-end;gap:8px;pointer-events:none}
+/* ── sound control ── */
+.snd{display:flex;align-items:center;gap:7px;pointer-events:auto}
+.sndbtn{display:inline-flex;align-items:center;gap:6px;font-family:inherit;font-size:11px;letter-spacing:.02em;
+  padding:7px 11px;border-radius:999px;cursor:pointer;color:#8ea3c0;white-space:nowrap;
+  background:rgba(10,16,26,.55);border:1px solid rgba(140,175,225,.2);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);transition:all .25s}
+.sndbtn:hover{color:#eaf3ff;border-color:rgba(150,200,255,.45)}
+.snd.on .sndbtn{color:#eaf3ff;border-color:rgba(140,190,255,.55);background:rgba(120,170,255,.16);
+  box-shadow:0 0 22px rgba(90,170,255,.22)}
+.sndvol{-webkit-appearance:none;appearance:none;width:0;height:16px;opacity:0;background:transparent;cursor:pointer;
+  transition:width .32s ease,opacity .32s ease;accent-color:#7fb0ff}
+.snd.on .sndvol{width:66px;opacity:1}
+.sndvol::-webkit-slider-runnable-track{height:3px;border-radius:2px;background:rgba(150,185,225,.28)}
+.sndvol::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;margin-top:-4.5px;border-radius:50%;background:#9fd2ff;box-shadow:0 0 10px rgba(120,195,255,.7)}
+.sndvol::-moz-range-track{height:3px;border-radius:2px;background:rgba(150,185,225,.28)}
+.sndvol::-moz-range-thumb{width:12px;height:12px;border:0;border-radius:50%;background:#9fd2ff}
+.snd.hint .sndbtn{animation:sndpulse 1.9s ease 3}
+@keyframes sndpulse{0%,100%{box-shadow:0 0 0 0 rgba(120,190,255,0)}50%{box-shadow:0 0 0 6px rgba(120,190,255,.16);border-color:rgba(160,215,255,.65)}}
 #hud{left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 18px);
   width:min(430px,calc(100% - 26px));text-align:center;pointer-events:none}
 #selName{font-size:19px;font-weight:700;letter-spacing:-.01em;color:#f5f9ff}
@@ -84,6 +103,10 @@ html.m #selName{font-size:17px}
 html.m #selDesc{font-size:11px}
 html.m #hud{bottom:calc(env(safe-area-inset-bottom) + 12px)}
 html.m .arrow{width:38px;height:38px;font-size:15px}
+html.m .sndbtn{padding:7px 9px;font-size:10.5px}
+html.m .snd .sndlbl{display:none}
+html.m .snd.on .sndvol{width:54px}
+html.m #count{padding:6px 10px}
 </style>
 </head>
 <body>
@@ -94,7 +117,15 @@ html.m .arrow{width:38px;height:38px;font-size:15px}
     <h1>Portal Launcher</h1>
     <p>김의형의 웹 · 3D 작업 8점을 한 공간에</p>
   </div>
-  <div id="count">8 PORTALS</div>
+  <div id="topright">
+    <div id="count">8 PORTALS</div>
+    <div class="snd" data-snd>
+      <button class="sndbtn" type="button" aria-pressed="false" aria-label="사운드 켜기" title="사운드 켜기">
+        <span class="sndico">🔇</span><span class="sndlbl">사운드</span>
+      </button>
+      <input class="sndvol" type="range" min="0" max="100" step="1" value="60" aria-label="볼륨" />
+    </div>
+  </div>
 </header>
 
 <div id="nav">
@@ -152,6 +183,7 @@ html.m .arrow{width:38px;height:38px;font-size:15px}
   }, 9000);
 </script>
 
+<script src="./sound.js"></script>
 <script type="importmap">
 { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js" } }
 </script>
@@ -163,6 +195,12 @@ const $ = (s) => document.querySelector(s);
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const lerp = (a, b, t) => a + (b - a) * t;
 const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+const SFX = window.PortalSound || null;
+if (SFX) {
+  SFX.boot('portal');
+  SFX.ui($('[data-snd]'));
+  SFX.hintPulse();
+}
 
 function fail(msg) {
   window.__errors.push(msg);
@@ -574,12 +612,14 @@ function absUrl(u) {
 
 function goTo(i) {
   const idx = ((i % N) + N) % N;
+  const dir = idx === selected ? 0 : (idx > selected ? 1 : -1);
   let target = -idx * STEP;
   while (target - rot > Math.PI) target -= Math.PI * 2;
   while (target - rot < -Math.PI) target += Math.PI * 2;
   targetRot = target;
   selected = idx;
   updateHud();
+  if (dir && SFX) SFX.play('move', { dir });
 }
 
 const dotsEl = $('#dots');
@@ -617,8 +657,13 @@ function openModal(i) {
   $('#mUrl').textContent = absUrl(it.url);
   $('#mOpen').href = it.url;
   modal.classList.add('on');
+  if (SFX) SFX.play('open');
 }
-function closeModal() { modal.classList.remove('on'); }
+function closeModal() {
+  if (!modal.classList.contains('on')) return;
+  modal.classList.remove('on');
+  if (SFX) SFX.play('close');
+}
 $('#mClose').addEventListener('click', closeModal);
 modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 $('#openBtn').addEventListener('click', () => openModal(selected));
