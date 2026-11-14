@@ -661,7 +661,7 @@ function sampleSlide(src, lang) {
     grad: src.grad,
     img: null,
     imgName: "",
-    scrim: 60,
+    scrim: 68,
     zoom: 100,
     py: 50,
     grain: true,
@@ -785,6 +785,11 @@ function drawLine(ctx, lineRuns, x, y, size, opts) {
   ctx.scale(scaleX, 1);
   setFont(ctx, opts.family, opts.weight || 800, size);
   setTracking(ctx, opts.tracking || 0);
+  if (opts.shadow) {
+    ctx.shadowColor = "rgba(0,0,0,0.42)";
+    ctx.shadowBlur = size * (opts.shadow === "soft" ? 0.16 : 0.24);
+    ctx.shadowOffsetY = size * 0.035;
+  }
   let cx = 0;
   for (const r of lineRuns) {
     ctx.fillStyle = r.hl ? opts.accent : opts.color;
@@ -934,7 +939,8 @@ function drawTextBlock(ctx, block, x, topY, opts) {
       scaleX: scaleX,
       accent: o.accent || "#fff",
       color: o.color || "#fff",
-      weight: block.weight
+      weight: block.weight,
+      shadow: o.shadow
     });
     y += block.lh;
   }
@@ -978,11 +984,12 @@ function drawBadge(ctx, text, x, baseline, size, accent, align) {
 function layoutMagazine(ctx, s, W, H) {
   const pad = W * 0.072;
   const sc = (s.scrim == null ? 60 : s.scrim) / 100;
-  const gTop = H * 0.30;
+  const gTop = H * 0.28;
   const lg = ctx.createLinearGradient(0, gTop, 0, H);
   lg.addColorStop(0, "rgba(0,0,0,0)");
-  lg.addColorStop(0.42, "rgba(0,0,0," + (0.10 + 0.40 * sc).toFixed(3) + ")");
-  lg.addColorStop(1, "rgba(0,0,0," + (0.60 + 0.36 * sc).toFixed(3) + ")");
+  lg.addColorStop(0.40, "rgba(0,0,0," + (0.12 + 0.44 * sc).toFixed(3) + ")");
+  lg.addColorStop(0.72, "rgba(0,0,0," + (0.42 + 0.40 * sc).toFixed(3) + ")");
+  lg.addColorStop(1, "rgba(0,0,0," + (0.72 + 0.28 * sc).toFixed(3) + ")");
   ctx.fillStyle = lg;
   ctx.fillRect(0, gTop, W, H - gTop);
 
@@ -997,11 +1004,11 @@ function layoutMagazine(ctx, s, W, H) {
   if (s.sub) {
     const sub = makeBlock(ctx, s.sub, { size: W * 0.0295, weight: 500, maxW: W - pad * 2.1, lineGap: 1.48 });
     cursor -= blockHeight(sub);
-    drawTextBlock(ctx, sub, pad, cursor, { color: "rgba(255,255,255,0.86)", accent: state.accent });
+    drawTextBlock(ctx, sub, pad, cursor, { color: "rgba(255,255,255,0.88)", accent: state.accent, shadow: "soft" });
   }
   const head = fitBlock(ctx, s.headline || " ", { start: W * 0.098, min: W * 0.050, maxW: W - pad * 2, maxH: H * 0.315, maxLines: 3 });
   const headTop = cursor - pad * 0.34 - blockHeight(head);
-  drawTextBlock(ctx, head, pad, headTop, { color: "#ffffff", accent: state.accent, scaleX: head.scaleX });
+  drawTextBlock(ctx, head, pad, headTop, { color: "#ffffff", accent: state.accent, scaleX: head.scaleX, shadow: true });
 
   if (s.badge) drawBadge(ctx, s.badge, pad, headTop - pad * 0.42, W * 0.0225, state.accent);
 
@@ -1033,7 +1040,7 @@ function layoutQuote(ctx, s, W, H) {
 
   const headTop = H * 0.175;
   const head = fitBlock(ctx, s.headline || " ", { start: W * 0.104, min: W * 0.052, maxW: W - pad * 2, maxH: H * 0.40, maxLines: 5 });
-  const headBottom = drawTextBlock(ctx, head, pad, headTop, { color: "#ffffff", accent: state.accent, scaleX: head.scaleX });
+  const headBottom = drawTextBlock(ctx, head, pad, headTop, { color: "#ffffff", accent: state.accent, scaleX: head.scaleX, shadow: true });
 
   const ruleY = headBottom + pad * 0.46;
   ctx.fillStyle = state.accent;
@@ -1043,7 +1050,7 @@ function layoutQuote(ctx, s, W, H) {
     const sub = makeBlock(ctx, s.sub, { size: W * 0.0295, weight: 500, maxW: W - pad * 2.1, lineGap: 1.5 });
     const subTop = ruleY + pad * 0.42;
     if (subTop + blockHeight(sub) < H - pad) {
-      drawTextBlock(ctx, sub, pad, subTop, { color: "rgba(255,255,255,0.86)", accent: state.accent });
+      drawTextBlock(ctx, sub, pad, subTop, { color: "rgba(255,255,255,0.88)", accent: state.accent, shadow: "soft" });
     }
   }
   if (s.source) {
@@ -1313,6 +1320,7 @@ function applyLang(lang) {
   $$("[data-layout]").forEach(b => {
     const k = "layout" + b.dataset.layout.charAt(0).toUpperCase() + b.dataset.layout.slice(1);
     b.title = d[k] || k;
+    b.setAttribute("aria-label", b.title);
   });
   $$("#accents button").forEach(b => {
     const a = ACCENTS.find(x => x.hex.toLowerCase() === b.dataset.accent.toLowerCase());
@@ -1471,6 +1479,7 @@ function buildPresets() {
     b.type = "button";
     b.dataset.layout = k;
     b.innerHTML = PRE_ICON[k] + '<em data-i18n="layout' + k.charAt(0).toUpperCase() + k.slice(1) + '"></em>';
+    b.setAttribute("aria-label", I18N[state.lang]["layout" + k.charAt(0).toUpperCase() + k.slice(1)] || k);
     b.addEventListener("click", () => { S().layout = k; syncFields(); schedule(); });
     wrap.appendChild(b);
   });
