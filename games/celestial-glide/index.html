@@ -1,0 +1,899 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="dark" />
+<meta name="theme-color" content="#04060f" />
+<title>Celestial Glide — a 3D Three.js dodge racer in your browser</title>
+<meta name="description" content="Thread glowing gates through a shader-built nebula, graze crystals for combo, burn boost. A free 3D browser game written in Three.js — no install, no account, nothing uploaded." />
+<meta name="keywords" content="three.js game, webgl game, 3d browser game, free online game, arcade dodge game, javascript game, procedural shader, play in browser" />
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/games/celestial-glide/" />
+<meta property="og:site_name" content="Kim Yihyung" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Celestial Glide — a 3D Three.js dodge racer" />
+<meta property="og:description" content="Thread glowing gates through a shader-built nebula, graze crystals for combo, burn boost. Free, in-browser, nothing to install." />
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/games/celestial-glide/" />
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/celestial-glide.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:locale:alternate" content="ko_KR" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Celestial Glide — a 3D Three.js dodge racer" />
+<meta name="twitter:description" content="Thread glowing gates through a shader-built nebula. Free 3D browser game, no install." />
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/celestial-glide.jpg" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2304060f'/%3E%3Ccircle cx='16' cy='16' r='7.5' fill='none' stroke='%237cd6ff' stroke-width='2.2'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%23ffcf7a'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"VideoGame","name":"Celestial Glide","alternateName":"셀레스티얼 글라이드","url":"https://kimyihyung.github.io/portfolio/games/celestial-glide/","description":"A 3D endless dodge racer built with Three.js: fly a light craft through a procedurally shaded nebula, thread glowing gates, graze crystals for combo points and burn boost charges. Free to play in the browser with mouse, keyboard or touch.","genre":["Arcade","Action"],"gamePlatform":["Web browser","Mobile web"],"applicationCategory":"GameApplication","operatingSystem":"Any (WebGL browser)","playMode":"SinglePlayer","inLanguage":["en","ko"],"author":{"@type":"Person","name":"Kim Yihyung","url":"https://kimyihyung.github.io/portfolio/"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD","availability":"https://schema.org/InStock"}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is Celestial Glide free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. The whole game is a single web page: no account, no install, no in-game purchases and no ads inside the canvas. Open it and fly."}},{"@type":"Question","name":"Does it work on a phone?","acceptedAnswer":{"@type":"Answer","text":"Yes. Drag anywhere on the canvas to steer; the ship follows your thumb with a relative offset so your finger never covers it. The layout is built for a 390x844 viewport and up."}},{"@type":"Question","name":"Where is my high score saved?","acceptedAnswer":{"@type":"Answer","text":"Only in this browser, under the localStorage key celestial-glide.hs. Nothing is sent to a server, and clearing site data clears the record."}},{"@type":"Question","name":"Do I need a powerful graphics card?","acceptedAnswer":{"@type":"Answer","text":"No. The scene is a few dozen meshes and one shader sky. If a device struggles, the game lowers its render resolution automatically and simplifies the nebula shader."}},{"@type":"Question","name":"What is it built with?","acceptedAnswer":{"@type":"Answer","text":"Three.js r169 for rendering, hand-written GLSL for the nebula, crystals, shield and particles, and the Web Audio API for every sound — there are no image or audio files in the build."}},{"@type":"Question","name":"Can I turn the sound off?","acceptedAnswer":{"@type":"Answer","text":"Yes. Use the sound button in the top bar or press M. The choice is kept in localStorage for the next visit."}}]}
+</script>
+<style>
+:root{
+  --bg:#04060f; --bg2:#070b16; --ink:#eaf2ff; --mut:#93a7c4; --dim:#6a7e9c;
+  --line:rgba(140,180,240,.15); --line2:rgba(140,180,240,.3);
+  --cy:#7cd6ff; --vi:#b48cff; --gold:#ffcf7a; --hot:#ff7a9c;
+  --glass:rgba(10,16,28,.6); --glass2:rgba(14,21,36,.86);
+  --font:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI","Malgun Gothic","Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+html,body{margin:0;padding:0;max-width:100%;overflow-x:hidden;background:var(--bg)}
+body{color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+button{font-family:inherit}
+a{color:inherit}
+
+/* ══════════════ stage ══════════════ */
+#stage{position:relative;width:100%;height:100vh;height:100svh;min-height:520px;overflow:hidden;isolation:isolate;background:#04060f}
+#scene{position:absolute;inset:0;display:block;width:100%;height:100%;touch-action:auto;cursor:crosshair}
+body.playing #scene{touch-action:none;cursor:none}
+#stage::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:radial-gradient(125% 95% at 50% 44%,rgba(4,6,15,0) 44%,rgba(3,5,12,.62) 100%)}
+#flash{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;
+  background:radial-gradient(circle at 50% 62%,rgba(255,255,255,.92),rgba(255,120,160,.35) 38%,rgba(255,120,160,0) 70%);
+  transition:opacity .18s ease-out}
+
+/* ══════════════ top bar ══════════════ */
+#top{position:absolute;top:0;left:0;right:0;z-index:9;display:flex;align-items:flex-start;justify-content:space-between;
+  gap:10px;padding:calc(env(safe-area-inset-top) + 14px) 16px 0}
+#brand{display:flex;align-items:center;gap:10px;min-width:0}
+#brand .mark{width:34px;height:34px;flex:none;border-radius:11px;display:grid;place-items:center;
+  font-size:12px;font-weight:800;letter-spacing:.06em;color:#eaf6ff;
+  background:linear-gradient(150deg,rgba(124,214,255,.34),rgba(180,140,255,.26));
+  border:1px solid rgba(150,200,255,.4);box-shadow:0 0 24px rgba(90,160,255,.25),inset 0 1px 0 rgba(255,255,255,.16)}
+#brand h1{font-size:12px;letter-spacing:.26em;font-weight:600;text-transform:uppercase;color:#dbe8fa;margin:0;white-space:nowrap}
+#brand p{margin:3px 0 0;font-size:10px;letter-spacing:.08em;color:#7d90ad;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#topR{display:flex;align-items:center;gap:6px;flex:none}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:7px 11px;border-radius:999px;
+  background:var(--glass);border:1px solid var(--line);color:#a7bcd8;font-size:11px;font-weight:600;
+  letter-spacing:.04em;cursor:pointer;transition:all .22s;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);white-space:nowrap}
+.pill:hover{color:#eaf2ff;border-color:var(--line2)}
+.pill.on{color:#eaf2ff;border-color:rgba(124,214,255,.45);background:rgba(90,160,255,.16)}
+#lang{display:flex;gap:2px;padding:3px;border-radius:999px;background:var(--glass);border:1px solid var(--line);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+#lang button{border:0;background:transparent;color:#7f93b0;font-size:10.5px;font-weight:700;letter-spacing:.08em;
+  padding:6px 9px;border-radius:999px;cursor:pointer;transition:all .2s}
+#lang button.on{background:rgba(124,214,255,.2);color:#eaf6ff;box-shadow:inset 0 0 0 1px rgba(140,200,255,.35)}
+#btnPause{padding:7px 10px;font-size:11px}
+#btnPause:disabled{opacity:.4;cursor:default}
+#btnPause:disabled:hover{color:#a7bcd8;border-color:var(--line)}
+
+/* ══════════════ HUD ══════════════ */
+#hud{position:absolute;inset:0;z-index:5;pointer-events:none;font-variant-numeric:tabular-nums;transition:opacity .45s}
+body:not(.playing) #hud{opacity:0}
+.hudblk{position:absolute;display:flex;flex-direction:column;gap:5px}
+#hudL{top:calc(env(safe-area-inset-top) + 68px);left:16px}
+#hudR{top:calc(env(safe-area-inset-top) + 68px);right:16px;align-items:flex-end}
+.lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#7387a5}
+#hudScore{font-size:clamp(30px,5vw,44px);font-weight:800;letter-spacing:-.02em;line-height:1;color:#f4f9ff;
+  text-shadow:0 0 26px rgba(124,214,255,.4)}
+#hudScore small{font-size:.4em;font-weight:700;color:var(--cy);margin-left:6px;letter-spacing:.02em}
+#hudBest{font-size:12px;font-weight:600;color:#9fb4d0}
+.row{display:flex;align-items:center;gap:7px}
+.hudmini{font-size:11.5px;font-weight:700;color:#cfe0f5;letter-spacing:.04em}
+#hudMult{font-size:15px;font-weight:800;color:var(--cy);transition:color .2s,text-shadow .2s}
+#hudMult.hot{color:var(--gold);text-shadow:0 0 18px rgba(255,207,122,.6)}
+#comboWrap{position:absolute;left:16px;right:16px;bottom:calc(env(safe-area-inset-bottom) + 74px);
+  height:2px;background:rgba(140,180,240,.12);border-radius:2px;overflow:hidden;max-width:340px}
+#comboBar{height:100%;width:0;background:linear-gradient(90deg,var(--cy),var(--vi));transition:width .12s linear}
+#comboWrap.hot #comboBar{background:linear-gradient(90deg,var(--gold),var(--hot))}
+#hudPips{position:absolute;left:16px;bottom:calc(env(safe-area-inset-bottom) + 22px);display:flex;gap:18px}
+.pipgrp{display:flex;flex-direction:column;gap:5px}
+.pips{display:flex;gap:4px}
+.pips i{width:16px;height:5px;border-radius:3px;background:rgba(140,180,240,.16);transition:all .25s}
+#hudShield i.on{background:var(--cy);box-shadow:0 0 12px rgba(124,214,255,.7)}
+#hudBoost i.on{background:var(--gold);box-shadow:0 0 12px rgba(255,207,122,.7)}
+#hint{position:absolute;right:16px;bottom:calc(env(safe-area-inset-bottom) + 22px);text-align:right;
+  font-size:10px;line-height:1.8;letter-spacing:.04em;color:#6d819f}
+#hint b{color:#a8c4e2;font-weight:600}
+#hint .kb{display:inline-block;min-width:16px;padding:1px 4px;margin:0 1px;border-radius:4px;font-size:9px;
+  background:rgba(255,255,255,.07);border:1px solid var(--line);color:#c3d6ee;font-family:var(--mono)}
+#btnBoost{position:absolute;right:14px;bottom:calc(env(safe-area-inset-bottom) + 58px);z-index:7;display:none;
+  width:74px;height:74px;border-radius:50%;border:1px solid rgba(255,207,122,.4);color:var(--gold);
+  background:radial-gradient(circle at 40% 35%,rgba(255,207,122,.22),rgba(10,16,28,.7));
+  font-size:10.5px;font-weight:800;letter-spacing:.1em;pointer-events:auto;backdrop-filter:blur(10px)}
+#btnBoost:active{transform:scale(.95)}
+
+/* popups + toast */
+#popups{position:absolute;left:0;right:0;top:52%;z-index:6;display:flex;flex-direction:column;align-items:center;
+  gap:2px;pointer-events:none}
+.pop{font-size:15px;font-weight:800;letter-spacing:.02em;color:#dcefff;text-shadow:0 2px 20px rgba(0,0,0,.8);
+  animation:pop 1s cubic-bezier(.2,.8,.3,1) forwards}
+.pop.gate{color:#bfe9ff}.pop.gold{color:var(--gold)}.pop.near{color:#ffb3cf;font-size:13px}
+.pop.mote{color:#ffe0a3;font-size:13px}.pop.hit{color:#ff8fa8}.pop.boost{color:var(--gold);font-size:13px}
+@keyframes pop{0%{opacity:0;transform:translateY(8px) scale(.94)}18%{opacity:1;transform:translateY(0) scale(1)}
+  70%{opacity:1}100%{opacity:0;transform:translateY(-26px) scale(1)}}
+#toast{position:absolute;left:50%;top:calc(env(safe-area-inset-top) + 112px);transform:translate(-50%,-6px);
+  z-index:7;padding:8px 16px;border-radius:999px;background:rgba(8,14,26,.82);border:1px solid var(--line2);
+  font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#dcecff;
+  opacity:0;pointer-events:none;transition:all .3s;white-space:nowrap;backdrop-filter:blur(14px)}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* ══════════════ overlays ══════════════ */
+.ov{position:absolute;inset:0;z-index:8;display:grid;place-items:center;padding:18px;
+  background:radial-gradient(125% 105% at 50% 45%,rgba(4,6,15,.26),rgba(3,5,12,.8));
+  backdrop-filter:blur(2.5px);-webkit-backdrop-filter:blur(2.5px);
+  opacity:0;pointer-events:none;transition:opacity .38s ease}
+.ov.on{opacity:1}
+.ov.on .panel{pointer-events:auto}
+.panel{width:min(600px,100%);max-height:calc(100svh - 36px);overflow-y:auto;padding:30px 28px;pointer-events:none;
+  border-radius:22px;text-align:center;
+  background:linear-gradient(165deg,rgba(14,22,38,.95),rgba(7,11,21,.97));
+  border:1px solid rgba(140,190,255,.22);
+  box-shadow:0 40px 110px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.07)}
+.panel .eyebrow{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--cy);margin:0 0 12px}
+.panel h2{margin:0;font-size:clamp(28px,5vw,44px);font-weight:800;letter-spacing:-.02em;line-height:1.05;
+  background:linear-gradient(120deg,#ffffff,#a8e2ff 45%,#c3a8ff);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.panel .tag{margin:12px 0 0;font-size:13.5px;line-height:1.7;color:#a6bad6}
+.panel .ctrl3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:20px 0 0;text-align:left}
+.panel .ctrl3 div{padding:11px 12px;border-radius:12px;background:rgba(255,255,255,.035);border:1px solid var(--line)}
+.panel .ctrl3 b{display:block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--cy);margin-bottom:5px}
+.panel .ctrl3 span{font-size:11.5px;line-height:1.5;color:#9db0c9}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;margin-top:22px;padding:15px 34px;
+  border-radius:14px;border:1px solid transparent;font-size:14px;font-weight:800;letter-spacing:.04em;
+  cursor:pointer;transition:transform .16s,filter .2s;width:100%;max-width:340px}
+.btn.primary{background:linear-gradient(160deg,#9ae9ff,#5aa8ff);color:#04121f;box-shadow:0 16px 40px rgba(70,150,255,.36)}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.primary:active{transform:scale(.985)}
+.btn.ghost{background:rgba(255,255,255,.05);border-color:var(--line2);color:#dbe9fb}
+.btn.ghost:hover{background:rgba(130,190,255,.14)}
+.btns{display:flex;flex-direction:column;align-items:center;gap:9px}
+.meta{display:flex;justify-content:center;gap:18px;margin-top:18px;font-size:11px;color:#7387a5;letter-spacing:.06em}
+.meta b{color:#cfe3f8;font-weight:700}
+.keys{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;margin-top:16px}
+.keys span{font-size:9.5px;letter-spacing:.1em;padding:5px 9px;border-radius:6px;color:#9fb4d0;
+  background:rgba(255,255,255,.05);border:1px solid var(--line);text-transform:uppercase}
+#ovOver .panel h2{font-size:clamp(34px,6vw,54px)}
+#ovOver .scoreline{font-size:clamp(44px,9vw,68px);font-weight:800;letter-spacing:-.03em;line-height:1;
+  margin:8px 0 2px;color:#fff;font-variant-numeric:tabular-nums}
+#recordBadge{display:none;margin:6px auto 0;width:max-content;padding:5px 12px;border-radius:999px;
+  font-size:10px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#0a1206;
+  background:linear-gradient(120deg,#ffe6a8,#ffc45e)}
+#recordBadge.on{display:block;animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.05);box-shadow:0 0 26px rgba(255,196,94,.5)}}
+.statgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:20px 0 0}
+.statgrid div{padding:11px 8px;border-radius:11px;background:rgba(255,255,255,.035);border:1px solid var(--line)}
+.statgrid b{display:block;font-size:15px;font-weight:800;color:#e9f3ff;font-variant-numeric:tabular-nums}
+.statgrid span{display:block;margin-top:3px;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#7387a5}
+.guideLink{display:inline-block;margin-top:14px;font-size:11.5px;color:#8ea3c0;text-decoration:none;
+  border-bottom:1px solid rgba(140,180,240,.3);padding-bottom:2px}
+.guideLink:hover{color:#dbeeff}
+
+/* loader + fallback */
+#loader{position:absolute;inset:0;z-index:9;display:grid;place-content:center;justify-items:center;gap:14px;
+  background:radial-gradient(120% 120% at 50% 40%,#0a1224,#03050c 72%);transition:opacity .7s;text-align:center;padding:20px}
+#loader.hidden{opacity:0;pointer-events:none}
+#loader .ring{width:32px;height:32px;border-radius:50%;border:2px solid rgba(255,255,255,.12);border-top-color:var(--cy);
+  animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#loader p{margin:0;font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:#7188a8}
+#fallback{position:absolute;inset:0;z-index:10;display:none;place-content:center;justify-items:center;gap:12px;
+  padding:26px;text-align:center;background:radial-gradient(120% 120% at 50% 40%,#0a1224,#03050c 72%)}
+#fallback.on{display:grid}
+#fallback h2{margin:0;font-size:20px}
+#fallback p{margin:0;max-width:400px;font-size:13px;line-height:1.8;color:#8ea3c0}
+#fallback button{margin-top:8px;padding:12px 24px;border-radius:11px;border:0;cursor:pointer;font-weight:700;
+  font-size:13px;background:linear-gradient(160deg,#9ae9ff,#5aa8ff);color:#04121f}
+#scrollcue{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom) + 4px);transform:translateX(-50%);
+  z-index:6;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#5e7391;text-decoration:none;
+  pointer-events:auto;padding:6px 12px}
+#scrollcue:hover{color:#a8c4e2}
+
+/* ══════════════ long-form content ══════════════ */
+main{position:relative;z-index:11;background:linear-gradient(180deg,#04060f,#050912 42%,#04060f);border-top:1px solid var(--line)}
+.wrap{width:100%;max-width:1000px;margin:0 auto;padding:0 20px}
+.sec{padding:56px 0;border-bottom:1px solid var(--line)}
+.sec:last-child{border-bottom:0}
+.eyebrow{display:flex;align-items:center;gap:8px;margin:0 0 12px;font-size:10px;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--cy);font-weight:700}
+.eyebrow::before{content:"";width:18px;height:1px;background:currentColor;opacity:.6}
+.sec h2{margin:0 0 12px;font-size:clamp(21px,3.2vw,29px);font-weight:800;letter-spacing:-.015em;line-height:1.25;color:#f2f8ff}
+.sec .lead{margin:0 0 24px;font-size:14px;line-height:1.85;color:#a2b6d1;max-width:74ch}
+.sec p{margin:0 0 12px;font-size:13.5px;line-height:1.85;color:#9db0c9;max-width:76ch}
+.sec p b,.sec li b{color:#dbeaf9;font-weight:700}
+.sec a{color:var(--cy);text-decoration:none;border-bottom:1px solid rgba(124,214,255,.3)}
+.sec a:hover{color:#bfeaff}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0 0}
+.card{border:1px solid var(--line);border-radius:14px;padding:18px 16px;background:rgba(255,255,255,.022);min-width:0}
+.card:hover{border-color:var(--line2);background:rgba(255,255,255,.035)}
+.card>b{display:block;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--cy);margin-bottom:8px}
+.card p{margin:0;font-size:12.5px;line-height:1.75;color:#9db0c9}
+.card p b{color:#d7e8f8;font-weight:700}
+.tbl{width:100%;border-collapse:collapse;table-layout:fixed;margin:20px 0 0;font-size:13px}
+.tbl th{text-align:left;padding:10px 8px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+  color:#7b8fa9;border-bottom:1px solid var(--line2);font-weight:700}
+.tbl td{padding:11px 8px;border-bottom:1px solid var(--line);color:#a7bad4;vertical-align:top;line-height:1.6;overflow-wrap:anywhere}
+.tbl td:first-child{color:#e6f1fd;font-weight:600}
+.tbl td:last-child,.tbl th:last-child{text-align:right;font-variant-numeric:tabular-nums;color:#cfe6fa;width:34%}
+.steps{counter-reset:s;margin:22px 0 0;padding:0;list-style:none;display:grid;gap:14px}
+.steps li{counter-increment:s;position:relative;padding:0 0 0 44px;min-width:0}
+.steps li::before{content:counter(s,decimal-leading-zero);position:absolute;left:0;top:-2px;font-size:11px;
+  font-weight:800;letter-spacing:.1em;color:var(--cy);border:1px solid var(--line);border-radius:8px;
+  padding:5px 7px;background:rgba(124,214,255,.06)}
+.steps h3{margin:0 0 4px;font-size:14px;font-weight:700;color:#eaf3ff}
+.steps p{margin:0;font-size:13px;line-height:1.75;color:#94a9c4}
+.faq details{border-bottom:1px solid var(--line);padding:14px 0}
+.faq details:first-of-type{border-top:1px solid var(--line)}
+.faq summary{position:relative;cursor:pointer;list-style:none;padding-right:26px;font-size:13.5px;font-weight:600;color:#dceaf9}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:2px;top:-2px;font-size:16px;color:var(--cy);transition:transform .2s}
+.faq details[open] summary::after{content:"−"}
+.faq details p{margin:10px 0 0;font-size:13px;line-height:1.85;color:#94a9c4}
+.log{margin:18px 0 0;display:grid;gap:0}
+.log article{padding:14px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:86px 1fr;gap:14px}
+.log article:first-child{border-top:1px solid var(--line)}
+.log time{font-size:10.5px;letter-spacing:.08em;color:#7b8fa9;font-variant-numeric:tabular-nums;padding-top:2px}
+.log h3{margin:0 0 4px;font-size:13px;font-weight:700;color:#e3eefb}
+.log p{margin:0;font-size:12.5px;line-height:1.7;color:#8fa3bd}
+#foot{border-top:1px solid var(--line);background:#03050c;padding:34px 0;position:relative;z-index:11}
+.foot-in{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:flex-start}
+.foot-brand{display:flex;align-items:center;gap:9px;margin:0 0 8px;font-size:12.5px;color:#dceaf9}
+.foot-brand .mark{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:9.5px;
+  font-weight:800;background:rgba(124,214,255,.14);border:1px solid rgba(140,190,255,.3);color:#dcefff}
+.foot-note{margin:0;max-width:44ch;font-size:11.5px;line-height:1.7;color:#66799a}
+.foot-links{display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px}
+.foot-links a{color:#8ea3c0;text-decoration:none}
+.foot-links a:hover{color:#dcefff}
+
+/* ══════════════ responsive ══════════════ */
+@media (max-width:760px){
+  #brand p{display:none}
+  #brand h1{font-size:10.5px;letter-spacing:.2em}
+  #brand .mark{width:29px;height:29px;border-radius:9px;font-size:10.5px}
+  #topR{gap:4px}
+  #btnSound .lbl{display:none}
+  #btnSound{padding:7px 9px}
+  #hudL,#hudR{top:calc(env(safe-area-inset-top) + 56px)}
+  #hudScore{font-size:32px}
+  #hudPips{gap:14px;bottom:calc(env(safe-area-inset-bottom) + 16px)}
+  .pips i{width:13px;height:4px}
+  #hint{display:none}
+  #comboWrap{bottom:calc(env(safe-area-inset-bottom) + 62px);right:auto;width:min(46vw,220px)}
+  #btnBoost{display:grid;place-items:center}
+  .panel{padding:24px 20px;border-radius:18px}
+  .panel .ctrl3{grid-template-columns:1fr;gap:6px}
+  .panel .ctrl3 div{padding:9px 11px;display:flex;gap:8px;align-items:baseline}
+  .panel .ctrl3 b{margin:0;flex:none;width:52px}
+  .panel .ctrl3 span{font-size:11px}
+  .panel .tag{font-size:12.5px}
+  .keys span{font-size:8.5px;padding:4px 7px}
+  .btn{padding:14px 20px;font-size:13.5px}
+  .statgrid b{font-size:13.5px}
+  .sec{padding:40px 0}
+  .grid3{grid-template-columns:1fr}
+  .tbl{font-size:11.5px}
+  .tbl th{font-size:8px;letter-spacing:.1em}
+  .tbl td{padding:9px 5px}
+  .tbl td:last-child,.tbl th:last-child{width:36%}
+  .log article{grid-template-columns:1fr;gap:4px}
+  .steps li{padding-left:38px}
+  .foot-in{flex-direction:column}
+  .sec h2{font-size:20px}
+  .sec .lead{font-size:13px}
+  #toast{font-size:9.5px;padding:7px 12px}
+}
+@media (pointer:coarse){#btnBoost{display:grid;place-items:center}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+</style>
+</head>
+<body>
+
+<div id="stage">
+  <canvas id="scene" aria-label="Celestial Glide — 3D flight corridor"></canvas>
+  <div id="flash"></div>
+
+  <header id="top">
+    <div id="brand">
+      <span class="mark">YH</span>
+      <div>
+        <h1>Celestial Glide</h1>
+        <p data-i18n="brandSub">Three.js · WebGL · no install</p>
+      </div>
+    </div>
+    <div id="topR">
+      <div id="lang" role="group" aria-label="Language">
+        <button data-l="en" class="on">EN</button><button data-l="ko">KO</button>
+      </div>
+      <button id="btnSound" class="pill on" aria-pressed="true"><span class="ico">🔊</span><span class="lbl" data-i18n="soundOn">Sound</span></button>
+      <button id="btnPause" class="pill" aria-label="Pause" data-i18n-aria="pauseAria">❚❚</button>
+    </div>
+  </header>
+
+  <div id="hud">
+    <div class="hudblk" id="hudL">
+      <span class="lbl" data-i18n="kScore">Score</span>
+      <div id="hudScore">0</div>
+      <div class="row"><span class="lbl" data-i18n="kBest">Best</span><span id="hudBest" class="hudmini">0</span></div>
+    </div>
+    <div class="hudblk" id="hudR">
+      <div class="row"><span class="lbl" data-i18n="kSector">Sector</span><span id="hudSector" class="hudmini">1</span></div>
+      <div class="row"><span class="lbl" data-i18n="kSpeed">Speed</span><span id="hudSpeed" class="hudmini">0</span></div>
+      <div class="row"><span class="lbl" data-i18n="kMult">Mult</span><span id="hudMult">×1</span></div>
+    </div>
+    <div id="hudPips">
+      <div class="pipgrp"><span class="lbl" data-i18n="kShield">Shield</span><div class="pips" id="hudShield"><i class="on"></i><i class="on"></i><i class="on"></i></div></div>
+      <div class="pipgrp"><span class="lbl" data-i18n="kBoost">Boost</span><div class="pips" id="hudBoost"><i class="on"></i><i></i><i></i></div></div>
+    </div>
+    <div id="comboWrap"><div id="comboBar"></div></div>
+    <div id="hint"></div>
+  </div>
+
+  <div id="popups"></div>
+  <div id="toast"></div>
+  <button id="btnBoost" data-i18n="kBoost">BOOST</button>
+  <a href="#guide" id="scrollcue" data-i18n="scrollCue">How to play ↓</a>
+
+  <section id="ovStart" class="ov on">
+    <div class="panel">
+      <p class="eyebrow" data-i18n="stEyebrow">Three.js · endless flight</p>
+      <h2>Celestial Glide</h2>
+      <p class="tag" data-i18n-html="stTag">Thread the <b>gates</b>. Graze the <b>crystals</b>. Keep the combo alive for as long as the nebula lets you.</p>
+      <div class="ctrl3">
+        <div><b data-i18n="stC1t">Mouse</b><span data-i18n="stC1d">Move to steer — the ship follows your cursor.</span></div>
+        <div><b data-i18n="stC2t">Touch</b><span data-i18n="stC2d">Drag anywhere. The offset keeps your thumb off the ship.</span></div>
+        <div><b data-i18n="stC3t">Keys</b><span data-i18n="stC3d">Arrows or WASD, Space to boost, P to pause.</span></div>
+      </div>
+      <div class="btns">
+        <button id="btnPlay" class="btn primary"><span data-i18n="stPlay">Launch</span> <span aria-hidden="true">→</span></button>
+      </div>
+      <div class="keys">
+        <span data-i18n="stK1">3 shields</span><span data-i18n="stK2">3 boosts</span><span data-i18n="stK3">×8 max combo</span><span data-i18n="stK4">no install</span>
+      </div>
+      <div class="meta">
+        <span><span data-i18n="kBest">Best</span> <b id="startBest">0</b></span>
+        <span><span data-i18n="stRuns">Runs</span> <b id="startRuns">0</b></span>
+      </div>
+    </div>
+  </section>
+
+  <section id="ovPause" class="ov">
+    <div class="panel" style="max-width:380px">
+      <p class="eyebrow" data-i18n="paEyebrow">Holding position</p>
+      <h2 data-i18n="paTitle" style="font-size:30px">Paused</h2>
+      <div class="btns">
+        <button id="btnResume" class="btn primary" data-i18n="paResume">Resume</button>
+        <button id="btnRestart" class="btn ghost" data-i18n="paRestart">Restart run</button>
+      </div>
+      <p class="tag" style="font-size:11.5px;margin-top:14px" data-i18n="paNote">The run pauses itself when you switch tabs.</p>
+    </div>
+  </section>
+
+  <section id="ovOver" class="ov">
+    <div class="panel">
+      <p class="eyebrow" data-i18n="ovEyebrow">Run complete</p>
+      <div class="scoreline" id="finalScore">0</div>
+      <div id="recordBadge" data-i18n="ovNew">New record</div>
+      <div class="statgrid">
+        <div><b id="finalBest">0</b><span data-i18n="kBest">Best</span></div>
+        <div><b id="finalGates">0</b><span data-i18n="ovGates">Gates</span></div>
+        <div><b id="finalCombo">×1</b><span data-i18n="ovCombo">Peak mult</span></div>
+      </div>
+      <div class="statgrid" style="grid-template-columns:1fr;margin-top:8px">
+        <div><b id="finalDist">0 u</b><span data-i18n="ovDist">Distance flown</span></div>
+      </div>
+      <div class="btns">
+        <button id="btnRetry" class="btn primary" data-i18n="ovRetry">Fly again</button>
+      </div>
+      <a class="guideLink" href="#guide" data-i18n="ovGuide">Read the strategy guide ↓</a>
+    </div>
+  </section>
+
+  <div id="loader"><div class="ring"></div><p data-i18n="loading">Rendering the nebula</p></div>
+
+  <div id="fallback">
+    <h2 data-i18n="fbTitle">The sky will not open</h2>
+    <p data-i18n="fbBody">This browser has no WebGL, or the 3D library could not load. Try the latest Chrome, Safari, Edge or Firefox.</p>
+    <button onclick="location.reload()" data-i18n="fbRetry">Try again</button>
+  </div>
+</div>
+
+<main>
+  <!-- 1 · how to play -->
+  <section class="sec" id="guide">
+    <div class="wrap">
+      <p class="eyebrow" data-i18n="gEyebrow">How to play</p>
+      <h2 data-i18n="gTitle">Three ways in, one rule: the ring is safe, the crystal is not</h2>
+      <p class="lead" data-i18n="gLead">Celestial Glide is a corridor you never stop moving through. You cannot slow down and you cannot shoot — the only controls are where you are and when you spend speed. Every glowing ring is a gate you want to pass through the middle of; every dark crystal is a wall you want to miss.</p>
+      <div class="grid3">
+        <div class="card">
+          <b data-i18n="g1t">Mouse &amp; trackpad</b>
+          <p data-i18n-html="g1d">Move the pointer over the canvas and the ship eases toward it. Release and it holds its line, so you can lift your hand between clusters.</p>
+        </div>
+        <div class="card">
+          <b data-i18n="g2t">Touch screen</b>
+          <p data-i18n-html="g2d">Press and drag anywhere. Steering is <b>relative</b> — the ship moves with your finger instead of jumping under it, so your thumb never hides the thing you are avoiding.</p>
+        </div>
+        <div class="card">
+          <b data-i18n="g3t">Keyboard</b>
+          <p data-i18n-html="g3d">Arrow keys or <b>WASD</b> nudge the aim, <b>Space</b> or <b>Shift</b> burns a boost charge, <b>P</b> pauses, <b>M</b> mutes. <b>Enter</b> starts and restarts.</p>
+        </div>
+      </div>
+      <p style="margin-top:20px" data-i18n-html="gFoot">A run ends when the last shield is gone. Nothing is installed, no account is created, and the page never asks for a file — the whole game is one HTML file and one JavaScript module.</p>
+    </div>
+  </section>
+
+  <!-- 2 · scoring -->
+  <section class="sec" id="scoring">
+    <div class="wrap">
+      <p class="eyebrow" data-i18n="sEyebrow">Scoring</p>
+      <h2 data-i18n="sTitle">What the numbers actually mean</h2>
+      <p class="lead" data-i18n="sLead">Score is distance multiplied by how well you are flying. The multiplier is the whole game: a clean chain of gates and near misses is worth several times the same distance dodged timidly.</p>
+      <table class="tbl">
+        <thead><tr><th data-i18n="thAction">Action</th><th data-i18n="thPoints">Points</th></tr></thead>
+        <tbody>
+          <tr><td data-i18n="s1a">Gate through the centre</td><td data-i18n="s1b">150 × multiplier</td></tr>
+          <tr><td data-i18n="s2a">Gold gate</td><td data-i18n="s2b">300 × multiplier, +2 boost</td></tr>
+          <tr><td data-i18n="s3a">Near miss (crystal within 2 units)</td><td data-i18n="s3b">40 × multiplier</td></tr>
+          <tr><td data-i18n="s4a">Light mote</td><td data-i18n="s4b">200 × multiplier, +1 boost or shield</td></tr>
+          <tr><td data-i18n="s5a">Distance</td><td data-i18n="s5b">10 × multiplier per unit</td></tr>
+          <tr><td data-i18n="s6a">Combo</td><td data-i18n="s6b">+1× per 3 combo, up to ×8</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:20px" data-i18n-html="sFoot">A gate adds <b>2 combo</b>, a near miss or mote adds <b>1</b>, and any hit empties the chain. Combo is forgotten after five seconds without a gate or a graze, which is why the multiplier falls apart the moment you start playing safe.</p>
+    </div>
+  </section>
+
+  <!-- 3 · strategy -->
+  <section class="sec" id="strategy">
+    <div class="wrap">
+      <p class="eyebrow" data-i18n="tEyebrow">Strategy</p>
+      <h2 data-i18n="tTitle">Five habits that move a score from 20k to 80k</h2>
+      <ol class="steps">
+        <li><h3 data-i18n="t1t">Aim for the hole, not the ring</h3><p data-i18n="t1d">Look at the empty centre of a gate and steer for that. Aiming at the bright metal puts you on the rim, which costs a shield. Gates are generous — roughly six tenths of the radius counts as a clean pass.</p></li>
+        <li><h3 data-i18n="t2t">Graze instead of dodging wide</h3><p data-i18n="t2d">A crystal only hurts at its own radius. Slipping past it with half a unit to spare pays 40 × multiplier and keeps the chain alive; swerving to the far side of the corridor pays nothing.</p></li>
+        <li><h3 data-i18n="t3t">Spend boost where it cannot be punished</h3><p data-i18n="t3d">Boost multiplies the world's speed by 1.72, and distance is most of your score. Use it on a straight of gates you have already lined up, never in the middle of a crystal field where you have no time to read the next cluster.</p></li>
+        <li><h3 data-i18n="t4t">Treat a shield as a resource, not a life</h3><p data-i18n="t4d">Three shields, no regeneration except motes. Losing one is survivable; losing the chain of a ×6 multiplier to save it usually is not. When a gate and safety disagree, take the gate while you still have shields.</p></li>
+        <li><h3 data-i18n="t5t">Read a sector change as a speed step</h3><p data-i18n="t5d">Every 700 units the corridor changes sector and the ship gets faster — obstacles arrive sooner and the safe gaps narrow. The first few seconds after the announcement are the right moment to stop chasing points and re-centre.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 4 · inside the build -->
+  <section class="sec" id="build">
+    <div class="wrap">
+      <p class="eyebrow" data-i18n="bEyebrow">Inside the build</p>
+      <h2 data-i18n="bTitle">A nebula with no texture files</h2>
+      <p class="lead" data-i18n-html="bLead">The page ships as one HTML file and two JavaScript modules. There is not a single image, model or audio file in the build: the sky is a fragment shader, the objects are primitives, and every sound is an oscillator. That is why it loads in a second and keeps working on a five-year-old phone.</p>
+      <div class="grid3">
+        <div class="card">
+          <b data-i18n="b1t">Shader sky</b>
+          <p data-i18n-html="b1d">One back-facing sphere runs a value-noise FBM — three octaves, slowly rotating, with a second layer of star specks. On a slow device the game drops to two octaves and a lower pixel ratio instead of dropping frames.</p>
+        </div>
+        <div class="card">
+          <b data-i18n="b2t">Pooled objects</b>
+          <p data-i18n-html="b2d">Nine gates, thirty crystals, six motes, 460 sparks and a starfield are allocated once at boot and recycled. Nothing is created while you fly, so there is no garbage-collection stutter mid-run.</p>
+        </div>
+        <div class="card">
+          <b data-i18n="b3t">Synthesised audio</b>
+          <p data-i18n-html="b3d">A four-oscillator pad and a pentatonic arpeggio are scheduled ahead of time with the Web Audio clock; the reverb is a generated noise impulse. Gates, hits and boosts are short envelopes on the same graph.</p>
+        </div>
+      </div>
+      <p style="margin-top:20px" data-i18n-html="bFoot">Rendering is <b>Three.js r169</b> with no post-processing pass — the glow comes from additive geometry rather than a bloom budget. Collisions are swept against the plane as an object crosses it, so a fast frame can never tunnel a crystal through the ship.</p>
+    </div>
+  </section>
+
+  <!-- 5 · update log -->
+  <section class="sec" id="log">
+    <div class="wrap">
+      <p class="eyebrow" data-i18n="lgEyebrow">Update log</p>
+      <h2 data-i18n="lgTitle">What changed, and when</h2>
+      <div class="log">
+        <article>
+          <time datetime="2026-11-15">2026.11.15</time>
+          <div>
+            <h3 data-i18n="lg1t">v1.0 — first flight</h3>
+            <p data-i18n="lg1d">Corridor, gates, crystals, motes, shields, boosts, five-sector difficulty curve, local high score, procedural music and effects, EN/KO interface, this guide.</p>
+          </div>
+        </article>
+        <article>
+          <time datetime="2026-11-15">2026.11.15</time>
+          <div>
+            <h3 data-i18n="lg2t">Mobile pass</h3>
+            <p data-i18n="lg2d">Relative touch steering, an on-screen boost button, compact HUD down to a 390 px viewport, and a quality watchdog that lowers resolution before it lowers the frame rate.</p>
+          </div>
+        </article>
+        <article>
+          <time datetime="2026-11-15">2026.11.15</time>
+          <div>
+            <h3 data-i18n="lg3t">Next up</h3>
+            <p data-i18n="lg3d">Daily seed runs with a shareable code, a second obstacle type, and a Korean-first landing page for the blog. Suggestions are welcome — the source is public.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · faq -->
+  <section class="sec faq" id="faq">
+    <div class="wrap">
+      <p class="eyebrow" data-i18n="fEyebrow">FAQ</p>
+      <h2 data-i18n="fTitle">Questions about the game</h2>
+      <details open>
+        <summary data-i18n="q1">Is Celestial Glide really free?</summary>
+        <p data-i18n="a1">Yes. There is no account, no install, no in-game purchase and no advertisement inside the canvas. The page is a static file served from GitHub Pages.</p>
+      </details>
+      <details>
+        <summary data-i18n="q2">Does it work on a phone?</summary>
+        <p data-i18n="a2">It is built for it. Drag anywhere on the canvas to steer, tap the round boost button to spend a charge. The layout was checked at 390 × 844 and holds without sideways scrolling; iOS Safari, Chrome for Android and desktop Chrome, Safari, Firefox and Edge all run it.</p>
+      </details>
+      <details>
+        <summary data-i18n="q3">Where is my high score stored?</summary>
+        <p data-i18n="a3">In this browser only, under the localStorage key <b>celestial-glide.hs</b>. Nothing is transmitted: there is no analytics script, no cookie and no server to send it to. Clearing site data clears the record.</p>
+      </details>
+      <details>
+        <summary data-i18n="q4">Do I need a graphics card?</summary>
+        <p data-i18n="a4">No. The scene is a few dozen meshes plus one shader sky, and it runs on integrated graphics. If the first ninety frames run slower than about 45 fps, the game lowers the render resolution by half a step and simplifies the nebula shader before you notice a stutter.</p>
+      </details>
+      <details>
+        <summary data-i18n="q5">Can I play without sound?</summary>
+        <p data-i18n="a5">Yes — the speaker button in the top bar or the M key. Your choice is remembered for the next visit. Music starts only after you press Launch, so nothing plays on its own.</p>
+      </details>
+      <details>
+        <summary data-i18n="q6">What is it built with?</summary>
+        <p data-i18n="a6">Three.js r169 for rendering; hand-written GLSL for the nebula, the crystals, the shield and the particles; the Web Audio API for every sound; about 1,400 lines of JavaScript in total. The same shelf of browser tools lives at <a href="/portfolio/tools/">/portfolio/tools/</a>.</p>
+      </details>
+    </div>
+  </section>
+</main>
+
+<footer id="foot">
+  <div class="wrap foot-in">
+    <div>
+      <p class="foot-brand"><span class="mark">YH</span> <b>Kim Yihyung</b></p>
+      <p class="foot-note" data-i18n="footNote">Built by hand in the browser, for the browser. No tracking, no accounts, nothing uploaded.</p>
+    </div>
+    <nav class="foot-links">
+      <a href="/portfolio/" data-i18n="footP">Portfolio</a>
+      <a href="/portfolio/tools/" data-i18n="footT">Browser tools</a>
+      <a href="/portfolio/3d/" data-i18n="footL">3D lab</a>
+      <a href="/portfolio/gallery/" data-i18n="footG">Gallery</a>
+    </nav>
+  </div>
+</footer>
+
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js" } }
+</script>
+<script>
+(function () {
+  /* ─────────────────────── interface dictionary ─────────────────────── */
+  var STORE = 'kyh.lang';
+  var D = window.CG_STRINGS = {
+    en: {
+      docTitle: 'Celestial Glide — a 3D Three.js dodge racer in your browser',
+      metaDesc: 'Thread glowing gates through a shader-built nebula, graze crystals for combo, burn boost. A free 3D browser game written in Three.js — no install, no account, nothing uploaded.',
+
+      brandSub: 'Three.js · WebGL · no install',
+      soundOn: 'Sound', soundOff: 'Muted', pauseAria: 'Pause the run',
+      kScore: 'Score', kBest: 'Best', kSector: 'Sector', kSpeed: 'Speed', kMult: 'Mult',
+      kShield: 'Shield', kBoost: 'Boost', scrollCue: 'How to play ↓',
+      loading: 'Rendering the nebula',
+
+      stEyebrow: 'Three.js · endless flight',
+      stTag: 'Thread the <b>gates</b>. Graze the <b>crystals</b>. Keep the combo alive for as long as the nebula lets you.',
+      stC1t: 'Mouse', stC1d: 'Move to steer — the ship follows your cursor.',
+      stC2t: 'Touch', stC2d: 'Drag anywhere. The offset keeps your thumb off the ship.',
+      stC3t: 'Keys', stC3d: 'Arrows or WASD, Space to boost, P to pause.',
+      stPlay: 'Launch', stRuns: 'Runs',
+      stK1: '3 shields', stK2: '3 boosts', stK3: '×8 max combo', stK4: 'no install',
+
+      paEyebrow: 'Holding position', paTitle: 'Paused', paResume: 'Resume',
+      paRestart: 'Restart run', paNote: 'The run pauses itself when you switch tabs.',
+
+      ovEyebrow: 'Run complete', ovNew: 'New record', ovGates: 'Gates',
+      ovCombo: 'Peak mult', ovDist: 'Distance flown', ovRetry: 'Fly again',
+      ovGuide: 'Read the strategy guide ↓',
+
+      fbTitle: 'The sky will not open',
+      fbBody: 'This browser has no WebGL, or the 3D library could not load. Try the latest Chrome, Safari, Edge or Firefox.',
+      fbRetry: 'Try again',
+
+      goldGate: 'Gold gate · +2 boost',
+      nearMiss: 'Near miss',
+      moteShield: 'Shield restored',
+      moteBoost: 'Boost charged',
+      shieldLost: 'Shield down',
+      lastShield: 'Last shield — fly clean',
+      boostPop: 'Boost',
+      sectorUp: 'Sector',
+
+      gEyebrow: 'How to play',
+      gTitle: 'Three ways in, one rule: the ring is safe, the crystal is not',
+      gLead: 'Celestial Glide is a corridor you never stop moving through. You cannot slow down and you cannot shoot — the only controls are where you are and when you spend speed. Every glowing ring is a gate you want to pass through the middle of; every dark crystal is a wall you want to miss.',
+      g1t: 'Mouse & trackpad',
+      g1d: 'Move the pointer over the canvas and the ship eases toward it. Release and it holds its line, so you can lift your hand between clusters.',
+      g2t: 'Touch screen',
+      g2d: 'Press and drag anywhere. Steering is <b>relative</b> — the ship moves with your finger instead of jumping under it, so your thumb never hides the thing you are avoiding.',
+      g3t: 'Keyboard',
+      g3d: 'Arrow keys or <b>WASD</b> nudge the aim, <b>Space</b> or <b>Shift</b> burns a boost charge, <b>P</b> pauses, <b>M</b> mutes. <b>Enter</b> starts and restarts.',
+      gFoot: 'A run ends when the last shield is gone. Nothing is installed, no account is created, and the page never asks for a file — the whole game is one HTML file and one JavaScript module.',
+
+      sEyebrow: 'Scoring',
+      sTitle: 'What the numbers actually mean',
+      sLead: 'Score is distance multiplied by how well you are flying. The multiplier is the whole game: a clean chain of gates and near misses is worth several times the same distance dodged timidly.',
+      thAction: 'Action', thPoints: 'Points',
+      s1a: 'Gate through the centre', s1b: '150 × multiplier',
+      s2a: 'Gold gate', s2b: '300 × multiplier, +2 boost',
+      s3a: 'Near miss (crystal within 2 units)', s3b: '40 × multiplier',
+      s4a: 'Light mote', s4b: '200 × multiplier, +1 boost or shield',
+      s5a: 'Distance', s5b: '10 × multiplier per unit',
+      s6a: 'Combo', s6b: '+1× per 3 combo, up to ×8',
+      sFoot: 'A gate adds <b>2 combo</b>, a near miss or mote adds <b>1</b>, and any hit empties the chain. Combo is forgotten after five seconds without a gate or a graze, which is why the multiplier falls apart the moment you start playing safe.',
+
+      tEyebrow: 'Strategy',
+      tTitle: 'Five habits that move a score from 20k to 80k',
+      t1t: 'Aim for the hole, not the ring',
+      t1d: 'Look at the empty centre of a gate and steer for that. Aiming at the bright metal puts you on the rim, which costs a shield. Gates are generous — roughly six tenths of the radius counts as a clean pass.',
+      t2t: 'Graze instead of dodging wide',
+      t2d: 'A crystal only hurts at its own radius. Slipping past it with half a unit to spare pays 40 × multiplier and keeps the chain alive; swerving to the far side of the corridor pays nothing.',
+      t3t: 'Spend boost where it cannot be punished',
+      t3d: 'Boost multiplies the world’s speed by 1.72, and distance is most of your score. Use it on a straight of gates you have already lined up, never in the middle of a crystal field where you have no time to read the next cluster.',
+      t4t: 'Treat a shield as a resource, not a life',
+      t4d: 'Three shields, no regeneration except motes. Losing one is survivable; losing the chain of a ×6 multiplier to save it usually is not. When a gate and safety disagree, take the gate while you still have shields.',
+      t5t: 'Read a sector change as a speed step',
+      t5d: 'Every 700 units the corridor changes sector and the ship gets faster — obstacles arrive sooner and the safe gaps narrow. The first few seconds after the announcement are the right moment to stop chasing points and re-centre.',
+
+      bEyebrow: 'Inside the build',
+      bTitle: 'A nebula with no texture files',
+      bLead: 'The page ships as one HTML file and two JavaScript modules. There is not a single image, model or audio file in the build: the sky is a fragment shader, the objects are primitives, and every sound is an oscillator. That is why it loads in a second and keeps working on a five-year-old phone.',
+      b1t: 'Shader sky',
+      b1d: 'One back-facing sphere runs a value-noise FBM — three octaves, slowly rotating, with a second layer of star specks. On a slow device the game drops to two octaves and a lower pixel ratio instead of dropping frames.',
+      b2t: 'Pooled objects',
+      b2d: 'Nine gates, thirty crystals, six motes, 460 sparks and a starfield are allocated once at boot and recycled. Nothing is created while you fly, so there is no garbage-collection stutter mid-run.',
+      b3t: 'Synthesised audio',
+      b3d: 'A four-oscillator pad and a pentatonic arpeggio are scheduled ahead of time with the Web Audio clock; the reverb is a generated noise impulse. Gates, hits and boosts are short envelopes on the same graph.',
+      bFoot: 'Rendering is <b>Three.js r169</b> with no post-processing pass — the glow comes from additive geometry rather than a bloom budget. Collisions are swept against the plane as an object crosses it, so a fast frame can never tunnel a crystal through the ship.',
+
+      lgEyebrow: 'Update log', lgTitle: 'What changed, and when',
+      lg1t: 'v1.0 — first flight',
+      lg1d: 'Corridor, gates, crystals, motes, shields, boosts, five-sector difficulty curve, local high score, procedural music and effects, EN/KO interface, this guide.',
+      lg2t: 'Mobile pass',
+      lg2d: 'Relative touch steering, an on-screen boost button, compact HUD down to a 390 px viewport, and a quality watchdog that lowers resolution before it lowers the frame rate.',
+      lg3t: 'Next up',
+      lg3d: 'Daily seed runs with a shareable code, a second obstacle type, and a Korean-first landing page for the blog. Suggestions are welcome — the source is public.',
+
+      fEyebrow: 'FAQ', fTitle: 'Questions about the game',
+      q1: 'Is Celestial Glide really free?',
+      a1: 'Yes. There is no account, no install, no in-game purchase and no advertisement inside the canvas. The page is a static file served from GitHub Pages.',
+      q2: 'Does it work on a phone?',
+      a2: 'It is built for it. Drag anywhere on the canvas to steer, tap the round boost button to spend a charge. The layout was checked at 390 × 844 and holds without sideways scrolling; iOS Safari, Chrome for Android and desktop Chrome, Safari, Firefox and Edge all run it.',
+      q3: 'Where is my high score stored?',
+      a3: 'In this browser only, under the localStorage key <b>celestial-glide.hs</b>. Nothing is transmitted: there is no analytics script, no cookie and no server to send it to. Clearing site data clears the record.',
+      q4: 'Do I need a graphics card?',
+      a4: 'No. The scene is a few dozen meshes plus one shader sky, and it runs on integrated graphics. If the first ninety frames run slower than about 45 fps, the game lowers the render resolution by half a step and simplifies the nebula shader before you notice a stutter.',
+      q5: 'Can I play without sound?',
+      a5: 'Yes — the speaker button in the top bar or the M key. Your choice is remembered for the next visit. Music starts only after you press Launch, so nothing plays on its own.',
+      q6: 'What is it built with?',
+      a6: 'Three.js r169 for rendering; hand-written GLSL for the nebula, the crystals, the shield and the particles; the Web Audio API for every sound; about 1,400 lines of JavaScript in total. The same shelf of browser tools lives at <a href="/portfolio/tools/">/portfolio/tools/</a>.',
+
+      footNote: 'Built by hand in the browser, for the browser. No tracking, no accounts, nothing uploaded.',
+      footP: 'Portfolio', footT: 'Browser tools', footL: '3D lab', footG: 'Gallery'
+    },
+    ko: {
+      docTitle: '셀레스티얼 글라이드 — 브라우저에서 즐기는 Three.js 3D 회피 비행 게임',
+      metaDesc: '셰이더로 만든 성운을 가로지르며 발광 게이트를 통과하고, 수정에 스치듯 지나 콤보를 쌓고, 부스트를 써서 기록을 세우는 3D 웹 게임. 설치·계정·업로드 없이 브라우저에서 바로.',
+
+      brandSub: 'Three.js · WebGL · 설치 없음',
+      soundOn: '소리', soundOff: '음소거', pauseAria: '일시정지',
+      kScore: '점수', kBest: '최고', kSector: '구역', kSpeed: '속도', kMult: '배율',
+      kShield: '방어막', kBoost: '부스트', scrollCue: '조작법 보기 ↓',
+      loading: '성운을 만드는 중',
+
+      stEyebrow: 'Three.js · 끝없는 비행',
+      stTag: '발광하는 <b>게이트</b>를 통과하고, <b>수정</b>은 스치듯 피하세요. 성운이 허락하는 동안 콤보를 이어가면 됩니다.',
+      stC1t: '마우스', stC1d: '포인터를 움직이면 기체가 따라옵니다.',
+      stC2t: '터치', stC2d: '아무 곳이나 끌어서 조종하세요. 손가락에 기체가 가려지지 않습니다.',
+      stC3t: '키보드', stC3d: '방향키·WASD, Space 부스트, P 일시정지.',
+      stPlay: '출발', stRuns: '도전 횟수',
+      stK1: '방어막 3', stK2: '부스트 3', stK3: '최대 ×8 콤보', stK4: '설치 없음',
+
+      paEyebrow: '궤도 정지', paTitle: '일시정지', paResume: '계속하기',
+      paRestart: '다시 시작', paNote: '다른 탭으로 이동하면 자동으로 멈춥니다.',
+
+      ovEyebrow: '비행 종료', ovNew: '신기록', ovGates: '게이트',
+      ovCombo: '최고 배율', ovDist: '비행 거리', ovRetry: '다시 비행',
+      ovGuide: '공략 가이드 보기 ↓',
+
+      fbTitle: '하늘을 열 수 없습니다',
+      fbBody: '이 브라우저에서 WebGL을 쓸 수 없거나 3D 라이브러리를 불러오지 못했습니다. 최신 Chrome·Safari·Edge·Firefox에서 다시 열어 주세요.',
+      fbRetry: '다시 시도',
+
+      goldGate: '황금 게이트 · 부스트 +2',
+      nearMiss: '스치기',
+      moteShield: '방어막 회복',
+      moteBoost: '부스트 충전',
+      shieldLost: '방어막 손상',
+      lastShield: '마지막 방어막 — 신중하게',
+      boostPop: '부스트',
+      sectorUp: '구역',
+
+      gEyebrow: '조작법',
+      gTitle: '조작은 세 가지, 규칙은 하나 — 링은 안전하고 수정은 위험합니다',
+      gLead: '셀레스티얼 글라이드는 멈추지 않는 회랑입니다. 속도를 줄일 수도, 쏠 수도 없습니다. 내가 고를 수 있는 것은 지금 어디에 있는가, 그리고 언제 속도를 쓰는가뿐입니다. 빛나는 링은 통과해야 할 게이트이고, 어두운 수정은 피해야 할 벽입니다.',
+      g1t: '마우스·트랙패드',
+      g1d: '화면 위에서 포인터를 움직이면 기체가 부드럽게 따라갑니다. 손을 떼도 그 자리를 유지하니, 구간 사이에 잠깐 손을 쉬어도 됩니다.',
+      g2t: '터치스크린',
+      g2d: '아무 곳이나 눌러 끌면 됩니다. 조종은 <b>상대 이동</b>이라 손가락 아래로 기체가 순간이동하지 않습니다. 피해야 할 것이 엄지에 가려지지 않습니다.',
+      g3t: '키보드',
+      g3d: '방향키 또는 <b>WASD</b>로 조준을 옮기고, <b>Space</b>·<b>Shift</b>로 부스트를 씁니다. <b>P</b> 일시정지, <b>M</b> 음소거, <b>Enter</b> 시작과 재시작.',
+      gFoot: '방어막을 모두 잃으면 한 판이 끝납니다. 설치도, 계정도, 파일 요구도 없습니다. 게임 전체가 HTML 한 장과 자바스크립트 모듈 하나로 되어 있습니다.',
+
+      sEyebrow: '점수 계산',
+      sTitle: '숫자가 실제로 뜻하는 것',
+      sLead: '점수는 거리 × 얼마나 잘 날았는가입니다. 사실상 배율이 전부입니다. 게이트와 스치기를 깔끔하게 이은 한 판은, 같은 거리를 소심하게 피한 판보다 몇 배 높습니다.',
+      thAction: '행동', thPoints: '점수',
+      s1a: '게이트 정중앙 통과', s1b: '150 × 배율',
+      s2a: '황금 게이트', s2b: '300 × 배율, 부스트 +2',
+      s3a: '스치기 (수정 2유닛 이내)', s3b: '40 × 배율',
+      s4a: '빛 입자', s4b: '200 × 배율, 부스트 또는 방어막 +1',
+      s5a: '거리', s5b: '1유닛당 10 × 배율',
+      s6a: '콤보', s6b: '콤보 3마다 ×1, 최대 ×8',
+      sFoot: '게이트는 콤보를 <b>2</b> 올리고, 스치기와 입자는 <b>1</b> 올립니다. 한 번 부딪히면 콤보는 비워집니다. 게이트도 스치기도 없는 5초가 지나면 콤보는 사라집니다. 안전하게만 날면 배율이 무너지는 이유입니다.',
+
+      tEyebrow: '공략',
+      tTitle: '점수를 2만에서 8만으로 올리는 다섯 가지 습관',
+      t1t: '링이 아니라 구멍을 겨냥하세요',
+      t1d: '게이트의 빈 가운데를 보고 그쪽으로 조종하세요. 밝은 테두리를 겨냥하면 링에 걸려 방어막을 잃습니다. 게이트는 관대해서 반지름의 약 6할 안쪽이면 깨끗한 통과입니다.',
+      t2t: '멀리 피하지 말고 스치세요',
+      t2d: '수정은 자기 반지름에서만 아픕니다. 반 유닛 차이로 지나가면 40 × 배율을 받고 콤보도 이어집니다. 회랑 반대편까지 크게 피하면 아무것도 없습니다.',
+      t3t: '벌받지 않을 곳에서만 부스트를 쓰세요',
+      t3d: '부스트는 세상의 속도를 1.72배로 올리고, 점수의 대부분은 거리입니다. 이미 줄을 맞춰 둔 게이트 구간에서 쓰세요. 다음 무리를 읽을 시간이 없는 수정 지대 한가운데는 아닙니다.',
+      t4t: '방어막은 목숨이 아니라 자원입니다',
+      t4d: '방어막은 세 칸이고 입자 말고는 회복되지 않습니다. 하나를 잃는 건 견딜 만하지만, 그것을 지키려고 ×6 콤보를 끊는 건 대개 손해입니다. 게이트와 안전이 갈릴 때는 방어막이 남아 있는 동안 게이트를 택하세요.',
+      t5t: '구역 변화는 속도가 오른 신호입니다',
+      t5d: '700유닛마다 구역이 바뀌고 기체가 빨라집니다. 장애물이 더 빨리 오고 안전한 틈은 좁아집니다. 구역 안내가 뜬 직후 몇 초가 점수를 좇는 것을 멈추고 중심을 다시 잡을 때입니다.',
+
+      bEyebrow: '만든 방식',
+      bTitle: '텍스처 파일이 하나도 없는 성운',
+      bLead: '이 페이지는 HTML 한 장과 자바스크립트 모듈 두 개로 되어 있습니다. 이미지도, 모델도, 오디오 파일도 없습니다. 하늘은 프래그먼트 셰이더이고, 물체는 기본 도형이며, 모든 소리는 오실레이터입니다. 그래서 1초 안에 열리고 5년 된 휴대폰에서도 돌아갑니다.',
+      b1t: '셰이더 하늘',
+      b1d: '안쪽을 향한 구 하나에 값 노이즈 FBM을 돌립니다. 옥타브 세 개가 천천히 회전하고 그 위에 별 티끌 층이 얹힙니다. 느린 기기에서는 프레임을 떨어뜨리는 대신 옥타브를 둘로 줄이고 픽셀 비율을 낮춥니다.',
+      b2t: '풀링된 오브젝트',
+      b2d: '게이트 9개, 수정 30개, 입자 6개, 스파크 460개와 별밭은 시작할 때 한 번 만들고 재사용합니다. 비행 중에는 아무것도 새로 만들지 않으므로 중간에 가비지 컬렉션으로 끊기지 않습니다.',
+      b3t: '합성 오디오',
+      b3d: '오실레이터 네 개의 패드와 펜타토닉 아르페지오를 Web Audio 시계로 미리 예약합니다. 리버브는 노이즈로 만든 임펄스입니다. 게이트·피격·부스트 소리도 같은 그래프 위의 짧은 엔벨로프입니다.',
+      bFoot: '렌더링은 <b>Three.js r169</b>이고 포스트프로세싱은 쓰지 않습니다. 빛 번짐은 블룸 예산이 아니라 가산 합성 도형에서 나옵니다. 충돌은 물체가 평면을 지나는 순간 스윕으로 판정하므로, 프레임이 튀어도 수정이 기체를 통과해 버리는 일이 없습니다.',
+
+      lgEyebrow: '업데이트 노트', lgTitle: '무엇이 언제 바뀌었나',
+      lg1t: 'v1.0 — 첫 비행',
+      lg1d: '회랑, 게이트, 수정, 입자, 방어막, 부스트, 5구역 난이도 곡선, 로컬 최고 점수, 절차적 음악과 효과음, 한/영 인터페이스, 이 가이드까지.',
+      lg2t: '모바일 대응',
+      lg2d: '상대 이동 터치 조종, 화면 부스트 버튼, 390px 뷰포트까지 줄어드는 HUD, 그리고 프레임이 떨어지기 전에 해상도를 먼저 낮추는 품질 감시 장치.',
+      lg3t: '다음 계획',
+      lg3d: '공유 코드가 있는 일일 시드 런, 두 번째 장애물 유형, 블로그용 한국어 우선 소개 페이지. 제안은 언제든 환영합니다 — 소스는 공개되어 있습니다.',
+
+      fEyebrow: 'FAQ', fTitle: '게임에 대해 자주 묻는 것들',
+      q1: '정말 무료인가요?',
+      a1: '네. 계정도, 설치도, 게임 내 결제도, 캔버스 안의 광고도 없습니다. 페이지는 GitHub Pages에서 내려받는 정적 파일입니다.',
+      q2: '휴대폰에서도 되나요?',
+      a2: '휴대폰을 기준으로 만들었습니다. 캔버스 아무 곳이나 끌어 조종하고, 둥근 부스트 버튼을 눌러 부스트를 씁니다. 390 × 844 화면에서 가로 스크롤 없이 확인했고, iOS Safari와 안드로이드 Chrome, 데스크톱 Chrome·Safari·Firefox·Edge에서 모두 동작합니다.',
+      q3: '최고 점수는 어디에 저장되나요?',
+      a3: '이 브라우저에만, localStorage의 <b>celestial-glide.hs</b> 키로 저장됩니다. 분석 스크립트도 쿠키도 없고, 보낼 서버도 없습니다. 사이트 데이터를 지우면 기록도 지워집니다.',
+      q4: '그래픽 카드가 필요한가요?',
+      a4: '아니요. 장면은 수십 개의 도형과 셰이더 하늘 하나뿐이라 내장 그래픽에서도 돌아갑니다. 첫 90프레임이 45fps보다 느리면, 끊김을 느끼기 전에 해상도를 반 단계 낮추고 성운 셰이더를 단순화합니다.',
+      q5: '소리 없이 할 수 있나요?',
+      a5: '됩니다. 상단 스피커 버튼이나 M 키를 누르세요. 선택은 다음 방문에도 유지됩니다. 음악은 출발을 누른 뒤에만 시작하므로 저절로 소리가 나지 않습니다.',
+      q6: '무엇으로 만들었나요?',
+      a6: '렌더링은 Three.js r169, 성운·수정·방어막·입자는 직접 쓴 GLSL, 모든 소리는 Web Audio API입니다. 자바스크립트는 약 1,400줄. 같은 브라우저 도구 모음은 <a href="/portfolio/tools/">/portfolio/tools/</a>에 있습니다.',
+
+      footNote: '브라우저를 위해, 브라우저 안에서 직접 만들었습니다. 추적도 계정도 업로드도 없습니다.',
+      footP: '포트폴리오', footT: '브라우저 도구', footL: '3D 랩', footG: '전시관'
+    }
+  };
+
+  var LANGS = ['en', 'ko'];
+  var lang = 'en';
+
+  function readPref() {
+    try {
+      var v = localStorage.getItem(STORE);
+      return LANGS.indexOf(v) >= 0 ? v : null;
+    } catch (e) { return null; }
+  }
+
+  function t(key) {
+    var pack = D[lang] || D.en;
+    var v = pack[key];
+    if (v === undefined || v === null) v = D.en[key];
+    return v === undefined ? null : v;
+  }
+
+  function apply(next) {
+    lang = LANGS.indexOf(next) >= 0 ? next : 'en';
+    document.documentElement.setAttribute('lang', lang);
+
+    var i, els, v;
+    els = document.querySelectorAll('[data-i18n]');
+    for (i = 0; i < els.length; i++) {
+      v = t(els[i].getAttribute('data-i18n'));
+      if (v !== null) els[i].textContent = v;
+    }
+    els = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < els.length; i++) {
+      v = t(els[i].getAttribute('data-i18n-html'));
+      if (v !== null) els[i].innerHTML = v;
+    }
+    els = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < els.length; i++) {
+      v = t(els[i].getAttribute('data-i18n-aria'));
+      if (v !== null) els[i].setAttribute('aria-label', v);
+    }
+
+    if (t('docTitle')) document.title = t('docTitle');
+    var md = document.querySelector('meta[name="description"]');
+    if (md && t('metaDesc')) md.setAttribute('content', t('metaDesc'));
+
+    var btns = document.querySelectorAll('#lang button');
+    for (i = 0; i < btns.length; i++) {
+      btns[i].classList.toggle('on', btns[i].getAttribute('data-l') === lang);
+    }
+    var hint = document.querySelector('#hint');
+    if (hint) {
+      hint.innerHTML = lang === 'ko'
+        ? '<b>마우스</b> 움직여 조종 · <b>Space</b> 부스트<br />모바일은 캔버스를 끌어서 조종합니다'
+        : '<b>Move</b> to steer · <b>Space</b> boost · <b>P</b> pause<br />On a phone, drag the canvas';
+    }
+
+    try { localStorage.setItem(STORE, lang); } catch (e) { /* private mode */ }
+    document.dispatchEvent(new CustomEvent('cg:lang', { detail: { lang: lang } }));
+  }
+
+  document.addEventListener('click', function (e) {
+    var btn = e.target && e.target.closest ? e.target.closest('#lang button') : null;
+    if (!btn) return;
+    apply(btn.getAttribute('data-l'));
+  });
+
+  var initial = readPref();
+  if (!initial) {
+    var nav = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+    initial = nav.indexOf('ko') === 0 ? 'ko' : 'en';
+  }
+  apply(initial);
+
+  /* failsafe: if the module never paints, show the fallback instead of a spinner */
+  window.addEventListener('error', function (e) {
+    if (window.__cgErrors) window.__cgErrors.push(String((e && (e.message || e.type)) || 'error') + ' @ ' + String((e && e.filename) || ''));
+  }, true);
+  setTimeout(function () {
+    if (!window.__cgReady) {
+      var l = document.getElementById('loader');
+      if (l) l.classList.add('hidden');
+      var fb = document.getElementById('fallback');
+      if (fb) fb.classList.add('on');
+      var body = fb && fb.querySelector('p');
+      if (body && window.__cgErrors && window.__cgErrors.length) {
+        body.innerHTML = body.innerHTML + '<br><span style="opacity:.6;font-size:11px">' + window.__cgErrors.join('<br>') + '</span>';
+      }
+    }
+  }, 14000);
+})();
+</script>
+<script src="./game.js" type="module"></script>
+</body>
+</html>
