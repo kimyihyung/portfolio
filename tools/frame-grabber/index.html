@@ -982,7 +982,7 @@ window.addEventListener('unhandledrejection', function (e) {
       fpsOk: 'Detected {fps} fps from {n} frame timings.',
       fpsManual: 'Set by hand: {fps} fps. ±1 frame uses this number.',
       fpsDefault: 'Not detected yet — 30 fps is assumed. Press Detect, or type the real rate.',
-      fpsFail: 'Frame rate could not be detected in this browser. Type it by hand if stepping looks off.',
+      fpsFail: 'The frame rate could not be measured reliably here, so 30 fps stays. Type the real rate if ±1 frame looks off.',
       exportTitle: 'Export format',
       qualityLabel: 'WebP quality',
       fmtHint: 'PNG is lossless and larger. WebP is smaller; the quality slider only affects WebP.',
@@ -1066,7 +1066,7 @@ window.addEventListener('unhandledrejection', function (e) {
       fpsOk: '{n}개 프레임 타이밍으로 {fps}fps를 감지했습니다.',
       fpsManual: '직접 입력한 값: {fps}fps. 1프레임 이동에 이 값을 씁니다.',
       fpsDefault: '아직 감지 전이라 30fps로 가정했습니다. 자동 감지를 누르거나 실제 값을 입력하세요.',
-      fpsFail: '이 브라우저에서는 프레임 레이트를 감지하지 못했습니다. 이동이 어긋나면 직접 입력하세요.',
+      fpsFail: '이 환경에서는 프레임 레이트를 안정적으로 재지 못해 30fps로 둡니다. 1프레임 이동이 어긋나면 실제 값을 입력하세요.',
       exportTitle: '저장 형식',
       qualityLabel: 'WebP 품질',
       fmtHint: 'PNG는 무손실이라 용량이 큽니다. WebP는 더 작고, 품질 슬라이더는 WebP에만 적용됩니다.',
@@ -1312,7 +1312,9 @@ window.addEventListener('unhandledrejection', function (e) {
 
   function loadFailed(msg) {
     state.loaded = false;
+    state.busy = false;
     state.buildId++;
+    setBusy(false);
     ws.hidden = true;
     drop.hidden = false;
     setStatus(msg, 'error');
@@ -1349,6 +1351,10 @@ window.addEventListener('unhandledrejection', function (e) {
     $('fileName').textContent = f.name;
     $('fileSub').textContent = Math.round(f.size / 1024) + ' KB';
     setStatus(t('reading'));
+    /* 준비(프레임 레이트 측정 → 타임라인 썸네일)가 끝날 때까지 조작을 잠근다.
+       그 사이에 사용자가 이동하면 썸네일 탐색과 서로 자리를 뺏는다. */
+    state.busy = true;
+    setBusy(true);
     onMeta(token);
   }
 
@@ -1382,6 +1388,7 @@ window.addEventListener('unhandledrejection', function (e) {
       if (token !== state.buildId) return;
       /* 프레임 레이트 감지가 먼저 끝나야 한다 — 동시에 필름스트립을 탐색하면
          미디어 타임라인이 튀어 추정이 어긋난다. */
+      if (t('fpsDetecting')) setStatus(t('fpsDetecting'));
       detectFps(true, token).then(function () {
         if (token !== state.buildId) return;
         buildFilmstrip(token);
@@ -1535,25 +1542,34 @@ window.addEventListener('unhandledrejection', function (e) {
 
   /* ───────────────────────── 프레임 레이트 ───────────────────────── */
   function estimateFps(times) {
-    /* 중복을 버리고 (첫 시각 → 마지막 시각) 전체 구간으로 추정한다.
-       개별 간격의 중앙값보다 타임스탬프 양자화 오차에 강하다. */
-    var ts = [], i, last = -1;
+    /* 프레임 간격을 직접 모은다. 드롭된 프레임과 타임스탬프 양자화를 모두 견디도록
+       최빈 간격의 하위 분위수를 기준으로 삼고, 간격이 고르지 않으면 값을 내지 않는다. */
+    var deltas = [], i, prev = -1;
     for (i = 0; i < times.length; i++) {
-      if (times[i] > last + 0.0002) { ts.push(times[i]); last = times[i]; }
+      if (prev >= 0) {
+        var d = times[i] - prev;
+        if (d > 0.0008 && d < 0.5) deltas.push(d);
+      }
+      prev = times[i];
     }
-    if (ts.length < 8) return null;
-    var span = ts[ts.length - 1] - ts[0];
-    var steps = ts.length - 1;
-    if (span <= 0 || span / steps > 0.4) return null;
-    var raw = steps / span;
+    if (deltas.length < 10) return null;
+    var sorted = deltas.slice(0).sort(function (a, b) { return a - b; });
+    var base = sorted[Math.floor(sorted.length * 0.2)];
+    if (!base) return null;
+    var steady = 0;
+    for (i = 0; i < deltas.length; i++) {
+      if (Math.abs(deltas[i] - base) / base < 0.15) steady++;
+    }
+    /* 화면에 실제로 그려진 간격이 들쭉날쭉하면(탭 스로틀·프레임 드롭) 믿지 않는다 */
+    if (steady / deltas.length < 0.7) return null;
+    var raw = 1 / base;
     var cands = [23.976, 24, 25, 29.97, 30, 48, 50, 59.94, 60, 120];
     var best = null, bestDiff = 1;
     for (i = 0; i < cands.length; i++) {
       var diff = Math.abs(raw - cands[i]) / cands[i];
-      if (diff < 0.02 && diff < bestDiff) { best = cands[i]; bestDiff = diff; }
+      if (diff < 0.03 && diff < bestDiff) { best = cands[i]; bestDiff = diff; }
     }
-    if (best) return { fps: best, n: steps };
-    return { fps: Math.round(raw * 1000) / 1000, n: steps };
+    return { fps: best || Math.round(raw * 1000) / 1000, n: deltas.length };
   }
 
   function waitEvent(name, ms) {
@@ -1606,7 +1622,7 @@ window.addEventListener('unhandledrejection', function (e) {
       function onFrame() {
         return function (now, meta) {
           times.push(meta.mediaTime);
-          if (times.length >= 16) finish(estimateFps(times));
+          if (times.length >= 20) finish(estimateFps(times));
           else cid = video.requestVideoFrameCallback(onFrame());
         };
       }
@@ -1623,7 +1639,7 @@ window.addEventListener('unhandledrejection', function (e) {
           p.then(function () { cid = video.requestVideoFrameCallback(onFrame()); })
             .catch(function () { finish(null); });
         }
-        timer = setTimeout(function () { finish(estimateFps(times)); }, 2000);
+        timer = setTimeout(function () { finish(estimateFps(times)); }, 2200);
       });
     });
   }
@@ -1672,12 +1688,18 @@ window.addEventListener('unhandledrejection', function (e) {
       cells.push(b);
     }
 
+    setStatus(t('readingFrames'));
     var i2 = 0;
     function next() {
       if (token !== state.buildId || i2 >= N) {
         if (token === state.buildId && state.loaded) {
           setStatus(t('statusFrames', { n: N }), 'ok');
-          seekExact(0).then(function () { if (token === state.buildId) paintTime(0); });
+          seekExact(0).then(function () {
+            if (token !== state.buildId) return;
+            paintTime(0);
+            state.busy = false;
+            setBusy(false);
+          });
         }
         return;
       }
@@ -2008,6 +2030,8 @@ window.addEventListener('unhandledrejection', function (e) {
       var el = $(ids[i]);
       if (el) el.disabled = b;
     }
+    var steps = document.querySelectorAll('.transport .step');
+    for (var k = 0; k < steps.length; k++) steps[k].disabled = b;
   }
 
   $('sbBuild').addEventListener('click', buildStoryboard);
