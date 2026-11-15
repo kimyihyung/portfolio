@@ -304,7 +304,8 @@ try {
 if (!renderer) throw new Error('WebGL renderer init failed');
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(PORTRAIT ? 58 : 52, window.innerWidth / window.innerHeight, 0.1, 900);
+const FOV_BASE = PORTRAIT ? 68 : 52;
+const camera = new THREE.PerspectiveCamera(FOV_BASE, window.innerWidth / window.innerHeight, 0.1, 900);
 const clock = new THREE.Clock();
 
 /* ───────────────── textures ───────────────── */
@@ -353,11 +354,15 @@ CHANNELS.forEach((c, i) => { CH_INDEX[c.id] = i; });
 
 /* ───────────────── layout: five spiral galaxies in a ring ───────────────── */
 const counts = CHANNELS.map((c) => c.count);
-const rMaxOf = (n) => 4.2 + 14 * Math.sqrt(n / 2000);
-const RING = PORTRAIT ? 44 : 52;
+const rMaxOf = (n) => (4.2 + 14 * Math.sqrt(n / 2000)) * (PORTRAIT ? 0.78 : 1);
+const RING = 52;
 const CLUSTER_SPOT = CHANNELS.map((ch, ci) => {
+  if (PORTRAIT) {
+    // 세로 화면: 은하를 세로로 세운다
+    return new THREE.Vector3(((ci % 2) ? 1 : -1) * 6.5, (2 - ci) * 25, ((ci % 2) ? -3 : 3));
+  }
   const a = ci * (Math.PI * 2 / CHANNELS.length) + 0.3;
-  const rr = RING * (PORTRAIT ? 0.72 : 1) * (0.92 + 0.16 * (ci % 2));
+  const rr = RING * (0.92 + 0.16 * (ci % 2));
   return new THREE.Vector3(Math.cos(a) * rr, ((ci % 2) ? -1 : 1) * (3.2 + ci * 0.6), Math.sin(a) * rr);
 });
 
@@ -558,7 +563,7 @@ CHANNELS.forEach((ch, ci) => {
   const spot = CLUSTER_SPOT[ci];
   const rr = rMaxOf(ch.count);
   const sp = makeLabel(ch);
-  const sc = PORTRAIT ? 0.25 : 0.19;
+  const sc = PORTRAIT ? 0.135 : 0.19;
   sp.scale.set(sc, sc / 3.45, 1);
   const outLen = Math.hypot(spot.x, spot.z) || 1;
   const ox = spot.x / outLen, oz = spot.z / outLen;
@@ -631,7 +636,12 @@ focusRing.scale.set(4, 4, 1);
 scene.add(focusRing);
 
 /* ───────────────── camera ───────────────── */
-const OVERVIEW_R = PORTRAIT ? 130 : (isSmall ? 124 : 118);
+let CONTENT_R = 0;
+NODES.forEach((n) => { CONTENT_R = Math.max(CONTENT_R, n.pos.length()); });
+CONTENT_R += 6.5;                                  // 라벨 여유
+const _tanV = Math.tan((FOV_BASE * Math.PI) / 360);
+const _tanH = _tanV * (window.innerWidth / window.innerHeight);
+const OVERVIEW_R = clamp(Math.max(CONTENT_R / _tanV * 0.62, CONTENT_R / _tanH * 1.08), 60, 320);
 const view = { target: new THREE.Vector3(0, 0, 0), r: OVERVIEW_R * 1.7, az: 0.6, pol: 1.06 };
 const tw = { active: false, t: 0, dur: 1, fr: 0, tr: 0, ft: new THREE.Vector3(), tt: new THREE.Vector3() };
 function applyCam() {
@@ -992,7 +1002,7 @@ canvas.addEventListener('wheel', (e) => {
 function onResize() {
   const w = window.innerWidth, h = window.innerHeight;
   camera.aspect = w / h;
-  camera.fov = w / h < 0.9 ? 58 : 52;
+  camera.fov = w / h < 0.9 ? 68 : 52;
   camera.updateProjectionMatrix();
   document.documentElement.classList.toggle('m', w <= 720);
   renderer.setSize(w, h, false);
