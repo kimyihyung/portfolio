@@ -906,7 +906,7 @@ function pick(cx, cy) {
     const sx = (projected.x * 0.5 + 0.5) * rect.width;
     const sy = (-projected.y * 0.5 + 0.5) * rect.height;
     const d = Math.hypot(sx - (cx - rect.left), sy - (cy - rect.top));
-    const score = d + Math.max(0, projected.z) * 46;
+    const score = d + Math.max(0, projected.z) * 6;   // 먼 별은 약간 불리하게
     if (score < bestScore) { bestScore = score; best = n; }
   }
   return bestScore <= limit ? best : null;
