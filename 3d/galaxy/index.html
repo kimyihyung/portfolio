@@ -558,7 +558,7 @@ CHANNELS.forEach((ch, ci) => {
   const spot = CLUSTER_SPOT[ci];
   const rr = rMaxOf(ch.count);
   const sp = makeLabel(ch);
-  const sc = PORTRAIT ? 0.34 : 0.11;
+  const sc = PORTRAIT ? 0.25 : 0.19;
   sp.scale.set(sc, sc / 3.45, 1);
   const outLen = Math.hypot(spot.x, spot.z) || 1;
   const ox = spot.x / outLen, oz = spot.z / outLen;
