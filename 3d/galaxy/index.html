@@ -652,7 +652,7 @@ const _tanH = _tanV * (window.innerWidth / window.innerHeight);
 const _mx = PORTRAIT ? 1.04 : 1.62;
 const _my = PORTRAIT ? 0.98 : 1.22;
 const OVERVIEW_R = clamp(Math.max((HALF_W / _tanH) * _mx, (HALF_H / _tanV) * _my), 60, 320);
-const targetY0 = PORTRAIT ? HALF_H * 0.2 : 0;
+const targetY0 = PORTRAIT ? HALF_H * 0.24 + 9 : 0;
 const view = { target: new THREE.Vector3(0, targetY0, 0), r: OVERVIEW_R * 1.7, az: 0.6, pol: 1.06 };
 const tw = { active: false, t: 0, dur: 1, fr: 0, tr: 0, ft: new THREE.Vector3(), tt: new THREE.Vector3() };
 function applyCam() {
