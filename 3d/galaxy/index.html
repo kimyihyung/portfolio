@@ -1032,6 +1032,13 @@ function animate() {
     if (!anyMove) dirty = false;
   }
 
+  const zoomFade = clamp((view.r - 22) / 55, 0.18, 1);
+  CHANNELS.forEach((ch) => {
+    if (!ch.lines) return;
+    const on = filter === 'all' || filter === ch.id;
+    ch.lines.material.opacity = on ? ch.linesBase * zoomFade : 0.02;
+  });
+
   if (focused) {
     focusRing.position.copy(focused.pos);
     const s = clamp(view.r * 0.075, 2.4, 7.5);
@@ -1058,6 +1065,12 @@ window.__galaxy = {
   openIndex: (i) => { const n = NODES[Math.max(0, Math.min(N - 1, i))]; openCard(n); return { t: n.t, c: n.c, d: n.d }; },
   close: () => closeCard(true),
   lang: (l) => { LANG = l; applyLang(); return LANG; },
+  screenOf: (i) => {
+    const n = NODES[Math.max(0, Math.min(N - 1, i))];
+    const v = n.pos.clone().project(camera);
+    const rect = canvas.getBoundingClientRect();
+    return { x: (v.x * 0.5 + 0.5) * rect.width, y: (-v.y * 0.5 + 0.5) * rect.height, t: n.t, live: !!n.live };
+  },
   cardText: () => ({ title: $('#ctitle').textContent, chip: $('#chiptext').textContent, date: $('#cdate').textContent, sum: $('#csum').textContent, href: $('#copen').getAttribute('href'), visible: cardEl.classList.contains('on') })
 };
 animate();
