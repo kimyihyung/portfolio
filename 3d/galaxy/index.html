@@ -351,30 +351,36 @@ const NODES = DATA.nodes;
 const CH_INDEX = {};
 CHANNELS.forEach((c, i) => { CH_INDEX[c.id] = i; });
 
-/* ───────────────── layout: 5 sectors of one galaxy ───────────────── */
-const SECTOR = (Math.PI * 2) / CHANNELS.length;
+/* ───────────────── layout: five spiral galaxies in a ring ───────────────── */
 const counts = CHANNELS.map((c) => c.count);
-const rMaxOf = (n) => 10 + 36 * Math.sqrt(n / 2000);
+const rMaxOf = (n) => 3.4 + 12.5 * Math.sqrt(n / 2000);
+const RING = PORTRAIT ? 40 : 44;
+const CLUSTER_SPOT = CHANNELS.map((ch, ci) => {
+  const a = ci * (Math.PI * 2 / CHANNELS.length) + 0.3;
+  const rr = RING * (PORTRAIT ? 0.72 : 1) * (0.92 + 0.16 * (ci % 2));
+  return new THREE.Vector3(Math.cos(a) * rr, ((ci % 2) ? -1 : 1) * (3.2 + ci * 0.6), Math.sin(a) * rr);
+});
 
 NODES.forEach((n, idx) => {
   const ci = CH_INDEX[n.c];
+  const center = CLUSTER_SPOT[ci];
   const count = Math.max(counts[ci], 1);
   const rMax = rMaxOf(count);
-  const rMin = 4.2 + rMax * 0.1;
-  const t = n.r === undefined ? 0.5 : n.r;
-  const k = idx; // stable index for scatter
-  const jitter = (k * 0.6180339887) % 1;
-  const jitter2 = (k * 0.3819660113) % 1;
-  const r = rMin + (rMax - rMin) * Math.sqrt(t) + (jitter - 0.5) * (rMax - rMin) * 0.055;
-  const a0 = ci * SECTOR + SECTOR * 0.06;
-  const span = SECTOR * 0.88;
-  let ang = a0 + span * ((jitter * 0.82 + jitter2 * 0.18) % 1);
-  ang += (r / 60) * 0.5;                                     // spiral twist
-  const yBase = (jitter2 - 0.5) * (1.5 + 3.6 * (1 - t));
-  const yWave = Math.sin(ang * 2.4 + r * 0.16) * (0.55 + 0.9 * (1 - t));
-  n.pos = new THREE.Vector3(Math.cos(ang) * r, yBase + yWave, Math.sin(ang) * r);
-  n.ang = ang; n.rad = r;
-  n.size = 0.85 + 1.45 * (n.i === undefined ? 0.5 : n.i);
+  const rMin = 1.1 + rMax * 0.06;
+  const t = n.r === undefined ? 0.5 : n.r;      // 0 = oldest (bulge), 1 = newest (rim)
+  const arms = count > 400 ? 3 : (count > 40 ? 2 : 1);
+  const arm = idx % arms;
+  const j = (rnd() - 0.5), j2 = (rnd() - 0.5);
+  const r = rMin + (rMax - rMin) * Math.pow(t, 0.72) + j * rMax * 0.07;
+  const ang = (arm * Math.PI * 2 / arms) + r * 0.62 + j2 * 0.42;
+  const y = (rnd() - 0.5) * (0.55 + 2.2 * (1 - t));
+  n.pos = new THREE.Vector3(
+    center.x + Math.cos(ang) * r,
+    center.y + y,
+    center.z + Math.sin(ang) * r
+  );
+  n.ang = ang; n.rad = r; n.cl = center;
+  n.size = 0.85 + 1.35 * (n.i === undefined ? 0.5 : n.i);
   n.featured = false;
 });
 
@@ -469,16 +475,16 @@ scene.add(bgStars);
 
 /* ───────────────── nebula clouds + core ───────────────── */
 CHANNELS.forEach((ch, ci) => {
-  const mid = ci * SECTOR + SECTOR / 2;
-  const rr = rMaxOf(ch.count) * 0.62;
+  const spot = CLUSTER_SPOT[ci];
+  const rr = rMaxOf(ch.count);
   for (let i = 0; i < 3; i++) {
     const sp = new THREE.Sprite(new THREE.SpriteMaterial({
-      map: GLOW, color: ch.color, transparent: true, opacity: 0.1,
+      map: GLOW, color: ch.color, transparent: true, opacity: 0.12,
       blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false
     }));
-    const s = 22 + rnd() * 18;
-    sp.scale.set(s, s * 0.72, 1);
-    sp.position.set(Math.cos(mid + (rnd() - 0.5) * 0.5) * rr, (rnd() - 0.5) * 6, Math.sin(mid + (rnd() - 0.5) * 0.5) * rr);
+    const s = rr * (2.1 + rnd() * 0.9);
+    sp.scale.set(s, s * 0.78, 1);
+    sp.position.set(spot.x + (rnd() - 0.5) * rr * 0.7, spot.y + (rnd() - 0.5) * 3, spot.z + (rnd() - 0.5) * rr * 0.7);
     sp.renderOrder = -2;
     scene.add(sp);
   }
@@ -487,7 +493,7 @@ const core = new THREE.Sprite(new THREE.SpriteMaterial({
   map: GLOW, color: 0xffe4b0, transparent: true, opacity: 0.55,
   blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false
 }));
-core.scale.set(24, 24, 1);
+core.scale.set(20, 20, 1);
 scene.add(core);
 
 /* ───────────────── channel labels ───────────────── */
@@ -517,11 +523,12 @@ function makeLabel(ch) {
   return sprite;
 }
 CHANNELS.forEach((ch, ci) => {
-  const mid = ci * SECTOR + SECTOR / 2;
-  const rr = rMaxOf(ch.count) + 7;
+  const spot = CLUSTER_SPOT[ci];
+  const rr = rMaxOf(ch.count);
   const sp = makeLabel(ch);
-  sp.scale.set(PORTRAIT ? 10 : 12, PORTRAIT ? 2.8 : 3.35, 1);
-  sp.position.set(Math.cos(mid) * rr, 7.5, Math.sin(mid) * rr);
+  const sc = PORTRAIT ? 8.6 : 10.4;
+  sp.scale.set(sc, sc / 3.6, 1);
+  sp.position.set(spot.x, spot.y + rr * 0.62 + 5.2, spot.z);
   sp.userData.ch = ch.id;
   scene.add(sp);
   ch.label = sp;
@@ -532,24 +539,13 @@ CHANNELS.forEach((ch, ci) => {
 const lineMats = [];
 function buildLines(list, color, opacity) {
   const sample = [];
-  const step = Math.max(1, Math.floor(list.length / 110));
+  const step = Math.max(1, Math.floor(list.length / 150));
   for (let i = 0; i < list.length; i += step) sample.push(list[i]);
   const pts = [];
-  const used = {};
-  for (let i = 0; i < sample.length; i++) {
-    const dists = [];
-    for (let j = 0; j < sample.length; j++) {
-      if (i === j) continue;
-      dists.push([j, sample[i].pos.distanceTo(sample[j].pos)]);
-    }
-    dists.sort((a, b) => a[1] - b[1]);
-    dists.slice(0, 2).forEach(([j, d]) => {
-      if (d > 16) return;
-      const key = i < j ? i + '-' + j : j + '-' + i;
-      if (used[key]) return;
-      used[key] = 1;
-      pts.push(sample[i].pos.x, sample[i].pos.y, sample[i].pos.z, sample[j].pos.x, sample[j].pos.y, sample[j].pos.z);
-    });
+  for (let i = 0; i < sample.length - 1; i++) {
+    const a = sample[i], b = sample[i + 1];
+    if (a.pos.distanceTo(b.pos) > 5) continue;
+    pts.push(a.pos.x, a.pos.y, a.pos.z, b.pos.x, b.pos.y, b.pos.z);
   }
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3));
@@ -562,20 +558,18 @@ function buildLines(list, color, opacity) {
   return seg;
 }
 CHANNELS.forEach((ch) => {
-  const list = NODES.filter((n) => n.c === ch.id);
-  ch.lines = buildLines(list, ch.color, 0.16);
-  ch.linesBase = 0.16;
+  const list = NODES.filter((n) => n.c === ch.id).sort((a, b) => (a.r || 0) - (b.r || 0));
+  ch.lines = buildLines(list, ch.color, 0.18);
+  ch.linesBase = 0.18;
 });
 
-/* inter-channel bridges via nearest star between sectors */
+/* inter-channel bridges: newest star of each cluster to the next */
 const bridgePts = [];
 for (let i = 0; i < CHANNELS.length; i++) {
   const a = CHANNELS[i], b = CHANNELS[(i + 1) % CHANNELS.length];
-  const la = NODES.filter((n) => n.c === a.id).slice(-3);
-  const lb = NODES.filter((n) => n.c === b.id).slice(-3);
-  let best = null, bd = 1e9;
-  la.forEach((x) => lb.forEach((y) => { const d = x.pos.distanceTo(y.pos); if (d < bd) { bd = d; best = [x, y]; } }));
-  if (best) bridgePts.push(best[0].pos.x, best[0].pos.y, best[0].pos.z, best[1].pos.x, best[1].pos.y, best[1].pos.z);
+  const la = NODES.filter((n) => n.c === a.id).sort((x, y) => (x.r || 0) - (y.r || 0)).slice(-1);
+  const lb = NODES.filter((n) => n.c === b.id).sort((x, y) => (x.r || 0) - (y.r || 0)).slice(-1);
+  if (la[0] && lb[0]) bridgePts.push(la[0].pos.x, la[0].pos.y, la[0].pos.z, lb[0].pos.x, lb[0].pos.y, lb[0].pos.z);
 }
 const bridgeGeo = new THREE.BufferGeometry();
 bridgeGeo.setAttribute('position', new THREE.Float32BufferAttribute(bridgePts, 3));
@@ -600,7 +594,7 @@ focusRing.scale.set(4, 4, 1);
 scene.add(focusRing);
 
 /* ───────────────── camera ───────────────── */
-const OVERVIEW_R = PORTRAIT ? 96 : (isSmall ? 92 : 86);
+const OVERVIEW_R = PORTRAIT ? 112 : (isSmall ? 104 : 100);
 const view = { target: new THREE.Vector3(0, 0, 0), r: OVERVIEW_R * 1.6, az: 0.6, pol: 1.28 };
 const tw = { active: false, t: 0, dur: 1, fr: 0, tr: 0, ft: new THREE.Vector3(), tt: new THREE.Vector3() };
 function applyCam() {
