@@ -571,7 +571,8 @@ CHANNELS.forEach((ch, ci) => {
   const sc = PORTRAIT ? 0.135 : 0.19;
   sp.scale.set(sc, sc / 3.45, 1);
   if (PORTRAIT) {
-    sp.position.set(spot.x, spot.y + rr * 1.02 + 4.2, spot.z);
+    const side = spot.x <= 0 ? 1 : -1;
+    sp.position.set(spot.x + side * (rr + 15), spot.y + 1.5, spot.z + 4);
   } else {
     const outLen = Math.hypot(spot.x, spot.z) || 1;
     const ox = spot.x / outLen, oz = spot.z / outLen;
@@ -654,7 +655,7 @@ HALF_W += 7; HALF_H += 5;
 const _tanV = Math.tan((FOV_BASE * Math.PI) / 360);
 const _tanH = _tanV * (window.innerWidth / window.innerHeight);
 const _mx = PORTRAIT ? 1.04 : 1.62;
-const _my = PORTRAIT ? 0.98 : 1.22;
+const _my = PORTRAIT ? 1.04 : 1.22;
 const OVERVIEW_R = clamp(Math.max((HALF_W / _tanH) * _mx, (HALF_H / _tanV) * _my), 60, 320);
 const targetY0 = PORTRAIT ? HALF_H * 0.24 + 9 : 0;
 const view = { target: new THREE.Vector3(0, targetY0, 0), r: OVERVIEW_R * 1.7, az: 0.6, pol: 1.06 };
