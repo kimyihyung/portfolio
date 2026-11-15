@@ -1,0 +1,3493 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0a0b0d">
+<meta name="description" content="FileForge converts PDF to images, images to PDF, JPG/PNG/WebP/BMP/ICO between each other, and JSON/CSV/TSV/Markdown — entirely inside your browser. Zero uploads, zero accounts, zero external requests.">
+<meta name="keywords" content="file converter, pdf to image, image to pdf, jpg to png, png to webp, webp to jpg, bmp converter, ico favicon generator, json to csv, csv to json, markdown to html, offline converter, no upload converter, private file converter">
+<title>FileForge — Convert PDF, Images &amp; Data With Zero Uploads</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0b0d'/%3E%3Cpath d='M10 21.5V10.5h6.6M10 16.2h5.4M19.4 10.5 22.6 13.7v7.8h-3.2' fill='none' stroke='%23e5b45c' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M16 23.6h.01' stroke='%23e5b45c' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/file-converter/">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/file-converter/">
+<meta property="og:title" content="FileForge — Convert PDF, Images &amp; Data With Zero Uploads">
+<meta property="og:description" content="PDF ⇄ images, JPG · PNG · WebP · BMP · ICO, JSON · CSV · TSV and Markdown — converted inside this tab. No server, no account, no external request.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/file-converter.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="FileForge — zero-upload file converter running in the browser">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="FileForge — Convert PDF, Images &amp; Data With Zero Uploads">
+<meta name="twitter:description" content="Every conversion happens inside your browser. Nothing is uploaded, nothing is installed.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/file-converter.jpg">
+<meta name="twitter:image:alt" content="FileForge — zero-upload file converter running in the browser">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"FileForge","alternateName":"Local file converter","applicationCategory":"UtilitiesApplication","operatingSystem":"Any (web browser)","url":"https://kimyihyung.github.io/portfolio/tools/file-converter/","description":"Convert PDF to JPG, PNG or WebP; combine images into one PDF; convert between JPG, PNG, WebP, BMP and ICO; convert JSON, CSV and TSV; render Markdown to HTML or print-ready PDF. Everything runs in the browser with zero uploads and no sign-up.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":"PDF to image (JPG, PNG, WebP) at 72–600 DPI, images to one PDF (A4, Letter or original size), JPG/PNG/WebP/BMP/ICO conversion with resize and EXIF removal, SVG rasterising, ICO favicon generation at five sizes, JSON ↔ CSV ↔ TSV, Markdown to HTML and print-to-PDF, HTML to plain text, batch ZIP download","isPartOf":{"@type":"CollectionPage","name":"Tools — Zero Uploads, Zero Sign-ups, 100% In-Browser","url":"https://kimyihyung.github.io/portfolio/tools/"}}
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  --bg: #0a0b0d;
+  --bg2: #0e1113;
+  --panel: #12161a;
+  --panel2: #171c20;
+  --line: rgba(255, 255, 255, .09);
+  --line2: rgba(255, 255, 255, .18);
+  --ink: #f3f1ea;
+  --muted: #a09a8e;
+  --muted2: #736d63;
+  --accent: #e5b45c;
+  --accent2: #c9973f;
+  --on-accent: #1a1204;
+  --warn: #ffc06b;
+  --danger: #ff837a;
+  --ok: #7fd6a2;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --shadow: 0 24px 70px rgba(0, 0, 0, .5);
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --display: "Segoe UI", "Helvetica Neue", system-ui, Arial, "Liberation Sans", sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html[data-theme="light"] {
+  --bg: #f6f4ef;
+  --bg2: #efece4;
+  --panel: #ffffff;
+  --panel2: #f7f5f0;
+  --line: rgba(30, 24, 12, .10);
+  --line2: rgba(30, 24, 12, .22);
+  --ink: #17140d;
+  --muted: #61605a;
+  --muted2: #8a857a;
+  --accent: #9a6f16;
+  --accent2: #7d5a11;
+  --on-accent: #ffffff;
+  --ok: #2f7d4f;
+  --danger: #c0392b;
+  --shadow: 0 20px 50px rgba(40, 30, 10, .12);
+}
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(120% 55% at 50% -18%, rgba(229, 180, 92, .10), transparent 62%),
+    radial-gradient(70% 40% at 100% 2%, rgba(229, 180, 92, .05), transparent 58%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: 1.55;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--accent); color: var(--on-accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.wrap { width: 100%; max-width: 1060px; margin: 0 auto; padding: 0 16px 0; }
+
+/* ---------------- header ---------------- */
+header.top {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; padding: 16px 0 10px;
+}
+.brand {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--display); font-size: 12.5px; font-weight: 700;
+  letter-spacing: .15em; text-transform: uppercase;
+  color: var(--ink); text-decoration: none; white-space: nowrap;
+}
+.brand .mark {
+  min-width: 28px; height: 22px; padding: 0 6px; border-radius: 7px; flex: none;
+  display: inline-grid; place-items: center;
+  border: 1px solid rgba(229, 180, 92, .45);
+  background: rgba(229, 180, 92, .14);
+  color: var(--accent); font-family: var(--mono); font-size: 9.5px; font-weight: 700;
+  letter-spacing: .04em;
+}
+.top-actions { display: flex; align-items: center; gap: 6px; }
+.lang-toggle {
+  display: inline-flex; align-items: center; gap: 2px;
+  height: 30px; padding: 0 8px;
+  border: 1px solid var(--line); border-radius: 8px;
+  background: rgba(255, 255, 255, .03);
+  color: var(--muted); cursor: pointer;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em;
+  transition: border-color .18s ease, transform .12s ease;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.95); }
+.lang-toggle .lt { transition: color .18s ease; }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); }
+.icon-btn {
+  width: 30px; height: 30px; flex: none;
+  display: grid; place-items: center;
+  border: 1px solid var(--line); border-radius: 8px;
+  background: rgba(255, 255, 255, .03); color: var(--muted);
+  cursor: pointer; transition: border-color .18s ease, color .18s ease, transform .12s ease;
+}
+.icon-btn:hover { border-color: var(--line2); color: var(--ink); }
+.icon-btn:active { transform: scale(.94); }
+.icon-btn .ico-sun { display: none; }
+html[data-theme="light"] .icon-btn .ico-sun { display: block; }
+html[data-theme="light"] .icon-btn .ico-moon { display: none; }
+.back {
+  font-size: 12px; color: var(--muted); text-decoration: none;
+  border-bottom: 1px solid transparent; padding-bottom: 1px;
+  white-space: nowrap;
+}
+.back:hover { color: var(--ink); border-bottom-color: var(--line2); }
+
+/* ---------------- hero ---------------- */
+.hero { padding: 18px 0 20px; }
+.pills { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 16px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted);
+  border: 1px solid var(--line); border-radius: 999px;
+  padding: 5px 10px; white-space: nowrap; max-width: 100%;
+}
+.pill b { color: var(--ink); font-weight: 700; }
+.pill .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex: none; }
+.pill--live { border-color: rgba(229, 180, 92, .34); background: rgba(229, 180, 92, .07); color: var(--accent); }
+.pill--live b { color: var(--accent); }
+.pill--net { border-color: rgba(127, 214, 162, .3); background: rgba(127, 214, 162, .06); color: var(--ok); }
+.pill--net .dot { background: var(--ok); }
+html[data-theme="light"] .pill--live { background: rgba(154, 111, 22, .07); }
+.hero h1 {
+  margin: 0 0 12px;
+  word-break: keep-all;
+  font-family: var(--display);
+  font-size: clamp(27px, 7.6vw, 50px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -.035em;
+  text-wrap: balance;
+}
+.hero h1 .dim { color: var(--muted); }
+.hero .lede {
+  margin: 0; max-width: 64ch;
+  word-break: keep-all;
+  font-size: clamp(13.5px, 3.7vw, 15.5px);
+  line-height: 1.65; color: var(--muted);
+}
+.hero .lede strong { color: var(--ink); font-weight: 600; }
+
+/* ---------------- modes ---------------- */
+.modes-wrap {
+  margin: 0 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel);
+  padding: 4px;
+  overflow: hidden;
+}
+.modes {
+  display: flex; gap: 4px;
+  overflow-x: auto; overflow-y: hidden;
+  scrollbar-width: none; -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+}
+.modes::-webkit-scrollbar { display: none; }
+.mode {
+  appearance: none; cursor: pointer; flex: 1 1 auto;
+  border: 0; border-radius: 999px;
+  background: transparent; color: var(--muted);
+  font-family: var(--font); font-size: 12.2px; font-weight: 600; letter-spacing: -.01em;
+  padding: 8px 12px;
+  transition: color .18s ease, background-color .18s ease;
+  white-space: nowrap;
+}
+.mode:hover { color: var(--ink); }
+.mode[aria-selected="true"] {
+  color: var(--on-accent); background: var(--accent); font-weight: 700;
+}
+
+.panel-mode[hidden] { display: none; }
+
+/* ---------------- drop ---------------- */
+.drop {
+  position: relative;
+  display: block;
+  margin: 4px 0 14px;
+  padding: 24px 16px 22px;
+  text-align: center;
+  border: 1px dashed var(--line2);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .025), rgba(255, 255, 255, 0) 70%),
+    var(--panel);
+  cursor: pointer;
+  transition: border-color .2s ease, background-color .2s ease, transform .15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.drop:hover { border-color: rgba(229, 180, 92, .5); }
+.drop.is-over {
+  border-color: var(--accent);
+  background: rgba(229, 180, 92, .07);
+  transform: scale(1.004);
+}
+.drop .drop-ico { width: 36px; height: 36px; margin: 0 auto 9px; color: var(--accent); opacity: .9; display: block; }
+.drop-title {
+  margin: 0 0 4px;
+  font-family: var(--display); font-size: 15px; font-weight: 700; letter-spacing: -.02em;
+}
+.drop-sub { margin: 0 0 7px; font-size: 12.6px; color: var(--muted); }
+.drop-fmt {
+  margin: 0; font-family: var(--mono); font-size: 9.5px;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--muted2);
+}
+
+/* ---------------- panel ---------------- */
+.panel {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  padding: 14px 14px 16px;
+  margin: 0 0 14px;
+}
+.panel-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; margin: 0 0 10px; flex-wrap: wrap;
+}
+.sec-k {
+  margin: 0;
+  font-family: var(--display); font-size: 10.5px; font-weight: 700;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--muted2);
+}
+.stats {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em;
+  color: var(--muted); display: inline-flex; gap: 6px; flex-wrap: wrap;
+}
+.stats b { color: var(--ink); font-weight: 700; }
+.stats .sep { color: var(--line2); }
+.link-btn {
+  appearance: none; background: none; border: 0; padding: 5px 1px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted2);
+  cursor: pointer; border-bottom: 1px solid transparent;
+}
+.link-btn:hover { color: var(--danger); border-bottom-color: currentColor; }
+
+/* ---------------- file list ---------------- */
+.files { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+.files:empty { display: none; }
+.file {
+  display: flex; align-items: center; gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--panel2);
+  padding: 8px 9px 8px 10px;
+  min-width: 0;
+}
+.file-thumb {
+  width: 34px; height: 34px; flex: none;
+  border-radius: 7px; object-fit: cover;
+  background: var(--bg2); border: 1px solid var(--line);
+  display: block;
+}
+.file-thumb--doc {
+  display: grid; place-items: center;
+  font-family: var(--mono); font-size: 9px; letter-spacing: .04em;
+  color: var(--danger); background: rgba(255, 131, 122, .08);
+  border-color: rgba(255, 131, 122, .22);
+  text-transform: uppercase; font-weight: 700;
+}
+.file-main {
+  display: flex; align-items: center; gap: 9px;
+  flex: 1 1 auto; min-width: 0;
+  background: none; border: 0; padding: 0; margin: 0;
+  text-align: left; color: inherit; font: inherit;
+}
+.file-idx {
+  flex: none; font-family: var(--mono); font-size: 10px; letter-spacing: .06em;
+  color: var(--muted2); width: 16px;
+}
+.file-txt { display: block; min-width: 0; flex: 1 1 auto; }
+.file-name {
+  margin: 0; font-size: 13px; font-weight: 600; letter-spacing: -.01em;
+  overflow-wrap: anywhere;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.file-meta {
+  display: block; margin: 1px 0 0;
+  font-family: var(--mono); font-size: 10px; letter-spacing: .04em;
+  color: var(--muted2); overflow-wrap: anywhere;
+}
+.file-meta.is-bad { color: var(--danger); }
+.file-actions { display: flex; align-items: center; gap: 3px; flex: none; }
+.file-actions .icon-btn { width: 27px; height: 27px; font-size: 11px; }
+.file-actions .icon-btn:disabled { opacity: .28; cursor: default; }
+.file-actions .icon-btn.is-del:hover { border-color: var(--danger); color: var(--danger); }
+.empty-list {
+  margin: 4px 0 0; padding: 12px 2px;
+  font-size: 12.8px; color: var(--muted2); text-align: center;
+}
+
+/* ---------------- controls ---------------- */
+.field { margin: 0 0 12px; }
+.field:last-child { margin-bottom: 0; }
+.ctrl-label {
+  display: block;
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: .13em;
+  text-transform: uppercase; color: var(--muted2);
+  margin: 0 0 6px;
+}
+.input, .select {
+  width: 100%; max-width: 100%;
+  font-family: var(--font); font-size: 13.5px; color: var(--ink);
+  background: var(--bg2);
+  border: 1px solid var(--line2); border-radius: 10px;
+  padding: 10px 11px;
+  appearance: none; -webkit-appearance: none;
+}
+.input[type="number"] { font-family: var(--mono); font-size: 13px; }
+.select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5' fill='none' stroke='%23888' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 11px center; background-size: 12px;
+  padding-right: 30px; text-overflow: ellipsis;
+}
+.input:focus, .select:focus, textarea:focus { border-color: rgba(229, 180, 92, .6); outline: none; }
+.input::placeholder, textarea::placeholder { color: var(--muted2); }
+textarea.input { resize: vertical; min-height: 96px; line-height: 1.55; font-family: var(--mono); font-size: 12.2px; }
+.hint {
+  margin: 6px 0 0;
+  font-size: 11.5px; color: var(--muted2); line-height: 1.5;
+}
+.hint.is-bad { color: var(--danger); }
+.hint.is-ok { color: var(--ok); }
+.hint b { color: var(--ink); font-weight: 700; }
+
+.row2 { display: grid; gap: 12px 14px; grid-template-columns: 1fr; }
+.fill { display: grid; gap: 10px; }
+
+.seg {
+  display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 3px;
+  padding: 3px; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--bg2);
+}
+.seg-wrap { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 3px; }
+.seg-btn {
+  appearance: none; cursor: pointer; border: 0; border-radius: 8px;
+  background: transparent; color: var(--muted);
+  font-family: var(--font); font-size: 12px; font-weight: 600;
+  padding: 7px 4px; white-space: nowrap; min-width: 0;
+  transition: color .16s ease, background-color .16s ease;
+}
+.seg-btn:hover { color: var(--ink); }
+.seg-btn[aria-pressed="true"] { background: rgba(229, 180, 92, .16); color: var(--accent); }
+html[data-theme="light"] .seg-btn[aria-pressed="true"] { background: rgba(154, 111, 22, .13); }
+
+.chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); gap: 5px; }
+.chip {
+  appearance: none; cursor: pointer;
+  border: 1px solid var(--line); border-radius: 7px;
+  background: var(--panel2); color: var(--muted);
+  font-family: var(--mono); font-size: 10.5px;
+  padding: 7px 2px; text-align: center;
+  transition: color .14s ease, border-color .14s ease, background-color .14s ease;
+  min-width: 0; overflow: hidden;
+}
+.chip:hover { border-color: var(--line2); color: var(--ink); }
+.chip[aria-pressed="true"] {
+  background: var(--accent); border-color: var(--accent);
+  color: var(--on-accent); font-weight: 700;
+}
+
+.range-row { display: flex; align-items: center; gap: 10px; }
+input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 20px; background: transparent; cursor: pointer; margin: 0;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px; border-radius: 999px; background: var(--line2);
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 15px; height: 15px; border-radius: 50%; margin-top: -5.5px;
+  background: var(--accent); border: 0;
+}
+input[type="range"]::-moz-range-track { height: 4px; border-radius: 999px; background: var(--line2); }
+input[type="range"]::-moz-range-thumb { width: 15px; height: 15px; border: 0; border-radius: 50%; background: var(--accent); }
+.range-val {
+  font-family: var(--mono); font-size: 11px; color: var(--ink);
+  min-width: 38px; text-align: right; flex: none;
+}
+.color-row { display: flex; align-items: center; gap: 9px; }
+.color-hex { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: .04em; }
+input[type="color"] {
+  -webkit-appearance: none; appearance: none;
+  width: 58px; height: 34px; flex: none; padding: 3px;
+  border: 1px solid var(--line2); border-radius: 9px;
+  background: var(--bg2); cursor: pointer;
+}
+input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+input[type="color"]::-webkit-color-swatch { border: 0; border-radius: 7px; }
+
+.check {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 12.5px; color: var(--muted); cursor: pointer;
+  padding: 2px 0;
+}
+.check input { margin: 2px 0 0; accent-color: var(--accent); width: 15px; height: 15px; flex: none; }
+
+.btn {
+  appearance: none; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  border: 1px solid var(--line2); border-radius: 10px;
+  background: rgba(255, 255, 255, .03); color: var(--ink);
+  font-family: var(--font); font-size: 13px; font-weight: 600; letter-spacing: -.01em;
+  padding: 11px 15px; text-decoration: none;
+  transition: border-color .18s ease, background-color .18s ease, transform .12s ease, opacity .18s ease;
+  text-align: center; min-width: 0;
+}
+.btn:hover { border-color: rgba(229, 180, 92, .45); }
+.btn:active { transform: scale(.985); }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 700; }
+.btn--primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.btn--ghost { background: transparent; color: var(--muted); font-size: 12px; padding: 8px 11px; }
+.btn--ghost:hover { color: var(--ink); }
+.btn--sm { font-size: 11.5px; padding: 8px 11px; }
+.btn:disabled { opacity: .45; cursor: default; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.actions .btn { flex: 1 1 170px; }
+body.is-busy .btn, body.is-busy .chip, body.is-busy .mode, body.is-busy .file-main,
+body.is-busy .file-actions .icon-btn, body.is-busy .link-btn, body.is-busy .drop {
+  pointer-events: none; opacity: .55;
+}
+.status {
+  display: none; margin: 10px 0 0;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--accent);
+  align-items: center; gap: 7px;
+}
+.status.is-on { display: flex; }
+.status .spin {
+  width: 11px; height: 11px; border-radius: 50%;
+  border: 1.5px solid rgba(229, 180, 92, .28);
+  border-top-color: var(--accent);
+  animation: spin .7s linear infinite; flex: none;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------------- results ---------------- */
+.results { margin: 4px 0 0; }
+.results[hidden] { display: none; }
+.outs { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+.out {
+  display: flex; align-items: center; gap: 10px;
+  border: 1px solid rgba(229, 180, 92, .26);
+  border-radius: var(--radius-sm);
+  background: rgba(229, 180, 92, .05);
+  padding: 9px 10px;
+  min-width: 0;
+}
+html[data-theme="light"] .out { background: rgba(154, 111, 22, .05); }
+.out-txt { flex: 1 1 auto; min-width: 0; }
+.out-name {
+  margin: 0; font-size: 12.8px; font-weight: 650; letter-spacing: -.01em;
+  overflow-wrap: anywhere;
+}
+.out-meta {
+  margin: 1px 0 0;
+  font-family: var(--mono); font-size: 10px; letter-spacing: .04em; color: var(--muted2);
+}
+.out a.save {
+  flex: none;
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--display); font-size: 11.5px; font-weight: 700;
+  letter-spacing: .04em; text-transform: uppercase;
+  color: var(--on-accent); background: var(--accent);
+  border-radius: 8px; padding: 8px 11px; text-decoration: none;
+  white-space: nowrap;
+}
+.out a.save:hover { background: var(--accent2); }
+
+/* ---------------- page thumbnails ---------------- */
+.thumbs {
+  list-style: none; margin: 10px 0 0; padding: 0;
+  display: grid; gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+}
+.thumb {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--panel2);
+  padding: 5px;
+  display: grid; gap: 4px;
+  min-width: 0;
+}
+.thumb img {
+  width: 100%; height: auto; display: block;
+  border-radius: 6px; background: #fff;
+  aspect-ratio: 3 / 4; object-fit: contain;
+}
+.thumb-meta {
+  display: flex; align-items: center; justify-content: space-between; gap: 4px;
+  font-family: var(--mono); font-size: 9px; letter-spacing: .04em; color: var(--muted2);
+}
+.thumb-meta a { color: var(--accent); text-decoration: none; font-weight: 700; }
+.thumb-meta a:hover { text-decoration: underline; }
+
+/* ---------------- preview ---------------- */
+.doc-preview {
+  margin: 10px 0 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--bg2);
+  padding: 14px;
+  max-height: 420px; overflow: auto;
+  color: var(--ink);
+  font-size: 13.5px; line-height: 1.65;
+}
+.doc-preview:empty { display: none; }
+.doc-preview > :first-child { margin-top: 0; }
+.doc-preview h1, .doc-preview h2, .doc-preview h3 { line-height: 1.25; letter-spacing: -.02em; }
+.doc-preview h1 { font-size: 21px; margin: 0 0 10px; }
+.doc-preview h2 { font-size: 17px; margin: 18px 0 8px; }
+.doc-preview h3 { font-size: 14.5px; margin: 14px 0 6px; }
+.doc-preview p { margin: 0 0 10px; }
+.doc-preview ul, .doc-preview ol { margin: 0 0 10px; padding-left: 22px; }
+.doc-preview li { margin: 0 0 4px; }
+.doc-preview blockquote {
+  margin: 0 0 10px; padding: 2px 0 2px 12px;
+  border-left: 2px solid var(--accent); color: var(--muted);
+}
+.doc-preview code {
+  font-family: var(--mono); font-size: 12px;
+  background: rgba(255, 255, 255, .07); border-radius: 4px; padding: 1px 4px;
+}
+.doc-preview pre {
+  margin: 0 0 10px; padding: 10px 12px; overflow-x: auto;
+  background: rgba(0, 0, 0, .35); border-radius: 8px; border: 1px solid var(--line);
+}
+.doc-preview pre code { background: none; padding: 0; font-size: 11.8px; }
+.doc-preview table { border-collapse: collapse; width: 100%; margin: 0 0 10px; font-size: 12.5px; }
+.doc-preview th, .doc-preview td { border: 1px solid var(--line2); padding: 5px 8px; text-align: left; }
+.doc-preview th { background: rgba(255, 255, 255, .05); font-weight: 700; }
+.doc-preview img { max-width: 100%; height: auto; border-radius: 6px; }
+.doc-preview a { color: var(--accent); }
+.doc-preview hr { border: 0; border-top: 1px solid var(--line2); margin: 14px 0; }
+
+/* ---------------- notes ---------------- */
+.notes { margin: 18px 0 0; display: grid; gap: 10px; }
+.note {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--panel);
+  padding: 13px 14px;
+}
+.note h3 {
+  margin: 0 0 5px;
+  font-family: var(--display); font-size: 13px; font-weight: 700; letter-spacing: -.01em;
+  display: flex; align-items: baseline; gap: 7px;
+}
+.note h3 span {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: .1em;
+  color: var(--accent); flex: none;
+}
+.note p { margin: 0; font-size: 12.4px; line-height: 1.6; color: var(--muted); }
+.note code { font-family: var(--mono); font-size: 11px; color: var(--ink); }
+.caveat {
+  margin: 12px 0 0; font-size: 11.8px; line-height: 1.6; color: var(--muted2);
+}
+.caveat strong { color: var(--muted); }
+
+/* ---------------- footer ---------------- */
+footer.foot {
+  margin: 26px 0 0; padding: 16px 0 34px;
+  border-top: 1px solid var(--line);
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--muted2);
+}
+footer.foot .sep { color: var(--line2); }
+
+/* ---------------- toast ---------------- */
+.toast {
+  position: fixed; left: 50%; bottom: 18px; transform: translate(-50%, 14px);
+  max-width: min(92vw, 460px);
+  padding: 11px 15px;
+  border-radius: 11px;
+  border: 1px solid var(--line2);
+  background: rgba(22, 26, 30, .97);
+  color: #f3f1ea;
+  font-size: 12.8px; line-height: 1.45;
+  box-shadow: var(--shadow);
+  opacity: 0; pointer-events: none;
+  transition: opacity .22s ease, transform .22s ease;
+  z-index: 60;
+  overflow-wrap: anywhere;
+}
+.toast.is-on { opacity: 1; transform: translate(-50%, 0); }
+.toast.is-bad { border-color: rgba(255, 131, 122, .5); }
+
+@media (min-width: 560px) {
+  .wrap { padding: 0 24px; }
+  header.top { padding: 20px 0 14px; }
+  .hero { padding: 26px 0 24px; }
+  .drop { padding: 30px 24px 26px; }
+  .panel { padding: 16px 18px 18px; }
+  .mode { font-size: 13px; }
+  .row2 { grid-template-columns: 1fr 1fr; }
+  .actions .btn { flex: 0 1 auto; }
+  .thumbs { grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); }
+}
+@media (min-width: 860px) {
+  .wrap { padding: 0 28px; }
+  .hero { padding: 36px 0 28px; }
+  .hero h1 { max-width: 24ch; }
+  .notes { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .panel { padding: 18px 20px 20px; }
+  .mode { flex: 0 1 auto; padding: 8px 16px; }
+}
+@media (max-width: 560px) {
+  .modes-wrap { border-radius: 16px; }
+  .modes { flex-wrap: wrap; }
+  .mode { flex: 1 1 calc(33.333% - 4px); padding: 8px 6px; font-size: 11.8px; }
+}
+@media (max-width: 430px) {
+  .brand-txt { display: none; }
+  header.top { gap: 8px; }
+  .top-actions { gap: 5px; }
+  .out a.save { padding: 7px 9px; font-size: 10.5px; }
+}
+@media (hover: none) {
+  .drop:hover { border-color: var(--line2); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="../../" aria-label="Back to the portfolio" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="View in Korean" aria-label="View in Korean">
+        <span class="lt on" data-lt="en">EN</span><span class="lsep" aria-hidden="true">|</span><span class="lt" data-lt="ko">KO</span>
+      </button>
+      <button class="icon-btn" id="themeBtn" type="button" title="Toggle theme" data-i18n-title="themeTitle" aria-label="Switch to light theme">
+        <svg class="ico-moon" width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M13.2 9.6A5.4 5.4 0 0 1 6.4 2.8a5.6 5.6 0 1 0 6.8 6.8Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        <svg class="ico-sun" width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="3.1" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 1.4v1.6M8 13v1.6M1.4 8H3M13 8h1.6M3.3 3.3l1.1 1.1M11.6 11.6l1.1 1.1M12.7 3.3l-1.1 1.1M4.4 11.6l-1.1 1.1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      </button>
+      <a class="back" href="../../" data-i18n="back">← Portfolio</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="pills">
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillServer">0 server uploads</b></span>
+        <span class="pill" data-i18n-html="pillLocal">In-browser <b>100% client-side</b></span>
+        <span class="pill" data-i18n-html="pillDevice"><b>Files</b> never leave this device</span>
+        <span class="pill pill--net"><span class="dot" aria-hidden="true"></span><span id="netBadge" data-i18n="pillNet">0 external requests</span></span>
+      </div>
+      <h1 data-i18n-html="h1">Convert anything.<br><span class="dim">Nothing leaves this tab.</span></h1>
+      <p class="lede" data-i18n-html="lede">PDF → images, images → one PDF, JPG · PNG · WebP · BMP · ICO between each other, JSON · CSV · TSV and Markdown — all converted <strong>inside your browser</strong>. No upload, no account, no queue.</p>
+    </section>
+
+    <div class="modes-wrap">
+      <nav class="modes" role="tablist" aria-label="Conversion modes">
+        <button class="mode" type="button" id="mode-image" role="tab" aria-controls="panel-image" aria-selected="true" data-mode="image" data-i18n="modeImage">Image format</button>
+        <button class="mode" type="button" id="mode-p2i" role="tab" aria-controls="panel-p2i" aria-selected="false" data-mode="p2i" data-i18n="modeP2i">PDF → Image</button>
+        <button class="mode" type="button" id="mode-i2p" role="tab" aria-controls="panel-i2p" aria-selected="false" data-mode="i2p" data-i18n="modeI2p">Image → PDF</button>
+        <button class="mode" type="button" id="mode-data" role="tab" aria-controls="panel-data" aria-selected="false" data-mode="data" data-i18n="modeData">Data</button>
+        <button class="mode" type="button" id="mode-md" role="tab" aria-controls="panel-md" aria-selected="false" data-mode="md" data-i18n="modeMd">Markdown</button>
+      </nav>
+    </div>
+
+    <!-- ═══════════════ 1 · IMAGE ═══════════════ -->
+    <section class="panel-mode" id="panel-image" role="tabpanel" aria-labelledby="mode-image">
+      <div class="drop" id="dropImage" role="button" tabindex="0" aria-label="Choose images or drop them here" data-i18n-aria="dropImgAria">
+        <input class="sr-only" type="file" id="fileImage" multiple accept=".jpg,.jpeg,.png,.webp,.bmp,.svg,image/jpeg,image/png,image/webp,image/bmp,image/svg+xml">
+        <svg class="drop-ico" viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="9" width="36" height="30" rx="4"/><circle cx="17" cy="20" r="3"/><path d="M6 32l10-9 8 7 6-5 12 10"/></svg>
+        <p class="drop-title" data-i18n="dropImgTitle">Drop images here</p>
+        <p class="drop-sub" data-i18n="dropImgSub">or click to choose · several at once · order them afterwards</p>
+        <p class="drop-fmt" data-i18n="dropImgFmt">JPG · PNG · WebP · BMP · SVG → JPG · PNG · WebP · BMP · ICO</p>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2 class="sec-k" data-i18n="filesTitle">Files</h2>
+          <span class="stats" id="statsImage" aria-live="polite"></span>
+          <button class="link-btn" id="clearImage" type="button" data-i18n="clearAll">Clear all</button>
+        </div>
+        <p class="empty-list" id="emptyImage" data-i18n="emptyImg">No images yet — drop a few above to begin.</p>
+        <ul class="files" id="listImage"></ul>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h2 class="sec-k" data-i18n="optionsTitle">Options</h2></div>
+        <div class="row2">
+          <div class="field">
+            <span class="ctrl-label" id="lblFmtImage" data-i18n="optOutFmt">Output format</span>
+            <div class="seg" role="group" aria-labelledby="lblFmtImage" id="fmtImage">
+              <button class="seg-btn" type="button" data-fmt="png" aria-pressed="false">PNG</button>
+              <button class="seg-btn" type="button" data-fmt="jpg" aria-pressed="true">JPG</button>
+              <button class="seg-btn" type="button" data-fmt="webp" aria-pressed="false">WebP</button>
+              <button class="seg-btn" type="button" data-fmt="bmp" aria-pressed="false">BMP</button>
+              <button class="seg-btn" type="button" data-fmt="ico" aria-pressed="false">ICO</button>
+            </div>
+          </div>
+          <div class="field" id="qualityFieldImage">
+            <span class="ctrl-label" data-i18n="optQuality">Quality</span>
+            <div class="range-row">
+              <input type="range" id="qualityImage" min="10" max="100" step="1" value="90" aria-label="Quality">
+              <span class="range-val" id="qualityImageVal">90%</span>
+            </div>
+            <p class="hint" id="qualityHintImage" data-i18n="qualityHint">Applies to JPG and WebP.</p>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <span class="ctrl-label" for="maxEdgeImage" data-i18n="optResize">Resize — longest edge (px)</span>
+            <input class="input" type="number" id="maxEdgeImage" min="16" max="20000" step="1" inputmode="numeric" placeholder="e.g. 1600" data-i18n-ph="resizePh">
+            <p class="hint" data-i18n="resizeHint">Leave blank to keep the original size. Only shrinks.</p>
+          </div>
+          <div class="field" id="bgField">
+            <span class="ctrl-label" for="bgImage" data-i18n="optBg">Background behind transparency</span>
+            <div class="color-row">
+              <input type="color" id="bgImage" value="#ffffff" aria-label="Background colour">
+              <span class="color-hex" id="bgHex">#FFFFFF</span>
+            </div>
+            <p class="hint" data-i18n="bgHint">Used when the target has no alpha (JPG, BMP).</p>
+          </div>
+        </div>
+        <div class="field" id="icoFieldImage" hidden>
+          <span class="ctrl-label" data-i18n="optIco">Favicon sizes inside the ICO</span>
+          <div class="chips" id="icoSizes">
+            <button class="chip" type="button" data-size="16" aria-pressed="true">16</button>
+            <button class="chip" type="button" data-size="32" aria-pressed="true">32</button>
+            <button class="chip" type="button" data-size="48" aria-pressed="true">48</button>
+            <button class="chip" type="button" data-size="64" aria-pressed="false">64</button>
+            <button class="chip" type="button" data-size="128" aria-pressed="false">128</button>
+          </div>
+          <p class="hint" data-i18n="icoHint">One .ico file holding every size you tick, as PNG frames.</p>
+        </div>
+        <div class="actions">
+          <button class="btn btn--primary" id="runImage" type="button" data-i18n="runImage">Convert &amp; download</button>
+        </div>
+        <p class="status" id="statusImage" aria-live="polite"></p>
+        <div class="results" id="resultsImage" hidden>
+          <div class="panel-head"><h2 class="sec-k" data-i18n="resultsTitle">Results</h2>
+            <button class="link-btn" id="zipImage" type="button" data-i18n="zipAll" hidden>Download all as ZIP</button>
+            <button class="link-btn" id="clearResImage" type="button" data-i18n="clearResults">Clear results</button>
+          </div>
+          <ul class="outs" id="outImage"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 2 · PDF → IMAGE ═══════════════ -->
+    <section class="panel-mode" id="panel-p2i" role="tabpanel" aria-labelledby="mode-p2i" hidden>
+      <div class="drop" id="dropP2i" role="button" tabindex="0" aria-label="Choose PDF files or drop them here" data-i18n-aria="dropPdfAria">
+        <input class="sr-only" type="file" id="fileP2i" multiple accept=".pdf,application/pdf">
+        <svg class="drop-ico" viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13 6h13l9 9v27H13z"/><path d="M26 6v9h9"/><path d="M18 24h12M18 30h12M18 36h7"/></svg>
+        <p class="drop-title" data-i18n="dropPdfTitle">Drop PDFs here</p>
+        <p class="drop-sub" data-i18n="dropPdfSub">or click to choose · several at once · every page becomes an image</p>
+        <p class="drop-fmt" data-i18n="dropPdfFmt">PDF → PNG · JPG · WebP · 72–600 DPI</p>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2 class="sec-k" data-i18n="filesTitle2">PDF files</h2>
+          <span class="stats" id="statsP2i" aria-live="polite"></span>
+          <button class="link-btn" id="clearP2i" type="button" data-i18n="clearAll">Clear all</button>
+        </div>
+        <p class="empty-list" id="emptyP2i" data-i18n="emptyPdf">No PDFs yet — drop one above to see its pages.</p>
+        <ul class="files" id="listP2i"></ul>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h2 class="sec-k" data-i18n="optionsTitle">Options</h2></div>
+        <div class="row2">
+          <div class="field">
+            <span class="ctrl-label" id="lblFmtP2i" data-i18n="optImgFmt">Image format</span>
+            <div class="seg" role="group" aria-labelledby="lblFmtP2i" id="fmtP2i">
+              <button class="seg-btn" type="button" data-fmt="png" aria-pressed="true">PNG</button>
+              <button class="seg-btn" type="button" data-fmt="jpg" aria-pressed="false">JPG</button>
+              <button class="seg-btn" type="button" data-fmt="webp" aria-pressed="false">WebP</button>
+            </div>
+          </div>
+          <div class="field">
+            <span class="ctrl-label" for="dpiP2i" data-i18n="optDpi">Resolution</span>
+            <select class="select" id="dpiP2i">
+              <option value="72">72 DPI · 1×</option>
+              <option value="96">96 DPI · 1.33×</option>
+              <option value="150" selected>150 DPI · 2×</option>
+              <option value="200">200 DPI · 2.8×</option>
+              <option value="300">300 DPI · 4×</option>
+              <option value="600">600 DPI · 8×</option>
+            </select>
+            <p class="hint" data-i18n="dpiHint">Print quality starts around 300 DPI.</p>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <span class="ctrl-label" for="rangeP2i" data-i18n="optPages">Pages</span>
+            <input class="input" type="text" id="rangeP2i" inputmode="numeric" placeholder="1-3, 5" data-i18n-ph="pagesPh">
+            <p class="hint" id="rangeP2iHint" data-i18n="pagesHint">Blank converts every page.</p>
+          </div>
+          <div class="field" id="qualityFieldP2i">
+            <span class="ctrl-label" data-i18n="optQuality">Quality</span>
+            <div class="range-row">
+              <input type="range" id="qualityP2i" min="10" max="100" step="1" value="88" aria-label="Quality">
+              <span class="range-val" id="qualityP2iVal">88%</span>
+            </div>
+            <p class="hint" data-i18n="qualityHint2">Applies to JPG and WebP.</p>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn btn--primary" id="runP2i" type="button" data-i18n="runP2i">Render pages</button>
+        </div>
+        <p class="status" id="statusP2i" aria-live="polite"></p>
+        <div class="results" id="resultsP2i" hidden>
+          <div class="panel-head"><h2 class="sec-k" data-i18n="resultsTitle">Results</h2>
+            <button class="link-btn" id="zipP2i" type="button" data-i18n="zipPages">Download all pages as ZIP</button>
+            <button class="link-btn" id="clearResP2i" type="button" data-i18n="clearResults">Clear results</button>
+          </div>
+          <ul class="thumbs" id="outP2i"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 3 · IMAGE → PDF ═══════════════ -->
+    <section class="panel-mode" id="panel-i2p" role="tabpanel" aria-labelledby="mode-i2p" hidden>
+      <div class="drop" id="dropI2p" role="button" tabindex="0" aria-label="Choose images or drop them here" data-i18n-aria="dropI2pAria">
+        <input class="sr-only" type="file" id="fileI2p" multiple accept=".jpg,.jpeg,.png,.webp,.bmp,.svg,image/jpeg,image/png,image/webp,image/bmp,image/svg+xml">
+        <svg class="drop-ico" viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5h15l9 9v29H12z"/><path d="M27 5v9h9"/><path d="M17 34l6-7 4 4.5 3-3 5 5.5"/><circle cx="21" cy="20" r="2"/></svg>
+        <p class="drop-title" data-i18n="dropI2pTitle">Drop images to bind into one PDF</p>
+        <p class="drop-sub" data-i18n="dropI2pSub">or click to choose · reorder them · one page per image</p>
+        <p class="drop-fmt" data-i18n="dropI2pFmt">JPG · PNG · WebP · BMP · SVG → a single PDF</p>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2 class="sec-k" data-i18n="filesTitle3">Images in order</h2>
+          <span class="stats" id="statsI2p" aria-live="polite"></span>
+          <button class="link-btn" id="clearI2p" type="button" data-i18n="clearAll">Clear all</button>
+        </div>
+        <p class="empty-list" id="emptyI2p" data-i18n="emptyI2p">No images yet — drop a few above; page 1 is the first file.</p>
+        <ul class="files" id="listI2p"></ul>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h2 class="sec-k" data-i18n="optionsTitle">Options</h2></div>
+        <div class="row2">
+          <div class="field">
+            <span class="ctrl-label" id="lblSizeI2p" data-i18n="optPageSize">Page size</span>
+            <div class="seg" role="group" aria-labelledby="lblSizeI2p" id="sizeI2p">
+              <button class="seg-btn" type="button" data-size="a4" aria-pressed="true">A4</button>
+              <button class="seg-btn" type="button" data-size="letter" aria-pressed="false">Letter</button>
+              <button class="seg-btn" type="button" data-size="original" aria-pressed="false" data-i18n="sizeOriginal">Image size</button>
+            </div>
+          </div>
+          <div class="field">
+            <span class="ctrl-label" for="marginI2p" data-i18n="optMargin">Margin (mm)</span>
+            <input class="input" type="number" id="marginI2p" min="0" max="50" step="1" value="0" inputmode="numeric">
+            <p class="hint" data-i18n="marginHint">0 fills the page edge to edge.</p>
+          </div>
+        </div>
+        <div class="field">
+          <label class="check"><input type="checkbox" id="qualityI2p" checked><span data-i18n="optCompress">Re-encode at 90% (strips EXIF, keeps files small)</span></label>
+        </div>
+        <div class="actions">
+          <button class="btn btn--primary" id="runI2p" type="button" data-i18n="runI2p">Build one PDF</button>
+        </div>
+        <p class="status" id="statusI2p" aria-live="polite"></p>
+        <div class="results" id="resultsI2p" hidden>
+          <div class="panel-head"><h2 class="sec-k" data-i18n="resultsTitle">Results</h2>
+            <button class="link-btn" id="clearResI2p" type="button" data-i18n="clearResults">Clear results</button>
+          </div>
+          <ul class="outs" id="outI2p"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 4 · DATA ═══════════════ -->
+    <section class="panel-mode" id="panel-data" role="tabpanel" aria-labelledby="mode-data" hidden>
+      <div class="drop" id="dropData" role="button" tabindex="0" aria-label="Choose a data file or drop it here" data-i18n-aria="dropDataAria">
+        <input class="sr-only" type="file" id="fileData" accept=".json,.csv,.tsv,.txt,application/json,text/csv,text/plain,text/tab-separated-values">
+        <svg class="drop-ico" viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13 6h13l9 9v27H13z"/><path d="M26 6v9h9"/><path d="M19 26h2m5 0h2m5 0h-1"/><path d="M19 32h2m5 0h2"/></svg>
+        <p class="drop-title" data-i18n="dropDataTitle">Drop a JSON, CSV or TSV file</p>
+        <p class="drop-sub" data-i18n="dropDataSub">or click to choose · or paste straight into the box below</p>
+        <p class="drop-fmt" data-i18n="dropDataFmt">JSON ⇄ CSV ⇄ TSV · never leaves the tab</p>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2 class="sec-k" data-i18n="dataInTitle">Input</h2>
+          <span class="stats" id="statsData" aria-live="polite"></span>
+          <button class="link-btn" id="clearData" type="button" data-i18n="clearAll">Clear all</button>
+        </div>
+        <div class="field">
+          <label class="ctrl-label" for="dataIn" data-i18n="dataInLabel">Paste data</label>
+          <textarea class="input" id="dataIn" rows="7" spellcheck="false" placeholder="[{&quot;name&quot;:&quot;Ada&quot;,&quot;role&quot;:&quot;engineer&quot;},{&quot;name&quot;:&quot;Lin&quot;,&quot;role&quot;:&quot;designer&quot;}]" data-i18n-ph="dataInPh"></textarea>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <span class="ctrl-label" id="lblFromData" data-i18n="optFrom">From</span>
+            <div class="seg" role="group" aria-labelledby="lblFromData" id="fromData">
+              <button class="seg-btn" type="button" data-from="auto" aria-pressed="true" data-i18n="fromAuto">Auto</button>
+              <button class="seg-btn" type="button" data-from="json" aria-pressed="false">JSON</button>
+              <button class="seg-btn" type="button" data-from="csv" aria-pressed="false">CSV</button>
+              <button class="seg-btn" type="button" data-from="tsv" aria-pressed="false">TSV</button>
+            </div>
+          </div>
+          <div class="field">
+            <span class="ctrl-label" id="lblToData" data-i18n="optTo">To</span>
+            <div class="seg" role="group" aria-labelledby="lblToData" id="toData">
+              <button class="seg-btn" type="button" data-to="json" aria-pressed="false">JSON</button>
+              <button class="seg-btn" type="button" data-to="csv" aria-pressed="true">CSV</button>
+              <button class="seg-btn" type="button" data-to="tsv" aria-pressed="false">TSV</button>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label class="check"><input type="checkbox" id="hdrData" checked><span data-i18n="optHeader">First row is a header</span></label>
+          <label class="check"><input type="checkbox" id="flatData" checked><span data-i18n="optFlatten">Expand dotted keys / flatten nested objects</span></label>
+          <label class="check"><input type="checkbox" id="prettyData" checked><span data-i18n="optPretty">Pretty-print JSON</span></label>
+        </div>
+        <div class="actions">
+          <button class="btn btn--primary" id="runData" type="button" data-i18n="runData">Convert</button>
+          <button class="btn" id="copyData" type="button" data-i18n="copyOut" disabled>Copy output</button>
+        </div>
+        <p class="status" id="statusData" aria-live="polite"></p>
+        <p class="hint" id="hintData"></p>
+        <div class="field" id="dataOutField" hidden>
+          <label class="ctrl-label" for="dataOut" data-i18n="dataOutLabel">Output</label>
+          <textarea class="input" id="dataOut" rows="9" spellcheck="false" readonly></textarea>
+        </div>
+        <div class="results" id="resultsData" hidden>
+          <div class="panel-head"><h2 class="sec-k" data-i18n="resultsTitle">Results</h2>
+            <button class="link-btn" id="clearResData" type="button" data-i18n="clearResults">Clear results</button>
+          </div>
+          <ul class="outs" id="outData"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 5 · MARKDOWN ═══════════════ -->
+    <section class="panel-mode" id="panel-md" role="tabpanel" aria-labelledby="mode-md" hidden>
+      <div class="drop" id="dropMd" role="button" tabindex="0" aria-label="Choose a Markdown or HTML file or drop it here" data-i18n-aria="dropMdAria">
+        <input class="sr-only" type="file" id="fileMd" accept=".md,.markdown,.mdown,.txt,.html,.htm,text/markdown,text/plain,text/html">
+        <svg class="drop-ico" viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13 6h13l9 9v27H13z"/><path d="M26 6v9h9"/><path d="M18 32v-7l3 3.4 3-3.4v7"/><path d="M27 32v-7m0 7-2.2-2.6M27 32l2.2-2.6"/></svg>
+        <p class="drop-title" data-i18n="dropMdTitle">Drop a Markdown or HTML file</p>
+        <p class="drop-sub" data-i18n="dropMdSub">or click to choose · or paste into the box below</p>
+        <p class="drop-fmt" data-i18n="dropMdFmt">Markdown → HTML · print-ready PDF · HTML → TXT</p>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2 class="sec-k" data-i18n="mdInTitle">Source</h2>
+          <span class="stats" id="statsMd" aria-live="polite"></span>
+          <button class="link-btn" id="clearMd" type="button" data-i18n="clearAll">Clear all</button>
+        </div>
+        <div class="field">
+          <label class="ctrl-label" for="mdIn" data-i18n="mdInLabel">Markdown or HTML</label>
+          <textarea class="input" id="mdIn" rows="9" spellcheck="false" placeholder="# Title&#10;&#10;Some **bold** text and a [link](https://example.com).&#10;&#10;- one&#10;- two" data-i18n-ph="mdInPh"></textarea>
+        </div>
+        <div class="actions">
+          <button class="btn btn--primary" id="runMd" type="button" data-i18n="runMd">Render</button>
+          <button class="btn" id="saveHtmlMd" type="button" data-i18n="saveHtml" disabled>Save .html</button>
+          <button class="btn" id="saveTxtMd" type="button" data-i18n="saveTxt" disabled>Save .txt</button>
+          <button class="btn" id="printMd" type="button" data-i18n="printPdf" disabled>Print → PDF</button>
+        </div>
+        <p class="status" id="statusMd" aria-live="polite"></p>
+        <p class="hint" id="hintMd" data-i18n="mdHint">Headings, lists, code blocks, quotes, tables, links and emphasis. Print → PDF uses the browser’s own print dialog, so the text stays selectable and sharp.</p>
+        <div class="doc-preview" id="previewMd"></div>
+        <div class="results" id="resultsMd" hidden>
+          <div class="panel-head"><h2 class="sec-k" data-i18n="resultsTitle">Results</h2>
+            <button class="link-btn" id="clearResMd" type="button" data-i18n="clearResults">Clear results</button>
+          </div>
+          <ul class="outs" id="outMd"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="notes" aria-label="How it works" data-i18n-aria="notesAria">
+      <div class="note">
+        <h3><span>01</span><span data-i18n="note1h">Read straight into memory</span></h3>
+        <p data-i18n="note1d">Files are opened with the browser’s own file API and decoded in this tab. No request leaves the page — not to a server, not to a CDN. Every library this tool uses is served from the same folder as this page.</p>
+      </div>
+      <div class="note">
+        <h3><span>02</span><span data-i18n="note2h">Converted, then measured</span></h3>
+        <p data-i18n="note2d">Each result is re-opened before you get it: images by decoding them again, PDFs by counting their pages. The size and page count shown are read from the actual output, not assumed.</p>
+      </div>
+      <div class="note">
+        <h3><span>03</span><span data-i18n="note3h">Released when you are done</span></h3>
+        <p data-i18n="note3d">Outputs live in a blob URL that is revoked when you clear the list or close the tab. Nothing is written to storage, and metadata such as EXIF and GPS is dropped by re-encoding.</p>
+      </div>
+    </section>
+    <p class="caveat" data-i18n-html="caveat"><strong>Limits.</strong> Browser encoding is not always the smallest: a PNG photo can come out larger than its JPEG. Very large PDFs and 600 DPI renders are capped by device memory. Password-protected PDFs must be unlocked first. Print → PDF opens your browser’s print dialog and needs system Korean fonts for Korean text.</p>
+  </main>
+
+  <footer class="foot">
+    <span data-i18n="foot1">0 uploads · 0 servers · 0 cookies · 0 external requests</span>
+    <span class="sep" aria-hidden="true">/</span>
+    <span data-i18n="foot2">Everything finishes inside this tab</span>
+    <span class="sep" aria-hidden="true">/</span>
+    <span data-i18n="foot3">Close the tab and nothing remains</span>
+  </footer>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="vendor/pdf-lib.min.js"></script>
+<script src="vendor/pdf.min.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  /* ─────────────── libs ─────────────── */
+  var LIB = window.PDFLib || null;
+  var PDFDocument = LIB ? LIB.PDFDocument : null;
+  var pdfjs = window.pdfjsLib || null;
+  if (pdfjs && pdfjs.GlobalWorkerOptions) {
+    pdfjs.GlobalWorkerOptions.workerSrc = 'vendor/pdf.worker.min.js';
+  }
+
+  var $ = function (id) { return document.getElementById(id); };
+  var LANG_KEY = 'fileforge.lang';
+  var SHARED_LANG_KEY = 'kyh.lang';
+  var THEME_KEY = 'fileforge.theme';
+
+  var state = {
+    lang: 'en',
+    theme: 'dark',
+    mode: 'image',
+    busy: false,
+    seq: 0,
+    image: { files: [], fmt: 'jpg', quality: 90, maxEdge: 0, icoSizes: [16, 32, 48], bg: '#ffffff', outputs: [] },
+    p2i: { files: [], fmt: 'png', dpi: 150, quality: 88, outputs: [] },
+    i2p: { files: [], size: 'a4', margin: 0, reencode: true, outputs: [] },
+    data: { from: 'auto', to: 'csv', header: true, flatten: true, pretty: true, outputs: [], last: null },
+    md: { outputs: [], last: null }
+  };
+
+  /* ─────────────── i18n ─────────────── */
+  var I18N = {
+    en: {
+      docTitle: 'FileForge — Convert PDF, Images & Data With Zero Uploads',
+      metaDesc: 'FileForge converts PDF to images, images to PDF, JPG/PNG/WebP/BMP/ICO between each other, and JSON/CSV/TSV/Markdown — entirely inside your browser. Zero uploads, zero accounts, zero external requests.',
+      brandAria: 'Back to the portfolio',
+      back: '← Portfolio',
+      themeTitle: 'Toggle theme',
+      switchToLight: 'Switch to light theme',
+      switchToDark: 'Switch to dark theme',
+      langTitle: 'View in Korean',
+      pillServer: '0 server uploads',
+      pillLocal: 'In-browser <b>100% client-side</b>',
+      pillDevice: '<b>Files</b> never leave this device',
+      pillNet: '0 external requests',
+      netCount: '{n} external requests',
+      h1: 'Convert anything.<br><span class="dim">Nothing leaves this tab.</span>',
+      lede: 'PDF → images, images → one PDF, JPG · PNG · WebP · BMP · ICO between each other, JSON · CSV · TSV and Markdown — all converted <strong>inside your browser</strong>. No upload, no account, no queue.',
+
+      modeImage: 'Image format',
+      modeP2i: 'PDF → Image',
+      modeI2p: 'Image → PDF',
+      modeData: 'Data',
+      modeMd: 'Markdown',
+
+      /* image */
+      dropImgAria: 'Choose images or drop them here',
+      dropImgTitle: 'Drop images here',
+      dropImgSub: 'or click to choose · several at once · order them afterwards',
+      dropImgFmt: 'JPG · PNG · WebP · BMP · SVG → JPG · PNG · WebP · BMP · ICO',
+      filesTitle: 'Files',
+      clearAll: 'Clear all',
+      emptyImg: 'No images yet — drop a few above to begin.',
+      optionsTitle: 'Options',
+      optOutFmt: 'Output format',
+      optQuality: 'Quality',
+      qualityHint: 'Applies to JPG and WebP.',
+      qualityHint2: 'Applies to JPG and WebP.',
+      optResize: 'Resize — longest edge (px)',
+      resizePh: 'e.g. 1600',
+      resizeHint: 'Leave blank to keep the original size. Only shrinks.',
+      optBg: 'Background behind transparency',
+      bgHint: 'Used when the target has no alpha (JPG, BMP).',
+      optIco: 'Favicon sizes inside the ICO',
+      icoHint: 'One .ico file holding every size you tick, as PNG frames.',
+      runImage: 'Convert & download',
+      resultsTitle: 'Results',
+      zipAll: 'Download all as ZIP',
+      clearResults: 'Clear results',
+
+      /* pdf → image */
+      dropPdfAria: 'Choose PDF files or drop them here',
+      dropPdfTitle: 'Drop PDFs here',
+      dropPdfSub: 'or click to choose · several at once · every page becomes an image',
+      dropPdfFmt: 'PDF → PNG · JPG · WebP · 72–600 DPI',
+      filesTitle2: 'PDF files',
+      emptyPdf: 'No PDFs yet — drop one above to see its pages.',
+      optImgFmt: 'Image format',
+      optDpi: 'Resolution',
+      dpiHint: 'Print quality starts around 300 DPI.',
+      optPages: 'Pages',
+      pagesPh: '1-3, 5',
+      pagesHint: 'Blank converts every page.',
+      runP2i: 'Render pages',
+      zipPages: 'Download all pages as ZIP',
+
+      /* image → pdf */
+      dropI2pAria: 'Choose images or drop them here',
+      dropI2pTitle: 'Drop images to bind into one PDF',
+      dropI2pSub: 'or click to choose · reorder them · one page per image',
+      dropI2pFmt: 'JPG · PNG · WebP · BMP · SVG → a single PDF',
+      filesTitle3: 'Images in order',
+      emptyI2p: 'No images yet — drop a few above; page 1 is the first file.',
+      optPageSize: 'Page size',
+      sizeOriginal: 'Image size',
+      optMargin: 'Margin (mm)',
+      marginHint: '0 fills the page edge to edge.',
+      optCompress: 'Re-encode at 90% (strips EXIF, keeps files small)',
+      runI2p: 'Build one PDF',
+
+      /* data */
+      dropDataAria: 'Choose a data file or drop it here',
+      dropDataTitle: 'Drop a JSON, CSV or TSV file',
+      dropDataSub: 'or click to choose · or paste straight into the box below',
+      dropDataFmt: 'JSON ⇄ CSV ⇄ TSV · never leaves the tab',
+      dataInTitle: 'Input',
+      dataInLabel: 'Paste data',
+      dataInPh: '[{"name":"Ada","role":"engineer"},{"name":"Lin","role":"designer"}]',
+      optFrom: 'From',
+      fromAuto: 'Auto',
+      optTo: 'To',
+      optHeader: 'First row is a header',
+      optFlatten: 'Expand dotted keys / flatten nested objects',
+      optPretty: 'Pretty-print JSON',
+      runData: 'Convert',
+      copyOut: 'Copy output',
+      dataOutLabel: 'Output',
+
+      /* markdown */
+      dropMdAria: 'Choose a Markdown or HTML file or drop it here',
+      dropMdTitle: 'Drop a Markdown or HTML file',
+      dropMdSub: 'or click to choose · or paste into the box below',
+      dropMdFmt: 'Markdown → HTML · print-ready PDF · HTML → TXT',
+      mdInTitle: 'Source',
+      mdInLabel: 'Markdown or HTML',
+      mdInPh: '# Title\n\nSome **bold** text and a [link](https://example.com).\n\n- one\n- two',
+      runMd: 'Render',
+      saveHtml: 'Save .html',
+      saveTxt: 'Save .txt',
+      printPdf: 'Print → PDF',
+      mdHint: 'Headings, lists, code blocks, quotes, tables, links and emphasis. Print → PDF uses the browser’s own print dialog, so the text stays selectable and sharp.',
+
+      /* notes */
+      notesAria: 'How it works',
+      note1h: 'Read straight into memory',
+      note1d: 'Files are opened with the browser’s own file API and decoded in this tab. No request leaves the page — not to a server, not to a CDN. Every library this tool uses is served from the same folder as this page.',
+      note2h: 'Converted, then measured',
+      note2d: 'Each result is re-opened before you get it: images by decoding them again, PDFs by counting their pages. The size and page count shown are read from the actual output, not assumed.',
+      note3h: 'Released when you are done',
+      note3d: 'Outputs live in a blob URL that is revoked when you clear the list or close the tab. Nothing is written to storage, and metadata such as EXIF and GPS is dropped by re-encoding.',
+      caveat: '<strong>Limits.</strong> Browser encoding is not always the smallest: a PNG photo can come out larger than its JPEG. Very large PDFs and 600 DPI renders are capped by device memory. Password-protected PDFs must be unlocked first. Print → PDF opens your browser’s print dialog and needs system Korean fonts for Korean text.',
+      foot1: '0 uploads · 0 servers · 0 cookies · 0 external requests',
+      foot2: 'Everything finishes inside this tab',
+      foot3: 'Close the tab and nothing remains',
+
+      /* dynamic */
+      saveWord: 'Save',
+      verifiedWord: 'page count verified',
+      pagesWord: 'pages',
+      pageWord: 'page',
+      singlePage: '1 page',
+      fileWord: 'file',
+      filesWord: 'files',
+      busyConvert: 'Converting {done}/{total}…',
+      busyRead: 'Reading {n} file(s)…',
+      busyRender: 'Rendering page {done}/{total}…',
+      busyPdf: 'Writing PDF… {done}/{total}',
+      busyZip: 'Building ZIP…',
+      doneImg: '{n} image(s) converted · verified.',
+      doneP2i: '{n} pages rendered from {files}.',
+      doneI2p: 'One PDF · {pages} pages · {size} (re-opened and counted).',
+      doneData: '{rows} rows × {cols} columns → {fmt}.',
+      doneMd: 'Preview ready · {words} words.',
+      doneZip: 'ZIP with {n} files.',
+      errNoFiles: 'Add at least one file first.',
+      errNoLib: 'A conversion engine did not load — reload the page and try again.',
+      errGeneric: 'Something went wrong',
+      errRead: '{name} could not be read.',
+      errEncrypted: '{name} is password-protected — unlock it first.',
+      errEncode: 'This browser could not encode that format — try PNG.',
+      errVerify: 'The output could not be re-opened, so nothing was saved.',
+      errEmpty: 'That produced nothing, so nothing was saved.',
+      errNoPages: 'Pick at least one page.',
+      pagesBad: '“{bad}” is not a page in this file (1–{max}).',
+      pagesOk: '<b>{n}</b> pages selected · {list}',
+      pdfMeta: '{pages} · {size}',
+      imgMeta: '{w}×{h} · {size}',
+      icoMeta: 'ICO · {n} sizes ({sizes}px) · {size}',
+      badPdf: 'password-protected or damaged',
+      skippedImg: '{n} file(s) skipped — not an image.',
+      skippedPdf: '{n} file(s) skipped — not a PDF.',
+      skippedData: '{n} file(s) skipped — not a data file.',
+      cleared: 'Cleared.',
+      clearedRes: 'Results cleared.',
+      removed: '{name} removed.',
+      copyOk: 'Copied to clipboard.',
+      copyFail: 'Copy failed — select the text and copy it yourself.',
+      dataEmpty: 'Nothing to convert — paste or drop some data first.',
+      dataBadJson: 'That is not valid JSON: {msg}',
+      dataBadCsv: 'That file could not be read as {fmt}.',
+      dataOneFile: 'Only one data file at a time — the last one was used.',
+      mdEmpty: 'Nothing to render — paste some Markdown or drop a file.',
+      mdDoneNoPrint: 'Printing needs a normal browser window.',
+      saveFail: 'The download could not start — use the Save link instead.',
+      infoData: '{in} → {out} · click Convert.',
+      infoDataAuto: 'Detected {in}.',
+      moveUp: 'Move up',
+      moveDown: 'Move down',
+      remove: 'Remove',
+      netZero: '0 external requests'
+    },
+    ko: {
+      docTitle: 'FileForge — 업로드 없는 만능 파일 변환기',
+      metaDesc: 'PDF → 이미지, 이미지 → PDF, JPG·PNG·WebP·BMP·ICO 상호 변환, JSON·CSV·TSV·마크다운까지 — 모두 브라우저 안에서만 변환합니다. 업로드 0건, 계정 없음, 외부 요청 0건.',
+      brandAria: '포트폴리오로 돌아가기',
+      back: '← 포트폴리오',
+      themeTitle: '테마 전환',
+      switchToLight: '라이트 테마로 전환',
+      switchToDark: '다크 테마로 전환',
+      langTitle: 'View in English',
+      pillServer: '서버 업로드 0건',
+      pillLocal: '브라우저 내 <b>100% 로컬 처리</b>',
+      pillDevice: '<b>파일이</b> 기기 밖으로 나가지 않음',
+      pillNet: '외부 요청 0건',
+      netCount: '외부 요청 {n}건',
+      h1: '무엇이든 변환.<br><span class="dim">이 탭에서 끝납니다.</span>',
+      lede: 'PDF → 이미지, 이미지 → PDF 한 장, JPG · PNG · WebP · BMP · ICO 상호 변환, JSON · CSV · TSV, 마크다운까지 — 전부 <strong>브라우저 안에서</strong> 변환합니다. 업로드도, 계정도, 대기열도 없습니다.',
+
+      modeImage: '이미지 변환',
+      modeP2i: 'PDF → 이미지',
+      modeI2p: '이미지 → PDF',
+      modeData: '데이터',
+      modeMd: '마크다운',
+
+      dropImgAria: '이미지 선택 또는 끌어다 놓기',
+      dropImgTitle: '이미지를 여기에 끌어다 놓으세요',
+      dropImgSub: '또는 클릭해서 선택 · 여러 개 동시 선택 · 순서는 나중에 변경',
+      dropImgFmt: 'JPG · PNG · WebP · BMP · SVG → JPG · PNG · WebP · BMP · ICO',
+      filesTitle: '파일',
+      clearAll: '전체 비우기',
+      emptyImg: '아직 이미지가 없습니다 — 위에 끌어다 놓아 시작하세요.',
+      optionsTitle: '옵션',
+      optOutFmt: '출력 형식',
+      optQuality: '품질',
+      qualityHint: 'JPG·WebP에 적용됩니다.',
+      qualityHint2: 'JPG·WebP에 적용됩니다.',
+      optResize: '크기 조절 — 긴 변 기준(px)',
+      resizePh: '예: 1600',
+      resizeHint: '비워두면 원본 크기를 유지합니다. 축소만 합니다.',
+      optBg: '투명 영역 배경색',
+      bgHint: '알파 채널이 없는 형식(JPG·BMP)에 적용됩니다.',
+      optIco: 'ICO 안에 넣을 파비콘 크기',
+      icoHint: '체크한 크기를 모두 담은 .ico 파일 1개(PNG 프레임).',
+      runImage: '변환 후 저장',
+      resultsTitle: '결과',
+      zipAll: '전체 ZIP으로 받기',
+      clearResults: '결과 지우기',
+
+      dropPdfAria: 'PDF 파일 선택 또는 끌어다 놓기',
+      dropPdfTitle: 'PDF를 여기에 끌어다 놓으세요',
+      dropPdfSub: '또는 클릭해서 선택 · 여러 개 동시 선택 · 모든 페이지가 이미지가 됩니다',
+      dropPdfFmt: 'PDF → PNG · JPG · WebP · 72~600 DPI',
+      filesTitle2: 'PDF 파일',
+      emptyPdf: '아직 PDF가 없습니다 — 위에 하나 놓으면 페이지를 읽습니다.',
+      optImgFmt: '이미지 형식',
+      optDpi: '해상도',
+      dpiHint: '인쇄 품질은 300 DPI부터 확보됩니다.',
+      optPages: '페이지',
+      pagesPh: '1-3, 5',
+      pagesHint: '비워두면 모든 페이지를 변환합니다.',
+      runP2i: '페이지 렌더링',
+      zipPages: '전체 페이지 ZIP으로 받기',
+
+      dropI2pAria: '이미지 선택 또는 끌어다 놓기',
+      dropI2pTitle: 'PDF 한 장으로 묶을 이미지를 놓으세요',
+      dropI2pSub: '또는 클릭해서 선택 · 순서 변경 가능 · 이미지 1장 = 1페이지',
+      dropI2pFmt: 'JPG · PNG · WebP · BMP · SVG → PDF 1개',
+      filesTitle3: '페이지 순서',
+      emptyI2p: '아직 이미지가 없습니다 — 위에 놓으면 첫 파일이 1페이지입니다.',
+      optPageSize: '용지 크기',
+      sizeOriginal: '이미지 크기',
+      optMargin: '여백(mm)',
+      marginHint: '0이면 페이지 끝까지 꽉 채웁니다.',
+      optCompress: '90% 품질로 다시 인코딩(EXIF 제거, 용량 절감)',
+      runI2p: 'PDF 하나로 만들기',
+
+      dropDataAria: '데이터 파일 선택 또는 끌어다 놓기',
+      dropDataTitle: 'JSON·CSV·TSV 파일을 놓으세요',
+      dropDataSub: '또는 클릭해서 선택 · 아래 칸에 직접 붙여넣어도 됩니다',
+      dropDataFmt: 'JSON ⇄ CSV ⇄ TSV · 이 탭 밖으로 나가지 않음',
+      dataInTitle: '입력',
+      dataInLabel: '데이터 붙여넣기',
+      dataInPh: '[{"name":"Ada","role":"engineer"},{"name":"Lin","role":"designer"}]',
+      optFrom: '입력 형식',
+      fromAuto: '자동',
+      optTo: '출력 형식',
+      optHeader: '첫 줄은 헤더입니다',
+      optFlatten: '점(.) 키 확장 / 중첩 객체 평탄화',
+      optPretty: 'JSON 예쁘게 출력',
+      runData: '변환',
+      copyOut: '결과 복사',
+      dataOutLabel: '출력',
+
+      dropMdAria: '마크다운·HTML 파일 선택 또는 끌어다 놓기',
+      dropMdTitle: '마크다운 또는 HTML 파일을 놓으세요',
+      dropMdSub: '또는 클릭해서 선택 · 아래 칸에 붙여넣어도 됩니다',
+      dropMdFmt: '마크다운 → HTML · 인쇄용 PDF · HTML → TXT',
+      mdInTitle: '원본',
+      mdInLabel: '마크다운 또는 HTML',
+      mdInPh: '# 제목\n\n**굵게** 쓴 문장과 [링크](https://example.com).\n\n- 하나\n- 둘',
+      runMd: '미리보기',
+      saveHtml: '.html 저장',
+      saveTxt: '.txt 저장',
+      printPdf: '인쇄 → PDF',
+      mdHint: '제목·목록·코드 블록·인용·표·링크·강조를 지원합니다. 인쇄 → PDF는 브라우저 인쇄 창을 쓰므로 텍스트가 선명하게 남습니다.',
+
+      notesAria: '동작 원리',
+      note1h: '메모리로 바로 읽기',
+      note1d: '파일은 브라우저 자체 파일 API로 열려 이 탭 안에서 해석됩니다. 서버로도, CDN으로도 요청이 나가지 않습니다. 이 페이지가 쓰는 라이브러리도 모두 같은 폴더에서 옵니다.',
+      note2h: '변환한 뒤 실측하기',
+      note2d: '결과물을 건네기 전에 다시 열어봅니다. 이미지는 다시 디코딩해, PDF는 페이지 수를 세어 확인합니다. 표시되는 용량과 페이지 수는 짐작이 아니라 실측값입니다.',
+      note3h: '끝나면 즉시 해제',
+      note3d: '결과물은 목록을 비우거나 탭을 닫을 때 해제되는 blob URL에만 존재합니다. 저장소에 아무것도 쓰지 않고, 다시 인코딩하므로 EXIF·GPS 같은 메타데이터는 사라집니다.',
+      caveat: '<strong>한계.</strong> 브라우저 인코딩이 항상 가장 작지는 않습니다 — PNG 사진이 원본 JPEG보다 커질 수 있습니다. 아주 큰 PDF나 600 DPI 렌더링은 기기 메모리 한도를 받습니다. 암호가 걸린 PDF는 먼저 잠금을 풀어야 합니다. 인쇄 → PDF는 브라우저 인쇄 창을 열며, 한글은 시스템 한글 폰트가 필요합니다.',
+      foot1: '업로드 0 · 서버 0 · 쿠키 0 · 외부 요청 0',
+      foot2: '모든 처리는 이 탭 안에서 끝납니다',
+      foot3: '탭을 닫으면 남는 것 없음',
+
+      saveWord: '저장',
+      verifiedWord: '페이지 수 실측',
+      pagesWord: '페이지',
+      pageWord: '페이지',
+      singlePage: '1페이지',
+      fileWord: '파일',
+      filesWord: '파일',
+      busyConvert: '변환 중… {done}/{total}',
+      busyRead: '파일 {n}개 읽는 중…',
+      busyRender: '페이지 렌더링 중… {done}/{total}',
+      busyPdf: 'PDF 쓰는 중… {done}/{total}',
+      busyZip: 'ZIP 만드는 중…',
+      doneImg: '이미지 {n}개 변환 완료 · 실측 확인.',
+      doneP2i: '{files}에서 {n}페이지를 렌더링했습니다.',
+      doneI2p: 'PDF 1개 · {pages}페이지 · {size} (다시 열어 페이지 수 확인).',
+      doneData: '{rows}행 × {cols}열 → {fmt}.',
+      doneMd: '미리보기 준비 완료 · {words}단어.',
+      doneZip: 'ZIP에 {n}개 파일을 담았습니다.',
+      errNoFiles: '먼저 파일을 하나 이상 추가하세요.',
+      errNoLib: '변환 엔진을 불러오지 못했습니다 — 페이지를 새로고침한 뒤 다시 시도하세요.',
+      errGeneric: '문제가 발생했습니다',
+      errRead: '{name}을(를) 읽지 못했습니다.',
+      errEncrypted: '{name}은(는) 암호가 걸려 있습니다 — 먼저 잠금을 풀어 주세요.',
+      errEncode: '이 브라우저가 해당 형식으로 인코딩하지 못했습니다 — PNG를 써 보세요.',
+      errVerify: '결과물을 다시 열지 못해 저장하지 않았습니다.',
+      errEmpty: '결과가 비어 있어 저장하지 않았습니다.',
+      errNoPages: '페이지를 하나 이상 고르세요.',
+      pagesBad: '“{bad}”은(는) 이 파일에 없는 페이지입니다 (1–{max}).',
+      pagesOk: '<b>{n}</b>페이지 선택됨 · {list}',
+      pdfMeta: '{pages} · {size}',
+      imgMeta: '{w}×{h} · {size}',
+      icoMeta: 'ICO · {n}개 크기({sizes}px) · {size}',
+      badPdf: '암호가 걸렸거나 손상됨',
+      skippedImg: '{n}개 파일은 이미지가 아니어서 건너뛰었습니다.',
+      skippedPdf: '{n}개 파일은 PDF가 아니어서 건너뛰었습니다.',
+      skippedData: '{n}개 파일은 데이터 파일이 아니어서 건너뛰었습니다.',
+      cleared: '비웠습니다.',
+      clearedRes: '결과를 지웠습니다.',
+      removed: '{name} 제거됨.',
+      copyOk: '클립보드에 복사했습니다.',
+      copyFail: '복사하지 못했습니다 — 텍스트를 직접 선택해 복사하세요.',
+      dataEmpty: '변환할 내용이 없습니다 — 먼저 데이터를 붙여넣거나 파일을 놓으세요.',
+      dataBadJson: '올바른 JSON이 아닙니다: {msg}',
+      dataBadCsv: '{fmt} 파일로 읽지 못했습니다.',
+      dataOneFile: '데이터 파일은 한 번에 하나만 처리합니다 — 마지막 파일을 사용했습니다.',
+      mdEmpty: '변환할 내용이 없습니다 — 마크다운을 붙여넣거나 파일을 놓으세요.',
+      mdDoneNoPrint: '인쇄는 일반 브라우저 창에서 동작합니다.',
+      saveFail: '다운로드를 시작하지 못했습니다 — 저장 링크를 이용하세요.',
+      infoData: '{in} → {out} · 변환을 누르세요.',
+      infoDataAuto: '{in} 형식으로 인식했습니다.',
+      moveUp: '위로 이동',
+      moveDown: '아래로 이동',
+      remove: '제거',
+      netZero: '외부 요청 0건'
+    }
+  };
+
+  function isKo() { return state.lang === 'ko'; }
+  function t(key) {
+    var d = I18N[state.lang] || I18N.en;
+    return d[key] != null ? d[key] : I18N.en[key];
+  }
+  function tpl(key, vars) {
+    var s = t(key);
+    if (vars) {
+      Object.keys(vars).forEach(function (k) { s = s.split('{' + k + '}').join(String(vars[k])); });
+    }
+    return s;
+  }
+
+  /* ─────────────── small helpers ─────────────── */
+  function nextId() { state.seq += 1; return 'f' + state.seq; }
+
+  function fmtBytes(n) {
+    if (n == null) return '–';
+    if (n < 1024) return n + ' B';
+    if (n < 1024 * 1024) return (n / 1024).toFixed(n < 10240 ? 1 : 0) + ' KB';
+    return (n / (1024 * 1024)).toFixed(n < 10 * 1024 * 1024 ? 1 : 0) + ' MB';
+  }
+
+  function baseName(name) {
+    return String(name || 'file').replace(/\.[^.]+$/, '') || 'file';
+  }
+
+  function tick() { return new Promise(function (r) { setTimeout(r, 0); }); }
+
+  function toast(msg, bad) {
+    var el = $('toast');
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.toggle('is-bad', !!bad);
+    el.classList.add('is-on');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { el.classList.remove('is-on'); }, bad ? 4200 : 2800);
+  }
+
+  function setStatus(id, text, on) {
+    var el = $(id);
+    if (!el) return;
+    if (!text) { el.classList.remove('is-on'); el.textContent = ''; return; }
+    el.innerHTML = '<span class="spin" aria-hidden="true"></span><span>' + escHtml(text) + '</span>';
+    el.classList.toggle('is-on', on !== false);
+  }
+
+  function escHtml(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function escAttr(s) { return escHtml(s).replace(/'/g, '&#39;'); }
+
+  function setBusy(on) {
+    state.busy = !!on;
+    document.body.classList.toggle('is-busy', state.busy);
+  }
+
+  function triggerDownload(url, name) {
+    try {
+      var a = document.createElement('a');
+      a.href = url; a.download = name; a.rel = 'noopener';
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function () { if (a.parentNode) a.parentNode.removeChild(a); }, 0);
+      return true;
+    } catch (e) { return false; }
+  }
+
+  /* ─────────────── theme + language ─────────────── */
+  function setTheme(theme) {
+    state.theme = theme === 'light' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', state.theme);
+    try { localStorage.setItem(THEME_KEY, state.theme); } catch (e) {}
+    var b = $('themeBtn');
+    if (b) { b.title = t(state.theme === 'dark' ? 'switchToLight' : 'switchToDark'); b.setAttribute('aria-label', b.title); }
+  }
+
+  function applyI18n() {
+    document.documentElement.lang = state.lang;
+    document.title = t('docTitle');
+    var md = document.querySelector('meta[name="description"]');
+    if (md) md.setAttribute('content', t('metaDesc'));
+
+    Array.prototype.forEach.call(document.querySelectorAll('[data-i18n]'), function (el) {
+      var k = el.getAttribute('data-i18n');
+      if (k) el.textContent = t(k);
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-html]'), function (el) {
+      var k = el.getAttribute('data-i18n-html');
+      if (k) el.innerHTML = t(k);
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-ph]'), function (el) {
+      var k = el.getAttribute('data-i18n-ph');
+      if (k) el.setAttribute('placeholder', t(k));
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-title]'), function (el) {
+      var k = el.getAttribute('data-i18n-title');
+      if (k) el.setAttribute('title', t(k));
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-aria]'), function (el) {
+      var k = el.getAttribute('data-i18n-aria');
+      if (k) el.setAttribute('aria-label', t(k));
+    });
+
+    var lt = $('langToggle');
+    if (lt) {
+      lt.setAttribute('title', t('langTitle'));
+      lt.setAttribute('aria-label', t('langTitle'));
+      Array.prototype.forEach.call(lt.querySelectorAll('.lt'), function (s) {
+        s.classList.toggle('on', s.getAttribute('data-lt') === state.lang);
+      });
+    }
+    var tb = $('themeBtn');
+    if (tb) { tb.title = t(state.theme === 'dark' ? 'switchToLight' : 'switchToDark'); tb.setAttribute('aria-label', tb.title); }
+
+    updateNetBadge();
+    renderImageList();
+    renderP2iList();
+    renderI2pList();
+    updateRangeHint();
+    updateDataHint();
+    updateMdSummary();
+  }
+
+  function setLang(lang) {
+    state.lang = lang === 'ko' ? 'ko' : 'en';
+    try {
+      localStorage.setItem(LANG_KEY, state.lang);
+      localStorage.setItem(SHARED_LANG_KEY, state.lang);
+    } catch (e) {}
+    applyI18n();
+  }
+
+  /* ─────────────── live network witness ─────────────── */
+  function countExternal() {
+    var n = 0;
+    try {
+      performance.getEntriesByType('resource').forEach(function (e) {
+        try {
+          var u = new URL(e.name, location.href);
+          if (u.origin !== location.origin && u.protocol !== 'data:' && u.protocol !== 'blob:') n++;
+        } catch (e2) {}
+      });
+    } catch (e) {}
+    return n;
+  }
+
+  function updateNetBadge() {
+    var el = $('netBadge');
+    if (!el) return;
+    var n = countExternal();
+    el.textContent = n === 0 ? t('netZero') : tpl('netCount', { n: n });
+  }
+
+  /* ─────────────── images: decode / encode ─────────────── */
+  var MIME = { png: 'image/png', jpg: 'image/jpeg', webp: 'image/webp' };
+  var EXT = { png: 'png', jpg: 'jpg', webp: 'webp', bmp: 'bmp', ico: 'ico' };
+
+  function isSvgFile(f) { return /svg/i.test(f.type || '') || /\.svg$/i.test(f.name || ''); }
+  function isImageFile(f) {
+    return /^image\//.test(f.type || '') || /\.(jpe?g|png|webp|bmp|svg|gif|avif|ico)$/i.test(f.name || '');
+  }
+  function isPdfFile(f) { return /pdf/i.test(f.type || '') || /\.pdf$/i.test(f.name || ''); }
+  function isDataFile(f) { return /\.(json|csv|tsv|txt)$/i.test(f.name || '') || /json|csv|tab-separated|text\/plain/i.test(f.type || ''); }
+  function isDocFile(f) { return /\.(md|markdown|mdown|txt|html?|htm)$/i.test(f.name || '') || /markdown|text\/plain|text\/html/i.test(f.type || ''); }
+
+  function srcW(s) { return s.naturalWidth || s.width || 0; }
+  function srcH(s) { return s.naturalHeight || s.height || 0; }
+  function releaseSrc(s) {
+    if (!s) return;
+    try { if (s._close) s._close(); } catch (e) {}
+    try { if (typeof s.close === 'function') s.close(); } catch (e) {}
+  }
+
+  function decodeImage(file) {
+    var f = file;
+    return new Promise(function (resolve, reject) {
+      if (window.createImageBitmap && !isSvgFile(f)) {
+        createImageBitmap(f, { imageOrientation: 'from-image' })
+          .then(function (bmp) { if (bmp && bmp.width) resolve(bmp); else throw new Error('empty'); })
+          .catch(function () {
+            createImageBitmap(f).then(function (bmp2) {
+              if (bmp2 && bmp2.width) resolve(bmp2); else fallback();
+            }).catch(fallback);
+          });
+      } else { fallback(); }
+
+      function fallback() {
+        var url = URL.createObjectURL(f);
+        var img = new Image();
+        img.onload = function () {
+          resolve({
+            img: img, width: img.naturalWidth || 0, height: img.naturalHeight || 0,
+            _close: function () { URL.revokeObjectURL(url); }
+          });
+        };
+        img.onerror = function () { URL.revokeObjectURL(url); reject(new Error('decode')); };
+        img.src = url;
+      }
+    }).then(function (src) {
+      // SVG without an intrinsic size: give it a sane default box
+      if (!srcW(src) || !srcH(src)) { src._fakeW = 1024; src._fakeH = 1024; }
+      return src;
+    });
+  }
+
+  function renderCanvas(src, w, h, fillBg, bg) {
+    var canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(w));
+    canvas.height = Math.max(1, Math.round(h));
+    var ctx = canvas.getContext('2d');
+    if (!ctx) throw new Error('canvas');
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    if (fillBg) { ctx.fillStyle = bg || '#ffffff'; ctx.fillRect(0, 0, canvas.width, canvas.height); }
+    ctx.drawImage(src.img || src, 0, 0, canvas.width, canvas.height);
+    return canvas;
+  }
+
+  function squareCanvas(src, size, bg, opaque) {
+    var canvas = document.createElement('canvas');
+    canvas.width = size; canvas.height = size;
+    var ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    if (opaque) { ctx.fillStyle = bg || '#ffffff'; ctx.fillRect(0, 0, size, size); }
+    var sw = srcW(src) || src._fakeW || 1, sh = srcH(src) || src._fakeH || 1;
+    var s = Math.min(size / sw, size / sh);
+    var dw = sw * s, dh = sh * s;
+    ctx.drawImage(src.img || src, (size - dw) / 2, (size - dh) / 2, dw, dh);
+    return canvas;
+  }
+
+  function canvasToBlob(canvas, mime, quality) {
+    return new Promise(function (resolve, reject) {
+      if (canvas.toBlob) {
+        canvas.toBlob(function (b) {
+          if (!b) return reject(new Error('encode'));
+          if (mime && b.type && b.type !== mime) return reject(new Error('mime:' + b.type));
+          resolve(b);
+        }, mime, quality);
+      } else {
+        try {
+          var d = canvas.toDataURL(mime, quality);
+          resolve(dataUrlToBlob(d));
+        } catch (e) { reject(e); }
+      }
+    });
+  }
+
+  function dataUrlToBlob(d) {
+    var parts = d.split(',');
+    var mime = (parts[0].match(/:(.*?);/) || [])[1] || 'application/octet-stream';
+    var bin = atob(parts[1]);
+    var u8 = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+    return new Blob([u8], { type: mime });
+  }
+
+  function encodeBMP(canvas) {
+    var ctx = canvas.getContext('2d');
+    var w = canvas.width, h = canvas.height;
+    var px = ctx.getImageData(0, 0, w, h).data;
+    var rowSize = Math.floor((24 * w + 31) / 32) * 4;
+    var pixelSize = rowSize * h;
+    var fileSize = 54 + pixelSize;
+    var out = new Uint8Array(fileSize);
+    var dv = new DataView(out.buffer);
+    out[0] = 0x42; out[1] = 0x4D;
+    dv.setUint32(2, fileSize, true);
+    dv.setUint32(10, 54, true);
+    dv.setUint32(14, 40, true);
+    dv.setInt32(18, w, true);
+    dv.setInt32(22, h, true);
+    dv.setUint16(26, 1, true);
+    dv.setUint16(28, 24, true);
+    dv.setUint32(34, pixelSize, true);
+    dv.setInt32(38, 2835, true);
+    dv.setInt32(42, 2835, true);
+    var pos = 54;
+    for (var y = h - 1; y >= 0; y--) {
+      var row = y * w * 4;
+      for (var x = 0; x < w; x++) {
+        var i = row + x * 4;
+        out[pos++] = px[i + 2]; out[pos++] = px[i + 1]; out[pos++] = px[i];
+      }
+      pos += rowSize - w * 3;
+    }
+    return out;
+  }
+
+  function encodeICO(entries) {
+    var count = entries.length;
+    var headerLen = 6 + 16 * count;
+    var total = headerLen;
+    entries.forEach(function (e) { total += e.png.length; });
+    var out = new Uint8Array(total);
+    var dv = new DataView(out.buffer);
+    dv.setUint16(0, 0, true);
+    dv.setUint16(2, 1, true);
+    dv.setUint16(4, count, true);
+    var pos = 6, dataPos = headerLen;
+    entries.forEach(function (e) {
+      var b = e.size >= 256 ? 0 : e.size;
+      out[pos] = b; out[pos + 1] = b; out[pos + 2] = 0; out[pos + 3] = 0;
+      dv.setUint16(pos + 4, 1, true);
+      dv.setUint16(pos + 6, 32, true);
+      dv.setUint32(pos + 8, e.png.length, true);
+      dv.setUint32(pos + 12, dataPos, true);
+      pos += 16;
+      out.set(e.png, dataPos);
+      dataPos += e.png.length;
+    });
+    return out;
+  }
+
+  function verifyImageBlob(blob) {
+    if (!window.createImageBitmap) return Promise.resolve(null);
+    return createImageBitmap(blob).then(function (bmp) {
+      var d = { w: bmp.width, h: bmp.height };
+      try { bmp.close(); } catch (e) {}
+      return d;
+    }).catch(function () { return null; });
+  }
+
+  async function convertOneImage(file, o) {
+    var src = await decodeImage(file);
+    try {
+      var base = baseName(file.name);
+      var sw = srcW(src) || src._fakeW || 0;
+      var sh = srcH(src) || src._fakeH || 0;
+      if (!sw || !sh) throw new Error('size');
+
+      if (o.fmt === 'ico') {
+        var sizes = (o.icoSizes && o.icoSizes.length ? o.icoSizes : [32]).slice().sort(function (a, b) { return a - b; });
+        var entries = [];
+        for (var si = 0; si < sizes.length; si++) {
+          var sq = squareCanvas(src, sizes[si], o.bg, false);
+          var pb = await canvasToBlob(sq, 'image/png');
+          entries.push({ size: sizes[si], png: new Uint8Array(await pb.arrayBuffer()) });
+        }
+        var icoBytes = encodeICO(entries);
+        var icoBlob = new Blob([icoBytes], { type: 'image/x-icon' });
+        return [{
+          name: base + '.ico', blob: icoBlob,
+          meta: tpl('icoMeta', { n: sizes.length, sizes: sizes.join('/'), size: fmtBytes(icoBlob.size) })
+        }];
+      }
+
+      var scale = 1;
+      if (o.maxEdge > 0 && Math.max(sw, sh) > o.maxEdge) scale = o.maxEdge / Math.max(sw, sh);
+      var w = Math.max(1, Math.round(sw * scale));
+      var h = Math.max(1, Math.round(sh * scale));
+      var opaque = (o.fmt === 'jpg' || o.fmt === 'bmp');
+      var canvas = renderCanvas(src, w, h, opaque, o.bg);
+
+      if (o.fmt === 'bmp') {
+        var bmpBytes = encodeBMP(canvas);
+        var bmpBlob = new Blob([bmpBytes], { type: 'image/bmp' });
+        return [{ name: base + '.bmp', blob: bmpBlob, meta: w + '×' + h + ' · ' + fmtBytes(bmpBlob.size) }];
+      }
+
+      var blob = await canvasToBlob(canvas, MIME[o.fmt], o.quality / 100);
+      var dims = await verifyImageBlob(blob);
+      if (!dims) throw new Error('verify');
+      if (Math.abs(dims.w - w) > 1 || Math.abs(dims.h - h) > 1) throw new Error('verify');
+      return [{ name: base + '.' + EXT[o.fmt], blob: blob, meta: dims.w + '×' + dims.h + ' · ' + fmtBytes(blob.size) }];
+    } finally {
+      releaseSrc(src);
+    }
+  }
+
+  /* ─────────────── output plumbing ─────────────── */
+  function clearOutputs(mode, quiet) {
+    state[mode].outputs.forEach(function (o) {
+      try { URL.revokeObjectURL(o.url); } catch (e) {}
+    });
+    state[mode].outputs = [];
+    if (mode === 'image') renderOutsImage();
+    if (mode === 'p2i') renderOutsP2i();
+    if (mode === 'i2p') renderOutsI2p();
+    if (mode === 'data') renderOutsData();
+    if (mode === 'md') renderOutsMd();
+    if (quiet !== true) toast(t('clearedRes'));
+  }
+
+  function pushOutput(mode, name, blob, meta, extra) {
+    var out = {
+      name: name, blob: blob, meta: meta,
+      url: URL.createObjectURL(blob)
+    };
+    if (extra) Object.keys(extra).forEach(function (k) { out[k] = extra[k]; });
+    state[mode].outputs.push(out);
+    return out;
+  }
+
+  function renderOutsImage() {
+    var list = $('outImage'), sec = $('resultsImage');
+    if (!list || !sec) return;
+    list.innerHTML = '';
+    var outs = state.image.outputs;
+    sec.hidden = outs.length === 0;
+    var zip = $('zipImage');
+    if (zip) zip.hidden = outs.length < 2;
+    outs.forEach(function (o) {
+      var li = document.createElement('li');
+      li.className = 'out';
+      li.innerHTML = '<div class="out-txt"><p class="out-name">' + escHtml(o.name) + '</p>'
+        + '<p class="out-meta">' + escHtml(o.meta || '') + '</p></div>'
+        + '<a class="save" download="' + escAttr(o.name) + '" href="' + o.url + '">' + escHtml(t('saveWord')) + '</a>';
+      list.appendChild(li);
+    });
+  }
+
+  function renderOutsP2i() {
+    var list = $('outP2i'), sec = $('resultsP2i');
+    if (!list || !sec) return;
+    list.innerHTML = '';
+    var outs = state.p2i.outputs;
+    sec.hidden = outs.length === 0;
+    outs.forEach(function (o) {
+      var li = document.createElement('li');
+      li.className = 'thumb';
+      li.innerHTML = '<img src="' + o.url + '" alt="' + escAttr(o.name) + '" loading="lazy">'
+        + '<div class="thumb-meta"><span>' + escHtml(o.label || '') + '</span>'
+        + '<a download="' + escAttr(o.name) + '" href="' + o.url + '">' + escHtml(t('saveWord')) + '</a></div>';
+      list.appendChild(li);
+    });
+  }
+
+  function renderOutsI2p() {
+    var list = $('outI2p'), sec = $('resultsI2p');
+    if (!list || !sec) return;
+    list.innerHTML = '';
+    var outs = state.i2p.outputs;
+    sec.hidden = outs.length === 0;
+    outs.forEach(function (o) {
+      var li = document.createElement('li');
+      li.className = 'out';
+      li.innerHTML = '<div class="out-txt"><p class="out-name">' + escHtml(o.name) + '</p>'
+        + '<p class="out-meta">' + escHtml(o.meta || '') + '</p></div>'
+        + '<a class="save" download="' + escAttr(o.name) + '" href="' + o.url + '">' + escHtml(t('saveWord')) + '</a>';
+      list.appendChild(li);
+    });
+  }
+
+  function renderOutsData() {
+    var list = $('outData'), sec = $('resultsData');
+    if (!list || !sec) return;
+    list.innerHTML = '';
+    var outs = state.data.outputs;
+    sec.hidden = outs.length === 0;
+    outs.forEach(function (o) {
+      var li = document.createElement('li');
+      li.className = 'out';
+      li.innerHTML = '<div class="out-txt"><p class="out-name">' + escHtml(o.name) + '</p>'
+        + '<p class="out-meta">' + escHtml(o.meta || '') + '</p></div>'
+        + '<a class="save" download="' + escAttr(o.name) + '" href="' + o.url + '">' + escHtml(t('saveWord')) + '</a>';
+      list.appendChild(li);
+    });
+  }
+
+  function renderOutsMd() {
+    var list = $('outMd'), sec = $('resultsMd');
+    if (!list || !sec) return;
+    list.innerHTML = '';
+    var outs = state.md.outputs;
+    sec.hidden = outs.length === 0;
+    outs.forEach(function (o) {
+      var li = document.createElement('li');
+      li.className = 'out';
+      li.innerHTML = '<div class="out-txt"><p class="out-name">' + escHtml(o.name) + '</p>'
+        + '<p class="out-meta">' + escHtml(o.meta || '') + '</p></div>'
+        + '<a class="save" download="' + escAttr(o.name) + '" href="' + o.url + '">' + escHtml(t('saveWord')) + '</a>';
+      list.appendChild(li);
+    });
+  }
+
+  /* ─────────────── ZIP (store + CRC32, no library) ─────────────── */
+  var CRC_TABLE = (function () {
+    var tab = new Uint32Array(256);
+    for (var n = 0; n < 256; n++) {
+      var c = n;
+      for (var k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      tab[n] = c >>> 0;
+    }
+    return tab;
+  })();
+
+  function crc32(u8) {
+    var c = 0xFFFFFFFF;
+    for (var i = 0; i < u8.length; i++) c = CRC_TABLE[(c ^ u8[i]) & 0xFF] ^ (c >>> 8);
+    return (c ^ 0xFFFFFFFF) >>> 0;
+  }
+
+  function zipStore(entries) {
+    var enc = new TextEncoder();
+    var now = new Date();
+    var dosTime = ((now.getHours() << 11) | (now.getMinutes() << 5) | Math.floor(now.getSeconds() / 2)) & 0xFFFF;
+    var dosDate = (((now.getFullYear() - 1980) << 9) | ((now.getMonth() + 1) << 5) | now.getDate()) & 0xFFFF;
+    var parts = [], central = [], offset = 0;
+    entries.forEach(function (e) {
+      var nameBytes = enc.encode(e.name);
+      var crc = crc32(e.bytes);
+      var local = new Uint8Array(30 + nameBytes.length);
+      var dv = new DataView(local.buffer);
+      dv.setUint32(0, 0x04034b50, true);
+      dv.setUint16(4, 20, true);
+      dv.setUint16(6, 0x0800, true);
+      dv.setUint16(10, dosTime, true);
+      dv.setUint16(12, dosDate, true);
+      dv.setUint32(14, crc, true);
+      dv.setUint32(18, e.bytes.length, true);
+      dv.setUint32(22, e.bytes.length, true);
+      dv.setUint16(26, nameBytes.length, true);
+      local.set(nameBytes, 30);
+      parts.push(local); parts.push(e.bytes);
+
+      var cd = new Uint8Array(46 + nameBytes.length);
+      var cdv = new DataView(cd.buffer);
+      cdv.setUint32(0, 0x02014b50, true);
+      cdv.setUint16(4, 20, true);
+      cdv.setUint16(6, 20, true);
+      cdv.setUint16(8, 0x0800, true);
+      cdv.setUint16(12, dosTime, true);
+      cdv.setUint16(14, dosDate, true);
+      cdv.setUint32(16, crc, true);
+      cdv.setUint32(20, e.bytes.length, true);
+      cdv.setUint32(24, e.bytes.length, true);
+      cdv.setUint16(28, nameBytes.length, true);
+      cdv.setUint32(42, offset, true);
+      cd.set(nameBytes, 46);
+      central.push(cd);
+      offset += 30 + nameBytes.length + e.bytes.length;
+    });
+    var cdSize = central.reduce(function (a, c) { return a + c.length; }, 0);
+    var end = new Uint8Array(22);
+    var edv = new DataView(end.buffer);
+    edv.setUint32(0, 0x06054b50, true);
+    edv.setUint16(8, entries.length, true);
+    edv.setUint16(10, entries.length, true);
+    edv.setUint32(12, cdSize, true);
+    edv.setUint32(16, offset, true);
+    var all = parts.concat(central, [end]);
+    var total = all.reduce(function (a, p) { return a + p.length; }, 0);
+    var out = new Uint8Array(total), pos = 0;
+    all.forEach(function (p) { out.set(p, pos); pos += p.length; });
+    return out;
+  }
+
+  async function zipOutputs(mode, zipName) {
+    var outs = state[mode].outputs;
+    if (!outs.length) return;
+    setBusy(true);
+    try {
+      var entries = [];
+      for (var i = 0; i < outs.length; i++) {
+        var buf = new Uint8Array(await outs[i].blob.arrayBuffer());
+        entries.push({ name: outs[i].name, bytes: buf });
+      }
+      var bytes = zipStore(entries);
+      var blob = new Blob([bytes], { type: 'application/zip' });
+      var url = URL.createObjectURL(blob);
+      triggerDownload(url, zipName);
+      toast(tpl('doneZip', { n: entries.length }));
+      setTimeout(function () { try { URL.revokeObjectURL(url); } catch (e) {} }, 60000);
+    } catch (e) {
+      toast(t('errGeneric') + ' — ' + (e && e.message ? e.message : ''), true);
+    } finally { setBusy(false); }
+  }
+
+  /* ─────────────── drop zones ─────────────── */
+  function wireDrop(dropId, inputId, onFiles) {
+    var drop = $(dropId), input = $(inputId);
+    if (!drop || !input) return;
+    drop.addEventListener('click', function (e) {
+      if (e.target === input || state.busy) return;
+      input.click();
+    });
+    drop.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+        e.preventDefault();
+        if (!state.busy) input.click();
+      }
+    });
+    input.addEventListener('change', function () {
+      var fs = Array.prototype.slice.call(input.files || []);
+      input.value = '';
+      if (fs.length) onFiles(fs);
+    });
+    ['dragenter', 'dragover'].forEach(function (ev) {
+      drop.addEventListener(ev, function (e) {
+        e.preventDefault(); e.stopPropagation();
+        if (!state.busy) drop.classList.add('is-over');
+      });
+    });
+    ['dragleave', 'dragend'].forEach(function (ev) {
+      drop.addEventListener(ev, function (e) {
+        if (e.target !== drop && drop.contains(e.relatedTarget)) return;
+        drop.classList.remove('is-over');
+      });
+    });
+    drop.addEventListener('drop', function (e) {
+      e.preventDefault(); e.stopPropagation();
+      drop.classList.remove('is-over');
+      if (state.busy) return;
+      var fs = Array.prototype.slice.call((e.dataTransfer && e.dataTransfer.files) || []);
+      if (fs.length) onFiles(fs);
+    });
+  }
+
+  function guardWindowDrop() {
+    ['dragover', 'drop'].forEach(function (ev) {
+      window.addEventListener(ev, function (e) { e.preventDefault(); });
+    });
+  }
+
+  /* ─────────────── generic segmented control ─────────────── */
+  function wireSeg(id, attr, fn) {
+    var box = $(id);
+    if (!box) return;
+    box.addEventListener('click', function (e) {
+      var btn = e.target && e.target.closest ? e.target.closest('[data-' + attr + ']') : null;
+      if (!btn || !box.contains(btn)) return;
+      Array.prototype.forEach.call(box.querySelectorAll('[data-' + attr + ']'), function (x) {
+        x.setAttribute('aria-pressed', x === btn ? 'true' : 'false');
+      });
+      fn(btn.getAttribute('data-' + attr));
+    });
+  }
+
+  /* ─────────────── list row helpers ─────────────── */
+  function fileRow(opts) {
+    var li = document.createElement('li');
+    li.className = 'file';
+
+    if (opts.thumbUrl) {
+      var img = document.createElement('img');
+      img.className = 'file-thumb'; img.alt = ''; img.loading = 'lazy';
+      img.src = opts.thumbUrl;
+      li.appendChild(img);
+    } else if (opts.badge) {
+      var b = document.createElement('span');
+      b.className = 'file-thumb file-thumb--doc';
+      b.textContent = opts.badge;
+      li.appendChild(b);
+    }
+
+    var main = document.createElement('div');
+    main.className = 'file-main';
+    if (opts.index != null) {
+      var idx = document.createElement('span');
+      idx.className = 'file-idx';
+      idx.textContent = String(opts.index + 1).padStart(2, '0');
+      main.appendChild(idx);
+    }
+    var txt = document.createElement('span');
+    txt.className = 'file-txt';
+    var nm = document.createElement('span');
+    nm.className = 'file-name'; nm.textContent = opts.name;
+    var meta = document.createElement('span');
+    meta.className = 'file-meta' + (opts.bad ? ' is-bad' : '');
+    meta.textContent = opts.meta || '';
+    txt.appendChild(nm); txt.appendChild(meta);
+    main.appendChild(txt);
+    li.appendChild(main);
+
+    var acts = document.createElement('div');
+    acts.className = 'file-actions';
+    if (opts.onUp) acts.appendChild(iconButton('↑', t('moveUp'), opts.onUp, opts.upDisabled));
+    if (opts.onDown) acts.appendChild(iconButton('↓', t('moveDown'), opts.onDown, opts.downDisabled));
+    if (opts.onRemove) acts.appendChild(iconButton('×', t('remove'), opts.onRemove, false, true));
+    li.appendChild(acts);
+    return li;
+  }
+
+  function iconButton(label, title, onClick, disabled, danger) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'icon-btn' + (danger ? ' is-del' : '');
+    b.textContent = label;
+    b.title = title;
+    b.setAttribute('aria-label', title);
+    b.disabled = !!disabled;
+    b.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); onClick(); });
+    return b;
+  }
+
+  /* ─────────────── mode 1 · image format ─────────────── */
+  function renderImageList() {
+    var list = $('listImage');
+    if (!list) return;
+    list.innerHTML = '';
+    var files = state.image.files;
+    var total = 0;
+    files.forEach(function (f, i) {
+      total += f.size;
+      list.appendChild(fileRow({
+        thumbUrl: f.thumb,
+        name: f.name,
+        meta: f.bad ? t('errRead', { name: f.name }) : (f.w ? tpl('imgMeta', { w: f.w, h: f.h, size: fmtBytes(f.size) }) : fmtBytes(f.size)),
+        bad: f.bad,
+        onUp: function () { moveItem(files, i, -1); renderImageList(); },
+        onDown: function () { moveItem(files, i, 1); renderImageList(); },
+        upDisabled: i === 0,
+        downDisabled: i === files.length - 1,
+        onRemove: function () { removeImageFile(f); }
+      }));
+    });
+    $('emptyImage').hidden = files.length > 0;
+    var st = $('statsImage');
+    if (st) {
+      st.innerHTML = files.length
+        ? '<b>' + files.length + '</b> ' + escHtml(t('filesWord')) + ' <span class="sep">·</span> ' + fmtBytes(total)
+        : '';
+    }
+  }
+
+  function moveItem(arr, i, delta) {
+    var j = i + delta;
+    if (j < 0 || j >= arr.length) return;
+    var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+  }
+
+  function removeImageFile(f) {
+    var i = state.image.files.indexOf(f);
+    if (i >= 0) state.image.files.splice(i, 1);
+    if (f.thumb) { try { URL.revokeObjectURL(f.thumb); } catch (e) {} }
+    renderImageList();
+    toast(tpl('removed', { name: f.name }));
+  }
+
+  async function addImageFiles(files) {
+    var skipped = 0;
+    for (var i = 0; i < files.length; i++) {
+      var f = files[i];
+      if (!isImageFile(f)) { skipped++; continue; }
+      var item = { id: nextId(), file: f, name: f.name || 'image', size: f.size || 0, thumb: null, w: 0, h: 0, bad: false };
+      try { item.thumb = URL.createObjectURL(f); } catch (e) {}
+      state.image.files.push(item);
+      renderImageList();
+      try {
+        var src = await decodeImage(f);
+        item.w = srcW(src) || src._fakeW || 0;
+        item.h = srcH(src) || src._fakeH || 0;
+        releaseSrc(src);
+        if (!item.w || !item.h) item.bad = true;
+      } catch (e) { item.bad = true; }
+      renderImageList();
+      await tick();
+    }
+    if (skipped) toast(tpl('skippedImg', { n: skipped }), true);
+  }
+
+  function imageOpts() {
+    var maxEdge = parseInt(($('maxEdgeImage') || {}).value, 10);
+    return {
+      fmt: state.image.fmt,
+      quality: state.image.quality,
+      maxEdge: isNaN(maxEdge) ? 0 : Math.max(0, maxEdge),
+      icoSizes: state.image.icoSizes.slice(),
+      bg: state.image.bg
+    };
+  }
+
+  async function runImage() {
+    var files = state.image.files.filter(function (f) { return !f.bad; });
+    if (!state.image.files.length) return toast(t('errNoFiles'), true);
+    if (!files.length) return toast(t('errNoFiles'), true);
+    setBusy(true);
+    clearOutputs('image', true);
+    var o = imageOpts();
+    var ok = 0, failed = [];
+    try {
+      for (var i = 0; i < files.length; i++) {
+        setStatus('statusImage', tpl('busyConvert', { done: i + 1, total: files.length }), true);
+        try {
+          var res = await convertOneImage(files[i].file, o);
+          res.forEach(function (r) {
+            pushOutput('image', r.name, r.blob, r.meta);
+            ok++;
+          });
+        } catch (err) {
+          failed.push(files[i].name);
+        }
+        renderOutsImage();
+        await tick();
+      }
+      if (state.image.outputs.length === 1) {
+        triggerDownload(state.image.outputs[0].url, state.image.outputs[0].name);
+      }
+      if (ok) toast(tpl('doneImg', { n: ok }));
+      if (failed.length) toast(tpl('errRead', { name: failed.join(', ') }), true);
+    } finally {
+      setStatus('statusImage', '', false);
+      setBusy(false);
+    }
+  }
+
+  /* ─────────────── mode 2 · PDF → image ─────────────── */
+  function isPasswordError(err) {
+    if (!err) return false;
+    return err.name === 'PasswordException' || /password/i.test(String(err.name || '') + ' ' + String(err.message || ''));
+  }
+
+  function loadPdfDoc(file) {
+    if (!pdfjs) return Promise.reject(new Error('nolib'));
+    return file.arrayBuffer().then(function (buf) {
+      return pdfjs.getDocument({
+        data: new Uint8Array(buf),
+        cMapUrl: 'vendor/cmaps/',
+        cMapPacked: true,
+        standardFontDataUrl: 'vendor/standard_fonts/',
+        isEvalSupported: false,
+        useSystemFonts: true
+      }).promise;
+    });
+  }
+
+  function renderP2iList() {
+    var list = $('listP2i');
+    if (!list) return;
+    list.innerHTML = '';
+    var files = state.p2i.files;
+    var totalPages = 0;
+    files.forEach(function (f, i) {
+      if (f.pages) totalPages += f.pages;
+      list.appendChild(fileRow({
+        badge: 'PDF',
+        name: f.name,
+        meta: f.bad ? f.badText : (f.pages ? tpl('pdfMeta', { pages: f.pages + ' ' + t('pagesWord'), size: fmtBytes(f.size) }) : '…'),
+        bad: !!f.bad,
+        onUp: function () { moveItem(files, i, -1); renderP2iList(); updateRangeHint(); },
+        onDown: function () { moveItem(files, i, 1); renderP2iList(); updateRangeHint(); },
+        upDisabled: i === 0,
+        downDisabled: i === files.length - 1,
+        onRemove: function () { removeP2iFile(f); }
+      }));
+    });
+    $('emptyP2i').hidden = files.length > 0;
+    var st = $('statsP2i');
+    if (st) {
+      st.innerHTML = files.length
+        ? '<b>' + files.length + '</b> ' + escHtml(t('filesWord')) + ' <span class="sep">·</span> <b>' + totalPages + '</b> ' + escHtml(t('pagesWord'))
+        : '';
+    }
+    var run = $('runP2i');
+    if (run) run.disabled = !files.some(function (f) { return f.doc; });
+  }
+
+  function removeP2iFile(f) {
+    var i = state.p2i.files.indexOf(f);
+    if (i >= 0) state.p2i.files.splice(i, 1);
+    destroyDoc(f);
+    renderP2iList();
+    updateRangeHint();
+    toast(tpl('removed', { name: f.name }));
+  }
+
+  function destroyDoc(f) {
+    try { if (f.doc && f.doc.destroy) f.doc.destroy(); } catch (e) {}
+    f.doc = null;
+  }
+
+  async function addP2iFiles(files) {
+    var skipped = 0;
+    for (var i = 0; i < files.length; i++) {
+      var f = files[i];
+      if (!isPdfFile(f)) { skipped++; continue; }
+      var item = { id: nextId(), file: f, name: f.name || 'document.pdf', size: f.size || 0, doc: null, pages: 0, bad: false, badText: '' };
+      state.p2i.files.push(item);
+      renderP2iList();
+      setStatus('statusP2i', tpl('busyRead', { n: 1 }), true);
+      try {
+        item.doc = await loadPdfDoc(f);
+        item.pages = item.doc.numPages || 0;
+      } catch (err) {
+        item.bad = true;
+        item.badText = isPasswordError(err) ? t('badPdf') : t('errRead', { name: item.name });
+        if (isPasswordError(err)) toast(tpl('errEncrypted', { name: item.name }), true);
+      }
+      setStatus('statusP2i', '', false);
+      renderP2iList();
+      updateRangeHint();
+      await tick();
+    }
+    if (skipped) toast(tpl('skippedPdf', { n: skipped }), true);
+  }
+
+  function parsePageRange(str, max) {
+    var raw = String(str || '').trim();
+    if (!raw) return { ok: true, blank: true, indices: [] };
+    var out = [], bad = null;
+    raw.split(',').forEach(function (chunk) {
+      var c = chunk.trim();
+      if (!c) return;
+      var m = c.match(/^(\d+)\s*-\s*(\d+)$/);
+      if (m) {
+        var a = parseInt(m[1], 10), b = parseInt(m[2], 10);
+        if (a > b) { var tmp = a; a = b; b = tmp; }
+        if (a < 1 || b > max) { bad = bad || c; return; }
+        for (var k = a; k <= b; k++) if (out.indexOf(k - 1) < 0) out.push(k - 1);
+        return;
+      }
+      var n = parseInt(c, 10);
+      if (!isNaN(n) && String(n) === c) {
+        if (n < 1 || n > max) { bad = bad || c; return; }
+        if (out.indexOf(n - 1) < 0) out.push(n - 1);
+        return;
+      }
+      bad = bad || c;
+    });
+    if (bad) return { ok: false, bad: bad, indices: [] };
+    out.sort(function (x, y) { return x - y; });
+    return { ok: true, indices: out };
+  }
+
+  function rangeLabel(indices) {
+    if (indices.length > 8) return indices.slice(0, 8).map(function (i) { return i + 1; }).join(', ') + ' …';
+    return indices.map(function (i) { return i + 1; }).join(', ');
+  }
+
+  function rangeJobCount(indices) {
+    var n = 0;
+    state.p2i.files.forEach(function (f) {
+      if (!f.pages) return;
+      indices.forEach(function (ix) { if (ix < f.pages) n++; });
+    });
+    return n;
+  }
+
+  function totalPdfPages() {
+    return state.p2i.files.reduce(function (a, f) { return a + (f.pages || 0); }, 0);
+  }
+
+  function updateRangeHint() {
+    var input = $('rangeP2i'), hint = $('rangeP2iHint');
+    if (!input || !hint) return;
+    hint.classList.remove('is-bad', 'is-ok');
+    var max = totalPdfPages();
+    if (!max) { hint.textContent = t('pagesHint'); return; }
+    var sel = parsePageRange(input.value, max);
+    if (!sel.ok) {
+      hint.classList.add('is-bad');
+      hint.textContent = tpl('pagesBad', { bad: sel.bad, max: max });
+      return;
+    }
+    if (sel.blank) { hint.textContent = t('pagesHint'); return; }
+    if (!sel.indices.length) { hint.classList.add('is-bad'); hint.textContent = t('errNoPages'); return; }
+    var jobs = rangeJobCount(sel.indices);
+    if (!jobs) { hint.classList.add('is-bad'); hint.textContent = t('errNoPages'); return; }
+    hint.classList.add('is-ok');
+    hint.innerHTML = tpl('pagesOk', { n: jobs, list: escHtml(rangeLabel(sel.indices)) });
+  }
+
+  function updateP2iQuality() {
+    var field = $('qualityFieldP2i');
+    if (field) field.hidden = state.p2i.fmt === 'png';
+  }
+
+  async function runP2i() {
+    var files = state.p2i.files.filter(function (f) { return f.doc; });
+    if (!files.length) return toast(t('errNoFiles'), true);
+    var max = totalPdfPages();
+    var sel = parsePageRange($('rangeP2i') ? $('rangeP2i').value : '', max);
+    if (!sel.ok) return toast(tpl('pagesBad', { bad: sel.bad, max: max }), true);
+    if (!sel.blank && !sel.indices.length) return toast(t('errNoPages'), true);
+
+    setBusy(true);
+    clearOutputs('p2i', true);
+    var dpi = state.p2i.dpi, fmt = state.p2i.fmt, q = state.p2i.quality / 100;
+
+    // build the job list across files
+    var jobs = [];
+    if (sel.blank) {
+      files.forEach(function (f) {
+        for (var p = 1; p <= f.pages; p++) jobs.push({ f: f, page: p });
+      });
+    } else {
+      files.forEach(function (f) {
+        sel.indices.forEach(function (ix) { if (ix < f.pages) jobs.push({ f: f, page: ix + 1 }); });
+      });
+    }
+    if (!jobs.length) {
+      setBusy(false);
+      return toast(t('errNoPages'), true);
+    }
+
+    var done = 0, failed = 0;
+    try {
+      for (var i = 0; i < jobs.length; i++) {
+        var job = jobs[i];
+        setStatus('statusP2i', tpl('busyRender', { done: i + 1, total: jobs.length }), true);
+        try {
+          var blob = await renderPdfPage(job.f.doc, job.page, dpi, fmt, q);
+          if (!blob) throw new Error('render');
+          var multi = files.length > 1;
+          var name = (multi ? baseName(job.f.name) + '-' : '') + 'p' + String(job.page).padStart(2, '0') + '.' + EXT[fmt];
+          var dims = await verifyImageBlob(blob);
+          var label = 'p' + job.page + (dims ? ' · ' + dims.w + '×' + dims.h : '');
+          pushOutput('p2i', name, blob, fmtBytes(blob.size), { label: label, page: job.page });
+          done++;
+        } catch (err) { failed++; }
+        renderOutsP2i();
+        await tick();
+      }
+      if (done) toast(tpl('doneP2i', { n: done, files: files.length }));
+      if (failed) toast(tpl('errEmpty'), true);
+    } finally {
+      setStatus('statusP2i', '', false);
+      setBusy(false);
+      renderOutsP2i();
+      var zip = $('zipP2i');
+      if (zip) zip.hidden = state.p2i.outputs.length < 2;
+    }
+  }
+
+  async function renderPdfPage(doc, pageNum, dpi, fmt, q) {
+    var page = await doc.getPage(pageNum);
+    var scale = dpi / 72;
+    var vp = page.getViewport({ scale: scale });
+    var maxPx = 36e6;
+    if (vp.width * vp.height > maxPx) {
+      var k = Math.sqrt(maxPx / (vp.width * vp.height));
+      vp = page.getViewport({ scale: scale * k });
+    }
+    var canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.floor(vp.width));
+    canvas.height = Math.max(1, Math.floor(vp.height));
+    var ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    await page.render({ canvasContext: ctx, viewport: vp, background: '#ffffff' }).promise;
+    var blob = await canvasToBlob(canvas, MIME[fmt], q);
+    try { page.cleanup(); } catch (e) {}
+    canvas.width = 0; canvas.height = 0;
+    return blob;
+  }
+
+  /* ─────────────── mode 3 · images → PDF ─────────────── */
+  function renderI2pList() {
+    var list = $('listI2p');
+    if (!list) return;
+    list.innerHTML = '';
+    var files = state.i2p.files;
+    var total = 0;
+    files.forEach(function (f, i) {
+      total += f.size;
+      list.appendChild(fileRow({
+        thumbUrl: f.thumb,
+        index: i,
+        name: f.name,
+        meta: f.bad ? t('errRead', { name: f.name }) : (f.w ? tpl('imgMeta', { w: f.w, h: f.h, size: fmtBytes(f.size) }) : fmtBytes(f.size)),
+        bad: f.bad,
+        onUp: function () { moveItem(files, i, -1); renderI2pList(); },
+        onDown: function () { moveItem(files, i, 1); renderI2pList(); },
+        upDisabled: i === 0,
+        downDisabled: i === files.length - 1,
+        onRemove: function () { removeI2pFile(f); }
+      }));
+    });
+    $('emptyI2p').hidden = files.length > 0;
+    var st = $('statsI2p');
+    if (st) {
+      st.innerHTML = files.length
+        ? '<b>' + files.length + '</b> ' + escHtml(t('pagesWord')) + ' <span class="sep">·</span> ' + fmtBytes(total)
+        : '';
+    }
+  }
+
+  function removeI2pFile(f) {
+    var i = state.i2p.files.indexOf(f);
+    if (i >= 0) state.i2p.files.splice(i, 1);
+    if (f.thumb) { try { URL.revokeObjectURL(f.thumb); } catch (e) {} }
+    renderI2pList();
+    toast(tpl('removed', { name: f.name }));
+  }
+
+  async function addI2pFiles(files) {
+    var skipped = 0;
+    for (var i = 0; i < files.length; i++) {
+      var f = files[i];
+      if (!isImageFile(f)) { skipped++; continue; }
+      var item = { id: nextId(), file: f, name: f.name || 'image', size: f.size || 0, thumb: null, w: 0, h: 0, bad: false };
+      try { item.thumb = URL.createObjectURL(f); } catch (e) {}
+      state.i2p.files.push(item);
+      renderI2pList();
+      try {
+        var src = await decodeImage(f);
+        item.w = srcW(src) || src._fakeW || 0;
+        item.h = srcH(src) || src._fakeH || 0;
+        releaseSrc(src);
+        if (!item.w || !item.h) item.bad = true;
+      } catch (e) { item.bad = true; }
+      renderI2pList();
+      await tick();
+    }
+    if (skipped) toast(tpl('skippedImg', { n: skipped }), true);
+  }
+
+  var PAGE_SIZES = {
+    a4: [595.28, 841.89],
+    letter: [612, 792]
+  };
+  var MM_TO_PT = 2.834645669;
+
+  async function runI2p() {
+    if (!PDFDocument) return toast(t('errNoLib'), true);
+    var files = state.i2p.files.filter(function (f) { return !f.bad; });
+    if (!state.i2p.files.length) return toast(t('errNoFiles'), true);
+    if (!files.length) return toast(t('errNoFiles'), true);
+    setBusy(true);
+    clearOutputs('i2p', true);
+    try {
+      var doc = await PDFDocument.create();
+      var margin = (parseInt(($('marginI2p') || {}).value, 10) || 0) * MM_TO_PT;
+      var size = state.i2p.size;
+      var reencode = $('qualityI2p') ? $('qualityI2p').checked : true;
+      var okCount = 0;
+
+      for (var i = 0; i < files.length; i++) {
+        setStatus('statusI2p', tpl('busyPdf', { done: i + 1, total: files.length }), true);
+        var f = files[i];
+        try {
+          var src = await decodeImage(f.file);
+          var sw = srcW(src) || 1024, sh = srcH(src) || 1024;
+          var canvas = renderCanvas(src, sw, sh, true, '#ffffff');
+          releaseSrc(src);
+          var blob = reencode ? await canvasToBlob(canvas, 'image/jpeg', 0.9) : await canvasToBlob(canvas, 'image/png');
+          var bytes = new Uint8Array(await blob.arrayBuffer());
+          var img = reencode ? await doc.embedJpg(bytes) : await doc.embedPng(bytes);
+          canvas.width = 0; canvas.height = 0;
+
+          var pageW, pageH;
+          if (size === 'original') {
+            pageW = Math.max(1, img.width * 0.75) + margin * 2;
+            pageH = Math.max(1, img.height * 0.75) + margin * 2;
+          } else {
+            var ps = PAGE_SIZES[size] || PAGE_SIZES.a4;
+            pageW = ps[0]; pageH = ps[1];
+          }
+          var page = doc.addPage([pageW, pageH]);
+          var availW = Math.max(1, pageW - margin * 2);
+          var availH = Math.max(1, pageH - margin * 2);
+          var k = Math.min(availW / img.width, availH / img.height);
+          var dw = img.width * k, dh = img.height * k;
+          page.drawImage(img, { x: (pageW - dw) / 2, y: (pageH - dh) / 2, width: dw, height: dh });
+          okCount++;
+        } catch (err) { /* skip this image */ }
+        await tick();
+      }
+
+      if (!okCount) { toast(t('errEmpty'), true); return; }
+
+      setStatus('statusI2p', tpl('busyPdf', { done: files.length, total: files.length }), true);
+      var outBytes = await doc.save();
+      var pdfBlob = new Blob([outBytes], { type: 'application/pdf' });
+
+      // verify: reopen and count pages
+      var verifyDoc = await PDFDocument.load(outBytes);
+      var pages = verifyDoc.getPageCount();
+      if (!pages) { toast(t('errVerify'), true); return; }
+
+      var name = 'merged-' + pages + 'p.pdf';
+      pushOutput('i2p', name, pdfBlob, pages + ' ' + t('pagesWord') + ' · ' + fmtBytes(pdfBlob.size) + ' · ' + t('verifiedWord'));
+      renderOutsI2p();
+      triggerDownload(state.i2p.outputs[0].url, name);
+      toast(tpl('doneI2p', { pages: pages, size: fmtBytes(pdfBlob.size) }));
+    } catch (err) {
+      toast(t('errGeneric') + (err && err.message ? ' — ' + err.message : ''), true);
+    } finally {
+      setStatus('statusI2p', '', false);
+      setBusy(false);
+    }
+  }
+
+  /* ─────────────── mode 4 · data ─────────────── */
+  function parseDelimited(text, delim) {
+    var rows = [], row = [], cell = '', i = 0, inQ = false;
+    var s = String(text).replace(/^\uFEFF/, '');
+    while (i < s.length) {
+      var ch = s[i];
+      if (inQ) {
+        if (ch === '"') {
+          if (s[i + 1] === '"') { cell += '"'; i += 2; continue; }
+          inQ = false; i++; continue;
+        }
+        cell += ch; i++; continue;
+      }
+      if (ch === '"' && cell === '') { inQ = true; i++; continue; }
+      if (ch === delim) { row.push(cell); cell = ''; i++; continue; }
+      if (ch === '\r') { i++; continue; }
+      if (ch === '\n') { row.push(cell); rows.push(row); row = []; cell = ''; i++; continue; }
+      cell += ch; i++;
+    }
+    if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+    // drop trailing fully-empty rows
+    while (rows.length && rows[rows.length - 1].every(function (c) { return c === ''; })) rows.pop();
+    return rows;
+  }
+
+  function detectDelim(text) {
+    var line = String(text).split(/\r?\n/).find(function (l) { return l.trim() !== ''; }) || '';
+    var tabs = (line.match(/\t/g) || []).length;
+    var commas = (line.match(/,/g) || []).length;
+    var semis = (line.match(/;/g) || []).length;
+    if (tabs && tabs >= commas && tabs >= semis) return '\t';
+    if (semis > commas) return ';';
+    return ',';
+  }
+
+  function detectFormat(text) {
+    var s = String(text).replace(/^\uFEFF/, '').trim();
+    if (!s) return null;
+    if (s.charAt(0) === '{' || s.charAt(0) === '[') return 'json';
+    var d = detectDelim(s);
+    if (d === '\t') return 'tsv';
+    return 'csv';
+  }
+
+  function inferValue(raw) {
+    if (raw == null) return null;
+    var s = String(raw);
+    var v = s.trim();
+    if (v === '') return null;
+    if (/^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?$/.test(v)) {
+      var n = Number(v);
+      if (isFinite(n)) return n;
+    }
+    if (v === 'true') return true;
+    if (v === 'false') return false;
+    if (v === 'null') return null;
+    return s;
+  }
+
+  function flattenObj(o, prefix, out) {
+    out = out || {};
+    Object.keys(o || {}).forEach(function (k) {
+      var v = o[k];
+      var key = prefix ? prefix + '.' + k : k;
+      if (v && typeof v === 'object' && !Array.isArray(v) && !(v instanceof Date)) {
+        flattenObj(v, key, out);
+      } else if (Array.isArray(v)) {
+        out[key] = JSON.stringify(v);
+      } else {
+        out[key] = v;
+      }
+    });
+    return out;
+  }
+
+  function cellText(v) {
+    if (v == null) return '';
+    if (typeof v === 'object') return JSON.stringify(v);
+    return String(v);
+  }
+
+  function jsonToTable(data, flatten) {
+    if (Array.isArray(data)) {
+      if (!data.length) return { headers: [], rows: [] };
+      var allObj = data.every(function (v) { return v && typeof v === 'object' && !Array.isArray(v); });
+      if (allObj) {
+        var objs = data.map(function (o) { return flatten ? flattenObj(o) : o; });
+        var headers = [];
+        objs.forEach(function (o) {
+          Object.keys(o).forEach(function (k) { if (headers.indexOf(k) < 0) headers.push(k); });
+        });
+        var rows = objs.map(function (o) {
+          return headers.map(function (h) { return cellText(o[h]); });
+        });
+        return { headers: headers, rows: rows };
+      }
+      var allArr = data.every(function (v) { return Array.isArray(v); });
+      if (allArr) {
+        var maxLen = data.reduce(function (a, r) { return Math.max(a, r.length); }, 0);
+        var hs = [];
+        for (var i = 0; i < maxLen; i++) hs.push('col' + (i + 1));
+        return {
+          headers: hs,
+          rows: data.map(function (r) {
+            var o = [];
+            for (var j = 0; j < maxLen; j++) o.push(cellText(r[j]));
+            return o;
+          })
+        };
+      }
+      return { headers: ['value'], rows: data.map(function (v) { return [cellText(v)]; }) };
+    }
+    if (data && typeof data === 'object') {
+      var keys = Object.keys(data);
+      var allArrays = keys.length > 0 && keys.every(function (k) { return Array.isArray(data[k]); });
+      if (allArrays) {
+        var maxL = keys.reduce(function (a, k) { return Math.max(a, data[k].length); }, 0);
+        var rows2 = [];
+        for (var r = 0; r < maxL; r++) {
+          rows2.push(keys.map(function (k) { return cellText(data[k][r]); }));
+        }
+        return { headers: keys, rows: rows2 };
+      }
+      var flat = flatten ? flattenObj(data) : data;
+      var ks = Object.keys(flat);
+      return { headers: ks, rows: [ks.map(function (k) { return cellText(flat[k]); })] };
+    }
+    return { headers: ['value'], rows: [[cellText(data)]] };
+  }
+
+  function toDelimited(headers, rows, delim) {
+    function esc(v) {
+      var s = v == null ? '' : String(v);
+      if (s.indexOf('"') >= 0 || s.indexOf(delim) >= 0 || /[\r\n]/.test(s) || /^\s|\s$/.test(s)) {
+        return '"' + s.replace(/"/g, '""') + '"';
+      }
+      return s;
+    }
+    var lines = [];
+    if (headers && headers.length) lines.push(headers.map(esc).join(delim));
+    rows.forEach(function (r) { lines.push(r.map(esc).join(delim)); });
+    return lines.join('\r\n');
+  }
+
+  function setPath(obj, path, value) {
+    var cur = obj;
+    for (var i = 0; i < path.length - 1; i++) {
+      var k = path[i];
+      if (!cur[k] || typeof cur[k] !== 'object') cur[k] = {};
+      cur = cur[k];
+    }
+    cur[path[path.length - 1]] = value;
+  }
+
+  function delimitedToJson(text, delim, hasHeader, expand) {
+    var rows = parseDelimited(text, delim);
+    if (!rows.length) return [];
+    if (!hasHeader) {
+      return rows
+        .filter(function (r) { return r.some(function (c) { return String(c).trim() !== ''; }); })
+        .map(function (r) { return r.map(inferValue); });
+    }
+    var headers = rows.shift().map(function (h, i) {
+      var s = String(h).trim();
+      return s || ('col' + (i + 1));
+    });
+    return rows
+      .filter(function (r) { return r.some(function (c) { return String(c).trim() !== ''; }); })
+      .map(function (r) {
+        if (expand && headers.some(function (h) { return h.indexOf('.') >= 0; })) {
+          var o = {};
+          headers.forEach(function (h, i) { setPath(o, h.split('.'), inferValue(r[i])); });
+          return o;
+        }
+        var obj = {};
+        headers.forEach(function (h, i) { obj[h] = inferValue(r[i]); });
+        return obj;
+      });
+  }
+
+  function currentText() {
+    return $('dataIn') ? $('dataIn').value : '';
+  }
+
+  function updateDataHint() {
+    var hint = $('hintData');
+    if (!hint) return;
+    var txt = currentText();
+    if (!txt.trim()) { hint.textContent = ''; return; }
+    var from = state.data.from;
+    var detected = detectFormat(txt);
+    var actual = from === 'auto' ? detected : from;
+    if (!actual) { hint.textContent = ''; return; }
+    hint.textContent = from === 'auto'
+      ? tpl('infoDataAuto', { in: actual.toUpperCase() })
+      : tpl('infoData', { in: actual.toUpperCase(), out: state.data.to.toUpperCase() });
+  }
+
+  function convertData() {
+    var txt = currentText();
+    if (!txt.trim()) { toast(t('dataEmpty'), true); return; }
+    var from = state.data.from;
+    var fmtIn = from === 'auto' ? detectFormat(txt) : from;
+    if (!fmtIn) { toast(t('dataEmpty'), true); return; }
+    var to = state.data.to;
+    var header = $('hdrData') ? $('hdrData').checked : true;
+    var flatten = $('flatData') ? $('flatData').checked : true;
+    var pretty = $('prettyData') ? $('prettyData').checked : true;
+
+    var value, headers = null, rows = null, text = '';
+    try {
+      if (fmtIn === 'json') {
+        value = JSON.parse(txt.replace(/^\uFEFF/, ''));
+        var table = jsonToTable(value, flatten);
+        headers = table.headers; rows = table.rows;
+      } else {
+        var delim = fmtIn === 'tsv' ? '\t' : detectDelim(txt);
+        value = delimitedToJson(txt, delim, header, flatten);
+        var t2 = jsonToTable(value, false);
+        headers = t2.headers; rows = t2.rows;
+      }
+    } catch (err) {
+      toast(fmtIn === 'json' ? tpl('dataBadJson', { msg: err && err.message ? err.message : '' }) : tpl('dataBadCsv', { fmt: fmtIn.toUpperCase() }), true);
+      return;
+    }
+
+    if (to === 'json') {
+      var objOut = (fmtIn === 'json') ? value : value;
+      if (fmtIn !== 'json' && header === false) objOut = value;
+      text = JSON.stringify(objOut, null, pretty ? 2 : 0);
+    } else {
+      text = toDelimited(headers, rows, to === 'tsv' ? '\t' : ',');
+    }
+
+    var out = $('dataOut');
+    if (out) out.value = text;
+    var field = $('dataOutField');
+    if (field) field.hidden = false;
+    var copyBtn = $('copyData');
+    if (copyBtn) copyBtn.disabled = false;
+
+    state.data.last = { text: text, ext: to === 'json' ? 'json' : (to === 'tsv' ? 'tsv' : 'csv') };
+
+    clearOutputs('data', true);
+    var blob = new Blob([text], { type: to === 'json' ? 'application/json' : 'text/plain' });
+    pushOutput('data', 'converted.' + state.data.last.ext, blob, fmtBytes(blob.size) + ' · ' + rows.length + ' × ' + (headers ? headers.length : 0));
+    renderOutsData();
+
+    var cols = headers ? headers.length : 0;
+    toast(tpl('doneData', { rows: rows.length, cols: cols, fmt: to.toUpperCase() }));
+    var hint = $('hintData');
+    if (hint) hint.textContent = tpl('doneData', { rows: rows.length, cols: cols, fmt: to.toUpperCase() });
+  }
+
+  /* ─────────────── mode 5 · markdown ─────────────── */
+  function mdInline(s) {
+    var codes = [];
+    var str = String(s).replace(/`([^`]+)`/g, function (m, c) {
+      codes.push(c);
+      return '\u0000C' + (codes.length - 1) + '\u0000';
+    });
+    str = escHtml(str);
+    str = str.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, function (m, alt, src) {
+      return '<img src="' + src + '" alt="' + alt + '" loading="lazy">';
+    });
+    str = str.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function (m, txt, href) {
+      return '<a href="' + href + '" rel="noopener">' + txt + '</a>';
+    });
+    str = str.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    str = str.replace(/__([^_]+)__/g, '<strong>$1</strong>');
+    str = str.replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>');
+    str = str.replace(/(^|[^_\w])_([^_\n]+)_/g, '$1<em>$2</em>');
+    str = str.replace(/~~([^~]+)~~/g, '<del>$1</del>');
+    str = str.replace(/\u0000C(\d+)\u0000/g, function (m, i) {
+      return '<code>' + escHtml(codes[parseInt(i, 10)]) + '</code>';
+    });
+    return str;
+  }
+
+  function splitRow(line) {
+    var s = String(line).trim();
+    if (s.charAt(0) === '|') s = s.slice(1);
+    if (s.charAt(s.length - 1) === '|') s = s.slice(0, -1);
+    var out = [], cur = '';
+    for (var i = 0; i < s.length; i++) {
+      var ch = s[i];
+      if (ch === '\\' && s[i + 1] === '|') { cur += '|'; i++; continue; }
+      if (ch === '|') { out.push(cur.trim()); cur = ''; continue; }
+      cur += ch;
+    }
+    out.push(cur.trim());
+    return out;
+  }
+
+  function isTableHead(lines, i) {
+    if (i + 1 >= lines.length) return false;
+    if (String(lines[i]).indexOf('|') < 0) return false;
+    return /^\s*\|?[\s:|-]*-[\s:|-]*\|?\s*$/.test(lines[i + 1]) && String(lines[i + 1]).indexOf('-') >= 0;
+  }
+
+  function isBlockStart(line) {
+    return /^\s*(#{1,6}\s|>|```|~~~|([-*+]|\d+[.)])\s+\S|([-*_])\s*(\3\s*){2,}\s*$)/.test(line);
+  }
+
+  function mdToHtml(md) {
+    var lines = String(md).replace(/\r\n?/g, '\n').replace(/\t/g, '    ').split('\n');
+    var out = [], i = 0;
+
+    function blank(l) { return /^\s*$/.test(l); }
+
+    while (i < lines.length) {
+      var line = lines[i];
+
+      var fence = line.match(/^\s*(```+|~~~+)\s*([\w+#.-]*)\s*$/);
+      if (fence) {
+        var marker = fence[1].charAt(0);
+        var lang = fence[2];
+        var buf = [];
+        i++;
+        while (i < lines.length && !new RegExp('^\\s*' + marker + '{3,}\\s*$').test(lines[i])) { buf.push(lines[i]); i++; }
+        i++;
+        out.push('<pre><code' + (lang ? ' class="lang-' + escAttr(lang) + '"' : '') + '>' + escHtml(buf.join('\n')) + '</code></pre>');
+        continue;
+      }
+      if (blank(line)) { i++; continue; }
+      if (/^\s*([-*_])\s*(\1\s*){2,}$/.test(line)) { out.push('<hr>'); i++; continue; }
+
+      var h = line.match(/^\s{0,3}(#{1,6})\s+(.*)$/);
+      if (h) {
+        var lv = h[1].length;
+        out.push('<h' + lv + '>' + mdInline(h[2].replace(/\s+#+\s*$/, '')) + '</h' + lv + '>');
+        i++; continue;
+      }
+
+      if (/^\s{0,3}>/.test(line)) {
+        var q = [];
+        while (i < lines.length && /^\s{0,3}>/.test(lines[i])) {
+          q.push(lines[i].replace(/^\s{0,3}>\s?/, ''));
+          i++;
+        }
+        out.push('<blockquote>' + mdToHtml(q.join('\n')) + '</blockquote>');
+        continue;
+      }
+
+      if (isTableHead(lines, i)) {
+        var head = splitRow(line);
+        var aligns = splitRow(lines[i + 1]).map(function (c) {
+          var left = /^:/.test(c.trim());
+          var right = /:$/.test(c.trim());
+          return left && right ? 'center' : (right ? 'right' : (left ? 'left' : ''));
+        });
+        i += 2;
+        var body = [];
+        while (i < lines.length && !blank(lines[i]) && lines[i].indexOf('|') >= 0) {
+          body.push(splitRow(lines[i]));
+          i++;
+        }
+        var thead = '<thead><tr>' + head.map(function (c, ci) {
+          return '<th' + (aligns[ci] ? ' style="text-align:' + aligns[ci] + '"' : '') + '>' + mdInline(c) + '</th>';
+        }).join('') + '</tr></thead>';
+        var tbody = '<tbody>' + body.map(function (r) {
+          return '<tr>' + r.map(function (c, ci) {
+            return '<td' + (aligns[ci] ? ' style="text-align:' + aligns[ci] + '"' : '') + '>' + mdInline(c) + '</td>';
+          }).join('') + '</tr>';
+        }).join('') + '</tbody>';
+        out.push('<table>' + thead + tbody + '</table>');
+        continue;
+      }
+
+      var li = line.match(/^\s*([-*+]|\d+[.)])\s+/);
+      if (li) {
+        var ordered = /\d/.test(li[1]);
+        var re = ordered ? /^\s*\d+[.)]\s+(.*)$/ : /^\s*[-*+]\s+(.*)$/;
+        var items = [];
+        var startNum = ordered ? parseInt(li[1], 10) : 1;
+        while (i < lines.length) {
+          var m = lines[i].match(re);
+          if (!m) break;
+          var text = m[1];
+          i++;
+          while (i < lines.length && !blank(lines[i]) && /^\s{2,}\S/.test(lines[i]) && !/^\s*([-*+]|\d+[.)])\s+/.test(lines[i])) {
+            text += ' ' + lines[i].trim();
+            i++;
+          }
+          items.push(text);
+        }
+        var tag = ordered ? 'ol' : 'ul';
+        out.push('<' + tag + (ordered && startNum > 1 ? ' start="' + startNum + '"' : '') + '>' +
+          items.map(function (x) { return '<li>' + mdInline(x) + '</li>'; }).join('') + '</' + tag + '>');
+        continue;
+      }
+
+      var para = [];
+      while (i < lines.length && !blank(lines[i]) && !isBlockStart(lines[i]) && !isTableHead(lines, i)) {
+        para.push(lines[i]);
+        i++;
+      }
+      if (!para.length) { i++; continue; }
+      out.push('<p>' + mdInline(para.join('\n')).replace(/\n/g, '<br>') + '</p>');
+    }
+    return out.join('\n');
+  }
+
+  function docShell(title, body) {
+    return '<!DOCTYPE html>\n<html lang="' + state.lang + '">\n<head>\n<meta charset="utf-8">\n'
+      + '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
+      + '<title>' + escHtml(title) + '</title>\n<style>\n'
+      + ':root{color-scheme:light}\n'
+      + 'body{margin:0;background:#fff;color:#16130d;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI","Malgun Gothic",system-ui,sans-serif;line-height:1.68;-webkit-text-size-adjust:100%}\n'
+      + 'article{max-width:720px;margin:0 auto;padding:56px 24px 72px}\n'
+      + 'h1,h2,h3,h4{line-height:1.25;letter-spacing:-.02em;margin:1.6em 0 .6em}\n'
+      + 'h1{font-size:30px;margin-top:0}\nh2{font-size:22px}\nh3{font-size:17px}\n'
+      + 'p{margin:0 0 1em}\na{color:#8a5a00;text-decoration:underline}\n'
+      + 'ul,ol{margin:0 0 1em;padding-left:1.4em}\nli{margin:.2em 0}\n'
+      + 'code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.9em;background:#f2efe8;padding:.1em .35em;border-radius:4px}\n'
+      + 'pre{background:#f6f3ec;border:1px solid #e2ddd0;border-radius:8px;padding:14px 16px;overflow-x:auto}\n'
+      + 'pre code{background:none;padding:0;font-size:13px}\n'
+      + 'blockquote{margin:0 0 1em;padding:.1em 0 .1em 16px;border-left:3px solid #d8b45c;color:#5a5548}\n'
+      + 'table{border-collapse:collapse;width:100%;margin:0 0 1em;font-size:14px}\n'
+      + 'th,td{border:1px solid #ddd7c8;padding:7px 10px;text-align:left}\nth{background:#f7f4ec}\n'
+      + 'img{max-width:100%;height:auto;border-radius:6px}\nhr{border:0;border-top:1px solid #e2ddd0;margin:2em 0}\n'
+      + '@media print{article{max-width:none;padding:0}@page{margin:18mm}a{color:inherit}h1,h2,h3{break-after:avoid}pre,table,blockquote{break-inside:avoid}}\n'
+      + '</style>\n</head>\n<body>\n<article>\n' + body + '\n</article>\n</body>\n</html>';
+  }
+
+  function textFromHtml(html) {
+    var doc = new DOMParser().parseFromString(String(html), 'text/html');
+    Array.prototype.forEach.call(doc.querySelectorAll('script,style,noscript,template'), function (n) {
+      if (n.parentNode) n.parentNode.removeChild(n);
+    });
+    var holder = document.createElement('div');
+    holder.style.cssText = 'position:absolute;left:-9999px;top:0;width:800px;white-space:normal;';
+    holder.innerHTML = doc.body ? doc.body.innerHTML : html;
+    document.body.appendChild(holder);
+    var txt = holder.innerText || holder.textContent || '';
+    document.body.removeChild(holder);
+    return txt.replace(/\u00a0/g, ' ').replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+  }
+
+  function looksLikeHtml(s) {
+    var t = String(s).trim();
+    return /^<!doctype|^<html|^<(div|p|h[1-6]|section|article|body|table|ul|ol)\b/i.test(t);
+  }
+
+  function currentMd() { return $('mdIn') ? $('mdIn').value : ''; }
+
+  function updateMdSummary() {
+    var st = $('statsMd');
+    if (!st) return;
+    var txt = currentMd();
+    if (!txt.trim()) { st.innerHTML = ''; return; }
+    var words = txt.trim().split(/\s+/).length;
+    var chars = txt.length;
+    st.innerHTML = '<b>' + words + '</b> ' + (isKo() ? '단어' : 'words') + ' <span class="sep">·</span> ' + chars + ' ' + (isKo() ? '자' : 'chars');
+  }
+
+  function buildMd() {
+    var raw = currentMd();
+    if (!raw.trim()) { toast(t('mdEmpty'), true); return null; }
+    var isHtml = looksLikeHtml(raw);
+    var body = isHtml ? raw : mdToHtml(raw);
+    var title = (isKo() ? '문서' : 'Document');
+    var m = body.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i) || body.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+    if (m) title = m[1].replace(/<[^>]+>/g, '').trim() || title;
+    var full = docShell(title, body);
+    return { body: body, full: full, title: title, isHtml: isHtml };
+  }
+
+  function renderMdPreview() {
+    var built = buildMd();
+    if (!built) return null;
+    var prev = $('previewMd');
+    if (prev) prev.innerHTML = built.body;
+    ['saveHtmlMd', 'saveTxtMd', 'printMd'].forEach(function (id) {
+      var b = $(id);
+      if (b) b.disabled = false;
+    });
+    state.md.last = built;
+    updateMdSummary();
+    var words = textFromHtml(built.body).split(/\s+/).filter(Boolean).length;
+    toast(tpl('doneMd', { words: words }));
+    return built;
+  }
+
+  function saveMdHtml() {
+    var built = state.md.last || buildMd();
+    if (!built) return;
+    clearOutputs('md', true);
+    var blob = new Blob([built.full], { type: 'text/html;charset=utf-8' });
+    pushOutput('md', 'document.html', blob, fmtBytes(blob.size) + ' · HTML');
+    renderOutsMd();
+    triggerDownload(state.md.outputs[0].url, 'document.html');
+  }
+
+  function saveMdTxt() {
+    var built = state.md.last || buildMd();
+    if (!built) return;
+    var txt = textFromHtml(built.body);
+    if (!txt.trim()) { toast(t('errEmpty'), true); return; }
+    clearOutputs('md', true);
+    var blob = new Blob([txt + '\n'], { type: 'text/plain;charset=utf-8' });
+    pushOutput('md', 'document.txt', blob, fmtBytes(blob.size) + ' · TXT');
+    renderOutsMd();
+    triggerDownload(state.md.outputs[0].url, 'document.txt');
+  }
+
+  function printMd() {
+    var built = state.md.last || buildMd();
+    if (!built) return;
+    var frame = document.createElement('iframe');
+    frame.setAttribute('aria-hidden', 'true');
+    frame.style.cssText = 'position:fixed;right:0;bottom:0;width:1px;height:1px;border:0;opacity:0;';
+    document.body.appendChild(frame);
+    var doc = frame.contentDocument || (frame.contentWindow && frame.contentWindow.document);
+    if (!doc) { toast(t('mdDoneNoPrint'), true); return; }
+    doc.open();
+    doc.write(built.full);
+    doc.close();
+    var fire = function () {
+      try {
+        frame.contentWindow.focus();
+        frame.contentWindow.print();
+      } catch (e) { toast(t('mdDoneNoPrint'), true); }
+      setTimeout(function () { if (frame.parentNode) frame.parentNode.removeChild(frame); }, 1500);
+    };
+    setTimeout(fire, 220);
+  }
+
+  /* ─────────────── UI wiring ─────────────── */
+  function updateImageFmtUi() {
+    var fmt = state.image.fmt;
+    var qf = $('qualityFieldImage');
+    if (qf) qf.hidden = (fmt === 'png' || fmt === 'bmp' || fmt === 'ico');
+    var ico = $('icoFieldImage');
+    if (ico) ico.hidden = fmt !== 'ico';
+    var bgField = $('bgField');
+    if (bgField) bgField.hidden = !(fmt === 'jpg' || fmt === 'bmp');
+  }
+
+  function clearImageFiles() {
+    state.image.files.forEach(function (f) { if (f.thumb) { try { URL.revokeObjectURL(f.thumb); } catch (e) {} } });
+    state.image.files = [];
+    renderImageList();
+    toast(t('cleared'));
+  }
+
+  function clearP2iFiles() {
+    state.p2i.files.forEach(function (f) { destroyDoc(f); });
+    state.p2i.files = [];
+    renderP2iList();
+    updateRangeHint();
+    toast(t('cleared'));
+  }
+
+  function clearI2pFiles() {
+    state.i2p.files.forEach(function (f) { if (f.thumb) { try { URL.revokeObjectURL(f.thumb); } catch (e) {} } });
+    state.i2p.files = [];
+    renderI2pList();
+    toast(t('cleared'));
+  }
+
+  function clearDataAll() {
+    if ($('dataIn')) $('dataIn').value = '';
+    if ($('dataOut')) $('dataOut').value = '';
+    var field = $('dataOutField');
+    if (field) field.hidden = true;
+    var cb = $('copyData');
+    if (cb) cb.disabled = true;
+    state.data.last = null;
+    clearOutputs('data', true);
+    updateDataHint();
+    var hint = $('hintData');
+    if (hint) hint.textContent = '';
+    toast(t('cleared'));
+  }
+
+  function clearMdAll() {
+    if ($('mdIn')) $('mdIn').value = '';
+    var prev = $('previewMd');
+    if (prev) prev.innerHTML = '';
+    ['saveHtmlMd', 'saveTxtMd', 'printMd'].forEach(function (id) { var b = $(id); if (b) b.disabled = true; });
+    state.md.last = null;
+    clearOutputs('md', true);
+    updateMdSummary();
+    toast(t('cleared'));
+  }
+
+  function setMode(mode) {
+    state.mode = mode;
+    ['image', 'p2i', 'i2p', 'data', 'md'].forEach(function (k) {
+      var b = $('mode-' + k), p = $('panel-' + k);
+      if (b) b.setAttribute('aria-selected', k === mode ? 'true' : 'false');
+      if (p) p.hidden = (k !== mode);
+    });
+  }
+
+  function runCurrent() {
+    if (state.busy) return;
+    if (state.mode === 'image') return runImage();
+    if (state.mode === 'p2i') return runP2i();
+    if (state.mode === 'i2p') return runI2p();
+    if (state.mode === 'data') return convertData();
+    if (state.mode === 'md') return renderMdPreview();
+  }
+
+  function wire() {
+    var tabs = document.querySelector('.modes');
+    if (tabs) {
+      tabs.addEventListener('click', function (e) {
+        var b = e.target && e.target.closest ? e.target.closest('[data-mode]') : null;
+        if (!b || state.busy) return;
+        setMode(b.getAttribute('data-mode'));
+      });
+    }
+
+    var lt = $('langToggle');
+    if (lt) lt.addEventListener('click', function () { setLang(isKo() ? 'en' : 'ko'); });
+    var tb = $('themeBtn');
+    if (tb) tb.addEventListener('click', function () { setTheme(state.theme === 'dark' ? 'light' : 'dark'); });
+
+    /* image */
+    wireDrop('dropImage', 'fileImage', addImageFiles);
+    wireSeg('fmtImage', 'fmt', function (v) { state.image.fmt = v; updateImageFmtUi(); });
+    var qi = $('qualityImage');
+    if (qi) {
+      qi.addEventListener('input', function () {
+        state.image.quality = parseInt(qi.value, 10) || 90;
+        var lab = $('qualityImageVal');
+        if (lab) lab.textContent = state.image.quality + '%';
+      });
+    }
+    var me = $('maxEdgeImage');
+    if (me) {
+      me.addEventListener('input', function () {
+        var v = parseInt(me.value, 10);
+        state.image.maxEdge = isNaN(v) ? 0 : Math.max(0, v);
+      });
+    }
+    var bg = $('bgImage');
+    if (bg) {
+      bg.addEventListener('input', function () {
+        state.image.bg = bg.value || '#ffffff';
+        var hex = $('bgHex');
+        if (hex) hex.textContent = String(state.image.bg).toUpperCase();
+      });
+    }
+
+    var icoBox = $('icoSizes');
+    if (icoBox) {
+      icoBox.addEventListener('click', function (e) {
+        var b = e.target && e.target.closest ? e.target.closest('[data-size]') : null;
+        if (!b) return;
+        var on = b.getAttribute('aria-pressed') === 'true';
+        var pressed = icoBox.querySelectorAll('[aria-pressed="true"]');
+        if (on && pressed.length <= 1) return;
+        b.setAttribute('aria-pressed', on ? 'false' : 'true');
+        state.image.icoSizes = Array.prototype.map.call(icoBox.querySelectorAll('[aria-pressed="true"]'), function (x) {
+          return parseInt(x.getAttribute('data-size'), 10);
+        }).sort(function (a, b2) { return a - b2; });
+      });
+    }
+    var runImg = $('runImage');
+    if (runImg) runImg.addEventListener('click', runImage);
+    var clrImg = $('clearImage');
+    if (clrImg) clrImg.addEventListener('click', clearImageFiles);
+    var clrResImg = $('clearResImage');
+    if (clrResImg) clrResImg.addEventListener('click', function () { clearOutputs('image'); });
+    var zipImg = $('zipImage');
+    if (zipImg) zipImg.addEventListener('click', function () { zipOutputs('image', 'fileforge-images.zip'); });
+
+    /* pdf → image */
+    wireDrop('dropP2i', 'fileP2i', addP2iFiles);
+    wireSeg('fmtP2i', 'fmt', function (v) { state.p2i.fmt = v; updateP2iQuality(); });
+    var dpi = $('dpiP2i');
+    if (dpi) dpi.addEventListener('change', function () { state.p2i.dpi = parseInt(dpi.value, 10) || 150; });
+    var qp = $('qualityP2i');
+    if (qp) {
+      qp.addEventListener('input', function () {
+        state.p2i.quality = parseInt(qp.value, 10) || 88;
+        var lab = $('qualityP2iVal');
+        if (lab) lab.textContent = state.p2i.quality + '%';
+      });
+    }
+    var rg = $('rangeP2i');
+    if (rg) rg.addEventListener('input', updateRangeHint);
+    var runP2 = $('runP2i');
+    if (runP2) runP2.addEventListener('click', runP2i);
+    var clrP = $('clearP2i');
+    if (clrP) clrP.addEventListener('click', clearP2iFiles);
+    var clrResP = $('clearResP2i');
+    if (clrResP) clrResP.addEventListener('click', function () { clearOutputs('p2i'); });
+    var zipP = $('zipP2i');
+    if (zipP) zipP.addEventListener('click', function () { zipOutputs('p2i', 'fileforge-pages.zip'); });
+
+    /* images → pdf */
+    wireDrop('dropI2p', 'fileI2p', addI2pFiles);
+    wireSeg('sizeI2p', 'size', function (v) { state.i2p.size = v; });
+    var runI = $('runI2p');
+    if (runI) runI.addEventListener('click', runI2p);
+    var clrI = $('clearI2p');
+    if (clrI) clrI.addEventListener('click', clearI2pFiles);
+    var clrResI = $('clearResI2p');
+    if (clrResI) clrResI.addEventListener('click', function () { clearOutputs('i2p'); });
+
+    /* data */
+    wireDrop('dropData', 'fileData', function (files) {
+      var picked = files.filter(isDataFile);
+      if (!picked.length) { toast(tpl('skippedData', { n: files.length }), true); return; }
+      if (files.length > picked.length) toast(tpl('skippedData', { n: files.length - picked.length }), true);
+      var f = picked[picked.length - 1];
+      if (picked.length > 1) toast(t('dataOneFile'));
+      f.text().then(function (txt) {
+        var ta = $('dataIn');
+        if (ta) ta.value = txt;
+        var ext = (f.name.split('.').pop() || '').toLowerCase();
+        var want = ext === 'json' ? 'json' : (ext === 'tsv' ? 'tsv' : (ext === 'csv' ? 'csv' : state.data.from));
+        state.data.from = want;
+        var box = $('fromData');
+        if (box) {
+          Array.prototype.forEach.call(box.querySelectorAll('[data-from]'), function (x) {
+            x.setAttribute('aria-pressed', x.getAttribute('data-from') === want ? 'true' : 'false');
+          });
+        }
+        var detected = detectFormat(txt);
+        if ((ext === 'txt' || !want) && detected) {
+          state.data.from = 'auto';
+          Array.prototype.forEach.call(box.querySelectorAll('[data-from]'), function (x) {
+            x.setAttribute('aria-pressed', x.getAttribute('data-from') === 'auto' ? 'true' : 'false');
+          });
+        }
+        updateDataHint();
+      });
+    });
+    wireSeg('fromData', 'from', function (v) { state.data.from = v; updateDataHint(); });
+    wireSeg('toData', 'to', function (v) { state.data.to = v; updateDataHint(); });
+    var ta = $('dataIn');
+    if (ta) ta.addEventListener('input', updateDataHint);
+    var runD = $('runData');
+    if (runD) runD.addEventListener('click', convertData);
+    var clrD = $('clearData');
+    if (clrD) clrD.addEventListener('click', clearDataAll);
+    var clrResD = $('clearResData');
+    if (clrResD) clrResD.addEventListener('click', function () { clearOutputs('data'); });
+    var cp = $('copyData');
+    if (cp) {
+      cp.addEventListener('click', function () {
+        var val = $('dataOut') ? $('dataOut').value : '';
+        if (!val) return;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(val).then(function () { toast(t('copyOk')); }).catch(function () { fallbackCopy(val); });
+        } else fallbackCopy(val);
+      });
+    }
+
+    /* markdown */
+    wireDrop('dropMd', 'fileMd', function (files) {
+      var picked = files.filter(isDocFile);
+      if (!picked.length) { toast(t('mdEmpty'), true); return; }
+      var f = picked[0];
+      f.text().then(function (txt) {
+        var box = $('mdIn');
+        if (box) box.value = txt;
+        updateMdSummary();
+        renderMdPreview();
+      });
+    });
+    var runM = $('runMd');
+    if (runM) runM.addEventListener('click', renderMdPreview);
+    var clrM = $('clearMd');
+    if (clrM) clrM.addEventListener('click', clearMdAll);
+    var sh = $('saveHtmlMd');
+    if (sh) sh.addEventListener('click', saveMdHtml);
+    var st = $('saveTxtMd');
+    if (st) st.addEventListener('click', saveMdTxt);
+    var pr = $('printMd');
+    if (pr) pr.addEventListener('click', printMd);
+    var clrResM = $('clearResMd');
+    if (clrResM) clrResM.addEventListener('click', function () { clearOutputs('md'); });
+    var mi = $('mdIn');
+    if (mi) mi.addEventListener('input', function () {
+      state.md.last = null;
+      ['saveHtmlMd', 'saveTxtMd', 'printMd'].forEach(function (id) { var b = $(id); if (b) b.disabled = true; });
+      updateMdSummary();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+        if (state.busy) return;
+        e.preventDefault();
+        runCurrent();
+      }
+    });
+
+    window.addEventListener('pagehide', revokeAll);
+    guardWindowDrop();
+  }
+
+  function fallbackCopy(text) {
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.cssText = 'position:fixed;left:-9999px;top:0;';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      toast(t('copyOk'));
+    } catch (e) { toast(t('copyFail'), true); }
+  }
+
+  function revokeAll() {
+    ['image', 'p2i', 'i2p', 'data', 'md'].forEach(function (mode) {
+      (state[mode].outputs || []).forEach(function (o) {
+        try { URL.revokeObjectURL(o.url); } catch (e) {}
+      });
+    });
+  }
+
+  /* ─────────────── boot ─────────────── */
+  function initialLang() {
+    var q = '';
+    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
+    if (q === 'ko' || q === 'en') return q;
+    try {
+      var v = localStorage.getItem(LANG_KEY) || localStorage.getItem(SHARED_LANG_KEY);
+      if (v === 'ko' || v === 'en') return v;
+    } catch (e) {}
+    return 'en';
+  }
+
+  function boot() {
+    state.lang = initialLang();
+    try {
+      var savedTheme = localStorage.getItem(THEME_KEY);
+      if (savedTheme === 'light' || savedTheme === 'dark') state.theme = savedTheme;
+    } catch (e) {}
+
+    setTheme(state.theme);
+    wire();
+    applyI18n();
+    setMode('image');
+    updateImageFmtUi();
+    updateP2iQuality();
+    updateNetBadge();
+
+    if (window.PerformanceObserver) {
+      try {
+        new PerformanceObserver(function () { updateNetBadge(); }).observe({ type: 'resource', buffered: false });
+      } catch (e) {}
+    }
+
+    if (!pdfjs || !PDFDocument) {
+      toast(t('errNoLib'), true);
+      var runP2 = $('runP2i'), runI = $('runI2p');
+      if (!pdfjs && runP2) runP2.disabled = true;
+      if (!PDFDocument && runI) runI.disabled = true;
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();
+</script>
+</body>
+</html>
