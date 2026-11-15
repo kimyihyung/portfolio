@@ -1382,7 +1382,7 @@ footer.foot .sep { color: var(--line2); }
       note2d: 'Each result is re-opened before you get it: images by decoding them again, PDFs by counting their pages, extracted text by counting its characters. The size, page count and character count you see are read from the actual output, not assumed.',
       note3h: 'Released when you are done',
       note3d: 'Outputs live in a blob URL that is revoked when you clear the list or close the tab. Nothing is written to storage, and metadata such as EXIF and GPS is dropped by re-encoding.',
-      caveat: '<strong>Limits.</strong> Browser encoding is not always the smallest: a PNG photo can come out larger than its JPEG. Very large PDFs, 600 DPI renders and 120-megapixel TIFFs are capped by device memory. Password-protected PDFs must be unlocked first. A scanned PDF has no text layer to extract. Text → PDF embeds Latin as real text and draws Korean and other scripts with your device fonts, so those passages are pictures of text. Print → PDF still needs system Korean fonts.',
+      caveat: '<strong>Limits.</strong> Browser encoding is not always the smallest: a PNG photo can come out larger than its JPEG. Very large PDFs, 600 DPI renders and 120-megapixel TIFFs are capped by device memory. TIFF input covers baseline files — uncompressed, LZW, PackBits, Deflate and JPEG, in grey, RGB, palette or 1-bit fax (G3/G4); tiled, 16-bit and CMYK files are refused rather than guessed at. Password-protected PDFs must be unlocked first. A scanned PDF has no text layer to extract. Text → PDF embeds Latin as real text and draws Korean and other scripts with your device fonts, so those passages are pictures of text. Print → PDF still needs system Korean fonts.',
       foot1: '0 uploads · 0 servers · 0 cookies · 0 external requests',
       foot2: 'Everything finishes inside this tab',
       foot3: 'Close the tab and nothing remains',
@@ -1601,7 +1601,7 @@ footer.foot .sep { color: var(--line2); }
       note2d: '결과물을 건네기 전에 다시 열어봅니다. 이미지는 다시 디코딩해, PDF는 페이지 수를, 꺼낸 텍스트는 글자 수를 세어 확인합니다. 표시되는 용량·페이지 수·글자 수는 짐작이 아니라 실측값입니다.',
       note3h: '끝나면 즉시 해제',
       note3d: '결과물은 목록을 비우거나 탭을 닫을 때 해제되는 blob URL에만 존재합니다. 저장소에 아무것도 쓰지 않고, 다시 인코딩하므로 EXIF·GPS 같은 메타데이터는 사라집니다.',
-      caveat: '<strong>한계.</strong> 브라우저 인코딩이 항상 가장 작지는 않습니다 — PNG 사진이 원본 JPEG보다 커질 수 있습니다. 아주 큰 PDF·600 DPI 렌더링·1억 2천만 화소 TIFF는 기기 메모리 한도를 받습니다. 암호가 걸린 PDF는 먼저 잠금을 풀어야 하고, 스캔한 PDF에는 꺼낼 텍스트 레이어가 없습니다. 텍스트 → PDF는 라틴 문자를 실제 텍스트로 넣고 한글 등은 기기 폰트로 그려 넣으므로 그 부분은 글자의 그림입니다. 인쇄 → PDF는 여전히 시스템 한글 폰트가 필요합니다.',
+      caveat: '<strong>한계.</strong> 브라우저 인코딩이 항상 가장 작지는 않습니다 — PNG 사진이 원본 JPEG보다 커질 수 있습니다. 아주 큰 PDF·600 DPI 렌더링·1억 2천만 화소 TIFF는 기기 메모리 한도를 받습니다. TIFF 입력은 베이스라인 파일(무압축·LZW·PackBits·Deflate·JPEG, 그레이·RGB·팔레트·1비트 팩스 G3/G4)을 지원하며, 타일·16비트·CMYK 파일은 짐작해 처리하지 않고 거부합니다. 암호가 걸린 PDF는 먼저 잠금을 풀어야 하고, 스캔한 PDF에는 꺼낼 텍스트 레이어가 없습니다. 텍스트 → PDF는 라틴 문자를 실제 텍스트로 넣고 한글 등은 기기 폰트로 그려 넣으므로 그 부분은 글자의 그림입니다. 인쇄 → PDF는 여전히 시스템 한글 폰트가 필요합니다.',
       foot1: '업로드 0 · 서버 0 · 쿠키 0 · 외부 요청 0',
       foot2: '모든 처리는 이 탭 안에서 끝납니다',
       foot3: '탭을 닫으면 남는 것 없음',
@@ -2137,6 +2137,10 @@ footer.foot .sep { color: var(--line2); }
       var unit = TIFF_UNIT[type] || 1;
       var size = unit * count;
       var base = size <= 4 ? p + 8 : dv.getUint32(p + 8, le);
+      if (tag === 347 && base + count <= dv.byteLength) {
+        tags[347] = new Uint8Array(buf, base, count);
+        continue;
+      }
       var arr = [];
       for (var k = 0; k < count && base + k * unit + unit <= dv.byteLength; k++) {
         var at = base + k * unit;
@@ -2154,7 +2158,7 @@ footer.foot .sep { color: var(--line2); }
     if (!W || !H) throw new Error('tiff-size');
     if (W * H > 120e6) throw new Error('tiff-huge');
     if (tags[322] || tags[324]) throw new Error('tiff-tiled');
-    var bps = tags[258] || [8];
+    var bps = tags[258] || [1];
     var comp = (tags[259] || [1])[0];
     var photo = (tags[262] || [2])[0];
     var spp = (tags[277] || [1])[0];
@@ -2166,9 +2170,15 @@ footer.foot .sep { color: var(--line2); }
     if (!offs.length) throw new Error('tiff-strips');
     if (planar !== 1) throw new Error('tiff-planar');
     if (spp !== 1 && spp !== 2 && spp !== 3 && spp !== 4) throw new Error('tiff-samples');
-    for (var bi = 0; bi < bps.length; bi++) if (bps[bi] !== 8) throw new Error('tiff-depth');
-
     var rowsPer = Math.min(rps, H);
+    if (bps[0] === 1) {
+      if (comp === 3 || comp === 4) {
+        return await tiffCcitt(buf, W, H, rowsPer, offs, counts, photo, comp, (tags[292] || [0])[0] || 0);
+      }
+      return await tiffBilevel(buf, W, H, rowsPer, offs, counts, comp, photo, (tags[266] || [1])[0] || 1);
+    }
+    if (comp === 7) return await tiffJpegStrips(buf, W, H, rowsPer, offs, counts, tags[347] || null);
+    for (var bi = 0; bi < bps.length; bi++) if (bps[bi] !== 8) throw new Error('tiff-depth');
     var rowBytes = W * spp;
     var pixels = new Uint8Array(rowBytes * H);
     var y = 0;
@@ -2232,6 +2242,166 @@ footer.foot .sep { color: var(--line2); }
       img: canvas, width: W, height: H,
       _close: function () { canvas.width = 0; canvas.height = 0; }
     };
+  }
+
+  async function tiffBilevel(buf, W, H, rowsPer, offs, counts, comp, photo, fillOrder) {
+    var rowBytes = Math.ceil(W / 8);
+    var pixels = new Uint8Array(W * H);
+    var y = 0;
+    for (var s = 0; s < offs.length && y < H; s++) {
+      var rows = Math.min(rowsPer, H - y);
+      var need = rowBytes * rows;
+      var srcLen = counts[s] != null ? counts[s] : (buf.byteLength - offs[s]);
+      srcLen = Math.min(srcLen, buf.byteLength - offs[s]);
+      if (srcLen <= 0) break;
+      var src = new Uint8Array(buf, offs[s], srcLen);
+      var raw;
+      if (comp === 1) raw = src;
+      else if (comp === 5) raw = tiffLZW(src);
+      else if (comp === 8 || comp === 32946) raw = new Uint8Array(await tiffInflate(src));
+      else if (comp === 32773) raw = tiffPackBits(src, need);
+      else throw new Error('tiff-comp:' + comp);
+      if (raw.length < need) throw new Error('tiff-short');
+      for (var r = 0; r < rows; r++) {
+        var ro = r * rowBytes;
+        for (var x = 0; x < W; x++) {
+          var byte = raw[ro + (x >> 3)];
+          pixels[(y + r) * W + x] = fillOrder === 2 ? ((byte >> (x & 7)) & 1) : ((byte >> (7 - (x & 7))) & 1);
+        }
+      }
+      y += rows;
+    }
+    if (y < H) throw new Error('tiff-short');
+    var canvas = document.createElement('canvas');
+    canvas.width = W; canvas.height = H;
+    var ctx = canvas.getContext('2d');
+    if (!ctx) throw new Error('tiff');
+    var img = ctx.createImageData(W, H);
+    var d = img.data;
+    for (var i = 0; i < W * H; i++) {
+      var v = photo === 0 ? (pixels[i] ? 0 : 255) : (pixels[i] ? 255 : 0);
+      d[i * 4] = v; d[i * 4 + 1] = v; d[i * 4 + 2] = v; d[i * 4 + 3] = 255;
+    }
+    ctx.putImageData(img, 0, 0);
+    return { img: canvas, width: W, height: H, _close: function () { canvas.width = 0; canvas.height = 0; } };
+  }
+
+  /* bilevel fax strips (T.4 / T.6) are decoded by the pdf.js engine that this page
+     already ships: the strips are wrapped in a one-page PDF built here in memory. */
+  function ccittPdfBytes(W, H, strips, blackIs1, K) {
+    var enc = new TextEncoder();
+    var parts = [], total = 0;
+    function put(u8) { parts.push(u8); total += u8.length; }
+    function putStr(s) { put(enc.encode(s)); }
+    var offsets = [];
+    putStr('%PDF-1.4\n');
+    var imgStart = 5, contentNum = 4;
+    function beginObj(n) { offsets[n] = total; putStr(n + ' 0 obj\n'); }
+    function endObj() { putStr('endobj\n'); }
+
+    beginObj(1); putStr('<</Type/Catalog/Pages 2 0 R>>\n'); endObj();
+    beginObj(2); putStr('<</Type/Pages/Kids[3 0 R]/Count 1>>\n'); endObj();
+    var xo = '';
+    for (var i = 0; i < strips.length; i++) xo += '/Im' + i + ' ' + (imgStart + i) + ' 0 R';
+    beginObj(3);
+    putStr('<</Type/Page/Parent 2 0 R/MediaBox[0 0 ' + W + ' ' + H + ']/Resources<</XObject<<' + xo + '>>>>/Contents ' + contentNum + ' 0 R>>\n');
+    endObj();
+
+    var ops = '';
+    for (var j = 0; j < strips.length; j++) {
+      ops += 'q ' + W + ' 0 0 ' + strips[j].rows + ' 0 ' + (H - (strips[j].y + strips[j].rows)) + ' cm /Im' + j + ' Do Q\n';
+    }
+    var opsBytes = enc.encode(ops);
+    beginObj(contentNum);
+    putStr('<</Length ' + opsBytes.length + '>>\nstream\n');
+    put(opsBytes);
+    putStr('\nendstream\n');
+    endObj();
+
+    for (var k = 0; k < strips.length; k++) {
+      var st = strips[k];
+      beginObj(imgStart + k);
+      putStr('<</Type/XObject/Subtype/Image/Width ' + W + '/Height ' + st.rows
+        + '/ColorSpace/DeviceGray/BitsPerComponent 1/Filter/CCITTFaxDecode/DecodeParms<</K ' + K
+        + '/Columns ' + W + '/Rows ' + st.rows + '/BlackIs1 ' + (blackIs1 ? 'true' : 'false') + '>>/Length ' + st.data.length + '>>\nstream\n');
+      put(st.data);
+      putStr('\nendstream\n');
+      endObj();
+    }
+
+    var size = imgStart + strips.length;
+    var xrefPos = total;
+    var xref = 'xref\n0 ' + size + '\n0000000000 65535 f \n';
+    for (var m = 1; m < size; m++) xref += ('0000000000' + offsets[m]).slice(-10) + ' 00000 n \n';
+    xref += 'trailer\n<</Size ' + size + '/Root 1 0 R>>\nstartxref\n' + xrefPos + '\n%%EOF\n';
+    putStr(xref);
+
+    var out = new Uint8Array(total), pos = 0;
+    parts.forEach(function (p) { out.set(p, pos); pos += p.length; });
+    return out;
+  }
+
+  async function tiffCcitt(buf, W, H, rowsPer, offs, counts, photo, comp, t4opts) {
+    if (!pdfjs) throw new Error('nolib');
+    var strips = [], y = 0;
+    for (var s = 0; s < offs.length && y < H; s++) {
+      var rows = Math.min(rowsPer, H - y);
+      var len = counts[s] != null ? counts[s] : (buf.byteLength - offs[s]);
+      len = Math.min(len, buf.byteLength - offs[s]);
+      strips.push({ y: y, rows: rows, data: new Uint8Array(buf, offs[s], len).slice() });
+      y += rows;
+    }
+    if (y < H) throw new Error('tiff-short');
+    var K = comp === 4 ? -1 : ((t4opts & 1) ? 1 : 0);
+    var bytes = ccittPdfBytes(W, H, strips, photo !== 0, K);
+    var doc = await pdfjs.getDocument({ data: bytes, isEvalSupported: false }).promise;
+    try {
+      var page = await doc.getPage(1);
+      var canvas = document.createElement('canvas');
+      canvas.width = W; canvas.height = H;
+      var ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('tiff');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, W, H);
+      await page.render({ canvasContext: ctx, viewport: page.getViewport({ scale: 1 }), canvas: canvas }).promise;
+      return { img: canvas, width: W, height: H, _close: function () { canvas.width = 0; canvas.height = 0; } };
+    } finally {
+      try { doc.destroy(); } catch (e) {}
+    }
+  }
+
+  async function tiffJpegStrips(buf, W, H, rowsPer, offs, counts, tables) {
+    if (!window.createImageBitmap) throw new Error('tiff-jpeg');
+    var canvas = document.createElement('canvas');
+    canvas.width = W; canvas.height = H;
+    var ctx = canvas.getContext('2d');
+    if (!ctx) throw new Error('tiff');
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, W, H);
+    var head = null;
+    if (tables && tables.length > 4) head = tables.subarray(2, tables.length - 2);
+    var y = 0;
+    for (var s = 0; s < offs.length && y < H; s++) {
+      var rows = Math.min(rowsPer, H - y);
+      var len = counts[s] != null ? counts[s] : (buf.byteLength - offs[s]);
+      len = Math.min(len, buf.byteLength - offs[s]);
+      var strip = new Uint8Array(buf, offs[s], len);
+      var jpeg;
+      if (head && strip[0] === 0xFF && strip[1] === 0xD8) {
+        jpeg = new Uint8Array(2 + head.length + strip.length - 2);
+        jpeg[0] = 0xFF; jpeg[1] = 0xD8;
+        jpeg.set(head, 2);
+        jpeg.set(strip.subarray(2), 2 + head.length);
+      } else {
+        jpeg = strip.slice();
+      }
+      var bmp = await createImageBitmap(new Blob([jpeg], { type: 'image/jpeg' }));
+      ctx.drawImage(bmp, 0, 0, bmp.width, bmp.height, 0, y, W, rows);
+      try { bmp.close(); } catch (e) {}
+      y += rows;
+    }
+    if (y < H) throw new Error('tiff-short');
+    return { img: canvas, width: W, height: H, _close: function () { canvas.width = 0; canvas.height = 0; } };
   }
 
   /* ─────────────── output plumbing ─────────────── */
@@ -2564,7 +2734,7 @@ footer.foot .sep { color: var(--line2); }
       list.appendChild(fileRow({
         thumbUrl: f.thumb,
         name: f.name,
-        meta: f.bad ? t('errRead', { name: f.name }) : (f.w ? tpl('imgMeta', { w: f.w, h: f.h, size: fmtBytes(f.size) }) : fmtBytes(f.size)),
+        meta: f.bad ? tpl('errRead', { name: f.name }) : (f.w ? tpl('imgMeta', { w: f.w, h: f.h, size: fmtBytes(f.size) }) : fmtBytes(f.size)),
         bad: f.bad,
         onUp: function () { moveItem(files, i, -1); renderImageList(); },
         onDown: function () { moveItem(files, i, 1); renderImageList(); },
@@ -2743,7 +2913,7 @@ footer.foot .sep { color: var(--line2); }
         item.pages = item.doc.numPages || 0;
       } catch (err) {
         item.bad = true;
-        item.badText = isPasswordError(err) ? t('badPdf') : t('errRead', { name: item.name });
+        item.badText = isPasswordError(err) ? t('badPdf') : tpl('errRead', { name: item.name });
         if (isPasswordError(err)) toast(tpl('errEncrypted', { name: item.name }), true);
       }
       setStatus('statusP2i', '', false);
@@ -4119,7 +4289,7 @@ footer.foot .sep { color: var(--line2); }
         item.pages = item.doc.numPages || 0;
       } catch (err) {
         item.bad = true;
-        item.badText = isPasswordError(err) ? t('badPdf') : t('errRead', { name: item.name });
+        item.badText = isPasswordError(err) ? t('badPdf') : tpl('errRead', { name: item.name });
       }
       setStatus('statusP2t', '', false);
       renderP2tList();
