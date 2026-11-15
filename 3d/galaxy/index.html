@@ -644,7 +644,7 @@ NODES.forEach((n) => {
 HALF_W += 7; HALF_H += 5;
 const _tanV = Math.tan((FOV_BASE * Math.PI) / 360);
 const _tanH = _tanV * (window.innerWidth / window.innerHeight);
-const OVERVIEW_R = clamp(Math.max((HALF_W / _tanH) * 1.34, (HALF_H / _tanV) * 1.12), 60, 320);
+const OVERVIEW_R = clamp(Math.max((HALF_W / _tanH) * 1.62, (HALF_H / _tanV) * 1.22), 60, 320);
 const view = { target: new THREE.Vector3(0, 0, 0), r: OVERVIEW_R * 1.7, az: 0.6, pol: 1.06 };
 const tw = { active: false, t: 0, dur: 1, fr: 0, tr: 0, ft: new THREE.Vector3(), tt: new THREE.Vector3() };
 function applyCam() {
@@ -1075,7 +1075,7 @@ function animate() {
 restyle();
 window.__galaxyInfo = {
   nodes: N, total: DATA.total, channels: DATA.counts, clusters: CHANNELS.length,
-  lang: LANG, filter: 'all', filtered: N, ready: false, generated: DATA.generated
+  lang: LANG, filter: 'all', filtered: N, ready: false, generated: DATA.generated, overviewR: Math.round(OVERVIEW_R)
 };
 /* 검수용 훅 (실물 검증 스크립트가 사용) */
 window.__galaxy = {
