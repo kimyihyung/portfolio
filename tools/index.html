@@ -866,6 +866,21 @@ button { font-family: inherit; color: inherit; }
   var countEl = $('count');
   var emptyEl = $('empty');
 
+  // The numbers on the filter chips are read from the cards themselves, so a
+  // new tool on the shelf updates them without anyone editing this markup.
+  function paintChipCounts() {
+    var perCat = {};
+    cards.forEach(function (card) {
+      var key = card.getAttribute('data-cat');
+      perCat[key] = (perCat[key] || 0) + 1;
+    });
+    chips.forEach(function (chip) {
+      var f = chip.getAttribute('data-filter');
+      var n = chip.querySelector('.n');
+      if (n) n.textContent = String(f === 'all' ? cards.length : (perCat[f] || 0));
+    });
+  }
+
   function countLabel(n) {
     if (state.lang === 'ko') return '도구 ' + n + '개';
     return n + ' ' + (n === 1 ? t('countOne') : t('countMany'));
@@ -976,6 +991,7 @@ button { font-family: inherit; color: inherit; }
   // Deep link: /tools/#creator opens pre-filtered. Initial state = all.
   var initial = (location.hash || '').replace('#', '');
   var valid = chips.some(function (c) { return c.getAttribute('data-filter') === initial; });
+  paintChipCounts();
   applyLang(initialLang());
   applyFilter(valid ? initial : 'all', false);
 
