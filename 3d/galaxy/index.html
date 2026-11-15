@@ -570,9 +570,13 @@ CHANNELS.forEach((ch, ci) => {
   const sp = makeLabel(ch);
   const sc = PORTRAIT ? 0.135 : 0.19;
   sp.scale.set(sc, sc / 3.45, 1);
-  const outLen = Math.hypot(spot.x, spot.z) || 1;
-  const ox = spot.x / outLen, oz = spot.z / outLen;
-  sp.position.set(spot.x + ox * (rr * 0.9 + 7), spot.y + rr * 0.55 + 6, spot.z + oz * (rr * 0.9 + 7));
+  if (PORTRAIT) {
+    sp.position.set(spot.x, spot.y + rr * 1.02 + 4.2, spot.z);
+  } else {
+    const outLen = Math.hypot(spot.x, spot.z) || 1;
+    const ox = spot.x / outLen, oz = spot.z / outLen;
+    sp.position.set(spot.x + ox * (rr * 0.9 + 7), spot.y + rr * 0.55 + 6, spot.z + oz * (rr * 0.9 + 7));
+  }
   sp.userData.ch = ch.id;
   scene.add(sp);
   ch.label = sp;
