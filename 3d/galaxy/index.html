@@ -381,7 +381,7 @@ NODES.forEach((n, idx) => {
     center.z + Math.sin(ang) * r
   );
   n.ang = ang; n.rad = r; n.cl = center;
-  n.size = 1.0 + 1.5 * (n.i === undefined ? 0.5 : n.i);
+  n.size = 1.1 + 1.65 * (n.i === undefined ? 0.5 : n.i);
   n.featured = false;
 });
 
@@ -404,7 +404,7 @@ NODES.forEach((n, i) => {
   tmpColor.set(n.col || CHANNELS[CH_INDEX[n.c]].css);
   colArr[i * 3] = tmpColor.r; colArr[i * 3 + 1] = tmpColor.g; colArr[i * 3 + 2] = tmpColor.b;
   sizeArr[i] = n.size;
-  alphaArr[i] = 0.55 + 0.45 * (n.i === undefined ? 0.5 : n.i);
+  alphaArr[i] = 0.62 + 0.38 * (n.i === undefined ? 0.5 : n.i);
   seedArr[i] = rnd();
   n.alphaBase = alphaArr[i];
   n.sizeBase = sizeArr[i];
@@ -497,6 +497,29 @@ const core = new THREE.Sprite(new THREE.SpriteMaterial({
 core.scale.set(13, 13, 1);
 scene.add(core);
 
+
+/* core monogram */
+const coreTex = canvasTexture(512, 256, (ctx, w, h) => {
+  ctx.clearRect(0, 0, w, h);
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#ffe6b8';
+  ctx.globalAlpha = 0.92;
+  ctx.font = '800 96px -apple-system, "Helvetica Neue", Arial, sans-serif';
+  ctx.fillText('YH', w / 2, 112);
+  ctx.globalAlpha = 0.55;
+  ctx.fillStyle = '#dce9ff';
+  ctx.font = '500 38px -apple-system, "Apple SD Gothic Neo", sans-serif';
+  ctx.fillText(TOTAL_TXT(), w / 2, 176);
+});
+function TOTAL_TXT() { return LANG === 'en' ? DATA.total.toLocaleString() + ' stars' : DATA.total.toLocaleString() + '개의 별'; }
+const coreLabel = new THREE.Sprite(new THREE.SpriteMaterial({
+  map: coreTex, transparent: true, opacity: 0.9, depthWrite: false, toneMapped: false
+}));
+coreLabel.scale.set(11, 5.5, 1);
+coreLabel.position.set(0, 2.2, 0);
+scene.add(coreLabel);
+window.__coreLabel = coreLabel;
+
 /* ───────────────── channel labels ───────────────── */
 function makeLabel(ch) {
   const ko = ch.ko, en = ch.en, count = ch.count;
@@ -527,11 +550,11 @@ CHANNELS.forEach((ch, ci) => {
   const spot = CLUSTER_SPOT[ci];
   const rr = rMaxOf(ch.count);
   const sp = makeLabel(ch);
-  const sc = PORTRAIT ? 11 : 13.2;
+  const sc = PORTRAIT ? 12.4 : 15;
   sp.scale.set(sc, sc / 3.6, 1);
   const outLen = Math.hypot(spot.x, spot.z) || 1;
   const ox = spot.x / outLen, oz = spot.z / outLen;
-  sp.position.set(spot.x + ox * (rr * 0.75 + 4), spot.y + rr * 0.35 + 3.4, spot.z + oz * (rr * 0.75 + 4));
+  sp.position.set(spot.x + ox * (rr * 0.95 + 6), spot.y + rr * 0.42 + 4, spot.z + oz * (rr * 0.95 + 6));
   sp.userData.ch = ch.id;
   scene.add(sp);
   ch.label = sp;
@@ -600,7 +623,7 @@ focusRing.scale.set(4, 4, 1);
 scene.add(focusRing);
 
 /* ───────────────── camera ───────────────── */
-const OVERVIEW_R = PORTRAIT ? 138 : (isSmall ? 132 : 128);
+const OVERVIEW_R = PORTRAIT ? 130 : (isSmall ? 124 : 118);
 const view = { target: new THREE.Vector3(0, 0, 0), r: OVERVIEW_R * 1.7, az: 0.6, pol: 1.06 };
 const tw = { active: false, t: 0, dur: 1, fr: 0, tr: 0, ft: new THREE.Vector3(), tt: new THREE.Vector3() };
 function applyCam() {
@@ -837,6 +860,23 @@ function applyLang() {
   $('#fbreason').innerHTML = T('fbBody');
   $('#loadtxt').textContent = T('loading');
   buildChrome();
+  if (window.__coreLabel) {
+    const t2 = canvasTexture(512, 256, (ctx, w, h) => {
+      ctx.clearRect(0, 0, w, h);
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#ffe6b8';
+      ctx.globalAlpha = 0.92;
+      ctx.font = '800 96px -apple-system, "Helvetica Neue", Arial, sans-serif';
+      ctx.fillText('YH', w / 2, 112);
+      ctx.globalAlpha = 0.55;
+      ctx.fillStyle = '#dce9ff';
+      ctx.font = '500 38px -apple-system, "Apple SD Gothic Neo", sans-serif';
+      ctx.fillText(TOTAL_TXT(), w / 2, 176);
+    });
+    window.__coreLabel.material.map.dispose();
+    window.__coreLabel.material.map = t2;
+    window.__coreLabel.material.needsUpdate = true;
+  }
   CHANNELS.forEach((ch) => {
     if (!ch.label) return;
     const next = makeLabel(ch);
