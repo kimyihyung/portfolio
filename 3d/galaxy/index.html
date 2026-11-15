@@ -529,6 +529,7 @@ const coreLabel = new THREE.Sprite(new THREE.SpriteMaterial({
 }));
 coreLabel.scale.set(11, 5.5, 1);
 coreLabel.position.set(0, 2.2, 0);
+coreLabel.visible = !PORTRAIT;
 scene.add(coreLabel);
 window.__coreLabel = coreLabel;
 
@@ -568,11 +569,11 @@ CHANNELS.forEach((ch, ci) => {
   const spot = CLUSTER_SPOT[ci];
   const rr = rMaxOf(ch.count);
   const sp = makeLabel(ch);
-  const sc = PORTRAIT ? 0.135 : 0.19;
+  const sc = PORTRAIT ? 0.115 : 0.19;
   sp.scale.set(sc, sc / 3.45, 1);
   if (PORTRAIT) {
     const side = spot.x <= 0 ? 1 : -1;
-    sp.position.set(spot.x + side * (rr + 15), spot.y + 1.5, spot.z + 4);
+    sp.position.set(spot.x + side * (rr + 24), spot.y + 1.5, spot.z + 4);
   } else {
     const outLen = Math.hypot(spot.x, spot.z) || 1;
     const ox = spot.x / outLen, oz = spot.z / outLen;
