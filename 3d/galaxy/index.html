@@ -1005,6 +1005,18 @@ window.__galaxyInfo = {
   nodes: N, total: DATA.total, channels: DATA.counts, clusters: CHANNELS.length,
   lang: LANG, filter: 'all', filtered: N, ready: false, generated: DATA.generated
 };
+/* 검수용 훅 (실물 검증 스크립트가 사용) */
+window.__galaxy = {
+  info: () => window.__galaxyInfo,
+  errors: () => window.__galaxyErrors,
+  filter: (f) => { setFilter(f); return activeList().length; },
+  search: (q) => { qEl.value = q; applyQuery(q); return window.__galaxyInfo.queryHits; },
+  openAt: (x, y) => { const n = pick(x, y); if (n) openCard(n); return n ? { t: n.t, c: n.c, d: n.d } : null; },
+  openIndex: (i) => { const n = NODES[Math.max(0, Math.min(N - 1, i))]; openCard(n); return { t: n.t, c: n.c, d: n.d }; },
+  close: () => closeCard(true),
+  lang: (l) => { LANG = l; applyLang(); return LANG; },
+  cardText: () => ({ title: $('#ctitle').textContent, chip: $('#chiptext').textContent, date: $('#cdate').textContent, sum: $('#csum').textContent, href: $('#copen').getAttribute('href'), visible: cardEl.classList.contains('on') })
+};
 animate();
 setTimeout(() => {
   $('#loading').style.opacity = '0';
