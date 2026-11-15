@@ -4598,7 +4598,7 @@ footer.foot .sep { color: var(--line2); }
         var label = String(idx + 1) + ' / ' + pages.length;
         var stl = sty({ size: Math.max(8, base * 0.82), color: '#8a8578' });
         var w = meas.width(stl, label);
-        pageOps.push({ k: 'text', x: (pageW - w) / 2, y: pageH - m * 0.45, s: label, st: stl });
+        pageOps.push({ k: 'text', x: (pageW - w) / 2, y: pageH - Math.max(12, m * 0.45), s: label, st: stl });
       });
     }
     return { pages: pages, pageW: pageW, pageH: pageH };
