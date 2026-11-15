@@ -1787,7 +1787,7 @@ footer .sep { opacity: .4; }
     try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
     if (q === 'ko' || q === 'en') return q;
     try {
-      var saved = localStorage.getItem(LANG_KEY);
+      var saved = localStorage.getItem(LANG_KEY) || localStorage.getItem('kyh.lang');
       if (saved === 'ko' || saved === 'en') return saved;
     } catch (e) { /* 저장소 접근 불가는 EN 기본으로 흡수 */ }
     return 'en';
@@ -1854,7 +1854,7 @@ footer .sep { opacity: .4; }
     }
     updateSummary();
 
-    try { localStorage.setItem(LANG_KEY, state.lang); } catch (e) { /* 저장 실패는 무해 */ }
+    try { localStorage.setItem(LANG_KEY, state.lang); localStorage.setItem('kyh.lang', state.lang); } catch (e) { /* 저장 실패는 무해 */ }
   }
 
   applyLang(initialLang());

@@ -120,37 +120,6 @@ body {
 
 .spacer { flex: 1 1 auto; }
 
-.lang {
-  display: inline-flex;
-  padding: 3px;
-  gap: 2px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: rgba(255, 255, 255, .05);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-.lang-btn {
-  appearance: none;
-  border: 0;
-  background: transparent;
-  color: var(--muted);
-  font: inherit;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: .08em;
-  padding: 5px 11px;
-  border-radius: 999px;
-  cursor: pointer;
-  transition: .18s ease;
-}
-.lang-btn:hover { color: var(--ink); }
-.lang-btn[aria-pressed="true"] {
-  color: #06070b;
-  background: #eaf1fb;
-  box-shadow: 0 1px 8px rgba(0, 0, 0, .35);
-}
-
 /* ---------- panel ---------- */
 .panel {
   position: fixed;
@@ -516,10 +485,11 @@ input[type="range"]:focus-visible { outline: 2px solid rgba(255, 255, 255, .45);
     <p data-i18n="app.sub">Real-time GPU background generator</p>
   </div>
   <div class="spacer"></div>
-  <div class="lang" role="group" aria-label="Language" data-i18n-attr="aria-label:lang.label">
-    <button class="lang-btn" type="button" data-lang="en" aria-pressed="true">EN</button>
-    <button class="lang-btn" type="button" data-lang="ko" aria-pressed="false">KO</button>
-  </div>
+  <button class="lang-toggle" id="langToggle" type="button" aria-label="View in Korean" title="View in Korean">
+    <span class="lt on" data-lt="en">EN</span>
+    <span class="lsep" aria-hidden="true">|</span>
+    <span class="lt" data-lt="ko">KO</span>
+  </button>
 </header>
 
 <aside class="panel" id="panel">
@@ -597,6 +567,8 @@ input[type="range"]:focus-visible { outline: 2px solid rgba(255, 255, 255, .45);
       'app.sub': 'Real-time GPU background generator',
       'nav.portfolio': 'Portfolio',
       'lang.label': 'Language',
+      'lang.viewKo': 'View in Korean',
+      'lang.viewEn': 'View in English',
       'panel.title': 'Controls',
       'sec.presets': 'Presets',
       'sec.motion': 'Motion',
@@ -648,6 +620,8 @@ input[type="range"]:focus-visible { outline: 2px solid rgba(255, 255, 255, .45);
       'app.sub': '실시간 GPU 배경 생성기',
       'nav.portfolio': '포트폴리오',
       'lang.label': '언어',
+      'lang.viewKo': '한국어로 보기',
+      'lang.viewEn': '영어로 보기',
       'panel.title': '컨트롤',
       'sec.presets': '프리셋',
       'sec.motion': '모션',
@@ -1593,9 +1567,15 @@ input[type="range"]:focus-visible { outline: 2px solid rgba(255, 255, 255, .45);
     var ogd = document.querySelector('meta[property="og:description"]');
     if (ogd) ogd.setAttribute('content', t('meta.desc'));
 
-    document.querySelectorAll('.lang-btn').forEach(function (b) {
-      b.setAttribute('aria-pressed', String(b.dataset.lang === lang));
+    document.querySelectorAll('.lang-toggle [data-lt]').forEach(function (el) {
+      el.classList.toggle('on', el.dataset.lt === lang);
     });
+    var ltBtn = document.getElementById('langToggle');
+    if (ltBtn) {
+      var nextLabel = (I18N[lang] || I18N.en)[lang === 'ko' ? 'lang.viewEn' : 'lang.viewKo'];
+      ltBtn.setAttribute('aria-label', nextLabel);
+      ltBtn.setAttribute('title', nextLabel);
+    }
 
     // rebuild label-bearing bits that are generated
     presetsEl.querySelectorAll('.preset').forEach(function (b) {
@@ -1623,16 +1603,17 @@ input[type="range"]:focus-visible { outline: 2px solid rgba(255, 255, 255, .45);
     setPaused(state.paused);
     updateStatus();
 
-    try { localStorage.setItem('ls.lang', lang); } catch (e) {}
+    try { localStorage.setItem('ls.lang', lang); localStorage.setItem('kyh.lang', lang); } catch (e) {}
   }
 
   /* ------------------------------------------------------------------ */
   /* Events                                                             */
   /* ------------------------------------------------------------------ */
   function wire() {
-    document.querySelectorAll('.lang-btn').forEach(function (b) {
-      b.addEventListener('click', function () { applyLang(b.dataset.lang); });
-    });
+    var ltBtn = document.getElementById('langToggle');
+    if (ltBtn) {
+      ltBtn.addEventListener('click', function () { applyLang(lang === 'ko' ? 'en' : 'ko'); });
+    }
 
     presetsEl.addEventListener('click', function (e) {
       var b = e.target.closest('.preset');

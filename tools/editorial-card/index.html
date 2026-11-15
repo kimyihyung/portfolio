@@ -104,6 +104,34 @@ button { font-family: inherit; color: inherit; }
 .seg button.on { background: var(--accent); color: var(--on-accent); }
 .seg button:not(.on):hover { color: var(--ink); }
 
+.lang-toggle {
+  appearance: none;
+  font-family: var(--font);
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--muted2);
+  height: 36px;
+  padding: 0 11px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  line-height: 1;
+  transition: color .2s, border-color .2s, transform .15s, background .2s;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.94); }
+.lang-toggle .lt { transition: color .2s; }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; letter-spacing: 0; }
+@media (max-width: 560px) {
+  .lang-toggle { height: 32px; padding: 0 8px; gap: 4px; font-size: 10px; }
+}
+
 .iconbtn {
   width: 36px; height: 36px; border-radius: 10px; cursor: pointer;
   background: var(--panel); border: 1px solid var(--line); color: var(--ink);
@@ -324,10 +352,11 @@ footer.foot a { color: var(--muted); text-decoration: none; border-bottom: 1px d
       </div>
     </div>
     <div class="top-actions">
-      <div class="seg" id="langSeg" role="group" aria-label="Language">
-        <button data-lang="en" class="on">EN</button>
-        <button data-lang="ko">한국어</button>
-      </div>
+      <button class="lang-toggle" id="langToggle" type="button" title="View in Korean" aria-label="View in Korean">
+        <span class="lt on" data-lt="en">EN</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="ko">KO</span>
+      </button>
       <button class="iconbtn" id="themeBtn" aria-label="Toggle theme"><span id="themeIco">☾</span></button>
     </div>
   </header>
@@ -1323,7 +1352,13 @@ function applyLang(lang) {
   $("#sub").placeholder = d.phSub;
   $("#badge").placeholder = d.phBadge;
   $("#source").placeholder = d.phSource;
-  $$("#langSeg button").forEach(b => b.classList.toggle("on", b.dataset.lang === lang));
+  const ltBtn = $("#langToggle");
+  if (ltBtn) {
+    $$("#langToggle [data-lt]").forEach(el => el.classList.toggle("on", el.dataset.lt === lang));
+    const nextLabel = lang === "ko" ? "View in English" : "View in Korean";
+    ltBtn.setAttribute("aria-label", nextLabel);
+    ltBtn.setAttribute("title", nextLabel);
+  }
   $$("[data-grad]").forEach(b => {
     const g = GRADS[b.dataset.grad];
     b.title = g[lang] || g.en;
@@ -1343,6 +1378,10 @@ function applyLang(lang) {
   $("#rightBtn").setAttribute("aria-label", lang === "ko" ? "다음 슬라이드" : "Next slide");
   $("#themeBtn").setAttribute("aria-label", lang === "ko" ? "테마 전환" : "Toggle theme");
   if (prev !== lang) localizeSamples(prev, lang);
+  try {
+    localStorage.setItem("editorial.lang", lang);
+    localStorage.setItem("kyh.lang", lang);
+  } catch (e) { /* 저장 실패는 무해 */ }
   updateAccName();
   syncFields();
   renderAll();
@@ -1533,18 +1572,31 @@ function go(delta) {
   renderAll();
 }
 
+/* language: ?lang=ko wins, then the saved choice, then English */
+function initialLang() {
+  let q = "";
+  try { q = String(new URLSearchParams(location.search).get("lang") || "").toLowerCase(); } catch (e) { q = ""; }
+  if (q === "ko" || q === "en") return q;
+  try {
+    const saved = localStorage.getItem("editorial.lang") || localStorage.getItem("kyh.lang");
+    if (saved === "ko" || saved === "en") return saved;
+  } catch (e) { /* 저장소 접근 불가는 EN 기본으로 흡수 */ }
+  return "en";
+}
+
 function init() {
   loadSamples("en");
   state.lang = "en";
   buildGradients();
   buildPresets();
-  applyLang("en");
+  applyLang(initialLang());
   buildStrip();
   syncFields();
   renderAll();
 
   // language + theme
-  $$("#langSeg button").forEach(b => b.addEventListener("click", () => { if (b.dataset.lang !== state.lang) applyLang(b.dataset.lang); }));
+  const langToggle = $("#langToggle");
+  if (langToggle) langToggle.addEventListener("click", () => applyLang(state.lang === "ko" ? "en" : "ko"));
   $("#themeBtn").addEventListener("click", () => {
     state.theme = state.theme === "dark" ? "light" : "dark";
     document.documentElement.dataset.theme = state.theme;

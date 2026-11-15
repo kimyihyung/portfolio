@@ -106,6 +106,37 @@ button { font-family: inherit; color: inherit; }
 }
 .topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
 
+.top-actions { display: inline-flex; align-items: center; gap: 9px; }
+.lang-toggle {
+  appearance: none;
+  font-family: var(--font);
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--muted2);
+  height: 34px;
+  padding: 0 11px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  line-height: 1;
+  transition: color .2s, border-color .2s, transform .15s, background .2s;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.94); }
+.lang-toggle .lt { transition: color .2s; }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; letter-spacing: 0; }
+@media (max-width: 520px) {
+  .topbar { gap: 8px; }
+  .lang-toggle { height: 30px; padding: 0 8px; gap: 4px; font-size: 10px; }
+  .topbar-link { font-size: 11.5px; }
+}
+
 /* ---------- hero ---------- */
 .hero { padding: 26px 0 30px; }
 .eyebrow {
@@ -405,35 +436,42 @@ button { font-family: inherit; color: inherit; }
 
 <div class="wrap">
   <header class="topbar">
-    <a class="brand" href="/portfolio/">
-      <span class="brand-mark" aria-hidden="true">KY</span>
+    <a class="brand" href="/portfolio/" aria-label="Kim Yihyung — portfolio" data-i18n-aria="brandAria">
+      <span class="brand-mark" aria-hidden="true">YH</span>
       <span>Kim Yihyung</span>
     </a>
-    <a class="topbar-link" href="/portfolio/">← Portfolio</a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="View in Korean" aria-label="View in Korean">
+        <span class="lt on" data-lt="en">EN</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="ko">KO</span>
+      </button>
+      <a class="topbar-link" href="/portfolio/" data-i18n="back">← Portfolio</a>
+    </div>
   </header>
 
   <main>
     <section class="hero">
-      <p class="eyebrow"><span class="dot" aria-hidden="true"></span>Tools · v1 · 7 live</p>
-      <h1>Zero uploads.<br><span class="soft">Zero sign-ups.</span><br><span class="gold">100% in your browser.</span></h1>
-      <p class="lede">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="eyebrow">Tools · v1 · 7 live</span></p>
+      <h1 data-i18n-html="h1">Zero uploads.<br><span class="soft">Zero sign-ups.</span><br><span class="gold">100% in your browser.</span></h1>
+      <p class="lede" data-i18n-html="lede">
         Every tool here is a single web page that does its work <strong>on your device</strong>.
         Your photos, fonts and files are never sent to a server, because there is no server to send them to.
         Open one, use it, close the tab. Nothing to install, no account, no tracking.
       </p>
       <ul class="proof">
-        <li>Files stay on your device</li>
-        <li>No account, ever</li>
-        <li>Free to use</li>
+        <li data-i18n="proof1">Files stay on your device</li>
+        <li data-i18n="proof2">No account, ever</li>
+        <li data-i18n="proof3">Free to use</li>
       </ul>
     </section>
 
     <div class="filters">
-      <div class="filter-row" role="group" aria-label="Filter tools by category">
-        <button class="chip" type="button" data-filter="all" aria-pressed="true">All <span class="n">7</span></button>
-        <button class="chip" type="button" data-filter="privacy" aria-pressed="false">Privacy &amp; Media <span class="n">3</span></button>
-        <button class="chip" type="button" data-filter="creator" aria-pressed="false">Creator Tools <span class="n">2</span></button>
-        <button class="chip" type="button" data-filter="lab" aria-pressed="false">3D &amp; Labs <span class="n">2</span></button>
+      <div class="filter-row" role="group" aria-label="Filter tools by category" data-i18n-aria="filterAria">
+        <button class="chip" type="button" data-filter="all" aria-pressed="true"><span data-i18n="fAll">All</span> <span class="n">7</span></button>
+        <button class="chip" type="button" data-filter="privacy" aria-pressed="false"><span data-i18n="fPrivacy">Privacy &amp; Media</span> <span class="n">3</span></button>
+        <button class="chip" type="button" data-filter="creator" aria-pressed="false"><span data-i18n="fCreator">Creator Tools</span> <span class="n">2</span></button>
+        <button class="chip" type="button" data-filter="lab" aria-pressed="false"><span data-i18n="fLab">3D &amp; Labs</span> <span class="n">2</span></button>
         <span class="count" id="count" aria-live="polite">7 tools</span>
       </div>
     </div>
@@ -442,23 +480,23 @@ button { font-family: inherit; color: inherit; }
       <li class="card card--wide" data-cat="privacy">
         <div class="card-head">
           <span class="num">01</span>
-          <span class="lang" title="Interface language">EN / KO</span>
+          <span class="lang" title="Interface language" data-i18n-title="langTitle" data-i18n="langBoth">EN / KO</span>
         </div>
         <h2><a href="/portfolio/tools/zero-exif-webp/">Zero-EXIF WebP</a></h2>
-        <p>
+        <p data-i18n-html="c1d">
           Photos carry the place, device and time they were taken. This tool
           <span class="hlgt">strips EXIF, GPS and device metadata</span> and re-encodes to WebP, JPEG or PNG — in batch,
           with resize presets — without a single byte leaving your browser.
         </p>
         <ul class="tags">
-          <li>EXIF · GPS</li>
-          <li>WebP</li>
-          <li>Batch</li>
-          <li>Resize</li>
+          <li data-i18n="c1t1">EXIF · GPS</li>
+          <li data-i18n="c1t2">WebP</li>
+          <li data-i18n="c1t3">Batch</li>
+          <li data-i18n="c1t4">Resize</li>
         </ul>
         <div class="card-foot">
-          <a class="open" href="/portfolio/tools/zero-exif-webp/">Open Tool <span class="arw" aria-hidden="true">→</span></a>
-          <span class="kind">Privacy &amp; Media</span>
+          <a class="open" href="/portfolio/tools/zero-exif-webp/"><span data-i18n="openTool">Open Tool</span> <span class="arw" aria-hidden="true">→</span></a>
+          <span class="kind" data-i18n="kPrivacy">Privacy &amp; Media</span>
         </div>
       </li>
 
@@ -466,185 +504,349 @@ button { font-family: inherit; color: inherit; }
       <li class="card" data-cat="privacy">
         <div class="card-head">
           <span class="num">02</span>
-          <span class="lang" title="Interface language">EN / KO</span>
+          <span class="lang" title="Interface language" data-i18n-title="langTitle" data-i18n="langBoth">EN / KO</span>
         </div>
         <h2><a href="/portfolio/tools/frame-grabber/">FrameGrab</a></h2>
-        <p>
+        <p data-i18n-html="c2d">
           Pull <span class="hlgt">exact frames</span> out of a local video and lay them into a 2×2 or 3×3 storyboard.
           Frame-accurate scrubbing with ±1 frame steps, PNG or WebP export — the clip never leaves the tab.
         </p>
         <ul class="tags">
-          <li>Zero upload</li>
-          <li>±1 frame</li>
-          <li>PNG · WebP</li>
-          <li>2×2 · 3×3</li>
+          <li data-i18n="c2t1">Zero upload</li>
+          <li data-i18n="c2t2">±1 frame</li>
+          <li data-i18n="c2t3">PNG · WebP</li>
+          <li data-i18n="c2t4">2×2 · 3×3</li>
         </ul>
         <div class="card-foot">
-          <a class="open" href="/portfolio/tools/frame-grabber/">Open Tool <span class="arw" aria-hidden="true">→</span></a>
-          <span class="kind">Privacy &amp; Media</span>
+          <a class="open" href="/portfolio/tools/frame-grabber/"><span data-i18n="openTool">Open Tool</span> <span class="arw" aria-hidden="true">→</span></a>
+          <span class="kind" data-i18n="kPrivacy">Privacy &amp; Media</span>
         </div>
       </li>
 
       <li class="card" data-cat="privacy">
         <div class="card-head">
           <span class="num">03</span>
-          <span class="lang" title="Interface language">EN / KO</span>
+          <span class="lang" title="Interface language" data-i18n-title="langTitle" data-i18n="langBoth">EN / KO</span>
         </div>
         <h2><a href="/portfolio/tools/local-pdf/">LocalPDF</a></h2>
-        <p>
+        <p data-i18n-html="c3d">
           <span class="hlgt">Merge, split, extract and rotate PDF pages</span> on one page. Drag files into order,
           type a range like <span class="hlgt">1-3, 5</span>, and download — the PDF engine is served with the site,
           so not one byte of your documents is uploaded.
         </p>
         <ul class="tags">
-          <li>Merge</li>
-          <li>Split · Extract</li>
-          <li>Rotate 90°</li>
-          <li>0 uploads</li>
+          <li data-i18n="c3t1">Merge</li>
+          <li data-i18n="c3t2">Split · Extract</li>
+          <li data-i18n="c3t3">Rotate 90°</li>
+          <li data-i18n="c3t4">0 uploads</li>
         </ul>
         <div class="card-foot">
-          <a class="open" href="/portfolio/tools/local-pdf/">Open Tool <span class="arw" aria-hidden="true">→</span></a>
-          <span class="kind">Privacy &amp; Media</span>
+          <a class="open" href="/portfolio/tools/local-pdf/"><span data-i18n="openTool">Open Tool</span> <span class="arw" aria-hidden="true">→</span></a>
+          <span class="kind" data-i18n="kPrivacy">Privacy &amp; Media</span>
         </div>
       </li>
 
       <li class="card" data-cat="creator">
         <div class="card-head">
           <span class="num">04</span>
-          <span class="lang" title="Interface language">EN / KO</span>
+          <span class="lang" title="Interface language" data-i18n-title="langTitle" data-i18n="langBoth">EN / KO</span>
         </div>
         <h2><a href="/portfolio/tools/editorial-card/">Editorial Card Studio</a></h2>
-        <p>
+        <p data-i18n-html="c4d">
           A magazine layout engine for social. Full-bleed photo, condensed headline with
           <span class="hlgt">accent words</span>, six-slide carousel, export as 1080×1350 PNG or a ZIP.
         </p>
         <ul class="tags">
           <li>1080×1350</li>
-          <li>6 slides</li>
+          <li data-i18n="c4t2">6 slides</li>
           <li>PNG · ZIP</li>
         </ul>
         <div class="card-foot">
-          <a class="open" href="/portfolio/tools/editorial-card/">Open Tool <span class="arw" aria-hidden="true">→</span></a>
-          <span class="kind">Creator Tools</span>
+          <a class="open" href="/portfolio/tools/editorial-card/"><span data-i18n="openTool">Open Tool</span> <span class="arw" aria-hidden="true">→</span></a>
+          <span class="kind" data-i18n="kCreator">Creator Tools</span>
         </div>
       </li>
 
       <li class="card" data-cat="creator">
         <div class="card-head">
           <span class="num">05</span>
-          <span class="lang" title="Interface language">EN / KO</span>
+          <span class="lang" title="Interface language" data-i18n-title="langTitle" data-i18n="langBoth">EN / KO</span>
         </div>
         <h2><a href="/portfolio/labs/liquid-shader/">Liquid Shader Studio</a></h2>
-        <p>
+        <p data-i18n-html="c5d">
           Real-time <span class="hlgt">liquid glass, iridescent metal and holographic mesh</span> backgrounds, rendered on your GPU.
           Five presets, PNG export, and one click to copy the CSS or GLSL behind it.
         </p>
         <ul class="tags">
           <li>WebGL2</li>
-          <li>5 presets</li>
+          <li data-i18n="c5t2">5 presets</li>
           <li>CSS · GLSL</li>
         </ul>
         <div class="card-foot">
-          <a class="open" href="/portfolio/labs/liquid-shader/">Open Tool <span class="arw" aria-hidden="true">→</span></a>
-          <span class="kind">Creator Tools</span>
+          <a class="open" href="/portfolio/labs/liquid-shader/"><span data-i18n="openTool">Open Tool</span> <span class="arw" aria-hidden="true">→</span></a>
+          <span class="kind" data-i18n="kCreator">Creator Tools</span>
         </div>
       </li>
 
       <li class="card" data-cat="lab">
         <div class="card-head">
           <span class="num">06</span>
-          <span class="lang" title="Interface language">KO interface</span>
+          <span class="lang" title="Interface language" data-i18n-title="langTitle" data-i18n="langKo">KO interface</span>
         </div>
         <h2><a href="/portfolio/3d/">3D Portal Launcher</a></h2>
-        <p>
+        <p data-i18n-html="c6d">
           A glass monolith ring holding <span class="hlgt">eight web and 3D builds</span>. Swipe or drag to orbit, tap a portal in the
           centre to step through.
         </p>
         <ul class="tags">
           <li>Three.js</li>
-          <li>Touch</li>
-          <li>8 portals</li>
+          <li data-i18n="c6t2">Touch</li>
+          <li data-i18n="c6t3">8 portals</li>
         </ul>
         <div class="card-foot">
-          <a class="open" href="/portfolio/3d/">Enter Lab <span class="arw" aria-hidden="true">→</span></a>
-          <span class="kind">3D &amp; Labs</span>
+          <a class="open" href="/portfolio/3d/"><span data-i18n="cta3d">Enter Lab</span> <span class="arw" aria-hidden="true">→</span></a>
+          <span class="kind" data-i18n="kLab">3D &amp; Labs</span>
         </div>
       </li>
 
       <li class="card" data-cat="lab">
         <div class="card-head">
           <span class="num">07</span>
-          <span class="lang" title="Interface language">KO interface</span>
+          <span class="lang" title="Interface language" data-i18n-title="langTitle" data-i18n="langKo">KO interface</span>
         </div>
         <h2><a href="/portfolio/gallery/">Virtual Gallery</a></h2>
-        <p>
+        <p data-i18n-html="c7d">
           Four rooms, twenty frames, <span class="hlgt">eight works on the walls</span>. Walk it on a phone with a joystick and
           touch look-around, or step to any room from the shortcut bar.
         </p>
         <ul class="tags">
           <li>Three.js</li>
-          <li>Joystick</li>
-          <li>4 rooms</li>
+          <li data-i18n="c7t2">Joystick</li>
+          <li data-i18n="c7t3">4 rooms</li>
         </ul>
         <div class="card-foot">
-          <a class="open" href="/portfolio/gallery/">Visit Gallery <span class="arw" aria-hidden="true">→</span></a>
-          <span class="kind">3D &amp; Labs</span>
+          <a class="open" href="/portfolio/gallery/"><span data-i18n="ctaGallery">Visit Gallery</span> <span class="arw" aria-hidden="true">→</span></a>
+          <span class="kind" data-i18n="kLab">3D &amp; Labs</span>
         </div>
       </li>
     </ul>
-    <p class="empty" id="empty">Nothing in this category yet.</p>
+    <p class="empty" id="empty" data-i18n="empty">Nothing in this category yet.</p>
 
     <section class="coming" aria-labelledby="comingTitle">
       <div class="sec-head">
-        <h2 id="comingTitle">Updates &amp; Templates</h2>
-        <span class="note">Coming soon</span>
+        <h2 id="comingTitle" data-i18n="comingTitle">Updates &amp; Templates</h2>
+        <span class="note" data-i18n="comingNote">Coming soon</span>
       </div>
       <div class="soon-grid">
         <div class="soon">
-          <p class="kicker">Newsletter</p>
-          <h3>Notes on building in the browser</h3>
-          <p>
+          <p class="kicker" data-i18n="nlKicker">Newsletter</p>
+          <h3 data-i18n="nlTitle">Notes on building in the browser</h3>
+          <p data-i18n="nlDesc">
             Short letters on client-side engineering, privacy-first design and the numbers behind each tool —
             what shipped, what broke, what it cost to run.
           </p>
-          <span class="pill"><span class="dot" aria-hidden="true"></span>Substack · coming soon</span>
-          <p class="fine">No sign-up form yet. Nothing to fill in, nothing collected.</p>
+          <span class="pill"><span class="dot" aria-hidden="true"></span><span data-i18n="nlPill">Substack · coming soon</span></span>
+          <p class="fine" data-i18n="nlFine">No sign-up form yet. Nothing to fill in, nothing collected.</p>
         </div>
         <div class="soon">
-          <p class="kicker">Templates</p>
-          <h3>Editorial &amp; shader packs</h3>
-          <p>
+          <p class="kicker" data-i18n="tpKicker">Templates</p>
+          <h3 data-i18n="tpTitle">Editorial &amp; shader packs</h3>
+          <p data-i18n="tpDesc">
             Downloadable starting points: magazine card layouts, carousel systems and shader presets —
             one free lead magnet, a small paid pack after that.
           </p>
-          <span class="pill"><span class="dot" aria-hidden="true"></span>Gumroad · coming soon</span>
-          <p class="fine">No checkout yet. When it opens, it will be listed here first.</p>
+          <span class="pill"><span class="dot" aria-hidden="true"></span><span data-i18n="tpPill">Gumroad · coming soon</span></span>
+          <p class="fine" data-i18n="tpFine">No checkout yet. When it opens, it will be listed here first.</p>
         </div>
       </div>
     </section>
   </main>
 
   <footer class="foot">
-    <span>© 2026 Kim Yihyung · Built in the browser, for the browser.</span>
+    <span data-i18n="footCopy">© 2026 Kim Yihyung · Built in the browser, for the browser.</span>
     <span class="foot-links">
-      <a href="/portfolio/">Portfolio</a>
-      <a href="/portfolio/3d/">3D Lab</a>
-      <a href="https://github.com/kimyihyung/portfolio" target="_blank" rel="noopener">Source</a>
+      <a href="/portfolio/" data-i18n="footP1">Portfolio</a>
+      <a href="/portfolio/3d/" data-i18n="footP2">3D Lab</a>
+      <a href="https://github.com/kimyihyung/portfolio" target="_blank" rel="noopener" data-i18n="footP3">Source</a>
     </span>
-    <span class="mono">NO UPLOADS · NO TRACKING</span>
+    <span class="mono" data-i18n="mono">NO UPLOADS · NO TRACKING</span>
   </footer>
 </div>
 
 <script>
 (function () {
+  /* ─────────────────────────── 언어 사전 ─────────────────────────── */
+  var I18N = {
+    en: {
+      docTitle: 'Tools — Zero Uploads, Zero Sign-ups, 100% In-Browser | Kim Yihyung',
+      metaDesc: 'A small shelf of browser tools that never see your files. Strip photo metadata, build editorial carousels, extract video frames and storyboards, generate GPU backgrounds, walk a 3D gallery — all running 100% in your browser with zero uploads and zero sign-ups.',
+      ogTitle: 'Tools — Zero Uploads. Zero Sign-ups. 100% In-Browser.',
+      ogDesc: 'A small shelf of browser tools that never see your files. Nothing uploads, nothing installs, nothing asks you to sign up.',
+
+      brandAria: 'Kim Yihyung — portfolio',
+      back: '← Portfolio',
+      eyebrow: 'Tools · v1 · 7 live',
+      h1: 'Zero uploads.<br><span class="soft">Zero sign-ups.</span><br><span class="gold">100% in your browser.</span>',
+      lede: 'Every tool here is a single web page that does its work <strong>on your device</strong>. Your photos, fonts and files are never sent to a server, because there is no server to send them to. Open one, use it, close the tab. Nothing to install, no account, no tracking.',
+      proof1: 'Files stay on your device',
+      proof2: 'No account, ever',
+      proof3: 'Free to use',
+
+      filterAria: 'Filter tools by category',
+      fAll: 'All',
+      fPrivacy: 'Privacy &amp; Media',
+      fCreator: 'Creator Tools',
+      fLab: '3D &amp; Labs',
+      countOne: 'tool',
+      countMany: 'tools',
+      empty: 'Nothing in this category yet.',
+      langTitle: 'Interface language',
+      langBoth: 'EN / KO',
+      langKo: 'KO interface',
+      openTool: 'Open Tool',
+      cta3d: 'Enter Lab',
+      ctaGallery: 'Visit Gallery',
+      kPrivacy: 'Privacy &amp; Media',
+      kCreator: 'Creator Tools',
+      kLab: '3D &amp; Labs',
+
+      c1d: 'Photos carry the place, device and time they were taken. This tool <span class="hlgt">strips EXIF, GPS and device metadata</span> and re-encodes to WebP, JPEG or PNG — in batch, with resize presets — without a single byte leaving your browser.',
+      c1t1: 'EXIF · GPS', c1t2: 'WebP', c1t3: 'Batch', c1t4: 'Resize',
+      c2d: 'Pull <span class="hlgt">exact frames</span> out of a local video and lay them into a 2×2 or 3×3 storyboard. Frame-accurate scrubbing with ±1 frame steps, PNG or WebP export — the clip never leaves the tab.',
+      c2t1: 'Zero upload', c2t2: '±1 frame', c2t3: 'PNG · WebP', c2t4: '2×2 · 3×3',
+      c3d: '<span class="hlgt">Merge, split, extract and rotate PDF pages</span> on one page. Drag files into order, type a range like <span class="hlgt">1-3, 5</span>, and download — the PDF engine is served with the site, so not one byte of your documents is uploaded.',
+      c3t1: 'Merge', c3t2: 'Split · Extract', c3t3: 'Rotate 90°', c3t4: '0 uploads',
+      c4d: 'A magazine layout engine for social. Full-bleed photo, condensed headline with <span class="hlgt">accent words</span>, six-slide carousel, export as 1080×1350 PNG or a ZIP.',
+      c4t2: '6 slides',
+      c5d: 'Real-time <span class="hlgt">liquid glass, iridescent metal and holographic mesh</span> backgrounds, rendered on your GPU. Five presets, PNG export, and one click to copy the CSS or GLSL behind it.',
+      c5t2: '5 presets',
+      c6d: 'A glass monolith ring holding <span class="hlgt">eight web and 3D builds</span>. Swipe or drag to orbit, tap a portal in the centre to step through.',
+      c6t2: 'Touch', c6t3: '8 portals',
+      c7d: 'Four rooms, twenty frames, <span class="hlgt">eight works on the walls</span>. Walk it on a phone with a joystick and touch look-around, or step to any room from the shortcut bar.',
+      c7t2: 'Joystick', c7t3: '4 rooms',
+
+      comingTitle: 'Updates &amp; Templates',
+      comingNote: 'Coming soon',
+      nlKicker: 'Newsletter',
+      nlTitle: 'Notes on building in the browser',
+      nlDesc: 'Short letters on client-side engineering, privacy-first design and the numbers behind each tool — what shipped, what broke, what it cost to run.',
+      nlPill: 'Substack · coming soon',
+      nlFine: 'No sign-up form yet. Nothing to fill in, nothing collected.',
+      tpKicker: 'Templates',
+      tpTitle: 'Editorial &amp; shader packs',
+      tpDesc: 'Downloadable starting points: magazine card layouts, carousel systems and shader presets — one free lead magnet, a small paid pack after that.',
+      tpPill: 'Gumroad · coming soon',
+      tpFine: 'No checkout yet. When it opens, it will be listed here first.',
+
+      footCopy: '© 2026 Kim Yihyung · Built in the browser, for the browser.',
+      footP1: 'Portfolio',
+      footP2: '3D Lab',
+      footP3: 'Source',
+      mono: 'NO UPLOADS · NO TRACKING',
+      toggleTo: 'View in Korean'
+    },
+    ko: {
+      docTitle: '도구 — 업로드 0, 가입 0, 100% 브라우저 | Kim Yihyung',
+      metaDesc: '파일을 보지 않는 브라우저 도구 모음. 사진 메타데이터 제거, 에디토리얼 카드 제작, 영상 프레임·스토리보드 추출, GPU 배경 생성, 3D 전시관까지 — 모두 업로드·가입 없이 브라우저 안에서만 실행됩니다.',
+      ogTitle: '도구 — 업로드 없음. 가입 없음. 100% 브라우저.',
+      ogDesc: '파일을 절대 보지 않는 브라우저 도구 모음. 업로드도, 설치도, 가입 요구도 없습니다.',
+
+      brandAria: 'Kim Yihyung — 포트폴리오',
+      back: '← 포트폴리오',
+      eyebrow: '도구 · v1 · 7종 라이브',
+      h1: '업로드 없음.<br><span class="soft">가입 없음.</span><br><span class="gold">전부 브라우저 안에서.</span>',
+      lede: '여기 있는 도구는 모두 한 장짜리 웹 페이지이고, 작업은 <strong>이 기기 안에서</strong> 끝납니다. 사진·폰트·파일이 서버로 갈 일은 없습니다. 보낼 서버가 아예 없기 때문입니다. 열고, 쓰고, 탭을 닫으면 그걸로 끝. 설치도 계정도 추적도 없습니다.',
+      proof1: '파일은 기기 안에 그대로',
+      proof2: '계정은 끝까지 없음',
+      proof3: '무료로 사용',
+
+      filterAria: '분류로 도구 거르기',
+      fAll: '전체',
+      fPrivacy: '프라이버시·미디어',
+      fCreator: '크리에이터 도구',
+      fLab: '3D·랩',
+      countOne: '개',
+      countMany: '개',
+      empty: '이 분류에는 아직 도구가 없습니다.',
+      langTitle: '인터페이스 언어',
+      langBoth: '한 / 영',
+      langKo: '한국어 전용',
+      openTool: '도구 열기',
+      cta3d: '랩 들어가기',
+      ctaGallery: '전시관 보기',
+      kPrivacy: '프라이버시·미디어',
+      kCreator: '크리에이터 도구',
+      kLab: '3D·랩',
+
+      c1d: '사진에는 찍은 장소와 기기, 시각이 함께 남습니다. 이 도구는 <span class="hlgt">EXIF·GPS·기기 정보를 지우고</span> WebP·JPEG·PNG로 다시 인코딩합니다. 크기 프리셋으로 여러 장을 한 번에 처리하며, 단 1바이트도 브라우저 밖으로 나가지 않습니다.',
+      c1t1: 'EXIF · GPS', c1t2: 'WebP', c1t3: '일괄 처리', c1t4: '크기 조절',
+      c2d: '영상에서 <span class="hlgt">원하는 순간의 프레임을 정확히</span> 뽑아 2×2·3×3 스토리보드로 배치합니다. ±1프레임 단위 탐색, PNG·WebP 내보내기 — 영상 파일은 탭 밖으로 나가지 않습니다.',
+      c2t1: '업로드 0', c2t2: '±1프레임', c2t3: 'PNG · WebP', c2t4: '2×2 · 3×3',
+      c3d: '<span class="hlgt">PDF 병합·분할·추출·회전</span>을 한 페이지에서. 파일을 끌어 순서를 바꾸고 <span class="hlgt">1-3, 5</span>처럼 범위를 적어 내려받습니다. PDF 엔진도 사이트와 함께 오므로 문서는 한 바이트도 업로드되지 않습니다.',
+      c3t1: '병합', c3t2: '분할 · 추출', c3t3: '90° 회전', c3t4: '업로드 0',
+      c4d: 'SNS용 매거진 레이아웃 엔진. 사진을 화면 가득 깔고 <span class="hlgt">강조 단어</span>를 넣은 압축 헤드라인, 6장 캐러셀, 1080×1350 PNG 또는 ZIP 내보내기.',
+      c4t2: '6장',
+      c5d: 'GPU에서 실시간으로 그리는 <span class="hlgt">리퀴드 글라스·이리데센트 메탈·홀로그램 메시</span> 배경. 프리셋 5종, PNG 내보내기, 한 번의 클릭으로 CSS·GLSL 복사.',
+      c5t2: '프리셋 5종',
+      c6d: '유리 모노리스 링 위에 <span class="hlgt">웹·3D 작업 8종</span>이 놓여 있습니다. 밀거나 끌어 회전하고, 가운데 포탈을 눌러 들어갑니다.',
+      c6t2: '터치', c6t3: '포탈 8개',
+      c7d: '전시실 4개, 액자 20개, <span class="hlgt">벽에 걸린 작품 8점</span>. 폰에서는 조이스틱과 터치 시선으로 걷고, 아래 바로 원하는 전시실로 이동합니다.',
+      c7t2: '조이스틱', c7t3: '전시실 4개',
+
+      comingTitle: '업데이트 &amp; 템플릿',
+      comingNote: '준비 중',
+      nlKicker: '뉴스레터',
+      nlTitle: '브라우저에서 만드는 일에 대한 기록',
+      nlDesc: '클라이언트 사이드 개발, 프라이버시 우선 설계, 도구마다의 숫자 — 무엇을 내보냈고 무엇이 깨졌고 운영에 얼마가 들었는지 짧게 적어 보냅니다.',
+      nlPill: 'Substack · 준비 중',
+      nlFine: '아직 구독 폼이 없습니다. 적을 것도, 모을 것도 없습니다.',
+      tpKicker: '템플릿',
+      tpTitle: '에디토리얼 · 셰이더 팩',
+      tpDesc: '바로 시작할 수 있는 세트: 매거진 카드 레이아웃, 캐러셀 시스템, 셰이더 프리셋 — 무료 리드 마그넷 하나, 그다음 작은 유료 팩.',
+      tpPill: 'Gumroad · 준비 중',
+      tpFine: '아직 결제 페이지가 없습니다. 열리면 여기에 가장 먼저 올립니다.',
+
+      footCopy: '© 2026 Kim Yihyung · 브라우저에서, 브라우저를 위해 만들었습니다.',
+      footP1: '포트폴리오',
+      footP2: '3D 랩',
+      footP3: '소스',
+      mono: '업로드 없음 · 추적 없음',
+      toggleTo: 'View in English'
+    }
+  };
+
+  var state = { lang: 'en', filter: 'all' };
+  var LANG_KEY = 'tools.lang';
+  var SHARED_KEY = 'kyh.lang';
+
+  function $(id) { return document.getElementById(id); }
+  function readLang(key) {
+    try { var v = localStorage.getItem(key); return v === 'ko' || v === 'en' ? v : ''; } catch (e) { return ''; }
+  }
+  function t(key) {
+    var d = I18N[state.lang] || I18N.en;
+    if (d[key] != null) return d[key];
+    return I18N.en[key] != null ? I18N.en[key] : '';
+  }
+  function initialLang() {
+    var q = '';
+    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
+    if (q === 'ko' || q === 'en') return q;
+    return readLang(LANG_KEY) || readLang(SHARED_KEY) || 'en';
+  }
+
+  /* ─────────────────────────── 필터 ─────────────────────────── */
   var chips = Array.prototype.slice.call(document.querySelectorAll('.chip'));
   var cards = Array.prototype.slice.call(document.querySelectorAll('#toolGrid .card'));
-  var countEl = document.getElementById('count');
-  var emptyEl = document.getElementById('empty');
+  var countEl = $('count');
+  var emptyEl = $('empty');
 
-  function label(n) { return n + (n === 1 ? ' tool' : ' tools'); }
-
-  function apply(filter, push) {
+  function countLabel(n) {
+    if (state.lang === 'ko') return '도구 ' + n + '개';
+    return n + ' ' + (n === 1 ? t('countOne') : t('countMany'));
+  }
+  function applyFilter(filter, push) {
+    state.filter = filter;
     var shown = 0;
     cards.forEach(function (card) {
       var match = filter === 'all' || card.getAttribute('data-cat') === filter;
@@ -654,7 +856,7 @@ button { font-family: inherit; color: inherit; }
     chips.forEach(function (chip) {
       chip.setAttribute('aria-pressed', String(chip.getAttribute('data-filter') === filter));
     });
-    if (countEl) countEl.textContent = label(shown);
+    if (countEl) countEl.textContent = countLabel(shown);
     if (emptyEl) emptyEl.style.display = shown ? 'none' : 'block';
     if (push && history.replaceState) {
       history.replaceState(null, '', filter === 'all' ? location.pathname : '#' + filter);
@@ -663,24 +865,94 @@ button { font-family: inherit; color: inherit; }
 
   chips.forEach(function (chip) {
     chip.addEventListener('click', function () {
-      apply(chip.getAttribute('data-filter'), true);
+      applyFilter(chip.getAttribute('data-filter'), true);
     });
   });
 
   // Allow arrow keys to move between filter chips.
-  document.querySelector('.filter-row').addEventListener('keydown', function (e) {
-    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
-    var i = chips.indexOf(document.activeElement);
-    if (i < 0) return;
-    e.preventDefault();
-    var next = chips[(i + (e.key === 'ArrowRight' ? 1 : chips.length - 1)) % chips.length];
-    next.focus();
-  });
+  var row = document.querySelector('.filter-row');
+  if (row) {
+    row.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      var i = chips.indexOf(document.activeElement);
+      if (i < 0) return;
+      e.preventDefault();
+      var next = chips[(i + (e.key === 'ArrowRight' ? 1 : chips.length - 1)) % chips.length];
+      next.focus();
+    });
+  }
+
+  /* ─────────────────────────── 언어 적용 ─────────────────────────── */
+  function setMeta(sel, attr, val) {
+    var el = document.querySelector(sel);
+    if (el) el.setAttribute(attr, val);
+  }
+  function applyLang(lang) {
+    state.lang = lang === 'ko' ? 'ko' : 'en';
+    var ko = state.lang === 'ko';
+
+    document.documentElement.setAttribute('lang', state.lang);
+    document.title = t('docTitle');
+    setMeta('meta[name="description"]', 'content', t('metaDesc'));
+    setMeta('meta[property="og:title"]', 'content', t('ogTitle'));
+    setMeta('meta[property="og:description"]', 'content', t('ogDesc'));
+    setMeta('meta[name="twitter:title"]', 'content', t('ogTitle'));
+    setMeta('meta[name="twitter:description"]', 'content', t('ogDesc'));
+
+    var i, k, v, nodes;
+    nodes = document.querySelectorAll('[data-i18n]');
+    for (i = 0; i < nodes.length; i++) {
+      k = nodes[i].getAttribute('data-i18n');
+      v = t(k);
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < nodes.length; i++) {
+      k = nodes[i].getAttribute('data-i18n-html');
+      v = t(k);
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-aria'));
+      if (v) nodes[i].setAttribute('aria-label', v);
+    }
+    nodes = document.querySelectorAll('[data-i18n-title]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-title'));
+      if (v) nodes[i].setAttribute('title', v);
+    }
+
+    var lt = $('langToggle');
+    if (lt) {
+      var spans = lt.querySelectorAll('[data-lt]');
+      for (i = 0; i < spans.length; i++) {
+        spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
+      }
+      lt.setAttribute('aria-label', t('toggleTo'));
+      lt.setAttribute('title', t('toggleTo'));
+    }
+
+    applyFilter(state.filter, false);
+
+    try {
+      localStorage.setItem(LANG_KEY, state.lang);
+      localStorage.setItem(SHARED_KEY, state.lang);
+    } catch (e) { /* 저장 실패는 무해 */ }
+  }
+
+  var ltBtn = $('langToggle');
+  if (ltBtn) {
+    ltBtn.addEventListener('click', function () {
+      applyLang(state.lang === 'ko' ? 'en' : 'ko');
+    });
+  }
 
   // Deep link: /tools/#creator opens pre-filtered. Initial state = all.
   var initial = (location.hash || '').replace('#', '');
   var valid = chips.some(function (c) { return c.getAttribute('data-filter') === initial; });
-  apply(valid ? initial : 'all', false);
+  applyLang(initialLang());
+  applyFilter(valid ? initial : 'all', false);
 
   // Hairline under the filter bar only once it is actually stuck to the top.
   var bar = document.querySelector('.filters');

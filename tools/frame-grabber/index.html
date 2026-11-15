@@ -1165,7 +1165,7 @@ window.addEventListener('unhandledrejection', function (e) {
     try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
     if (q === 'ko' || q === 'en') return q;
     try {
-      var saved = localStorage.getItem(LANG_KEY);
+      var saved = localStorage.getItem(LANG_KEY) || localStorage.getItem('kyh.lang');
       if (saved === 'ko' || saved === 'en') return saved;
     } catch (e) { /* 저장소 접근 불가는 EN 기본 */ }
     return 'en';
@@ -1204,7 +1204,7 @@ window.addEventListener('unhandledrejection', function (e) {
     }
 
     paintAll();
-    try { localStorage.setItem(LANG_KEY, state.lang); } catch (e) { /* 무해 */ }
+    try { localStorage.setItem(LANG_KEY, state.lang); localStorage.setItem('kyh.lang', state.lang); } catch (e) { /* 무해 */ }
   }
 
   function paintAll() {

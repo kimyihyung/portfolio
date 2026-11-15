@@ -1944,7 +1944,7 @@ footer.foot .sep { color: var(--line2); }
 
   function setLang(lang) {
     state.lang = lang === 'ko' ? 'ko' : 'en';
-    try { localStorage.setItem(LANG_KEY, state.lang); } catch (e) {}
+    try { localStorage.setItem(LANG_KEY, state.lang); localStorage.setItem('kyh.lang', state.lang); } catch (e) {}
     applyI18n();
   }
 
@@ -2159,7 +2159,7 @@ footer.foot .sep { color: var(--line2); }
   /* ───────────────────────── 시작 ───────────────────────── */
   function boot() {
     try {
-      var savedLang = localStorage.getItem(LANG_KEY);
+      var savedLang = localStorage.getItem(LANG_KEY) || localStorage.getItem('kyh.lang');
       if (savedLang === 'ko' || savedLang === 'en') state.lang = savedLang;
     } catch (e) {}
     try {
