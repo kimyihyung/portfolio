@@ -59,6 +59,10 @@
 
 <body>
 
+    <!-- 폰·태블릿 전용 : 스크롤 진행 바 + 앰비언트 배경 -->
+    <div class="mfx-progress" aria-hidden="true"><span id="mfxProgressBar"></span></div>
+    <div class="mfx-ambient" aria-hidden="true"><i></i><i></i></div>
+
     <header>
         <div>[ PORTFOLIO ]</div>
         <nav class="header_nav" aria-label="다른 작업">
@@ -71,6 +75,25 @@
     </header>
 
     <section id="section1">
+        <!-- 폰·태블릿 전용 : 스티키 스크롤 씬 히어로 (PC에서는 display:none) -->
+        <div class="mfx-hero mfx-only" id="mfxHero">
+            <div class="mfx-hero__stage">
+                <div class="mfx-hero__bg" aria-hidden="true"></div>
+                <div class="mfx-hero__blur" aria-hidden="true"></div>
+                <div class="mfx-hero__scrim" aria-hidden="true"></div>
+                <div class="mfx-hero__content">
+                    <p class="mfx-eyebrow">Kim Yihyung · Portfolio 2026</p>
+                    <div class="mfx-hero__title">
+                        <span class="mfx-line"><span class="mfx-line__i">The</span></span>
+                        <span class="mfx-line"><span class="mfx-line__i">absolute</span></span>
+                        <span class="mfx-line"><span class="mfx-line__i">Best</span></span>
+                        <span class="mfx-line mfx-line--accent"><span class="mfx-line__i">Developer</span></span>
+                    </div>
+                    <p class="mfx-hero__meta">웹 도구 · 3D 공간 · 인터랙션을 직접 만들고 배포합니다</p>
+                    <p class="mfx-hero__scroll" aria-hidden="true"><span>Scroll</span></p>
+                </div>
+            </div>
+        </div>
         <div class="sec1">
             <div class="sec1_ani1 fixed" data-0="transform: translate(-50%, -50%) scale(1); filter: brightness(100%);"
                 data-3000="transform: translate(-50%, -50%) scale(1); filter: brightness(100%);"
@@ -618,11 +641,15 @@
         <p class="m-footer__copy">© 2026 Kim Yihyung</p>
     </footer>
 
+    <!-- 폰·태블릿 전용 : 맨 위로 -->
+    <button class="mfx-top mfx-only" id="mfxTop" type="button" aria-label="맨 위로 이동">↑</button>
+
     <section id=" section5">
     </section><!-- //section5 -->
     <section id="section6"></section><!-- //section6 -->
     <section id="section7"></section><!-- //section7 -->
 
+    <script src="js/mobile-fx.js" defer></script>
     <script src=" https://cdn.jsdelivr.net/npm/skrollr@0.6.26/dist/skrollr.min.js">
     </script>
     <script>
