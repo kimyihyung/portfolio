@@ -1,0 +1,2104 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0a0b0d">
+<meta name="description" content="Pull exact frames out of a video and lay them into a storyboard without uploading a single byte. Frame-accurate scrubbing, PNG/WebP frame export and 2×2 or 3×3 contact sheets, 100% in your browser.">
+<meta property="og:title" content="FrameGrab — Zero-Upload Video Frame &amp; Storyboard Extractor">
+<meta property="og:description" content="0 bytes uploaded · frame-accurate scrub · PNG/WebP frames · 2×2 and 3×3 storyboards">
+<title>FrameGrab — Zero-Upload Video Frame &amp; Storyboard Extractor</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0b0d'/%3E%3Crect x='7' y='9' width='18' height='14' rx='2.5' fill='none' stroke='%236ef2b0' stroke-width='1.8'/%3E%3Cpath d='M7 13.5h18M7 18.5h18M12.5 9v14M19.5 9v14' stroke='%236ef2b0' stroke-width='1.1' opacity='.55'/%3E%3C/svg%3E">
+<style>
+@view-transition { navigation: auto; }
+::view-transition-old(root),
+::view-transition-new(root) { animation-duration: .3s; animation-timing-function: cubic-bezier(.2,.7,.2,1); }
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+:root {
+  --bg: #0a0b0d;
+  --bg2: #0e1113;
+  --panel: #12161a;
+  --panel2: #171c20;
+  --line: rgba(255, 255, 255, .09);
+  --line2: rgba(255, 255, 255, .18);
+  --ink: #f1f5f3;
+  --muted: #97a29f;
+  --muted2: #6b7674;
+  --accent: #6ef2b0;
+  --accent2: #2fd88c;
+  --on-accent: #04150d;
+  --warn: #ffc06b;
+  --danger: #ff837a;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --shadow: 0 24px 70px rgba(0, 0, 0, .5);
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html[data-theme="light"] {
+  --bg: #f4f6f2;
+  --bg2: #ecefe9;
+  --panel: #ffffff;
+  --panel2: #f5f7f4;
+  --line: rgba(12, 22, 16, .10);
+  --line2: rgba(12, 22, 16, .22);
+  --ink: #101613;
+  --muted: #59645f;
+  --muted2: #838d88;
+  --accent: #0e9a5f;
+  --accent2: #0a7d4c;
+  --on-accent: #ffffff;
+  --shadow: 0 20px 50px rgba(16, 28, 20, .12);
+}
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--bg);
+  background-image:
+    radial-gradient(120% 70% at 50% -20%, rgba(110, 242, 176, .13), transparent 60%),
+    radial-gradient(90% 60% at 100% 0%, rgba(110, 242, 176, .05), transparent 55%);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: 1.5;
+  transition: background-color .35s ease, color .35s ease;
+}
+
+::selection { background: var(--accent); color: var(--on-accent); }
+
+.wrap {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 20px 80px;
+}
+
+/* ── header ─────────────────────────────────────────── */
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 22px 0 0;
+}
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+.mark {
+  width: 30px; height: 30px;
+  border-radius: 9px;
+  border: 1px solid var(--line2);
+  display: grid; place-items: center;
+  font-size: 12px;
+  color: var(--accent);
+  background: var(--panel);
+  box-shadow: inset 0 0 0 1px rgba(110, 242, 176, .06);
+}
+.brand-txt { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; white-space: nowrap; }
+.top-actions { display: flex; align-items: center; gap: 8px; }
+
+.icon-btn {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--muted);
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: grid; place-items: center;
+  cursor: pointer;
+  font-size: 15px;
+  transition: color .2s, border-color .2s, transform .15s, background .2s;
+}
+.icon-btn:hover { color: var(--ink); border-color: var(--line2); }
+.icon-btn:active { transform: scale(.95); }
+.icon-btn .ico { display: block; }
+html[data-theme="dark"] .ico-sun,
+html[data-theme="light"] .ico-moon { display: none; }
+
+.lang-toggle {
+  appearance: none;
+  display: inline-flex; align-items: center; gap: 5px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 10px;
+  height: 36px;
+  padding: 0 10px;
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .1em;
+  color: var(--muted);
+  transition: border-color .2s, color .2s;
+}
+.lang-toggle:hover { border-color: var(--line2); color: var(--ink); }
+.lang-toggle .lt { opacity: .45; transition: opacity .2s, color .2s; }
+.lang-toggle .lt.on { opacity: 1; color: var(--accent); font-weight: 700; }
+.lang-toggle .lsep { opacity: .3; }
+
+.back {
+  font-size: 12.5px;
+  color: var(--muted);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 10px;
+  height: 36px;
+  display: inline-flex; align-items: center;
+  padding: 0 12px;
+  transition: color .2s, border-color .2s;
+}
+.back:hover { color: var(--ink); border-color: var(--line2); }
+
+/* ── hero ───────────────────────────────────────────── */
+.hero { padding: 34px 0 26px; }
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 18px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, .025);
+  border-radius: 999px;
+  padding: 5px 11px;
+  font-size: 11px;
+  letter-spacing: .02em;
+  color: var(--muted);
+}
+.pill b { color: var(--ink); font-weight: 650; }
+.pill--live { border-color: rgba(110, 242, 176, .32); color: var(--accent); }
+.pill .dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px rgba(110, 242, 176, .14);
+  animation: pulse 2.6s ease-in-out infinite;
+}
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+
+.hero h1 {
+  margin: 0 0 14px;
+  font-size: clamp(30px, 6.4vw, 52px);
+  line-height: 1.06;
+  letter-spacing: -.035em;
+  font-weight: 730;
+  max-width: 22ch;
+}
+.hero h1 .dim { color: var(--muted2); }
+.lede {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--muted);
+}
+.lede strong { color: var(--ink); font-weight: 600; }
+
+/* ── drop ───────────────────────────────────────────── */
+.drop {
+  position: relative;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  gap: 4px;
+  padding: 44px 22px;
+  border: 1.5px dashed var(--line2);
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(255, 255, 255, .03), rgba(255, 255, 255, 0) 60%);
+  cursor: pointer;
+  transition: border-color .2s, background-color .2s, transform .15s;
+  outline: none;
+}
+.drop:hover, .drop:focus-visible { border-color: rgba(110, 242, 176, .45); background-color: rgba(110, 242, 176, .03); }
+.drop.is-over { border-color: var(--accent); background-color: rgba(110, 242, 176, .07); transform: scale(1.004); }
+.drop-ico { color: var(--accent); opacity: .9; margin-bottom: 10px; }
+.drop-ico svg { width: 40px; height: 40px; }
+.drop-title { margin: 0; font-size: 17px; font-weight: 650; letter-spacing: -.01em; }
+.drop-sub { margin: 0; font-size: 13px; color: var(--muted); }
+.drop-fmt { margin: 10px 0 0; font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; color: var(--muted2); text-transform: uppercase; }
+.drop-note { margin: 14px 0 0; font-size: 12px; color: var(--muted2); }
+.kbd {
+  font-family: var(--mono); font-size: .92em;
+  border: 1px solid var(--line2); border-bottom-width: 2px;
+  border-radius: 4px; padding: 0 4px; color: var(--muted);
+}
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ── workspace ──────────────────────────────────────── */
+.ws { padding-top: 4px; }
+.ws-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+}
+@media (min-width: 940px) {
+  .ws-grid { grid-template-columns: minmax(0, 1.62fr) minmax(300px, .85fr); align-items: start; }
+}
+.panel {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  padding: 16px;
+}
+@media (min-width: 640px) { .panel { padding: 18px; } }
+.ph {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted2);
+  font-weight: 650;
+  font-family: var(--mono);
+}
+.p-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.file-meta { min-width: 0; }
+.file-name {
+  display: block;
+  font-size: 14px; font-weight: 620;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  letter-spacing: -.01em;
+}
+.file-sub { display: block; font-family: var(--mono); font-size: 10.5px; color: var(--muted2); margin-top: 3px; letter-spacing: .04em; }
+
+.video-shell {
+  position: relative;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: #05070a;
+  border: 1px solid var(--line);
+  line-height: 0;
+}
+video { display: block; width: 100%; max-height: 58vh; background: #05070a; object-fit: contain; }
+.ov {
+  position: absolute; top: 9px;
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: .1em;
+  padding: 4px 7px; border-radius: 5px;
+  background: rgba(5, 8, 7, .66);
+  border: 1px solid rgba(255, 255, 255, .13);
+  color: var(--muted); text-transform: uppercase;
+  backdrop-filter: blur(6px);
+  line-height: 1;
+  pointer-events: none;
+}
+.ov--local { left: 9px; color: var(--accent); }
+.ov--dim { right: 9px; }
+
+/* filmstrip */
+.filmstrip {
+  display: flex;
+  gap: 5px;
+  margin: 10px 0 0;
+  padding-bottom: 2px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+.fs {
+  appearance: none;
+  flex: 1 0 58px;
+  min-width: 46px;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--panel2) center / cover no-repeat;
+  cursor: pointer;
+  padding: 0;
+  opacity: .38;
+  transition: opacity .2s, border-color .2s, box-shadow .2s;
+  position: relative;
+}
+.fs.ok { opacity: .72; }
+.fs:hover { opacity: 1; border-color: var(--line2); }
+.fs.on { opacity: 1; border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+
+/* scrub */
+.scrub-wrap { margin: 14px 0 6px; }
+input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 22px; margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px; border-radius: 99px;
+  background: linear-gradient(90deg, var(--accent) var(--fill, 0%), rgba(255, 255, 255, .13) var(--fill, 0%));
+}
+input[type="range"]::-moz-range-track {
+  height: 4px; border-radius: 99px;
+  background: linear-gradient(90deg, var(--accent) var(--fill, 0%), rgba(255, 255, 255, .13) var(--fill, 0%));
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 14px; height: 14px; margin-top: -5px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid #08120d;
+  box-shadow: 0 0 0 1px rgba(110, 242, 176, .4), 0 2px 6px rgba(0, 0, 0, .5);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--accent); border: 2px solid #08120d;
+}
+input[type="range"]:disabled { opacity: .45; cursor: default; }
+
+.tc-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.tc-now {
+  font-family: var(--mono);
+  font-size: 21px;
+  letter-spacing: -.01em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+.tc-frame {
+  font-family: var(--mono); font-size: 11px; color: var(--muted2);
+  letter-spacing: .06em; text-transform: uppercase;
+}
+.tc-meta { font-family: var(--mono); font-size: 10.5px; color: var(--muted2); letter-spacing: .05em; }
+
+/* transport */
+.transport {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px;
+  margin: 14px 0 0;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--panel2);
+}
+.tgroup { display: flex; gap: 5px; }
+.step {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--muted);
+  border-radius: 9px;
+  min-width: 44px;
+  height: 34px;
+  padding: 0 8px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  cursor: pointer;
+  transition: color .16s, border-color .16s, background .16s, transform .12s;
+}
+.step:hover { color: var(--ink); border-color: var(--line2); background: #1b2226; }
+html[data-theme="light"] .step:hover { background: #eaf0ec; }
+.step:active { transform: scale(.95); }
+.step:disabled, .btn:disabled { opacity: .4; cursor: default; }
+.play {
+  appearance: none;
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  border: 1px solid rgba(110, 242, 176, .35);
+  background: var(--accent);
+  color: var(--on-accent);
+  display: grid; place-items: center;
+  cursor: pointer;
+  flex: none;
+  transition: transform .14s, box-shadow .2s;
+  box-shadow: 0 6px 18px rgba(45, 216, 140, .22);
+}
+.play:hover { transform: scale(1.04); }
+.play:active { transform: scale(.96); }
+.play .p-ico { display: none; }
+.play .p-play { display: block; }
+.play.is-playing .p-play { display: none; }
+.play.is-playing .p-pause { display: block; }
+
+/* capture bar */
+.capbar {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin-top: 12px;
+}
+.capbar-note {
+  font-family: var(--mono); font-size: 10.5px; color: var(--muted2);
+  letter-spacing: .05em; margin-left: auto;
+}
+
+.btn {
+  appearance: none;
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  border-radius: 10px;
+  border: 1px solid var(--line2);
+  background: var(--panel2);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 9px 14px;
+  cursor: pointer;
+  transition: background .18s, border-color .18s, color .18s, transform .12s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn:hover { border-color: var(--accent); }
+.btn:active { transform: scale(.985); }
+.btn svg { width: 15px; height: 15px; }
+.btn--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+  font-weight: 700;
+}
+.btn--primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.btn--ghost { background: transparent; border-color: var(--line2); color: var(--muted); }
+.btn--ghost:hover { color: var(--ink); }
+.btn--sm { padding: 7px 11px; font-size: 12px; border-radius: 9px; }
+.btn--xs { padding: 5px 9px; font-size: 11px; border-radius: 7px; }
+
+/* side panels */
+.side { display: grid; gap: 14px; }
+.fps-row { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+input[type="number"] {
+  width: 100%;
+  min-width: 0;
+  flex: 1 1 auto;
+  border: 1px solid var(--line);
+  background: var(--panel2);
+  color: var(--ink);
+  border-radius: 9px;
+  padding: 8px 10px;
+  font-family: var(--mono);
+  font-size: 13px;
+}
+input[type="number"]:focus { outline: none; border-color: var(--accent); }
+.hint {
+  margin: 9px 0 0;
+  font-size: 11.8px;
+  line-height: 1.55;
+  color: var(--muted2);
+}
+.hint b { color: var(--muted); font-weight: 600; }
+
+.seg {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--panel2);
+  margin-top: 10px;
+}
+.seg-btn {
+  appearance: none;
+  flex: 1;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: .04em;
+  padding: 7px 6px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background .18s, color .18s;
+}
+.seg-btn:hover { color: var(--ink); }
+.seg-btn[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); font-weight: 700; }
+.seg-btn:disabled { opacity: .4; cursor: default; }
+
+.q-row { margin-top: 14px; }
+.q-label { display: flex; justify-content: space-between; align-items: baseline; font-size: 12px; color: var(--muted); }
+.q-label .num { font-family: var(--mono); font-size: 12px; color: var(--ink); }
+.q-row.is-off { opacity: .45; }
+
+/* tray */
+.tray-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.badge {
+  font-family: var(--mono); font-size: 10px;
+  border: 1px solid var(--line2);
+  border-radius: 999px;
+  padding: 1px 7px;
+  color: var(--muted);
+  margin-left: 6px;
+}
+.tray { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 8px; }
+.tray:empty { display: none; }
+.cap {
+  display: flex; align-items: center; gap: 9px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  padding: 6px;
+  background: var(--panel2);
+}
+.cap-thumb {
+  appearance: none;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 0;
+  width: 74px;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #000;
+  cursor: pointer;
+  flex: none;
+  line-height: 0;
+}
+.cap-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cap-meta { min-width: 0; flex: 1; display: grid; gap: 2px; }
+.cap-tc { font-family: var(--mono); font-size: 11.5px; color: var(--ink); }
+.cap-fr { font-family: var(--mono); font-size: 9.5px; letter-spacing: .06em; color: var(--muted2); text-transform: uppercase; }
+.cap-act { display: flex; align-items: center; gap: 5px; flex: none; }
+.icon-btn--sm { width: 26px; height: 26px; border-radius: 7px; font-size: 14px; }
+.tray-empty { margin: 12px 0 0; font-size: 12px; color: var(--muted2); line-height: 1.6; }
+
+/* status */
+.status {
+  margin: 14px 0 0;
+  min-height: 18px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: var(--mono);
+  letter-spacing: .01em;
+}
+.status.is-warn { color: var(--warn); }
+.status.is-error { color: var(--danger); }
+.status.is-ok { color: var(--accent); }
+
+/* storyboard */
+.sb { margin-top: 14px; }
+.sb-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 14px; }
+.sb-opts { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.sb-opts .seg { margin-top: 0; }
+.chk {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 7px 10px;
+  cursor: pointer;
+  font-family: var(--font);
+}
+.chk input { accent-color: var(--accent); margin: 0; }
+.sb-stage { margin-top: 14px; }
+#sbCanvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: #05070a;
+}
+.sb-actions { display: flex; align-items: center; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.sb-meta { font-family: var(--mono); font-size: 10.5px; color: var(--muted2); margin-left: auto; letter-spacing: .04em; }
+
+/* notes */
+.notes {
+  display: grid;
+  gap: 12px;
+  margin-top: 34px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 780px) { .notes { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
+.note { border-top: 1px solid var(--line); padding-top: 14px; }
+.note h3 {
+  margin: 0 0 7px;
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: -.005em;
+  display: flex; align-items: baseline; gap: 8px;
+}
+.note h3 span { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: .1em; }
+.note p { margin: 0; font-size: 12.5px; line-height: 1.62; color: var(--muted2); }
+
+.caveat {
+  margin: 22px 0 0;
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--muted2);
+  border-left: 2px solid rgba(255, 192, 107, .5);
+  padding-left: 12px;
+}
+.caveat strong { color: var(--warn); font-weight: 600; }
+
+/* footer */
+.foot {
+  display: flex; flex-wrap: wrap; gap: 10px 18px;
+  align-items: center; justify-content: space-between;
+  margin-top: 40px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .07em;
+  color: var(--muted2);
+  text-transform: uppercase;
+}
+.foot .net b { color: var(--accent); font-weight: 700; }
+.foot a { color: var(--muted2); text-decoration: none; border-bottom: 1px solid transparent; }
+.foot a:hover { color: var(--ink); border-bottom-color: var(--line2); }
+
+@media (max-width: 520px) {
+  .wrap { padding: 0 14px 64px; }
+  .hero h1 { font-size: clamp(26px, 8.4vw, 34px); }
+  .lede { font-size: 14px; }
+  .tc-now { font-size: 18px; }
+  .transport { gap: 6px; padding: 6px; }
+  .step { min-width: 38px; height: 32px; font-size: 10.5px; padding: 0 6px; }
+  .play { width: 42px; height: 42px; }
+  .capbar .btn { flex: 1 1 auto; }
+  .capbar-note { width: 100%; margin-left: 0; }
+  .ov { font-size: 8.5px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+}
+</style>
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/frame-grabber/">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/frame-grabber.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="FrameGrab — pull video frames and storyboards in the browser, zero uploads">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="FrameGrab — Zero-Upload Video Frame &amp; Storyboard Extractor">
+<meta name="twitter:description" content="Frame-accurate scrubbing, PNG/WebP frame export and 2×2 or 3×3 storyboards — the video never leaves the tab.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/frame-grabber.jpg">
+<meta name="twitter:image:alt" content="FrameGrab — zero-upload video frame extractor">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/frame-grabber/">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "FrameGrab — Zero-Upload Video Frame & Storyboard Extractor",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/frame-grabber/",
+      "description": "Pull exact frames from a local video and build 2×2 or 3×3 storyboard contact sheets, entirely in the browser with zero uploads.",
+      "featureList": [
+        "Frame-accurate scrubbing with ±1 frame, ±0.1s and ±1s steps",
+        "Single-frame export as PNG or WebP at native resolution",
+        "2×2 and 3×3 storyboard contact sheets with timestamps",
+        "Frame rate detection and manual override",
+        "100% client-side: no uploads, no accounts, no tracking"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "FrameGrab", "item": "https://kimyihyung.github.io/portfolio/tools/frame-grabber/" }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <a class="brand" href="../../" aria-label="Back to the portfolio" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">▣</span>
+      <span class="brand-txt">Zero&nbsp;Server Tools</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="View in Korean" aria-label="View in Korean">
+        <span class="lt on" data-lt="en">EN</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="ko">KO</span>
+      </button>
+      <button class="icon-btn" id="themeBtn" type="button" title="Toggle theme" data-i18n-title="themeTitle" aria-label="Switch to dark theme">
+        <svg class="ico ico-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 13.6A8.6 8.6 0 1 1 10.4 3.5a6.9 6.9 0 0 0 10.1 10.1Z"/></svg>
+        <svg class="ico ico-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2m0 14v2M3 12h2m14 0h2M5.6 5.6l1.4 1.4m10 10 1.4 1.4M18.4 5.6l-1.4 1.4m-10 10-1.4 1.4"/></svg>
+      </button>
+      <a class="back" href="../../" data-i18n="back">← Portfolio</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="badge-row">
+      <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillServer">0 bytes uploaded</b></span>
+      <span class="pill" data-i18n-html="pillLocal">In-browser <b>100% local</b></span>
+      <span class="pill" data-i18n-html="pillOut"><b>PNG · WebP</b> frames &amp; sheets</span>
+    </div>
+    <h1 data-i18n-html="h1">Freeze the exact frame.<br><span class="dim">Then lay out the sheet.</span></h1>
+    <p class="lede" data-i18n="lede">Drop a video and pull frames out of it without sending it anywhere. Scrub to the frame you want, step by a single frame, save it as PNG or WebP — or turn the whole clip into a 2×2 / 3×3 storyboard sheet. All of it happens inside this tab.</p>
+  </section>
+
+  <div class="drop" id="drop" role="button" tabindex="0" aria-label="Choose a video file or drop it here" data-i18n-aria="dropAria">
+    <div class="drop-ico" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2.5" y="5.5" width="19" height="13" rx="2.5"/>
+        <path d="M7 5.5v13M17 5.5v13M2.5 9.5h4.5M2.5 14.5h4.5M17 9.5h4.5M17 14.5h4.5"/>
+      </svg>
+    </div>
+    <p class="drop-title" data-i18n="dropTitle">Drop a video here</p>
+    <p class="drop-sub" data-i18n-html="dropSub">or click to choose · one file at a time · <span class="kbd">←</span> <span class="kbd">→</span> steps one frame</p>
+    <p class="drop-fmt" data-i18n="dropFmt">MP4 · MOV · M4V · WebM · OGV — whatever your browser can decode</p>
+    <p class="drop-note" data-i18n="dropNote">The file is opened from your disk with a local object URL. It is never copied to a server.</p>
+    <input class="visually-hidden" id="fileInput" type="file" accept="video/*,.mp4,.m4v,.mov,.webm,.ogv,.ogg">
+  </div>
+
+  <p class="status" id="status" role="status" aria-live="polite"></p>
+
+  <section class="ws" id="ws" hidden aria-label="Frame extractor workspace" data-i18n-aria="wsAria">
+    <div class="ws-grid">
+
+      <div class="panel player-panel">
+        <div class="p-head">
+          <div class="file-meta">
+            <span class="file-name" id="fileName">—</span>
+            <span class="file-sub" id="fileSub">—</span>
+          </div>
+          <button class="btn btn--ghost btn--sm" id="changeBtn" type="button" data-i18n="changeVideo">Change video</button>
+        </div>
+
+        <div class="video-shell">
+          <video id="video" playsinline preload="metadata"></video>
+          <span class="ov ov--local" data-i18n="ovLocal">local · 0 upload</span>
+          <span class="ov ov--dim" id="ovDim">—</span>
+        </div>
+
+        <div class="filmstrip" id="filmstrip" aria-hidden="true"></div>
+
+        <div class="scrub-wrap">
+          <input type="range" id="scrub" min="0" max="1000" step="1" value="0" aria-label="Timeline" data-i18n-aria="scrubAria">
+        </div>
+
+        <div class="tc-row">
+          <div>
+            <div class="tc-now" id="tcNow">00:00:00.000</div>
+            <div class="tc-frame" id="tcFrame">frame 0</div>
+          </div>
+          <div class="tc-meta" id="tcMeta">—</div>
+        </div>
+
+        <div class="transport">
+          <div class="tgroup" role="group" aria-label="Step back" data-i18n-aria="backGroupAria">
+            <button class="step" type="button" data-step="-1000" aria-label="Back 1 second" data-i18n-aria="back1s">−1s</button>
+            <button class="step" type="button" data-step="-100" aria-label="Back 0.1 seconds" data-i18n-aria="back01">−0.1s</button>
+            <button class="step" type="button" data-step="-fr" aria-label="Back 1 frame" data-i18n-aria="backFr">−1f</button>
+          </div>
+          <button class="play" id="playBtn" type="button" aria-label="Play" data-i18n-aria="play">
+            <svg class="p-ico p-play" width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+            <svg class="p-ico p-pause" width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="7" y="5" width="3.6" height="14" rx="1"/><rect x="13.4" y="5" width="3.6" height="14" rx="1"/></svg>
+          </button>
+          <div class="tgroup" role="group" aria-label="Step forward" data-i18n-aria="fwdGroupAria">
+            <button class="step" type="button" data-step="fr" aria-label="Forward 1 frame" data-i18n-aria="fwdFr">+1f</button>
+            <button class="step" type="button" data-step="100" aria-label="Forward 0.1 seconds" data-i18n-aria="fwd01">+0.1s</button>
+            <button class="step" type="button" data-step="1000" aria-label="Forward 1 second" data-i18n-aria="fwd1s">+1s</button>
+          </div>
+        </div>
+
+        <div class="capbar">
+          <button class="btn btn--primary" id="saveFrameBtn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0 4-4m-4 4-4-4"/><path d="M4.5 17.5V19a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5v-1.5"/></svg>
+            <span data-i18n="saveFrame">Save this frame</span>
+          </button>
+          <button class="btn btn--ghost" id="addTrayBtn" type="button">
+            <span data-i18n="addTray">Add to tray</span>
+          </button>
+          <span class="capbar-note" id="capNote">—</span>
+        </div>
+      </div>
+
+      <aside class="side">
+        <section class="panel">
+          <h2 class="ph" data-i18n="fpsTitle">Frame rate</h2>
+          <div class="fps-row">
+            <input type="number" id="fpsNum" min="1" max="240" step="0.001" value="30" list="fpsPresets" aria-label="Frame rate" data-i18n-aria="fpsTitle">
+            <button class="btn btn--ghost btn--sm" id="fpsDetect" type="button" data-i18n="fpsDetect">Detect</button>
+          </div>
+          <datalist id="fpsPresets">
+            <option value="23.976"></option>
+            <option value="24"></option>
+            <option value="25"></option>
+            <option value="29.97"></option>
+            <option value="30"></option>
+            <option value="50"></option>
+            <option value="59.94"></option>
+            <option value="60"></option>
+            <option value="120"></option>
+          </datalist>
+          <p class="hint" id="fpsHint">Used for ±1 frame stepping and frame numbers.</p>
+        </section>
+
+        <section class="panel">
+          <h2 class="ph" data-i18n="exportTitle">Export format</h2>
+          <div class="seg" id="fmtSeg" role="group" aria-label="Export format" data-i18n-aria="exportTitle">
+            <button class="seg-btn" type="button" data-fmt="png" aria-pressed="true">PNG</button>
+            <button class="seg-btn" type="button" data-fmt="webp" aria-pressed="false">WebP</button>
+          </div>
+          <div class="q-row" id="qRow">
+            <label class="q-label" for="quality"><span data-i18n="qualityLabel">WebP quality</span> <span class="num" id="qualityOut">92%</span></label>
+            <input type="range" id="quality" min="40" max="100" step="1" value="92">
+          </div>
+          <p class="hint" id="fmtHint" data-i18n="fmtHint">PNG is lossless and larger. WebP is smaller; the quality slider only affects WebP.</p>
+        </section>
+
+        <section class="panel">
+          <div class="tray-head">
+            <h2 class="ph"><span data-i18n="trayTitle">Captured frames</span><span class="badge" id="capCount">0</span></h2>
+          </div>
+          <ul class="tray" id="tray"></ul>
+          <p class="tray-empty" id="trayEmpty" data-i18n="trayEmpty">Nothing captured yet. Scrub to a moment and press “Add to tray”, then save each frame in the format you picked.</p>
+        </section>
+      </aside>
+    </div>
+
+    <section class="panel sb" aria-labelledby="sbTitle">
+      <div class="sb-head">
+        <div>
+          <h2 class="ph" id="sbTitle" data-i18n="sbTitle">Storyboard</h2>
+          <p class="hint" id="sbHint">Evenly spaced frames from the whole clip, on one sheet.</p>
+        </div>
+        <div class="sb-opts">
+          <div class="seg" id="gridSeg" role="group" aria-label="Storyboard grid" data-i18n-aria="sbGrid">
+            <button class="seg-btn" type="button" data-grid="2" aria-pressed="true">2 × 2</button>
+            <button class="seg-btn" type="button" data-grid="3" aria-pressed="false">3 × 3</button>
+          </div>
+          <label class="chk"><input type="checkbox" id="sbLabels" checked> <span data-i18n="sbLabelsOpt">Timestamps</span></label>
+          <button class="btn btn--primary btn--sm" id="sbBuild" type="button" data-i18n="sbBuild">Generate storyboard</button>
+        </div>
+      </div>
+      <div class="sb-stage" id="sbStage" hidden>
+        <canvas id="sbCanvas" width="1200" height="900"></canvas>
+        <div class="sb-actions">
+          <button class="btn btn--ghost btn--sm" type="button" data-sb="png">PNG</button>
+          <button class="btn btn--ghost btn--sm" type="button" data-sb="webp">WebP</button>
+          <span class="sb-meta" id="sbMeta"></span>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <section class="notes" aria-label="How it works" data-i18n-aria="notesAria">
+    <div class="note">
+      <h3 data-i18n-html="note1h"><span>01</span> Opened, never uploaded</h3>
+      <p data-i18n="note1d">The video is read from disk through a local object URL. No request carries the file out of the tab, and the counter at the bottom of this page shows how many network requests this page has actually made.</p>
+    </div>
+    <div class="note">
+      <h3 data-i18n-html="note2h"><span>02</span> Pixels, at native size</h3>
+      <p data-i18n="note2d">Each frame is drawn into a canvas at the video’s own resolution — 1920×1080 stays 1920×1080. PNG is lossless, WebP re-encodes at the quality you set, and nothing is ever scaled up.</p>
+    </div>
+    <div class="note">
+      <h3 data-i18n-html="note3h"><span>03</span> Sample times you can check</h3>
+      <p data-i18n="note3d">Storyboard cells are the centres of equal slices of the clip, labelled with their real timecode. Frame numbers follow the frame rate above, so ±1 frame lands where you expect.</p>
+    </div>
+  </section>
+
+  <p class="caveat" data-i18n-html="caveat"><strong>Note.</strong> Frame accuracy depends on your browser and the codec inside the file: a phone clip recorded at a variable frame rate can drift from the number you set, so type the real rate into the frame-rate field if stepping looks off. A storyboard is a still image of the clip, not a video — keep the original file.</p>
+
+  <footer class="foot">
+    <span data-i18n="foot1">0 uploads · 0 servers · 0 cookies</span>
+    <span class="net"><span data-i18n="netLabel">network requests made by this page</span>: <b id="netCount">—</b></span>
+    <span><a href="../../" data-i18n="back">← Portfolio</a> · <a href="../" data-i18n="footTools">All tools</a></span>
+  </footer>
+</div>
+
+<script>
+/* Fault trap: keeps a list of runtime errors so a broken step can be traced instead of
+   freezing silently. It costs nothing when the page runs cleanly. */
+window.__fgFaults = [];
+window.addEventListener('error', function (e) {
+  try { window.__fgFaults.push(String((e && (e.message || e.type)) || 'error')); } catch (err) {}
+});
+window.addEventListener('unhandledrejection', function (e) {
+  try { window.__fgFaults.push('rejection: ' + String(e && e.reason)); } catch (err) {}
+});
+</script>
+<script>
+(function () {
+  'use strict';
+
+  var $ = function (id) { return document.getElementById(id); };
+  function pad(n, w) { n = String(n); while (n.length < w) n = '0' + n; return n; }
+  function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
+
+  function tc(t) {
+    var ms = Math.max(0, Math.round((t || 0) * 1000));
+    var h = Math.floor(ms / 3600000), m = Math.floor(ms % 3600000 / 60000), s = Math.floor(ms % 60000 / 1000), r = ms % 1000;
+    return pad(h, 2) + ':' + pad(m, 2) + ':' + pad(s, 2) + '.' + pad(r, 3);
+  }
+  function tcShort(t) {
+    var ms = Math.max(0, Math.round((t || 0) * 1000));
+    var m = Math.floor(ms / 60000), s = Math.floor(ms % 60000 / 1000), r = Math.floor(ms % 1000 / 100);
+    return m + ':' + pad(s, 2) + '.' + r;
+  }
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  /* ───────────────────────── 언어 ───────────────────────── */
+  var LANG_KEY = 'framegrab.lang';
+  var THEME_KEY = 'framegrab.theme';
+
+  var I18N = {
+    en: {
+      docTitle: 'FrameGrab — Zero-Upload Video Frame & Storyboard Extractor',
+      metaDesc: 'Pull exact frames out of a video and lay them into a storyboard without uploading a single byte. Frame-accurate scrubbing, PNG/WebP frame export and 2×2 or 3×3 contact sheets, 100% in your browser.',
+      ogTitle: 'FrameGrab — Zero-Upload Video Frame & Storyboard Extractor',
+      ogDesc: '0 bytes uploaded · frame-accurate scrub · PNG/WebP frames · 2×2 and 3×3 storyboards',
+      themeTitle: 'Toggle theme',
+      brandAria: 'Back to the portfolio',
+      back: '← Portfolio',
+      footTools: 'All tools',
+      pillServer: '0 bytes uploaded',
+      pillLocal: 'In-browser <b>100% local</b>',
+      pillOut: '<b>PNG · WebP</b> frames &amp; sheets',
+      h1: 'Freeze the exact frame.<br><span class="dim">Then lay out the sheet.</span>',
+      lede: 'Drop a video and pull frames out of it without sending it anywhere. Scrub to the frame you want, step by a single frame, save it as PNG or WebP — or turn the whole clip into a 2×2 / 3×3 storyboard sheet. All of it happens inside this tab.',
+      dropAria: 'Choose a video file or drop it here',
+      dropTitle: 'Drop a video here',
+      dropSub: 'or click to choose · one file at a time · <span class="kbd">←</span> <span class="kbd">→</span> steps one frame',
+      dropFmt: 'MP4 · MOV · M4V · WebM · OGV — whatever your browser can decode',
+      dropNote: 'The file is opened from your disk with a local object URL. It is never copied to a server.',
+      wsAria: 'Frame extractor workspace',
+      changeVideo: 'Change video',
+      ovLocal: 'local · 0 upload',
+      scrubAria: 'Timeline',
+      backGroupAria: 'Step back',
+      fwdGroupAria: 'Step forward',
+      back1s: 'Back 1 second',
+      back01: 'Back 0.1 seconds',
+      backFr: 'Back 1 frame',
+      fwdFr: 'Forward 1 frame',
+      fwd01: 'Forward 0.1 seconds',
+      fwd1s: 'Forward 1 second',
+      play: 'Play',
+      pause: 'Pause',
+      saveFrame: 'Save this frame',
+      addTray: 'Add to tray',
+      fpsTitle: 'Frame rate',
+      fpsDetect: 'Detect',
+      fpsHint: 'Used for ±1 frame stepping and frame numbers.',
+      fpsDetecting: 'Detecting frame rate…',
+      fpsOk: 'Detected {fps} fps from {n} frame timings.',
+      fpsManual: 'Set by hand: {fps} fps. ±1 frame uses this number.',
+      fpsDefault: 'Not detected yet — 30 fps is assumed. Press Detect, or type the real rate.',
+      fpsFail: 'Frame rate could not be detected in this browser. Type it by hand if stepping looks off.',
+      exportTitle: 'Export format',
+      qualityLabel: 'WebP quality',
+      fmtHint: 'PNG is lossless and larger. WebP is smaller; the quality slider only affects WebP.',
+      webpNoTitle: 'This browser cannot encode WebP — PNG is used instead.',
+      trayTitle: 'Captured frames',
+      trayEmpty: 'Nothing captured yet. Scrub to a moment and press “Add to tray”, then save each frame in the format you picked.',
+      traySave: 'Save',
+      trayRemove: 'Remove from tray',
+      trayGoto: 'Jump to this frame',
+      sbTitle: 'Storyboard',
+      sbHint: 'Evenly spaced frames from the whole clip, on one sheet.',
+      sbGrid: 'Storyboard grid',
+      sbLabelsOpt: 'Timestamps',
+      sbBuild: 'Generate storyboard',
+      sbBuilding: 'Rendering frame {i} of {n}…',
+      sbReady: 'Storyboard ready — {w}×{h}, {n} frames.',
+      sbMeta: '{w}×{h} · {n} frames',
+      notesAria: 'How it works',
+      note1h: '<span>01</span> Opened, never uploaded',
+      note1d: 'The video is read from disk through a local object URL. No request carries the file out of the tab, and the counter at the bottom of this page shows how many network requests this page has actually made.',
+      note2h: '<span>02</span> Pixels, at native size',
+      note2d: 'Each frame is drawn into a canvas at the video’s own resolution — 1920×1080 stays 1920×1080. PNG is lossless, WebP re-encodes at the quality you set, and nothing is ever scaled up.',
+      note3h: '<span>03</span> Sample times you can check',
+      note3d: 'Storyboard cells are the centres of equal slices of the clip, labelled with their real timecode. Frame numbers follow the frame rate above, so ±1 frame lands where you expect.',
+      caveat: '<strong>Note.</strong> Frame accuracy depends on your browser and the codec inside the file: a phone clip recorded at a variable frame rate can drift from the number you set, so type the real rate into the frame-rate field if stepping looks off. A storyboard is a still image of the clip, not a video — keep the original file.',
+      foot1: '0 uploads · 0 servers · 0 cookies',
+      netLabel: 'network requests made by this page',
+      frameLabel: 'frame {n}',
+      frameOf: 'frame {n} / {total}',
+      reading: 'Reading the video…',
+      readingFrames: 'Reading timeline thumbnails…',
+      errUnsupported: 'That file is not a video this page can open. Try MP4, MOV or WebM.',
+      errDecode: 'This browser cannot decode that video. MP4 (H.264) and WebM play nearly everywhere; MOV with HEVC usually only opens in Safari.',
+      errDuration: 'This video reports no usable length. Re-export it as MP4 or WebM and try again.',
+      statusFrames: '{n} timeline thumbnails ready.',
+      saved: 'Saved {name}',
+      savedTray: 'Frame added to the tray.',
+      working: 'Working…',
+      sizeNote: 'PNG · {w}×{h}',
+      sizeNoteWebp: 'WebP {q}% · {w}×{h}'
+    },
+    ko: {
+      docTitle: 'FrameGrab — 업로드 없는 영상 프레임·스토리보드 추출기',
+      metaDesc: '영상을 서버로 보내지 않고 원하는 프레임을 뽑아 PNG·WebP로 저장하고 2×2·3×3 스토리보드로 묶는 브라우저 도구입니다. 업로드 0바이트.',
+      ogTitle: 'FrameGrab — 업로드 없는 영상 프레임·스토리보드 추출기',
+      ogDesc: '업로드 0바이트 · 프레임 단위 이동 · PNG/WebP 저장 · 2×2·3×3 스토리보드',
+      themeTitle: '테마 전환',
+      brandAria: '포트폴리오로 돌아가기',
+      back: '← 포트폴리오',
+      footTools: '전체 도구',
+      pillServer: '업로드 0바이트',
+      pillLocal: '브라우저 안에서 <b>100% 로컬</b>',
+      pillOut: '<b>PNG · WebP</b> 프레임·시트',
+      h1: '원하는 프레임을 정확히.<br><span class="dim">그리고 한 장의 시트로.</span>',
+      lede: '영상을 끌어다 놓으면 어디로도 보내지 않고 프레임을 뽑아냅니다. 원하는 지점까지 스크럽하고 1프레임 단위로 이동해 PNG·WebP로 저장하거나, 영상 전체를 2×2·3×3 스토리보드 한 장으로 만들 수 있습니다. 모든 처리는 이 탭 안에서 끝납니다.',
+      dropAria: '영상 파일을 선택하거나 여기로 끌어다 놓기',
+      dropTitle: '영상을 여기에 놓으세요',
+      dropSub: '또는 클릭해서 선택 · 한 번에 한 파일 · <span class="kbd">←</span> <span class="kbd">→</span> 로 1프레임 이동',
+      dropFmt: 'MP4 · MOV · M4V · WebM · OGV — 이 브라우저가 재생할 수 있는 형식',
+      dropNote: '파일은 디스크에서 로컬 객체 URL로 바로 열립니다. 서버로 복사되지 않습니다.',
+      wsAria: '프레임 추출 작업 공간',
+      changeVideo: '다른 영상',
+      ovLocal: '로컬 · 업로드 0',
+      scrubAria: '타임라인',
+      backGroupAria: '뒤로 이동',
+      fwdGroupAria: '앞으로 이동',
+      back1s: '1초 뒤로',
+      back01: '0.1초 뒤로',
+      backFr: '1프레임 뒤로',
+      fwdFr: '1프레임 앞으로',
+      fwd01: '0.1초 앞으로',
+      fwd1s: '1초 앞으로',
+      play: '재생',
+      pause: '일시정지',
+      saveFrame: '이 프레임 저장',
+      addTray: '담아두기',
+      fpsTitle: '프레임 레이트',
+      fpsDetect: '자동 감지',
+      fpsHint: '1프레임 이동과 프레임 번호 계산에 쓰입니다.',
+      fpsDetecting: '프레임 레이트를 확인하는 중…',
+      fpsOk: '{n}개 프레임 타이밍으로 {fps}fps를 감지했습니다.',
+      fpsManual: '직접 입력한 값: {fps}fps. 1프레임 이동에 이 값을 씁니다.',
+      fpsDefault: '아직 감지 전이라 30fps로 가정했습니다. 자동 감지를 누르거나 실제 값을 입력하세요.',
+      fpsFail: '이 브라우저에서는 프레임 레이트를 감지하지 못했습니다. 이동이 어긋나면 직접 입력하세요.',
+      exportTitle: '저장 형식',
+      qualityLabel: 'WebP 품질',
+      fmtHint: 'PNG는 무손실이라 용량이 큽니다. WebP는 더 작고, 품질 슬라이더는 WebP에만 적용됩니다.',
+      webpNoTitle: '이 브라우저는 WebP 인코딩을 지원하지 않아 PNG로 저장합니다.',
+      trayTitle: '담아둔 프레임',
+      trayEmpty: '아직 담아둔 프레임이 없습니다. 원하는 지점으로 이동해 ‘담아두기’를 누른 뒤, 고른 형식으로 저장하세요.',
+      traySave: '저장',
+      trayRemove: '목록에서 빼기',
+      trayGoto: '이 프레임으로 이동',
+      sbTitle: '스토리보드',
+      sbHint: '영상 전체에서 균등 간격으로 뽑은 프레임을 한 장에 모읍니다.',
+      sbGrid: '스토리보드 배열',
+      sbLabelsOpt: '타임코드 표시',
+      sbBuild: '스토리보드 만들기',
+      sbBuilding: '{n}프레임 중 {i}번째 그리는 중…',
+      sbReady: '스토리보드 완성 — {w}×{h}, {n}프레임.',
+      sbMeta: '{w}×{h} · {n}프레임',
+      notesAria: '동작 방식',
+      note1h: '<span>01</span> 열기만 하고, 올리지 않습니다',
+      note1d: '영상은 로컬 객체 URL로 디스크에서 바로 읽습니다. 파일을 밖으로 내보내는 요청은 없으며, 페이지 하단에 이 페이지가 실제로 보낸 네트워크 요청 수가 표시됩니다.',
+      note2h: '<span>02</span> 원본 해상도 그대로',
+      note2d: '프레임은 영상 자체의 해상도로 캔버스에 그립니다. 1920×1080은 그대로 1920×1080입니다. PNG는 무손실, WebP는 지정한 품질로 다시 인코딩하며, 확대하지 않습니다.',
+      note3h: '<span>03</span> 확인 가능한 샘플 시각',
+      note3d: '스토리보드 칸은 영상을 균등 분할한 구간의 중앙 시각이고, 실제 타임코드가 붙습니다. 프레임 번호는 위의 프레임 레이트를 따르므로 1프레임 이동이 예상대로 움직입니다.',
+      caveat: '<strong>주의.</strong> 프레임 정확도는 브라우저와 파일 코덱에 따라 달라집니다. 휴대폰에서 가변 프레임 레이트(VFR)로 찍은 영상은 입력한 값과 어긋날 수 있으니, 이동이 이상하면 프레임 레이트 칸에 실제 값을 넣으세요. 스토리보드는 영상이 아니라 한 장의 이미지입니다. 원본은 보관하세요.',
+      foot1: '업로드 0 · 서버 0 · 쿠키 0',
+      netLabel: '이 페이지의 네트워크 요청',
+      frameLabel: '프레임 {n}',
+      frameOf: '프레임 {n} / {total}',
+      reading: '영상을 읽는 중…',
+      readingFrames: '타임라인 썸네일을 만드는 중…',
+      errUnsupported: '이 페이지에서 열 수 없는 파일입니다. MP4·MOV·WebM을 사용하세요.',
+      errDecode: '이 브라우저가 해당 영상을 디코딩하지 못합니다. MP4(H.264)와 WebM은 대부분 재생되고, HEVC가 든 MOV는 보통 Safari에서만 열립니다.',
+      errDuration: '영상 길이를 읽지 못했습니다. MP4나 WebM으로 다시 내보낸 뒤 시도하세요.',
+      statusFrames: '타임라인 썸네일 {n}장 준비됨.',
+      saved: '{name} 저장 완료',
+      savedTray: '프레임을 목록에 담았습니다.',
+      working: '처리 중…',
+      sizeNote: 'PNG · {w}×{h}',
+      sizeNoteWebp: 'WebP {q}% · {w}×{h}'
+    }
+  };
+
+  var state = {
+    lang: 'en',
+    file: null,
+    url: null,
+    dur: 0,
+    w: 0,
+    h: 0,
+    fps: 30,
+    fpsSrc: 'default',
+    fmt: 'png',
+    quality: 92,
+    grid: 2,
+    captures: [],
+    loaded: false,
+    busy: false,
+    buildId: 0,
+    lastT: 0
+  };
+
+  function t(key, vars) {
+    var d = I18N[state.lang] || I18N.en;
+    var s = d[key] != null ? d[key] : I18N.en[key];
+    if (s == null) return '';
+    if (vars) {
+      Object.keys(vars).forEach(function (k) { s = s.split('{' + k + '}').join(vars[k]); });
+    }
+    return s;
+  }
+
+  var video = $('video');
+  var drop = $('drop');
+  var fileInput = $('fileInput');
+  var ws = $('ws');
+  var scrub = $('scrub');
+  var playBtn = $('playBtn');
+  var statusEl = $('status');
+  var trayEl = $('tray');
+
+  var WEBP_OK = (function () {
+    try {
+      var c = document.createElement('canvas');
+      c.width = c.height = 1;
+      return c.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+    } catch (e) { return false; }
+  })();
+
+  /* ───────────────────────── 언어 적용 ───────────────────────── */
+  function initialLang() {
+    var q = '';
+    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
+    if (q === 'ko' || q === 'en') return q;
+    try {
+      var saved = localStorage.getItem(LANG_KEY);
+      if (saved === 'ko' || saved === 'en') return saved;
+    } catch (e) { /* 저장소 접근 불가는 EN 기본 */ }
+    return 'en';
+  }
+
+  function applyLang(lang) {
+    state.lang = lang === 'ko' ? 'ko' : 'en';
+    var ko = state.lang === 'ko';
+
+    document.documentElement.setAttribute('lang', state.lang);
+    document.title = t('docTitle');
+    var md = document.querySelector('meta[name="description"]');
+    if (md) md.setAttribute('content', t('metaDesc'));
+    var ogt = document.querySelector('meta[property="og:title"]');
+    if (ogt) ogt.setAttribute('content', t('ogTitle'));
+    var ogd = document.querySelector('meta[property="og:description"]');
+    if (ogd) ogd.setAttribute('content', t('ogDesc'));
+
+    var i, els;
+    els = document.querySelectorAll('[data-i18n]');
+    for (i = 0; i < els.length; i++) els[i].textContent = t(els[i].getAttribute('data-i18n'));
+    els = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < els.length; i++) els[i].innerHTML = t(els[i].getAttribute('data-i18n-html'));
+    els = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < els.length; i++) els[i].setAttribute('aria-label', t(els[i].getAttribute('data-i18n-aria')));
+    els = document.querySelectorAll('[data-i18n-title]');
+    for (i = 0; i < els.length; i++) els[i].setAttribute('title', t(els[i].getAttribute('data-i18n-title')));
+
+    var lt = $('langToggle');
+    if (lt) {
+      var lts = lt.querySelectorAll('[data-lt]');
+      for (i = 0; i < lts.length; i++) lts[i].classList.toggle('on', lts[i].getAttribute('data-lt') === state.lang);
+      var next = ko ? 'View in English' : 'View in Korean';
+      lt.setAttribute('aria-label', next);
+      lt.setAttribute('title', next);
+    }
+
+    paintAll();
+    try { localStorage.setItem(LANG_KEY, state.lang); } catch (e) { /* 무해 */ }
+  }
+
+  function paintAll() {
+    paintTime(video.currentTime || 0);
+    paintFpsHint();
+    paintCapNote();
+    paintFormat();
+    paintTray();
+    if (state.sbInfo) $('sbMeta').textContent = t('sbMeta', state.sbInfo);
+    if (state.loaded && state.file) {
+      $('fileSub').textContent = state.w + ' × ' + state.h + ' · ' + fmtFps(state.fps) + ' fps · ' + tc(state.dur);
+    }
+  }
+
+  function paintFpsHint() {
+    var el = $('fpsHint');
+    if (!el) return;
+    if (state.fpsSrc === 'detected') el.textContent = t('fpsOk', { fps: fmtFps(state.fps), n: state.fpsSamples || 0 });
+    else if (state.fpsSrc === 'manual') el.textContent = t('fpsManual', { fps: fmtFps(state.fps) });
+    else el.textContent = t('fpsDefault');
+  }
+
+  function paintCapNote() {
+    var el = $('capNote');
+    if (!el) return;
+    if (!state.loaded) { el.textContent = '—'; return; }
+    el.textContent = state.fmt === 'webp'
+      ? t('sizeNoteWebp', { q: state.quality, w: state.w, h: state.h })
+      : t('sizeNote', { w: state.w, h: state.h });
+  }
+
+  function paintFormat() {
+    var btns = document.querySelectorAll('#fmtSeg .seg-btn');
+    for (var i = 0; i < btns.length; i++) {
+      var f = btns[i].getAttribute('data-fmt');
+      btns[i].setAttribute('aria-pressed', String(f === state.fmt));
+      if (f === 'webp' && !WEBP_OK) {
+        btns[i].disabled = true;
+        btns[i].title = t('webpNoTitle');
+      }
+    }
+    $('qRow').classList.toggle('is-off', state.fmt !== 'webp');
+    $('qualityOut').textContent = state.quality + '%';
+  }
+
+  function fmtFps(v) {
+    var n = Math.round(v * 1000) / 1000;
+    return String(n).replace(/\.0+$/, '');
+  }
+
+  /* ───────────────────────── 테마 ───────────────────────── */
+  function setTheme(mode) {
+    document.documentElement.setAttribute('data-theme', mode === 'light' ? 'light' : 'dark');
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', mode === 'light' ? '#f4f6f2' : '#0a0b0d');
+    var btn = $('themeBtn');
+    if (btn) btn.setAttribute('aria-label', mode === 'light' ? 'Switch to dark theme' : 'Switch to light theme');
+    try { localStorage.setItem(THEME_KEY, mode); } catch (e) { /* 무해 */ }
+  }
+  (function initTheme() {
+    var m = 'dark';
+    try {
+      var s = localStorage.getItem(THEME_KEY);
+      if (s === 'light' || s === 'dark') m = s;
+      else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) m = 'light';
+    } catch (e) { /* 무해 */ }
+    setTheme(m);
+  })();
+  $('themeBtn').addEventListener('click', function () {
+    setTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+  });
+
+  $('langToggle').addEventListener('click', function () {
+    applyLang(state.lang === 'ko' ? 'en' : 'ko');
+    try {
+      var u = new URL(location.href);
+      if (u.searchParams.get('lang')) {
+        u.searchParams.set('lang', state.lang);
+        history.replaceState(null, '', u.pathname + u.search + u.hash);
+      }
+    } catch (e) { /* 무해 */ }
+  });
+
+  /* ───────────────────────── 상태 표시 ───────────────────────── */
+  var statusTimer = 0;
+  function setStatus(msg, kind) {
+    statusEl.textContent = msg || '';
+    statusEl.className = 'status' + (kind ? ' is-' + kind : '');
+    if (statusTimer) clearTimeout(statusTimer);
+    if (kind && kind !== 'error') {
+      statusTimer = setTimeout(function () { statusEl.textContent = ''; statusEl.className = 'status'; }, 6000);
+    }
+  }
+
+  /* ───────────────────────── 파일 열기 ───────────────────────── */
+  function isVideoFile(f) {
+    if (!f) return false;
+    if (/^video\//.test(f.type || '')) return true;
+    return /\.(mp4|m4v|mov|webm|ogv|ogg|mkv)$/i.test(f.name || '');
+  }
+
+  function handleFiles(list) {
+    var f = list && list[0];
+    if (!f) return;
+    if (!isVideoFile(f)) { setStatus(t('errUnsupported'), 'error'); return; }
+    loadVideo(f);
+  }
+
+  function loadFailed(msg) {
+    state.loaded = false;
+    state.buildId++;
+    ws.hidden = true;
+    drop.hidden = false;
+    setStatus(msg, 'error');
+  }
+
+  function resetWorkspace() {
+    state.captures = [];
+    paintTray();
+    state.sbInfo = null;
+    $('sbStage').hidden = true;
+    $('filmstrip').innerHTML = '';
+    scrub.value = 0;
+    $('tcNow').textContent = tc(0);
+    $('tcFrame').textContent = t('frameLabel', { n: 0 });
+  }
+
+  function loadVideo(f) {
+    state.buildId++;
+    var token = state.buildId;
+    resetWorkspace();
+    state.loaded = false;
+    state.file = f;
+    state.dur = 0;
+    state.w = 0;
+    state.h = 0;
+
+    if (state.url) { try { URL.revokeObjectURL(state.url); } catch (e) {} }
+    state.url = URL.createObjectURL(f);
+    video.src = state.url;
+    video.load();
+
+    ws.hidden = false;
+    drop.hidden = true;
+    $('fileName').textContent = f.name;
+    $('fileSub').textContent = Math.round(f.size / 1024) + ' KB';
+    setStatus(t('reading'));
+    onMeta(token);
+  }
+
+  function onMeta(token) {
+    var tries = 0;
+    (function wait() {
+      if (token !== state.buildId) return;
+      if (video.readyState >= 1 && video.videoWidth) { ready(token); return; }
+      if (video.error) { loadFailed(t('errDecode')); return; }
+      if (++tries > 80) { loadFailed(t('errDecode')); return; }
+      setTimeout(wait, 100);
+    })();
+  }
+
+  function ready(token) {
+    if (token !== state.buildId) return;
+    if (state.loaded && state.metaToken === token) return;
+    var d = video.duration;
+    if (!isFinite(d) || d <= 0) { loadFailed(t('errDuration')); return; }
+    state.metaToken = token;
+    state.dur = d;
+    state.w = video.videoWidth || 1280;
+    state.h = video.videoHeight || 720;
+    state.loaded = true;
+    $('ovDim').textContent = state.w + ' × ' + state.h;
+    $('tcMeta').textContent = tc(d) + ' · ' + fmtFps(state.fps) + ' fps';
+    $('fileSub').textContent = state.w + ' × ' + state.h + ' · ' + fmtFps(state.fps) + ' fps · ' + tc(d);
+    paintCapNote();
+    paintTime(0);
+    seekExact(0).then(function () {
+      if (token !== state.buildId) return;
+      /* 프레임 레이트 감지가 먼저 끝나야 한다 — 동시에 필름스트립을 탐색하면
+         미디어 타임라인이 튀어 추정이 어긋난다. */
+      detectFps(true, token).then(function () {
+        if (token !== state.buildId) return;
+        buildFilmstrip(token);
+      });
+    });
+  }
+
+  /* ───────────────────────── 탐색 ───────────────────────── */
+  var chain = Promise.resolve();
+
+  function doSeek(target) {
+    return new Promise(function (resolve) {
+      if (!state.loaded) { resolve(0); return; }
+      var t = clamp(target, 0, Math.max(0, state.dur - 0.0008));
+      var samePos = Math.abs((video.currentTime || 0) - t) < 0.0006;
+      if (samePos && video.readyState >= 2) { resolve(t); return; }
+      var settled = false;
+      var timer = 0;
+      function done() {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        video.removeEventListener('seeked', done);
+        video.removeEventListener('loadeddata', done);
+        resolve(t);
+      }
+      timer = setTimeout(done, 4000);
+      if (samePos) {
+        /* 이미 같은 위치 — 첫 프레임이 디코드되기만 기다린다 */
+        video.addEventListener('loadeddata', done);
+        return;
+      }
+      video.addEventListener('seeked', done);
+      try { video.currentTime = t; } catch (e) { done(); }
+    });
+  }
+
+  function waitFrames(n) {
+    return new Promise(function (resolve) {
+      var left = n || 1;
+      (function step() {
+        if (left-- <= 0) { resolve(); return; }
+        requestAnimationFrame(step);
+      })();
+    });
+  }
+
+  function seekExact(target) {
+    var run = function () {
+      return doSeek(target).then(function (t) { return waitFrames(1).then(function () { return t; }); });
+    };
+    chain = chain.then(run, run);
+    return chain;
+  }
+
+  function userSeek(target) {
+    if (!state.loaded) return;
+    var t = clamp(target, 0, Math.max(0, state.dur - 0.001));
+    try { video.currentTime = t; } catch (e) { return; }
+    paintTime(t);
+  }
+
+  function paintTime(at) {
+    if (at == null || !isFinite(at)) at = video.currentTime || 0;
+    state.lastT = at;
+    $('tcNow').textContent = tc(at);
+    var frame = Math.round(at * state.fps);
+    $('tcFrame').textContent = t('frameLabel', { n: frame });
+    if (state.loaded) {
+      var pct = state.dur ? clamp(at / state.dur, 0, 1) * 100 : 0;
+      if (document.activeElement !== scrub) scrub.value = String(Math.round(pct * 10));
+      scrub.style.setProperty('--fill', pct.toFixed(2) + '%');
+      markFilmstrip(at);
+    }
+  }
+
+  function markFilmstrip(t) {
+    var cells = $('filmstrip').children;
+    if (!cells.length || !state.dur) return;
+    var idx = clamp(Math.floor(t / state.dur * cells.length), 0, cells.length - 1);
+    for (var i = 0; i < cells.length; i++) cells[i].classList.toggle('on', i === idx);
+  }
+
+  scrub.addEventListener('input', function () {
+    if (!state.loaded) return;
+    var t = (Number(scrub.value) / 10) / 100 * state.dur;
+    paintTime(t);
+    try { video.currentTime = t; } catch (e) {}
+  });
+
+  video.addEventListener('seeked', function () {
+    if (video.paused) paintTime(video.currentTime);
+  });
+  video.addEventListener('timeupdate', function () {
+    if (!video.paused) paintTime(video.currentTime);
+  });
+
+  /* ───────────────────────── 재생 ───────────────────────── */
+  var rafId = 0;
+  function tick() {
+    if (video.paused) { rafId = 0; return; }
+    paintTime(video.currentTime);
+    rafId = requestAnimationFrame(tick);
+  }
+  function togglePlay() {
+    if (!state.loaded) return;
+    if (video.paused) {
+      video.play().then(function () {
+        if (!rafId) rafId = requestAnimationFrame(tick);
+      }).catch(function () {});
+    } else {
+      video.pause();
+    }
+  }
+  video.addEventListener('play', function () {
+    playBtn.classList.add('is-playing');
+    playBtn.setAttribute('aria-label', t('pause'));
+    if (!rafId) rafId = requestAnimationFrame(tick);
+  });
+  video.addEventListener('pause', function () {
+    playBtn.classList.remove('is-playing');
+    playBtn.setAttribute('aria-label', t('play'));
+    if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
+    paintTime(video.currentTime);
+  });
+  video.addEventListener('ended', function () {
+    playBtn.classList.remove('is-playing');
+    playBtn.setAttribute('aria-label', t('play'));
+  });
+  video.addEventListener('loadedmetadata', function () {
+    if (!state.loaded && video.videoWidth) ready(state.buildId);
+  });
+  video.addEventListener('error', function () {
+    if (!state.loaded) loadFailed(t('errDecode'));
+  });
+  playBtn.addEventListener('click', togglePlay);
+
+  document.querySelector('.transport').addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('[data-step]') : null;
+    if (!b || state.busy || !state.loaded) return;
+    video.pause();
+    var v = b.getAttribute('data-step');
+    var now = video.currentTime || 0;
+    if (v === 'fr' || v === '-fr') {
+      var f = Math.round(now * state.fps) + (v === 'fr' ? 1 : -1);
+      userSeek(f / state.fps);
+    } else {
+      userSeek(now + (Number(v) / 1000));
+    }
+  });
+
+  /* ───────────────────────── 프레임 레이트 ───────────────────────── */
+  function estimateFps(times) {
+    /* 중복을 버리고 (첫 시각 → 마지막 시각) 전체 구간으로 추정한다.
+       개별 간격의 중앙값보다 타임스탬프 양자화 오차에 강하다. */
+    var ts = [], i, last = -1;
+    for (i = 0; i < times.length; i++) {
+      if (times[i] > last + 0.0002) { ts.push(times[i]); last = times[i]; }
+    }
+    if (ts.length < 8) return null;
+    var span = ts[ts.length - 1] - ts[0];
+    var steps = ts.length - 1;
+    if (span <= 0 || span / steps > 0.4) return null;
+    var raw = steps / span;
+    var cands = [23.976, 24, 25, 29.97, 30, 48, 50, 59.94, 60, 120];
+    var best = null, bestDiff = 1;
+    for (i = 0; i < cands.length; i++) {
+      var diff = Math.abs(raw - cands[i]) / cands[i];
+      if (diff < 0.02 && diff < bestDiff) { best = cands[i]; bestDiff = diff; }
+    }
+    if (best) return { fps: best, n: steps };
+    return { fps: Math.round(raw * 1000) / 1000, n: steps };
+  }
+
+  function waitEvent(name, ms) {
+    return new Promise(function (resolve) {
+      var done = false;
+      var timer = setTimeout(function () { if (!done) { done = true; video.removeEventListener(name, on); resolve(); } }, ms || 2000);
+      function on() {
+        if (done) return;
+        done = true;
+        clearTimeout(timer);
+        video.removeEventListener(name, on);
+        resolve();
+      }
+      video.addEventListener(name, on);
+    });
+  }
+
+  function detectFps(silent, token) {
+    return new Promise(function (resolve) {
+      if (!state.loaded || typeof video.requestVideoFrameCallback !== 'function') { resolve(null); return; }
+      var start = state.lastT > 0.05 ? state.lastT : 0;
+      var times = [], cid = 0, done = false, timer = 0;
+      var wasMuted = video.muted;
+
+      function finish(res) {
+        if (done) return;
+        done = true;
+        if (timer) clearTimeout(timer);
+        if (cid && video.cancelVideoFrameCallback) { try { video.cancelVideoFrameCallback(cid); } catch (e) {} }
+        try { video.pause(); } catch (e) {}
+        video.muted = wasMuted;
+        if (token !== state.buildId) { resolve(null); return; }
+        if (res && res.fps > 0 && state.fpsSrc !== 'manual') {
+          state.fps = res.fps;
+          state.fpsSamples = res.n;
+          state.fpsSrc = 'detected';
+          $('fpsNum').value = fmtFps(res.fps);
+          $('tcMeta').textContent = tc(state.dur) + ' · ' + fmtFps(state.fps) + ' fps';
+          $('fileSub').textContent = state.w + ' × ' + state.h + ' · ' + fmtFps(state.fps) + ' fps · ' + tc(state.dur);
+          paintFpsHint();
+          paintCapNote();
+          paintTime(video.currentTime || 0);
+        } else if (!silent) {
+          paintFpsHint();
+        }
+        seekExact(start);
+        resolve(res);
+      }
+
+      function onFrame() {
+        return function (now, meta) {
+          times.push(meta.mediaTime);
+          if (times.length >= 16) finish(estimateFps(times));
+          else cid = video.requestVideoFrameCallback(onFrame());
+        };
+      }
+
+      doSeek(start).then(function () {
+        if (token !== state.buildId) { finish(null); return; }
+        if (video.readyState < 3) return waitEvent('canplay', 2500);
+      }).then(function () {
+        if (token !== state.buildId) { finish(null); return; }
+        video.muted = true;
+        var p;
+        try { p = video.play(); } catch (e) { finish(null); return; }
+        if (p && p.then) {
+          p.then(function () { cid = video.requestVideoFrameCallback(onFrame()); })
+            .catch(function () { finish(null); });
+        }
+        timer = setTimeout(function () { finish(estimateFps(times)); }, 2000);
+      });
+    });
+  }
+
+  $('fpsDetect').addEventListener('click', function () {
+    if (!state.loaded || state.busy) return;
+    setStatus(t('fpsDetecting'));
+    detectFps(false, state.buildId).then(function (r) {
+      if (!r) setStatus(t('fpsFail'), 'warn');
+      else setStatus(t('fpsOk', { fps: fmtFps(r.fps), n: r.n }), 'ok');
+    });
+  });
+
+  $('fpsNum').addEventListener('input', function () {
+    var v = parseFloat(this.value);
+    if (!isFinite(v) || v <= 0) return;
+    state.fps = clamp(v, 1, 240);
+    state.fpsSrc = 'manual';
+    paintFpsHint();
+    if (state.loaded) {
+      $('tcMeta').textContent = tc(state.dur) + ' · ' + fmtFps(state.fps) + ' fps';
+      $('fileSub').textContent = state.w + ' × ' + state.h + ' · ' + fmtFps(state.fps) + ' fps · ' + tc(state.dur);
+      paintTime(video.currentTime || 0);
+    }
+  });
+
+  /* ───────────────────────── 필름스트립 ───────────────────────── */
+  function buildFilmstrip(token) {
+    var strip = $('filmstrip');
+    strip.innerHTML = '';
+    var N = 10, cells = [], i;
+    for (i = 0; i < N; i++) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'fs';
+      b.tabIndex = -1;
+      var at = state.dur * (i + 0.5) / N;
+      b.setAttribute('data-t', String(at));
+      b.setAttribute('aria-hidden', 'true');
+      b.addEventListener('click', function () {
+        if (state.busy || !state.loaded) return;
+        video.pause();
+        userSeek(Number(this.getAttribute('data-t')));
+      });
+      strip.appendChild(b);
+      cells.push(b);
+    }
+
+    var i2 = 0;
+    function next() {
+      if (token !== state.buildId || i2 >= N) {
+        if (token === state.buildId && state.loaded) {
+          setStatus(t('statusFrames', { n: N }), 'ok');
+          seekExact(0).then(function () { if (token === state.buildId) paintTime(0); });
+        }
+        return;
+      }
+      var at = state.dur * (i2 + 0.5) / N;
+      seekExact(at).then(function () {
+        if (token !== state.buildId) return;
+        var c = document.createElement('canvas');
+        c.width = 168;
+        c.height = Math.max(1, Math.round(168 * state.h / state.w));
+        var cx = c.getContext('2d');
+        try { cx.drawImage(video, 0, 0, c.width, c.height); } catch (e) {}
+        cells[i2].style.backgroundImage = 'url(' + c.toDataURL('image/jpeg', 0.6) + ')';
+        cells[i2].classList.add('ok');
+        i2++;
+        next();
+      });
+    }
+    next();
+  }
+
+  /* ───────────────────────── 캡처·저장 ───────────────────────── */
+  function canvasOfFrame() {
+    var c = document.createElement('canvas');
+    c.width = video.videoWidth || state.w;
+    c.height = video.videoHeight || state.h;
+    var cx = c.getContext('2d');
+    cx.drawImage(video, 0, 0, c.width, c.height);
+    return c;
+  }
+
+  function mime() { return state.fmt === 'webp' && WEBP_OK ? 'image/webp' : 'image/png'; }
+  function ext() { return mime() === 'image/webp' ? 'webp' : 'png'; }
+
+  function baseName() {
+    var n = (state.file && state.file.name) || 'video';
+    n = n.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9_-]+/g, '-').replace(/^-+|-+$/g, '');
+    if (!n) n = 'video';
+    return n.slice(0, 48);
+  }
+
+  function fileNameFor(kind, at) {
+    var stamp = tc(at).replace(/[:.]/g, '-');
+    if (kind === 'storyboard') {
+      var g = (state.sbInfo && state.sbInfo.grid) || state.grid;
+      return 'framegrab_storyboard-' + g + 'x' + g + '_' + baseName() + '.' + ext();
+    }
+    return 'framegrab_' + baseName() + '_' + stamp + '.' + ext();
+  }
+
+  function blobFrom(canvas) {
+    return new Promise(function (resolve) {
+      var type = mime();
+      if (canvas.toBlob) {
+        canvas.toBlob(function (b) { resolve(b); }, type, type === 'image/webp' ? state.quality / 100 : undefined);
+      } else {
+        resolve(null);
+      }
+    });
+  }
+
+  function download(blob, name) {
+    if (!blob) { setStatus(t('working'), 'warn'); return; }
+    var a = document.createElement('a');
+    var u = URL.createObjectURL(blob);
+    a.href = u;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { try { URL.revokeObjectURL(u); } catch (e) {} }, 5000);
+    setStatus(t('saved', { name: name }), 'ok');
+  }
+
+  function saveCurrentFrame() {
+    if (!state.loaded || state.busy) return;
+    state.busy = true;
+    video.pause();
+    var at = Math.round((video.currentTime || 0) * state.fps) / state.fps;
+    seekExact(at).then(function () {
+      var c = canvasOfFrame();
+      return blobFrom(c).then(function (b) {
+        download(b, fileNameFor('frame', at));
+      });
+    }).catch(function () {
+      setStatus(t('working'), 'warn');
+    }).then(function () {
+      state.busy = false;
+    });
+  }
+
+  function addToTray() {
+    if (!state.loaded || state.busy) return;
+    var at = Math.round((video.currentTime || 0) * state.fps) / state.fps;
+    var c = document.createElement('canvas');
+    c.width = 240;
+    c.height = Math.max(1, Math.round(240 * state.h / state.w));
+    c.getContext('2d').drawImage(video, 0, 0, c.width, c.height);
+    state.captures.push({
+      t: at,
+      frame: Math.round(at * state.fps),
+      thumb: c.toDataURL('image/jpeg', 0.7)
+    });
+    paintTray();
+    setStatus(t('savedTray'), 'ok');
+  }
+
+  function paintTray() {
+    var tray = $('tray');
+    tray.innerHTML = '';
+    $('capCount').textContent = String(state.captures.length);
+    $('trayEmpty').hidden = state.captures.length > 0;
+    state.captures.forEach(function (c, i) {
+      var li = document.createElement('li');
+      li.className = 'cap';
+      li.innerHTML =
+        '<button class="cap-thumb" type="button" data-act="goto" data-i="' + i + '" title="' + esc(t('trayGoto')) + '" aria-label="' + esc(t('trayGoto')) + '">' +
+          '<img alt="" src="' + c.thumb + '">' +
+        '</button>' +
+        '<div class="cap-meta">' +
+          '<span class="cap-tc">' + tc(c.t) + '</span>' +
+          '<span class="cap-fr">' + esc(t('frameLabel', { n: c.frame })) + '</span>' +
+        '</div>' +
+        '<div class="cap-act">' +
+          '<button class="btn btn--ghost btn--xs" type="button" data-act="save" data-i="' + i + '">' + esc(t('traySave')) + '</button>' +
+          '<button class="icon-btn icon-btn--sm" type="button" data-act="del" data-i="' + i + '" title="' + esc(t('trayRemove')) + '" aria-label="' + esc(t('trayRemove')) + '">×</button>' +
+        '</div>';
+      tray.appendChild(li);
+    });
+  }
+
+  trayEl.addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('[data-act]') : null;
+    if (!b || state.busy) return;
+    var i = Number(b.getAttribute('data-i'));
+    var item = state.captures[i];
+    if (!item) return;
+    var act = b.getAttribute('data-act');
+    if (act === 'del') {
+      state.captures.splice(i, 1);
+      paintTray();
+    } else if (act === 'goto') {
+      video.pause();
+      userSeek(item.t);
+    } else if (act === 'save') {
+      state.busy = true;
+      seekExact(item.t).then(function () {
+        var c = canvasOfFrame();
+        return blobFrom(c).then(function (bl) { download(bl, fileNameFor('frame', item.t)); });
+      }).catch(function () {}).then(function () {
+        state.busy = false;
+        paintTime(video.currentTime);
+      });
+    }
+  });
+
+  $('saveFrameBtn').addEventListener('click', saveCurrentFrame);
+  $('addTrayBtn').addEventListener('click', addToTray);
+
+  /* ───────────────────────── 형식·품질 ───────────────────────── */
+  document.querySelector('#fmtSeg').addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('.seg-btn') : null;
+    if (!b || b.disabled) return;
+    state.fmt = b.getAttribute('data-fmt') === 'webp' && WEBP_OK ? 'webp' : 'png';
+    paintFormat();
+    paintCapNote();
+  });
+
+  $('quality').addEventListener('input', function () {
+    state.quality = Number(this.value);
+    paintFormat();
+    paintCapNote();
+  });
+
+  document.querySelector('#gridSeg').addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('.seg-btn') : null;
+    if (!b) return;
+    state.grid = Number(b.getAttribute('data-grid')) === 3 ? 3 : 2;
+    var all = document.querySelectorAll('#gridSeg .seg-btn');
+    for (var i = 0; i < all.length; i++) {
+      all[i].setAttribute('aria-pressed', String(Number(all[i].getAttribute('data-grid')) === state.grid));
+    }
+    $('sbMeta').textContent = state.sbInfo ? t('sbMeta', state.sbInfo) : '';
+  });
+
+  /* ───────────────────────── 스토리보드 ───────────────────────── */
+  function drawCover(ctx, dx, dy, dw, dh) {
+    var sw = video.videoWidth, sh = video.videoHeight;
+    var sAR = sw / sh, dAR = dw / dh;
+    var sx = 0, sy = 0, sW = sw, sH = sh;
+    if (sAR > dAR) { sW = sh * dAR; sx = (sw - sW) / 2; }
+    else { sH = sw / dAR; sy = (sh - sH) / 2; }
+    ctx.drawImage(video, sx, sy, sW, sH, dx, dy, dw, dh);
+  }
+
+  function buildStoryboard() {
+    if (!state.loaded || state.busy) return;
+    var n = state.grid;
+    var count = n * n;
+    var token = state.buildId;
+    var resume = video.currentTime || 0;
+    var showLabels = $('sbLabels').checked;
+
+    state.busy = true;
+    video.pause();
+    setBusy(true);
+
+    var outW = n === 3 ? 1800 : 1500;
+    var P = Math.round(outW * 0.022);
+    var GAP = Math.round(outW * 0.008);
+    var HEAD = Math.round(outW * 0.056);
+    var FOOT = Math.round(outW * 0.036);
+    var cellW = Math.floor((outW - P * 2 - GAP * (n - 1)) / n);
+    var cellH = Math.round(cellW * state.h / state.w);
+    var outH = P + HEAD + n * cellH + (n - 1) * GAP + FOOT;
+
+    var cv = $('sbCanvas');
+    cv.width = outW;
+    cv.height = outH;
+    var x = cv.getContext('2d');
+
+    var bg = x.createLinearGradient(0, 0, outW, outH);
+    bg.addColorStop(0, '#080b0a');
+    bg.addColorStop(0.55, '#0b100e');
+    bg.addColorStop(1, '#0e1512');
+    x.fillStyle = bg;
+    x.fillRect(0, 0, outW, outH);
+
+    var i = 0;
+    function cell() {
+      if (token !== state.buildId) { finish(); return; }
+      if (i >= count) { chrome(); finish(); return; }
+      var at = state.dur * (i + 0.5) / count;
+      var cx = P + (i % n) * (cellW + GAP);
+      var cy = P + HEAD + Math.floor(i / n) * (cellH + GAP);
+      setStatus(t('sbBuilding', { i: i + 1, n: count }));
+      seekExact(at).then(function () {
+        if (token !== state.buildId) { finish(); return; }
+        drawCover(x, cx, cy, cellW, cellH);
+        x.strokeStyle = 'rgba(255,255,255,.12)';
+        x.lineWidth = Math.max(1, outW / 1200);
+        x.strokeRect(cx + .5, cy + .5, cellW - 1, cellH - 1);
+
+        if (showLabels) {
+          var barH = Math.max(18, Math.round(cellH * 0.1));
+          var g = x.createLinearGradient(0, cy + cellH - barH * 2, 0, cy + cellH);
+          g.addColorStop(0, 'rgba(4,8,6,0)');
+          g.addColorStop(1, 'rgba(4,8,6,.82)');
+          x.fillStyle = g;
+          x.fillRect(cx, cy + cellH - barH * 2, cellW, barH * 2);
+          var fs = Math.max(11, Math.round(cellW * 0.031));
+          x.font = '600 ' + fs + 'px ui-monospace, SFMono-Regular, Menlo, monospace';
+          if ('letterSpacing' in x) x.letterSpacing = Math.round(fs * 0.06) + 'px';
+          x.fillStyle = '#eaf3ee';
+          x.textBaseline = 'middle';
+          x.fillText(tc(at), cx + fs * 0.85, cy + cellH - barH * 0.62);
+          x.fillStyle = 'rgba(110,242,176,.9)';
+          x.textAlign = 'right';
+          x.fillText(pad(i + 1, 2), cx + cellW - fs * 0.85, cy + cellH - barH * 0.62);
+          x.textAlign = 'left';
+          if ('letterSpacing' in x) x.letterSpacing = '0px';
+        }
+        i++;
+        cell();
+      });
+    }
+
+    function chrome() {
+      var pad = P;
+      x.textBaseline = 'alphabetic';
+      x.textAlign = 'left';
+      x.fillStyle = '#6ef2b0';
+      var tfs = Math.round(outW * 0.0135);
+      x.font = '700 ' + tfs + 'px ui-monospace, SFMono-Regular, Menlo, monospace';
+      if ('letterSpacing' in x) x.letterSpacing = Math.round(tfs * 0.32) + 'px';
+      x.fillText('FRAMEGRAB', pad, P + HEAD * 0.44);
+      if ('letterSpacing' in x) x.letterSpacing = '0px';
+
+      x.fillStyle = 'rgba(241,245,243,.92)';
+      var nameFs = Math.round(outW * 0.017);
+      x.font = '600 ' + nameFs + 'px "Helvetica Neue", Arial, sans-serif';
+      var name = (state.file && state.file.name) || 'video';
+      if (name.length > 54) name = name.slice(0, 51) + '…';
+      x.fillText(name, pad, P + HEAD * 0.86);
+
+      var rightFs = Math.round(outW * 0.0105);
+      x.font = '500 ' + rightFs + 'px ui-monospace, SFMono-Regular, Menlo, monospace';
+      x.fillStyle = 'rgba(151,162,159,.95)';
+      x.textAlign = 'right';
+      x.fillText(n + ' × ' + n + '  ·  ' + state.w + '×' + state.h + '  ·  ' + fmtFps(state.fps) + ' fps  ·  ' + tc(state.dur), outW - pad, P + HEAD * 0.44);
+      x.fillStyle = 'rgba(110,242,176,.75)';
+      x.fillText('ZERO UPLOAD', outW - pad, P + HEAD * 0.86);
+      x.textAlign = 'left';
+
+      var footY = outH - FOOT * 0.5;
+      x.font = '500 ' + Math.round(outW * 0.0098) + 'px ui-monospace, SFMono-Regular, Menlo, monospace';
+      x.fillStyle = 'rgba(107,118,116,.95)';
+      x.fillText('framegrab · in-browser frame extractor', pad, footY);
+      x.textAlign = 'right';
+      x.fillText('kimyihyung.github.io/portfolio', outW - pad, footY);
+      x.textAlign = 'left';
+
+      x.strokeStyle = 'rgba(255,255,255,.08)';
+      x.lineWidth = 1;
+      x.beginPath();
+      x.moveTo(pad, outH - FOOT * 0.92);
+      x.lineTo(outW - pad, outH - FOOT * 0.92);
+      x.stroke();
+    }
+
+    function finish() {
+      state.busy = false;
+      setBusy(false);
+      if (token !== state.buildId) return;
+      state.sbInfo = { w: outW, h: outH, n: count, grid: n };
+      $('sbMeta').textContent = t('sbMeta', state.sbInfo);
+      $('sbStage').hidden = false;
+      setStatus(t('sbReady', { w: outW, h: outH, n: count }), 'ok');
+      seekExact(resume).then(function () { paintTime(video.currentTime); });
+    }
+
+    cell();
+  }
+
+  function setBusy(b) {
+    ws.classList.toggle('is-busy', b);
+    var ids = ['scrub', 'saveFrameBtn', 'addTrayBtn', 'sbBuild', 'fpsDetect', 'playBtn', 'changeBtn'];
+    for (var i = 0; i < ids.length; i++) {
+      var el = $(ids[i]);
+      if (el) el.disabled = b;
+    }
+  }
+
+  $('sbBuild').addEventListener('click', buildStoryboard);
+  $('sbLabels').addEventListener('change', function () {
+    if (state.sbInfo) buildStoryboard();
+  });
+
+  document.querySelector('.sb-actions').addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('[data-sb]') : null;
+    if (!b || state.busy || !state.sbInfo) return;
+    var want = b.getAttribute('data-sb');
+    var backup = state.fmt;
+    if (want === 'webp' && !WEBP_OK) { state.fmt = 'png'; } else { state.fmt = want; }
+    state.busy = true;
+    blobFrom($('sbCanvas')).then(function (bl) {
+      download(bl, fileNameFor('storyboard'));
+    }).catch(function () {}).then(function () {
+      state.fmt = backup;
+      state.busy = false;
+      paintFormat();
+      paintCapNote();
+    });
+  });
+
+  /* ───────────────────────── 입력 ───────────────────────── */
+  drop.addEventListener('click', function () { fileInput.click(); });
+  drop.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); }
+  });
+  fileInput.addEventListener('change', function () {
+    handleFiles(this.files);
+    this.value = '';
+  });
+  $('changeBtn').addEventListener('click', function () { fileInput.click(); });
+
+  ['dragenter', 'dragover'].forEach(function (ev) {
+    document.addEventListener(ev, function (e) {
+      if (!e.dataTransfer) return;
+      e.preventDefault();
+      drop.classList.add('is-over');
+    });
+  });
+  ['dragleave', 'dragend'].forEach(function (ev) {
+    document.addEventListener(ev, function (e) {
+      if (e.target === document.documentElement || !e.relatedTarget) drop.classList.remove('is-over');
+    });
+  });
+  document.addEventListener('drop', function (e) {
+    e.preventDefault();
+    drop.classList.remove('is-over');
+    if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) handleFiles(e.dataTransfer.files);
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (!state.loaded || state.busy) return;
+    var tag = (e.target && e.target.tagName) || '';
+    if (/INPUT|SELECT|TEXTAREA/.test(tag)) return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      e.preventDefault();
+      video.pause();
+      var dir = e.key === 'ArrowRight' ? 1 : -1;
+      if (e.shiftKey) userSeek((video.currentTime || 0) + dir * 1);
+      else userSeek((Math.round((video.currentTime || 0) * state.fps) + dir) / state.fps);
+    } else if (e.key === ' ') {
+      e.preventDefault();
+      togglePlay();
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      userSeek(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      userSeek(state.dur - 0.05);
+    }
+  });
+
+  /* ───────────────────────── 네트워크 요청 수 ───────────────────────── */
+  function paintNet() {
+    var n = 0;
+    try {
+      if (performance.getEntriesByType) n = performance.getEntriesByType('resource').length;
+    } catch (e) { n = 0; }
+    $('netCount').textContent = String(n);
+  }
+
+  /* ───────────────────────── 시작 ───────────────────────── */
+  applyLang(initialLang());
+  paintNet();
+  setTimeout(paintNet, 800);
+  setTimeout(paintNet, 3000);
+})();
+</script>
+</body>
+</html>
