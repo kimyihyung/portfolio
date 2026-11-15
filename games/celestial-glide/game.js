@@ -453,7 +453,7 @@ const sparkMat = new THREE.ShaderMaterial({
     void main() {
       vLife = aLife; vC = color;
       vec4 mv = modelViewMatrix * vec4(position, 1.0);
-      gl_PointSize = uPixel * 6.0 * (0.3 + aLife) * (40.0 / max(-mv.z, 1.0));
+      gl_PointSize = min(uPixel * 1.7 * (0.25 + aLife) * (38.0 / max(-mv.z, 1.0)), 20.0);
       gl_Position = projectionMatrix * mv;
     }`,
   fragmentShader: /* glsl */`
