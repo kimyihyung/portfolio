@@ -523,6 +523,11 @@ footer.foot .sep { color: var(--line2); }
   .notes { grid-template-columns: repeat(3, 1fr); gap: 12px; }
   .panel { padding: 18px 20px 20px; }
 }
+@media (max-width: 430px) {
+  .brand-txt { display: none; }
+  header.top { gap: 8px; }
+  .top-actions { gap: 5px; }
+}
 @media (hover: none) {
   .drop:hover { border-color: var(--line2); }
 }
