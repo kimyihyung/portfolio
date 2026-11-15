@@ -38,6 +38,8 @@ body.focus .fb{padding:7px 9px}
 /* 1줄째 은하 전환 탭은 포커스 중에도 늘 남는다 — 다른 은하로 바로 건너뛰는 길 */
 #filters{flex-wrap:nowrap;overflow-x:auto;max-width:100%;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 #filters::-webkit-scrollbar{display:none}
+#filters.over,#subchips.over{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 26px),rgba(0,0,0,.22));mask-image:linear-gradient(90deg,#000 calc(100% - 26px),rgba(0,0,0,.22))}
+#filters.over.atend,#subchips.over.atend{-webkit-mask-image:none;mask-image:none}
 #filters .fb.home{color:#c6dbff}
 #filters .fb.home.on{background:rgba(150,200,255,.26);box-shadow:inset 0 0 0 1px rgba(170,210,255,.45)}
 #focusrow{display:none}
@@ -45,7 +47,7 @@ body.focus #focusrow{display:flex}
 #subchips{display:none}
 body.focus.hasSubs #subchips{display:flex}
 .fb{border:0;background:transparent;color:#8ea3c0;font-family:inherit;font-size:11px;letter-spacing:.01em;
-  padding:7px 11px;border-radius:999px;cursor:pointer;transition:all .25s;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+  padding:7px 11px;border-radius:999px;cursor:pointer;transition:all .25s;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;flex:none}
 .fb i{width:6px;height:6px;border-radius:50%;background:currentColor;display:block;opacity:.85}
 .fb.on{background:rgba(120,170,255,.2);color:#eaf3ff;box-shadow:inset 0 0 0 1px rgba(140,190,255,.35)}
 .fb:hover{color:#dfeaf9}
@@ -1033,7 +1035,27 @@ function buildChrome() {
   if (capEl) capEl.textContent = LANG === 'en'
     ? DATA.total.toLocaleString() + ' stars · ' + CHANNELS.length + ' galaxies'
     : DATA.total.toLocaleString() + '개의 별 · ' + CHANNELS.length + '개의 은하';
+  syncChipScroll();
 }
+/* 칩 줄이 넘치면 끝단을 흐리게 해 '더 있다'를 알리고, 세로 휠로도 가로 스크롤되게 */
+function syncChipScroll() {
+  ['#filters', '#subchips'].forEach((sel) => {
+    const el = $(sel);
+    if (!el) return;
+    const over = el.scrollWidth > el.clientWidth + 2;
+    el.classList.toggle('over', over);
+    el.classList.toggle('atend', over && el.scrollLeft + el.clientWidth >= el.scrollWidth - 2);
+  });
+}
+['#filters', '#subchips'].forEach((sel) => {
+  const el = $(sel);
+  if (!el) return;
+  el.addEventListener('wheel', (e) => {
+    if (el.scrollWidth <= el.clientWidth + 2) return;
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) { el.scrollLeft += e.deltaY; e.preventDefault(); }
+  }, { passive: false });
+  el.addEventListener('scroll', () => syncChipScroll());
+});
 
 /* ───────────────── focus / overview ───────────────── */
 function enterFocus(chId, opts) {
@@ -1873,6 +1895,7 @@ function onResize() {
   }
   measureLabels();
   updateLabels();
+  syncChipScroll();
 }
 window.addEventListener('resize', onResize);
 window.addEventListener('orientationchange', () => setTimeout(onResize, 240));
