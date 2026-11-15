@@ -93,6 +93,7 @@ body {
 }
 
 ::selection { background: var(--accent); color: var(--on-accent); }
+button, .lang-toggle, .mode, .chip, .seg-btn, .brand { -webkit-user-select: none; user-select: none; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
@@ -759,7 +760,7 @@ footer.foot .sep { color: var(--line2); }
           <div class="field" id="qualityFieldImage">
             <span class="ctrl-label" data-i18n="optQuality">Quality</span>
             <div class="range-row">
-              <input type="range" id="qualityImage" min="10" max="100" step="1" value="90" aria-label="Quality">
+              <input type="range" id="qualityImage" min="10" max="100" step="1" value="90" data-i18n-aria="qualityAria" aria-label="Quality">
               <span class="range-val" id="qualityImageVal">90%</span>
             </div>
             <p class="hint" id="qualityHintImage" data-i18n="qualityHint">Applies to JPG and WebP.</p>
@@ -774,7 +775,7 @@ footer.foot .sep { color: var(--line2); }
           <div class="field" id="bgField">
             <span class="ctrl-label" for="bgImage" data-i18n="optBg">Background behind transparency</span>
             <div class="color-row">
-              <input type="color" id="bgImage" value="#ffffff" aria-label="Background colour">
+              <input type="color" id="bgImage" value="#ffffff" data-i18n-aria="bgAria" aria-label="Background colour">
               <span class="color-hex" id="bgHex">#FFFFFF</span>
             </div>
             <p class="hint" data-i18n="bgHint">Used when the target has no alpha (JPG, BMP).</p>
@@ -858,7 +859,7 @@ footer.foot .sep { color: var(--line2); }
           <div class="field" id="qualityFieldP2i">
             <span class="ctrl-label" data-i18n="optQuality">Quality</span>
             <div class="range-row">
-              <input type="range" id="qualityP2i" min="10" max="100" step="1" value="88" aria-label="Quality">
+              <input type="range" id="qualityP2i" min="10" max="100" step="1" value="88" data-i18n-aria="qualityAria" aria-label="Quality">
               <span class="range-val" id="qualityP2iVal">88%</span>
             </div>
             <p class="hint" data-i18n="qualityHint2">Applies to JPG and WebP.</p>
@@ -1126,6 +1127,8 @@ footer.foot .sep { color: var(--line2); }
       optionsTitle: 'Options',
       optOutFmt: 'Output format',
       optQuality: 'Quality',
+      qualityAria: 'Quality',
+      bgAria: 'Background colour',
       qualityHint: 'Applies to JPG and WebP.',
       qualityHint2: 'Applies to JPG and WebP.',
       optResize: 'Resize — longest edge (px)',
@@ -1304,6 +1307,8 @@ footer.foot .sep { color: var(--line2); }
       optionsTitle: '옵션',
       optOutFmt: '출력 형식',
       optQuality: '품질',
+      qualityAria: '품질',
+      bgAria: '배경색',
       qualityHint: 'JPG·WebP에 적용됩니다.',
       qualityHint2: 'JPG·WebP에 적용됩니다.',
       optResize: '크기 조절 — 긴 변 기준(px)',
