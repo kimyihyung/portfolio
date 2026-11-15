@@ -703,10 +703,11 @@ CHANNELS.forEach((ch) => {
 function layoutGalaxyVisuals() {
   CHANNELS.forEach((ch) => {
     const R = ch.R;
+    ch.coreK = 0.34 + 0.26 * Math.sqrt(Math.min(1, ch.count / 2000));
     ch.core.position.copy(ch.center);
-    ch.core.scale.set(R * 0.5, R * 0.5, 1);
+    ch.core.scale.set(R * ch.coreK, R * ch.coreK, 1);
     ch.nucleus.position.copy(ch.center);
-    ch.nucleus.scale.set(R * 0.17, R * 0.17, 1);
+    ch.nucleus.scale.set(R * ch.coreK * 0.34, R * ch.coreK * 0.34, 1);
     ch.nebula.forEach((nb, i) => {
       const s = R * (1.55 + nb.userData.spread);
       nb.position.set(ch.center.x + (i - 1) * R * 0.1, ch.center.y + (i - 1) * R * 0.05, ch.center.z + (i - 1) * R * 0.1);
@@ -862,7 +863,8 @@ function focusSilhouette(ch) {
 function computeFit(radius, kind) {
   const pol = kind === 'focus' ? (PORTRAIT ? 0.86 : 0.72) : (PORTRAIT ? 1.0 : 0.74);
   if (kind === 'focus' && focusCh) {
-    return _fitMeasure(focusCh.center, focusSilhouette(focusCh), pol, view.az, 0.86, false).D;
+    const fill = 0.55 + 0.31 * Math.min(1, Math.sqrt(focusCh.count / 800));   // 작은 은하는 주변까지 보이게
+    return _fitMeasure(focusCh.center, focusSilhouette(focusCh), pol, view.az, fill, false).D;
   }
   return _fitMeasure(new THREE.Vector3(0, 0, 0), radius, pol, view.az, 0.9, false).D;
 }
@@ -946,7 +948,8 @@ function buildSubChips() {
   };
   mk(null, LANG === 'en' ? focusCh.en : focusCh.ko, focusCh.css, focusCh.count, LANG === 'en' ? 'all' : '전체');
   if (focusCh.groups.length > 1) {
-    focusCh.groups.forEach((g) => mk(g.key, g.name, g.css, g.count, g.host && g.host.length > 2 ? g.host : null));
+    const hosts = new Set(focusCh.groups.map((g) => g.host));
+    focusCh.groups.forEach((g) => mk(g.key, g.name, g.css, g.count, hosts.size > 1 && g.host && g.host.length > 2 ? g.host : null));
   }
 }
 function buildLegend() {
