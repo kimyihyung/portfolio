@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
 <meta name="theme-color" content="#04060f" />
-<meta name="description" content="3D 지식 은하계 — 기록노트·EB_note·티스토리·스레드·인스타·웹 툴까지 모든 채널의 글을 별자리로 엮은 인터랙티브 3D 지식 지도" />
+<meta name="description" content="3D 지식 은하계 — 기록노트·EB_note·티스토리·스레드·인스타·웹 툴까지 모든 채널의 글을 별자리로 엮은 인터랙티브 3D 지식 지도. 다섯 개의 은하를 골라 들어가 별을 고릅니다." />
 <title>지식 은하계 · Knowledge Galaxy</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" />
 <style>
@@ -26,16 +26,35 @@ html,body{height:100%;overflow:hidden;background:#03050c;color:#e9f0fb;
 #brand h1{font-size:12.5px;letter-spacing:.3em;font-weight:600;color:#dbe7f8;text-transform:uppercase}
 #brand p{margin-top:5px;font-size:10.5px;letter-spacing:.1em;color:#7188a8}
 #brand b{color:#9fc4ff;font-weight:600}
-#controls{display:flex;flex-direction:column;align-items:flex-end;gap:7px;pointer-events:auto;max-width:min(640px,62vw)}
+#controls{display:flex;flex-direction:column;align-items:flex-end;gap:7px;pointer-events:auto;max-width:min(660px,64vw);margin-left:auto}
 .ctlrow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end}
-#filters{display:flex;gap:3px;padding:3px;border-radius:999px;background:rgba(10,16,28,.62);
-  border:1px solid rgba(130,165,215,.18);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);flex-wrap:wrap;justify-content:flex-end}
+#filters,#subchips{display:flex;gap:3px;padding:3px;border-radius:999px;background:rgba(10,16,28,.62);
+  border:1px solid rgba(130,165,215,.18);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+  flex-wrap:wrap;justify-content:flex-end}
+#subchips{flex-wrap:nowrap;overflow-x:auto;max-width:100%;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+#subchips::-webkit-scrollbar{display:none}
+body.focus #controls{max-width:min(800px,74vw)}
+body.focus .fb{padding:7px 9px}
+#subchips{display:none}
+body.focus #subchips{display:flex}
+body.focus #filters{display:none}
 .fb{border:0;background:transparent;color:#8ea3c0;font-family:inherit;font-size:11px;letter-spacing:.01em;
   padding:7px 11px;border-radius:999px;cursor:pointer;transition:all .25s;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
 .fb i{width:6px;height:6px;border-radius:50%;background:currentColor;display:block;opacity:.85}
 .fb.on{background:rgba(120,170,255,.2);color:#eaf3ff;box-shadow:inset 0 0 0 1px rgba(140,190,255,.35)}
 .fb:hover{color:#dfeaf9}
 .fb .n{font-size:9.5px;opacity:.6;font-variant-numeric:tabular-nums}
+.fb .sb{font-size:9px;opacity:.5;letter-spacing:.02em}
+#listBtn{display:none;align-items:center;gap:7px;padding:7px 12px;border-radius:999px;cursor:pointer;
+  background:rgba(10,16,28,.62);border:1px solid rgba(130,165,215,.18);color:#a7bcd8;font-family:inherit;
+  font-size:11px;letter-spacing:.02em;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);transition:all .25s;white-space:nowrap}
+body.focus #listBtn{display:inline-flex}
+#listBtn.on{color:#eaf3ff;border-color:rgba(140,190,255,.45);background:rgba(120,170,255,.16)}
+#listBtn .lbls{display:none}
+html.m #listBtn .lbl{display:none}
+html.m #listBtn .lbls{display:inline}
+html.m #listBtn .n{display:inline}
+html.m body.focus #controls{max-width:calc(100vw - 66px)}
 #lang{display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(10,16,28,.62);
   border:1px solid rgba(130,165,215,.18);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
 #lang button{border:0;background:transparent;color:#7f93b0;font-family:inherit;font-size:10.5px;font-weight:700;
@@ -58,8 +77,69 @@ html,body{height:100%;overflow:hidden;background:#03050c;color:#e9f0fb;
 #q::placeholder{color:#66799a}
 #qclear{border:0;background:transparent;color:#7f93b0;font-size:13px;cursor:pointer;padding:0 2px;display:none}
 #qclear.on{display:block}
+/* ── back to overview ── */
+#back{flex:none;display:none;align-items:center;gap:9px;padding:9px 15px;border-radius:999px;cursor:pointer;pointer-events:auto;
+  background:rgba(10,16,28,.8);border:1px solid rgba(150,190,255,.38);color:#eaf3ff;font-family:inherit;
+  font-size:12.5px;font-weight:600;letter-spacing:.01em;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
+  box-shadow:0 12px 34px rgba(0,0,0,.5);transition:all .22s}
+body.focus #back{display:inline-flex}
+body.focus #brand{display:none}
+#back:hover{background:rgba(30,48,80,.9);border-color:rgba(160,205,255,.6)}
+#back .arr{opacity:.9;font-weight:700}
+#back .dot{width:8px;height:8px;border-radius:50%;flex:none}
+#back .nm{opacity:.95}
+#back .ct{font-size:9.5px;font-weight:600;letter-spacing:.04em;color:#7e93b1;font-variant-numeric:tabular-nums}
+/* ── galaxy labels (HTML, anchored above each core) ── */
+#glabels{position:fixed;inset:0;z-index:9;pointer-events:none}
+#corecap{position:absolute;left:0;top:0;transform:translate(-50%,-50%);z-index:9;pointer-events:none;
+  font-size:9.5px;letter-spacing:.24em;color:#5d7292;text-align:center;white-space:nowrap;text-transform:uppercase;
+  transition:opacity .4s}
+body.focus #corecap{opacity:0}
+html.m #corecap{display:none}
+.glabel{position:absolute;left:0;top:0;transform:translate(-50%,-100%);pointer-events:auto;
+  display:inline-flex;align-items:center;gap:7px;padding:6px 11px 6px 9px;border-radius:999px;
+  background:rgba(6,11,21,.66);border:1px solid rgba(140,180,240,.3);color:#e8f0fc;
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);cursor:pointer;font-family:inherit;
+  font-size:11.5px;letter-spacing:.01em;white-space:nowrap;line-height:1;
+  box-shadow:0 8px 26px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.06);
+  transition:background .22s,box-shadow .22s,border-color .22s}
+.glabel:hover{background:rgba(16,26,44,.9);box-shadow:0 10px 30px rgba(0,0,0,.5),0 0 0 1px rgba(160,205,255,.25)}
+.glabel i{width:7px;height:7px;border-radius:50%;flex:none}
+.glabel b{font-weight:650}
+.glabel em{font-style:normal;font-size:9.5px;color:#8298b6;font-variant-numeric:tabular-nums}
+.glabel.gone{opacity:0;pointer-events:none}
+/* ── inner list (drawer) ── */
+#drawer{position:fixed;z-index:14;left:16px;top:calc(env(safe-area-inset-top) + 74px);bottom:calc(env(safe-area-inset-bottom) + 16px);
+  width:min(336px,calc(100vw - 32px));display:flex;flex-direction:column;border-radius:16px;
+  background:linear-gradient(170deg,rgba(12,19,33,.95),rgba(7,11,20,.97));
+  border:1px solid rgba(140,180,240,.2);-webkit-backdrop-filter:blur(22px);backdrop-filter:blur(22px);
+  box-shadow:0 26px 70px rgba(0,0,0,.6);opacity:0;pointer-events:none;transform:translateX(-14px) scale(.985);
+  transition:opacity .28s ease,transform .28s cubic-bezier(.2,.8,.2,1)}
+#drawer.on{opacity:1;pointer-events:auto;transform:none}
+#drawer .dh{display:flex;align-items:center;gap:8px;padding:14px 15px 11px;border-bottom:1px solid rgba(140,180,240,.13);flex:none}
+#drawer .dh i{width:8px;height:8px;border-radius:50%;flex:none}
+#drawer .dh b{font-size:12.5px;font-weight:700;color:#edf4ff}
+#drawer .dh span{font-size:10px;color:#7a8eab;font-variant-numeric:tabular-nums}
+#drawer .dh button{margin-left:auto;border:0;background:transparent;color:#8ea3c0;font-size:14px;cursor:pointer;padding:2px 4px;font-family:inherit}
+#drawerList{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:4px 12px 10px;-webkit-overflow-scrolling:touch}
+#drawerList::-webkit-scrollbar{width:4px}
+#drawerList::-webkit-scrollbar-thumb{background:rgba(140,180,240,.22);border-radius:9px}
+.row{display:block;width:100%;text-align:left;background:transparent;border:0;
+  border-bottom:1px solid rgba(140,180,240,.08);padding:9px 4px 10px;cursor:pointer;font-family:inherit}
+.row:hover{background:rgba(130,180,255,.09)}
+.row .rm{display:flex;align-items:center;gap:6px;font-size:9.5px;letter-spacing:.02em;color:#6f84a2;font-variant-numeric:tabular-nums}
+.row .rm i{width:5px;height:5px;border-radius:50%;flex:none}
+.row .rm .g{color:#8ba0bd}
+.row .t{display:block;margin-top:4px;font-size:11.5px;line-height:1.55;color:#dde9f9;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.row.sel .t{color:#fff}
+.row.sel .rm{color:#a8c8ff}
+#drawerMore{display:block;width:100%;margin:10px 0 2px;padding:9px;border-radius:9px;cursor:pointer;
+  background:transparent;border:1px solid rgba(140,180,240,.2);color:#8ea3c0;font-family:inherit;font-size:11px}
+#drawerMore:hover{color:#dfeaf9}
 /* ── legend / hint ── */
 #legend{left:16px;bottom:calc(env(safe-area-inset-bottom) + 15px);display:flex;flex-direction:column;gap:6px;pointer-events:none}
+body.focus #legend{opacity:0}
 .lg{display:flex;align-items:center;gap:8px;font-size:10.5px;letter-spacing:.03em;color:#8ea3c0;
   opacity:.45;transition:opacity .3s}
 .lg.on{opacity:1}
@@ -68,10 +148,13 @@ html,body{height:100%;overflow:hidden;background:#03050c;color:#e9f0fb;
 .lg em{font-style:normal;color:#63748e;font-variant-numeric:tabular-nums}
 #hint{right:16px;bottom:calc(env(safe-area-inset-bottom) + 15px);font-size:10px;line-height:1.75;letter-spacing:.05em;
   color:#6a7e99;text-align:right;pointer-events:none}
-#tip{position:fixed;z-index:12;padding:6px 10px;border-radius:8px;font-size:11.5px;color:#eaf3ff;
-  background:rgba(8,14,26,.92);border:1px solid rgba(140,180,240,.28);pointer-events:none;
-  transform:translate(-50%,-160%);opacity:0;transition:opacity .18s;white-space:nowrap;max-width:76vw;overflow:hidden;text-overflow:ellipsis}
+#tip{position:fixed;z-index:15;padding:7px 11px;border-radius:9px;font-size:11.5px;color:#eaf3ff;
+  background:rgba(8,14,26,.94);border:1px solid rgba(140,180,240,.3);pointer-events:none;
+  transform:translate(-50%,-160%);opacity:0;transition:opacity .16s;white-space:nowrap;max-width:80vw;
+  box-shadow:0 10px 28px rgba(0,0,0,.5)}
 #tip.on{opacity:1}
+#tip b{font-weight:650}
+#tip span{display:block;margin-top:3px;font-size:9.5px;letter-spacing:.04em;color:#8298b6;font-variant-numeric:tabular-nums}
 /* ── card ── */
 #card{position:fixed;z-index:20;right:20px;top:50%;transform:translate(0,-50%) scale(.97);
   width:min(384px,calc(100vw - 32px));padding:22px 22px 20px;border-radius:18px;
@@ -121,27 +204,40 @@ html.m #brand h1{display:none}
 html.m #brand p{display:none}
 html.m #brand .mark{width:32px;height:32px;font-size:12px;border-radius:10px}
 html.m #hint{display:none}
-html.m #controls{max-width:calc(100vw - 100px)}
-html.m #filters .n{display:none}
-html.m #filters{gap:2px;flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;max-width:100%;
+html.m #controls{max-width:calc(100vw - 96px)}
+html.m #filters .n,html.m #subchips .n{display:none}
+html.m #filters .full{display:none}
+#filters .sh{display:none}
+html.m #filters .sh{display:inline}
+html.m #filters,html.m #subchips{gap:2px;flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;max-width:100%;
   scrollbar-width:none;-webkit-overflow-scrolling:touch}
-html.m #filters::-webkit-scrollbar{display:none}
+html.m #filters::-webkit-scrollbar,html.m #subchips::-webkit-scrollbar{display:none}
 html.m .ctlrow{width:100%;justify-content:flex-end}
 html.m #soundBtn .lbl{display:none}
-html.m #brand .mark{width:30px;height:30px;font-size:11px}
 html.m #top{padding-top:calc(env(safe-area-inset-top) + 10px)}
 html.m .fb{font-size:10px;padding:6px 9px}
+html.m .fb .sb{display:none}
 html.m #orbit span.lbl{display:none}
 html.m #orbit{padding:7px 9px}
 html.m #search{width:100%;padding:6px 11px}
 html.m #legend{display:none}
-html.m .lg{font-size:9px}
-html.m .lg em{display:none}
+html.m .glabel{font-size:10px;padding:5px 9px 5px 7px;gap:5px}
+html.m .glabel em{font-size:8.5px}
+html.m #back{font-size:13px;padding:0;width:36px;height:36px;min-height:36px;justify-content:center;border-radius:12px;gap:0}
+html.m #back .nm,html.m #back .ct{display:none}
+html.m #back .arr{font-size:15px}
+html.m #back .ct{font-size:8.5px}
+html.m #listBtn{padding:7px 10px}
+html.m #drawer{left:0;right:0;bottom:0;top:auto;width:100%;max-height:66vh;
+  border-radius:20px 20px 0 0;transform:translateY(16px) scale(1);
+  padding-bottom:calc(env(safe-area-inset-bottom) + 6px)}
+html.m #drawer.on{transform:translateY(0) scale(1)}
 html.m #card{right:0;left:0;top:auto;bottom:0;width:100%;transform:translateY(14px) scale(1);border-radius:22px 22px 0 0;
   padding:20px 20px calc(env(safe-area-inset-bottom) + 18px);max-height:64vh;overflow-y:auto;overscroll-behavior:contain}
 html.m #card.on{transform:translateY(0) scale(1)}
 html.m #ctitle{font-size:17px}
 html.m #soundBtn{padding:7px 9px}
+html.m #tip{font-size:10.5px;padding:6px 9px}
 </style>
 <meta property="og:site_name" content="Kim Yihyung">
 <meta property="og:type" content="website">
@@ -163,7 +259,13 @@ html.m #soundBtn{padding:7px 9px}
 <body>
 <canvas id="scene" aria-label="3D 지식 은하계 화면"></canvas>
 
+<div id="glabels" class="ui"></div>
+<div id="corecap" class="ui"></div>
+
 <header id="top" class="ui">
+  <button id="back" aria-label="전체 은하로 돌아가기">
+    <span class="arr">←</span><span class="nm">전체 은하로</span><span class="dot" id="backDot"></span><span class="ct" id="backName"></span>
+  </button>
   <div id="brand">
     <span class="mark">YH</span>
     <div>
@@ -185,12 +287,24 @@ html.m #soundBtn{padding:7px 9px}
       <input id="q" type="search" autocomplete="off" placeholder="제목·요약 검색" aria-label="검색" />
       <button id="qclear" aria-label="지우기">×</button>
     </div>
+    <div class="ctlrow" id="focusrow">
+      <div id="subchips" role="group" aria-label="Sub cluster filter"></div>
+      <button id="listBtn" aria-pressed="false"><span>☰</span><span class="lbl">은하 내부 목록</span><span class="lbls">목록</span><span class="n" id="listBtnN"></span></button>
+    </div>
   </div>
 </header>
 
+<aside id="drawer" aria-label="은하 내부 목록">
+  <div class="dh">
+    <i id="dhDot"></i><b id="dhName">은하</b><span id="dhCount">0</span>
+    <button id="drawerClose" aria-label="목록 닫기">✕</button>
+  </div>
+  <div id="drawerList"></div>
+</aside>
+
 <div id="legend" class="ui"></div>
 
-<div id="hint" class="ui">별을 탭하면 그 글로 줌인합니다<br />드래그로 회전 · 두 손가락으로 확대 · 휠로 줌</div>
+<div id="hint" class="ui">은하를 눌러 그 안으로 들어갑니다<br />별을 누르면 글로 · 드래그 회전 · 휠·핀치 확대</div>
 <div id="tip" class="ui"></div>
 
 <section id="card" class="ui" aria-live="polite">
@@ -247,6 +361,8 @@ const $ = (s) => document.querySelector(s);
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const lerp = (a, b, t) => a + (b - a) * t;
 const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+let TOP_SAFE = 96;
 const SFX = window.PortalSound || null;
 if (SFX && SFX.boot) SFX.boot('galaxy');
 
@@ -255,32 +371,39 @@ function fail(msg) {
   $('#loading').classList.add('hidden');
   $('#fallback').classList.add('on');
   const r = $('#fbreason');
-  if (r) r.innerHTML = '3D 은하계를 여는 중 문제가 발생했습니다.<br /><span style="opacity:.65;font-size:11px">' + msg + '</span>';
+  if (r) r.innerHTML = '3D 은하계를 여는 중 문제가 발생했습니다.<br /><span style="opacity:.65;font-size:11px">' + esc(msg) + '</span>';
 }
 
 /* ───────────────── i18n ───────────────── */
+const SHORT = { ko: { note: '기록', eb: 'EB', tistory: '티스', social: '스레드', tools: '3D' }, en: { note: 'Note', eb: 'EB', tistory: 'Tist', social: 'SNS', tools: '3D' } };
 const I18N = {
   ko: {
     brandSub: '<b>기록노트</b>·<b>EB_note</b>·<b>티스토리</b>·<b>스레드·인스타</b>·<b>웹 툴</b> — 모든 채널의 글이 별이 됩니다',
-    all: '전체', orbit: '자동 공전', sound: '사운드', search: '제목·요약 검색',
-    hint: '별을 탭하면 그 글로 줌인합니다<br />드래그로 회전 · 두 손가락으로 확대 · 휠로 줌',
-    open: '글 열기', close: '닫기', prev: '← 이전 별', next: '다음 별 →',
-    loading: '은하계를 펼치는 중', stars: '별',
+    filterAll: '전체 은하', orbit: '자동 공전', sound: '사운드', search: '제목·요약 검색',
+    hint: '은하를 눌러 그 안으로 들어갑니다<br />별을 누르면 글로 · 드래그 회전 · 휠·핀치 확대',
+    hintFocus: '별을 누르면 그 글로 · 목록에서 골라도 됩니다<br />빈 곳을 드래그해 회전 · 휠·핀치 확대',
+    open: '글 열기', openProject: '프로젝트 열기', close: '닫기', prev: '← 이전 별', next: '다음 별 →',
+    loading: '은하계를 펼치는 중', stars: '개의 별',
     fbTitle: '은하계를 열 수 없어요',
     fbBody: '이 브라우저에서 WebGL을 사용할 수 없거나 3D 라이브러리를 불러오지 못했습니다.<br />최신 Chrome · Safari · Edge에서 다시 열어 주세요.',
-    left: '개의 별만 남겼습니다', none: '조건에 맞는 별이 없습니다', found: '개 찾음',
-    clear: '지우기', retry: '다시 시도', chain: '체인'
+    none: '조건에 맞는 별이 없습니다', found: '개 찾음',
+    back: '전체 은하로', list: '은하 내부 목록', listOf: '은하 내부 목록', all: '전체', more: '더 보기',
+    inGalaxy: '개의 별', hintDrawer: '목록에서 고르면 그 별로 날아갑니다', chain: '체인',
+    enterGalaxy: '은하로 들어가는 중', subAll: '이 은하 전체'
   },
   en: {
     brandSub: '<b>Record Note</b> · <b>EB_note</b> · <b>Tistory</b> · <b>Threads·Instagram</b> · <b>Web tools</b> — every channel as a star',
-    all: 'All', orbit: 'Auto orbit', sound: 'Sound', search: 'Search titles & summaries',
-    hint: 'Tap a star to fly to the post<br />Drag to rotate · Pinch to zoom · Scroll to zoom',
-    open: 'Open post', close: 'Close', prev: '← Previous', next: 'Next →',
-    loading: 'Unfolding the galaxy', stars: 'stars',
+    filterAll: 'All galaxies', orbit: 'Auto orbit', sound: 'Sound', search: 'Search titles & summaries',
+    hint: 'Tap a galaxy to go inside<br />Tap a star for the post · drag to rotate · scroll/pinch to zoom',
+    hintFocus: 'Tap a star for its post, or pick from the list<br />Drag empty space to rotate · scroll/pinch to zoom',
+    open: 'Open post', openProject: 'Open project', close: 'Close', prev: '← Previous', next: 'Next →',
+    loading: 'Unfolding the galaxy', stars: ' stars',
     fbTitle: 'The galaxy cannot open',
     fbBody: 'This browser has no WebGL, or the 3D library could not load. Try the latest Chrome, Safari, or Edge.',
-    left: ' stars left', none: 'No star matches', found: ' found',
-    clear: 'Clear', retry: 'Retry', chain: 'Chain'
+    none: 'No star matches', found: ' found',
+    back: 'All galaxies', list: 'Inner list', listOf: 'Inner list', all: 'All', more: 'Show more',
+    inGalaxy: ' stars', hintDrawer: 'Pick a row to fly to that star', chain: 'Chain',
+    enterGalaxy: 'Entering the galaxy', subAll: 'This galaxy'
   }
 };
 let LANG = (localStorage.getItem('galaxy-lang') || 'ko');
@@ -291,7 +414,7 @@ const T = (k) => (I18N[LANG][k] !== undefined ? I18N[LANG][k] : I18N.ko[k]);
 const canvas = $('#scene');
 const forceMobile = /[?&]m=1/.test(location.search);
 const isSmall = forceMobile || window.matchMedia('(max-width: 720px)').matches;
-const PORTRAIT = window.innerWidth / window.innerHeight < 0.9;
+let PORTRAIT = window.innerWidth / window.innerHeight < 0.9;
 document.documentElement.classList.toggle('m', isSmall);
 let renderer = null;
 try {
@@ -329,8 +452,8 @@ function getGlow() {
   glowTex = canvasTexture(128, 128, (ctx, w, h) => {
     const g = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2);
     g.addColorStop(0, 'rgba(255,255,255,1)');
-    g.addColorStop(0.15, 'rgba(255,255,255,.8)');
-    g.addColorStop(0.4, 'rgba(255,255,255,.22)');
+    g.addColorStop(0.12, 'rgba(255,255,255,.86)');
+    g.addColorStop(0.34, 'rgba(255,255,255,.26)');
     g.addColorStop(1, 'rgba(255,255,255,0)');
     ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
   });
@@ -342,7 +465,7 @@ let seed = 20261115;
 function rnd() { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; }
 
 /* ───────────────── data load ───────────────── */
-const DATA_URL = 'data.json';
+const DATA_URL = 'data.json?v=20261115v2';
 let DATA = null;
 try {
   const res = await fetch(DATA_URL, { cache: 'no-cache' });
@@ -357,49 +480,111 @@ const NODES = DATA.nodes;
 const CH_INDEX = {};
 CHANNELS.forEach((c, i) => { CH_INDEX[c.id] = i; });
 
-/* ───────────────── layout: five spiral galaxies in a ring ───────────────── */
-const counts = CHANNELS.map((c) => c.count);
-const rMaxOf = (n) => (4.2 + 14 * Math.sqrt(n / 2000)) * (PORTRAIT ? 0.64 : 1);
-const RING = 52;
-const CLUSTER_SPOT = CHANNELS.map((ch, ci) => {
-  if (PORTRAIT) {
-    // 세로 화면: 은하를 세로로 세운다
-    return new THREE.Vector3(((ci % 2) ? 1 : -1) * 6.2, (2 - ci) * 26, ((ci % 2) ? -3 : 3));
+/* ───────────────── per-node latent layout + sub-cluster groups ───────────────── */
+const GROUP_OF = (n) => {
+  if (n.c === 'social') return (n.b || '').indexOf('Threads') === 0 ? 'Threads' : 'Instagram';
+  return n.b || '·';
+};
+const HOST_OF = (n) => {
+  try { return new URL(n.u).hostname.split('.')[0]; } catch (e) { return ''; }
+};
+
+CHANNELS.forEach((ch) => {
+  ch.ko = ch.ko; ch.css = ch.css;
+  ch.colorObj = new THREE.Color(ch.css);
+  const groups = new Map();
+  for (const n of NODES) {
+    if (n.c !== ch.id) continue;
+    const k = GROUP_OF(n);
+    if (!groups.has(k)) {
+      const c2 = ch.colorObj.clone();
+      const i = groups.size;
+      if (i > 0) c2.offsetHSL(((i % 2 ? 1 : -1) * 0.028) * Math.ceil(i / 2), -0.02 * (i % 3), (i % 2 ? 0.05 : -0.04));
+      groups.set(k, { key: k, name: k, host: HOST_OF(n), color: c2, css: '#' + c2.getHexString(), count: 0, nodes: [] });
+    }
+    const g = groups.get(k);
+    g.count++; g.nodes.push(n);
+    if (!g.host) g.host = HOST_OF(n);
+    n.grp = k;
+    n.gcss = g.css;
   }
-  const a = ci * (Math.PI * 2 / CHANNELS.length) + 0.3;
-  const rr = RING * (0.92 + 0.16 * (ci % 2));
-  return new THREE.Vector3(Math.cos(a) * rr, ((ci % 2) ? -1 : 1) * (3.2 + ci * 0.6), Math.sin(a) * rr);
+  ch.groups = Array.from(groups.values()).sort((a, b) => b.count - a.count);
+  ch.groupMap = {};
+  ch.groups.forEach((g) => { ch.groupMap[g.key] = g; });
+  ch.groups.forEach((g) => g.nodes.sort((a, b) => (b.d || '').localeCompare(a.d || '')));
 });
 
 NODES.forEach((n, idx) => {
-  const ci = CH_INDEX[n.c];
-  const center = CLUSTER_SPOT[ci];
-  const count = Math.max(counts[ci], 1);
-  const rMax = rMaxOf(count);
-  const rMin = 1.1 + rMax * 0.06;
-  const t = n.r === undefined ? 0.5 : n.r;      // 0 = oldest (bulge), 1 = newest (rim)
-  const arms = count > 400 ? 3 : (count > 40 ? 2 : 1);
-  const arm = idx % arms;
-  const j = (rnd() - 0.5), j2 = (rnd() - 0.5);
-  const r = rMin + (rMax - rMin) * Math.pow(t, 0.72) + j * rMax * 0.07;
-  const ang = (arm * Math.PI * 2 / arms) + r * 0.62 + j2 * 0.42;
-  const y = (rnd() - 0.5) * (0.55 + 2.2 * (1 - t));
-  n.arm = arm; n.arms = arms;
-  n.pos = new THREE.Vector3(
-    center.x + Math.cos(ang) * r,
-    center.y + y,
-    center.z + Math.sin(ang) * r
-  );
-  n.ang = ang; n.rad = r; n.cl = center;
-  n.size = 1.1 + 1.65 * (n.i === undefined ? 0.5 : n.i);
+  const ch = CHANNELS[CH_INDEX[n.c]];
+  const arms = ch.count > 300 ? 3 : 2;
+  const t = n.r === undefined ? 0.5 : n.r;         // 0 = oldest (bulge), 1 = newest (rim)
+  n.arm = idx % arms;
+  n.nr = Math.pow(clamp(t, 0, 1), 0.7);            // 정규화 반경 (n.u는 원문 URL이라 이름을 피한다)
+  n.aoff = (rnd() - 0.5) * 0.5;                    // angular scatter
+  n.jr = (rnd() - 0.5) * 0.085;                    // radial jitter (× R)
+  n.jh = rnd() - 0.5;                              // thickness jitter
+  n.size = 1.05 + 1.6 * (n.i === undefined ? 0.5 : n.i);
   n.featured = false;
 });
-
 /* newest few of every channel get a brighter presence */
 CHANNELS.forEach((ch) => {
   const list = NODES.filter((n) => n.c === ch.id).sort((a, b) => (a.r || 0) - (b.r || 0));
-  list.slice(-8).forEach((n) => { n.featured = true; n.size *= 1.32; });
+  list.slice(-6).forEach((n) => { n.featured = true; n.size *= 1.3; });
 });
+
+/* ── each galaxy: its own radius, centre, tilt ── */
+const galaxyRadius = (ch) => 13 + 16 * Math.sqrt(ch.count / 2000);   // tistory ~28.8, eb ~14.2
+
+function computeCenters() {
+  if (PORTRAIT) {
+    // 세로 화면: 원근 압축을 미리 보정해 화면상 간격이 고르게
+    const YS = [70, 34, 0, -45, -100];
+    return CHANNELS.map((ch, ci) => new THREE.Vector3(((ci % 2) ? 1 : -1) * 16, YS[ci] !== undefined ? YS[ci] : (2 - ci) * 54, ((ci % 2) ? -1 : 1) * 7));
+  }
+  const RING = 61;
+  return CHANNELS.map((ch, ci) => {
+    const a = ci * (Math.PI * 2 / CHANNELS.length) + 0.42;
+    const rr = RING * (0.93 + 0.13 * (ci % 2));
+    return new THREE.Vector3(Math.cos(a) * rr, ((ci % 2) ? -1 : 1) * (5 + ci * 2.2), Math.sin(a) * rr);
+  });
+}
+
+let tiltSeed = 7717;
+const trnd = () => { tiltSeed = (tiltSeed * 1103515245 + 12345) % 2147483648; return tiltSeed / 2147483648; };
+CHANNELS.forEach((ch) => {
+  // 고유 기울기 — 은하마다 다른 방향에서 본 나선
+  ch.tiltBase = { x: (trnd() - 0.5) * 0.34, z: (trnd() - 0.5) * 0.34 };
+  ch.tilt = { x: ch.tiltBase.x * (PORTRAIT ? 0.7 : 1), z: ch.tiltBase.z * (PORTRAIT ? 0.7 : 1) };
+});
+function tiltVec(x, y, z, tl) {
+  const cx = Math.cos(tl.x), sx = Math.sin(tl.x);
+  const y1 = y * cx - z * sx, z1 = y * sx + z * cx;
+  const cz = Math.cos(tl.z), sz = Math.sin(tl.z);
+  return [x * cz - y1 * sz, x * sz + y1 * cz, z1];
+}
+const _tmpV = new THREE.Vector3();
+function placeAll() {
+  const centers = computeCenters();
+  CHANNELS.forEach((ch, ci) => {
+    ch.center = centers[ci];
+    ch.R = galaxyRadius(ch) * (PORTRAIT ? 0.82 : 1);
+    ch.rMax = ch.R;
+    const arms = ch.count > 300 ? 3 : 2;
+    ch.arms = arms;
+    for (const n of NODES) {
+      if (n.c !== ch.id) continue;
+      const r = ch.R * (0.065 + 0.935 * n.nr) * (1 + n.jr);
+      const ang = (n.arm * Math.PI * 2 / arms) + (r / ch.R) * 2.55 + n.aoff;
+      const lx = Math.cos(ang) * r;
+      const lz = Math.sin(ang) * r;
+      const ly = n.jh * ch.R * (0.035 + 0.115 * (1 - n.nr));
+      const w = tiltVec(lx, ly, lz, ch.tilt);
+      n.pos = new THREE.Vector3(ch.center.x + w[0], ch.center.y + w[1], ch.center.z + w[2]);
+      n.ang = ang; n.rad = r; n.cl = ch.center;
+    }
+  });
+}
+placeAll();
 
 /* ───────────────── star field (points) ───────────────── */
 const N = NODES.length;
@@ -411,10 +596,10 @@ const seedArr = new Float32Array(N);
 const tmpColor = new THREE.Color();
 NODES.forEach((n, i) => {
   posArr[i * 3] = n.pos.x; posArr[i * 3 + 1] = n.pos.y; posArr[i * 3 + 2] = n.pos.z;
-  tmpColor.set(n.col || CHANNELS[CH_INDEX[n.c]].css);
+  tmpColor.set(n.gcss || CHANNELS[CH_INDEX[n.c]].css);
   colArr[i * 3] = tmpColor.r; colArr[i * 3 + 1] = tmpColor.g; colArr[i * 3 + 2] = tmpColor.b;
   sizeArr[i] = n.size;
-  alphaArr[i] = 0.62 + 0.38 * (n.i === undefined ? 0.5 : n.i);
+  alphaArr[i] = 0.6 + 0.4 * (n.i === undefined ? 0.5 : n.i);
   seedArr[i] = rnd();
   n.alphaBase = alphaArr[i];
   n.sizeBase = sizeArr[i];
@@ -440,8 +625,8 @@ const starMat = new THREE.ShaderMaterial({
     void main(){
       vec4 mv = modelViewMatrix * vec4(position, 1.0);
       gl_Position = projectionMatrix * mv;
-      float tw = 0.88 + 0.12 * sin(uTime * 1.4 + aSeed * 6.283);
-      gl_PointSize = aSize * uPix * tw * (250.0 / max(3.0, -mv.z));
+      float tw = 0.9 + 0.1 * sin(uTime * 1.4 + aSeed * 6.283);
+      gl_PointSize = clamp(aSize * uPix * tw * (185.0 / max(3.0, -mv.z)), 1.25 * uPix, 9.5 * uPix);
       vColor = aColor;
       vAlpha = aAlpha;
     }`,
@@ -466,7 +651,7 @@ const bgGeo = new THREE.BufferGeometry();
 const bgPos = new Float32Array(BG_N * 3);
 const bgCol = new Float32Array(BG_N * 3);
 for (let i = 0; i < BG_N; i++) {
-  const r = 110 + rnd() * 190;
+  const r = 150 + rnd() * 260;
   const th = rnd() * Math.PI * 2;
   const ph = Math.acos(2 * rnd() - 1);
   bgPos[i * 3] = r * Math.sin(ph) * Math.cos(th);
@@ -478,189 +663,214 @@ for (let i = 0; i < BG_N; i++) {
 bgGeo.setAttribute('position', new THREE.BufferAttribute(bgPos, 3));
 bgGeo.setAttribute('color', new THREE.BufferAttribute(bgCol, 3));
 const bgStars = new THREE.Points(bgGeo, new THREE.PointsMaterial({
-  size: 1.5, vertexColors: true, map: GLOW, alphaTest: 0.2, transparent: true, opacity: 0.78,
+  size: 1.5, vertexColors: true, map: GLOW, alphaTest: 0.2, transparent: true, opacity: 0.7,
   blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true
 }));
 bgStars.frustumCulled = false;
 scene.add(bgStars);
 
-/* ───────────────── nebula clouds + core ───────────────── */
-CHANNELS.forEach((ch, ci) => {
-  const spot = CLUSTER_SPOT[ci];
-  const rr = rMaxOf(ch.count);
+/* ───────────────── each galaxy's own core: halo, nucleus, ring, nebula ───────────────── */
+CHANNELS.forEach((ch) => {
+  ch.nebula = [];
+  // 나선 원반을 감싸는 성운 (은하 고유 색)
   for (let i = 0; i < 3; i++) {
     const sp = new THREE.Sprite(new THREE.SpriteMaterial({
-      map: GLOW, color: ch.color, transparent: true, opacity: 0.12,
+      map: GLOW, color: ch.color, transparent: true, opacity: 0.2,
       blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false
     }));
-    const s = rr * (2.1 + rnd() * 0.9);
-    sp.scale.set(s, s * 0.78, 1);
-    sp.position.set(spot.x + (rnd() - 0.5) * rr * 0.7, spot.y + (rnd() - 0.5) * 3, spot.z + (rnd() - 0.5) * rr * 0.7);
     sp.renderOrder = -2;
-    sp.userData.base = 0.12;
+    sp.userData.base = 0.17 + i * 0.022;
+    sp.userData.spread = [0.36, 0.62, 0.9][i];
     scene.add(sp);
-    (ch.nebula = ch.nebula || []).push(sp);
+    ch.nebula.push(sp);
   }
-});
-const core = new THREE.Sprite(new THREE.SpriteMaterial({
-  map: GLOW, color: 0xffe4b0, transparent: true, opacity: 0.55,
-  blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false
-}));
-core.scale.set(13, 13, 1);
-scene.add(core);
-
-
-/* core monogram */
-const coreTex = canvasTexture(512, 256, (ctx, w, h) => {
-  ctx.clearRect(0, 0, w, h);
-  ctx.textAlign = 'center';
-  ctx.fillStyle = '#ffe6b8';
-  ctx.globalAlpha = 0.92;
-  ctx.font = '800 96px -apple-system, "Helvetica Neue", Arial, sans-serif';
-  ctx.fillText('YH', w / 2, 112);
-  ctx.globalAlpha = 0.55;
-  ctx.fillStyle = '#dce9ff';
-  ctx.font = '500 38px -apple-system, "Apple SD Gothic Neo", sans-serif';
-  ctx.fillText(TOTAL_TXT(), w / 2, 176);
-});
-function TOTAL_TXT() { return LANG === 'en' ? DATA.total.toLocaleString() + ' stars' : DATA.total.toLocaleString() + '개의 별'; }
-const coreLabel = new THREE.Sprite(new THREE.SpriteMaterial({
-  map: coreTex, transparent: true, opacity: 0.9, depthWrite: false, toneMapped: false
-}));
-coreLabel.scale.set(11, 5.5, 1);
-coreLabel.position.set(0, 2.2, 0);
-coreLabel.visible = !PORTRAIT;
-scene.add(coreLabel);
-window.__coreLabel = coreLabel;
-
-/* ───────────────── channel labels ───────────────── */
-function makeLabel(ch) {
-  const ko = ch.ko, en = ch.en, count = ch.count;
-  const tex = canvasTexture(760, 220, (ctx, w, h) => {
-    ctx.clearRect(0, 0, w, h);
-    const pad = 26;
-    // pill backdrop
-    ctx.fillStyle = 'rgba(4,8,16,.55)';
-    ctx.strokeStyle = ch.css + '66';
-    ctx.lineWidth = 2;
-    const bw = w - pad * 2, bh = h - pad * 2, r = 40;
-    ctx.beginPath();
-    if (ctx.roundRect) { ctx.roundRect(pad, pad, bw, bh, r); } else { ctx.rect(pad, pad, bw, bh); }
-    ctx.fill(); ctx.stroke();
-    ctx.textAlign = 'center';
-    ctx.fillStyle = '#ffffff';
-    ctx.globalAlpha = 0.97;
-    ctx.font = '700 50px -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
-    const main = LANG === 'en' ? en : ko;
-    ctx.fillText(main, w / 2, 106);
-    ctx.globalAlpha = 0.72;
-    ctx.fillStyle = ch.css;
-    ctx.font = '600 30px -apple-system, "Apple SD Gothic Neo", sans-serif';
-    const sub = (LANG === 'en' ? ko + ' · ' : '') + count.toLocaleString() + (LANG === 'en' ? ' stars' : '개의 별');
-    ctx.fillText(sub, w / 2, 154);
-  });
-  const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
-    map: tex, transparent: true, opacity: 1, depthWrite: false, toneMapped: false,
-    sizeAttenuation: false
+  // 발광 코어 (핵)
+  ch.core = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: GLOW, color: ch.color, transparent: true, opacity: 0.95,
+    blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false
   }));
-  return sprite;
-}
-CHANNELS.forEach((ch, ci) => {
-  const spot = CLUSTER_SPOT[ci];
-  const rr = rMaxOf(ch.count);
-  const sp = makeLabel(ch);
-  const sc = PORTRAIT ? 0.115 : 0.19;
-  sp.scale.set(sc, sc / 3.45, 1);
-  if (PORTRAIT) {
-    const side = spot.x <= 0 ? 1 : -1;
-    sp.position.set(spot.x + side * (rr + 24), spot.y + 1.5, spot.z + 4);
-  } else {
-    const outLen = Math.hypot(spot.x, spot.z) || 1;
-    const ox = spot.x / outLen, oz = spot.z / outLen;
-    sp.position.set(spot.x + ox * (rr * 0.9 + 7), spot.y + rr * 0.55 + 6, spot.z + oz * (rr * 0.9 + 7));
-  }
-  sp.userData.ch = ch.id;
-  scene.add(sp);
-  ch.label = sp;
-  ch.labelBase = 1;
+  ch.core.renderOrder = -1;
+  scene.add(ch.core);
+  // 코어 한가운데의 백열 핵
+  ch.nucleus = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: GLOW, color: 0xffffff, transparent: true, opacity: 0.85,
+    blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false
+  }));
+  ch.nucleus.renderOrder = -1;
+  scene.add(ch.nucleus);
 });
 
-/* ───────────────── constellation lines (sampled) ───────────────── */
-const lineMats = [];
-function buildLines(list, color, opacity) {
-  const pts = [];
-  const arms = list[0] ? (list[0].arms || 1) : 1;
-  for (let a = 0; a < arms; a++) {
-    const armNodes = list.filter((n) => n.arm === a).sort((x, y) => (x.r || 0) - (y.r || 0));
-    const step = Math.max(1, Math.floor(armNodes.length / 60));
-    for (let i = 0; i + step < armNodes.length; i += step) {
-      const p = armNodes[i], q = armNodes[i + step];
-      if (p.pos.distanceTo(q.pos) > 9) continue;
-      pts.push(p.pos.x, p.pos.y, p.pos.z, q.pos.x, q.pos.y, q.pos.z);
+function layoutGalaxyVisuals() {
+  CHANNELS.forEach((ch) => {
+    const R = ch.R;
+    ch.core.position.copy(ch.center);
+    ch.core.scale.set(R * 0.5, R * 0.5, 1);
+    ch.nucleus.position.copy(ch.center);
+    ch.nucleus.scale.set(R * 0.17, R * 0.17, 1);
+    ch.nebula.forEach((nb, i) => {
+      const s = R * (1.55 + nb.userData.spread);
+      nb.position.set(ch.center.x + (i - 1) * R * 0.1, ch.center.y + (i - 1) * R * 0.05, ch.center.z + (i - 1) * R * 0.1);
+      nb.scale.set(s, s * 0.7, 1);
+    });
+  });
+}
+layoutGalaxyVisuals();
+
+/* ───────────────── constellation lines inside each galaxy ───────────────── */
+let lineSegs = [];
+function buildConstellations() {
+  lineSegs.forEach((s) => { scene.remove(s); s.geometry.dispose(); s.material.dispose(); });
+  lineSegs = [];
+  const chans = CHANNELS.slice();
+  const fade = (ch) => 1;
+  CHANNELS.forEach((ch) => {
+    const arms = ch.arms || 1;
+    for (let a = 0; a < arms; a++) {
+      const armNodes = NODES.filter((n) => n.c === ch.id && n.arm === a).sort((x, y) => x.nr - y.nr);
+      const pts = [];
+      const step = Math.max(1, Math.floor(armNodes.length / 150));
+      for (let i = 0; i + step < armNodes.length; i += step) {
+        const p = armNodes[i], q = armNodes[i + step];
+        if (p.pos.distanceTo(q.pos) > ch.R * 0.42) continue;
+        pts.push(p.pos.x, p.pos.y, p.pos.z, q.pos.x, q.pos.y, q.pos.z);
+      }
+      if (!pts.length) continue;
+      const g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3));
+      const m = new THREE.LineBasicMaterial({
+        color: ch.color, transparent: true, opacity: 0.2, blending: THREE.AdditiveBlending, depthWrite: false
+      });
+      const seg = new THREE.LineSegments(g, m);
+      seg.userData.ch = ch.id;
+      seg.userData.base = 0.2;
+      scene.add(seg);
+      lineSegs.push(seg);
     }
+  });
+}
+function buildBridges() {
+  if (bridgeSeg) { scene.remove(bridgeSeg); bridgeSeg.geometry.dispose(); bridgeSeg.material.dispose(); bridgeSeg = null; }
+  const pts = [];
+  for (let i = 0; i < CHANNELS.length; i++) {
+    const a = CHANNELS[i], b = CHANNELS[(i + 1) % CHANNELS.length];
+    const pa = a.center.clone().add(new THREE.Vector3(0, -a.R * 0.12, 0));
+    const pb = b.center.clone().add(new THREE.Vector3(0, -b.R * 0.12, 0));
+    // 두 코어를 잇는 완만한 호
+    const mid = pa.clone().add(pb).multiplyScalar(0.5);
+    mid.y -= Math.min(28, pa.distanceTo(pb) * 0.16);
+    const curve = new THREE.QuadraticBezierCurve3(pa, mid, pb);
+    const arr = curve.getPoints(24);
+    for (let k = 0; k + 1 < arr.length; k++) pts.push(arr[k].x, arr[k].y, arr[k].z, arr[k + 1].x, arr[k + 1].y, arr[k + 1].z);
   }
-  if (!pts.length) return null;
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3));
   const m = new THREE.LineBasicMaterial({
-    color: color, transparent: true, opacity: opacity, blending: THREE.AdditiveBlending, depthWrite: false
+    color: 0x9fc2ff, transparent: true, opacity: 0.045, blending: THREE.AdditiveBlending, depthWrite: false
   });
-  const seg = new THREE.LineSegments(g, m);
-  scene.add(seg);
-  lineMats.push(m);
-  return seg;
+  bridgeSeg = new THREE.LineSegments(g, m);
+  scene.add(bridgeSeg);
 }
+let bridgeSeg = null;
+buildConstellations();
+buildBridges();
+
+/* ───────────────── HTML galaxy labels, anchored above each core ───────────────── */
+const glabels = $('#glabels');
+const capEl = $('#corecap');
 CHANNELS.forEach((ch) => {
-  const list = NODES.filter((n) => n.c === ch.id).sort((a, b) => (a.r || 0) - (b.r || 0));
-  ch.lines = buildLines(list, ch.color, 0.2);
-  ch.linesBase = 0.2;
+  const b = document.createElement('button');
+  b.className = 'glabel';
+  b.dataset.ch = ch.id;
+  b.style.borderColor = ch.css + '55';
+  b.innerHTML = '<i style="background:' + ch.css + ';box-shadow:0 0 9px ' + ch.css + '"></i><b>' + esc(LANG === 'en' ? ch.en : ch.ko) + '</b><em>' + ch.count.toLocaleString() + '</em>';
+  b.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); enterFocus(ch.id); });
+  glabels.appendChild(b);
+  ch.labelEl = b;
 });
-
-/* inter-channel bridges: newest star of each cluster to the next */
-const bridgePts = [];
-for (let i = 0; i < CHANNELS.length; i++) {
-  const a = CHANNELS[i], b = CHANNELS[(i + 1) % CHANNELS.length];
-  const la = NODES.filter((n) => n.c === a.id).sort((x, y) => (x.r || 0) - (y.r || 0)).slice(-1);
-  const lb = NODES.filter((n) => n.c === b.id).sort((x, y) => (x.r || 0) - (y.r || 0)).slice(-1);
-  if (la[0] && lb[0]) bridgePts.push(la[0].pos.x, la[0].pos.y, la[0].pos.z, lb[0].pos.x, lb[0].pos.y, lb[0].pos.z);
-}
-const bridgeGeo = new THREE.BufferGeometry();
-bridgeGeo.setAttribute('position', new THREE.Float32BufferAttribute(bridgePts, 3));
-const bridgeMat = new THREE.LineBasicMaterial({
-  color: 0x9fc2ff, transparent: true, opacity: 0.1, blending: THREE.AdditiveBlending, depthWrite: false
-});
-scene.add(new THREE.LineSegments(bridgeGeo, bridgeMat));
-
-/* focus ring */
-const ringTex = canvasTexture(128, 128, (ctx, w, h) => {
-  const cx = w / 2, cy = h / 2;
-  const g = ctx.createRadialGradient(cx, cy, w * 0.30, cx, cy, w * 0.5);
-  g.addColorStop(0, 'rgba(180,215,255,0)');
-  g.addColorStop(0.55, 'rgba(190,225,255,.85)');
-  g.addColorStop(1, 'rgba(190,225,255,0)');
-  ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, w / 2, 0, Math.PI * 2); ctx.fill();
-});
-const focusRing = new THREE.Sprite(new THREE.SpriteMaterial({
-  map: ringTex, color: 0xbfe0ff, transparent: true, opacity: 0, depthWrite: false, toneMapped: false
-}));
-focusRing.scale.set(4, 4, 1);
-scene.add(focusRing);
+measureLabels();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { measureLabels(); updateLabels(); });
 
 /* ───────────────── camera ───────────────── */
-let HALF_W = 0, HALF_H = 0;
-NODES.forEach((n) => {
-  HALF_W = Math.max(HALF_W, Math.abs(n.pos.x));
-  HALF_H = Math.max(HALF_H, Math.abs(n.pos.y));
-});
-HALF_W += 7; HALF_H += 5;
-const _tanV = Math.tan((FOV_BASE * Math.PI) / 360);
-const _tanH = _tanV * (window.innerWidth / window.innerHeight);
-const _mx = PORTRAIT ? 1.04 : 1.62;
-const _my = PORTRAIT ? 1.04 : 1.22;
-const OVERVIEW_R = clamp(Math.max((HALF_W / _tanH) * _mx, (HALF_H / _tanV) * _my), 60, 320);
-const targetY0 = PORTRAIT ? HALF_H * 0.24 + 9 : 0;
-const view = { target: new THREE.Vector3(0, targetY0, 0), r: OVERVIEW_R * 1.7, az: 0.6, pol: 1.06 };
-const tw = { active: false, t: 0, dur: 1, fr: 0, tr: 0, ft: new THREE.Vector3(), tt: new THREE.Vector3() };
+const view = { target: new THREE.Vector3(0, 0, 0), r: 200, az: 0.72, pol: 1.0 };
+const state = { overview: { r: 200, target: new THREE.Vector3(), az: 0.72, pol: 1.0 } };
+const tw = { active: false, t: 0, dur: 1, fr: 0, tr: 0, fa: 0, ta: 0, fp: 0, tp: 0, ft: new THREE.Vector3(), tt: new THREE.Vector3() };
+
+const _fitDir = new THREE.Vector3(), _fitUp = new THREE.Vector3(), _fitRight = new THREE.Vector3(), _fitV = new THREE.Vector3();
+function _fitMeasure(target, radius, pol, az, fill, recenter) {
+  // 실제 투영으로 필요한 카메라 거리·중심을 반복 수렴 (원근 왜곡까지 반영)
+  _fitDir.set(Math.sin(pol) * Math.sin(az), Math.cos(pol), Math.sin(pol) * Math.cos(az)).normalize();
+  _fitRight.crossVectors(new THREE.Vector3(0, 1, 0), _fitDir).normalize();
+  _fitUp.crossVectors(_fitDir, _fitRight).normalize();
+  const savePos = camera.position.clone();
+  const pts = [];
+  const push = (c, ax, off) => pts.push(new THREE.Vector3().copy(c).addScaledVector(ax, off));
+  if (Array.isArray(radius)) {
+    radius.forEach((p) => pts.push(p));                       // 은하 내부: 실제 별 위치로 실루엣 측정
+    pts.push(target.clone());
+  } else if (radius === null) {
+    CHANNELS.forEach((ch) => {
+      pts.push(ch.center.clone());
+      [_fitUp, _fitRight].forEach((ax) => {
+        push(ch.center, ax, ch.R * 1.12);
+        push(ch.center, ax, -ch.R * 1.12);
+      });
+    });
+  } else {
+    [_fitUp, _fitRight, _fitDir].forEach((ax) => {
+      push(target, ax, radius);
+      push(target, ax, -radius);
+    });
+  }
+  const tanV = Math.tan((camera.fov * Math.PI) / 360);
+  const tanH = tanV * camera.aspect;
+  const tgt = target.clone();
+  let D = 220;
+  for (let it = 0; it < 9; it++) {
+    camera.position.copy(_fitDir).multiplyScalar(D).add(tgt);
+    camera.lookAt(tgt);
+    camera.updateMatrixWorld(true);
+    let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
+    for (const p of pts) {
+      const v = _fitV.copy(p).project(camera);
+      if (v.x < x0) x0 = v.x; if (v.x > x1) x1 = v.x;
+      if (v.y < y0) y0 = v.y; if (v.y > y1) y1 = v.y;
+    }
+    if (!isFinite(x0) || !isFinite(y0)) break;
+    let m;
+    if (recenter) {
+      // 전체 뷰: 실루엣 중심을 화면 중심으로 옮기고 그 크기에 맞춘다
+      const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+      tgt.addScaledVector(_fitRight, cx * tanH * D).addScaledVector(_fitUp, cy * tanV * D);
+      m = Math.max((x1 - x0) / 2, (y1 - y0) / 2);
+    } else {
+      // 은하 내부: 코어(=타겟)를 화면 중심에 고정하고 잘리지 않게 맞춘다
+      m = Math.max(Math.abs(x0), Math.abs(x1), Math.abs(y0), Math.abs(y1));
+    }
+    D = D * (m / fill);
+  }
+  camera.position.copy(savePos);
+  camera.lookAt(view.target);
+  camera.updateMatrixWorld(true);
+  return { D, target: tgt };
+}
+function focusSilhouette(ch) {
+  if (!ch.fitPts || ch.fitPts.length < 2) {
+    ch.fitPts = NODES.filter((n) => n.c === ch.id).map((n) => n.pos.clone());
+  }
+  return ch.fitPts;
+}
+function computeFit(radius, kind) {
+  const pol = kind === 'focus' ? (PORTRAIT ? 0.86 : 0.72) : (PORTRAIT ? 1.0 : 0.74);
+  if (kind === 'focus' && focusCh) {
+    return _fitMeasure(focusCh.center, focusSilhouette(focusCh), pol, view.az, 0.86, false).D;
+  }
+  return _fitMeasure(new THREE.Vector3(0, 0, 0), radius, pol, view.az, 0.9, false).D;
+}
+function computeOverview() {
+  const pol = PORTRAIT ? 1.0 : 0.74;
+  const o = _fitMeasure(new THREE.Vector3(0, 0, 0), null, pol, view.az, 0.84, true);
+  return { r: clamp(o.D, 40, 520), target: o.target, az: view.az, pol };
+}
 function applyCam() {
   const sp = Math.sin(view.pol);
   camera.position.set(
@@ -670,69 +880,224 @@ function applyCam() {
   );
   camera.lookAt(view.target);
 }
-applyCam();
-function flyTo(target, r, dur) {
-  tw.active = true; tw.t = 0; tw.dur = dur || 1.0;
-  tw.fr = view.r; tw.tr = r;
-  tw.ft.copy(view.target); tw.tt.copy(target);
+function flyTo(o) {
+  tw.active = true; tw.t = 0;
+  tw.dur = o.dur || 1.0;
+  tw.fr = view.r; tw.tr = o.r;
+  tw.fa = view.az; tw.ta = o.az === undefined ? view.az : o.az;
+  tw.fp = view.pol; tw.tp = o.pol === undefined ? view.pol : o.pol;
+  tw.ft.copy(view.target); tw.tt.copy(o.target);
 }
-/* intro: slow zoom-in */
-flyTo(new THREE.Vector3(0, targetY0, 0), OVERVIEW_R, 2.4);
+const ov = computeOverview();
+state.overview = ov;
+view.target.copy(ov.target); view.r = ov.r * 1.75; view.az = ov.az; view.pol = ov.pol;
+applyCam();
 
 /* ───────────────── state ───────────────── */
 let orbitOn = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-let filter = 'all';
+let filter = 'all';            // overview: 'all' (kept for compat)
 let query = '';
-let focused = null;
+let mode = 'overview';
+let focusCh = null;
+let subKey = null;             // null = whole galaxy
+let focused = null;            // star node with card open
+let hovered = null;
+let drawerOpen = false;
+let drawerShown = 0;
 const pointerState = new Map();
-let moved = 0, lastX = 0, lastY = 0, pinchStart = 0, pinchR = 0, dragging = false;
+let moved = 0, dragging = false;
 let hoverAt = 0, dirty = true;
 
-const isActive = (n) => (filter === 'all' || n.c === filter) && (!query || n.match);
-const activeList = () => NODES.filter(isActive);
+const inFocusCh = (n) => !focusCh || n.c === focusCh.id;
+const passSub = (n) => !subKey || GROUP_OF(n) === subKey;
+const isActive = (n) => {
+  const qOn = !query || n.match;
+  if (mode === 'focus') return inFocusCh(n) && passSub(n) && qOn;
+  return qOn;
+};
+const galaxyNodes = (ch) => NODES.filter((n) => n.c === ch.id);
 
-/* ───────────────── legend + filters ───────────────── */
-function buildChrome() {
+/* ───────────────── chrome: filters, sub chips, legend ───────────────── */
+function buildFilters() {
   const f = $('#filters');
   f.innerHTML = '';
-  const mk = (id, label, color, count) => {
+  CHANNELS.forEach((c) => {
     const b = document.createElement('button');
-    b.className = 'fb' + (filter === id ? ' on' : '');
-    b.dataset.f = id;
-    b.innerHTML = (color ? '<i style="color:' + color + '"></i>' : '') + '<span>' + label + '</span>' + (count !== null ? '<span class="n">' + count.toLocaleString() + '</span>' : '');
-    b.addEventListener('click', () => setFilter(id));
+    b.className = 'fb' + (mode === 'focus' && focusCh === c ? ' on' : '');
+    b.dataset.f = c.id;
+    b.innerHTML = '<i style="color:' + c.css + '"></i><span class="full">' + esc(LANG === 'en' ? c.en : c.ko) + '</span><span class="sh">' + esc(SHORT[LANG][c.id] || (LANG === 'en' ? c.en : c.ko)) + '</span><span class="n">' + c.count.toLocaleString() + '</span>';
+    b.addEventListener('click', () => enterFocus(c.id));
+    f.appendChild(b);
+  });
+}
+function buildSubChips() {
+  const f = $('#subchips');
+  f.innerHTML = '';
+  if (mode !== 'focus' || !focusCh) return;
+  const mk = (key, label, css, count, sub) => {
+    const b = document.createElement('button');
+    b.className = 'fb' + ((subKey === key) ? ' on' : '');
+    b.dataset.s = key == null ? '__all' : key;
+    b.innerHTML = '<i style="color:' + css + '"></i><span>' + esc(label) + '</span>' +
+      (sub ? '<span class="sb">' + esc(sub) + '</span>' : '') +
+      '<span class="n">' + count.toLocaleString() + '</span>';
+    b.addEventListener('click', () => setSub(key));
     f.appendChild(b);
   };
-  mk('all', T('all'), null, DATA.total);
-  CHANNELS.forEach((c) => mk(c.id, LANG === 'en' ? c.en : c.ko, c.css, c.count));
-
+  mk(null, LANG === 'en' ? focusCh.en : focusCh.ko, focusCh.css, focusCh.count, LANG === 'en' ? 'all' : '전체');
+  if (focusCh.groups.length > 1) {
+    focusCh.groups.forEach((g) => mk(g.key, g.name, g.css, g.count, g.host && g.host.length > 2 ? g.host : null));
+  }
+}
+function buildLegend() {
   const lg = $('#legend');
   lg.innerHTML = '';
   CHANNELS.forEach((c) => {
     const d = document.createElement('div');
-    d.className = 'lg' + (filter === 'all' || filter === c.id ? ' on' : '');
+    d.className = 'lg on';
     d.dataset.ch = c.id;
-    d.innerHTML = '<i style="background:' + c.css + ';box-shadow:0 0 10px ' + c.css + '"></i><b>' + (LANG === 'en' ? c.en : c.ko) + '</b><em>' + c.count.toLocaleString() + '</em>';
+    d.innerHTML = '<i style="background:' + c.css + ';box-shadow:0 0 10px ' + c.css + '"></i><b>' + esc(LANG === 'en' ? c.en : c.ko) + '</b><em>' + c.count.toLocaleString() + '</em>';
     lg.appendChild(d);
   });
 }
-buildChrome();
+function buildChrome() {
+  buildFilters(); buildSubChips(); buildLegend();
+  if (capEl) capEl.textContent = LANG === 'en'
+    ? DATA.total.toLocaleString() + ' stars · ' + CHANNELS.length + ' galaxies'
+    : DATA.total.toLocaleString() + '개의 별 · ' + CHANNELS.length + '개의 은하';
+}
+
+/* ───────────────── focus / overview ───────────────── */
+function enterFocus(chId, opts) {
+  const ch = CHANNELS[CH_INDEX[chId]];
+  if (!ch) return;
+  const first = mode !== 'focus' || focusCh !== ch;
+  mode = 'focus';
+  focusCh = ch;
+  subKey = (opts && opts.sub !== undefined) ? opts.sub : null;
+  document.body.classList.add('focus');
+  document.documentElement.classList.add('focus');
+  glabels.style.opacity = '0';
+  CHANNELS.forEach((c) => { c.labelEl.classList.toggle('gone', true); });
+  buildChrome();
+  updateFocusChrome();
+  const fit = computeFit(ch.R, 'focus');
+  flyTo({ target: ch.center.clone(), r: fit * 1.02, dur: first ? 1.35 : 0.9, pol: PORTRAIT ? 0.86 : 0.72, az: view.az });
+  setFilterBrightness();
+  if (drawerOpen) renderDrawer(true);
+  if (!first) toast((LANG === 'en' ? ch.en : ch.ko) + ' · ' + ch.count.toLocaleString() + T('inGalaxy'));
+  if (SFX && SFX.play && first) SFX.play('move');
+  window.__galaxyInfo.mode = 'focus';
+  window.__galaxyInfo.focus = ch.id;
+}
+function exitFocus() {
+  if (drawerOpen) setDrawer(false);
+  mode = 'overview';
+  focusCh = null; subKey = null;
+  document.body.classList.remove('focus');
+  document.documentElement.classList.remove('focus');
+  glabels.style.opacity = '1';
+  CHANNELS.forEach((c) => { c.labelEl.classList.remove('gone'); });
+  buildChrome();
+  if (focused) closeCard(true);
+  const o = computeOverview();
+  state.overview = o;
+  flyTo({ target: o.target.clone(), r: o.r, dur: 1.25, pol: o.pol, az: view.az });
+  setFilterBrightness();
+  if (SFX && SFX.play) SFX.play('close');
+  window.__galaxyInfo.mode = 'overview';
+  window.__galaxyInfo.focus = null;
+}
+function setSub(key) {
+  if (!focusCh) return;
+  subKey = key;
+  buildSubChips();
+  setFilterBrightness();
+  if (query) applyQuery($('#q').value);
+  renderDrawer(true);
+  if (SFX && SFX.play) SFX.play('filter');
+  window.__galaxyInfo.sub = key;
+  const n = drawerData().length;
+  toast(subKey ? (focusCh.groupMap[subKey] ? focusCh.groupMap[subKey].name : subKey) + ' · ' + n.toLocaleString() : (LANG === 'en' ? focusCh.en : focusCh.ko) + ' · ' + n.toLocaleString());
+}
+function updateFocusChrome() {
+  const ch = focusCh;
+  if (!ch) return;
+  $('#backName').textContent = LANG === 'en' ? ch.en : ch.ko;
+  $('#backDot').style.background = ch.css;
+  $('#backDot').style.boxShadow = '0 0 10px ' + ch.css;
+  $('#back').querySelector('.nm').textContent = T('back');
+  $('#dhName').textContent = LANG === 'en' ? ch.en : ch.ko;
+  $('#dhDot').style.background = ch.css;
+  $('#dhDot').style.boxShadow = '0 0 10px ' + ch.css;
+  $('#listBtnN').textContent = ch.count.toLocaleString();
+  $('#hint').innerHTML = T('hintFocus');
+}
+$('#back').addEventListener('click', () => exitFocus());
+
+/* ───────────────── brightness per mode/sub-filter/query ───────────────── */
+function setFilterBrightness() {
+  NODES.forEach((n) => {
+    let a = 1, s = 1;
+    if (mode === 'focus') {
+      if (n.c !== focusCh.id) { a = 0.045; s = 0.86; }
+      else if (subKey && GROUP_OF(n) !== subKey) { a = 0.16; s = 0.9; }
+      else { a = 1.06; s = 1.06; }
+    }
+    if (query) a *= n.match ? (mode === 'overview' ? 1.0 : 1.0) : 0.12;
+    n.alphaTarget = n.alphaBase * a;
+    n.sizeTarget = n.sizeBase * s * (query && n.match ? 1.5 : 1);
+  });
+  hovered = null;
+  dirty = true;
+  if (mode === 'focus' && focusCh) {
+    CHANNELS.forEach((c) => {
+      const on = c === focusCh;
+      const other = on ? 1 : 0.1;
+      c.core.material.opacity = on ? 0.95 : 0.26;
+      c.nucleus.material.opacity = on ? 0.85 : 0.3;
+      (c.nebula || []).forEach((nb) => { nb.material.opacity = nb.userData.base * (on ? 1.25 : 0.22); });
+    });
+    lineSegs.forEach((seg) => {
+      const on = seg.userData.ch === focusCh.id;
+      seg.material.opacity = on ? (subKey ? 0.07 : 0.11) : 0.008;
+    });
+    if (bridgeSeg) bridgeSeg.material.opacity = 0.014;
+  } else {
+    CHANNELS.forEach((c) => {
+      c.core.material.opacity = 0.95;
+      c.nucleus.material.opacity = 0.85;
+      (c.nebula || []).forEach((nb) => { nb.material.opacity = nb.userData.base; });
+    });
+    lineSegs.forEach((seg) => { seg.material.opacity = 0.2; });
+    if (bridgeSeg) bridgeSeg.material.opacity = 0.045;
+  }
+}
+const restyle = setFilterBrightness;
 
 /* ───────────────── search ───────────────── */
 const qEl = $('#q');
 let qT = 0;
 qEl.addEventListener('input', () => {
   clearTimeout(qT);
-  qT = setTimeout(() => applyQuery(qEl.value), 130);
+  qT = setTimeout(() => applyQuery(qEl.value), 140);
 });
 $('#qclear').addEventListener('click', () => { qEl.value = ''; applyQuery(''); qEl.focus(); });
 qEl.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
-    const list = activeList();
-    if (list.length) openCard(list[list.length - 1]);
+    const hit = firstHit();
+    if (hit) {
+      if (mode !== 'focus' || !focusCh || focusCh.id !== hit.c) enterFocus(hit.c, { sub: null });
+      openCard(hit);
+    }
   }
   if (e.key === 'Escape') { qEl.value = ''; applyQuery(''); qEl.blur(); }
 });
+function firstHit() {
+  const hits = NODES.filter((n) => n.match && inFocusCh(n));
+  if (!hits.length) return null;
+  return hits.sort((a, b) => (b.r || 0) - (a.r || 0))[0];
+}
 function applyQuery(v) {
   query = (v || '').trim().toLowerCase();
   $('#qclear').classList.toggle('on', !!query);
@@ -742,68 +1107,26 @@ function applyQuery(v) {
     NODES.forEach((n) => {
       const hay = (n.t + ' ' + (n.s || '') + ' ' + (n.b || '')).toLowerCase();
       n.match = terms.every((t) => hay.indexOf(t) >= 0);
-      if (n.match && (filter === 'all' || n.c === filter)) hits++;
     });
+    hits = NODES.filter((n) => n.match && isActive(n)).length;
   } else {
     NODES.forEach((n) => { n.match = false; });
   }
-  restyle();
+  setFilterBrightness();
   if (query) {
     toast(hits ? hits.toLocaleString() + T('found') : T('none'));
-    if (hits) {
-      const first = NODES.filter((n) => n.match && (filter === 'all' || n.c === filter)).slice(-1)[0];
-      if (first) { flyTo(first.pos, PORTRAIT ? 14 : 16, 1.1); }
-    }
+    const first = firstHit();
+    if (first) flyTo({ target: first.pos.clone(), r: mode === 'focus' ? Math.max(14, focusCh.R * 0.55) : 34, dur: 0.9 });
   }
   window.__galaxyInfo.queryHits = hits;
-}
-
-/* ───────────────── styling of nodes per filter/query ───────────────── */
-function restyle() {
-  const qActive = !!query;
-  NODES.forEach((n) => {
-    const chOn = filter === 'all' || n.c === filter;
-    const qOn = !qActive || n.match;
-    const on = chOn && qOn;
-    const dim = chOn ? 1 : 0.07;
-    const qdim = qActive && !n.match ? 0.1 : 1;
-    n.alphaTarget = n.alphaBase * dim * qdim;
-    n.sizeTarget = n.sizeBase * (on ? 1 : 0.8) * (qActive && n.match ? 1.5 : 1);
-    n.live = on;
-  });
-  CHANNELS.forEach((ch) => {
-    const on = filter === 'all' || filter === ch.id;
-    ch.label.material.opacity = on ? ch.labelBase : 0.08;
-    if (ch.lines) ch.lines.material.opacity = on ? ch.linesBase : 0.02;
-    (ch.nebula || []).forEach((nb) => { nb.material.opacity = on ? nb.userData.base : 0.012; });
-    const lg = document.querySelector('.lg[data-ch="' + ch.id + '"]');
-    if (lg) lg.classList.toggle('on', on);
-  });
-  document.querySelectorAll('.fb').forEach((b) => b.classList.toggle('on', b.dataset.f === filter));
-  bridgeMat.opacity = filter === 'all' ? 0.1 : 0.02;
-  dirty = true;
-}
-function setFilter(f) {
-  filter = f;
-  restyle();
-  const c = activeList().length;
-  toast(query
-    ? (LANG === 'en' ? c.toLocaleString() + T('found') : c.toLocaleString() + T('found'))
-    : (LANG === 'en'
-      ? c.toLocaleString() + (f === 'all' ? ' stars' : T('left'))
-      : c.toLocaleString() + (f === 'all' ? '개의 별' : T('left'))));
-  if (focused && !isActive(focused)) closeCard(false);
-  if (SFX && SFX.play) SFX.play('filter');
-  window.__galaxyInfo.filter = f;
-  window.__galaxyInfo.filtered = c;
 }
 
 let toastT = 0;
 function toast(msg) {
   const t = $('#tip');
-  t.textContent = msg;
+  t.innerHTML = '<b>' + esc(msg) + '</b>';
   t.style.left = '50%';
-  t.style.top = 'calc(env(safe-area-inset-top) + 88px)';
+  t.style.top = TOP_SAFE + 'px';
   t.style.transform = 'translate(-50%,0)';
   t.classList.add('on');
   clearTimeout(toastT);
@@ -820,33 +1143,52 @@ function openCard(node) {
   chip.style.background = 'rgba(255,255,255,.05)';
   chip.style.borderColor = ch.css + '55';
   let chipText = LANG === 'en' ? ch.en : ch.ko;
-  if (node.c === 'tistory' && node.b) chipText += ' · ' + node.b;
-  else if (node.c === 'social' && node.b) chipText += ' · ' + node.b;
-  else if (node.c === 'tools' && node.b) chipText += ' · ' + node.b;
+  if (node.b) chipText += ' · ' + node.b;
   if (node.cn) chipText += ' · ' + T('chain') + ' ' + node.cn + '/' + node.ct;
   $('#chiptext').textContent = chipText;
   $('#ctitle').textContent = node.t + (node.t2 && LANG === 'en' ? ' · ' + node.t2 : '');
   $('#csum').textContent = node.s || (LANG === 'en' ? 'Open the post for the full text.' : '전문은 글에서 확인할 수 있습니다.');
   $('#cdate').textContent = (node.d || '').replace(/-/g, '.');
-  $('#cblog').textContent = node.b && node.c === 'tistory' ? node.b : ch.host;
+  $('#cblog').textContent = node.b && node.c !== 'note' && node.c !== 'eb' ? node.b : ch.host;
   const list = activeList();
   const idx = list.indexOf(node);
   $('#cidx').textContent = String(idx + 1).padStart(2, '0') + ' / ' + list.length.toLocaleString();
   const open = $('#copen');
   open.href = node.u;
-  open.textContent = node.c === 'tools' ? (LANG === 'en' ? 'Open project' : '프로젝트 열기') : T('open');
+  open.textContent = node.c === 'tools' ? T('openProject') : T('open');
   cardEl.classList.add('on');
   focusRing.position.copy(node.pos);
   focusRing.material.opacity = 0.9;
-  flyTo(node.pos, PORTRAIT ? 9 : 10, 1.05);
+  const wantR = mode === 'focus' ? clamp(view.r * 0.82, 22, 9999) : clamp(state.overview.r * 0.22, 22, 60);
+  const tgt = node.pos.clone();
+  // 카드가 가리는 쪽을 피해 별을 화면 중앙에서 살짝 비켜 둔다
+  if (!isSmall) {
+    const tanH = Math.tan((camera.fov * Math.PI) / 360) * camera.aspect;
+    const right = new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld, 0).normalize();
+    tgt.addScaledVector(right, -0.13 * wantR * tanH);
+  } else {
+    const up = new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld, 1).normalize();
+    tgt.addScaledVector(up, -0.1 * wantR * Math.tan((camera.fov * Math.PI) / 360));
+  }
+  flyTo({ target: tgt, r: wantR, dur: 1.0 });
   if (SFX && SFX.play) SFX.play('star', { n: Math.max(0, idx) });
+  if (drawerOpen && isSmall) setDrawer(false);
+  markDrawerRow(node);
   window.__galaxyInfo.opened = { t: node.t, c: node.c, idx: idx + 1 };
 }
 function closeCard(keepView) {
+  const wasFocus = mode === 'focus' && focusCh;
   focused = null;
   cardEl.classList.remove('on');
   focusRing.material.opacity = 0;
-  if (!keepView) flyTo(new THREE.Vector3(0, targetY0, 0), OVERVIEW_R, 1.0);
+  if (!keepView) {
+    if (wasFocus) {
+      flyTo({ target: focusCh.center.clone(), r: computeFit(focusCh.R, 'focus') * 1.02, dur: 0.95, pol: PORTRAIT ? 0.86 : 0.72 });
+    } else {
+      const o = computeOverview();
+      flyTo({ target: o.target.clone(), r: o.r, dur: 0.95, pol: o.pol });
+    }
+  }
   if (SFX && SFX.play) SFX.play('close');
   window.__galaxyInfo.opened = null;
 }
@@ -857,15 +1199,108 @@ function step(dir) {
   i = (i + dir + list.length) % list.length;
   openCard(list[i]);
 }
+const activeList = () => NODES.filter(isActive);
 $('#cclose').addEventListener('click', () => closeCard(false));
 $('#next').addEventListener('click', () => step(1));
 $('#prev').addEventListener('click', () => step(-1));
 document.addEventListener('keydown', (e) => {
-  if (e.target && e.target.tagName === 'INPUT') return;
-  if (e.key === 'Escape') closeCard(false);
+  if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+  if (e.key === 'Escape') {
+    if (focused) closeCard(false);
+    else if (drawerOpen) setDrawer(false);
+    else if (mode === 'focus') exitFocus();
+  }
   if (e.key === 'ArrowRight') { if (focused) step(1); else view.az -= 0.16; }
   if (e.key === 'ArrowLeft') { if (focused) step(-1); else view.az += 0.16; }
+  if (e.key.toLowerCase() === 'l' && mode === 'focus') setDrawer(!drawerOpen);
 });
+
+/* ───────────────── inner list (drawer) ───────────────── */
+function drawerData() {
+  if (!focusCh) return [];
+  let list = galaxyNodes(focusCh);
+  if (subKey) list = list.filter((n) => GROUP_OF(n) === subKey);
+  if (query) list = list.filter((n) => n.match);
+  return list.sort((a, b) => (b.d || '').localeCompare(a.d || ''));
+}
+function renderDrawer(force) {
+  if (mode !== 'focus' || !focusCh) return;
+  const list = drawerData();
+  $('#dhCount').textContent = list.length.toLocaleString() + T('inGalaxy');
+  if (!force && drawerShown === list.length) return;
+  drawerShown = list.length;
+  const box = $('#drawerList');
+  box.innerHTML = '';
+  box.scrollTop = 0;
+  appendRows(0);
+}
+const CHUNK = 70;
+function appendRows(from) {
+  const list = drawerData();
+  const box = $('#drawerList');
+  const more = $('#drawerMore');
+  if (more) more.remove();
+  const end = Math.min(list.length, from + CHUNK);
+  const frag = document.createDocumentFragment();
+  for (let i = from; i < end; i++) {
+    const n = list[i];
+    const g = focusCh.groupMap[n.grp];
+    const row = document.createElement('button');
+    row.className = 'row';
+    row.dataset.i = String(NODES.indexOf(n));
+    row.innerHTML = '<span class="rm"><i style="background:' + (n.gcss || focusCh.css) + '"></i>' +
+      '<span>' + esc((n.d || '').replace(/-/g, '.')) + '</span>' +
+      (g && focusCh.groups.length > 1 ? '<span class="g">' + esc(g.name) + '</span>' : '') + '</span>' +
+      '<span class="t">' + esc(n.t) + '</span>';
+    row.addEventListener('click', () => {
+      if (mode !== 'focus' || !focusCh || focusCh.id !== n.c) enterFocus(n.c);
+      openCard(n);
+    });
+    frag.appendChild(row);
+  }
+  box.appendChild(frag);
+  if (end < list.length) {
+    const b = document.createElement('button');
+    b.id = 'drawerMore';
+    b.textContent = T('more') + ' (' + (list.length - end).toLocaleString() + ')';
+    b.addEventListener('click', () => appendRows(end));
+    box.appendChild(b);
+  }
+}
+function markDrawerRow(node) {
+  document.querySelectorAll('#drawerList .row.sel').forEach((r) => r.classList.remove('sel'));
+  if (!node) return;
+  const i = NODES.indexOf(node);
+  const row = document.querySelector('#drawerList .row[data-i="' + i + '"]');
+  if (row) { row.classList.add('sel'); row.scrollIntoView({ block: 'nearest' }); }
+}
+function setDrawer(open) {
+  if (open && mode !== 'focus') return;
+  drawerOpen = open;
+  $('#drawer').classList.toggle('on', open);
+  $('#listBtn').classList.toggle('on', open);
+  $('#listBtn').setAttribute('aria-pressed', open ? 'true' : 'false');
+  if (open) renderDrawer(true);
+  if (SFX && SFX.play) SFX.play('tick');
+  window.__galaxyInfo.drawer = open;
+}
+$('#listBtn').addEventListener('click', () => setDrawer(!drawerOpen));
+$('#drawerClose').addEventListener('click', () => setDrawer(false));
+
+/* focus ring for the opened star */
+const ringTex = canvasTexture(128, 128, (ctx, w, h) => {
+  const cx = w / 2, cy = h / 2;
+  const g = ctx.createRadialGradient(cx, cy, w * 0.30, cx, cy, w * 0.5);
+  g.addColorStop(0, 'rgba(180,215,255,0)');
+  g.addColorStop(0.55, 'rgba(190,225,255,.85)');
+  g.addColorStop(1, 'rgba(190,225,255,0)');
+  ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, w / 2, 0, Math.PI * 2); ctx.fill();
+});
+const focusRing = new THREE.Sprite(new THREE.SpriteMaterial({
+  map: ringTex, color: 0xbfe0ff, transparent: true, opacity: 0, depthWrite: false, toneMapped: false
+}));
+focusRing.scale.set(4, 4, 1);
+scene.add(focusRing);
 
 /* ───────────────── orbit + sound + lang ───────────────── */
 $('#orbit').classList.toggle('on', orbitOn);
@@ -889,7 +1324,7 @@ function applyLang() {
   $('#brandsub').innerHTML = T('brandSub');
   $('#q').placeholder = T('search');
   $('#q').setAttribute('aria-label', T('search'));
-  $('#hint').innerHTML = T('hint');
+  $('#hint').innerHTML = mode === 'focus' ? T('hintFocus') : T('hint');
   $('#cclose').textContent = T('close');
   $('#prev').textContent = T('prev');
   $('#next').textContent = T('next');
@@ -898,87 +1333,112 @@ function applyLang() {
   $('#fbtitle').textContent = T('fbTitle');
   $('#fbreason').innerHTML = T('fbBody');
   $('#loadtxt').textContent = T('loading');
-  buildChrome();
-  if (window.__coreLabel) {
-    const t2 = canvasTexture(512, 256, (ctx, w, h) => {
-      ctx.clearRect(0, 0, w, h);
-      ctx.textAlign = 'center';
-      ctx.fillStyle = '#ffe6b8';
-      ctx.globalAlpha = 0.92;
-      ctx.font = '800 96px -apple-system, "Helvetica Neue", Arial, sans-serif';
-      ctx.fillText('YH', w / 2, 112);
-      ctx.globalAlpha = 0.55;
-      ctx.fillStyle = '#dce9ff';
-      ctx.font = '500 38px -apple-system, "Apple SD Gothic Neo", sans-serif';
-      ctx.fillText(TOTAL_TXT(), w / 2, 176);
-    });
-    window.__coreLabel.material.map.dispose();
-    window.__coreLabel.material.map = t2;
-    window.__coreLabel.material.needsUpdate = true;
-  }
+  $('#back').querySelector('.nm').textContent = T('back');
+  $('#listBtn').querySelector('.lbl').textContent = T('list');
   CHANNELS.forEach((ch) => {
-    if (!ch.label) return;
-    const next = makeLabel(ch);
-    ch.label.material.map.dispose();
-    ch.label.material.map = next.material.map;
-    ch.label.material.needsUpdate = true;
+    ch.labelEl.innerHTML = '<i style="background:' + ch.css + ';box-shadow:0 0 9px ' + ch.css + '"></i><b>' + esc(LANG === 'en' ? ch.en : ch.ko) + '</b><em>' + ch.count.toLocaleString() + '</em>';
   });
+  buildChrome();
+  if (mode === 'focus') updateFocusChrome();
+  if (drawerOpen) renderDrawer(true);
   if (focused) openCard(focused);
+  measureLabels();
 }
-applyLang();
+buildChrome();
 
 /* ───────────────── picking ───────────────── */
 const projected = new THREE.Vector3();
-let pickCache = null;
-function pick(cx, cy) {
+const _vp = new THREE.Vector3();
+function screenOf(p) {
+  _vp.copy(p).project(camera);
+  return { x: (_vp.x * 0.5 + 0.5) * window.innerWidth, y: (-_vp.y * 0.5 + 0.5) * window.innerHeight, z: _vp.z };
+}
+function pickStar(cx, cy) {
   const rect = canvas.getBoundingClientRect();
-  const limit = isSmall ? 44 : 34;
+  const limit = mode === 'focus' ? (isSmall ? 46 : 42) : (isSmall ? 26 : 22);
   let best = null, bestScore = 1e9;
+  const chId = mode === 'focus' && focusCh ? focusCh.id : null;
   for (let i = 0; i < N; i++) {
     const n = NODES[i];
     if (!n.live) continue;
+    if (chId && n.c !== chId) continue;
     projected.copy(n.pos).project(camera);
     if (projected.z > 1) continue;
     const sx = (projected.x * 0.5 + 0.5) * rect.width;
     const sy = (-projected.y * 0.5 + 0.5) * rect.height;
     const d = Math.hypot(sx - (cx - rect.left), sy - (cy - rect.top));
-    const score = d + Math.max(0, projected.z) * 6;   // 먼 별은 약간 불리하게
+    const score = d + Math.max(0, projected.z) * 4;
     if (score < bestScore) { bestScore = score; best = n; }
   }
   return bestScore <= limit ? best : null;
 }
+function pickGalaxy(cx, cy) {
+  const rect = canvas.getBoundingClientRect();
+  let best = null, bestD = 1e9;
+  CHANNELS.forEach((ch) => {
+    const c = screenOf(ch.center);
+    const top = screenOf(ch.center.clone().add(new THREE.Vector3(0, ch.R, 0)));
+    const rad = Math.abs(c.y - top.y);
+    const d = Math.hypot(c.x - (cx - rect.left), c.y - (cy - rect.top));
+    if (d < Math.max(rad * 1.02, 26) && d < bestD) { bestD = d; best = ch; }
+  });
+  return best;
+}
 
 const tipEl = $('#tip');
-function showTip(node, x, y) {
+function showStarTip(node, x, y) {
   if (!node) { tipEl.classList.remove('on'); return; }
-  tipEl.textContent = node.t;
-  tipEl.style.left = clamp(x, 90, window.innerWidth - 90) + 'px';
-  tipEl.style.top = Math.max(y - 6, 70) + 'px';
+  tipEl.innerHTML = '<b>' + esc(node.t.length > 42 ? node.t.slice(0, 42) + '…' : node.t) + '</b>' +
+    '<span>' + esc((node.d || '').replace(/-/g, '.')) + (node.b ? ' · ' + esc(node.b) : '') + '</span>';
+  tipEl.style.left = clamp(x, 110, window.innerWidth - 110) + 'px';
+  tipEl.style.top = Math.max(y - 8, 76) + 'px';
   tipEl.style.transform = 'translate(-50%,-100%)';
   tipEl.classList.add('on');
 }
+function setHover(node) {
+  if (hovered === node) return;
+  if (hovered) {
+    hovered.sizeTarget = hovered.sizeBase * (mode === 'focus' && subKey && GROUP_OF(hovered) !== subKey ? 0.9 : 1);
+    hovered.alphaTarget = hovered.alphaBase;
+  }
+  hovered = node;
+  if (node) {
+    node.sizeTarget = node.sizeBase * 2.15;
+    node.alphaTarget = Math.min(1, node.alphaBase * 1.5);
+  }
+  dirty = true;
+  window.__galaxyInfo.hover = node ? node.t : null;
+}
 
 /* ───────────────── pointer ───────────────── */
-canvas.addEventListener('pointerdown', (e) => {
-  canvas.setPointerCapture(e.pointerId);
-  pointerState.set(e.pointerId, { x: e.clientX, y: e.clientY });
-  if (pointerState.size === 1) { moved = 0; dragging = true; lastX = e.clientX; lastY = e.clientY; canvas.classList.add('dragging'); }
-  if (pointerState.size === 2) { pinchStart = pinchDist(); pinchR = view.r; }
-});
 function pinchDist() {
   const p = Array.from(pointerState.values());
   if (p.length < 2) return 0;
   return Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y);
 }
+let pinchStart = 0, pinchR = 0;
+canvas.addEventListener('pointerdown', (e) => {
+  canvas.setPointerCapture(e.pointerId);
+  pointerState.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (pointerState.size === 1) { moved = 0; dragging = true; canvas.classList.add('dragging'); }
+  if (pointerState.size === 2) { pinchStart = pinchDist(); pinchR = view.r; }
+});
 canvas.addEventListener('pointermove', (e) => {
   const prev = pointerState.get(e.pointerId);
   if (!prev) {
-    const now = performance.now();
-    if (now - hoverAt > 90) {
-      hoverAt = now;
-      const n = pick(e.clientX, e.clientY);
-      showTip(n, e.clientX, e.clientY);
-      canvas.style.cursor = n ? 'pointer' : 'grab';
+    if (e.pointerType === 'mouse' || e.pointerType === 'pen') {
+      const now = performance.now();
+      if (now - hoverAt > 80) {
+        hoverAt = now;
+        const n = pickStar(e.clientX, e.clientY);
+        if (n) { setHover(n); showStarTip(n, e.clientX, e.clientY); }
+        else {
+          setHover(null); tipEl.classList.remove('on');
+          const g = pickGalaxy(e.clientX, e.clientY);
+          if (g && mode === 'overview') showStarTip({ t: (LANG === 'en' ? g.en : g.ko), d: g.count.toLocaleString() + T('inGalaxy'), b: T('enterGalaxy') }, e.clientX, e.clientY);
+        }
+        canvas.style.cursor = n ? 'pointer' : (mode === 'overview' && pickGalaxy(e.clientX, e.clientY)) ? 'pointer' : 'grab';
+      }
     }
     return;
   }
@@ -988,11 +1448,12 @@ canvas.addEventListener('pointermove', (e) => {
     moved += Math.abs(dx) + Math.abs(dy);
     view.az -= dx * 0.005;
     view.pol = clamp(view.pol - dy * 0.004, 0.34, 2.5);
-    if (tw.active && tw.t > 0.35) tw.active = false;
+    if (tw.active && tw.t > 0.3) tw.active = false;
+    if (moved > 6) { setHover(null); tipEl.classList.remove('on'); }
   } else if (pointerState.size === 2) {
     moved += 30;
     const d = pinchDist();
-    if (pinchStart > 10 && d > 10) view.r = clamp(pinchR * (pinchStart / d), 3.4, OVERVIEW_R * 2.1);
+    if (pinchStart > 10 && d > 10) view.r = clamp(pinchR * (pinchStart / d), 3.4, state.overview.r * 2.2);
   }
 });
 function endP(e) {
@@ -1002,18 +1463,99 @@ function endP(e) {
   if (pointerState.size < 2) pinchStart = 0;
   if (pointerState.size === 0) { dragging = false; canvas.classList.remove('dragging'); }
   if (single && moved < 10) {
-    const n = pick(e.clientX, e.clientY);
-    if (n) { openCard(n); showTip(null); }
+    tipEl.classList.remove('on');
+    if (mode === 'overview') {
+      // 전체 뷰: 은하를 누르면 그 은하 안으로 (별 오픈은 포커스 안에서)
+      const g = pickGalaxy(e.clientX, e.clientY);
+      if (g) enterFocus(g.id);
+      return;
+    }
+    const n = pickStar(e.clientX, e.clientY);
+    if (n) openCard(n);
   }
 }
 canvas.addEventListener('pointerup', endP);
 canvas.addEventListener('pointercancel', (e) => { pointerState.delete(e.pointerId); pinchStart = 0; dragging = false; canvas.classList.remove('dragging'); });
-canvas.addEventListener('pointerleave', () => showTip(null));
+canvas.addEventListener('pointerleave', () => { setHover(null); tipEl.classList.remove('on'); });
 canvas.addEventListener('wheel', (e) => {
   e.preventDefault();
-  view.r = clamp(view.r * (1 + e.deltaY * 0.001), 3.4, OVERVIEW_R * 2.1);
+  view.r = clamp(view.r * (1 + e.deltaY * 0.001), 3.4, state.overview.r * 2.2);
   if (tw.active) tw.active = false;
+  setHover(null);
 }, { passive: false });
+
+/* ───────────────── labels follow their cores ───────────────── */
+const _camUp = new THREE.Vector3(), _camRight = new THREE.Vector3();
+const _lp = new THREE.Vector3();
+function measureTopSafe() {
+  const t = document.getElementById('top');
+  const r = t ? t.getBoundingClientRect() : null;
+  TOP_SAFE = Math.round((r && r.bottom ? r.bottom : 92) + 6);
+}
+function measureLabels() {
+  measureTopSafe();
+  CHANNELS.forEach((ch) => {
+    ch.labelW = ch.labelEl.offsetWidth || 90;
+    ch.labelH = ch.labelEl.offsetHeight || 28;
+  });
+}
+function updateLabels() {
+  const w = window.innerWidth, h = window.innerHeight;
+  const rect = canvas.getBoundingClientRect();
+  const rw = rect.width, rh = rect.height;
+  _camUp.setFromMatrixColumn(camera.matrixWorld, 1).normalize();
+  _camRight.setFromMatrixColumn(camera.matrixWorld, 0).normalize();
+  const boxes = [];
+  CHANNELS.forEach((ch) => {
+    const el = ch.labelEl;
+    const c = screenOf(ch.center);
+    const up = screenOf(_lp.copy(ch.center).addScaledVector(_camUp, ch.R));
+    const rt = screenOf(_lp.copy(ch.center).addScaledVector(_camRight, ch.R));
+    const rad = Math.max(Math.abs(c.y - up.y), Math.abs(c.x - rt.x));
+    const halfW = (ch.labelW || 90) / 2;
+    const lh = ch.labelH || 28;
+    const minL = halfW + 8, maxL = rw - halfW - 8;
+    const left = clamp(c.x, minL, maxL);
+    const top = Math.max(c.y - rad * 0.7 - 8, TOP_SAFE + lh);
+    el.style.left = left.toFixed(1) + 'px';
+    el.style.top = top.toFixed(1) + 'px';
+    boxes.push({ ch: ch.id, l: left - halfW, t: top - lh, r: left + halfW, b: top, core: { x: c.x, y: c.y }, rad });
+  });
+  window.__labelBoxes = boxes;
+  if (capEl) {
+    const o = screenOf(new THREE.Vector3(0, 0, 0));
+    capEl.style.left = o.x.toFixed(1) + 'px';
+    capEl.style.top = o.y.toFixed(1) + 'px';
+  }
+}
+
+/* ───────────────── relayout on orientation change ───────────────── */
+function relayout() {
+  const wasPortrait = PORTRAIT;
+  PORTRAIT = window.innerWidth / window.innerHeight < 0.9;
+  CHANNELS.forEach((ch) => {
+    ch.tilt = { x: ch.tiltBase.x * (PORTRAIT ? 0.7 : 1), z: ch.tiltBase.z * (PORTRAIT ? 0.7 : 1) };
+  });
+  CHANNELS.forEach((c) => { c.fitPts = null; });
+  placeAll();
+  for (let i = 0; i < N; i++) {
+    posArr[i * 3] = NODES[i].pos.x; posArr[i * 3 + 1] = NODES[i].pos.y; posArr[i * 3 + 2] = NODES[i].pos.z;
+  }
+  geo.attributes.position.needsUpdate = true;
+  geo.computeBoundingSphere();
+  layoutGalaxyVisuals();
+  buildConstellations();
+  buildBridges();
+  if (focusRing.material.opacity > 0 && focused) focusRing.position.copy(focused.pos);
+  const o = computeOverview();
+  state.overview = o;
+  if (mode === 'overview') {
+    flyTo({ target: o.target.clone(), r: o.r, dur: 0.6, pol: o.pol });
+  } else if (focusCh) {
+    flyTo({ target: focusCh.center.clone(), r: computeFit(focusCh.R, 'focus'), dur: 0.6, pol: PORTRAIT ? 0.86 : 0.72 });
+  }
+  setFilterBrightness();
+}
 
 /* ───────────────── resize ───────────────── */
 function onResize() {
@@ -1025,6 +1567,13 @@ function onResize() {
   renderer.setSize(w, h, false);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   starMat.uniforms.uPix.value = renderer.getPixelRatio();
+  if ((w / h < 0.9) !== PORTRAIT) relayout();
+  else {
+    const o = computeOverview();
+    state.overview = o;
+  }
+  measureLabels();
+  updateLabels();
 }
 window.addEventListener('resize', onResize);
 window.addEventListener('orientationchange', () => setTimeout(onResize, 240));
@@ -1038,21 +1587,30 @@ function animate() {
   const t = clock.elapsedTime;
   starMat.uniforms.uTime.value = t;
 
-  if (orbitOn && !focused && !dragging && pointerState.size === 0) view.az += dt * 0.026;
+  if (orbitOn && !focused && !dragging && pointerState.size === 0) view.az += dt * (mode === 'focus' ? 0.032 : 0.024);
 
   if (tw.active) {
     tw.t += dt / tw.dur;
     const k = easeInOut(clamp(tw.t, 0, 1));
     view.r = lerp(tw.fr, tw.tr, k);
+    view.az = lerp(tw.fa, tw.ta, k);
+    view.pol = lerp(tw.fp, tw.tp, k);
     view.target.lerpVectors(tw.ft, tw.tt, k);
     if (tw.t >= 1) tw.active = false;
   }
   applyCam();
+  updateLabels();
   bgStars.rotation.y += dt * 0.004;
-  core.material.opacity = 0.22 + 0.07 * Math.sin(t * 0.9);
+
+  CHANNELS.forEach((ch, i) => {
+    const on = mode === 'overview' || ch === focusCh;
+    const pulse = 0.5 + 0.5 * Math.sin(t * 0.85 + i * 1.7);
+    ch.nucleus.material.opacity = (on ? 0.62 : 0.2) + (on ? 0.3 : 0.08) * pulse;
+    ch.core.material.opacity = on ? 0.92 : 0.24;
+  });
 
   if (dirty) {
-    const ease = Math.min(1, dt * 6.5);
+    const ease = Math.min(1, dt * 7);
     let anyMove = false;
     for (let i = 0; i < N; i++) {
       const n = NODES[i];
@@ -1060,20 +1618,13 @@ function animate() {
       const s = lerp(n.sizeNow, n.sizeTarget, ease);
       if (Math.abs(a - n.alpha) > 0.0008 || Math.abs(s - n.sizeNow) > 0.001) anyMove = true;
       n.alpha = a; n.sizeNow = s;
-      alphaArr[i] = a * (n === focused ? 1.15 : 1);
-      sizeArr[i] = s * (n === focused ? 1.35 : 1);
+      alphaArr[i] = a * (n === focused ? 1.2 : 1);
+      sizeArr[i] = s * (n === focused ? 1.5 : 1);
     }
     alphaAttr.needsUpdate = true;
     sizeAttr.needsUpdate = true;
     if (!anyMove) dirty = false;
   }
-
-  const zoomFade = clamp((view.r - 22) / 55, 0.18, 1);
-  CHANNELS.forEach((ch) => {
-    if (!ch.lines) return;
-    const on = filter === 'all' || filter === ch.id;
-    ch.lines.material.opacity = on ? ch.linesBase * zoomFade : 0.02;
-  });
 
   if (focused) {
     focusRing.position.copy(focused.pos);
@@ -1086,29 +1637,80 @@ function animate() {
 }
 
 /* ───────────────── boot ───────────────── */
-restyle();
+NODES.forEach((n) => { n.live = true; });
+setFilterBrightness();
 window.__galaxyInfo = {
   nodes: N, total: DATA.total, channels: DATA.counts, clusters: CHANNELS.length,
-  lang: LANG, filter: 'all', filtered: N, ready: false, generated: DATA.generated, overviewR: Math.round(OVERVIEW_R)
+  lang: LANG, mode: 'overview', focus: null, sub: null, filtered: N, ready: false,
+  generated: DATA.generated, overviewR: Math.round(state.overview.r), width: window.innerWidth, height: window.innerHeight,
+  portrait: PORTRAIT, queryHits: 0, drawer: false, hover: null
 };
-/* 검수용 훅 (실물 검증 스크립트가 사용) */
 window.__galaxy = {
   info: () => window.__galaxyInfo,
   errors: () => window.__galaxyErrors,
-  filter: (f) => { setFilter(f); return activeList().length; },
+  focus: (id) => { enterFocus(id); return focusCh ? focusCh.id : null; },
+  overview: () => { exitFocus(); return mode; },
+  sub: (k) => { setSub(k); return drawerData().length; },
+  setSub,
+  drawer: (open) => { setDrawer(!!open); return drawerOpen; },
+  drawerRows: () => document.querySelectorAll('#drawerList .row').length,
+  drawerFirst: (n) => Array.from(document.querySelectorAll('#drawerList .row')).slice(0, n || 3).map((r) => r.innerText.replace(/\n/g, ' | ')),
+  listTitles: (n) => drawerData().slice(0, n || 5).map((x) => ({ t: x.t, d: x.d, g: GROUP_OF(x) })),
+  labels: () => (window.__labelBoxes || []).map((b) => ({ ch: b.ch, left: Math.round(b.l), top: Math.round(b.t), right: Math.round(b.r), bottom: Math.round(b.b), core: { x: Math.round(b.core.x), y: Math.round(b.core.y) }, rad: Math.round(b.rad) })),
+  labelClick: (id) => { document.querySelector('.glabel[data-ch="' + id + '"]').click(); return mode; },
+  clickAt: (x, y) => {
+    if (mode === 'overview') { const g = pickGalaxy(x, y); if (g) { enterFocus(g.id); return { galaxy: g.id }; } return null; }
+    const n = pickStar(x, y);
+    if (n) { openCard(n); return { star: n.t, c: n.c }; }
+    return null;
+  },
+  hoverAt: (x, y) => {
+    const n = pickStar(x, y);
+    setHover(n);
+    return n ? { t: n.t, d: n.d, size: +(n.sizeTarget).toFixed(2), base: +(n.sizeBase).toFixed(2) } : null;
+  },
   search: (q) => { qEl.value = q; applyQuery(q); return window.__galaxyInfo.queryHits; },
-  openAt: (x, y) => { const n = pick(x, y); if (n) openCard(n); return n ? { t: n.t, c: n.c, d: n.d } : null; },
   openIndex: (i) => { const n = NODES[Math.max(0, Math.min(N - 1, i))]; openCard(n); return { t: n.t, c: n.c, d: n.d }; },
+  openNode: (i) => { const n = NODES[i]; if (mode !== 'focus' || !focusCh || focusCh.id !== n.c) enterFocus(n.c); openCard(n); return { t: n.t, c: n.c }; },
   close: () => closeCard(true),
   lang: (l) => { LANG = l; applyLang(); return LANG; },
   screenOf: (i) => {
     const n = NODES[Math.max(0, Math.min(N - 1, i))];
-    const v = n.pos.clone().project(camera);
-    const rect = canvas.getBoundingClientRect();
-    return { x: (v.x * 0.5 + 0.5) * rect.width, y: (-v.y * 0.5 + 0.5) * rect.height, t: n.t, live: !!n.live };
+    const s = screenOf(n.pos);
+    return { x: Math.round(s.x), y: Math.round(s.y), t: n.t, live: !!n.live, c: n.c };
   },
-  cardText: () => ({ title: $('#ctitle').textContent, chip: $('#chiptext').textContent, date: $('#cdate').textContent, sum: $('#csum').textContent, href: $('#copen').getAttribute('href'), visible: cardEl.classList.contains('on') })
+  galaxyFill: () => {
+    if (!focusCh) return null;
+    const c = screenOf(focusCh.center);
+    const up = screenOf(focusCh.center.clone().add(new THREE.Vector3(0, focusCh.R, 0)));
+    const rt = screenOf(focusCh.center.clone().add(new THREE.Vector3(focusCh.R, 0, 0)));
+    return {
+      cx: Math.round(c.x), cy: Math.round(c.y),
+      rv: Math.round(Math.abs(c.y - up.y)), rh: Math.round(Math.abs(c.x - rt.x)),
+      w: window.innerWidth, h: window.innerHeight
+    };
+  },
+  cam: () => ({
+    pos: camera.position.toArray().map((v) => Math.round(v * 10) / 10),
+    target: view.target.toArray().map((v) => Math.round(v * 10) / 10),
+    r: Math.round(view.r * 10) / 10, az: +view.az.toFixed(3), pol: +view.pol.toFixed(3),
+    tw: { active: tw.active, t: +tw.t.toFixed(2), tr: Math.round(tw.tr), tgt: tw.tt.toArray().map((v) => Math.round(v)) },
+    center: focusCh ? focusCh.center.toArray().map((v) => Math.round(v * 10) / 10) : null,
+    R: focusCh ? Math.round(focusCh.R * 10) / 10 : null,
+    fit: focusCh ? Math.round(computeFit(focusCh.R, 'focus')) : null,
+    aspect: +camera.aspect.toFixed(3), fov: camera.fov
+  }),
+  cardText: () => ({ title: $('#ctitle').textContent, chip: $('#chiptext').textContent, date: $('#cdate').textContent, sum: $('#csum').textContent, href: $('#copen').getAttribute('href'), visible: cardEl.classList.contains('on') }),
+  chrome: () => ({
+    back: getComputedStyle($('#back')).display,
+    backText: $('#back').innerText.replace(/\n/g, ' '),
+    subchips: Array.from(document.querySelectorAll('#subchips .fb')).map((b) => b.innerText.replace(/\n/g, ' ')),
+    filters: getComputedStyle($('#filters')).display,
+    hint: $('#hint').innerText.replace(/\n/g, ' | '),
+    listBtn: getComputedStyle($('#listBtn')).display
+  })
 };
+updateLabels();
 animate();
 setTimeout(() => {
   $('#loading').style.opacity = '0';
@@ -1116,6 +1718,8 @@ setTimeout(() => {
   window.__galaxyReady = true;
   window.__galaxyInfo.ready = true;
 }, 420);
+/* intro: overview에서 천천히 들어오기 */
+flyTo({ target: state.overview.target.clone(), r: state.overview.r, dur: 2.2, pol: state.overview.pol });
 </script>
 </body>
 </html>
