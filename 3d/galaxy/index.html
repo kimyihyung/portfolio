@@ -359,12 +359,12 @@ CHANNELS.forEach((c, i) => { CH_INDEX[c.id] = i; });
 
 /* ───────────────── layout: five spiral galaxies in a ring ───────────────── */
 const counts = CHANNELS.map((c) => c.count);
-const rMaxOf = (n) => (4.2 + 14 * Math.sqrt(n / 2000)) * (PORTRAIT ? 0.78 : 1);
+const rMaxOf = (n) => (4.2 + 14 * Math.sqrt(n / 2000)) * (PORTRAIT ? 0.64 : 1);
 const RING = 52;
 const CLUSTER_SPOT = CHANNELS.map((ch, ci) => {
   if (PORTRAIT) {
     // 세로 화면: 은하를 세로로 세운다
-    return new THREE.Vector3(((ci % 2) ? 1 : -1) * 6.5, (2 - ci) * 25, ((ci % 2) ? -3 : 3));
+    return new THREE.Vector3(((ci % 2) ? 1 : -1) * 6.2, (2 - ci) * 26, ((ci % 2) ? -3 : 3));
   }
   const a = ci * (Math.PI * 2 / CHANNELS.length) + 0.3;
   const rr = RING * (0.92 + 0.16 * (ci % 2));
@@ -649,8 +649,8 @@ NODES.forEach((n) => {
 HALF_W += 7; HALF_H += 5;
 const _tanV = Math.tan((FOV_BASE * Math.PI) / 360);
 const _tanH = _tanV * (window.innerWidth / window.innerHeight);
-const _mx = PORTRAIT ? 1.08 : 1.62;
-const _my = PORTRAIT ? 1.26 : 1.22;
+const _mx = PORTRAIT ? 1.04 : 1.62;
+const _my = PORTRAIT ? 0.98 : 1.22;
 const OVERVIEW_R = clamp(Math.max((HALF_W / _tanH) * _mx, (HALF_H / _tanV) * _my), 60, 320);
 const targetY0 = PORTRAIT ? HALF_H * 0.2 : 0;
 const view = { target: new THREE.Vector3(0, targetY0, 0), r: OVERVIEW_R * 1.7, az: 0.6, pol: 1.06 };
