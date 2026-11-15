@@ -329,6 +329,27 @@ button { font-family: inherit; color: inherit; }
   letter-spacing: .2em; text-transform: uppercase; color: var(--muted);
 }
 .sec-head .note { font-size: 12px; color: var(--muted2); }
+/* ---------- more calculators ---------- */
+.more { padding: 46px 0 0; }
+.more-lead {
+  margin: 0 0 18px; color: var(--muted); font-size: 13.5px; line-height: 1.8; max-width: 62ch;
+}
+.more-list {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: 1fr; gap: 1px;
+  border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden;
+  background: var(--line);
+}
+.more-list a {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 14px;
+  padding: 13px 16px; background: var(--bg2, rgba(10,12,16,.6));
+  color: var(--ink); text-decoration: none; font-size: 14px;
+  transition: background .18s, color .18s;
+}
+.more-list a:hover, .more-list a:focus-visible { background: rgba(255,255,255,.05); }
+.more-list a b { font-weight: 600; }
+.more-list a span { color: var(--muted2); font-size: 12px; text-align: right; }
+@media (min-width: 700px) { .more-list { grid-template-columns: 1fr 1fr; } }
 .soon-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
 .soon {
   padding: 22px 20px;
@@ -674,6 +695,30 @@ button { font-family: inherit; color: inherit; }
           <p class="fine" data-i18n="tpFine">No checkout yet. When it opens, it will be listed here first.</p>
         </div>
       </div>
+    </section>
+
+    <section class="more" aria-labelledby="moreTitle">
+      <div class="sec-head">
+        <h2 id="moreTitle">More calculators</h2>
+        <span class="note">11 sites · 한국어</span>
+      </div>
+      <p class="more-lead">
+        계산기와 시뮬레이터는 따로 사이트로 운영합니다. 회원가입 없이 입력한 값이 서버로 전송되지 않고 브라우저에서만 계산됩니다.<br>
+        Standalone calculator sites for Korean users — nothing is uploaded, every result is computed in the browser.
+      </p>
+      <ul class="more-list">
+        <li><a href="https://electric-bill-calc.pages.dev/"><b>전기요금 계산기</b><span>주택용 누진제 · 2026</span></a></li>
+        <li><a href="https://nps-timing.pages.dev/"><b>국민연금 수령시기</b><span>조기·연기 손익분기</span></a></li>
+        <li><a href="https://housing-pension.pages.dev/"><b>주택연금 월지급금</b><span>나이·집값</span></a></li>
+        <li><a href="https://nhis-cap-calc.pages.dev/"><b>본인부담상한제 환급</b><span>병원비 환급액</span></a></li>
+        <li><a href="https://loan-calc-kr.pages.dev/"><b>대출 이자 계산기</b><span>원리금·원금균등</span></a></li>
+        <li><a href="https://retire-drawdown.pages.dev/"><b>은퇴 인출 시뮬레이터</b><span>자산 소진 나이</span></a></li>
+        <li><a href="https://pet-age.pages.dev/"><b>강아지·고양이 나이</b><span>사람 나이 환산</span></a></li>
+        <li><a href="https://sleep-cycle-kr.pages.dev/"><b>수면 사이클</b><span>취침·기상 시간</span></a></li>
+        <li><a href="https://reaction-test-kr.pages.dev/"><b>반응속도 테스트</b><span>5회 평균 ms</span></a></li>
+        <li><a href="https://balance-vs.pages.dev/"><b>밸런스 게임</b><span>전 세계 투표 비율</span></a></li>
+        <li><a href="https://cosmic-odometer.pages.dev/"><b>우주 주행거리</b><span>태어난 뒤 이동한 거리</span></a></li>
+      </ul>
     </section>
   </main>
 
