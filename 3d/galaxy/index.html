@@ -549,7 +549,8 @@ function makeLabel(ch) {
     ctx.fillText(sub, w / 2, 154);
   });
   const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
-    map: tex, transparent: true, opacity: 1, depthWrite: false, toneMapped: false
+    map: tex, transparent: true, opacity: 1, depthWrite: false, toneMapped: false,
+    sizeAttenuation: false
   }));
   return sprite;
 }
@@ -557,7 +558,7 @@ CHANNELS.forEach((ch, ci) => {
   const spot = CLUSTER_SPOT[ci];
   const rr = rMaxOf(ch.count);
   const sp = makeLabel(ch);
-  const sc = PORTRAIT ? 13 : 15.5;
+  const sc = PORTRAIT ? 0.46 : 0.30;
   sp.scale.set(sc, sc / 3.45, 1);
   const outLen = Math.hypot(spot.x, spot.z) || 1;
   const ox = spot.x / outLen, oz = spot.z / outLen;
