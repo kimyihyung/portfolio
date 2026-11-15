@@ -345,7 +345,7 @@ function rnd() { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed 
 const DATA_URL = 'data.json';
 let DATA = null;
 try {
-  const res = await fetch(DATA_URL, { cache: 'force-cache' });
+  const res = await fetch(DATA_URL, { cache: 'no-cache' });
   if (!res.ok) throw new Error('data.json ' + res.status);
   DATA = await res.json();
 } catch (e) {
