@@ -350,6 +350,7 @@ button { font-family: inherit; color: inherit; }
 .more-list a b { font-weight: 600; }
 .more-list a span { color: var(--muted2); font-size: 12px; text-align: right; }
 @media (min-width: 700px) { .more-list { grid-template-columns: 1fr 1fr; } }
+.more-list li:last-child:nth-child(odd) { grid-column: 1 / -1; }
 .soon-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
 .soon {
   padding: 22px 20px;
