@@ -186,6 +186,37 @@ header .header_nav a:focus-visible {
   color: #93906c;
 }
 
+/* ABOUT 소개 문장 : 스크롤에 따라 좌우에서 한 줄씩 들어와 균등한 간격으로 쌓인다 */
+@media (min-width: 1025px) {
+  #section1 .sec1_ani5 {
+    position: fixed;
+    left: 0;
+    /* ABOUT 제목(10vw, translate -170%) 아래 5vh 지점에서 문장 열이 시작된다 */
+    top: calc(50% - 8.4vw + 5vh);
+    width: 100%;
+    height: auto;
+    transform: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(6px, 1vh, 14px);
+    /* 글자 크기를 높이에도 묶어, 화면 비율이 달라도 한 줄에 들어가는 글자 수가 일정하다 */
+    font-size: min(1.8vw, 2.6vh);
+    line-height: 1.7;
+    pointer-events: none;
+  }
+  #section1 .sec1_ani5_1 {
+    position: static;
+    left: auto;
+    width: min(125vh, 88vw);
+    margin: 0 auto;
+    text-align: center;
+    text-wrap: balance;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+  }
+}
+
 /* section2 */
 #section2 .sec1 {
   width: 400vw;
