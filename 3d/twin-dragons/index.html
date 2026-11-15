@@ -1873,10 +1873,10 @@ function tick() {
 
   // reel mode: slow scripted arc so the vertical take stays cinematic
   if (reelMode && !camAnim && !intro.active) {
-    const base = PRESETS.orb.pos;
+    const base = new THREE.Vector3(0.4, 8.2, 17.5);
     const a = Math.sin(elapsed * 0.10) * 0.55;
-    camera.position.set(base.x + Math.sin(a) * 3.1, base.y + Math.sin(elapsed * 0.14) * 0.4, base.z + (Math.cos(a) - 1) * 9.5 + 2.2);
-    camera.lookAt(0, 7.2, 0);
+    camera.position.set(base.x + Math.sin(a) * 4.5, base.y + Math.sin(elapsed * 0.14) * 0.5, base.z + (Math.cos(a) - 1) * 3.5);
+    camera.lookAt(0, 7.6, 0);
   }
 
   // world animation
