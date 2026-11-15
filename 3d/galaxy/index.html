@@ -948,8 +948,9 @@ function buildSubChips() {
   };
   mk(null, LANG === 'en' ? focusCh.en : focusCh.ko, focusCh.css, focusCh.count, LANG === 'en' ? 'all' : '전체');
   if (focusCh.groups.length > 1) {
-    const hosts = new Set(focusCh.groups.map((g) => g.host));
-    focusCh.groups.forEach((g) => mk(g.key, g.name, g.css, g.count, hosts.size > 1 && g.host && g.host.length > 2 ? g.host : null));
+    const hostCount = {};
+    focusCh.groups.forEach((g) => { hostCount[g.host] = (hostCount[g.host] || 0) + 1; });
+    focusCh.groups.forEach((g) => mk(g.key, g.name, g.css, g.count, hostCount[g.host] === 1 && g.host && g.host.length > 2 && g.host !== 'www' ? g.host : null));
   }
 }
 function buildLegend() {
