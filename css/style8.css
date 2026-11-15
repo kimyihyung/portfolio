@@ -201,7 +201,7 @@ header .header_nav a:focus-visible {
     align-items: center;
     gap: clamp(6px, 1vh, 14px);
     /* 글자 크기를 높이에도 묶어, 화면 비율이 달라도 한 줄에 들어가는 글자 수가 일정하다 */
-    font-size: min(1.8vw, 2.6vh);
+    font-size: min(1.8vw, 3vh);
     line-height: 1.7;
     pointer-events: none;
   }

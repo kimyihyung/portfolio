@@ -1,0 +1,1885 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="description" content="Three.js 로 만든 가상 전시관 — 입구, 아트리움, 복도와 네 개의 전시실을 걸어 다니며 작품 8점을 관람하는 공간. 도슨트 자동 관람 지원" />
+<title>가상 전시관 · Virtual Gallery</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#08090a;color:#f2efe9;overflow:hidden;
+  font-family:"Helvetica Neue",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+#scene{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.layer{position:fixed;inset:0;pointer-events:none;z-index:10}
+.layer.overlay{pointer-events:auto;display:flex;align-items:center;justify-content:center;padding:24px;
+  background:radial-gradient(120% 120% at 50% 30%,rgba(22,24,27,.9),rgba(5,6,7,.97));-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.hidden{display:none !important}
+.panel{width:100%;max-width:560px;padding:42px 40px 36px;border:1px solid rgba(255,255,255,.13);
+  background:linear-gradient(180deg,rgba(20,21,24,.86),rgba(12,13,15,.9));border-radius:3px;
+  box-shadow:0 40px 120px rgba(0,0,0,.6);animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
+.panel.small{max-width:420px;padding:32px 30px 28px}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.eyebrow{font-size:10px;letter-spacing:.34em;color:#c9a97c;text-transform:uppercase;margin-bottom:22px}
+h1{font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(34px,6vw,58px);line-height:1.08;letter-spacing:.01em}
+.panel h2{font-family:Georgia,serif;font-weight:400;font-size:24px;margin-bottom:14px}
+.lede{margin-top:14px;font-size:14px;line-height:1.75;color:rgba(242,239,233,.66)}
+.keys{list-style:none;margin:26px 0 30px;border-top:1px solid rgba(255,255,255,.1)}
+.keys li{padding:11px 2px;border-bottom:1px solid rgba(255,255,255,.07);font-size:13px;color:rgba(242,239,233,.62);line-height:1.5}
+.keys b{color:#f2efe9;font-weight:600;letter-spacing:.04em}
+button{font:600 12px/1 "Helvetica Neue",sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#0c0d0f;
+  background:#e9e4da;border:0;padding:16px 30px;border-radius:2px;cursor:pointer;transition:background .25s,transform .25s}
+button:hover{background:#fff;transform:translateY(-1px)}
+button.ghost{background:transparent;color:#e9e4da;border:1px solid rgba(255,255,255,.3)}
+button.ghost:hover{background:rgba(255,255,255,.08);color:#fff}
+.fine{margin-top:22px;font-size:11px;line-height:1.6;color:rgba(242,239,233,.34)}
+#topbar{position:absolute;top:0;left:0;right:0;display:flex;align-items:flex-start;justify-content:space-between;padding:22px 26px;gap:12px}
+#roomname{font-family:Georgia,serif;font-size:17px;letter-spacing:.04em;transition:opacity .3s}
+#roomsub{display:block;margin-top:5px;font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:rgba(242,239,233,.42);font-style:normal}
+#meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+#progress{font-size:10px;letter-spacing:.22em;padding:7px 11px;border:1px solid rgba(255,255,255,.16);border-radius:2px;color:rgba(242,239,233,.7)}
+.hudbtn{background:rgba(10,11,13,.55);border:1px solid rgba(255,255,255,.18);color:rgba(242,239,233,.78);padding:7px 10px;font-size:10px;letter-spacing:.14em;border-radius:2px;cursor:pointer;pointer-events:auto;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.hudbtn:hover{background:rgba(255,255,255,.12);color:#fff}
+.hudbtn.active{border-color:#c9a97c;color:#c9a97c}
+.hudbtn.gold{border-color:rgba(201,169,124,.55);color:#e3cba6}
+.hudbtn.gold:hover{background:rgba(201,169,124,.22);border-color:#c9a97c;color:#fff}
+.hudbtn.gold.active{background:rgba(201,169,124,.24);border-color:#c9a97c;color:#f6e6cd}
+#roombar{position:absolute;left:26px;bottom:26px;display:flex;gap:6px;flex-wrap:wrap;pointer-events:auto;z-index:12}
+.rbtn{background:rgba(10,11,13,.58);border:1px solid rgba(255,255,255,.16);color:rgba(242,239,233,.72);padding:7px 10px;font-size:10px;letter-spacing:.08em;border-radius:2px;cursor:pointer;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.rbtn:hover,.rbtn.on{border-color:#c9a97c;color:#f2efe9;background:rgba(201,169,124,.18)}
+body.focusing #roombar{display:none}
+#cardActions{display:none;margin-top:14px;gap:8px;align-items:center}
+#card.focus #cardActions{display:flex}
+#cardActions button{padding:9px 13px;font-size:11px;letter-spacing:.1em}
+#dot{position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;
+  background:rgba(255,255,255,.75);box-shadow:0 0 8px rgba(0,0,0,.6);transition:opacity .25s,transform .25s}
+#dot.off{opacity:0;transform:scale(.4)}
+#card{position:absolute;right:26px;bottom:26px;width:330px;padding:22px 24px 20px;border:1px solid rgba(255,255,255,.13);
+  background:rgba(13,14,16,.72);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-radius:2px;
+  opacity:0;transform:translateY(10px);transition:opacity .4s ease,transform .4s ease,width .4s ease;pointer-events:none}
+#card.on{opacity:1;transform:none}
+#card.focus{width:400px;pointer-events:auto}
+body.focusing #joy{display:none}
+#card .idx{font-size:10px;letter-spacing:.26em;color:#c9a97c}
+#card h3{font-family:Georgia,serif;font-weight:400;font-size:22px;line-height:1.3;margin:11px 0 9px}
+#card p{font-size:12.5px;line-height:1.7;color:rgba(242,239,233,.66);max-height:32vh;overflow:hidden}
+#card .meta{font-size:9.5px;letter-spacing:.2em;color:rgba(201,169,124,.85);text-transform:uppercase;margin:-2px 0 11px}
+#card .hint{margin-top:14px;font-size:10px;letter-spacing:.18em;color:rgba(242,239,233,.34);text-transform:uppercase}
+#card.focus{width:400px}
+#map{position:absolute;right:26px;top:78px;width:210px;height:126px;border:1px solid rgba(255,255,255,.12);
+  background:rgba(9,10,11,.55);border-radius:2px;opacity:.9}
+#joy{position:absolute;left:30px;bottom:32px;width:128px;height:128px;border-radius:50%;display:none;touch-action:none;pointer-events:auto;
+  border:1px solid rgba(255,255,255,.2);background:radial-gradient(circle,rgba(255,255,255,.07),rgba(255,255,255,.02))}
+body.touch #joy{display:block}
+#joyknob{position:absolute;left:50%;top:50%;width:52px;height:52px;margin:-26px 0 0 -26px;border-radius:50%;
+  background:rgba(255,255,255,.24);border:1px solid rgba(255,255,255,.35);transition:transform .06s linear}
+#toast{position:absolute;left:50%;bottom:44px;transform:translate(-50%,10px);padding:10px 16px;font-size:11.5px;letter-spacing:.06em;
+  background:rgba(10,11,12,.8);border:1px solid rgba(255,255,255,.14);border-radius:2px;opacity:0;transition:opacity .3s,transform .3s}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+#tourfade{position:fixed;inset:0;z-index:9;background:#050607;opacity:0;pointer-events:none;
+  transition:opacity .62s ease;display:flex;align-items:center;justify-content:center}
+#tourfade.on{opacity:1}
+#tourcap{text-align:center;opacity:0;transform:translateY(10px);
+  transition:opacity .5s ease .14s,transform .5s ease .14s}
+#tourfade.on #tourcap{opacity:1;transform:none}
+#tourcap .troom{display:block;font-size:10px;letter-spacing:.34em;color:#c9a97c;text-transform:uppercase}
+#tourcap .tcount{display:block;margin-top:18px;font-family:Georgia,"Times New Roman",serif;font-size:clamp(40px,7vw,62px);
+  color:rgba(242,239,233,.9);letter-spacing:.06em;line-height:1}
+#tourcap .tname{display:block;margin-top:16px;font-family:Georgia,serif;font-size:15px;letter-spacing:.04em;color:rgba(242,239,233,.52)}
+body.touring #roombar,body.touring #joy{display:none}
+.touchonly{display:none}
+body.touch .touchonly{display:block}
+body.touch .nohover{display:none}
+@media (max-width:820px){
+  .panel{padding:32px 26px 28px}
+  #card{right:14px;left:14px;width:auto;bottom:14px}
+  #card.focus{width:auto}
+  #map{display:none}
+  #topbar{padding:14px 14px}
+  #joy{left:18px;bottom:68px}
+  #roombar{left:14px;right:14px;bottom:14px;justify-content:center}
+}
+</style>
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:title" content="가상 전시관 · Virtual Gallery">
+<meta property="og:description" content="네 개의 전시실과 여덟 점의 작품을 1인칭으로 걸어 다니는 Three.js 가상 전시관. 도슨트 자동 관람 지원.">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/gallery/">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/gallery.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Virtual 3D exhibition gallery">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="가상 전시관 · Virtual Gallery">
+<meta name="twitter:description" content="네 개의 전시실과 여덟 점의 작품을 1인칭으로 걸어 다니는 Three.js 가상 전시관. 도슨트 자동 관람 지원.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/gallery.jpg">
+<meta name="twitter:image:alt" content="Virtual 3D exhibition gallery">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/gallery/">
+</head>
+<body>
+<canvas id="scene"></canvas>
+
+
+<div id="hud" class="layer">
+  <div id="topbar">
+    <div>
+      <span id="roomname">입구</span>
+      <em id="roomsub">Foyer</em>
+    </div>
+    <div id="meta">
+      <span id="progress">0 / 8</span>
+      <button id="tourbtn" class="hudbtn gold" type="button">자동 관람</button>
+      <button id="invertbtn" class="hudbtn touchonly" type="button">상하 반전</button>
+      <button id="helpbtn" class="hudbtn" type="button">도움말</button>
+    </div>
+  </div>
+  <div id="dot"></div>
+  <canvas id="map" width="420" height="252"></canvas>
+  <div id="card">
+    <div class="idx" id="cardIdx">01 / 20</div>
+    <h3 id="cardTitle">작품 1</h3>
+    <div class="meta" id="cardMeta"></div>
+    <p id="cardDesc"></p>
+    <div class="hint" id="cardHint">클릭하여 확대</div>
+    <div id="cardActions">
+      <button id="cardPrev" type="button" class="ghost">‹ 이전</button>
+      <button id="cardNext" type="button" class="ghost">다음 ›</button>
+      <button id="cardClose" type="button" style="margin-left:auto">돌아가기</button>
+    </div>
+  </div>
+  <div id="roombar">
+    <button class="rbtn" data-room="vest" type="button">입구</button>
+    <button class="rbtn" data-room="atrium" type="button">아트리움</button>
+    <button class="rbtn" data-room="A" type="button">1실</button>
+    <button class="rbtn" data-room="B" type="button">2실</button>
+    <button class="rbtn" data-room="C" type="button">3실</button>
+    <button class="rbtn" data-room="D" type="button">4실</button>
+  </div>
+  <div id="joy"><div id="joyknob"></div></div>
+  <div id="toast"></div>
+</div>
+
+
+<div id="tourfade">
+  <div id="tourcap">
+    <span class="troom" id="tourcapTop">제1전시실</span>
+    <span class="tcount" id="tourcapCount">01 / 08</span>
+    <span class="tname" id="tourcapName"></span>
+  </div>
+</div>
+
+
+<div id="intro" class="layer overlay">
+  <div class="panel">
+    <p class="eyebrow">Virtual Exhibition · Three.js</p>
+    <h1 id="introTitle">가상 전시관</h1>
+    <p class="lede" id="introLede">네 개의 방, 스무 개의 액자 (8점 전시 중 · 나머지 12점은 빈 슬롯)</p>
+    <ul class="keys">
+      <li><b>W A S D</b> / 방향키 — 걷기 &nbsp;·&nbsp; <b>Shift</b> — 빠르게</li>
+      <li><b>마우스</b> — 시선 (클릭하면 포인터 잠금)</li>
+      <li><b>클릭</b> — 가까운 작품 확대 &nbsp;·&nbsp; <b>Esc</b> — 돌아가기</li>
+      <li><b>자동 관람</b> (T) — 도슨트가 여덟 점을 차례로 안내 &nbsp;·&nbsp; 움직이면 자유 관람</li>
+      <li class="touchonly"><b>왼쪽 조이스틱</b> — 이동 &nbsp;·&nbsp; <b>드래그</b> — 시선 &nbsp;·&nbsp; <b>탭</b> — 그 자리로 걷기</li>
+    </ul>
+    <button id="startbtn" type="button">입장하기</button>
+    <p class="fine">스무 개의 액자 중 여덟 점이 걸려 있고, 열두 개는 아직 비어 있습니다. <b>자동 관람</b>을 누르면 도슨트가 네 개의 전시실을 순서대로 안내합니다.</p>
+  </div>
+</div>
+
+
+<div id="pause" class="layer overlay hidden">
+  <div class="panel small">
+    <p class="eyebrow">Paused</p>
+    <h2>잠시 멈춤</h2>
+    <p class="lede">계속 관람하려면 아래 버튼을 누르세요.</p>
+    <div style="margin-top:24px"><button id="resumebtn" type="button">계속 관람</button></div>
+  </div>
+</div>
+
+
+<div id="help" class="layer overlay hidden">
+  <div class="panel small">
+    <p class="eyebrow">Controls</p>
+    <h2>조작 안내</h2>
+    <ul class="keys">
+      <li><b>W A S D</b> / 방향키 — 이동</li>
+      <li><b>마우스</b> — 시선 &nbsp;·&nbsp; <b>Shift</b> — 빠르게</li>
+      <li><b>클릭</b> — 작품 확대 &nbsp;·&nbsp; <b>Esc</b> — 해제</li>
+      <li><b>T</b> — 자동 관람 &nbsp;·&nbsp; <b>H</b> — 이 창 &nbsp;·&nbsp; <b>Esc</b> — 잠시 멈춤</li>
+      <li><b>보기</b> — 자동 관람 중 화면을 누르거나 움직이면 자유 관람으로 전환</li>
+    </ul>
+    <button id="helpclose" type="button" class="ghost">닫기</button>
+  </div>
+</div>
+
+
+<div id="loading" class="layer overlay">
+  <div class="panel small"><p class="eyebrow">Loading</p><p class="lede" id="loadmsg">전시관을 짓는 중…</p></div>
+</div>
+<script>
+setTimeout(function () {
+  if (window.__galleryBooted) return;
+  var msg = document.getElementById('loadmsg');
+  if (msg) {
+    msg.innerHTML = '3D 엔진을 불러오지 못했습니다.<br><br>앱 내 파일 미리보기나 로컬 파일(file://)에서는 보안 제한으로 멈출 수 있습니다. Safari/Chrome에서 로컬 서버(<code>python3 -m http.server 8000</code>) 또는 웹(https) 주소로 열어 주세요.';
+  }
+}, 4500);
+</script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+  }
+}
+</script>
+<script id="gallery-config" type="application/json">
+{
+  "title": "가상 전시관",
+  "subtitle": "네 개의 방, 스무 개의 액자 (8점 전시 중 · 나머지 12점은 빈 슬롯)",
+  "artworks": [
+    {
+      "image": "./artworks/art_01.png",
+      "title": "오후 네 시의 창가",
+      "year": "2026",
+      "medium": "캔버스에 유채",
+      "description": "오래된 목조 창틀에 스민 오후의 햇살. 놓인 주전자와 펼친 책 위로 먼지가 천천히 내려앉는다. 누군가 잠시 자리를 비운 듯한 방의 온도가 아직 남아 있다."
+    },
+    {
+      "image": "./artworks/art_02.png",
+      "title": "비 갠 골목",
+      "year": "2026",
+      "medium": "캔버스에 유채",
+      "description": "비가 그친 저녁, 젖은 돌바닥이 가로등 불빛을 삼켰다가 다시 흘려보낸다. 발자국은 지워졌지만 물빛은 아직 그날을 기억하고 있다."
+    },
+    null,
+    null,
+    null,
+    {
+      "image": "./artworks/art_06.png",
+      "title": "한 줄기",
+      "year": "2026",
+      "medium": "디지털 프린트",
+      "description": "완전한 어둠 속에 놓인 하나의 프리즘. 빛은 벽과 바닥에서 스스로를 펼쳐 보이고, 어둠은 그 폭을 조용히 재어 준다."
+    },
+    {
+      "image": "./artworks/art_07.png",
+      "title": "부서지는 금빛",
+      "year": "2026",
+      "medium": "디지털 프린트",
+      "description": "수면 위로 흩어지는 오후의 햇살. 잡으려 하면 부서지고, 눈을 감으면 다시 모인다."
+    },
+    null,
+    null,
+    null,
+    {
+      "image": "./artworks/art_11.png",
+      "title": "새벽의 지평",
+      "year": "2026",
+      "medium": "디지털 프린트",
+      "description": "바다와 하늘이 경계를 잃는 시간. 수평선 하나가 세상의 앞과 뒤를 조용히 나눈다."
+    },
+    {
+      "image": "./artworks/art_12.png",
+      "title": "안개의 능선",
+      "year": "2026",
+      "medium": "젤라틴 실버 프린트",
+      "description": "설산은 겹겹이 물러나며 제 존재를 감춘다. 가장 조용한 풍경은 가장 멀리 있는 풍경이다."
+    },
+    null,
+    null,
+    null,
+    {
+      "image": "./artworks/art_16.png",
+      "title": "먹과 금",
+      "year": "2026",
+      "medium": "먹 · 금박 · 캔버스",
+      "description": "짙은 먹의 층 위로 스민 금빛 균열. 어둠을 채우지 않고 어둠 속에 금을 심는다."
+    },
+    {
+      "image": "./artworks/art_17.png",
+      "title": "달항아리, 밤",
+      "year": "2026",
+      "medium": "디지털 프린트",
+      "description": "어둠 속에서 스스로 빛을 머금은 둥근 그릇. 비어 있기에 오히려 가득한 침묵."
+    },
+    null,
+    null,
+    null
+  ],
+  "_guide": "artworks 배열 20개가 앞에서부터 전시실 1~4에 5점씩 걸립니다. image 에 이미지 경로(예: ./artworks/art_01.png 또는 https 주소), title, year, medium, description 을 채우면 그대로 걸립니다. null 이면 빈 액자로 남고, 자동 관람과 작품 이동에서는 건너뜁니다."
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+
+/* ============================================================
+   가상 전시관 · Three.js
+   1) 설정   2) 렌더러 · 질감   3) 건축(벽/바닥/천장/충돌)
+   4) 작품과 액자   5) 조명   6) 이동 · 충돌 · UI
+   ============================================================ */
+
+
+window.addEventListener('error', function (ev) {
+  const ld = document.getElementById('loading');
+  const msg = document.getElementById('loadmsg');
+  if (ld) ld.classList.remove('hidden');
+  if (msg) msg.textContent = '오류가 발생했습니다: ' + (ev.message || '알 수 없는 오류') + ' · WebGL 지원과 인터넷 연결(CDN)을 확인해 주세요.';
+});
+
+
+/* ---------- 1) 설정 ---------- */
+const CONFIG_NODE = document.getElementById('gallery-config');
+let CONFIG = { title: '가상 전시관', subtitle: '', artworks: [] };
+if (CONFIG_NODE) {
+  try { CONFIG = JSON.parse(CONFIG_NODE.textContent); } catch (err) { console.warn('config parse', err); }
+}
+const ARTWORKS = Array.isArray(CONFIG.artworks) ? CONFIG.artworks : [];
+const TOTAL = 20;
+
+
+/* ---------- 2) 렌더러 · 씬 ---------- */
+const canvas = document.getElementById('scene');
+const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, powerPreference: 'high-performance' });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+renderer.setSize(window.innerWidth, window.innerHeight, false);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.06;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x07080a);
+scene.fog = new THREE.Fog(0x101216, 18, 62);
+
+
+const camera = new THREE.PerspectiveCamera(62, window.innerWidth / Math.max(1, window.innerHeight), 0.05, 280);
+camera.rotation.order = 'YXZ';
+
+
+const pmrem = new THREE.PMREMGenerator(renderer);
+try {
+  const envRT = pmrem.fromScene(new RoomEnvironment(), 0.05);
+  scene.environment = envRT.texture;
+  scene.environmentIntensity = 0.5;
+} catch (err) {
+  console.warn('environment', err);
+}
+
+
+/* ---------- 2b) 절차적 질감 ---------- */
+function makeCanvas(w, h) {
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  return c;
+}
+function texFromCanvas(c, repeatX, repeatY) {
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 8;
+  if (repeatX || repeatY) {
+    t.wrapS = THREE.RepeatWrapping;
+    t.wrapT = THREE.RepeatWrapping;
+    t.repeat.set(repeatX || 1, repeatY || 1);
+  }
+  return t;
+}
+function grainTexture(base, amount, repX, repY) {
+  const c = makeCanvas(256, 256);
+  const x = c.getContext('2d');
+  x.fillStyle = base; x.fillRect(0, 0, 256, 256);
+  for (let i = 0; i < 5200; i++) {
+    const a = Math.random() * amount;
+    x.fillStyle = 'rgba(0,0,0,' + a.toFixed(3) + ')';
+    x.fillRect(Math.random() * 256, Math.random() * 256, 2, 2);
+  }
+  for (let i = 0; i < 900; i++) {
+    const a = Math.random() * amount * 0.7;
+    x.fillStyle = 'rgba(255,255,255,' + a.toFixed(3) + ')';
+    x.fillRect(Math.random() * 256, Math.random() * 256, 2, 2);
+  }
+  return texFromCanvas(c, repX, repY);
+}
+function skyTexture() {
+  const c = makeCanvas(128, 128);
+  const x = c.getContext('2d');
+  const g = x.createRadialGradient(64, 64, 3, 64, 64, 64);
+  g.addColorStop(0, '#ffffff');
+  g.addColorStop(0.5, '#f2f7ff');
+  g.addColorStop(1, '#bccde6');
+  x.fillStyle = g; x.fillRect(0, 0, 128, 128);
+  return texFromCanvas(c);
+}
+function wrapLines(ctx, text, maxWidth) {
+  const chars = String(text).split('');
+  const lines = [];
+  let line = '';
+  for (let i = 0; i < chars.length; i++) {
+    const test = line + chars[i];
+    if (ctx.measureText(test).width > maxWidth && line.length > 0) {
+      lines.push(line);
+      line = chars[i];
+    } else {
+      line = test;
+    }
+  }
+  if (line.length > 0) lines.push(line);
+  return lines;
+}
+function placeholderTexture(index) {
+  const c = makeCanvas(768, 768);
+  const x = c.getContext('2d');
+  const g = x.createLinearGradient(0, 0, 768, 768);
+  g.addColorStop(0, '#f0ebe1');
+  g.addColorStop(0.5, '#e9e3d7');
+  g.addColorStop(1, '#ded6c7');
+  x.fillStyle = g; x.fillRect(0, 0, 768, 768);
+  for (let i = 0; i < 2600; i++) {
+    x.fillStyle = 'rgba(120,108,90,' + (0.012 + Math.random() * 0.026).toFixed(3) + ')';
+    x.fillRect(Math.random() * 768, Math.random() * 768, 2, 2);
+  }
+  x.strokeStyle = 'rgba(86,76,62,0.10)';
+  x.lineWidth = 2;
+  x.strokeRect(80, 80, 608, 608);
+  return texFromCanvas(c);
+}
+function plaqueTexture(numText, title, subText) {
+  const c = makeCanvas(640, 320);
+  const x = c.getContext('2d');
+  x.fillStyle = '#f1ece2'; x.fillRect(0, 0, 640, 320);
+  x.strokeStyle = 'rgba(0,0,0,0.14)'; x.lineWidth = 3; x.strokeRect(1.5, 1.5, 637, 317);
+  x.fillStyle = '#22201d';
+  x.textAlign = 'left';
+  x.font = '600 22px Helvetica, Arial, sans-serif';
+  x.fillText(numText, 44, 78);
+  x.font = '600 34px Georgia, serif';
+  const lines = wrapLines(x, title, 552);
+  let y = 142;
+  for (let i = 0; i < Math.min(lines.length, 2); i++) {
+    x.fillText(lines[i], 44, y);
+    y += 42;
+  }
+  x.font = '400 20px Helvetica, Arial, sans-serif';
+  x.fillStyle = 'rgba(34,32,29,0.6)';
+  x.fillText(subText, 44, 284);
+  return texFromCanvas(c);
+}
+function signTexture(main, sub) {
+  const c = makeCanvas(1024, 256);
+  const x = c.getContext('2d');
+  x.fillStyle = '#0c0d0f'; x.fillRect(0, 0, 1024, 256);
+  x.fillStyle = 'rgba(201,169,124,0.9)';
+  x.fillRect(40, 72, 3, 112);
+  x.fillStyle = '#f4f1ea';
+  x.textAlign = 'left';
+  x.font = '400 62px Georgia, serif';
+  x.fillText(main, 74, 140);
+  x.font = '600 22px Helvetica, Arial, sans-serif';
+  x.fillStyle = 'rgba(244,241,234,0.45)';
+  x.fillText(sub, 76, 182);
+  return texFromCanvas(c);
+}
+
+
+const TEX = {
+  sky: skyTexture(),
+  atriumFloor: grainTexture('#26282c', 0.16, 6, 6),
+  atriumWall: grainTexture('#3f3b36', 0.1, 4, 2),
+  corridorFloor: grainTexture('#2a2825', 0.14, 10, 2),
+  corridorWall: grainTexture('#4a463f', 0.09, 8, 1)
+};
+
+
+/* ---------- 3) 건축 ---------- */
+const COLLIDERS = [];
+function addCollider(x0, z0, x1, z1) {
+  COLLIDERS.push({
+    x0: Math.min(x0, x1), z0: Math.min(z0, z1),
+    x1: Math.max(x0, x1), z1: Math.max(z0, z1)
+  });
+}
+function boxMesh(w, h, d, material) {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), material);
+  m.castShadow = true;
+  m.receiveShadow = true;
+  return m;
+}
+function addWallX(z, x0, x1, h, material, thickness) {
+  const t = thickness || 0.4;
+  const len = Math.abs(x1 - x0);
+  if (len < 0.02) return null;
+  const m = boxMesh(len, h, t, material);
+  m.position.set((x0 + x1) / 2, h / 2, z);
+  scene.add(m);
+  addCollider(x0, z - t / 2, x1, z + t / 2);
+  return m;
+}
+function addWallZ(x, z0, z1, h, material, thickness) {
+  const t = thickness || 0.4;
+  const len = Math.abs(z1 - z0);
+  if (len < 0.02) return null;
+  const m = boxMesh(t, h, len, material);
+  m.position.set(x, h / 2, (z0 + z1) / 2);
+  scene.add(m);
+  addCollider(x - t / 2, z0, x + t / 2, z1);
+  return m;
+}
+function wallXWithOpening(z, x0, x1, h, material, t, a, b, openH, lintelHeight) {
+  addWallX(z, x0, a, h, material, t);
+  addWallX(z, b, x1, h, material, t);
+  const lh = (lintelHeight || h) - openH;
+  if (lh > 0.02) {
+    const m = boxMesh(b - a, lh, t, material);
+    m.position.set((a + b) / 2, openH + lh / 2, z);
+    scene.add(m);
+  }
+}
+function wallZWithOpening(x, z0, z1, h, material, t, a, b, openH) {
+  addWallZ(x, z0, a, h, material, t);
+  addWallZ(x, b, z1, h, material, t);
+  const lh = h - openH;
+  if (lh > 0.02) {
+    const m = boxMesh(t, lh, b - a, material);
+    m.position.set(x, openH + lh / 2, (a + b) / 2);
+    scene.add(m);
+  }
+}
+function addFloor(x0, z0, x1, z1, material, y) {
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(Math.abs(x1 - x0), Math.abs(z1 - z0)), material);
+  m.rotation.x = -Math.PI / 2;
+  m.position.set((x0 + x1) / 2, y === undefined ? 0 : y, (z0 + z1) / 2);
+  m.receiveShadow = true;
+  scene.add(m);
+  return m;
+}
+function addCeiling(x0, z0, x1, z1, y, material) {
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(Math.abs(x1 - x0), Math.abs(z1 - z0)), material);
+  m.rotation.x = Math.PI / 2;
+  m.position.set((x0 + x1) / 2, y, (z0 + z1) / 2);
+  m.receiveShadow = true;
+  scene.add(m);
+  return m;
+}
+
+
+/* 전시실 정의 (치수는 미터) */
+const ROOMS = [
+  { id: 'A', name: '제1전시실', sub: 'Memory · 기억', x0: 10.5, x1: 19.5, z0: -11.5, z1: -1.8, h: 4.6,
+    wall: '#cfc4b2', floor: '#6a4b34', frame: 0x9a7442, frameMetal: 0.85, light: 0xffb279 },
+  { id: 'B', name: '제2전시실', sub: 'Light · 빛', x0: 21, x1: 28, z0: 1.8, z1: 8.5, h: 3.2,
+    wall: '#c6cdd2', floor: '#8d8b86', frame: 0xa9b0b6, frameMetal: 0.9, light: 0xc3d9f2 },
+  { id: 'C', name: '제3전시실', sub: 'Horizon · 지평', x0: 29, x1: 39, z0: -13, z1: -1.8, h: 6.4,
+    wall: '#e3ded6', floor: '#9a9891', frame: 0x2a2a2c, frameMetal: 0.55, light: 0xfff2dd },
+  { id: 'D', name: '제4전시실', sub: 'Stillness · 침잠', x0: 30.5, x1: 38.5, z0: 1.8, z1: 7.5, h: 2.9,
+    wall: '#403c37', floor: '#3b3028', frame: 0x6b5340, frameMetal: 0.7, light: 0xffb070 }
+];
+const ATRIUM = { x0: -8, x1: 8, z0: -7, z1: 7, h: 9 };
+const VEST = { x0: -3.2, x1: 3.2, z0: 7, z1: 12.6, h: 4.2 };
+const COR = { x0: 8, x1: 40, z0: -1.8, z1: 1.8, h: 3.3 };
+
+
+/* ---------- 3b) 월드 ---------- */
+function wallXMulti(z, x0, x1, h, material, t, openings) {
+  const ops = (openings || []).slice().sort(function (p, q) { return p.a - q.a; });
+  let cursor = x0;
+  for (let i = 0; i < ops.length; i++) {
+    const o = ops[i];
+    addWallX(z, cursor, o.a, h, material, t);
+    const lh = h - o.h;
+    if (lh > 0.02) {
+      const m = boxMesh(o.b - o.a, lh, t, material);
+      m.position.set((o.a + o.b) / 2, o.h + lh / 2, z);
+      scene.add(m);
+    }
+    cursor = o.b;
+  }
+  addWallX(z, cursor, x1, h, material, t);
+}
+function skylightCeiling(x0, z0, x1, z1, y, material, insetX, insetZ) {
+  const sx0 = x0 + insetX, sx1 = x1 - insetX, sz0 = z0 + insetZ, sz1 = z1 - insetZ;
+  addCeiling(x0, z0, sx0, z1, y, material);
+  addCeiling(sx1, z0, x1, z1, y, material);
+  addCeiling(sx0, z0, sx1, sz0, y, material);
+  addCeiling(sx0, sz1, sx1, z1, y, material);
+  const glowMat = new THREE.MeshBasicMaterial({ map: TEX.sky, toneMapped: false, color: 0xffffff });
+  const glow = new THREE.Mesh(new THREE.PlaneGeometry(sx1 - sx0, sz1 - sz0), glowMat);
+  glow.rotation.x = Math.PI / 2;
+  glow.position.set((sx0 + sx1) / 2, y - 0.01, (sz0 + sz1) / 2);
+  scene.add(glow);
+  const ribMat = new THREE.MeshStandardMaterial({ color: 0x23252a, roughness: 0.7, metalness: 0.4 });
+  const ribs = 4;
+  for (let i = 1; i < ribs; i++) {
+    const t = i / ribs;
+    const rib = boxMesh(0.08, 0.1, sz1 - sz0, ribMat);
+    rib.position.set(sx0 + (sx1 - sx0) * t, y - 0.06, (sz0 + sz1) / 2);
+    scene.add(rib);
+  }
+  return { sx0: sx0, sx1: sx1, sz0: sz0, sz1: sz1 };
+}
+
+
+/* 바닥 · 벽 재질 */
+const matAtriumFloor = new THREE.MeshStandardMaterial({ color: 0xffffff, map: TEX.atriumFloor, roughness: 0.18, metalness: 0.22, envMapIntensity: 1.15 });
+const matAtriumWall = new THREE.MeshStandardMaterial({ color: 0xffffff, map: TEX.atriumWall, roughness: 0.95, metalness: 0.0 });
+const matCorridorFloor = new THREE.MeshStandardMaterial({ color: 0xffffff, map: TEX.corridorFloor, roughness: 0.32, metalness: 0.08, envMapIntensity: 0.7 });
+const matCorridorWall = new THREE.MeshStandardMaterial({ color: 0xffffff, map: TEX.corridorWall, roughness: 0.93, metalness: 0.02 });
+const matCeilingDark = new THREE.MeshStandardMaterial({ color: 0x1a1b1e, roughness: 0.9, metalness: 0.05 });
+const matDarkMetal = new THREE.MeshStandardMaterial({ color: 0x181a1d, roughness: 0.45, metalness: 0.72 });
+const matGlowSoft = new THREE.MeshBasicMaterial({ color: 0xffe6c0, toneMapped: false });
+
+
+/* --- 아트리움 --- */
+addFloor(ATRIUM.x0, ATRIUM.z0, ATRIUM.x1, ATRIUM.z1, matAtriumFloor);
+const atriumLight = skylightCeiling(ATRIUM.x0, ATRIUM.z0, ATRIUM.x1, ATRIUM.z1, ATRIUM.h, matCeilingDark, 2.6, 2.4);
+addWallX(ATRIUM.z0, ATRIUM.x0 - 0.2, ATRIUM.x1 + 0.2, ATRIUM.h, matAtriumWall);
+addWallZ(ATRIUM.x0, ATRIUM.z0 - 0.2, ATRIUM.z1 + 0.2, ATRIUM.h, matAtriumWall);
+wallXMulti(ATRIUM.z1, ATRIUM.x0 - 0.2, ATRIUM.x1 + 0.2, ATRIUM.h, matAtriumWall, 0.4, [{ a: -1.9, b: 1.9, h: 2.9 }]);
+wallZWithOpening(ATRIUM.x1, ATRIUM.z0 - 0.2, ATRIUM.z1 + 0.2, ATRIUM.h, matAtriumWall, 0.4, -1.6, 1.6, 2.6);
+
+
+/* 기둥 4개 */
+const pillarMat = new THREE.MeshStandardMaterial({ color: 0x35322e, roughness: 0.72, metalness: 0.06 });
+[[-4.4, -3.9], [4.4, -3.9], [-4.4, 3.9], [4.4, 3.9]].forEach(function (p) {
+  const c = boxMesh(0.82, ATRIUM.h, 0.82, pillarMat);
+  c.position.set(p[0], ATRIUM.h / 2, p[1]);
+  scene.add(c);
+  addCollider(p[0] - 0.41, p[1] - 0.41, p[0] + 0.41, p[1] + 0.41);
+  const cap = boxMesh(1.02, 0.12, 1.02, matDarkMetal);
+  cap.position.set(p[0], ATRIUM.h - 0.1, p[1]);
+  scene.add(cap);
+});
+
+
+/* 아트리움 중앙 벤치 */
+const benchMat = new THREE.MeshStandardMaterial({ color: 0x1b1c1f, roughness: 0.55, metalness: 0.15 });
+const bench = boxMesh(3.4, 0.42, 0.9, benchMat);
+bench.position.set(0, 0.21, 1.6);
+scene.add(bench);
+addCollider(-1.7, 1.15, 1.7, 2.05);
+
+
+/* --- 입구 현관 --- */
+const matVestFloor = new THREE.MeshStandardMaterial({ color: 0x2b2d31, roughness: 0.2, metalness: 0.18, envMapIntensity: 1.0 });
+addFloor(VEST.x0, VEST.z0, VEST.x1, VEST.z1, matVestFloor);
+addCeiling(VEST.x0, VEST.z0, VEST.x1, VEST.z1, VEST.h, matCeilingDark);
+addWallZ(VEST.x0, VEST.z0, VEST.z1, VEST.h, matAtriumWall);
+addWallZ(VEST.x1, VEST.z0, VEST.z1, VEST.h, matAtriumWall);
+/* 바깥으로 통하는 유리벽 */
+const glassMat = new THREE.MeshStandardMaterial({ color: 0x9fb4c9, roughness: 0.08, metalness: 0.1, transparent: true, opacity: 0.34, side: THREE.DoubleSide });
+const glass = new THREE.Mesh(new THREE.PlaneGeometry(VEST.x1 - VEST.x0, VEST.h - 0.1), glassMat);
+glass.position.set(0, (VEST.h - 0.1) / 2, VEST.z1 - 0.03);
+scene.add(glass);
+const outsideMat = new THREE.MeshBasicMaterial({ color: 0xdfe9f4, toneMapped: false });
+const outside = new THREE.Mesh(new THREE.PlaneGeometry(VEST.x1 - VEST.x0, VEST.h), outsideMat);
+outside.position.set(0, VEST.h / 2, VEST.z1 + 0.02);
+outside.rotation.y = Math.PI;
+scene.add(outside);
+for (let i = -2; i <= 2; i++) {
+  const mull = boxMesh(0.07, VEST.h, 0.1, matDarkMetal);
+  mull.position.set(i * 1.25, VEST.h / 2, VEST.z1 - 0.06);
+  scene.add(mull);
+}
+addCollider(VEST.x0 - 0.3, VEST.z1 - 0.25, VEST.x1 + 0.3, VEST.z1 + 0.25);
+
+
+/* --- 복도 --- */
+addFloor(COR.x0, COR.z0, COR.x1, COR.z1, matCorridorFloor);
+addCeiling(COR.x0, COR.z0, COR.x1, COR.z1, COR.h, matCeilingDark);
+const DOORS = [
+  { a: 13.6, b: 15.4, z: -1.8, room: 'A' },
+  { a: 23.4, b: 25.1, z: 1.8, room: 'B' },
+  { a: 32.4, b: 34.2, z: -1.8, room: 'C' },
+  { a: 35.4, b: 37.2, z: 1.8, room: 'D' }
+];
+wallXMulti(-1.8, COR.x0 - 0.2, COR.x1, 6.8, matCorridorWall, 0.4, [
+  { a: 13.6, b: 15.4, h: 2.35 },
+  { a: 32.4, b: 34.2, h: 2.35 }
+]);
+wallXMulti(1.8, COR.x0 - 0.2, COR.x1, 6.8, matCorridorWall, 0.4, [
+  { a: 23.4, b: 25.1, h: 2.35 },
+  { a: 35.4, b: 37.2, h: 2.35 }
+]);
+addWallZ(COR.x1, COR.z0, COR.z1, COR.h + 0.2, matCorridorWall, 0.4);
+
+
+/* 복도 천장 라이트 라인 */
+const stripMat = new THREE.MeshBasicMaterial({ color: 0xffeccc, toneMapped: false });
+for (let i = 0; i < 6; i++) {
+  const x = 10.5 + i * 5.4;
+  const strip = boxMesh(2.6, 0.05, 0.14, stripMat);
+  strip.position.set(x, COR.h - 0.04, 0);
+  strip.castShadow = false;
+  scene.add(strip);
+}
+
+
+/* --- 전시실 4곳 --- */
+function buildRoom(r) {
+  const wallTex = grainTexture(r.wall, 0.07, 3, 1.6);
+  const wallMat = new THREE.MeshStandardMaterial({ color: 0xffffff, map: wallTex, roughness: 0.94, metalness: 0.02, envMapIntensity: 0.55 });
+  const floorMat = new THREE.MeshStandardMaterial({ color: 0xffffff, map: grainTexture(r.floor, 0.12, 5, 5), roughness: r.id === 'B' || r.id === 'C' ? 0.24 : 0.42, metalness: r.id === 'C' ? 0.12 : 0.04, envMapIntensity: 0.9 });
+  const ceilMat = new THREE.MeshStandardMaterial({ color: r.id === 'D' ? 0x2b2724 : 0x2a2b2d, roughness: 0.9, metalness: 0.04 });
+
+
+  addFloor(r.x0, r.z0, r.x1, r.z1, floorMat, 0.002);
+  if (r.id === 'C') {
+    skylightCeiling(r.x0, r.z0, r.x1, r.z1, r.h, ceilMat, 3.0, 3.2);
+  } else {
+    addCeiling(r.x0, r.z0, r.x1, r.z1, r.h, ceilMat);
+  }
+  /* 복도와 맞닿은 벽은 복도 쪽에서 만들었으므로 나머지 세 면만 */
+  const corridorSide = (r.id === 'A' || r.id === 'C') ? 'z1' : 'z0';
+  if (corridorSide === 'z1') {
+    addWallX(r.z0 - 0.2, r.x0 - 0.2, r.x1 + 0.2, r.h, wallMat);
+  } else {
+    addWallX(r.z1 + 0.2, r.x0 - 0.2, r.x1 + 0.2, r.h, wallMat);
+  }
+  addWallZ(r.x0 - 0.2, r.z0 - 0.2, r.z1 + 0.2, r.h, wallMat);
+  addWallZ(r.x1 + 0.2, r.z0 - 0.2, r.z1 + 0.2, r.h, wallMat);
+
+
+  /* 걸레받이 */
+  const skirtMat = new THREE.MeshStandardMaterial({ color: 0x0f0f11, roughness: 0.6, metalness: 0.1 });
+  addWallX(r.z0 + 0.02, r.x0, r.x1, 0.09, skirtMat, 0.03);
+  addWallZ(r.x0 + 0.02, r.z0, r.z1, 0.09, skirtMat, 0.03);
+  addWallZ(r.x1 - 0.02, r.z0, r.z1, 0.09, skirtMat, 0.03);
+
+
+  /* 전시실 입구 표지 (복도 쪽) */
+  const zSign = (r.id === 'A' || r.id === 'C') ? -1.58 : 1.58;
+  const dx = (r.id === 'A') ? 14.5 : (r.id === 'B') ? 24.25 : (r.id === 'C') ? 33.3 : 36.3;
+  const signMat = new THREE.MeshBasicMaterial({ map: signTexture(r.name, r.sub), toneMapped: false });
+  const sign = new THREE.Mesh(new THREE.PlaneGeometry(1.5, 0.375), signMat);
+  sign.position.set(dx, 2.95, zSign);
+  sign.rotation.y = zSign < 0 ? 0 : Math.PI;
+  scene.add(sign);
+
+
+  return { wallMat: wallMat, floorMat: floorMat };
+}
+const ROOM_MATS = {};
+ROOMS.forEach(function (r) { ROOM_MATS[r.id] = buildRoom(r); });
+
+
+/* ---------- 4) 작품과 액자 ---------- */
+const SLOTS = {
+  A: [
+    { wall: 'back', at: 12.4, w: 1.5, h: 1.05 },
+    { wall: 'back', at: 15.0, w: 1.15, h: 1.15 },
+    { wall: 'back', at: 17.6, w: 1.0, h: 1.35 },
+    { wall: 'left', at: -6.6, w: 1.0, h: 1.35 },
+    { wall: 'right', at: -6.6, w: 1.5, h: 1.05 }
+  ],
+  B: [
+    { wall: 'back', at: 22.9, w: 1.35, h: 0.95 },
+    { wall: 'back', at: 26.1, w: 1.35, h: 0.95 },
+    { wall: 'left', at: 5.2, w: 0.95, h: 1.3 },
+    { wall: 'right', at: 4.3, w: 1.05, h: 1.05 },
+    { wall: 'right', at: 6.6, w: 1.05, h: 1.05 }
+  ],
+  C: [
+    { wall: 'back', at: 31.3, y: 1.9, w: 1.9, h: 1.3 },
+    { wall: 'back', at: 34.2, y: 1.9, w: 1.6, h: 1.1 },
+    { wall: 'back', at: 37.1, y: 1.9, w: 1.9, h: 1.3 },
+    { wall: 'left', at: -7.2, y: 1.9, w: 1.1, h: 1.5 },
+    { wall: 'right', at: -7.2, y: 1.9, w: 1.1, h: 1.5 }
+  ],
+  D: [
+    { wall: 'back', at: 33.0, y: 1.42, w: 1.25, h: 0.9 },
+    { wall: 'back', at: 36.2, y: 1.42, w: 1.25, h: 0.9 },
+    { wall: 'left', at: 4.6, y: 1.42, w: 0.9, h: 1.2 },
+    { wall: 'right', at: 3.6, y: 1.42, w: 0.9, h: 0.9 },
+    { wall: 'right', at: 5.9, y: 1.42, w: 0.9, h: 0.9 }
+  ]
+};
+const ROOM_BY_ID = {};
+ROOMS.forEach(function (r) { ROOM_BY_ID[r.id] = r; });
+
+
+function slotPose(room, s) {
+  const t = 0.08;
+  if (s.wall === 'back') return { x: s.at, y: s.y || 1.55, z: room.z1 - t, ry: Math.PI, nx: 0, nz: -1 };
+  if (s.wall === 'front') return { x: s.at, y: s.y || 1.55, z: room.z0 + t, ry: 0, nx: 0, nz: 1 };
+  if (s.wall === 'left') return { x: room.x0 + t, y: s.y || 1.55, z: s.at, ry: Math.PI / 2, nx: 1, nz: 0 };
+  return { x: room.x1 - t, y: s.y || 1.55, z: s.at, ry: -Math.PI / 2, nx: -1, nz: 0 };
+}
+/* 방마다 'back' 이 복도 반대편 벽이 되도록 좌표를 맞춘다:
+   A·C 는 z0 쪽이 먼 벽, B·D 는 z1 쪽이 먼 벽. */
+function farWall(room) {
+  return (room.id === 'A' || room.id === 'C') ? 'z0' : 'z1';
+}
+
+
+const RECORDS = [];
+const artMeshes = [];
+const frameGeoCache = {};
+function frameMaterial(room) {
+  return new THREE.MeshStandardMaterial({
+    color: room.frame,
+    roughness: room.frameMetal > 0.8 ? 0.32 : 0.46,
+    metalness: room.frameMetal,
+    envMapIntensity: 1.1
+  });
+}
+const backMat = new THREE.MeshStandardMaterial({ color: 0x121110, roughness: 0.9, metalness: 0.05 });
+const matBoardMat = new THREE.MeshStandardMaterial({ color: 0xf0ebe1, roughness: 0.96, metalness: 0.0 });
+
+
+function buildArtwork(room, slot, data, index) {
+  const pose = slotPose(room, slot);
+  const group = new THREE.Group();
+  group.position.set(pose.x, pose.y, pose.z);
+  group.rotation.y = pose.ry;
+
+
+  const w = slot.w, h = slot.h, fw = 0.075;
+  const backing = new THREE.Mesh(new THREE.PlaneGeometry(w + 0.2, h + 0.2), backMat);
+  backing.position.z = 0.015;
+  backing.receiveShadow = true;
+  group.add(backing);
+
+
+  const filled = !!(data && data.image);
+  if (filled) {
+    const matBoard = new THREE.Mesh(new THREE.PlaneGeometry(w + 0.13, h + 0.13), matBoardMat);
+    matBoard.position.z = 0.03;
+    matBoard.receiveShadow = true;
+    group.add(matBoard);
+
+
+    const artMat = new THREE.MeshStandardMaterial({
+      map: placeholderTexture(index),
+      roughness: 0.86,
+      metalness: 0.0,
+      envMapIntensity: 0.35
+    });
+    const loader = new THREE.TextureLoader();
+    loader.setCrossOrigin('anonymous');
+    loader.load(data.image, function (tex) {
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.anisotropy = 8;
+      artMat.map = tex;
+      artMat.needsUpdate = true;
+    }, undefined, function () {
+      console.warn('작품 이미지를 불러오지 못했습니다:', data.image);
+    });
+    const art = new THREE.Mesh(new THREE.PlaneGeometry(w, h), artMat);
+    art.position.z = 0.045;
+    art.receiveShadow = true;
+    group.add(art);
+    art.userData.recordIndex = index;
+    artMeshes.push(art);
+  }
+
+
+  const fm = frameMaterial(room);
+  const bars = [
+    [w + 2 * fw, fw, 0, h / 2 + fw / 2],
+    [w + 2 * fw, fw, 0, -(h / 2 + fw / 2)],
+    [fw, h + 2 * fw, -(w / 2 + fw / 2), 0],
+    [fw, h + 2 * fw, w / 2 + fw / 2, 0]
+  ];
+  for (let i = 0; i < bars.length; i++) {
+    const b = bars[i];
+    const bar = boxMesh(b[0], b[1], 0.085, fm);
+    bar.position.set(b[2], b[3], 0.045);
+    group.add(bar);
+  }
+
+
+  /* 벽면 라벨 */
+  const numText = (index + 1 < 10 ? '0' : '') + (index + 1);
+  const label = filled ? data.title : ('빈 액자 ' + numText);
+  const subText = filled ? (room.name + ' · ' + (data.year || '')) : (room.name + ' · 비어 있음');
+  const plMat = new THREE.MeshBasicMaterial({
+    map: plaqueTexture(numText, label, subText.trim()),
+    toneMapped: false
+  });
+  const plaque = new THREE.Mesh(new THREE.PlaneGeometry(0.3, 0.15), plMat);
+  plaque.position.set(w / 2 + 0.36, -h / 2 + 0.06, 0.03);
+  group.add(plaque);
+
+
+  scene.add(group);
+
+
+  const normal = new THREE.Vector3(pose.nx, 0, pose.nz);
+  RECORDS.push({
+    index: index,
+    filled: filled,
+    title: filled ? data.title : ('빈 액자 ' + numText),
+    description: filled ? (data.description || '') : '아직 작품이 걸리지 않은 자리입니다. 다음 전시를 기다리는 빈 액자.',
+    year: filled ? (data.year || '') : '',
+    medium: filled ? (data.medium || '') : '',
+    room: room.id,
+    roomName: room.name,
+    roomSub: room.sub,
+    pos: new THREE.Vector3(pose.x, pose.y, pose.z),
+    normal: normal,
+    group: group,
+    focused: false
+  });
+}
+
+
+ROOMS.forEach(function (room, roomIndex) {
+  const slots = SLOTS[room.id];
+  for (let i = 0; i < slots.length; i++) {
+    const index = roomIndex * 5 + i;
+    const slot = Object.assign({}, slots[i]);
+    if (slot.wall === 'back') {
+      /* 먼 벽이 z0 인 방은 회전만 뒤집으면 된다 */
+      if (farWall(room) === 'z0') { slot.wall = 'front'; }
+    }
+    buildArtwork(room, slot, ARTWORKS[index], index);
+  }
+});
+
+
+/* ---------- 4b) 도슨트 자동 관람 ---------- */
+const TOUR_STOPS = RECORDS.filter(function (r) { return r.filled; });
+TOUR_STOPS.forEach(function (r, i) { r.tourOrder = i; });
+const ART_TOTAL = TOUR_STOPS.length;
+const TOUR_FAR = 3.6, TOUR_NEAR = 2.05, TOUR_FADEOUT = 0.55, TOUR_HOLD = 2.7, TOUR_APPROACH = 3.0, TOUR_SPEED = 1.55;
+const tour = { on: false, i: 0, phase: 'idle', t: 0, dur: 1, from: null, to: null };
+const elTourFade = document.getElementById('tourfade');
+const elTourCapTop = document.getElementById('tourcapTop');
+const elTourCapCount = document.getElementById('tourcapCount');
+const elTourCapName = document.getElementById('tourcapName');
+const elTourBtn = document.getElementById('tourbtn');
+const elDot = document.getElementById('dot');
+
+
+function tourCaption(rec) {
+  const n = rec ? rec.tourOrder + 1 : 0;
+  elTourCapTop.textContent = rec.roomName + ' · ' + rec.roomSub;
+  elTourCapCount.textContent = (n < 10 ? '0' : '') + n + ' / ' + (TOUR_STOPS.length < 10 ? '0' : '') + TOUR_STOPS.length;
+  elTourCapName.textContent = rec.title;
+}
+function lookAngles(from, target) {
+  const dx = target.x - from.x, dz = target.z - from.z;
+  const d = Math.max(0.001, Math.sqrt(dx * dx + dz * dz));
+  return { yaw: Math.atan2(-dx, -dz), pitch: clampPitch(Math.atan2(target.y - EYE, d)) };
+}
+function aimAt(rec, dt, rate) {
+  const ang = lookAngles(state.pos, rec.pos);
+  const k = 1 - Math.exp(-dt * rate);
+  state.yaw = lerpAngle(state.yaw, ang.yaw, k);
+  state.pitch += (ang.pitch - state.pitch) * k;
+}
+function tourPose(rec, dist) {
+  return rec.pos.clone().add(rec.normal.clone().multiplyScalar(dist));
+}
+function easeInOut(k) {
+  return k < 0.5 ? 2 * k * k : -1 + (4 - 2 * k) * k;
+}
+function showStop(rec) {
+  showCard(rec, false, '도슨트 안내 중 · 화면을 누르면 자유 관람');
+  markViewed(rec);
+}
+function placeAtStop(rec) {
+  const far = tourPose(rec, TOUR_FAR);
+  const near = tourPose(rec, TOUR_NEAR);
+  state.pos.set(far.x, EYE, far.z);
+  state.vel.set(0, 0, 0);
+  state.bob = 0;
+  tour.from = new THREE.Vector2(far.x, far.z);
+  tour.to = new THREE.Vector2(near.x, near.z);
+  const ang = lookAngles(state.pos, rec.pos);
+  state.yaw = ang.yaw;
+  state.pitch = ang.pitch;
+  updateZone();
+}
+function syncTourBtn() {
+  elTourBtn.classList.toggle('active', tour.on);
+  elTourBtn.textContent = tour.on ? '관람 중지' : '자동 관람';
+}
+function startTour() {
+  if (!TOUR_STOPS.length) { toast('아직 걸린 작품이 없습니다'); return; }
+  if (tour.on) { stopTour(true); return; }
+  if (state.mode === 'focus') exitFocus();
+  document.getElementById('intro').classList.add('hidden');
+  document.getElementById('loading').classList.add('hidden');
+  toggleHelp(false);
+  document.getElementById('pause').classList.add('hidden');
+  if (document.pointerLockElement === canvas) document.exitPointerLock();
+  hideCard();
+  tour.on = true; tour.i = 0; tour.phase = 'fadeout'; tour.t = 0;
+  state.mode = 'tour';
+  state.moveTo = null;
+  state.vel.set(0, 0, 0);
+  document.body.classList.add('touring');
+  elDot.classList.add('off');
+  syncTourBtn();
+  tourCaption(TOUR_STOPS[0]);
+  elTourFade.classList.add('on');
+  toast('도슨트 자동 관람 — 화면을 누르거나 움직이면 멈춥니다');
+}
+function stopTour(manual) {
+  const wasOn = tour.on;
+  tour.on = false;
+  tour.phase = 'idle';
+  elTourFade.classList.remove('on');
+  document.body.classList.remove('touring');
+  elDot.classList.remove('off');
+  syncTourBtn();
+  if (state.mode === 'tour') state.mode = 'walk';
+  state.vel.set(0, 0, 0);
+  if (wasOn && manual) toast('자유 관람으로 전환했습니다');
+}
+function nextStop() {
+  const cur = TOUR_STOPS[tour.i];
+  if (tour.i >= TOUR_STOPS.length - 1) { finishTour(); return; }
+  const nxt = TOUR_STOPS[tour.i + 1];
+  tour.i += 1;
+  tour.t = 0;
+  if (nxt.room === cur.room) {
+    const near = tourPose(nxt, TOUR_NEAR);
+    tour.from = new THREE.Vector2(state.pos.x, state.pos.z);
+    tour.to = new THREE.Vector2(near.x, near.z);
+    const d = Math.sqrt((near.x - state.pos.x) * (near.x - state.pos.x) + (near.z - state.pos.z) * (near.z - state.pos.z));
+    tour.dur = Math.min(4.5, Math.max(1.1, d / TOUR_SPEED));
+    tour.phase = 'travel';
+    showStop(nxt);
+  } else {
+    tourCaption(nxt);
+    elTourFade.classList.add('on');
+    tour.phase = 'fadeout';
+    hideCard();
+  }
+}
+function finishTour() {
+  stopTour(false);
+  toast('관람을 마쳤습니다 — 이제 자유롭게 둘러보세요');
+  if (!isTouch) requestLook();
+}
+function updateTour(dt) {
+  const rec = TOUR_STOPS[tour.i];
+  if (!rec) { stopTour(false); return; }
+  tour.t += dt;
+  if (tour.phase === 'fadeout') {
+    if (tour.t >= TOUR_FADEOUT) {
+      placeAtStop(rec);
+      elTourFade.classList.remove('on');
+      tour.phase = 'approach';
+      tour.t = 0;
+      showStop(rec);
+    }
+  } else if (tour.phase === 'approach' || tour.phase === 'travel') {
+    const dur = tour.phase === 'approach' ? TOUR_APPROACH : tour.dur;
+    const k = Math.min(1, tour.t / dur);
+    const e = easeInOut(k);
+    state.pos.x = tour.from.x + (tour.to.x - tour.from.x) * e;
+    state.pos.z = tour.from.y + (tour.to.y - tour.from.y) * e;
+    aimAt(rec, dt, tour.phase === 'approach' ? 3.4 : 2.8);
+    if (k >= 1) { tour.phase = 'hold'; tour.t = 0; }
+  } else if (tour.phase === 'hold') {
+    aimAt(rec, dt, 2.2);
+    if (tour.t >= TOUR_HOLD) nextStop();
+  }
+  updateZone();
+}
+function stepArtwork(dir) {
+  if (!TOUR_STOPS.length) return;
+  if (tour.on) stopTour(true);
+  const curRec = state.focus && state.focus.rec ? state.focus.rec : null;
+  const cur = curRec ? TOUR_STOPS.indexOf(curRec) : -1;
+  const nextIdx = cur < 0
+    ? (dir > 0 ? 0 : TOUR_STOPS.length - 1)
+    : (cur + dir + TOUR_STOPS.length) % TOUR_STOPS.length;
+  state.focus = null;
+  state.saved = null;
+  state.mode = 'walk';
+  document.body.classList.remove('focusing');
+  document.getElementById('dot').classList.remove('off');
+  focusOn(TOUR_STOPS[nextIdx]);
+}
+
+
+/* ---------- 5) 조명 ---------- */
+function addPoint(x, y, z, color, intensity, distance) {
+  const l = new THREE.PointLight(color, intensity, distance === undefined ? 14 : distance, 2);
+  l.position.set(x, y, z);
+  scene.add(l);
+  return l;
+}
+function addSpot(x, y, z, tx, ty, tz, color, intensity, angle, distance, shadow) {
+  const l = new THREE.SpotLight(color, intensity, distance, angle, 0.95, 2);
+  l.position.set(x, y, z);
+  l.target.position.set(tx, ty, tz);
+  scene.add(l);
+  scene.add(l.target);
+  if (shadow) {
+    l.castShadow = true;
+    l.shadow.mapSize.set(1024, 1024);
+    l.shadow.bias = -0.0006;
+    l.shadow.normalBias = 0.03;
+    l.shadow.camera.near = 0.4;
+    l.shadow.camera.far = distance + 4;
+  }
+  return l;
+}
+
+
+/* 전역 보조광 */
+const hemi = new THREE.HemisphereLight(0xa9c0dd, 0x3a3128, 0.30);
+scene.add(hemi);
+
+
+/* 아트리움 햇빛 */
+const sun = new THREE.DirectionalLight(0xfff3e4, 2.3);
+sun.position.set(6, 24, 8);
+sun.target.position.set(0, 0, -1);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.camera.left = -16;
+sun.shadow.camera.right = 16;
+sun.shadow.camera.top = 16;
+sun.shadow.camera.bottom = -16;
+sun.shadow.camera.near = 2;
+sun.shadow.camera.far = 60;
+sun.shadow.bias = -0.0007;
+sun.shadow.normalBias = 0.04;
+scene.add(sun);
+scene.add(sun.target);
+
+
+/* 아트리움 펜던트 */
+[[-3.8, -3.4], [3.8, -3.4], [0, 3.2]].forEach(function (p, i) {
+  const rod = boxMesh(0.02, 2.4, 0.02, matDarkMetal);
+  rod.position.set(p[0], 7.8, p[1]);
+  scene.add(rod);
+  const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.16, 20, 16), new THREE.MeshBasicMaterial({ color: 0xffe9c8, toneMapped: false }));
+  bulb.position.set(p[0], 6.55, p[1]);
+  scene.add(bulb);
+  addPoint(p[0], 6.5, p[1], 0xffe2bb, 22, 16);
+});
+
+
+/* 복도 조명 */
+for (let i = 0; i < 6; i++) {
+  addPoint(10.5 + i * 5.4, 3.0, 0, 0xffe6c2, 9, 9);
+}
+
+
+/* 현관 조명 */
+addPoint(0, 3.5, 10.2, 0xdfe9ff, 14, 10);
+addPoint(0, 3.4, 7.9, 0xffe9cf, 8, 7);
+
+
+/* 전시실 조명 */
+function lightRoom(r) {
+  const cx = (r.x0 + r.x1) / 2;
+  const cz = (r.z0 + r.z1) / 2;
+  const fz = farWall(r) === 'z0' ? r.z0 : r.z1;
+  const inward = fz === r.z0 ? 1 : -1;
+  const big = (r.id === 'C');
+  const mid = (r.id === 'A');
+  let fill = 14, back = 34, side = 20;
+  if (big) { fill = 26; back = 70; side = 34; }
+  if (mid) { fill = 20; back = 46; side = 26; }
+  if (r.id === 'D') { fill = 7; back = 18; side = 11; }
+  if (r.id === 'B') { fill = 12; back = 26; side = 16; }
+
+
+  addPoint(cx, r.h - 0.55, cz, r.light, fill, 12);
+  addSpot(cx, r.h - 0.22, fz + inward * 3.1, cx, 1.75, fz, r.light, back, 0.62, 14, r.id === 'C');
+  addSpot(cx - 2.3, r.h - 0.35, cz, r.x0, 1.65, cz, r.light, side, 0.6, 11, false);
+  addSpot(cx + 2.3, r.h - 0.35, cz, r.x1, 1.65, cz, r.light, side, 0.6, 11, false);
+}
+ROOMS.forEach(lightRoom);
+
+
+/* 3전시실 채광 */
+const skySun = new THREE.DirectionalLight(0xfff6e8, 1.7);
+skySun.position.set(34, 18, -7);
+skySun.target.position.set(34, 0, -7);
+skySun.castShadow = true;
+skySun.shadow.mapSize.set(1024, 1024);
+skySun.shadow.camera.left = -7;
+skySun.shadow.camera.right = 7;
+skySun.shadow.camera.top = 8;
+skySun.shadow.camera.bottom = -8;
+skySun.shadow.camera.near = 1;
+skySun.shadow.camera.far = 30;
+skySun.shadow.bias = -0.0008;
+skySun.shadow.normalBias = 0.04;
+scene.add(skySun);
+scene.add(skySun.target);
+
+
+/* ---------- 6) 이동 · 시점 ---------- */
+const EYE = 1.62;
+const isTouch = (('ontouchstart' in window) || navigator.maxTouchPoints > 0);
+if (isTouch) document.body.classList.add('touch');
+
+
+const state = {
+  mode: 'intro',
+  yaw: 0,
+  pitch: 0,
+  pos: new THREE.Vector3(0, EYE, 11.3),
+  vel: new THREE.Vector3(),
+  bob: 0,
+  phase: 0,
+  viewed: {},
+  viewedCount: 0,
+  focus: null,
+  saved: null,
+  moveTo: null,
+  zoneKey: '',
+  cardIndex: -1
+};
+const keys = {};
+const joy = { x: 0, y: 0, active: false };
+
+
+const raycaster = new THREE.Raycaster();
+raycaster.far = 12;
+const floorPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+
+
+function requestLook() {
+  if (lastPointerType === 'touch') return;
+  if (canvas.requestPointerLock) {
+    try { canvas.requestPointerLock(); } catch (err) { /* 무시 */ }
+  }
+}
+let lastPointerType = isTouch ? 'touch' : 'mouse';
+function clampPitch(v) {
+  return Math.max(-1.15, Math.min(1.15, v));
+}
+
+
+window.addEventListener('keydown', function (e) {
+  keys[e.code] = true;
+  if (e.code === 'KeyT') {
+    e.preventDefault();
+    if (tour.on) stopTour(true); else startTour();
+    return;
+  }
+  if (tour.on) stopTour(true);
+  if (e.code === 'Escape') {
+    if (document.pointerLockElement === canvas) { document.exitPointerLock(); e.preventDefault(); return; }
+    if (state.mode === 'focus') { exitFocus(); e.preventDefault(); }
+    else if (state.mode === 'walk') { openPause(); }
+    else if (document.getElementById('help').classList.contains('hidden') === false) { toggleHelp(false); }
+  }
+  if (e.code === 'KeyH') toggleHelp();
+  if (e.code === 'KeyW' || e.code === 'KeyA' || e.code === 'KeyS' || e.code === 'KeyD' ||
+      e.code === 'ArrowUp' || e.code === 'ArrowDown' || e.code === 'ArrowLeft' || e.code === 'ArrowRight' ||
+      e.code === 'Space') {
+    if (state.mode === 'walk') e.preventDefault();
+  }
+});
+window.addEventListener('keyup', function (e) { keys[e.code] = false; });
+window.addEventListener('blur', function () { for (const k in keys) keys[k] = false; });
+
+
+document.addEventListener('mousemove', function (e) {
+  if (document.pointerLockElement !== canvas) return;
+  if (state.mode !== 'walk' && state.mode !== 'focus') return;
+  if (state.mode === 'focus') return;
+  const s = 0.0021;
+  state.yaw -= e.movementX * s;
+  state.pitch = clampPitch(state.pitch - e.movementY * s);
+});
+
+
+/* 마우스 드래그(포인터 잠금이 안 될 때) */
+let dragLook = false, dragX = 0, dragY = 0, dragMoved = 0, swallowClick = false;
+canvas.addEventListener('pointerdown', function (e) {
+  lastPointerType = e.pointerType || 'mouse';
+  if (tour.on) { stopTour(true); swallowClick = true; return; }
+  if (e.pointerType === 'touch') {
+    document.body.classList.add('touch');
+    touchStart(e);
+    return;
+  }
+  if (document.pointerLockElement === canvas) return;
+  dragLook = true; dragX = e.clientX; dragY = e.clientY; dragMoved = 0;
+});
+window.addEventListener('pointermove', function (e) {
+  if (e.pointerType === 'touch') { touchMove(e); return; }
+  if (!dragLook) return;
+  const dx = e.clientX - dragX, dy = e.clientY - dragY;
+  dragX = e.clientX; dragY = e.clientY;
+  dragMoved += Math.abs(dx) + Math.abs(dy);
+  if (state.mode === 'walk') {
+    state.yaw -= dx * 0.0032;
+    state.pitch = clampPitch(state.pitch - dy * 0.0032);
+  }
+});
+window.addEventListener('pointerup', function (e) {
+  if (e.pointerType === 'touch') { touchEnd(e); return; }
+  dragLook = false;
+});
+
+
+/* 터치: 자연스러운 드래그 시점(관성 포함) · 탭 이동/확대 · 포커스 해제 */
+let touchId = -1, tX = 0, tY = 0, tMoved = 0;
+let lookVelX = 0, lookVelY = 0;
+let invertTouch = false;
+try { invertTouch = localStorage.getItem('gallery_invert_touch') === '1'; } catch (e) {}
+function touchStart(e) {
+  if (joystick.contains(e.target)) return;
+  touchId = e.pointerId; tX = e.clientX; tY = e.clientY; tMoved = 0;
+  lookVelX = 0; lookVelY = 0;
+}
+function touchMove(e) {
+  if (e.pointerId !== touchId) return;
+  const dx = e.clientX - tX, dy = e.clientY - tY;
+  tX = e.clientX; tY = e.clientY;
+  tMoved += Math.abs(dx) + Math.abs(dy);
+  if (state.mode === 'walk') {
+    const sy = invertTouch ? -0.0038 : 0.0038;
+    const vx = dx * 0.0042;
+    const vy = dy * sy;
+    state.yaw += vx;
+    state.pitch = clampPitch(state.pitch + vy);
+    lookVelX = vx;
+    lookVelY = vy;
+  }
+}
+function touchEnd(e) {
+  if (e.pointerId !== touchId) return;
+  touchId = -1;
+  if (tMoved < 12) {
+    lookVelX = 0; lookVelY = 0;
+    if (state.mode === 'focus') { exitFocus(); return; }
+    if (state.mode === 'walk') tapAt(e.clientX, e.clientY);
+  }
+}
+
+
+canvas.addEventListener('click', function (e) {
+  if (swallowClick) { swallowClick = false; return; }
+  if (lastPointerType === 'touch') return;
+  if (state.mode === 'focus') { exitFocus(); return; }
+  if (state.mode !== 'walk') return;
+  if (document.pointerLockElement === canvas) {
+    tryFocus(undefined, undefined);
+    return;
+  }
+  if (dragMoved >= 8) return;
+  if (!tryFocus(e.clientX, e.clientY)) requestLook();
+});
+
+
+function tapAt(cx, cy) {
+  const rect = canvas.getBoundingClientRect();
+  const ndc = new THREE.Vector2((cx - rect.left) / rect.width * 2 - 1, -((cy - rect.top) / rect.height) * 2 + 1);
+  raycaster.setFromCamera(ndc, camera);
+  const hits = raycaster.intersectObjects(artMeshes, false);
+  if (hits.length > 0 && hits[0].distance < 7.5) {
+    focusOn(RECORDS[hits[0].object.userData.recordIndex]);
+    return;
+  }
+  const p = new THREE.Vector3();
+  if (raycaster.ray.intersectPlane(floorPlane, p)) {
+    state.moveTo = new THREE.Vector2(p.x, p.z);
+    state.vel.set(0, 0, 0);
+  }
+}
+
+
+function tryFocus(cx, cy) {
+  const rect = canvas.getBoundingClientRect();
+  const x = (cx === undefined) ? rect.width / 2 : cx - rect.left;
+  const y = (cy === undefined) ? rect.height / 2 : cy - rect.top;
+  const ndc = new THREE.Vector2((x / rect.width) * 2 - 1, -(y / rect.height) * 2 + 1);
+  raycaster.setFromCamera(ndc, camera);
+  const hits = raycaster.intersectObjects(artMeshes, false);
+  if (hits.length > 0 && hits[0].distance < 7.5) {
+    focusOn(RECORDS[hits[0].object.userData.recordIndex]);
+    return true;
+  }
+  return false;
+}
+
+
+function focusOn(rec) {
+  if (!rec || state.mode === 'focus') return;
+  state.saved = { pos: state.pos.clone(), yaw: state.yaw, pitch: state.pitch };
+  const eye = rec.pos.clone().add(rec.normal.clone().multiplyScalar(1.95));
+  eye.y = rec.pos.y + 0.03;
+  const dir = rec.pos.clone().sub(eye).normalize();
+  state.focus = {
+    rec: rec,
+    eye: eye,
+    yaw: Math.atan2(-dir.x, -dir.z),
+    pitch: Math.asin(Math.max(-1, Math.min(1, dir.y)))
+  };
+  state.mode = 'focus';
+  state.moveTo = null;
+  document.body.classList.add('focusing');
+  document.getElementById('dot').classList.add('off');
+  showCard(rec, true);
+  if (document.pointerLockElement === canvas) document.exitPointerLock();
+}
+function exitFocus() {
+  if (state.mode !== 'focus') return;
+  if (state.saved) {
+    state.pos.copy(state.saved.pos);
+    state.yaw = state.saved.yaw;
+    state.pitch = state.saved.pitch;
+  }
+  state.focus = null;
+  state.mode = 'walk';
+  state.saved = null;
+  document.body.classList.remove('focusing');
+  document.getElementById('dot').classList.remove('off');
+  hideCard();
+  requestLook();
+}
+
+
+/* ---------- 충돌 ---------- */
+const RADIUS = 0.34;
+function blocked(x, z) {
+  for (let i = 0; i < COLLIDERS.length; i++) {
+    const c = COLLIDERS[i];
+    if (x > c.x0 - RADIUS && x < c.x1 + RADIUS && z > c.z0 - RADIUS && z < c.z1 + RADIUS) return true;
+  }
+  return false;
+}
+function moveWithCollision(dx, dz) {
+  const steps = Math.max(1, Math.ceil(Math.sqrt(dx * dx + dz * dz) / 0.07));
+  const sx = dx / steps, sz = dz / steps;
+  for (let i = 0; i < steps; i++) {
+    if (!blocked(state.pos.x + sx, state.pos.z)) state.pos.x += sx;
+    if (!blocked(state.pos.x, state.pos.z + sz)) state.pos.z += sz;
+  }
+}
+
+
+/* ---------- 7) 화면 UI ---------- */
+const elRoom = document.getElementById('roomname');
+const elRoomSub = document.getElementById('roomsub');
+const elProgress = document.getElementById('progress');
+const elCard = document.getElementById('card');
+const elCardIdx = document.getElementById('cardIdx');
+const elCardTitle = document.getElementById('cardTitle');
+const elCardMeta = document.getElementById('cardMeta');
+const elCardDesc = document.getElementById('cardDesc');
+const elCardHint = document.getElementById('cardHint');
+const elToast = document.getElementById('toast');
+const joystick = document.getElementById('joy');
+const knob = document.getElementById('joyknob');
+
+
+let toastTimer = 0;
+function toast(msg) {
+  elToast.textContent = msg;
+  elToast.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () { elToast.classList.remove('on'); }, 2400);
+}
+function pad2(n) { return (n < 10 ? '0' : '') + n; }
+function showCard(rec, focused, hint) {
+  if (!rec) return;
+  elCardIdx.textContent = pad2(rec.index + 1) + ' / ' + TOTAL;
+  elCardTitle.textContent = rec.title;
+  elCardMeta.textContent = rec.filled ? [rec.medium, rec.year].filter(Boolean).join(' · ') : '빈 슬롯';
+  elCardDesc.textContent = rec.description;
+  elCardHint.textContent = hint || (rec.filled ? (focused ? 'ESC 또는 탭으로 돌아가기' : '클릭하여 확대') : '아직 비어 있는 자리');
+  elCard.classList.add('on');
+  elCard.classList.toggle('focus', !!focused);
+  state.cardIndex = rec.index;
+}
+function hideCard() {
+  elCard.classList.remove('on');
+  state.cardIndex = -1;
+}
+function markViewed(rec) {
+  if (!rec || !rec.filled || state.viewed[rec.index]) return;
+  state.viewed[rec.index] = true;
+  state.viewedCount += 1;
+  elProgress.textContent = state.viewedCount + ' / ' + ART_TOTAL;
+}
+
+
+/* 구역 */
+const ZONES = {
+  vest: { name: '입구', sub: 'Entrance', fog: 0x1b1f25, near: 6, far: 26 },
+  atrium: { name: '아트리움', sub: 'Atrium', fog: 0x14171c, near: 12, far: 54 },
+  corridor: { name: '복도', sub: 'Corridor', fog: 0x111316, near: 7, far: 30 },
+  A: { name: '제1전시실', sub: 'Memory · 기억', fog: 0x2a2018, near: 8, far: 30 },
+  B: { name: '제2전시실', sub: 'Light · 빛', fog: 0x1a232b, near: 7, far: 26 },
+  C: { name: '제3전시실', sub: 'Horizon · 지평', fog: 0x1d1f22, near: 14, far: 46 },
+  D: { name: '제4전시실', sub: 'Stillness · 침잠', fog: 0x0e0c0a, near: 5, far: 20 }
+};
+function zoneAt(x, z) {
+  for (let i = 0; i < ROOMS.length; i++) {
+    const r = ROOMS[i];
+    if (x > r.x0 - 0.4 && x < r.x1 + 0.4 && z > r.z0 - 0.4 && z < r.z1 + 0.4) return r.id;
+  }
+  if (x > COR.x0 - 0.3 && x < COR.x1 && z > COR.z0 - 0.3 && z < COR.z1 + 0.3) return 'corridor';
+  if (x > VEST.x0 - 0.6 && x < VEST.x1 + 0.6 && z > VEST.z0 - 0.6 && z < VEST.z1 + 0.6) return 'vest';
+  return 'atrium';
+}
+let fogTarget = new THREE.Color(0x14171c);
+function updateZone() {
+  const key = zoneAt(state.pos.x, state.pos.z);
+  if (key === state.zoneKey) return;
+  state.zoneKey = key;
+  const z = ZONES[key] || ZONES.atrium;
+  elRoom.textContent = z.name;
+  elRoomSub.textContent = z.sub;
+  fogTarget.setHex(z.fog);
+  scene.fog.near = z.near;
+  scene.fog.far = z.far;
+  document.querySelectorAll('#roombar .rbtn').forEach(function (b) {
+    b.classList.toggle('on', b.getAttribute('data-room') === key);
+  });
+}
+
+
+/* 미니맵 */
+const mapCanvas = document.getElementById('map');
+const mctx = mapCanvas.getContext('2d');
+const MAPBOX = { x0: -10, z0: -15, x1: 42, z1: 15 };
+function drawMap() {
+  const W = mapCanvas.width, H = mapCanvas.height;
+  mctx.clearRect(0, 0, W, H);
+  mctx.fillStyle = 'rgba(8,9,10,0.55)';
+  mctx.fillRect(0, 0, W, H);
+  const pad = 16;
+  const s = Math.min((W - pad * 2) / (MAPBOX.x1 - MAPBOX.x0), (H - pad * 2) / (MAPBOX.z1 - MAPBOX.z0));
+  const ox = pad + ((W - pad * 2) - (MAPBOX.x1 - MAPBOX.x0) * s) / 2;
+  const oy = pad + ((H - pad * 2) - (MAPBOX.z1 - MAPBOX.z0) * s) / 2;
+  function px(x) { return ox + (x - MAPBOX.x0) * s; }
+  function pz(z) { return oy + (z - MAPBOX.z0) * s; }
+  function rect(x0, z0, x1, z1, fill, stroke) {
+    const w = (x1 - x0) * s, h = (z1 - z0) * s;
+    if (fill) { mctx.fillStyle = fill; mctx.fillRect(px(x0), pz(z0), w, h); }
+    if (stroke) { mctx.strokeStyle = stroke; mctx.lineWidth = 2; mctx.strokeRect(px(x0), pz(z0), w, h); }
+  }
+  rect(ATRIUM.x0, ATRIUM.z0, ATRIUM.x1, ATRIUM.z1, 'rgba(255,255,255,0.11)', 'rgba(255,255,255,0.3)');
+  rect(VEST.x0, VEST.z0, VEST.x1, VEST.z1, 'rgba(255,255,255,0.07)', 'rgba(255,255,255,0.2)');
+  rect(COR.x0, COR.z0, COR.x1, COR.z1, 'rgba(255,255,255,0.09)', 'rgba(255,255,255,0.24)');
+  for (let i = 0; i < ROOMS.length; i++) {
+    const r = ROOMS[i];
+    const active = state.zoneKey === r.id;
+    rect(r.x0, r.z0, r.x1, r.z1, active ? 'rgba(201,169,124,0.34)' : 'rgba(255,255,255,0.10)', active ? 'rgba(201,169,124,0.9)' : 'rgba(255,255,255,0.26)');
+  }
+  /* 시야 콘 */
+  const cx = px(state.pos.x), cy = pz(state.pos.z);
+  const a = Math.atan2(-Math.cos(state.yaw), -Math.sin(state.yaw));
+  mctx.beginPath();
+  mctx.moveTo(cx, cy);
+  mctx.arc(cx, cy, 26, a - 0.5, a + 0.5);
+  mctx.closePath();
+  mctx.fillStyle = 'rgba(255,255,255,0.16)';
+  mctx.fill();
+  mctx.beginPath();
+  mctx.arc(cx, cy, 4.5, 0, Math.PI * 2);
+  mctx.fillStyle = '#f4f1ea';
+  mctx.fill();
+}
+
+
+/* ---------- 8) 루프 ---------- */
+function lerpAngle(a, b, t) {
+  let d = (b - a) % (Math.PI * 2);
+  if (d > Math.PI) d -= Math.PI * 2;
+  if (d < -Math.PI) d += Math.PI * 2;
+  return a + d * t;
+}
+const camFwd = new THREE.Vector3();
+
+
+function updateWalk(dt) {
+  const sprint = keys.ShiftLeft || keys.ShiftRight;
+  const speed = sprint ? 3.9 : 2.35;
+  let fx = 0, fz = 0;
+  if (keys.KeyW || keys.ArrowUp) fz -= 1;
+  if (keys.KeyS || keys.ArrowDown) fz += 1;
+  if (keys.KeyA || keys.ArrowLeft) fx -= 1;
+  if (keys.KeyD || keys.ArrowRight) fx += 1;
+  fx += joy.x;
+  fz += joy.y;
+
+
+  let vx = 0, vz = 0;
+  const len = Math.sqrt(fx * fx + fz * fz);
+  if (len > 0.08) {
+    state.moveTo = null;
+    const nx = fx / len, nz = fz / len;
+    const fX = -Math.sin(state.yaw), fZ = -Math.cos(state.yaw);
+    const rX = Math.cos(state.yaw), rZ = -Math.sin(state.yaw);
+    vx = (fX * (-nz) + rX * nx) * speed;
+    vz = (fZ * (-nz) + rZ * nx) * speed;
+  } else if (state.moveTo) {
+    const dx = state.moveTo.x - state.pos.x;
+    const dz = state.moveTo.y - state.pos.z;
+    const d = Math.sqrt(dx * dx + dz * dz);
+    if (d < 0.35) { state.moveTo = null; }
+    else {
+      vx = (dx / d) * 2.2;
+      vz = (dz / d) * 2.2;
+    }
+  }
+
+
+  const k = 1 - Math.exp(-dt * 11);
+  state.vel.x += (vx - state.vel.x) * k;
+  state.vel.z += (vz - state.vel.z) * k;
+  if (Math.abs(state.vel.x) < 0.002) state.vel.x = 0;
+  if (Math.abs(state.vel.z) < 0.002) state.vel.z = 0;
+  moveWithCollision(state.vel.x * dt, state.vel.z * dt);
+
+
+  const sp = Math.sqrt(state.vel.x * state.vel.x + state.vel.z * state.vel.z);
+  state.phase += dt * sp * 2.2;
+  const targetBob = sp > 0.15 ? Math.sin(state.phase * 2) * 0.018 : 0;
+  state.bob += (targetBob - state.bob) * Math.min(1, dt * 10);
+
+  if (touchId === -1 && (Math.abs(lookVelX) > 0.0001 || Math.abs(lookVelY) > 0.0001)) {
+    state.yaw += lookVelX;
+    state.pitch = clampPitch(state.pitch + lookVelY);
+    const damp = Math.exp(-dt * 9);
+    lookVelX *= damp;
+    lookVelY *= damp;
+  }
+
+  updateZone();
+  updateProximity();
+}
+
+
+function updateProximity() {
+  camFwd.set(
+    -Math.sin(state.yaw) * Math.cos(state.pitch),
+    Math.sin(state.pitch),
+    -Math.cos(state.yaw) * Math.cos(state.pitch)
+  );
+  let best = null, bestScore = 0;
+  for (let i = 0; i < RECORDS.length; i++) {
+    const rec = RECORDS[i];
+    const to = rec.pos.clone().sub(camera.position);
+    const dist = to.length();
+    if (dist > 3.8) continue;
+    to.normalize();
+    const dot = to.dot(camFwd);
+    if (dot < 0.55) continue;
+    const score = dot * 2 + (3.8 - dist);
+    if (score > bestScore) { bestScore = score; best = rec; }
+  }
+  if (best) {
+    const d = best.pos.distanceTo(camera.position);
+    if (d < 3.3) markViewed(best);
+    if (state.cardIndex !== best.index) showCard(best, false);
+  } else if (state.cardIndex !== -1 && state.mode === 'walk') {
+    hideCard();
+  }
+}
+
+
+function updateFocus(dt) {
+  if (!state.focus) return;
+  const k = 1 - Math.exp(-dt * 6.5);
+  state.pos.lerp(state.focus.eye, k);
+  state.yaw = lerpAngle(state.yaw, state.focus.yaw, k);
+  state.pitch += (state.focus.pitch - state.pitch) * k;
+}
+
+
+const clock = new THREE.Clock();
+let frames = 0;
+function animate() {
+  requestAnimationFrame(animate);
+  const dt = Math.min(clock.getDelta(), 0.05);
+  if (state.mode === 'walk') updateWalk(dt);
+  else if (state.mode === 'focus') updateFocus(dt);
+  else if (state.mode === 'tour') updateTour(dt);
+
+
+  camera.position.set(state.pos.x, EYE + state.bob, state.pos.z);
+  camera.rotation.x = state.pitch;
+  camera.rotation.y = state.yaw;
+  camera.rotation.z = 0;
+
+
+  scene.fog.color.lerp(fogTarget, Math.min(1, dt * 1.6));
+  hemi.intensity += ((state.zoneKey === 'atrium' || state.zoneKey === 'C' ? 0.34 : 0.24) - hemi.intensity) * Math.min(1, dt * 2);
+
+
+  if (frames % 2 === 0) drawMap();
+  frames += 1;
+  renderer.render(scene, camera);
+
+
+  if (frames === 3) {
+    window.__galleryBooted = true;
+    const ld = document.getElementById('loading');
+    if (ld) ld.classList.add('hidden');
+  }
+}
+
+
+
+window.__dbg = { THREE: THREE, scene: scene, renderer: renderer, camera: camera, state: state, sun: sun, skySun: skySun, hemi: hemi, ROOM_MATS: ROOM_MATS, TEX: TEX, RECORDS: RECORDS, ROOMS: ROOMS };
+window.__dbg.setCam = function (x, z, yaw, pitch) { state.pos.set(x, EYE, z); state.yaw = yaw; state.pitch = pitch || 0; state.mode = 'walk'; };
+/* ---------- 9) 시작 · 창 ---------- */
+function openPause() {
+  document.getElementById('pause').classList.remove('hidden');
+  state.mode = 'pause';
+  if (document.pointerLockElement === canvas) document.exitPointerLock();
+}
+function closePause() {
+  document.getElementById('pause').classList.add('hidden');
+  state.mode = 'walk';
+  requestLook();
+}
+function toggleHelp(force) {
+  const el = document.getElementById('help');
+  const show = (force === undefined) ? el.classList.contains('hidden') : force;
+  el.classList.toggle('hidden', !show);
+  if (show && document.pointerLockElement === canvas) document.exitPointerLock();
+  if (!show && state.mode === 'walk') requestLook();
+}
+document.getElementById('helpbtn').addEventListener('click', function () { toggleHelp(true); });
+document.getElementById('tourbtn').addEventListener('click', function (e) {
+  e.stopPropagation();
+  if (tour.on) stopTour(true); else startTour();
+});
+document.getElementById('helpclose').addEventListener('click', function () { toggleHelp(false); });
+document.getElementById('resumebtn').addEventListener('click', closePause);
+const invertBtn = document.getElementById('invertbtn');
+if (invertBtn) {
+  invertBtn.classList.toggle('active', invertTouch);
+  invertBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    invertTouch = !invertTouch;
+    invertBtn.classList.toggle('active', invertTouch);
+    try { localStorage.setItem('gallery_invert_touch', invertTouch ? '1' : '0'); } catch (err) {}
+    toast(invertTouch ? '터치 상하 시선: 반전됨' : '터치 상하 시선: 기본(끌어당기기)');
+  });
+}
+const ROOM_SPOTS = {
+  vest: { x: 0, z: 11.3, yaw: 0 },
+  atrium: { x: 0, z: 2.0, yaw: -Math.PI / 2 },
+  A: { x: 14.5, z: -6.2, yaw: 0 },
+  B: { x: 24.2, z: 6.2, yaw: Math.PI },
+  C: { x: 33.3, z: -7.5, yaw: 0 },
+  D: { x: 36.3, z: 6.0, yaw: Math.PI }
+};
+document.querySelectorAll('#roombar .rbtn').forEach(function (b) {
+  b.addEventListener('click', function (e) {
+    e.stopPropagation();
+    const id = b.getAttribute('data-room');
+    const sp = ROOM_SPOTS[id];
+    if (!sp) return;
+    if (state.mode === 'focus') exitFocus();
+    state.mode = 'walk';
+    state.moveTo = null;
+    state.vel.set(0, 0, 0);
+    state.pos.set(sp.x, EYE, sp.z);
+    state.yaw = sp.yaw;
+    state.pitch = 0;
+    updateZone();
+  });
+});
+document.getElementById('cardPrev').addEventListener('click', function (e) {
+  e.stopPropagation();
+  stepArtwork(-1);
+});
+document.getElementById('cardNext').addEventListener('click', function (e) {
+  e.stopPropagation();
+  stepArtwork(1);
+});
+document.getElementById('cardClose').addEventListener('click', function (e) {
+  e.stopPropagation();
+  exitFocus();
+});
+document.getElementById('startbtn').addEventListener('click', function () {
+  document.getElementById('intro').classList.add('hidden');
+  document.getElementById('loading').classList.add('hidden');
+  state.mode = 'walk';
+  updateZone();
+  requestLook();
+  if (isTouch) toast('왼쪽 조이스틱으로 걷고, 화면을 드래그해 둘러보세요');
+});
+
+
+/* 텍스트 초기화 */
+if (CONFIG.title) {
+  document.getElementById('introTitle').textContent = CONFIG.title;
+  document.title = CONFIG.title + ' · Virtual Gallery';
+}
+if (CONFIG.subtitle) document.getElementById('introLede').textContent = CONFIG.subtitle;
+elProgress.textContent = '0 / ' + ART_TOTAL;
+
+
+/* 조이스틱 */
+let joyId = -1;
+function joyStart(e) {
+  joyId = e.pointerId;
+  joy.active = true;
+  joystick.setPointerCapture(e.pointerId);
+  joyMove(e);
+}
+function joyMove(e) {
+  if (!joy.active || e.pointerId !== joyId) return;
+  const rect = joystick.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  let dx = e.clientX - cx;
+  let dy = e.clientY - cy;
+  const max = rect.width / 2 - 18;
+  const d = Math.sqrt(dx * dx + dy * dy);
+  if (d > max) { dx = dx / d * max; dy = dy / d * max; }
+  knob.style.transform = 'translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px)';
+  const norm = Math.min(1, d / max);
+  if (norm < 0.10) { joy.x = 0; joy.y = 0; return; }
+  const mag = Math.pow((norm - 0.10) / 0.90, 1.25);
+  joy.x = (dx / d) * mag;
+  joy.y = (dy / d) * mag;
+}
+function joyEnd(e) {
+  if (e && e.pointerId !== undefined && e.pointerId !== joyId) return;
+  joy.active = false;
+  joy.x = 0; joy.y = 0;
+  knob.style.transform = 'translate(0px,0px)';
+  joyId = -1;
+}
+joystick.addEventListener('pointerdown', function (e) { e.preventDefault(); if (tour.on) stopTour(true); e.stopPropagation(); joyStart(e); });
+joystick.addEventListener('pointermove', function (e) { e.preventDefault(); e.stopPropagation(); joyMove(e); });
+joystick.addEventListener('pointerup', function (e) { e.preventDefault(); e.stopPropagation(); joyEnd(e); });
+joystick.addEventListener('pointercancel', function (e) { e.stopPropagation(); joyEnd(e); });
+
+
+/* 창 크기 */
+function onResize() {
+  const w = window.innerWidth, h = window.innerHeight;
+  camera.aspect = w / Math.max(1, h);
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h, false);
+}
+window.addEventListener('resize', onResize);
+onResize();
+
+
+/* 첫 화면 */
+camera.position.set(state.pos.x, EYE, state.pos.z);
+camera.rotation.set(0, 0, 0, 'YXZ');
+updateZone();
+drawMap();
+animate();
+setTimeout(function () {
+  const ld = document.getElementById('loading');
+  if (ld) ld.classList.add('hidden');
+}, 4500);
+
+
+</script>
+</body>
+</html>
