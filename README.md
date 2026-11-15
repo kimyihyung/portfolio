@@ -8,6 +8,7 @@
 | --- | --- |
 | `/` | 메인 소개 페이지 (스크롤 애니메이션) |
 | `/3d/` | 3D 포탈 — 배포작 5종 바로가기 |
+| `/3d/twin-dragons/` | Three.js 쌍룡 쇼케이스(9:16 릴스 내장) |
 | `/3d/focus-room/` | Three.js 집중실 |
 | `/3d/galaxy/` | Three.js 은하 |
 | `/gallery/` | 이미지 갤러리 |

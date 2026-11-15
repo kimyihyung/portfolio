@@ -111,7 +111,7 @@ html.m #count{padding:6px 10px}
 <meta property="og:site_name" content="Kim Yihyung">
 <meta property="og:type" content="website">
 <meta property="og:title" content="3D 프로젝트 포탈 · Portal Launcher">
-<meta property="og:description" content="여덟 개의 포탈을 돌며 작업을 골라 들어가는 인터랙티브 3D 런처 — Three.js로 만든 웹·3D 작업 허브.">
+<meta property="og:description" content="아홉 개의 포탈을 돌며 작업을 골라 들어가는 인터랙티브 3D 런처 — Three.js로 만든 웹·3D 작업 허브.">
 <meta property="og:url" content="https://kimyihyung.github.io/portfolio/3d/">
 <meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/3d.jpg">
 <meta property="og:image:width" content="1200">
@@ -121,7 +121,7 @@ html.m #count{padding:6px 10px}
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="3D 프로젝트 포탈 · Portal Launcher">
-<meta name="twitter:description" content="여덟 개의 포탈을 돌며 작업을 골라 들어가는 인터랙티브 3D 런처 — Three.js로 만든 웹·3D 작업 허브.">
+<meta name="twitter:description" content="아홉 개의 포탈을 돌며 작업을 골라 들어가는 인터랙티브 3D 런처 — Three.js로 만든 웹·3D 작업 허브.">
 <meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/3d.jpg">
 <meta name="twitter:image:alt" content="3D project portal">
 <link rel="canonical" href="https://kimyihyung.github.io/portfolio/3d/">
@@ -132,10 +132,10 @@ html.m #count{padding:6px 10px}
 <header id="top" class="ui">
   <div id="brand">
     <h1>Portal Launcher</h1>
-    <p>김이형의 웹 · 3D 작업 8점을 한 공간에</p>
+    <p>김이형의 웹 · 3D 작업 9점을 한 공간에</p>
   </div>
   <div id="topright">
-    <div id="count">8 PORTALS</div>
+    <div id="count">9 PORTALS</div>
     <div class="snd" data-snd>
       <button class="sndbtn" type="button" aria-pressed="false" aria-label="사운드 켜기" title="사운드 켜기">
         <span class="sndico">🔇</span><span class="sndlbl">사운드</span>
@@ -407,6 +407,11 @@ scene.add(dust);
 
 /* ───────────────── portals data ───────────────── */
 const ITEMS = [
+  {
+    name: '쌍룡 성역', type: 'THREE.JS · 3D',
+    desc: '여의주를 지키는 청룡과 금룡. 비늘·뿔·수염까지 코드로 빚은 실시간 3D 쇼케이스에 9:16 릴스 녹화를 내장했습니다.',
+    url: './twin-dragons/', glyph: '龍', accent: 0xffc46b, css: '#ffc46b', tag: 'NEW'
+  },
   {
     name: '몰입 집중 스튜디오', type: 'THREE.JS · 3D',
     desc: '비 오는 밤 · 따뜻한 노을 · 심야 별빛, 세 가지 창밖 풍경 속 3D 데스크 룸. 책상 위 홀로그램과 함께 실제로 작동하는 포모도로 타이머가 돌아갑니다.',
