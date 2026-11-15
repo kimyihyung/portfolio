@@ -636,12 +636,15 @@ focusRing.scale.set(4, 4, 1);
 scene.add(focusRing);
 
 /* ───────────────── camera ───────────────── */
-let CONTENT_R = 0;
-NODES.forEach((n) => { CONTENT_R = Math.max(CONTENT_R, n.pos.length()); });
-CONTENT_R += 6.5;                                  // 라벨 여유
+let HALF_W = 0, HALF_H = 0;
+NODES.forEach((n) => {
+  HALF_W = Math.max(HALF_W, Math.abs(n.pos.x));
+  HALF_H = Math.max(HALF_H, Math.abs(n.pos.y));
+});
+HALF_W += 7; HALF_H += 5;
 const _tanV = Math.tan((FOV_BASE * Math.PI) / 360);
 const _tanH = _tanV * (window.innerWidth / window.innerHeight);
-const OVERVIEW_R = clamp(Math.max(CONTENT_R / _tanV * 0.62, CONTENT_R / _tanH * 1.08), 60, 320);
+const OVERVIEW_R = clamp(Math.max((HALF_W / _tanH) * 1.34, (HALF_H / _tanV) * 1.12), 60, 320);
 const view = { target: new THREE.Vector3(0, 0, 0), r: OVERVIEW_R * 1.7, az: 0.6, pol: 1.06 };
 const tw = { active: false, t: 0, dur: 1, fr: 0, tr: 0, ft: new THREE.Vector3(), tt: new THREE.Vector3() };
 function applyCam() {
