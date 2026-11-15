@@ -121,15 +121,20 @@ html.m #brand h1{font-size:11px;letter-spacing:.22em}
 html.m #brand p{display:none}
 html.m #brand .mark{width:32px;height:32px;font-size:12px;border-radius:10px}
 html.m #hint{display:none}
-html.m #controls{max-width:calc(100vw - 96px)}
+html.m #controls{max-width:calc(100vw - 100px)}
 html.m #filters .n{display:none}
-html.m #filters{gap:2px}
+html.m #filters{gap:2px;flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;max-width:100%;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch}
+html.m #filters::-webkit-scrollbar{display:none}
+html.m .ctlrow{width:100%;justify-content:flex-end}
+html.m #soundBtn .lbl{display:none}
+html.m #brand .mark{width:30px;height:30px;font-size:11px}
+html.m #top{padding-top:calc(env(safe-area-inset-top) + 10px)}
 html.m .fb{font-size:10px;padding:6px 9px}
 html.m #orbit span.lbl{display:none}
 html.m #orbit{padding:7px 9px}
-html.m #search{width:min(210px,52vw);padding:5px 10px}
-html.m #legend{display:flex;flex-direction:row;flex-wrap:wrap;gap:4px 12px;bottom:auto;left:14px;right:14px;
-  top:calc(env(safe-area-inset-top) + 116px);justify-content:center}
+html.m #search{width:100%;padding:6px 11px}
+html.m #legend{display:none}
 html.m .lg{font-size:9px}
 html.m .lg em{display:none}
 html.m #card{right:0;left:0;top:auto;bottom:0;width:100%;transform:translateY(14px) scale(1);border-radius:22px 22px 0 0;
@@ -645,7 +650,8 @@ HALF_W += 7; HALF_H += 5;
 const _tanV = Math.tan((FOV_BASE * Math.PI) / 360);
 const _tanH = _tanV * (window.innerWidth / window.innerHeight);
 const OVERVIEW_R = clamp(Math.max((HALF_W / _tanH) * 1.62, (HALF_H / _tanV) * 1.22), 60, 320);
-const view = { target: new THREE.Vector3(0, 0, 0), r: OVERVIEW_R * 1.7, az: 0.6, pol: 1.06 };
+const targetY0 = PORTRAIT ? HALF_H * 0.16 : 0;
+const view = { target: new THREE.Vector3(0, targetY0, 0), r: OVERVIEW_R * 1.7, az: 0.6, pol: 1.06 };
 const tw = { active: false, t: 0, dur: 1, fr: 0, tr: 0, ft: new THREE.Vector3(), tt: new THREE.Vector3() };
 function applyCam() {
   const sp = Math.sin(view.pol);
@@ -663,7 +669,7 @@ function flyTo(target, r, dur) {
   tw.ft.copy(view.target); tw.tt.copy(target);
 }
 /* intro: slow zoom-in */
-flyTo(new THREE.Vector3(0, 0, 0), OVERVIEW_R, 2.4);
+flyTo(new THREE.Vector3(0, targetY0, 0), OVERVIEW_R, 2.4);
 
 /* ───────────────── state ───────────────── */
 let orbitOn = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -832,7 +838,7 @@ function closeCard(keepView) {
   focused = null;
   cardEl.classList.remove('on');
   focusRing.material.opacity = 0;
-  if (!keepView) flyTo(new THREE.Vector3(0, 0, 0), OVERVIEW_R, 1.0);
+  if (!keepView) flyTo(new THREE.Vector3(0, targetY0, 0), OVERVIEW_R, 1.0);
   if (SFX && SFX.play) SFX.play('close');
   window.__galaxyInfo.opened = null;
 }
