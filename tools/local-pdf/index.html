@@ -837,7 +837,6 @@ footer.foot .sep { color: var(--line2); }
       errRotate: 'The rotation failed',
       errZip: 'ZIP creation failed — save the pages one at a time instead.',
       errGeneric: 'Something went wrong',
-      errNotPdf: '{n} file(s) skipped — not a PDF.',
       errEncrypted: '{name} is password-protected, so it was skipped.',
       errBroken: '{name} could not be read — it may be damaged.',
       errNoLib: 'The PDF engine did not load. Reload the page and try again.',
@@ -940,7 +939,6 @@ footer.foot .sep { color: var(--line2); }
       errRotate: '회전에 실패했습니다',
       errZip: 'ZIP 생성에 실패했습니다 — 페이지를 하나씩 저장해 주세요.',
       errGeneric: '문제가 발생했습니다',
-      errNotPdf: 'PDF가 아니어서 {n}개 파일을 건너뛰었습니다.',
       errEncrypted: '{name}은(는) 암호가 걸려 있어 건너뛰었습니다.',
       errBroken: '{name}을(를) 읽지 못했습니다 — 손상되었을 수 있습니다.',
       errNoLib: 'PDF 엔진을 불러오지 못했습니다. 페이지를 새로고침한 뒤 다시 시도해 주세요.',
@@ -985,6 +983,11 @@ footer.foot .sep { color: var(--line2); }
 
   function pagesText(n) {
     return isKo() ? n + t('pagesWord') : (n === 1 ? t('singlePage') : n + ' ' + t('pagesWord'));
+  }
+
+  function notPdfMsg(n) {
+    if (isKo()) return n + '개 파일은 PDF가 아니어서 건너뛰었습니다.';
+    return n === 1 ? 'Skipped 1 file — it is not a PDF.' : 'Skipped ' + n + ' files — they are not PDFs.';
   }
 
   function fileCountText(n) {
@@ -1065,8 +1068,20 @@ footer.foot .sep { color: var(--line2); }
     });
   }
 
+  function fileToBuffer(file) {
+    if (file && typeof file.arrayBuffer === 'function') return Promise.resolve(file.arrayBuffer());
+    return new Promise(function (resolve, reject) {
+      try {
+        var fr = new FileReader();
+        fr.onload = function () { resolve(fr.result); };
+        fr.onerror = function () { reject(fr.error || new Error('read failed')); };
+        fr.readAsArrayBuffer(file);
+      } catch (e) { reject(e); }
+    });
+  }
+
   function readFile(file) {
-    return Promise.resolve(file.arrayBuffer()).then(function (ab) {
+    return fileToBuffer(file).then(function (ab) {
       var bytes = new Uint8Array(ab);
       return loadDoc(bytes).then(function (doc) {
         return { doc: doc, bytes: bytes, pageCount: doc.getPageCount(), encrypted: !!doc.__localpdfEncrypted };
@@ -1094,7 +1109,7 @@ footer.foot .sep { color: var(--line2); }
       candidates.push(f);
     }
     if (!candidates.length) {
-      if (skipped) toast(tpl('errNotPdf', { n: skipped }), true);
+      if (skipped) toast(notPdfMsg(skipped), true);
       return;
     }
 
@@ -1128,7 +1143,7 @@ footer.foot .sep { color: var(--line2); }
 
     chain.then(function () {
       setBusy(false);
-      if (skipped) toast(tpl('errNotPdf', { n: skipped }), true);
+      if (skipped) toast(notPdfMsg(skipped), true);
       if (failed.length) {
         var enc = failed.filter(function (x) { return x.enc; });
         if (enc.length) toast(tpl('errEncrypted', { name: enc[0].name }), true);
@@ -1282,14 +1297,15 @@ footer.foot .sep { color: var(--line2); }
   }
 
   function appendStat(parent, value, label) {
+    var box = document.createElement('span');
     var b = document.createElement('b');
     b.textContent = value;
-    parent.appendChild(b);
+    box.appendChild(b);
     if (label) {
-      var s = document.createElement('span');
-      s.textContent = label;
-      parent.appendChild(s);
+      var txt = /^[A-Za-z]/.test(label) ? '\u00a0' + label : label;
+      box.appendChild(document.createTextNode(txt));
     }
+    parent.appendChild(box);
   }
 
   function appendSep(parent) {
@@ -1479,7 +1495,7 @@ footer.foot .sep { color: var(--line2); }
     hint.innerHTML = tpl('rangeOk', { n: sel.indices.length, list: rangeLabel(sel.indices) });
   }
 
-  function renderAll() {
+  function render() {
     renderFiles();
     renderSelects();
     renderChips();
@@ -1918,7 +1934,7 @@ footer.foot .sep { color: var(--line2); }
     var rp = $('rotateRange');
     if (rp) rp.setAttribute('placeholder', isKo() ? '비우면 전체' : 'blank = all');
 
-    renderAll();
+    render();
   }
 
   function setLang(lang) {
