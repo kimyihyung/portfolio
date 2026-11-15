@@ -754,9 +754,11 @@ function setFilter(f) {
   filter = f;
   restyle();
   const c = activeList().length;
-  toast(LANG === 'en'
-    ? c.toLocaleString() + (f === 'all' ? ' stars' : T('left'))
-    : c.toLocaleString() + (f === 'all' ? '개의 별' : T('left')));
+  toast(query
+    ? (LANG === 'en' ? c.toLocaleString() + T('found') : c.toLocaleString() + T('found'))
+    : (LANG === 'en'
+      ? c.toLocaleString() + (f === 'all' ? ' stars' : T('left'))
+      : c.toLocaleString() + (f === 'all' ? '개의 별' : T('left'))));
   if (focused && !isActive(focused)) closeCard(false);
   if (SFX && SFX.play) SFX.play('filter');
   window.__galaxyInfo.filter = f;
@@ -853,6 +855,7 @@ document.querySelectorAll('#lang button').forEach((b) => {
 function applyLang() {
   $('#brandsub').innerHTML = T('brandSub');
   $('#q').placeholder = T('search');
+  $('#q').setAttribute('aria-label', T('search'));
   $('#hint').innerHTML = T('hint');
   $('#cclose').textContent = T('close');
   $('#prev').textContent = T('prev');
@@ -896,7 +899,7 @@ const projected = new THREE.Vector3();
 let pickCache = null;
 function pick(cx, cy) {
   const rect = canvas.getBoundingClientRect();
-  const limit = isSmall ? 40 : 30;
+  const limit = isSmall ? 44 : 34;
   let best = null, bestScore = 1e9;
   for (let i = 0; i < N; i++) {
     const n = NODES[i];
@@ -1002,7 +1005,7 @@ function animate() {
   const t = clock.elapsedTime;
   starMat.uniforms.uTime.value = t;
 
-  if (orbitOn && !focused && !dragging && pointerState.size === 0) view.az += dt * 0.035;
+  if (orbitOn && !focused && !dragging && pointerState.size === 0) view.az += dt * 0.026;
 
   if (tw.active) {
     tw.t += dt / tw.dur;
