@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#0a0b0d">
-<meta name="description" content="FileForge converts PDF to images, images to PDF, JPG/PNG/WebP/BMP/ICO between each other, and JSON/CSV/TSV/Markdown — entirely inside your browser. Zero uploads, zero accounts, zero external requests.">
-<meta name="keywords" content="file converter, pdf to image, image to pdf, jpg to png, png to webp, webp to jpg, bmp converter, ico favicon generator, json to csv, csv to json, markdown to html, offline converter, no upload converter, private file converter">
+<meta name="description" content="FileForge converts PDF to images and reads PDF text out as TXT or Markdown, sets text and Markdown into a PDF, converts JPG/PNG/WebP/AVIF/GIF/BMP/TIFF/ICO between each other, and converts JSON/YAML/CSV/TSV and HTML/Markdown — entirely inside your browser. Zero uploads, zero accounts, zero external requests.">
+<meta name="keywords" content="file converter, pdf to image, pdf to text, pdf to markdown, extract pdf text, text to pdf, markdown to pdf, image to pdf, jpg to png, png to webp, webp to jpg, avif to png, gif to png, tiff to png, bmp converter, ico favicon generator, json to csv, csv to json, json to yaml, yaml to json, markdown to html, html to markdown, offline converter, no upload converter, private file converter">
 <title>FileForge — Convert PDF, Images &amp; Data With Zero Uploads</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0b0d'/%3E%3Cpath d='M10 21.5V10.5h6.6M10 16.2h5.4M19.4 10.5 22.6 13.7v7.8h-3.2' fill='none' stroke='%23e5b45c' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M16 23.6h.01' stroke='%23e5b45c' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/file-converter/">
@@ -14,7 +14,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/file-converter/">
 <meta property="og:title" content="FileForge — Convert PDF, Images &amp; Data With Zero Uploads">
-<meta property="og:description" content="PDF ⇄ images, JPG · PNG · WebP · BMP · ICO, JSON · CSV · TSV and Markdown — converted inside this tab. No server, no account, no external request.">
+<meta property="og:description" content="PDF ⇄ images ⇄ text, JPG · PNG · WebP · AVIF · TIFF · ICO, JSON · YAML · CSV · TSV, Markdown and HTML — converted inside this tab. No server, no account, no external request.">
 <meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/file-converter.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -23,11 +23,11 @@
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="FileForge — Convert PDF, Images &amp; Data With Zero Uploads">
-<meta name="twitter:description" content="Every conversion happens inside your browser. Nothing is uploaded, nothing is installed.">
+<meta name="twitter:description" content="PDF to text, text to PDF, image formats, JSON · YAML — every conversion happens inside your browser. Nothing is uploaded, nothing is installed.">
 <meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/file-converter.jpg">
 <meta name="twitter:image:alt" content="FileForge — zero-upload file converter running in the browser">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"SoftwareApplication","name":"FileForge","alternateName":"Local file converter","applicationCategory":"UtilitiesApplication","operatingSystem":"Any (web browser)","url":"https://kimyihyung.github.io/portfolio/tools/file-converter/","description":"Convert PDF to JPG, PNG or WebP; combine images into one PDF; convert between JPG, PNG, WebP, BMP and ICO; convert JSON, CSV and TSV; render Markdown to HTML or print-ready PDF. Everything runs in the browser with zero uploads and no sign-up.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":"PDF to image (JPG, PNG, WebP) at 72–600 DPI, images to one PDF (A4, Letter or original size), JPG/PNG/WebP/BMP/ICO conversion with resize and EXIF removal, SVG rasterising, ICO favicon generation at five sizes, JSON ↔ CSV ↔ TSV, Markdown to HTML and print-to-PDF, HTML to plain text, batch ZIP download","isPartOf":{"@type":"CollectionPage","name":"Tools — Zero Uploads, Zero Sign-ups, 100% In-Browser","url":"https://kimyihyung.github.io/portfolio/tools/"}}
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"FileForge","alternateName":"Local file converter","applicationCategory":"UtilitiesApplication","operatingSystem":"Any (web browser)","url":"https://kimyihyung.github.io/portfolio/tools/file-converter/","description":"Convert PDF to JPG, PNG or WebP and extract PDF text to TXT or Markdown; set text or Markdown into a PDF; combine images into one PDF; convert between JPG, PNG, WebP, AVIF, GIF, BMP, TIFF and ICO; convert JSON, YAML, CSV and TSV; render Markdown to HTML and HTML back to Markdown. Everything runs in the browser with zero uploads and no sign-up.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":"PDF to image (JPG, PNG, WebP) at 72–600 DPI, PDF text extraction to TXT or page-marked Markdown, text and Markdown to PDF with real selectable Latin text and device-font rendering for Korean, images to one PDF (A4, Letter or original size), JPG/PNG/WebP/AVIF/GIF/BMP/TIFF/SVG to JPG/PNG/WebP/BMP/ICO with resize and EXIF removal, SVG rasterising, ICO favicon generation at five sizes, JSON ↔ CSV ↔ TSV ↔ YAML, Markdown to HTML and HTML to Markdown, HTML to plain text, batch ZIP download","isPartOf":{"@type":"CollectionPage","name":"Tools — Zero Uploads, Zero Sign-ups, 100% In-Browser","url":"https://kimyihyung.github.io/portfolio/tools/"}}
 </script>
 <style>
 *, *::before, *::after { box-sizing: border-box; }
@@ -395,6 +395,8 @@ textarea.input { resize: vertical; min-height: 96px; line-height: 1.55; font-fam
 }
 .seg-btn:hover { color: var(--ink); }
 .seg-btn[aria-pressed="true"] { background: rgba(229, 180, 92, .16); color: var(--accent); }
+.seg--many { grid-auto-columns: auto; }
+.seg--many .seg-btn { font-size: 10.5px; padding: 7px 2px; letter-spacing: -.03em; }
 html[data-theme="light"] .seg-btn[aria-pressed="true"] { background: rgba(154, 111, 22, .13); }
 
 .chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); gap: 5px; }
@@ -718,7 +720,9 @@ footer.foot .sep { color: var(--line2); }
       <nav class="modes" role="tablist" aria-label="Conversion modes">
         <button class="mode" type="button" id="mode-image" role="tab" aria-controls="panel-image" aria-selected="true" data-mode="image" data-i18n="modeImage">Image format</button>
         <button class="mode" type="button" id="mode-p2i" role="tab" aria-controls="panel-p2i" aria-selected="false" data-mode="p2i" data-i18n="modeP2i">PDF → Image</button>
+        <button class="mode" type="button" id="mode-p2t" role="tab" aria-controls="panel-p2t" aria-selected="false" data-mode="p2t" data-i18n="modeP2t">PDF → Text</button>
         <button class="mode" type="button" id="mode-i2p" role="tab" aria-controls="panel-i2p" aria-selected="false" data-mode="i2p" data-i18n="modeI2p">Image → PDF</button>
+        <button class="mode" type="button" id="mode-t2p" role="tab" aria-controls="panel-t2p" aria-selected="false" data-mode="t2p" data-i18n="modeT2p">Text → PDF</button>
         <button class="mode" type="button" id="mode-data" role="tab" aria-controls="panel-data" aria-selected="false" data-mode="data" data-i18n="modeData">Data</button>
         <button class="mode" type="button" id="mode-md" role="tab" aria-controls="panel-md" aria-selected="false" data-mode="md" data-i18n="modeMd">Markdown</button>
       </nav>
@@ -727,11 +731,11 @@ footer.foot .sep { color: var(--line2); }
     <!-- ═══════════════ 1 · IMAGE ═══════════════ -->
     <section class="panel-mode" id="panel-image" role="tabpanel" aria-labelledby="mode-image">
       <div class="drop" id="dropImage" role="button" tabindex="0" aria-label="Choose images or drop them here" data-i18n-aria="dropImgAria">
-        <input class="sr-only" type="file" id="fileImage" multiple accept=".jpg,.jpeg,.png,.webp,.bmp,.svg,image/jpeg,image/png,image/webp,image/bmp,image/svg+xml">
+        <input class="sr-only" type="file" id="fileImage" multiple accept=".jpg,.jpeg,.png,.webp,.avif,.gif,.bmp,.tif,.tiff,.svg,.ico,image/jpeg,image/png,image/webp,image/avif,image/gif,image/bmp,image/tiff,image/svg+xml,image/x-icon">
         <svg class="drop-ico" viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="9" width="36" height="30" rx="4"/><circle cx="17" cy="20" r="3"/><path d="M6 32l10-9 8 7 6-5 12 10"/></svg>
         <p class="drop-title" data-i18n="dropImgTitle">Drop images here</p>
         <p class="drop-sub" data-i18n="dropImgSub">or click to choose · several at once · order them afterwards</p>
-        <p class="drop-fmt" data-i18n="dropImgFmt">JPG · PNG · WebP · BMP · SVG → JPG · PNG · WebP · BMP · ICO</p>
+        <p class="drop-fmt" data-i18n="dropImgFmt">JPG · PNG · WebP · AVIF · GIF · BMP · TIFF · SVG → JPG · PNG · WebP · BMP · ICO</p>
       </div>
 
       <div class="panel">
@@ -879,14 +883,65 @@ footer.foot .sep { color: var(--line2); }
       </div>
     </section>
 
+    <!-- ═══════════════ 2b · PDF → TEXT ═══════════════ -->
+    <section class="panel-mode" id="panel-p2t" role="tabpanel" aria-labelledby="mode-p2t" hidden>
+      <div class="drop" id="dropP2t" role="button" tabindex="0" aria-label="Choose PDF files or drop them here" data-i18n-aria="dropP2tAria">
+        <input class="sr-only" type="file" id="fileP2t" multiple accept=".pdf,application/pdf">
+        <svg class="drop-ico" viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13 6h13l9 9v27H13z"/><path d="M26 6v9h9"/><path d="M18 24h12M18 29h12M18 34h6"/><path d="M31 30l2.6 2.6L38 28"/></svg>
+        <p class="drop-title" data-i18n="dropP2tTitle">Drop PDFs here to read their text</p>
+        <p class="drop-sub" data-i18n="dropP2tSub">or click to choose · several at once · every page is read as text</p>
+        <p class="drop-fmt" data-i18n="dropP2tFmt">PDF → TXT · Markdown · clipboard</p>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2 class="sec-k" data-i18n="filesTitleB">PDF files</h2>
+          <span class="stats" id="statsP2t" aria-live="polite"></span>
+          <button class="link-btn" id="clearP2t" type="button" data-i18n="clearAll">Clear all</button>
+        </div>
+        <p class="empty-list" id="emptyP2t" data-i18n="emptyP2t">No PDFs yet — drop one above to read its text.</p>
+        <ul class="files" id="listP2t"></ul>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h2 class="sec-k" data-i18n="optionsTitle">Options</h2></div>
+        <div class="row2">
+          <div class="field">
+            <span class="ctrl-label" id="lblFmtP2t" data-i18n="optOutText">Output</span>
+            <div class="seg" role="group" aria-labelledby="lblFmtP2t" id="fmtP2t">
+              <button class="seg-btn" type="button" data-fmt="txt" aria-pressed="true">TXT</button>
+              <button class="seg-btn" type="button" data-fmt="md" aria-pressed="false">Markdown</button>
+            </div>
+          </div>
+          <div class="field">
+            <span class="ctrl-label" data-i18n="optLayout">Layout</span>
+            <label class="check"><input type="checkbox" id="markP2t" checked><span data-i18n="optPageMark">Page markers</span></label>
+            <label class="check"><input type="checkbox" id="reflowP2t"><span data-i18n="optReflow">Join wrapped lines</span></label>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn btn--primary" id="runP2t" type="button" data-i18n="runP2t">Extract text</button>
+          <button class="btn" id="copyP2t" type="button" data-i18n="copyText" disabled>Copy text</button>
+        </div>
+        <p class="status" id="statusP2t" aria-live="polite"></p>
+        <p class="hint" id="hintP2t" data-i18n="p2tHint">Every page is read through its text layer inside this tab — nothing is rendered, uploaded or queued. Page markers become “## Page 1” in Markdown and a ruled header in TXT. A scanned PDF has no text layer, so there is nothing to read.</p>
+        <div class="results" id="resultsP2t" hidden>
+          <div class="panel-head"><h2 class="sec-k" data-i18n="resultsTitle">Results</h2>
+            <button class="link-btn" id="clearResP2t" type="button" data-i18n="clearResults">Clear results</button>
+          </div>
+          <ul class="outs" id="outP2t"></ul>
+        </div>
+      </div>
+    </section>
+
     <!-- ═══════════════ 3 · IMAGE → PDF ═══════════════ -->
     <section class="panel-mode" id="panel-i2p" role="tabpanel" aria-labelledby="mode-i2p" hidden>
       <div class="drop" id="dropI2p" role="button" tabindex="0" aria-label="Choose images or drop them here" data-i18n-aria="dropI2pAria">
-        <input class="sr-only" type="file" id="fileI2p" multiple accept=".jpg,.jpeg,.png,.webp,.bmp,.svg,image/jpeg,image/png,image/webp,image/bmp,image/svg+xml">
+        <input class="sr-only" type="file" id="fileI2p" multiple accept=".jpg,.jpeg,.png,.webp,.avif,.gif,.bmp,.tif,.tiff,.svg,.ico,image/jpeg,image/png,image/webp,image/avif,image/gif,image/bmp,image/tiff,image/svg+xml,image/x-icon">
         <svg class="drop-ico" viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5h15l9 9v29H12z"/><path d="M27 5v9h9"/><path d="M17 34l6-7 4 4.5 3-3 5 5.5"/><circle cx="21" cy="20" r="2"/></svg>
         <p class="drop-title" data-i18n="dropI2pTitle">Drop images to bind into one PDF</p>
         <p class="drop-sub" data-i18n="dropI2pSub">or click to choose · reorder them · one page per image</p>
-        <p class="drop-fmt" data-i18n="dropI2pFmt">JPG · PNG · WebP · BMP · SVG → a single PDF</p>
+        <p class="drop-fmt" data-i18n="dropI2pFmt">JPG · PNG · WebP · AVIF · GIF · BMP · TIFF · SVG → a single PDF</p>
       </div>
 
       <div class="panel">
@@ -932,14 +987,78 @@ footer.foot .sep { color: var(--line2); }
       </div>
     </section>
 
+    <!-- ═══════════════ 3b · TEXT → PDF ═══════════════ -->
+    <section class="panel-mode" id="panel-t2p" role="tabpanel" aria-labelledby="mode-t2p" hidden>
+      <div class="drop" id="dropT2p" role="button" tabindex="0" aria-label="Choose a text or Markdown file or drop it here" data-i18n-aria="dropT2pAria">
+        <input class="sr-only" type="file" id="fileT2p" accept=".txt,.md,.markdown,.mdown,.text,text/plain,text/markdown">
+        <svg class="drop-ico" viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13 6h13l9 9v27H13z"/><path d="M26 6v9h9"/><path d="M18 33V23l3.2 3.6L24.4 23v10"/><path d="M28 33V23m0 10 2.6-3M28 33l-2.6-3"/></svg>
+        <p class="drop-title" data-i18n="dropT2pTitle">Drop a .txt or .md file</p>
+        <p class="drop-sub" data-i18n="dropT2pSub">or click to choose · or paste into the box below</p>
+        <p class="drop-fmt" data-i18n="dropT2pFmt">TXT · Markdown → a PDF you keep</p>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2 class="sec-k" data-i18n="t2pInTitle">Text</h2>
+          <span class="stats" id="statsT2p" aria-live="polite"></span>
+          <button class="link-btn" id="clearT2p" type="button" data-i18n="clearAll">Clear all</button>
+        </div>
+        <div class="field">
+          <label class="ctrl-label" for="t2pIn" data-i18n="t2pInLabel">Plain text or Markdown</label>
+          <textarea class="input" id="t2pIn" rows="9" spellcheck="false" placeholder="# Title&#10;&#10;A paragraph set as real text.&#10;&#10;- one&#10;- two" data-i18n-ph="t2pInPh"></textarea>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <span class="ctrl-label" id="lblSizeT2p" data-i18n="optPageSize">Page size</span>
+            <div class="seg" role="group" aria-labelledby="lblSizeT2p" id="sizeT2p">
+              <button class="seg-btn" type="button" data-size="a4" aria-pressed="true">A4</button>
+              <button class="seg-btn" type="button" data-size="letter" aria-pressed="false">Letter</button>
+            </div>
+          </div>
+          <div class="field">
+            <span class="ctrl-label" id="lblFsT2p" data-i18n="optFontSize">Font size (pt)</span>
+            <div class="seg" role="group" aria-labelledby="lblFsT2p" id="fsT2p">
+              <button class="seg-btn" type="button" data-fs="10" aria-pressed="false">10</button>
+              <button class="seg-btn" type="button" data-fs="11" aria-pressed="true">11</button>
+              <button class="seg-btn" type="button" data-fs="12" aria-pressed="false">12</button>
+              <button class="seg-btn" type="button" data-fs="14" aria-pressed="false">14</button>
+            </div>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label class="ctrl-label" for="marginT2p" data-i18n="optMargin">Margin (mm)</label>
+            <input class="input" type="number" id="marginT2p" min="0" max="40" step="1" value="18" inputmode="numeric">
+            <p class="hint" data-i18n="marginHintT2p">A4 with 18 mm margins fits roughly 500 words per page.</p>
+          </div>
+          <div class="field">
+            <span class="ctrl-label" data-i18n="optT2pExtra">Options</span>
+            <label class="check"><input type="checkbox" id="mdT2p" checked><span data-i18n="optMdRender">Render Markdown</span></label>
+            <label class="check"><input type="checkbox" id="numT2p" checked><span data-i18n="optPageNum">Page numbers</span></label>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn btn--primary" id="runT2p" type="button" data-i18n="runT2p">Build PDF</button>
+        </div>
+        <p class="status" id="statusT2p" aria-live="polite"></p>
+        <p class="hint" id="hintT2p" data-i18n="t2pHint">Latin text goes into the PDF as real, selectable text. Korean and other scripts are drawn with your device’s own fonts at print resolution, so no character comes out as an empty box.</p>
+        <div class="results" id="resultsT2p" hidden>
+          <div class="panel-head"><h2 class="sec-k" data-i18n="resultsTitle">Results</h2>
+            <button class="link-btn" id="clearResT2p" type="button" data-i18n="clearResults">Clear results</button>
+          </div>
+          <ul class="outs" id="outT2p"></ul>
+        </div>
+      </div>
+    </section>
+
     <!-- ═══════════════ 4 · DATA ═══════════════ -->
     <section class="panel-mode" id="panel-data" role="tabpanel" aria-labelledby="mode-data" hidden>
       <div class="drop" id="dropData" role="button" tabindex="0" aria-label="Choose a data file or drop it here" data-i18n-aria="dropDataAria">
-        <input class="sr-only" type="file" id="fileData" accept=".json,.csv,.tsv,.txt,application/json,text/csv,text/plain,text/tab-separated-values">
+        <input class="sr-only" type="file" id="fileData" accept=".json,.yaml,.yml,.csv,.tsv,.txt,application/json,application/yaml,text/yaml,text/csv,text/plain,text/tab-separated-values">
         <svg class="drop-ico" viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13 6h13l9 9v27H13z"/><path d="M26 6v9h9"/><path d="M19 26h2m5 0h2m5 0h-1"/><path d="M19 32h2m5 0h2"/></svg>
-        <p class="drop-title" data-i18n="dropDataTitle">Drop a JSON, CSV or TSV file</p>
+        <p class="drop-title" data-i18n="dropDataTitle">Drop a JSON, YAML, CSV or TSV file</p>
         <p class="drop-sub" data-i18n="dropDataSub">or click to choose · or paste straight into the box below</p>
-        <p class="drop-fmt" data-i18n="dropDataFmt">JSON ⇄ CSV ⇄ TSV · never leaves the tab</p>
+        <p class="drop-fmt" data-i18n="dropDataFmt">JSON ⇄ YAML ⇄ CSV ⇄ TSV · never leaves the tab</p>
       </div>
 
       <div class="panel">
@@ -955,17 +1074,19 @@ footer.foot .sep { color: var(--line2); }
         <div class="row2">
           <div class="field">
             <span class="ctrl-label" id="lblFromData" data-i18n="optFrom">From</span>
-            <div class="seg" role="group" aria-labelledby="lblFromData" id="fromData">
+            <div class="seg seg--many" role="group" aria-labelledby="lblFromData" id="fromData">
               <button class="seg-btn" type="button" data-from="auto" aria-pressed="true" data-i18n="fromAuto">Auto</button>
               <button class="seg-btn" type="button" data-from="json" aria-pressed="false">JSON</button>
+              <button class="seg-btn" type="button" data-from="yaml" aria-pressed="false">YAML</button>
               <button class="seg-btn" type="button" data-from="csv" aria-pressed="false">CSV</button>
               <button class="seg-btn" type="button" data-from="tsv" aria-pressed="false">TSV</button>
             </div>
           </div>
           <div class="field">
             <span class="ctrl-label" id="lblToData" data-i18n="optTo">To</span>
-            <div class="seg" role="group" aria-labelledby="lblToData" id="toData">
+            <div class="seg seg--many" role="group" aria-labelledby="lblToData" id="toData">
               <button class="seg-btn" type="button" data-to="json" aria-pressed="false">JSON</button>
+              <button class="seg-btn" type="button" data-to="yaml" aria-pressed="false">YAML</button>
               <button class="seg-btn" type="button" data-to="csv" aria-pressed="true">CSV</button>
               <button class="seg-btn" type="button" data-to="tsv" aria-pressed="false">TSV</button>
             </div>
@@ -1002,7 +1123,7 @@ footer.foot .sep { color: var(--line2); }
         <svg class="drop-ico" viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13 6h13l9 9v27H13z"/><path d="M26 6v9h9"/><path d="M18 32v-7l3 3.4 3-3.4v7"/><path d="M27 32v-7m0 7-2.2-2.6M27 32l2.2-2.6"/></svg>
         <p class="drop-title" data-i18n="dropMdTitle">Drop a Markdown or HTML file</p>
         <p class="drop-sub" data-i18n="dropMdSub">or click to choose · or paste into the box below</p>
-        <p class="drop-fmt" data-i18n="dropMdFmt">Markdown → HTML · print-ready PDF · HTML → TXT</p>
+        <p class="drop-fmt" data-i18n="dropMdFmt">Markdown → HTML · PDF · HTML → Markdown · TXT</p>
       </div>
 
       <div class="panel">
@@ -1019,6 +1140,7 @@ footer.foot .sep { color: var(--line2); }
           <button class="btn btn--primary" id="runMd" type="button" data-i18n="runMd">Render</button>
           <button class="btn" id="saveHtmlMd" type="button" data-i18n="saveHtml" disabled>Save .html</button>
           <button class="btn" id="saveTxtMd" type="button" data-i18n="saveTxt" disabled>Save .txt</button>
+          <button class="btn" id="saveMdMd" type="button" data-i18n="saveMd" disabled>Save .md</button>
           <button class="btn" id="printMd" type="button" data-i18n="printPdf" disabled>Print → PDF</button>
         </div>
         <p class="status" id="statusMd" aria-live="polite"></p>
@@ -1086,6 +1208,8 @@ footer.foot .sep { color: var(--line2); }
     seq: 0,
     image: { files: [], fmt: 'jpg', quality: 90, maxEdge: 0, icoSizes: [16, 32, 48], bg: '#ffffff', outputs: [] },
     p2i: { files: [], fmt: 'png', dpi: 150, quality: 88, outputs: [] },
+    p2t: { files: [], fmt: 'txt', markers: true, reflow: false, outputs: [], text: '' },
+    t2p: { size: 'a4', fontSize: 11, margin: 18, markdown: true, numbers: true, outputs: [], mailIsRaster: false },
     i2p: { files: [], size: 'a4', margin: 0, reencode: true, outputs: [] },
     data: { from: 'auto', to: 'csv', header: true, flatten: true, pretty: true, outputs: [], last: null },
     md: { outputs: [], last: null }
@@ -1095,7 +1219,7 @@ footer.foot .sep { color: var(--line2); }
   var I18N = {
     en: {
       docTitle: 'FileForge — Convert PDF, Images & Data With Zero Uploads',
-      metaDesc: 'FileForge converts PDF to images, images to PDF, JPG/PNG/WebP/BMP/ICO between each other, and JSON/CSV/TSV/Markdown — entirely inside your browser. Zero uploads, zero accounts, zero external requests.',
+      metaDesc: 'FileForge converts PDF to images and reads PDF text out as TXT or Markdown, sets text and Markdown into a PDF, converts JPG/PNG/WebP/AVIF/GIF/BMP/TIFF/ICO between each other, and converts JSON/YAML/CSV/TSV and HTML/Markdown — entirely inside your browser. Zero uploads, zero accounts, zero external requests.',
       brandAria: 'Back to the portfolio',
       back: '← Portfolio',
       themeTitle: 'Toggle theme',
@@ -1108,11 +1232,13 @@ footer.foot .sep { color: var(--line2); }
       pillNet: '0 external requests',
       netCount: '{n} external requests',
       h1: 'Convert anything.<br><span class="dim">Nothing leaves this tab.</span>',
-      lede: 'PDF → images, images → one PDF, JPG · PNG · WebP · BMP · ICO between each other, JSON · CSV · TSV and Markdown — all converted <strong>inside your browser</strong>. No upload, no account, no queue.',
+      lede: 'PDF → images, PDF → text, text → PDF, JPG · PNG · WebP · AVIF · TIFF between each other, JSON · YAML · CSV and Markdown — all converted <strong>inside your browser</strong>. No upload, no account, no queue.',
 
       modeImage: 'Image format',
       modeP2i: 'PDF → Image',
+      modeP2t: 'PDF → Text',
       modeI2p: 'Image → PDF',
+      modeT2p: 'Text → PDF',
       modeData: 'Data',
       modeMd: 'Markdown',
 
@@ -1120,7 +1246,7 @@ footer.foot .sep { color: var(--line2); }
       dropImgAria: 'Choose images or drop them here',
       dropImgTitle: 'Drop images here',
       dropImgSub: 'or click to choose · several at once · order them afterwards',
-      dropImgFmt: 'JPG · PNG · WebP · BMP · SVG → JPG · PNG · WebP · BMP · ICO',
+      dropImgFmt: 'JPG · PNG · WebP · AVIF · GIF · BMP · TIFF · SVG → JPG · PNG · WebP · BMP · ICO',
       filesTitle: 'Files',
       clearAll: 'Clear all',
       emptyImg: 'No images yet — drop a few above to begin.',
@@ -1163,7 +1289,7 @@ footer.foot .sep { color: var(--line2); }
       dropI2pAria: 'Choose images or drop them here',
       dropI2pTitle: 'Drop images to bind into one PDF',
       dropI2pSub: 'or click to choose · reorder them · one page per image',
-      dropI2pFmt: 'JPG · PNG · WebP · BMP · SVG → a single PDF',
+      dropI2pFmt: 'JPG · PNG · WebP · AVIF · GIF · BMP · TIFF · SVG → a single PDF',
       filesTitle3: 'Images in order',
       emptyI2p: 'No images yet — drop a few above; page 1 is the first file.',
       optPageSize: 'Page size',
@@ -1175,9 +1301,9 @@ footer.foot .sep { color: var(--line2); }
 
       /* data */
       dropDataAria: 'Choose a data file or drop it here',
-      dropDataTitle: 'Drop a JSON, CSV or TSV file',
+      dropDataTitle: 'Drop a JSON, YAML, CSV or TSV file',
       dropDataSub: 'or click to choose · or paste straight into the box below',
-      dropDataFmt: 'JSON ⇄ CSV ⇄ TSV · never leaves the tab',
+      dropDataFmt: 'JSON ⇄ YAML ⇄ CSV ⇄ TSV · never leaves the tab',
       dataInTitle: 'Input',
       dataInLabel: 'Paste data',
       dataInPh: '[{"name":"Ada","role":"engineer"},{"name":"Lin","role":"designer"}]',
@@ -1202,18 +1328,61 @@ footer.foot .sep { color: var(--line2); }
       runMd: 'Render',
       saveHtml: 'Save .html',
       saveTxt: 'Save .txt',
+      saveMd: 'Save .md',
       printPdf: 'Print → PDF',
       mdHint: 'Headings, lists, code blocks, quotes, tables, links and emphasis. Print → PDF uses the browser’s own print dialog, so the text stays selectable and sharp.',
+
+      /* pdf → text */
+      dropP2tAria: 'Choose PDF files or drop them here',
+      dropP2tTitle: 'Drop PDFs here to read their text',
+      dropP2tSub: 'or click to choose · several at once · every page is read as text',
+      dropP2tFmt: 'PDF → TXT · Markdown · clipboard',
+      filesTitleB: 'PDF files',
+      emptyP2t: 'No PDFs yet — drop one above to read its text.',
+      optOutText: 'Output',
+      optLayout: 'Layout',
+      optPageMark: 'Page markers',
+      optReflow: 'Join wrapped lines',
+      runP2t: 'Extract text',
+      copyText: 'Copy text',
+      p2tHint: 'Every page is read through its text layer inside this tab — nothing is rendered, uploaded or queued. Page markers become “## Page 1” in Markdown and a ruled header in TXT. A scanned PDF has no text layer, so there is nothing to read.',
+
+      /* text → pdf */
+      dropT2pAria: 'Choose a text or Markdown file or drop it here',
+      dropT2pTitle: 'Drop a .txt or .md file',
+      dropT2pSub: 'or click to choose · or paste into the box below',
+      dropT2pFmt: 'TXT · Markdown → a PDF you keep',
+      t2pInTitle: 'Text',
+      t2pInLabel: 'Plain text or Markdown',
+      t2pInPh: '# Title\n\nA paragraph set as real text.\n\n- one\n- two',
+      optFontSize: 'Font size (pt)',
+      optT2pExtra: 'Options',
+      optMdRender: 'Render Markdown',
+      optPageNum: 'Page numbers',
+      marginHintT2p: 'A4 with 18 mm margins fits roughly 500 words per page.',
+      runT2p: 'Build PDF',
+      t2pHint: 'Latin text goes into the PDF as real, selectable text. Korean and other scripts are drawn with your device’s own fonts at print resolution, so no character comes out as an empty box.',
+
+      doneP2t: 'Read {chars} characters from {pages} pages.',
+      p2tNone: 'No text layer found — this PDF is probably a scan.',
+      errNoText: '{name} has no text layer (probably a scan).',
+      doneT2p: 'PDF · {pages} pages · {size} · {mode}',
+      textModeWord: 'real text, selectable',
+      rasterModeWord: 'drawn with your device fonts',
+      busyExtract: 'Reading page {done}/{total}…',
+      busyLayout: 'Setting the PDF…',
+      emptyT2p: 'Nothing to convert — paste some text or drop a file first.',
+      dataBadYaml: 'That is not valid YAML: {msg}',
 
       /* notes */
       notesAria: 'How it works',
       note1h: 'Read straight into memory',
       note1d: 'Files are opened with the browser’s own file API and decoded in this tab. No request leaves the page — not to a server, not to a CDN. Every library this tool uses is served from the same folder as this page.',
       note2h: 'Converted, then measured',
-      note2d: 'Each result is re-opened before you get it: images by decoding them again, PDFs by counting their pages. The size and page count shown are read from the actual output, not assumed.',
+      note2d: 'Each result is re-opened before you get it: images by decoding them again, PDFs by counting their pages, extracted text by counting its characters. The size, page count and character count you see are read from the actual output, not assumed.',
       note3h: 'Released when you are done',
       note3d: 'Outputs live in a blob URL that is revoked when you clear the list or close the tab. Nothing is written to storage, and metadata such as EXIF and GPS is dropped by re-encoding.',
-      caveat: '<strong>Limits.</strong> Browser encoding is not always the smallest: a PNG photo can come out larger than its JPEG. Very large PDFs and 600 DPI renders are capped by device memory. Password-protected PDFs must be unlocked first. Print → PDF opens your browser’s print dialog and needs system Korean fonts for Korean text.',
+      caveat: '<strong>Limits.</strong> Browser encoding is not always the smallest: a PNG photo can come out larger than its JPEG. Very large PDFs, 600 DPI renders and 120-megapixel TIFFs are capped by device memory. Password-protected PDFs must be unlocked first. A scanned PDF has no text layer to extract. Text → PDF embeds Latin as real text and draws Korean and other scripts with your device fonts, so those passages are pictures of text. Print → PDF still needs system Korean fonts.',
       foot1: '0 uploads · 0 servers · 0 cookies · 0 external requests',
       foot2: 'Everything finishes inside this tab',
       foot3: 'Close the tab and nothing remains',
@@ -1255,6 +1424,7 @@ footer.foot .sep { color: var(--line2); }
       skippedImg: '{n} file(s) skipped — not an image.',
       skippedPdf: '{n} file(s) skipped — not a PDF.',
       skippedData: '{n} file(s) skipped — not a data file.',
+      skippedDoc: '{n} file(s) skipped — not text or Markdown.',
       cleared: 'Cleared.',
       clearedRes: 'Results cleared.',
       removed: '{name} removed.',
@@ -1276,7 +1446,7 @@ footer.foot .sep { color: var(--line2); }
     },
     ko: {
       docTitle: 'FileForge — 업로드 없는 만능 파일 변환기',
-      metaDesc: 'PDF → 이미지, 이미지 → PDF, JPG·PNG·WebP·BMP·ICO 상호 변환, JSON·CSV·TSV·마크다운까지 — 모두 브라우저 안에서만 변환합니다. 업로드 0건, 계정 없음, 외부 요청 0건.',
+      metaDesc: 'PDF → 이미지와 PDF → 텍스트(TXT·마크다운), 텍스트 → PDF, JPG·PNG·WebP·AVIF·GIF·BMP·TIFF·ICO 상호 변환, JSON·YAML·CSV·TSV와 마크다운까지 — 모두 브라우저 안에서만 변환합니다. 업로드 0건, 계정 없음, 외부 요청 0건.',
       brandAria: '포트폴리오로 돌아가기',
       back: '← 포트폴리오',
       themeTitle: '테마 전환',
@@ -1289,18 +1459,20 @@ footer.foot .sep { color: var(--line2); }
       pillNet: '외부 요청 0건',
       netCount: '외부 요청 {n}건',
       h1: '무엇이든 변환.<br><span class="dim">이 탭에서 끝납니다.</span>',
-      lede: 'PDF → 이미지, 이미지 → PDF 한 장, JPG · PNG · WebP · BMP · ICO 상호 변환, JSON · CSV · TSV, 마크다운까지 — 전부 <strong>브라우저 안에서</strong> 변환합니다. 업로드도, 계정도, 대기열도 없습니다.',
+      lede: 'PDF → 이미지, PDF → 텍스트, 텍스트 → PDF, JPG · PNG · WebP · AVIF · TIFF 상호 변환, JSON · YAML · CSV, 마크다운까지 — 전부 <strong>브라우저 안에서</strong> 변환합니다. 업로드도, 계정도, 대기열도 없습니다.',
 
       modeImage: '이미지 변환',
       modeP2i: 'PDF → 이미지',
+      modeP2t: 'PDF → 텍스트',
       modeI2p: '이미지 → PDF',
+      modeT2p: '텍스트 → PDF',
       modeData: '데이터',
       modeMd: '마크다운',
 
       dropImgAria: '이미지 선택 또는 끌어다 놓기',
       dropImgTitle: '이미지를 여기에 끌어다 놓으세요',
       dropImgSub: '또는 클릭해서 선택 · 여러 개 동시 선택 · 순서는 나중에 변경',
-      dropImgFmt: 'JPG · PNG · WebP · BMP · SVG → JPG · PNG · WebP · BMP · ICO',
+      dropImgFmt: 'JPG · PNG · WebP · AVIF · GIF · BMP · TIFF · SVG → JPG · PNG · WebP · BMP · ICO',
       filesTitle: '파일',
       clearAll: '전체 비우기',
       emptyImg: '아직 이미지가 없습니다 — 위에 끌어다 놓아 시작하세요.',
@@ -1341,7 +1513,7 @@ footer.foot .sep { color: var(--line2); }
       dropI2pAria: '이미지 선택 또는 끌어다 놓기',
       dropI2pTitle: 'PDF 한 장으로 묶을 이미지를 놓으세요',
       dropI2pSub: '또는 클릭해서 선택 · 순서 변경 가능 · 이미지 1장 = 1페이지',
-      dropI2pFmt: 'JPG · PNG · WebP · BMP · SVG → PDF 1개',
+      dropI2pFmt: 'JPG · PNG · WebP · AVIF · GIF · BMP · TIFF · SVG → PDF 1개',
       filesTitle3: '페이지 순서',
       emptyI2p: '아직 이미지가 없습니다 — 위에 놓으면 첫 파일이 1페이지입니다.',
       optPageSize: '용지 크기',
@@ -1352,9 +1524,9 @@ footer.foot .sep { color: var(--line2); }
       runI2p: 'PDF 하나로 만들기',
 
       dropDataAria: '데이터 파일 선택 또는 끌어다 놓기',
-      dropDataTitle: 'JSON·CSV·TSV 파일을 놓으세요',
+      dropDataTitle: 'JSON·YAML·CSV·TSV 파일을 놓으세요',
       dropDataSub: '또는 클릭해서 선택 · 아래 칸에 직접 붙여넣어도 됩니다',
-      dropDataFmt: 'JSON ⇄ CSV ⇄ TSV · 이 탭 밖으로 나가지 않음',
+      dropDataFmt: 'JSON ⇄ YAML ⇄ CSV ⇄ TSV · 이 탭 밖으로 나가지 않음',
       dataInTitle: '입력',
       dataInLabel: '데이터 붙여넣기',
       dataInPh: '[{"name":"Ada","role":"engineer"},{"name":"Lin","role":"designer"}]',
@@ -1378,17 +1550,58 @@ footer.foot .sep { color: var(--line2); }
       runMd: '미리보기',
       saveHtml: '.html 저장',
       saveTxt: '.txt 저장',
+      saveMd: '.md 저장',
       printPdf: '인쇄 → PDF',
       mdHint: '제목·목록·코드 블록·인용·표·링크·강조를 지원합니다. 인쇄 → PDF는 브라우저 인쇄 창을 쓰므로 텍스트가 선명하게 남습니다.',
+
+      dropP2tAria: 'PDF 파일 선택 또는 끌어다 놓기',
+      dropP2tTitle: 'PDF를 놓으면 텍스트를 읽어냅니다',
+      dropP2tSub: '또는 클릭해서 선택 · 여러 개 동시 선택 · 모든 페이지를 텍스트로',
+      dropP2tFmt: 'PDF → TXT · 마크다운 · 클립보드',
+      filesTitleB: 'PDF 파일',
+      emptyP2t: '아직 PDF가 없습니다 — 위에 하나 놓으면 텍스트를 읽습니다.',
+      optOutText: '출력',
+      optLayout: '배치',
+      optPageMark: '페이지 표시',
+      optReflow: '줄바꿈 이어붙이기',
+      runP2t: '텍스트 추출',
+      copyText: '텍스트 복사',
+      p2tHint: '모든 페이지를 이 탭 안에서 텍스트 레이어로 읽습니다 — 렌더링도, 업로드도, 대기열도 없습니다. 페이지 표시를 켜면 마크다운에는 “## 1페이지”, TXT에는 구분선이 들어갑니다. 스캔한 PDF는 텍스트 레이어가 없어 읽을 것이 없습니다.',
+
+      dropT2pAria: '텍스트·마크다운 파일 선택 또는 끌어다 놓기',
+      dropT2pTitle: '.txt 또는 .md 파일을 놓으세요',
+      dropT2pSub: '또는 클릭해서 선택 · 아래 칸에 붙여넣어도 됩니다',
+      dropT2pFmt: 'TXT · 마크다운 → 남길 수 있는 PDF',
+      t2pInTitle: '텍스트',
+      t2pInLabel: '일반 텍스트 또는 마크다운',
+      t2pInPh: '# 제목\n\n본문 문단입니다.\n\n- 하나\n- 둘',
+      optFontSize: '글자 크기(pt)',
+      optT2pExtra: '옵션',
+      optMdRender: '마크다운 서식 적용',
+      optPageNum: '페이지 번호',
+      marginHintT2p: 'A4·여백 18mm 기준 한 페이지에 약 500단어가 들어갑니다.',
+      runT2p: 'PDF 만들기',
+      t2pHint: '라틴 문자는 PDF에 실제 텍스트로 들어가 선택·복사됩니다. 한글 등은 기기 자체 폰트로 인쇄 해상도에 그려 넣어, 어떤 글자도 빈 네모로 나오지 않습니다.',
+
+      doneP2t: '{pages}페이지에서 {chars}자를 읽었습니다.',
+      p2tNone: '텍스트 레이어를 찾지 못했습니다 — 스캔한 PDF로 보입니다.',
+      errNoText: '{name}에는 텍스트 레이어가 없습니다(스캔본으로 보임).',
+      doneT2p: 'PDF · {pages}페이지 · {size} · {mode}',
+      textModeWord: '실제 텍스트, 선택 가능',
+      rasterModeWord: '기기 폰트로 그려 넣음',
+      busyExtract: '페이지 읽는 중… {done}/{total}',
+      busyLayout: 'PDF 조판 중…',
+      emptyT2p: '변환할 내용이 없습니다 — 텍스트를 붙여넣거나 파일을 놓으세요.',
+      dataBadYaml: '올바른 YAML이 아닙니다: {msg}',
 
       notesAria: '동작 원리',
       note1h: '메모리로 바로 읽기',
       note1d: '파일은 브라우저 자체 파일 API로 열려 이 탭 안에서 해석됩니다. 서버로도, CDN으로도 요청이 나가지 않습니다. 이 페이지가 쓰는 라이브러리도 모두 같은 폴더에서 옵니다.',
       note2h: '변환한 뒤 실측하기',
-      note2d: '결과물을 건네기 전에 다시 열어봅니다. 이미지는 다시 디코딩해, PDF는 페이지 수를 세어 확인합니다. 표시되는 용량과 페이지 수는 짐작이 아니라 실측값입니다.',
+      note2d: '결과물을 건네기 전에 다시 열어봅니다. 이미지는 다시 디코딩해, PDF는 페이지 수를, 꺼낸 텍스트는 글자 수를 세어 확인합니다. 표시되는 용량·페이지 수·글자 수는 짐작이 아니라 실측값입니다.',
       note3h: '끝나면 즉시 해제',
       note3d: '결과물은 목록을 비우거나 탭을 닫을 때 해제되는 blob URL에만 존재합니다. 저장소에 아무것도 쓰지 않고, 다시 인코딩하므로 EXIF·GPS 같은 메타데이터는 사라집니다.',
-      caveat: '<strong>한계.</strong> 브라우저 인코딩이 항상 가장 작지는 않습니다 — PNG 사진이 원본 JPEG보다 커질 수 있습니다. 아주 큰 PDF나 600 DPI 렌더링은 기기 메모리 한도를 받습니다. 암호가 걸린 PDF는 먼저 잠금을 풀어야 합니다. 인쇄 → PDF는 브라우저 인쇄 창을 열며, 한글은 시스템 한글 폰트가 필요합니다.',
+      caveat: '<strong>한계.</strong> 브라우저 인코딩이 항상 가장 작지는 않습니다 — PNG 사진이 원본 JPEG보다 커질 수 있습니다. 아주 큰 PDF·600 DPI 렌더링·1억 2천만 화소 TIFF는 기기 메모리 한도를 받습니다. 암호가 걸린 PDF는 먼저 잠금을 풀어야 하고, 스캔한 PDF에는 꺼낼 텍스트 레이어가 없습니다. 텍스트 → PDF는 라틴 문자를 실제 텍스트로 넣고 한글 등은 기기 폰트로 그려 넣으므로 그 부분은 글자의 그림입니다. 인쇄 → PDF는 여전히 시스템 한글 폰트가 필요합니다.',
       foot1: '업로드 0 · 서버 0 · 쿠키 0 · 외부 요청 0',
       foot2: '모든 처리는 이 탭 안에서 끝납니다',
       foot3: '탭을 닫으면 남는 것 없음',
@@ -1429,6 +1642,7 @@ footer.foot .sep { color: var(--line2); }
       skippedImg: '{n}개 파일은 이미지가 아니어서 건너뛰었습니다.',
       skippedPdf: '{n}개 파일은 PDF가 아니어서 건너뛰었습니다.',
       skippedData: '{n}개 파일은 데이터 파일이 아니어서 건너뛰었습니다.',
+      skippedDoc: '{n}개 파일은 텍스트·마크다운이 아니어서 건너뛰었습니다.',
       cleared: '비웠습니다.',
       clearedRes: '결과를 지웠습니다.',
       removed: '{name} 제거됨.',
@@ -1611,11 +1825,12 @@ footer.foot .sep { color: var(--line2); }
   var EXT = { png: 'png', jpg: 'jpg', webp: 'webp', bmp: 'bmp', ico: 'ico' };
 
   function isSvgFile(f) { return /svg/i.test(f.type || '') || /\.svg$/i.test(f.name || ''); }
+  function isTiffFile(f) { return /tiff?$/i.test((f && f.name) || '') || /^image\/tiff$/i.test((f && f.type) || ''); }
   function isImageFile(f) {
-    return /^image\//.test(f.type || '') || /\.(jpe?g|png|webp|bmp|svg|gif|avif|ico)$/i.test(f.name || '');
+    return /^image\//.test(f.type || '') || /\.(jpe?g|png|webp|avif|gif|bmp|tiff?|svg|ico)$/i.test(f.name || '');
   }
   function isPdfFile(f) { return /pdf/i.test(f.type || '') || /\.pdf$/i.test(f.name || ''); }
-  function isDataFile(f) { return /\.(json|csv|tsv|txt)$/i.test(f.name || '') || /json|csv|tab-separated|text\/plain/i.test(f.type || ''); }
+  function isDataFile(f) { return /\.(json|yaml|yml|csv|tsv|txt)$/i.test(f.name || '') || /json|yaml|csv|tab-separated|text\/plain/i.test(f.type || ''); }
   function isDocFile(f) { return /\.(md|markdown|mdown|txt|html?|htm)$/i.test(f.name || '') || /markdown|text\/plain|text\/html/i.test(f.type || ''); }
 
   function srcW(s) { return s.naturalWidth || s.width || 0; }
@@ -1628,6 +1843,11 @@ footer.foot .sep { color: var(--line2); }
 
   function decodeImage(file) {
     var f = file;
+    if (isTiffFile(f)) {
+      return f.arrayBuffer()
+        .then(function (buf) { return tiffDecode(buf); })
+        .catch(function () { throw new Error('decode'); });
+    }
     return new Promise(function (resolve, reject) {
       if (window.createImageBitmap && !isSvgFile(f)) {
         createImageBitmap(f, { imageOrientation: 'from-image' })
@@ -1656,6 +1876,23 @@ footer.foot .sep { color: var(--line2); }
       if (!srcW(src) || !srcH(src)) { src._fakeW = 1024; src._fakeH = 1024; }
       return src;
     });
+  }
+
+  function thumbFromSource(src) {
+    try {
+      var sw = srcW(src) || 96, sh = srcH(src) || 96;
+      var k = Math.min(1, 96 / Math.max(sw, sh));
+      var c = document.createElement('canvas');
+      c.width = Math.max(1, Math.round(sw * k));
+      c.height = Math.max(1, Math.round(sh * k));
+      var ctx = c.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, c.width, c.height);
+      ctx.drawImage(src.img || src, 0, 0, c.width, c.height);
+      var url = c.toDataURL('image/jpeg', 0.82);
+      c.width = 0; c.height = 0;
+      return url;
+    } catch (e) { return null; }
   }
 
   function renderCanvas(src, w, h, fillBg, bg) {
@@ -1824,6 +2061,179 @@ footer.foot .sep { color: var(--line2); }
     }
   }
 
+  /* ─────────────── TIFF (baseline) → canvas ─────────────── */
+  var TIFF_UNIT = { 1: 1, 2: 1, 3: 2, 4: 4, 5: 8, 6: 1, 7: 1, 8: 2, 9: 4, 10: 8, 11: 4, 12: 8 };
+
+  function tiffPackBits(src, need) {
+    var out = new Uint8Array(need), o = 0, i = 0;
+    while (i < src.length && o < need) {
+      var n = src[i++];
+      if (n > 127) n -= 256;
+      if (n >= 0) {
+        for (var k = 0; k <= n && i < src.length && o < need; k++) out[o++] = src[i++];
+      } else if (n !== -128) {
+        var b = src[i++];
+        for (var k2 = 0; k2 < 1 - n && o < need; k2++) out[o++] = b;
+      }
+    }
+    return out;
+  }
+
+  function tiffLZW(src) {
+    var out = [], dict = [], width = 9, prev = null, pos = 0, buf = 0, bits = 0;
+    for (var i = 0; i < 256; i++) dict.push([i]);
+    dict.push(null); dict.push(null);
+    function code(w) {
+      while (bits < w) {
+        if (pos >= src.length) return -1;
+        buf = (buf << 8) | src[pos++];
+        bits += 8;
+      }
+      bits -= w;
+      return (buf >>> bits) & ((1 << w) - 1);
+    }
+    var guard = 0;
+    while (guard++ < 4e8) {
+      var c = code(width);
+      if (c < 0 || c === 257) break;
+      if (c === 256) { width = 9; dict.length = 258; prev = null; continue; }
+      var entry;
+      if (c < dict.length && dict[c]) entry = dict[c];
+      else if (prev) entry = prev.concat([prev[0]]);
+      else break;
+      for (var k = 0; k < entry.length; k++) out.push(entry[k]);
+      if (prev) dict.push(prev.concat([entry[0]]));
+      prev = entry;
+      if (dict.length + 1 >= (1 << width) && width < 12) width++;
+    }
+    return new Uint8Array(out);
+  }
+
+  function tiffInflate(src) {
+    if (typeof DecompressionStream === 'undefined') return Promise.reject(new Error('tiff-inflate'));
+    function attempt(fmt) {
+      return new Response(new Blob([src]).stream().pipeThrough(new DecompressionStream(fmt))).arrayBuffer();
+    }
+    return attempt('deflate').catch(function () { return attempt('deflate-raw'); });
+  }
+
+  async function tiffDecode(buf) {
+    var dv = new DataView(buf);
+    if (dv.byteLength < 8) throw new Error('tiff');
+    var magic = dv.getUint16(0, false);
+    var le = magic === 0x4949;
+    if (!le && magic !== 0x4D4D) throw new Error('tiff');
+    var ver = dv.getUint16(2, le);
+    if (ver !== 42) throw new Error('tiff-version');
+    var ifd = dv.getUint32(4, le);
+    if (!ifd || ifd + 2 > dv.byteLength) throw new Error('tiff');
+
+    var n = dv.getUint16(ifd, le);
+    var tags = {};
+    for (var i = 0; i < n; i++) {
+      var p = ifd + 2 + i * 12;
+      if (p + 12 > dv.byteLength) break;
+      var tag = dv.getUint16(p, le), type = dv.getUint16(p + 2, le), count = dv.getUint32(p + 4, le);
+      var unit = TIFF_UNIT[type] || 1;
+      var size = unit * count;
+      var base = size <= 4 ? p + 8 : dv.getUint32(p + 8, le);
+      var arr = [];
+      for (var k = 0; k < count && base + k * unit + unit <= dv.byteLength; k++) {
+        var at = base + k * unit;
+        if (type === 3) arr.push(dv.getUint16(at, le));
+        else if (type === 4 || type === 11) arr.push(dv.getUint32(at, le));
+        else if (type === 8) arr.push(dv.getInt16(at, le));
+        else if (type === 9) arr.push(dv.getInt32(at, le));
+        else if (type === 5) arr.push(dv.getUint32(at, le) / (dv.getUint32(at + 4, le) || 1));
+        else arr.push(dv.getUint8(at));
+      }
+      tags[tag] = arr;
+    }
+
+    var W = (tags[256] || [0])[0], H = (tags[257] || [0])[0];
+    if (!W || !H) throw new Error('tiff-size');
+    if (W * H > 120e6) throw new Error('tiff-huge');
+    if (tags[322] || tags[324]) throw new Error('tiff-tiled');
+    var bps = tags[258] || [8];
+    var comp = (tags[259] || [1])[0];
+    var photo = (tags[262] || [2])[0];
+    var spp = (tags[277] || [1])[0];
+    var planar = (tags[284] || [1])[0];
+    var pred = (tags[317] || [1])[0];
+    var rps = (tags[278] || [H])[0] || H;
+    var offs = tags[273] || [];
+    var counts = tags[279] || [];
+    if (!offs.length) throw new Error('tiff-strips');
+    if (planar !== 1) throw new Error('tiff-planar');
+    if (spp !== 1 && spp !== 2 && spp !== 3 && spp !== 4) throw new Error('tiff-samples');
+    for (var bi = 0; bi < bps.length; bi++) if (bps[bi] !== 8) throw new Error('tiff-depth');
+
+    var rowsPer = Math.min(rps, H);
+    var rowBytes = W * spp;
+    var pixels = new Uint8Array(rowBytes * H);
+    var y = 0;
+    for (var s = 0; s < offs.length && y < H; s++) {
+      var rows = Math.min(rowsPer, H - y);
+      var need = rowBytes * rows;
+      var srcOff = offs[s];
+      var srcLen = counts[s] != null ? counts[s] : (buf.byteLength - srcOff);
+      if (srcOff + srcLen > buf.byteLength) srcLen = buf.byteLength - srcOff;
+      if (srcLen <= 0) break;
+      var rawSrc = new Uint8Array(buf, srcOff, srcLen);
+      var raw;
+      if (comp === 1) raw = rawSrc;
+      else if (comp === 5) raw = tiffLZW(rawSrc);
+      else if (comp === 8 || comp === 32946) raw = new Uint8Array(await tiffInflate(rawSrc));
+      else if (comp === 32773) raw = tiffPackBits(rawSrc, need);
+      else throw new Error('tiff-comp:' + comp);
+      if (raw.length < need) throw new Error('tiff-short');
+      if (pred === 2) {
+        raw = raw.slice();
+        for (var r = 0; r < rows; r++) {
+          var ro = r * rowBytes;
+          for (var x = spp; x < rowBytes; x++) raw[ro + x] = (raw[ro + x] + raw[ro + x - spp]) & 0xFF;
+        }
+      }
+      pixels.set(raw.subarray(0, need), y * rowBytes);
+      y += rows;
+    }
+    if (y < H) throw new Error('tiff-short');
+
+    var canvas = document.createElement('canvas');
+    canvas.width = W; canvas.height = H;
+    var ctx = canvas.getContext('2d');
+    if (!ctx) throw new Error('tiff');
+    var img = ctx.createImageData(W, H);
+    var d = img.data;
+    var cmap = tags[320] || null;
+    var palette = cmap && photo === 3 ? Math.floor(cmap.length / 3) : 0;
+    for (var yy = 0; yy < H; yy++) {
+      for (var xx = 0; xx < W; xx++) {
+        var si = (yy * W + xx) * spp, di = (yy * W + xx) * 4;
+        var R = 0, G = 0, B = 0, A = 255;
+        if (photo === 2) {
+          R = pixels[si]; G = pixels[si + 1]; B = pixels[si + 2];
+          if (spp === 4) A = pixels[si + 3];
+        } else if (photo === 3 && palette) {
+          var ix = pixels[si] % palette;
+          R = cmap[ix] >> 8; G = cmap[palette + ix] >> 8; B = cmap[palette * 2 + ix] >> 8;
+        } else if (photo === 0) {
+          R = G = B = 255 - pixels[si];
+          if (spp === 2) A = pixels[si + 1];
+        } else {
+          R = G = B = pixels[si];
+          if (spp === 2) A = pixels[si + 1];
+        }
+        d[di] = R; d[di + 1] = G; d[di + 2] = B; d[di + 3] = A;
+      }
+    }
+    ctx.putImageData(img, 0, 0);
+    return {
+      img: canvas, width: W, height: H,
+      _close: function () { canvas.width = 0; canvas.height = 0; }
+    };
+  }
+
   /* ─────────────── output plumbing ─────────────── */
   function clearOutputs(mode, quiet) {
     state[mode].outputs.forEach(function (o) {
@@ -1832,7 +2242,9 @@ footer.foot .sep { color: var(--line2); }
     state[mode].outputs = [];
     if (mode === 'image') renderOutsImage();
     if (mode === 'p2i') renderOutsP2i();
+    if (mode === 'p2t') renderP2tOuts();
     if (mode === 'i2p') renderOutsI2p();
+    if (mode === 't2p') renderT2pOuts();
     if (mode === 'data') renderOutsData();
     if (mode === 'md') renderOutsMd();
     if (quiet !== true) toast(t('clearedRes'));
@@ -2165,7 +2577,7 @@ footer.foot .sep { color: var(--line2); }
     var st = $('statsImage');
     if (st) {
       st.innerHTML = files.length
-        ? '<b>' + files.length + '</b> ' + escHtml(t('filesWord')) + ' <span class="sep">·</span> ' + fmtBytes(total)
+        ? '<b>' + files.length + '</b> ' + escHtml(files.length === 1 ? t('fileWord') : t('filesWord')) + ' <span class="sep">·</span> ' + fmtBytes(total)
         : '';
     }
   }
@@ -2197,6 +2609,7 @@ footer.foot .sep { color: var(--line2); }
         var src = await decodeImage(f);
         item.w = srcW(src) || src._fakeW || 0;
         item.h = srcH(src) || src._fakeH || 0;
+        if (isTiffFile(f)) item.thumb = thumbFromSource(src);
         releaseSrc(src);
         if (!item.w || !item.h) item.bad = true;
       } catch (e) { item.bad = true; }
@@ -2295,7 +2708,7 @@ footer.foot .sep { color: var(--line2); }
     var st = $('statsP2i');
     if (st) {
       st.innerHTML = files.length
-        ? '<b>' + files.length + '</b> ' + escHtml(t('filesWord')) + ' <span class="sep">·</span> <b>' + totalPages + '</b> ' + escHtml(t('pagesWord'))
+        ? '<b>' + files.length + '</b> ' + escHtml(files.length === 1 ? t('fileWord') : t('filesWord')) + ' <span class="sep">·</span> <b>' + totalPages + '</b> ' + escHtml(totalPages === 1 ? t('pageWord') : t('pagesWord'))
         : '';
     }
     var run = $('runP2i');
@@ -2517,7 +2930,7 @@ footer.foot .sep { color: var(--line2); }
     var st = $('statsI2p');
     if (st) {
       st.innerHTML = files.length
-        ? '<b>' + files.length + '</b> ' + escHtml(t('pagesWord')) + ' <span class="sep">·</span> ' + fmtBytes(total)
+        ? '<b>' + files.length + '</b> ' + escHtml(files.length === 1 ? t('pageWord') : t('pagesWord')) + ' <span class="sep">·</span> ' + fmtBytes(total)
         : '';
     }
   }
@@ -2543,6 +2956,7 @@ footer.foot .sep { color: var(--line2); }
         var src = await decodeImage(f);
         item.w = srcW(src) || src._fakeW || 0;
         item.h = srcH(src) || src._fakeH || 0;
+        if (isTiffFile(f)) item.thumb = thumbFromSource(src);
         releaseSrc(src);
         if (!item.w || !item.h) item.bad = true;
       } catch (e) { item.bad = true; }
@@ -2628,6 +3042,356 @@ footer.foot .sep { color: var(--line2); }
     }
   }
 
+  /* ─────────────── YAML (subset) ⇄ objects ─────────────── */
+  function yamlScalar(raw) {
+    var s = String(raw == null ? '' : raw).trim();
+    if (s === '' || s === '~' || /^null$/i.test(s)) return null;
+    if (/^(true|yes|on)$/i.test(s)) return true;
+    if (/^(false|no|off)$/i.test(s)) return false;
+    if (s.length > 1 && s.charAt(0) === '"' && s.charAt(s.length - 1) === '"') {
+      return s.slice(1, -1)
+        .replace(/\\u([0-9a-fA-F]{4})/g, function (m, h) { return String.fromCharCode(parseInt(h, 16)); })
+        .replace(/\\n/g, '\n').replace(/\\t/g, '\t').replace(/\\r/g, '\r')
+        .replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+    }
+    if (s.length > 1 && s.charAt(0) === "'" && s.charAt(s.length - 1) === "'") {
+      return s.slice(1, -1).replace(/''/g, "'");
+    }
+    if (/^[-+]?\d+$/.test(s)) { var n = Number(s); return isFinite(n) ? n : s; }
+    if (/^0x[0-9a-f]+$/i.test(s)) return parseInt(s, 16);
+    if (/^0o[0-7]+$/i.test(s)) return parseInt(s.slice(2), 8);
+    if (/^[-+]?(?:\d+\.\d*|\.\d+|\d+)(?:[eE][-+]?\d+)?$/.test(s)) { var f = Number(s); return isFinite(f) ? f : s; }
+    if (/^[-+]?\.(?:inf|Inf|INF)$/.test(s)) return s.charAt(0) === '-' ? -Infinity : Infinity;
+    if (/^\.(?:nan|NaN|NAN)$/.test(s)) return NaN;
+    if (/^!!(?:str|string)\s+/.test(s)) return s.replace(/^!!\w+\s+/, '');
+    return s;
+  }
+
+  function yamlStripComment(line) {
+    var out = '', q = null;
+    for (var i = 0; i < line.length; i++) {
+      var ch = line.charAt(i);
+      if (q) {
+        out += ch;
+        if (ch === '\\' && q === '"') { out += line.charAt(++i); continue; }
+        if (ch === q) q = null;
+        continue;
+      }
+      if (ch === '"' || ch === "'") { q = ch; out += ch; continue; }
+      if (ch === '#' && (i === 0 || /\s/.test(line.charAt(i - 1)))) break;
+      out += ch;
+    }
+    return out;
+  }
+
+  function yamlFlow(text) {
+    var s = String(text), i = 0;
+    function ws() { while (i < s.length && /\s/.test(s.charAt(i))) i++; }
+    function node() {
+      ws();
+      var ch = s.charAt(i);
+      if (ch === '[') {
+        i++;
+        var arr = [];
+        while (i < s.length) {
+          ws();
+          if (s.charAt(i) === ']') { i++; break; }
+          arr.push(node());
+          ws();
+          if (s.charAt(i) === ',') { i++; continue; }
+          if (s.charAt(i) === ']') { i++; break; }
+          break;
+        }
+        return arr;
+      }
+      if (ch === '{') {
+        i++;
+        var obj = {};
+        while (i < s.length) {
+          ws();
+          if (s.charAt(i) === '}') { i++; break; }
+          var key;
+          if (s.charAt(i) === '"' || s.charAt(i) === "'") key = String(yamlScalar(readQuoted()));
+          else {
+            var st = i;
+            while (i < s.length && !/[:,}]/.test(s.charAt(i))) i++;
+            key = s.slice(st, i).trim();
+          }
+          ws();
+          var val = null;
+          if (s.charAt(i) === ':') { i++; val = node(); }
+          obj[key] = val;
+          ws();
+          if (s.charAt(i) === ',') { i++; continue; }
+          if (s.charAt(i) === '}') { i++; break; }
+          break;
+        }
+        return obj;
+      }
+      if (ch === '"' || ch === "'") return yamlScalar(readQuoted());
+      var start = i;
+      while (i < s.length && !/[,}\]]/.test(s.charAt(i))) i++;
+      return yamlScalar(s.slice(start, i));
+    }
+    function readQuoted() {
+      var q = s.charAt(i), st = i;
+      i++;
+      while (i < s.length) {
+        var c = s.charAt(i);
+        if (q === '"' && c === '\\') { i += 2; continue; }
+        if (c === q) { if (q === "'" && s.charAt(i + 1) === "'") { i += 2; continue; } i++; break; }
+        i++;
+      }
+      return s.slice(st, i);
+    }
+    return node();
+  }
+
+  function cloneVal(v) {
+    if (v == null || typeof v !== 'object') return v;
+    try { return JSON.parse(JSON.stringify(v)); } catch (e) { return v; }
+  }
+
+  function yamlParse(text) {
+    var raw = String(text).replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n').split('\n');
+    var lines = raw.map(function (l) {
+      var stripped = yamlStripComment(l).replace(/\s+$/, '');
+      if (/^\s*$/.test(stripped)) return { blank: true, indent: 0, text: '' };
+      var lead = stripped.match(/^ */)[0].length;
+      return { blank: false, indent: lead, text: stripped.slice(lead) };
+    });
+    var anchors = {};
+
+    function skipBlank(i) { while (i < lines.length && lines[i].blank) i++; return i; }
+    function isItem(t) { return /^-(\s|$)/.test(t); }
+    function keyMatch(t) {
+      if (/^[\[\{]/.test(t)) return null;
+      var m = /^("(?:[^"\\]|\\.)*"|'(?:[^']|'')*'|[^#].*?)\s*:(?:\s+(.*))?$/.exec(t);
+      if (!m) return null;
+      var k = m[1];
+      if (/^["']/.test(k)) k = String(yamlScalar(k));
+      return { key: k, rest: (m[2] || '').trim() };
+    }
+    function isBlockScalar(t) { return /^[|>][+-]?\d*$/.test(String(t).trim()); }
+
+    function readBlockScalar(i, parentIndent, header) {
+      var style = header.charAt(0);
+      var buf = [], base = null, j = i;
+      while (j < lines.length) {
+        var ln = lines[j];
+        if (ln.blank) { buf.push(''); j++; continue; }
+        if (ln.indent <= parentIndent) break;
+        if (base === null) base = ln.indent;
+        buf.push(new Array(Math.max(0, ln.indent - base) + 1).join(' ') + ln.text);
+        j++;
+      }
+      while (buf.length && buf[buf.length - 1] === '') buf.pop();
+      while (buf.length && buf[0] === '') buf.shift();
+      var out;
+      if (style === '|') out = buf.join('\n');
+      else {
+        var groups = [], cur = [];
+        buf.forEach(function (l) {
+          if (l === '') { groups.push(cur.join(' ')); cur = []; }
+          else cur.push(l);
+        });
+        groups.push(cur.join(' '));
+        out = groups.join('\n\n');
+      }
+      return { value: out, next: j };
+    }
+
+    function parseNode(i, indent) {
+      i = skipBlank(i);
+      if (i >= lines.length) return { value: null, next: i };
+      if (lines[i].indent !== indent) return { value: null, next: i };
+      if (isItem(lines[i].text)) return parseSeq(i, indent);
+      if (keyMatch(lines[i].text)) return parseMap(i, indent);
+      return { value: yamlScalar(lines[i].text), next: i + 1 };
+    }
+
+    function parseMap(i, indent) {
+      var obj = {};
+      while (true) {
+        i = skipBlank(i);
+        if (i >= lines.length || lines[i].indent !== indent || isItem(lines[i].text)) break;
+        var kv = keyMatch(lines[i].text);
+        if (!kv) break;
+        var key = kv.key, rest = kv.rest, anchor = null;
+        i++;
+        var am = /^&([^\s]+)\s*([\s\S]*)$/.exec(rest);
+        if (am) { anchor = am[1]; rest = am[2].trim(); }
+        var val;
+        if (rest === '') {
+          var n = skipBlank(i);
+          if (n < lines.length && lines[n].indent > indent) { var r1 = parseNode(n, lines[n].indent); val = r1.value; i = r1.next; }
+          else if (n < lines.length && lines[n].indent === indent && isItem(lines[n].text)) { var r2 = parseSeq(n, indent); val = r2.value; i = r2.next; }
+          else val = null;
+        } else if (isBlockScalar(rest)) {
+          var bs = readBlockScalar(i, indent, rest); val = bs.value; i = bs.next;
+        } else if (/^\*[^\s]+$/.test(rest)) {
+          val = cloneVal(anchors[rest.slice(1)]);
+        } else if (/^[\[{]/.test(rest)) {
+          val = yamlFlow(rest);
+        } else {
+          val = yamlScalar(rest);
+          while (true) {
+            var m2 = skipBlank(i);
+            if (m2 < lines.length && lines[m2].indent > indent && !isItem(lines[m2].text) && !keyMatch(lines[m2].text)) {
+              val = String(val == null ? '' : val) + ' ' + lines[m2].text.trim(); i = m2 + 1;
+            } else break;
+          }
+        }
+        if (anchor) anchors[anchor] = cloneVal(val);
+        obj[key] = val;
+      }
+      return { value: obj, next: i };
+    }
+
+    function parseSeq(i, indent) {
+      var arr = [];
+      while (true) {
+        i = skipBlank(i);
+        if (i >= lines.length || lines[i].indent !== indent || !isItem(lines[i].text)) break;
+        var rest = lines[i].text.replace(/^-(\s+|$)/, '').trim();
+        var anchor = null;
+        var am = /^&([^\s]+)\s*([\s\S]*)$/.exec(rest);
+        if (am) { anchor = am[1]; rest = am[2].trim(); }
+        if (rest === '') {
+          i++;
+          var n = skipBlank(i);
+          if (n < lines.length && lines[n].indent > indent) { var r = parseNode(n, lines[n].indent); arr.push(r.value); i = r.next; }
+          else arr.push(null);
+        } else if (isItem(rest)) {
+          lines.splice(i, 1);
+          lines.splice(i, 0, { blank: false, indent: indent + 2, text: rest });
+          var rs = parseSeq(i, indent + 2);
+          arr.push(rs.value); i = rs.next;
+        } else if (keyMatch(rest)) {
+          lines.splice(i, 1);
+          lines.splice(i, 0, { blank: false, indent: indent + 2, text: rest });
+          var rm = parseMap(i, indent + 2);
+          arr.push(rm.value); i = rm.next;
+        } else if (isBlockScalar(rest)) {
+          var bsv = readBlockScalar(i + 1, indent, rest);
+          arr.push(bsv.value); i = bsv.next;
+        } else if (/^[\[{]/.test(rest)) {
+          arr.push(yamlFlow(rest)); i++;
+        } else {
+          var v = yamlScalar(rest);
+          i++;
+          while (true) {
+            var m2 = skipBlank(i);
+            if (m2 < lines.length && lines[m2].indent > indent && !isItem(lines[m2].text) && !keyMatch(lines[m2].text)) {
+              v = String(v == null ? '' : v) + ' ' + lines[m2].text.trim(); i = m2 + 1;
+            } else break;
+          }
+          arr.push(v);
+        }
+        if (anchor) anchors[anchor] = cloneVal(arr[arr.length - 1]);
+      }
+      return { value: arr, next: i };
+    }
+
+    // split multi-document streams
+    var docs = [], start = 0;
+    for (var li = 0; li < lines.length; li++) {
+      if (!lines[li].blank && lines[li].indent === 0 && /^---\s*$/.test(lines[li].text)) {
+        if (li > start) docs.push([start, li]);
+        start = li + 1;
+      }
+    }
+    docs.push([start, lines.length]);
+    var values = [];
+    docs.forEach(function (range) {
+      var seg = lines.slice(range[0], range[1]);
+      if (!seg.some(function (l) { return !l.blank; })) return;
+      var saved = lines;
+      lines = seg;
+      var first = skipBlank(0);
+      var res = first < lines.length ? parseNode(first, lines[first].indent) : { value: null };
+      lines = saved;
+      values.push(res.value);
+    });
+    if (!values.length) return null;
+    return values.length === 1 ? values[0] : values;
+  }
+
+  function yamlNeedsQuote(s) {
+    if (s === '') return true;
+    if (/^[\s]|[\s]$/.test(s)) return true;
+    if (/^(?:true|false|null|yes|no|on|off|~)$/i.test(s)) return true;
+    if (/^[-+]?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?$/.test(s)) return true;
+    if (/^[-?:,\[\]{}#&*!|>'"%@`]/.test(s)) return true;
+    if (/: |\s#/.test(s)) return true;
+    if (/[\n\t\r]/.test(s)) return true;
+    if (/:$/.test(s)) return true;
+    return false;
+  }
+
+  function yamlQuote(s) {
+    if (/[\n\t\r]/.test(s)) {
+      return '"' + s.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+        .replace(/\n/g, '\\n').replace(/\t/g, '\\t').replace(/\r/g, '\\r') + '"';
+    }
+    return "'" + s.replace(/'/g, "''") + "'";
+  }
+
+  function yamlDump(value, level) {
+    level = level || 0;
+    var pad = new Array(level + 1).join('  ');
+    if (value === null || value === undefined) return 'null';
+    if (typeof value === 'boolean') return value ? 'true' : 'false';
+    if (typeof value === 'number') {
+      if (value !== value) return '.nan';
+      if (!isFinite(value)) return value > 0 ? '.inf' : '-.inf';
+      return String(value);
+    }
+    if (typeof value === 'string') return yamlNeedsQuote(value) ? yamlQuote(value) : value;
+    if (Array.isArray(value)) {
+      if (!value.length) return '[]';
+      return '\n' + value.map(function (v) {
+        var d = yamlDump(v, level + 1);
+        if (d.charAt(0) === '\n') {
+          var body = d.slice(1);
+          var nl = body.indexOf('\n');
+          var first = nl < 0 ? body : body.slice(0, nl);
+          var rest = nl < 0 ? '' : body.slice(nl);
+          return pad + '- ' + first.replace(/^ {2}/, '') + rest;
+        }
+        return pad + '- ' + d;
+      }).join('\n');
+    }
+    if (typeof value === 'object') {
+      var keys = Object.keys(value);
+      if (!keys.length) return '{}';
+      return '\n' + keys.map(function (k) {
+        var kt = yamlNeedsQuote(k) ? yamlQuote(k) : k;
+        var d = yamlDump(value[k], level + 1);
+        return pad + kt + ':' + (d.charAt(0) === '\n' ? d : ' ' + d);
+      }).join('\n');
+    }
+    return yamlQuote(String(value));
+  }
+
+  function yamlStringify(value) {
+    var s = yamlDump(value);
+    if (s.charAt(0) === '\n') s = s.slice(1);
+    return s + '\n';
+  }
+
+  function looksLikeYaml(s) {
+    var lines = String(s).split(/\r?\n/).filter(function (l) { return l.trim() && !/^\s*#/.test(l); });
+    if (!lines.length) return false;
+    if (/^---\s*$/.test(lines[0].trim())) return true;
+    var keyed = 0, items = 0, sampled = Math.min(lines.length, 12);
+    for (var i = 0; i < sampled; i++) {
+      if (/^\s*("(?:[^"\\]|\\.)*"|'(?:[^']|'')*'|[^#:].*?)\s*:(\s|$)/.test(lines[i])) keyed++;
+      if (/^\s*-\s+/.test(lines[i])) items++;
+    }
+    return keyed > 0 && keyed >= items;
+  }
+
   /* ─────────────── mode 4 · data ─────────────── */
   function parseDelimited(text, delim) {
     var rows = [], row = [], cell = '', i = 0, inQ = false;
@@ -2667,6 +3431,7 @@ footer.foot .sep { color: var(--line2); }
     var s = String(text).replace(/^\uFEFF/, '').trim();
     if (!s) return null;
     if (s.charAt(0) === '{' || s.charAt(0) === '[') return 'json';
+    if (looksLikeYaml(s)) return 'yaml';
     var d = detectDelim(s);
     if (d === '\t') return 'tsv';
     return 'csv';
@@ -2843,6 +3608,11 @@ footer.foot .sep { color: var(--line2); }
         value = JSON.parse(txt.replace(/^\uFEFF/, ''));
         var table = jsonToTable(value, flatten);
         headers = table.headers; rows = table.rows;
+      } else if (fmtIn === 'yaml') {
+        value = yamlParse(txt);
+        if (value === null && !/^\s*$/.test(txt)) throw new Error('yaml');
+        var ty = jsonToTable(value, flatten);
+        headers = ty.headers; rows = ty.rows;
       } else {
         var delim = fmtIn === 'tsv' ? '\t' : detectDelim(txt);
         value = delimitedToJson(txt, delim, header, flatten);
@@ -2850,14 +3620,16 @@ footer.foot .sep { color: var(--line2); }
         headers = t2.headers; rows = t2.rows;
       }
     } catch (err) {
-      toast(fmtIn === 'json' ? tpl('dataBadJson', { msg: err && err.message ? err.message : '' }) : tpl('dataBadCsv', { fmt: fmtIn.toUpperCase() }), true);
+      toast(fmtIn === 'json' ? tpl('dataBadJson', { msg: err && err.message ? err.message : '' })
+        : fmtIn === 'yaml' ? tpl('dataBadYaml', { msg: err && err.message ? err.message : '' })
+        : tpl('dataBadCsv', { fmt: fmtIn.toUpperCase() }), true);
       return;
     }
 
     if (to === 'json') {
-      var objOut = (fmtIn === 'json') ? value : value;
-      if (fmtIn !== 'json' && header === false) objOut = value;
-      text = JSON.stringify(objOut, null, pretty ? 2 : 0);
+      text = JSON.stringify(value, null, pretty ? 2 : 0);
+    } else if (to === 'yaml') {
+      text = yamlStringify(value);
     } else {
       text = toDelimited(headers, rows, to === 'tsv' ? '\t' : ',');
     }
@@ -2869,10 +3641,10 @@ footer.foot .sep { color: var(--line2); }
     var copyBtn = $('copyData');
     if (copyBtn) copyBtn.disabled = false;
 
-    state.data.last = { text: text, ext: to === 'json' ? 'json' : (to === 'tsv' ? 'tsv' : 'csv') };
+    state.data.last = { text: text, ext: to === 'json' ? 'json' : (to === 'yaml' ? 'yaml' : (to === 'tsv' ? 'tsv' : 'csv')) };
 
     clearOutputs('data', true);
-    var blob = new Blob([text], { type: to === 'json' ? 'application/json' : 'text/plain' });
+    var blob = new Blob([text], { type: to === 'json' ? 'application/json' : (to === 'yaml' ? 'application/yaml' : 'text/plain') });
     pushOutput('data', 'converted.' + state.data.last.ext, blob, fmtBytes(blob.size) + ' · ' + rows.length + ' × ' + (headers ? headers.length : 0));
     renderOutsData();
 
@@ -3072,6 +3844,124 @@ footer.foot .sep { color: var(--line2); }
     return /^<!doctype|^<html|^<(div|p|h[1-6]|section|article|body|table|ul|ol)\b/i.test(t);
   }
 
+  /* rendered HTML → Markdown (for .md export) */
+  function htmlToMarkdown(html) {
+    var doc = new DOMParser().parseFromString(String(html), 'text/html');
+    var body = doc.body || doc.documentElement;
+    var SKIP = { script: 1, style: 1, noscript: 1, template: 1, head: 1 };
+
+    function inline(node) {
+      var s = '';
+      Array.prototype.forEach.call(node.childNodes, function (n) {
+        if (n.nodeType === 3) { s += n.nodeValue.replace(/[\s\u00a0]+/g, ' '); return; }
+        if (n.nodeType !== 1) return;
+        var tag = n.tagName.toLowerCase();
+        if (SKIP[tag]) return;
+        if (tag === 'br') { s += '\n'; return; }
+        if (tag === 'strong' || tag === 'b') { var b = inline(n).trim(); s += b ? '**' + b + '**' : ''; return; }
+        if (tag === 'em' || tag === 'i') { var em = inline(n).trim(); s += em ? '*' + em + '*' : ''; return; }
+        if (tag === 'del' || tag === 's' || tag === 'strike') { var d = inline(n).trim(); s += d ? '~~' + d + '~~' : ''; return; }
+        if (tag === 'code') { s += '`' + (n.textContent || '').replace(/`/g, '') + '`'; return; }
+        if (tag === 'a') {
+          var txt = inline(n).trim().replace(/\s+/g, ' ');
+          var href = n.getAttribute('href') || '';
+          s += (href && href !== txt && !/^javascript:/i.test(href)) ? '[' + (txt || href) + '](' + href + ')' : txt;
+          return;
+        }
+        if (tag === 'img') {
+          var alt = (n.getAttribute('alt') || '').replace(/[\[\]]/g, '');
+          var src = n.getAttribute('src') || '';
+          if (src) s += '![' + alt + '](' + src + ')';
+          return;
+        }
+        s += inline(n);
+      });
+      return s;
+    }
+
+    function clean(s) {
+      return String(s).replace(/[ \t]*\n[ \t]*/g, '\n').replace(/\n{3,}/g, '\n\n').replace(/[ \t]{2,}/g, ' ').trim();
+    }
+
+    function renderList(list, depth) {
+      var out = [], ordered = list.tagName.toLowerCase() === 'ol', i = 0;
+      var pad = new Array(depth + 1).join('  ');
+      Array.prototype.forEach.call(list.children, function (li) {
+        if (li.tagName.toLowerCase() !== 'li') return;
+        i++;
+        var clone = li.cloneNode(true);
+        Array.prototype.forEach.call(clone.querySelectorAll('ul,ol'), function (s) { if (s.parentNode) s.parentNode.removeChild(s); });
+        var text = clean(inline(clone)).replace(/\n+/g, ' ');
+        out.push(pad + (ordered ? i + '. ' : '- ') + text);
+        Array.prototype.forEach.call(li.children, function (c) {
+          if (/^(ul|ol)$/i.test(c.tagName)) out.push(renderList(c, depth + 1));
+        });
+      });
+      return out.join('\n');
+    }
+
+    function renderTable(table) {
+      var rows = [];
+      Array.prototype.forEach.call(table.querySelectorAll('tr'), function (tr) {
+        var cells = [];
+        Array.prototype.forEach.call(tr.children, function (c) {
+          cells.push(clean(inline(c)).replace(/\n+/g, ' ').replace(/\|/g, '\\|'));
+        });
+        if (cells.length) rows.push(cells);
+      });
+      if (!rows.length) return '';
+      var cols = rows.reduce(function (a, r) { return Math.max(a, r.length); }, 0);
+      rows = rows.map(function (r) { while (r.length < cols) r.push(''); return r; });
+      var head = rows.shift();
+      var headLine = '| ' + head.join(' | ') + ' |';
+      var rule = '| ' + head.map(function () { return '---'; }).join(' | ') + ' |';
+      return [headLine, rule].concat(rows.map(function (r) { return '| ' + r.join(' | ') + ' |'; })).join('\n');
+    }
+
+    function walk(node, out) {
+      Array.prototype.forEach.call(node.childNodes, function (n) {
+        if (n.nodeType === 3) {
+          var t = n.nodeValue.trim();
+          if (t) out.push(t);
+          return;
+        }
+        if (n.nodeType !== 1) return;
+        var tag = n.tagName.toLowerCase();
+        if (SKIP[tag]) return;
+        var m;
+        if ((m = /^h([1-6])$/.exec(tag))) { var h = clean(inline(n)); if (h) out.push(new Array(+m[1] + 1).join('#') + ' ' + h); return; }
+        if (tag === 'p') { var ps = clean(inline(n)); if (ps) out.push(ps); return; }
+        if (tag === 'hr') { out.push('---'); return; }
+        if (tag === 'pre') {
+          var lang = '', codeEl = n.querySelector('code');
+          if (codeEl) {
+            var cls = String(codeEl.className || '');
+            var lm = /language-([\w+#-]+)/.exec(cls) || /lang-([\w+#-]+)/.exec(cls);
+            if (lm) lang = lm[1];
+          }
+          out.push('```' + lang + '\n' + String(n.textContent || '').replace(/\s+$/, '') + '\n```');
+          return;
+        }
+        if (tag === 'blockquote') {
+          var inner = [];
+          walk(n, inner);
+          var q = inner.join('\n\n').split('\n').map(function (l) { return l ? '> ' + l : '>'; }).join('\n');
+          if (q) out.push(q);
+          return;
+        }
+        if (tag === 'ul' || tag === 'ol') { var ls = renderList(n, 0); if (ls) out.push(ls); return; }
+        if (tag === 'table') { var tb = renderTable(n); if (tb) out.push(tb); return; }
+        if (/^(div|section|article|main|header|footer|body|html|figure|figcaption|details|aside|nav)$/.test(tag)) { walk(n, out); return; }
+        var line = clean(inline(n));
+        if (line) out.push(line);
+      });
+    }
+
+    var blocks = [];
+    walk(body, blocks);
+    return blocks.join('\n\n').replace(/\n{3,}/g, '\n\n').trim() + '\n';
+  }
+
   function currentMd() { return $('mdIn') ? $('mdIn').value : ''; }
 
   function updateMdSummary() {
@@ -3101,7 +3991,7 @@ footer.foot .sep { color: var(--line2); }
     if (!built) return null;
     var prev = $('previewMd');
     if (prev) prev.innerHTML = built.body;
-    ['saveHtmlMd', 'saveTxtMd', 'printMd'].forEach(function (id) {
+    ['saveHtmlMd', 'saveTxtMd', 'saveMdMd', 'printMd'].forEach(function (id) {
       var b = $(id);
       if (b) b.disabled = false;
     });
@@ -3134,6 +4024,18 @@ footer.foot .sep { color: var(--line2); }
     triggerDownload(state.md.outputs[0].url, 'document.txt');
   }
 
+  function saveMdMarkdown() {
+    var built = state.md.last || buildMd();
+    if (!built) return;
+    var md = htmlToMarkdown(built.body);
+    if (!md.trim()) { toast(t('errEmpty'), true); return; }
+    clearOutputs('md', true);
+    var blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+    pushOutput('md', 'document.md', blob, fmtBytes(blob.size) + ' · MD');
+    renderOutsMd();
+    triggerDownload(state.md.outputs[0].url, 'document.md');
+  }
+
   function printMd() {
     var built = state.md.last || buildMd();
     if (!built) return;
@@ -3154,6 +4056,736 @@ footer.foot .sep { color: var(--line2); }
       setTimeout(function () { if (frame.parentNode) frame.parentNode.removeChild(frame); }, 1500);
     };
     setTimeout(fire, 220);
+  }
+
+  /* ─────────────── mode 6 · PDF → text ─────────────── */
+  function renderP2tList() {
+    var list = $('listP2t');
+    if (!list) return;
+    list.innerHTML = '';
+    var files = state.p2t.files, total = 0;
+    files.forEach(function (f, i) {
+      if (f.pages) total += f.pages;
+      list.appendChild(fileRow({
+        badge: 'PDF',
+        name: f.name,
+        meta: f.bad ? f.badText : (f.pages ? tpl('pdfMeta', { pages: f.pages + ' ' + t('pagesWord'), size: fmtBytes(f.size) }) : '…'),
+        bad: !!f.bad,
+        onUp: function () { moveItem(files, i, -1); renderP2tList(); },
+        onDown: function () { moveItem(files, i, 1); renderP2tList(); },
+        upDisabled: i === 0,
+        downDisabled: i === files.length - 1,
+        onRemove: function () { removeP2tFile(f); }
+      }));
+    });
+    var empty = $('emptyP2t');
+    if (empty) empty.hidden = files.length > 0;
+    var st = $('statsP2t');
+    if (st) {
+      st.innerHTML = files.length
+        ? '<b>' + files.length + '</b> ' + escHtml(files.length === 1 ? t('fileWord') : t('filesWord')) + ' <span class="sep">·</span> <b>' + total + '</b> ' + escHtml(total === 1 ? t('pageWord') : t('pagesWord'))
+        : '';
+    }
+    var run = $('runP2t');
+    if (run) run.disabled = !files.some(function (f) { return f.doc; });
+  }
+
+  function removeP2tFile(f) {
+    var i = state.p2t.files.indexOf(f);
+    if (i >= 0) state.p2t.files.splice(i, 1);
+    destroyDoc(f);
+    renderP2tList();
+    toast(tpl('removed', { name: f.name }));
+  }
+
+  function clearP2tFiles() {
+    state.p2t.files.forEach(function (f) { destroyDoc(f); });
+    state.p2t.files = [];
+    renderP2tList();
+    toast(t('cleared'));
+  }
+
+  async function addP2tFiles(files) {
+    var skipped = 0;
+    for (var i = 0; i < files.length; i++) {
+      var f = files[i];
+      if (!isPdfFile(f)) { skipped++; continue; }
+      var item = { id: nextId(), file: f, name: f.name || 'document.pdf', size: f.size || 0, doc: null, pages: 0, bad: false, badText: '' };
+      state.p2t.files.push(item);
+      renderP2tList();
+      setStatus('statusP2t', tpl('busyRead', { n: 1 }), true);
+      try {
+        item.doc = await loadPdfDoc(f);
+        item.pages = item.doc.numPages || 0;
+      } catch (err) {
+        item.bad = true;
+        item.badText = isPasswordError(err) ? t('badPdf') : t('errRead', { name: item.name });
+      }
+      setStatus('statusP2t', '', false);
+      renderP2tList();
+      await tick();
+    }
+    if (skipped) toast(tpl('skippedPdf', { n: skipped }), true);
+  }
+
+  async function pageTextLines(doc, pageNum) {
+    var page = await doc.getPage(pageNum);
+    var content = await page.getTextContent({ normalizeWhitespace: false, disableCombineTextItems: false });
+    var items = content.items || [];
+    var rows = [], cur = null;
+    for (var i = 0; i < items.length; i++) {
+      var it = items[i];
+      if (!it || typeof it.str !== 'string' || it.str === '') continue;
+      var tr = it.transform || [1, 0, 0, 1, 0, 0];
+      var x = tr[4], yy = tr[5];
+      var h = Math.abs(it.height || tr[3] || 10) || 10;
+      var tol = Math.max(1.6, h * 0.35);
+      if (!cur || Math.abs(cur.y - yy) > tol) { cur = { y: yy, parts: [] }; rows.push(cur); }
+      cur.parts.push({ x: x, w: it.width || 0, s: it.str, h: h });
+    }
+    var out = rows.map(function (ln) {
+      ln.parts.sort(function (a, b) { return a.x - b.x; });
+      var s = '', end = null, hs = [];
+      ln.parts.forEach(function (p) {
+        if (end !== null) {
+          var em = p.s.length ? p.w / p.s.length : 4;
+          if (p.x - end > Math.max(1.2, em * 0.5) && !/\s$/.test(s) && !/^\s/.test(p.s)) s += ' ';
+        }
+        s += p.s;
+        end = p.x + p.w;
+        if (p.h) hs.push(p.h);
+      });
+      var hh = hs.length ? hs.reduce(function (a, b) { return a + b; }, 0) / hs.length : 0;
+      return { s: s.replace(/\u00ad/g, '').replace(/[ \t]+$/, ''), h: hh };
+    });
+    var res = [];
+    out.forEach(function (item) {
+      if (/^\s*$/.test(item.s)) { if (res.length && res[res.length - 1].s !== '') res.push({ s: '', h: 0 }); return; }
+      res.push(item);
+    });
+    while (res.length && res[res.length - 1].s === '') res.pop();
+    try { page.cleanup(); } catch (e) {}
+    return res;
+  }
+
+  function reflowLines(lines) {
+    var maxLen = 0, out = [], buf = '', bufH = 0;
+    lines.forEach(function (l) { if (l.s && l.s.length > maxLen) maxLen = l.s.length; });
+    function flush() { if (buf) { out.push({ s: buf, h: bufH }); buf = ''; } }
+    lines.forEach(function (l) {
+      if (!l.s) { flush(); if (out.length && out[out.length - 1].s !== '') out.push({ s: '', h: 0 }); return; }
+      if (!buf) { buf = l.s; bufH = l.h; return; }
+      var sizeJump = bufH && l.h && Math.abs(l.h - bufH) / bufH > 0.12;
+      var bullet = /^\s*(?:[-•·*]|\d+[.)])\s/.test(l.s);
+      var closed = /[.!?;:。！？：「」『』】]$/.test(buf);
+      var shortLine = buf.length < maxLen * 0.88;
+      if (!sizeJump && !bullet && !closed && !shortLine) {
+        if (/[-\u2010\u2011]$/.test(buf) && /^[a-z]/.test(l.s)) buf = buf.slice(0, -1) + l.s;
+        else buf = buf + ' ' + l.s;
+      } else { flush(); buf = l.s; bufH = l.h; }
+    });
+    flush();
+    while (out.length && out[out.length - 1].s === '') out.pop();
+    return out;
+  }
+
+  async function runP2t() {
+    var files = state.p2t.files.filter(function (f) { return f.doc; });
+    if (!files.length) return toast(t('errNoFiles'), true);
+    var fmt = state.p2t.fmt === 'md' ? 'md' : 'txt';
+    var markers = $('markP2t') ? $('markP2t').checked : true;
+    var reflow = $('reflowP2t') ? $('reflowP2t').checked : false;
+    setBusy(true);
+    clearOutputs('p2t', true);
+    var all = [], totalChars = 0, totalPages = 0, made = 0, blankNames = [];
+    try {
+      for (var fi = 0; fi < files.length; fi++) {
+        var f = files[fi];
+        var pageTexts = [];
+        for (var p = 1; p <= f.pages; p++) {
+          setStatus('statusP2t', tpl('busyExtract', { done: p, total: f.pages }), true);
+          var lines = await pageTextLines(f.doc, p);
+          if (reflow) lines = reflowLines(lines);
+          pageTexts.push(lines);
+          await tick();
+        }
+        var base = baseName(f.name);
+        var chunk = '', chars = 0;
+        if (fmt === 'md') chunk += '# ' + base + '\n\n';
+        pageTexts.forEach(function (lines2, idx) {
+          var body = lines2.map(function (l) { return l.s; }).join('\n').replace(/\n{3,}/g, '\n\n').trim();
+          if (!body) return;
+          chars += body.length;
+          if (markers) {
+            chunk += (fmt === 'md' ? '## ' : '———— ') + (isKo() ? (idx + 1) + '페이지' : 'Page ' + (idx + 1)) + (fmt === 'md' ? '' : ' ————') + '\n\n';
+          }
+          chunk += body + '\n\n';
+        });
+        totalPages += f.pages;
+        if (!chars) { blankNames.push(f.name); continue; }
+        totalChars += chars;
+        var blob = new Blob([chunk.trim() + '\n'], { type: fmt === 'md' ? 'text/markdown;charset=utf-8' : 'text/plain;charset=utf-8' });
+        var meta = chars + (isKo() ? '자' : ' chars') + ' · ' + f.pages + ' ' + (f.pages === 1 ? t('pageWord') : t('pagesWord'));
+        pushOutput('p2t', base + '.' + fmt, blob, meta);
+        all.push(chunk.trim());
+        made++;
+      }
+      setStatus('statusP2t', '', false);
+      if (!made) {
+        toast(t('p2tNone'), true);
+        renderP2tOuts();
+        var noHint = $('hintP2t');
+        if (noHint && blankNames.length) noHint.textContent = tpl('errNoText', { name: blankNames.length > 1 ? blankNames.length + (isKo() ? '개 파일' : ' files') : blankNames[0] });
+        return;
+      }
+      state.p2t.text = all.join('\n\n');
+      renderP2tOuts();
+      var copyBtn = $('copyP2t');
+      if (copyBtn) copyBtn.disabled = false;
+      if (made === 1) triggerDownload(state.p2t.outputs[0].url, state.p2t.outputs[0].name);
+      toast(tpl('doneP2t', { chars: totalChars, pages: totalPages }));
+      var p2tHint = $('hintP2t');
+      if (p2tHint) {
+        p2tHint.textContent = blankNames.length
+          ? tpl('errNoText', { name: blankNames.length > 1 ? blankNames.length + (isKo() ? '개 파일' : ' files') : blankNames[0] })
+          : t('p2tHint');
+      }
+    } catch (err) {
+      toast(t('errGeneric') + (err && err.message ? ': ' + err.message : ''), true);
+    } finally {
+      setBusy(false);
+      setStatus('statusP2t', '', false);
+    }
+  }
+
+  function copyP2tText() {
+    var txt = state.p2t.text || '';
+    if (!txt) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(function () { toast(t('copyOk')); }).catch(function () { fallbackCopy(txt); });
+    } else fallbackCopy(txt);
+  }
+
+  /* ─────────────── mode 7 · text → PDF ─────────────── */
+  var T2P_TEXT = '"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR","Noto Sans CJK KR","NanumGothic","Hiragino Sans",system-ui,-apple-system,"Segoe UI",sans-serif';
+  var T2P_CODE = 'ui-monospace,SFMono-Regular,Menlo,Consolas,"Noto Sans Mono CJK KR",monospace';
+
+  function t2pFontCss(st) {
+    return (st.i ? 'italic ' : '') + (st.b ? '700 ' : '400 ') + st.size + 'px ' + (st.c ? T2P_CODE : T2P_TEXT);
+  }
+
+  var t2pMeasureCtx = null;
+  function t2pCanvasMeasure() {
+    if (!t2pMeasureCtx) {
+      var cv = document.createElement('canvas');
+      t2pMeasureCtx = cv.getContext('2d');
+    }
+    var ctx = t2pMeasureCtx;
+    return {
+      width: function (st, text) {
+        ctx.font = t2pFontCss(st);
+        return ctx.measureText(String(text)).width;
+      }
+    };
+  }
+
+  function t2pRuns(line) {
+    var parts = String(line).split(/(\*\*[^*]+\*\*|__[^_]+__|`[^`]+`|\*[^*\s][^*]*\*|_[^_\s][^_]*_)/);
+    var runs = [];
+    parts.forEach(function (p) {
+      if (!p) return;
+      var m;
+      if ((m = /^\*\*([^*]+)\*\*$/.exec(p)) || (m = /^__([^_]+)__$/.exec(p))) runs.push({ s: m[1], b: true });
+      else if ((m = /^`([^`]+)`$/.exec(p))) runs.push({ s: m[1], c: true });
+      else if ((m = /^\*([^*]+)\*$/.exec(p)) || (m = /^_([^_]+)_$/.exec(p))) runs.push({ s: m[1], i: true });
+      else runs.push({ s: p });
+    });
+    var merged = [];
+    runs.forEach(function (r) {
+      var last = merged[merged.length - 1];
+      if (last && !!last.b === !!r.b && !!last.i === !!r.i && !!last.c === !!r.c) last.s += r.s;
+      else merged.push({ s: r.s, b: !!r.b, i: !!r.i, c: !!r.c });
+    });
+    return merged.length ? merged : [{ s: '' }];
+  }
+
+  function t2pPlainBlocks(text) {
+    var lines = String(text).replace(/\r\n?/g, '\n').split('\n');
+    var blocks = [], buf = [];
+    function flush() {
+      if (!buf.length) return;
+      blocks.push({ t: 'p', hard: buf.map(function (l) { return t2pRuns(l.replace(/\t/g, '    ')); }) });
+      buf = [];
+    }
+    lines.forEach(function (l) {
+      if (/^\s*$/.test(l)) { flush(); return; }
+      buf.push(l);
+    });
+    flush();
+    return blocks;
+  }
+
+  function t2pMdBlocks(text) {
+    var lines = String(text).replace(/\r\n?/g, '\n').split('\n');
+    var blocks = [], i = 0;
+    function blank(l) { return !l || /^\s*$/.test(l); }
+    while (i < lines.length) {
+      var l = lines[i];
+      if (blank(l)) { i++; continue; }
+      var fence = /^\s*(```+|~~~+)\s*([\w+#-]*)\s*$/.exec(l);
+      if (fence) {
+        var mark = fence[1].charAt(0), code = [];
+        i++;
+        while (i < lines.length && !(new RegExp('^\\s*' + mark + '{3,}\\s*$')).test(lines[i])) { code.push(lines[i]); i++; }
+        i++;
+        blocks.push({ t: 'code', lines: code });
+        continue;
+      }
+      var h = /^\s{0,3}(#{1,6})\s+(.*?)\s*#*\s*$/.exec(l);
+      if (h) { blocks.push({ t: 'h', level: h[1].length, runs: t2pRuns(h[2]) }); i++; continue; }
+      if (/^\s{0,3}([-*_])(\s*\1){2,}\s*$/.test(l)) { blocks.push({ t: 'hr' }); i++; continue; }
+      if (/^\s{0,3}>/.test(l)) {
+        var q = [];
+        while (i < lines.length && /^\s{0,3}>/.test(lines[i])) { q.push(lines[i].replace(/^\s{0,3}>\s?/, '')); i++; }
+        blocks.push({ t: 'quote', runs: t2pRuns(q.join(' ')) });
+        continue;
+      }
+      if (/^\s{0,3}([-*+]|\d+[.)])\s+/.test(l)) {
+        var items = [], num = 0;
+        while (i < lines.length) {
+          var m = /^(\s{0,6})([-*+]|\d+[.)])\s+(.*)$/.exec(lines[i]);
+          if (!m) {
+            if (items.length && !blank(lines[i]) && /^\s{2,}/.test(lines[i])) {
+              var lastIt = items[items.length - 1];
+              lastIt.text += ' ' + lines[i].trim();
+              lastIt.runs = t2pRuns(lastIt.text);
+              i++;
+              continue;
+            }
+            break;
+          }
+          if (/\d/.test(m[2])) num = parseInt(m[2], 10) || 0;
+          items.push({ level: Math.floor(m[1].length / 2), ordered: /\d/.test(m[2]), num: num, text: m[3], runs: t2pRuns(m[3]) });
+          i++;
+        }
+        if (items.length) blocks.push({ t: 'list', items: items });
+        continue;
+      }
+      if (l.indexOf('|') >= 0 && i + 1 < lines.length && lines[i + 1].indexOf('-') >= 0 && /^\s*\|?[\s:|-]*-[\s:|-]*\|?\s*$/.test(lines[i + 1])) {
+        var head = splitRow(l), rows = [];
+        i += 2;
+        while (i < lines.length && !blank(lines[i]) && lines[i].indexOf('|') >= 0) { rows.push(splitRow(lines[i])); i++; }
+        blocks.push({ t: 'table', head: head, rows: rows });
+        continue;
+      }
+      var para = [];
+      while (i < lines.length && !blank(lines[i]) && !/^\s{0,3}(#{1,6}\s|>|```|~~~|([-*+]|\d+[.)])\s)/.test(lines[i])) { para.push(lines[i].trim()); i++; }
+      if (!para.length) { para.push(lines[i].trim()); i++; }
+      blocks.push({ t: 'p', runs: t2pRuns(para.join(' ')) });
+    }
+    return blocks;
+  }
+
+  function t2pTextOf(blocks) {
+    var out = [];
+    blocks.forEach(function (b) {
+      if (b.t === 'h' || b.t === 'p' || b.t === 'quote') {
+        (b.runs || []).forEach(function (r) { out.push(r.s); });
+        if (b.hard) b.hard.forEach(function (hr) { hr.forEach(function (r) { out.push(r.s); }); });
+      } else if (b.t === 'code') {
+        b.lines.forEach(function (l) { out.push(l); });
+      } else if (b.t === 'list') {
+        b.items.forEach(function (it) { out.push(it.text); });
+      } else if (b.t === 'table') {
+        b.head.forEach(function (c) { out.push(c); });
+        b.rows.forEach(function (r) { r.forEach(function (c) { out.push(c); }); });
+      }
+    });
+    return out.join(' ');
+  }
+
+  function t2pLayout(blocks, opt, meas) {
+    var pageW = opt.pageW, pageH = opt.pageH;
+    var m = opt.margin, cw = pageW - m * 2;
+    var base = opt.fontSize;
+    var pages = [], ops = [];
+    var y = m;
+    var bottom = pageH - m - (opt.numbers ? base * 1.9 : 0);
+
+    function newPage() { pages.push(ops); ops = []; y = m; }
+    function need(h) { if (y + h > bottom && ops.length) newPage(); }
+
+    function sty(o) {
+      return { size: (o && o.size) || base, b: !!(o && o.b), i: !!(o && o.i), c: !!(o && o.c), color: (o && o.color) || null };
+    }
+
+    function wrap(runs, width, size, color) {
+      var lines = [], line = [], w = 0;
+      runs.forEach(function (run) {
+        var style = sty({ size: size, b: !!run.b, i: !!run.i, c: !!run.c, color: color });
+        var chunks = String(run.s == null ? '' : run.s).match(/\s+|\S+/g) || [];
+        chunks.forEach(function (chunk) {
+          var cw2 = meas.width(style, chunk);
+          if (w + cw2 <= width) { line.push({ s: chunk, st: style, w: cw2 }); w += cw2; return; }
+          if (/^\s+$/.test(chunk)) { if (line.length) { lines.push(line); line = []; w = 0; } return; }
+          if (line.length) { lines.push(line); line = []; w = 0; }
+          if (cw2 <= width) { line.push({ s: chunk, st: style, w: cw2 }); w = cw2; return; }
+          var buf = '';
+          for (var ci = 0; ci < chunk.length; ci++) {
+            var trial = buf + chunk.charAt(ci);
+            if (meas.width(style, trial) > width && buf) {
+              lines.push([{ s: buf, st: style, w: meas.width(style, buf) }]);
+              buf = chunk.charAt(ci);
+            } else buf = trial;
+          }
+          if (buf) { var bw = meas.width(style, buf); line.push({ s: buf, st: style, w: bw }); w = bw; }
+        });
+      });
+      if (line.length) lines.push(line);
+      return lines;
+    }
+
+    function emit(lines, x0, lineH) {
+      lines.forEach(function (ln) {
+        need(lineH);
+        var top = y, x = x0;
+        ln.forEach(function (p) {
+          if (p.s) ops.push({ k: 'text', x: x, y: top + lineH * 0.5 + p.st.size * 0.34, s: p.s, st: p.st });
+          x += p.w;
+        });
+        y += lineH;
+      });
+    }
+
+    function para(runs, o) {
+      var size = (o && o.size) || base;
+      var lineH = (o && o.lineH) || size * 1.55;
+      var indent = (o && o.indent) || 0;
+      var color = (o && o.color) || null;
+      var lines = wrap(runs, cw - indent, size, color);
+      emit(lines, m + indent, lineH);
+    }
+
+    blocks.forEach(function (blk) {
+      if (blk.t === 'h') {
+        var fs = Math.round(base * ([0, 1.95, 1.6, 1.35, 1.2, 1.1, 1.05][blk.level] || 1.1) * 10) / 10;
+        y += fs * (blk.level <= 2 ? 0.8 : 0.5);
+        need(fs * 2);
+        var runsB = (blk.runs || []).map(function (r) { return { s: r.s, b: true, i: r.i, c: r.c }; });
+        para(runsB, { size: fs, lineH: fs * 1.32 });
+        if (blk.level === 1) {
+          ops.push({ k: 'line', x1: m, y1: y + 3, x2: m + cw, y2: y + 3, w: 0.8, color: '#d9d4c6' });
+          y += 6;
+        } else { y += fs * 0.25; }
+        return;
+      }
+      if (blk.t === 'p') {
+        if (blk.hard) {
+          blk.hard.forEach(function (hr, idx) {
+            if (!idx) need(base * 1.6);
+            para(hr, {});
+          });
+        } else {
+          need(base * 1.6);
+          para(blk.runs, {});
+        }
+        y += base * 0.55;
+        return;
+      }
+      if (blk.t === 'list') {
+        blk.items.forEach(function (it) {
+          var indent = 14 + it.level * 16;
+          var marker = it.ordered ? (it.num || 1) + '.' : '•';
+          var mst = sty({});
+          var mw = meas.width(mst, marker + '  ');
+          need(base * 1.7);
+          ops.push({ k: 'text', x: m + indent, y: y + base * 1.55 * 0.5 + base * 0.34, s: marker, st: mst });
+          para(it.runs, { indent: indent + mw, lineH: base * 1.55 });
+          y += base * 0.16;
+        });
+        y += base * 0.4;
+        return;
+      }
+      if (blk.t === 'quote') {
+        var startY = y;
+        para(blk.runs, { indent: 16, color: '#4c5057' });
+        if (y > startY) {
+          ops.push({ k: 'rect', x: m + 2, y: startY + base * 0.12, w: 2.4, h: Math.max(base * 0.6, y - startY - base * 0.3), color: '#d8b45c' });
+        }
+        y += base * 0.6;
+        return;
+      }
+      if (blk.t === 'code') {
+        var csize = base * 0.92, lh = csize * 1.5, pad = 8;
+        var cblocks = [];
+        blk.lines.forEach(function (l) {
+          var wrapped = wrap([{ s: l || ' ', c: true }], cw - pad * 2, csize);
+          wrapped.forEach(function (w) { cblocks.push(w); });
+        });
+        var boxH = cblocks.length * lh + pad * 2;
+        need(Math.min(boxH, bottom - m));
+        var single = (y + boxH) <= bottom;
+        if (single) ops.push({ k: 'rect', x: m, y: y, w: cw, h: boxH, color: '#f4f1e9' });
+        y += pad;
+        cblocks.forEach(function (ln) {
+          need(lh);
+          var top = y, x = m + pad;
+          ln.forEach(function (p) { ops.push({ k: 'text', x: x, y: top + lh * 0.5 + csize * 0.34, s: p.s, st: p.st }); x += p.w; });
+          y += lh;
+        });
+        y += pad + base * 0.55;
+        return;
+      }
+      if (blk.t === 'table') {
+        var cols = Math.max(1, blk.head.length);
+        var pad2 = 5, tsize = base * 0.9;
+        var headSt = sty({ size: tsize, b: true });
+        var cellSt = sty({ size: tsize });
+        var natural = [];
+        for (var ci = 0; ci < cols; ci++) natural.push(meas.width(headSt, String(blk.head[ci] || '')) + pad2 * 2 + 2);
+        blk.rows.forEach(function (r) {
+          for (var cj = 0; cj < cols; cj++) natural[cj] = Math.max(natural[cj], meas.width(cellSt, String(r[cj] == null ? '' : r[cj])) + pad2 * 2 + 2);
+        });
+        var sum = natural.reduce(function (a, b) { return a + b; }, 0);
+        var widths = natural;
+        if (sum > cw) { var k = cw / sum; widths = natural.map(function (w) { return w * k; }); }
+        var lh2 = tsize * 1.45;
+
+        function cellsOf(rowVals, stl) {
+          return widths.map(function (w2, idx) {
+            return wrap([{ s: String(rowVals[idx] == null ? '' : rowVals[idx]), b: stl.b }], Math.max(10, w2 - pad2 * 2), tsize);
+          });
+        }
+        function drawRow(cells, stl) {
+          var maxLines = 1;
+          cells.forEach(function (c) { if (c.length > maxLines) maxLines = c.length; });
+          var rowH = maxLines * lh2 + pad2 * 2;
+          need(rowH);
+          var top = y, x = m;
+          cells.forEach(function (c, i2) {
+            var bx = x + pad2;
+            c.forEach(function (ln2, li) {
+              var tx = bx, by = top + pad2 + lh2 * 0.5 + li * lh2 + tsize * 0.34;
+              ln2.forEach(function (p) { ops.push({ k: 'text', x: tx, y: by, s: p.s, st: stl }); tx += p.w; });
+            });
+            x += widths[i2];
+          });
+          ops.push({ k: 'line', x1: m, y1: top, x2: m + widths.reduce(function (a, b) { return a + b; }, 0), y2: top, w: 0.5, color: '#ded9cb' });
+          y += rowH;
+          ops.push({ k: 'line', x1: m, y1: y, x2: m + widths.reduce(function (a, b) { return a + b; }, 0), y2: y, w: 0.5, color: '#ded9cb' });
+          var vx = m;
+          widths.forEach(function (w3) { ops.push({ k: 'line', x1: vx, y1: y - rowH, x2: vx, y2: y, w: 0.5, color: '#ded9cb' }); vx += w3; });
+          ops.push({ k: 'line', x1: vx, y1: y - rowH, x2: vx, y2: y, w: 0.5, color: '#ded9cb' });
+        }
+        drawRow(cellsOf(blk.head, headSt), headSt);
+        blk.rows.forEach(function (r) { drawRow(cellsOf(r, cellSt), cellSt); });
+        y += base * 0.7;
+        return;
+      }
+      if (blk.t === 'hr') {
+        need(base * 1.4);
+        ops.push({ k: 'line', x1: m, y1: y + base * 0.5, x2: m + cw, y2: y + base * 0.5, w: 0.6, color: '#ded9cb' });
+        y += base * 1.2;
+      }
+    });
+
+    pages.push(ops);
+    pages = pages.filter(function (p) { return p.length; });
+    if (!pages.length) pages.push([]);
+
+    if (opt.numbers) {
+      pages.forEach(function (pageOps, idx) {
+        var label = String(idx + 1) + ' / ' + pages.length;
+        var stl = sty({ size: Math.max(8, base * 0.82), color: '#8a8578' });
+        var w = meas.width(stl, label);
+        pageOps.push({ k: 'text', x: (pageW - w) / 2, y: pageH - m * 0.45, s: label, st: stl });
+      });
+    }
+    return { pages: pages, pageW: pageW, pageH: pageH };
+  }
+
+  async function t2pBuildPdf(blocks, opt) {
+    var sample = t2pTextOf(blocks).replace(/[\n\r\t]/g, ' ').slice(0, 4000);
+    var mode = 'raster';
+    var fonts = null, doc = null;
+    if (PDFDocument) {
+      try {
+        doc = await PDFDocument.create();
+        var SF = LIB.StandardFonts;
+        fonts = {
+          r: await doc.embedFont(SF.Helvetica),
+          b: await doc.embedFont(SF.HelveticaBold),
+          i: await doc.embedFont(SF.HelveticaOblique),
+          bi: await doc.embedFont(SF.HelveticaBoldOblique),
+          c: await doc.embedFont(SF.Courier)
+        };
+        fonts.r.widthOfTextAtSize(sample || 'a', opt.fontSize);
+        mode = 'text';
+      } catch (e) { mode = 'raster'; fonts = null; }
+    }
+
+    if (mode === 'text') {
+      var meas = {
+        width: function (st, text) {
+          var f = fonts[st.c ? 'c' : st.b && st.i ? 'bi' : st.b ? 'b' : st.i ? 'i' : 'r'];
+          try { return f.widthOfTextAtSize(String(text), st.size); }
+          catch (e2) { return String(text).length * st.size * 0.5; }
+        }
+      };
+      var layout = t2pLayout(blocks, opt, meas);
+      var rgb = function (hex) {
+        var h = String(hex || '#14161a').replace('#', '');
+        return LIB.rgb(parseInt(h.slice(0, 2), 16) / 255, parseInt(h.slice(2, 4), 16) / 255, parseInt(h.slice(4, 6), 16) / 255);
+      };
+      layout.pages.forEach(function (pageOps) {
+        var page = doc.addPage([layout.pageW, layout.pageH]);
+        pageOps.forEach(function (o) {
+          if (o.k === 'text') {
+            page.drawText(o.s, {
+              x: o.x, y: layout.pageH - o.y, size: o.st.size,
+              font: fonts[o.st.c ? 'c' : o.st.b && o.st.i ? 'bi' : o.st.b ? 'b' : o.st.i ? 'i' : 'r'],
+              color: rgb(o.st.color)
+            });
+          } else if (o.k === 'rect') {
+            page.drawRectangle({ x: o.x, y: layout.pageH - o.y - o.h, width: o.w, height: o.h, color: rgb(o.color) });
+          } else if (o.k === 'line') {
+            page.drawLine({
+              start: { x: o.x1, y: layout.pageH - o.y1 }, end: { x: o.x2, y: layout.pageH - o.y2 },
+              thickness: o.w || 0.6, color: rgb(o.color)
+            });
+          }
+        });
+      });
+      var bytes = await doc.save();
+      return { bytes: bytes, pages: layout.pages.length, mode: 'text' };
+    }
+
+    var measC = t2pCanvasMeasure();
+    var layout2 = t2pLayout(blocks, opt, measC);
+    var scale = 2;
+    var pdf2 = await PDFDocument.create();
+    for (var pi = 0; pi < layout2.pages.length; pi++) {
+      var pageOps2 = layout2.pages[pi];
+      var canvas = document.createElement('canvas');
+      canvas.width = Math.round(layout2.pageW * scale);
+      canvas.height = Math.round(layout2.pageH * scale);
+      var ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.scale(scale, scale);
+      ctx.textBaseline = 'alphabetic';
+      pageOps2.forEach(function (o) {
+        if (o.k === 'text') {
+          ctx.font = t2pFontCss(o.st);
+          ctx.fillStyle = o.st.color || '#14161a';
+          ctx.fillText(o.s, o.x, o.y);
+        } else if (o.k === 'rect') {
+          ctx.fillStyle = o.color || '#f4f1e9';
+          ctx.fillRect(o.x, o.y, o.w, o.h);
+        } else if (o.k === 'line') {
+          ctx.strokeStyle = o.color || '#ded9cb';
+          ctx.lineWidth = o.w || 0.6;
+          ctx.beginPath();
+          ctx.moveTo(o.x1, o.y1 + 0.3);
+          ctx.lineTo(o.x2, o.y2 + 0.3);
+          ctx.stroke();
+        }
+      });
+      var blob = await canvasToBlob(canvas, 'image/png');
+      var img = await pdf2.embedPng(new Uint8Array(await blob.arrayBuffer()));
+      var pg = pdf2.addPage([layout2.pageW, layout2.pageH]);
+      pg.drawImage(img, { x: 0, y: 0, width: layout2.pageW, height: layout2.pageH });
+      canvas.width = 0; canvas.height = 0;
+    }
+    var bytes2 = await pdf2.save();
+    return { bytes: bytes2, pages: layout2.pages.length, mode: 'raster' };
+  }
+
+  async function runT2p() {
+    var txt = $('t2pIn') ? $('t2pIn').value : '';
+    if (!txt.trim()) return toast(t('emptyT2p'), true);
+    if (!PDFDocument) return toast(t('errNoLib'), true);
+    var markdown = $('mdT2p') ? $('mdT2p').checked : true;
+    var blocks = markdown ? t2pMdBlocks(txt) : t2pPlainBlocks(txt);
+    if (!blocks.length) return toast(t('emptyT2p'), true);
+    setBusy(true);
+    clearOutputs('t2p', true);
+    try {
+      var dims = PAGE_SIZES[state.t2p.size] || PAGE_SIZES.a4;
+      var marginMm = parseInt(($('marginT2p') || {}).value, 10);
+      if (isNaN(marginMm)) marginMm = 18;
+      marginMm = Math.max(0, Math.min(40, marginMm));
+      var opt = {
+        pageW: dims[0], pageH: dims[1],
+        margin: marginMm * MM_TO_PT,
+        fontSize: state.t2p.fontSize,
+        numbers: $('numT2p') ? $('numT2p').checked : true
+      };
+      setStatus('statusT2p', t('busyLayout'), true);
+      var res = await t2pBuildPdf(blocks, opt);
+      setStatus('statusT2p', '', false);
+
+      var blob = new Blob([res.bytes], { type: 'application/pdf' });
+      var pageCount = res.pages, verified = false;
+      try {
+        var vdoc = await PDFDocument.load(res.bytes);
+        pageCount = vdoc.getPageCount();
+        verified = pageCount === res.pages && pageCount > 0;
+      } catch (e) { verified = false; }
+      if (res.mode === 'text' && pdfjs) {
+        try {
+          var pdoc = await pdfjs.getDocument({ data: new Uint8Array(res.bytes.slice(0)), isEvalSupported: false }).promise;
+          var tc = await (await pdoc.getPage(1)).getTextContent();
+          var chars = (tc.items || []).reduce(function (a, it) { return a + String(it.str || '').length; }, 0);
+          if (!chars) verified = false;
+          pdoc.destroy();
+        } catch (e) { /* keep the page-count verdict */ }
+      }
+      if (!verified) { toast(t('errVerify'), true); return; }
+
+      var titleSrc = '';
+      for (var bi = 0; bi < blocks.length && !titleSrc; bi++) {
+        if (blocks[bi].t === 'h' && blocks[bi].runs && blocks[bi].runs[0]) titleSrc = blocks[bi].runs[0].s;
+      }
+      for (var bj = 0; bj < blocks.length && !titleSrc; bj++) {
+        var b2 = blocks[bj];
+        if (b2.t !== 'p') continue;
+        if (b2.hard && b2.hard[0] && b2.hard[0][0]) titleSrc = b2.hard[0][0].s;
+        else if (b2.runs && b2.runs[0]) titleSrc = b2.runs[0].s;
+      }
+      var base = String(titleSrc || '').replace(/[\\/:*?"<>|]+/g, ' ').replace(/\s+/g, ' ').trim();
+      base = base.split(/[.。!?！？]\s/)[0].replace(/[.\s]+$/, '').slice(0, 42).trim() || 'document';
+      var name = base + '.pdf';
+      var meta = pageCount + ' ' + (pageCount === 1 ? t('pageWord') : t('pagesWord')) + ' · ' + fmtBytes(blob.size) + ' · ' + (res.mode === 'text' ? t('textModeWord') : t('rasterModeWord')) + ' · ' + t('verifiedWord');
+      pushOutput('t2p', name, blob, meta);
+      renderT2pOuts();
+      triggerDownload(state.t2p.outputs[0].url, name);
+      toast(tpl('doneT2p', { pages: pageCount, size: fmtBytes(blob.size), mode: res.mode === 'text' ? t('textModeWord') : t('rasterModeWord') }));
+    } catch (err) {
+      toast(t('errGeneric') + (err && err.message ? ': ' + err.message : ''), true);
+      setStatus('statusT2p', '', false);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function renderT2pOuts() { renderOutsPlain('outT2p', 'resultsT2p', 't2p'); }
+  function renderP2tOuts() { renderOutsPlain('outP2t', 'resultsP2t', 'p2t'); }
+
+  function renderOutsPlain(listId, secId, mode) {
+    var list = $(listId), sec = $(secId);
+    if (!list || !sec) return;
+    list.innerHTML = '';
+    var outs = state[mode].outputs || [];
+    sec.hidden = outs.length === 0;
+    outs.forEach(function (o) {
+      var li = document.createElement('li');
+      li.className = 'out';
+      li.innerHTML = '<div class="out-txt"><p class="out-name">' + escHtml(o.name) + '</p>'
+        + '<p class="out-meta">' + escHtml(o.meta || '') + '</p></div>'
+        + '<a class="save" download="' + escAttr(o.name) + '" href="' + o.url + '">' + escHtml(t('saveWord')) + '</a>';
+      list.appendChild(li);
+    });
   }
 
   /* ─────────────── UI wiring ─────────────── */
@@ -3208,16 +4840,32 @@ footer.foot .sep { color: var(--line2); }
     if ($('mdIn')) $('mdIn').value = '';
     var prev = $('previewMd');
     if (prev) prev.innerHTML = '';
-    ['saveHtmlMd', 'saveTxtMd', 'printMd'].forEach(function (id) { var b = $(id); if (b) b.disabled = true; });
+    ['saveHtmlMd', 'saveTxtMd', 'saveMdMd', 'printMd'].forEach(function (id) { var b = $(id); if (b) b.disabled = true; });
     state.md.last = null;
     clearOutputs('md', true);
     updateMdSummary();
     toast(t('cleared'));
   }
 
+  function clearT2pAll() {
+    if ($('t2pIn')) $('t2pIn').value = '';
+    clearOutputs('t2p', true);
+    updateT2pStats();
+    toast(t('cleared'));
+  }
+
+  function updateT2pStats() {
+    var st = $('statsT2p');
+    if (!st) return;
+    var txt = $('t2pIn') ? $('t2pIn').value : '';
+    if (!txt.trim()) { st.innerHTML = ''; return; }
+    var words = txt.trim().split(/\s+/).filter(Boolean).length;
+    st.innerHTML = '<b>' + words + '</b> ' + (isKo() ? '단어' : 'words') + ' <span class="sep">·</span> ' + txt.length + ' ' + (isKo() ? '자' : 'chars');
+  }
+
   function setMode(mode) {
     state.mode = mode;
-    ['image', 'p2i', 'i2p', 'data', 'md'].forEach(function (k) {
+    ['image', 'p2i', 'p2t', 'i2p', 't2p', 'data', 'md'].forEach(function (k) {
       var b = $('mode-' + k), p = $('panel-' + k);
       if (b) b.setAttribute('aria-selected', k === mode ? 'true' : 'false');
       if (p) p.hidden = (k !== mode);
@@ -3228,7 +4876,9 @@ footer.foot .sep { color: var(--line2); }
     if (state.busy) return;
     if (state.mode === 'image') return runImage();
     if (state.mode === 'p2i') return runP2i();
+    if (state.mode === 'p2t') return runP2t();
     if (state.mode === 'i2p') return runI2p();
+    if (state.mode === 't2p') return runT2p();
     if (state.mode === 'data') return convertData();
     if (state.mode === 'md') return renderMdPreview();
   }
@@ -3343,7 +4993,7 @@ footer.foot .sep { color: var(--line2); }
         var ta = $('dataIn');
         if (ta) ta.value = txt;
         var ext = (f.name.split('.').pop() || '').toLowerCase();
-        var want = ext === 'json' ? 'json' : (ext === 'tsv' ? 'tsv' : (ext === 'csv' ? 'csv' : state.data.from));
+        var want = ext === 'json' ? 'json' : (ext === 'yaml' || ext === 'yml' ? 'yaml' : (ext === 'tsv' ? 'tsv' : (ext === 'csv' ? 'csv' : state.data.from)));
         state.data.from = want;
         var box = $('fromData');
         if (box) {
@@ -3402,6 +5052,8 @@ footer.foot .sep { color: var(--line2); }
     if (sh) sh.addEventListener('click', saveMdHtml);
     var st = $('saveTxtMd');
     if (st) st.addEventListener('click', saveMdTxt);
+    var sm = $('saveMdMd');
+    if (sm) sm.addEventListener('click', saveMdMarkdown);
     var pr = $('printMd');
     if (pr) pr.addEventListener('click', printMd);
     var clrResM = $('clearResMd');
@@ -3409,9 +5061,52 @@ footer.foot .sep { color: var(--line2); }
     var mi = $('mdIn');
     if (mi) mi.addEventListener('input', function () {
       state.md.last = null;
-      ['saveHtmlMd', 'saveTxtMd', 'printMd'].forEach(function (id) { var b = $(id); if (b) b.disabled = true; });
+      ['saveHtmlMd', 'saveTxtMd', 'saveMdMd', 'printMd'].forEach(function (id) { var b = $(id); if (b) b.disabled = true; });
       updateMdSummary();
     });
+
+    /* pdf → text */
+    wireDrop('dropP2t', 'fileP2t', addP2tFiles);
+    wireSeg('fmtP2t', 'fmt', function (v) { state.p2t.fmt = v; });
+    var mkP = $('markP2t');
+    if (mkP) mkP.addEventListener('change', function () { state.p2t.markers = mkP.checked; });
+    var rfP = $('reflowP2t');
+    if (rfP) rfP.addEventListener('change', function () { state.p2t.reflow = rfP.checked; });
+    var runPt = $('runP2t');
+    if (runPt) runPt.addEventListener('click', runP2t);
+    var clrPt = $('clearP2t');
+    if (clrPt) clrPt.addEventListener('click', clearP2tFiles);
+    var clrResPt = $('clearResP2t');
+    if (clrResPt) clrResPt.addEventListener('click', function () {
+      clearOutputs('p2t');
+      state.p2t.text = '';
+      var cb = $('copyP2t');
+      if (cb) cb.disabled = true;
+    });
+    var cpP = $('copyP2t');
+    if (cpP) cpP.addEventListener('click', copyP2tText);
+
+    /* text → pdf */
+    wireDrop('dropT2p', 'fileT2p', function (files) {
+      var picked = files.filter(isDocFile);
+      if (!picked.length) { toast(tpl('skippedDoc', { n: files.length }), true); return; }
+      var f = picked[0];
+      f.text().then(function (txt) {
+        var ta = $('t2pIn');
+        if (ta) ta.value = txt;
+        updateT2pStats();
+      });
+    });
+    wireSeg('sizeT2p', 'size', function (v) { state.t2p.size = v; });
+    wireSeg('fsT2p', 'fs', function (v) { state.t2p.fontSize = parseInt(v, 10) || 11; });
+    var t2i = $('t2pIn');
+    if (t2i) t2i.addEventListener('input', updateT2pStats);
+    var runT = $('runT2p');
+    if (runT) runT.addEventListener('click', runT2p);
+    var clrT = $('clearT2p');
+    if (clrT) clrT.addEventListener('click', clearT2pAll);
+    var clrResT = $('clearResT2p');
+    if (clrResT) clrResT.addEventListener('click', function () { clearOutputs('t2p'); });
 
     document.addEventListener('keydown', function (e) {
       if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
@@ -3439,7 +5134,7 @@ footer.foot .sep { color: var(--line2); }
   }
 
   function revokeAll() {
-    ['image', 'p2i', 'i2p', 'data', 'md'].forEach(function (mode) {
+    ['image', 'p2i', 'p2t', 'i2p', 't2p', 'data', 'md'].forEach(function (mode) {
       (state[mode].outputs || []).forEach(function (o) {
         try { URL.revokeObjectURL(o.url); } catch (e) {}
       });
@@ -3471,6 +5166,7 @@ footer.foot .sep { color: var(--line2); }
     setMode('image');
     updateImageFmtUi();
     updateP2iQuality();
+    updateT2pStats();
     updateNetBadge();
 
     if (window.PerformanceObserver) {
