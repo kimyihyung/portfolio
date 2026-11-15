@@ -117,7 +117,7 @@ html,body{height:100%;overflow:hidden;background:#03050c;color:#e9f0fb;
   background:linear-gradient(160deg,#69b4ff,#4a86e0);color:#03121f;font-weight:700;font-size:13px}
 .hidden{display:none!important}
 /* ── mobile ── */
-html.m #brand h1{font-size:11px;letter-spacing:.22em}
+html.m #brand h1{display:none}
 html.m #brand p{display:none}
 html.m #brand .mark{width:32px;height:32px;font-size:12px;border-radius:10px}
 html.m #hint{display:none}
@@ -649,8 +649,10 @@ NODES.forEach((n) => {
 HALF_W += 7; HALF_H += 5;
 const _tanV = Math.tan((FOV_BASE * Math.PI) / 360);
 const _tanH = _tanV * (window.innerWidth / window.innerHeight);
-const OVERVIEW_R = clamp(Math.max((HALF_W / _tanH) * 1.62, (HALF_H / _tanV) * 1.22), 60, 320);
-const targetY0 = PORTRAIT ? HALF_H * 0.16 : 0;
+const _mx = PORTRAIT ? 1.08 : 1.62;
+const _my = PORTRAIT ? 1.26 : 1.22;
+const OVERVIEW_R = clamp(Math.max((HALF_W / _tanH) * _mx, (HALF_H / _tanV) * _my), 60, 320);
+const targetY0 = PORTRAIT ? HALF_H * 0.2 : 0;
 const view = { target: new THREE.Vector3(0, targetY0, 0), r: OVERVIEW_R * 1.7, az: 0.6, pol: 1.06 };
 const tw = { active: false, t: 0, dur: 1, fr: 0, tr: 0, ft: new THREE.Vector3(), tt: new THREE.Vector3() };
 function applyCam() {
