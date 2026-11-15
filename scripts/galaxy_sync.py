@@ -54,7 +54,10 @@ FEEDS = [
         "channel": "note",
         "blog": "기록노트",
         "col": "#6ea8ff",
-        "url": "https://rss.blog.naver.com/branson_note.xml",
+        "urls": [
+            "https://rss.blog.naver.com/branson_note.xml",
+            "https://blog.rss.naver.com/branson_note.xml",
+        ],
         "snippet": 80,
     },
     {
@@ -62,7 +65,10 @@ FEEDS = [
         "channel": "eb",
         "blog": "EB_note",
         "col": "#b07bff",
-        "url": "https://rss.blog.naver.com/op213y.xml",
+        "urls": [
+            "https://rss.blog.naver.com/op213y.xml",
+            "https://blog.rss.naver.com/op213y.xml",
+        ],
         "snippet": 60,
     },
     {
@@ -70,7 +76,7 @@ FEEDS = [
         "channel": "tistory",
         "blog": "플로우 시스템",
         "col": "#46e08a",
-        "url": "https://yhcode.tistory.com/rss",
+        "urls": ["https://yhcode.tistory.com/rss"],
         "snippet": 168,
     },
     {
@@ -78,7 +84,7 @@ FEEDS = [
         "channel": "tistory",
         "blog": "OPYEB",
         "col": "#3cbfe6",
-        "url": "https://opyeb.tistory.com/rss",
+        "urls": ["https://opyeb.tistory.com/rss"],
         "snippet": 168,
     },
     {
@@ -86,7 +92,7 @@ FEEDS = [
         "channel": "tistory",
         "blog": "은퇴노트",
         "col": "#7bd7ff",
-        "url": "https://euntu-note.tistory.com/rss",
+        "urls": ["https://euntu-note.tistory.com/rss"],
         "snippet": 168,
     },
     {
@@ -94,7 +100,7 @@ FEEDS = [
         "channel": "tistory",
         "blog": "테크 커런트",
         "col": "#2fd4c8",
-        "url": "https://sharednote.tistory.com/rss",
+        "urls": ["https://sharednote.tistory.com/rss"],
         "snippet": 168,
     },
 ]
@@ -363,16 +369,23 @@ def main() -> int:
     feed_err: list[str] = []
 
     for feed in FEEDS:
-        try:
-            items = parse_feed(fetch(feed["url"]))
-        except Exception as exc:  # noqa: BLE001
-            feed_err.append(f"{feed['name']}: {exc}")
-            log(f"[경고] {feed['name']} 피드 실패 — {exc}")
+        items = None
+        errs: list[str] = []
+        for url in feed["urls"]:
+            try:
+                parsed = parse_feed(fetch(url))
+            except Exception as exc:  # noqa: BLE001 - 주소별 실패는 다음 주소로
+                errs.append(f"{url} → {exc}")
+                continue
+            if parsed:
+                items = parsed
+                break
+            errs.append(f"{url} → 항목 없음")
+        if items is None:
+            feed_err.append(f"{feed['name']}: " + " | ".join(errs))
+            log(f"[경고] {feed['name']} 피드 실패 — " + " | ".join(errs))
             continue
         feed_ok += 1
-        if not items:
-            log(f"[경고] {feed['name']} 피드에 항목이 없습니다")
-            continue
         new_here = 0
         for item in items:
             if not item["title"] or not item["url"] or not item["date"]:
