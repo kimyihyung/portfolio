@@ -346,7 +346,7 @@ html.m #tip{font-size:10.5px;padding:6px 9px}
       var r = document.getElementById('fbreason');
       if (r && window.__galaxyErrors.length) r.innerHTML = '로딩 중 문제가 발생했습니다.<br /><span style="opacity:.7;font-size:11px">' + window.__galaxyErrors.join('<br />') + '</span>';
     }
-  }, 12000);
+  }, 15000);
 </script>
 
 <script src="../sound.js"></script>
@@ -1713,6 +1713,8 @@ window.__galaxy = {
 updateLabels();
 animate();
 setTimeout(() => {
+  // 느린 회선에서 12초 대기 안내가 먼저 떴더라도, 실제로 준비되면 반드시 걷어낸다
+  $('#fallback').classList.remove('on');
   $('#loading').style.opacity = '0';
   setTimeout(() => $('#loading').classList.add('hidden'), 700);
   window.__galaxyReady = true;
