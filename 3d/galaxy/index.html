@@ -353,8 +353,8 @@ CHANNELS.forEach((c, i) => { CH_INDEX[c.id] = i; });
 
 /* ───────────────── layout: five spiral galaxies in a ring ───────────────── */
 const counts = CHANNELS.map((c) => c.count);
-const rMaxOf = (n) => 3.4 + 12.5 * Math.sqrt(n / 2000);
-const RING = PORTRAIT ? 44 : 54;
+const rMaxOf = (n) => 4.4 + 15 * Math.sqrt(n / 2000);
+const RING = PORTRAIT ? 46 : 60;
 const CLUSTER_SPOT = CHANNELS.map((ch, ci) => {
   const a = ci * (Math.PI * 2 / CHANNELS.length) + 0.3;
   const rr = RING * (PORTRAIT ? 0.72 : 1) * (0.92 + 0.16 * (ci % 2));
@@ -381,7 +381,7 @@ NODES.forEach((n, idx) => {
     center.z + Math.sin(ang) * r
   );
   n.ang = ang; n.rad = r; n.cl = center;
-  n.size = 0.85 + 1.35 * (n.i === undefined ? 0.5 : n.i);
+  n.size = 1.0 + 1.5 * (n.i === undefined ? 0.5 : n.i);
   n.featured = false;
 });
 
@@ -529,7 +529,9 @@ CHANNELS.forEach((ch, ci) => {
   const sp = makeLabel(ch);
   const sc = PORTRAIT ? 9.4 : 11.6;
   sp.scale.set(sc, sc / 3.6, 1);
-  sp.position.set(spot.x, spot.y + rr * 0.5 + 4.2, spot.z);
+  const outLen = Math.hypot(spot.x, spot.z) || 1;
+  const ox = spot.x / outLen, oz = spot.z / outLen;
+  sp.position.set(spot.x + ox * (rr * 0.75 + 4), spot.y + rr * 0.35 + 3.4, spot.z + oz * (rr * 0.75 + 4));
   sp.userData.ch = ch.id;
   scene.add(sp);
   ch.label = sp;
@@ -598,8 +600,8 @@ focusRing.scale.set(4, 4, 1);
 scene.add(focusRing);
 
 /* ───────────────── camera ───────────────── */
-const OVERVIEW_R = PORTRAIT ? 124 : (isSmall ? 118 : 116);
-const view = { target: new THREE.Vector3(0, 0, 0), r: OVERVIEW_R * 1.6, az: 0.6, pol: 1.28 };
+const OVERVIEW_R = PORTRAIT ? 110 : (isSmall ? 100 : 96);
+const view = { target: new THREE.Vector3(0, 0, 0), r: OVERVIEW_R * 1.7, az: 0.6, pol: 1.06 };
 const tw = { active: false, t: 0, dur: 1, fr: 0, tr: 0, ft: new THREE.Vector3(), tt: new THREE.Vector3() };
 function applyCam() {
   const sp = Math.sin(view.pol);
