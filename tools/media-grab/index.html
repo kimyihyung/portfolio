@@ -932,15 +932,17 @@ footer a:hover { color: var(--ink); }
       auto: L('Direct file, HLS playlist or a page — detected from the link.', '직접 파일·HLS 재생목록·페이지를 링크로 판별합니다.')
     };
     el.detHint.textContent = hint[mode] || hint.auto;
+    el.detTag.hidden = el.detTag.textContent === '—';
   }
 
   el.input.addEventListener('input', function () {
     var v = normalize(el.input.value);
-    if (!v) { setMode('auto'); el.detTag.textContent = '—'; el.detTag.className = 'tag tag--mute'; if (!state.busy) setStatus(idleStatus(), ''); return; }
+    if (!v) { setMode('auto'); el.detTag.textContent = '—'; el.detTag.className = 'tag tag--mute'; el.detTag.hidden = true; if (!state.busy) setStatus(idleStatus(), ''); return; }
     var m = classify(v);
     setMode(m);
     el.detTag.textContent = m === 'direct' ? 'FILE' : m === 'hls' ? 'HLS' : m === 'youtube' ? 'YOUTUBE' : 'PAGE';
     el.detTag.className = 'tag';
+    el.detTag.hidden = false;
   });
 
   el.paste.addEventListener('click', function () {
