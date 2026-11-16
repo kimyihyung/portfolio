@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#0a0b0d">
+<!-- Utility page: kept out of search indexes and AdSense crawls on purpose. -->
+<meta name="robots" content="noindex, nofollow">
 <title>MediaGrab — Zero-Upload Video &amp; HLS Downloader (direct links + your own Worker) | Kim Yihyung</title>
 <meta name="description" content="Paste a direct video, audio or HLS .m3u8 link and save it as one file — assembled in your browser, with nothing uploaded and no third-party downloader service. YouTube and other pages run through a Worker on your own Cloudflare account, with zero logging and zero storage.">
 <meta name="keywords" content="video downloader, hls downloader, m3u8 downloader, mp4 downloader, mp3 extract, zero upload, client side downloader, no log downloader, self hosted downloader, cloudflare worker downloader, browser hls merge, private video downloader">
@@ -617,7 +619,7 @@ footer a:hover { color: var(--ink); }
    * Deploy point: the Worker origin. Leave empty to run browser-only.
    * Nothing else in this page needs editing.
    * ------------------------------------------------------------------ */
-  var API_BASE = '';
+  var API_BASE = 'https://media-grab-api.kim7180742715.workers.dev';
 
   var LANG_KEY = 'kyh.lang';
   var MAX_WARN = 900 * 1024 * 1024;
@@ -1434,8 +1436,16 @@ footer a:hover { color: var(--ink); }
    * ------------------------------------------------------------------ */
   function explainWorkerError(j) {
     var code = (j && j.error) || 'unknown';
+    var detail = ((j && j.detail) || '').trim();
+    var ytBlock = code === 'youtube_unavailable' && ((j && j.hint === 'yt_bot_check') || /bot|sign in/i.test(detail));
+    if (ytBlock) {
+      return L(
+        'YouTube answered this video with a bot check, so nothing was read. It is temporary and sits on the Worker’s Cloudflare address, not on this page: press Analyze again in a minute or two, or try another video. If it keeps failing, paste a direct MP4 or .m3u8 link instead — those never ask YouTube.' + (detail ? ' (YouTube said: ' + detail + ')' : ''),
+        '유튜브가 봇 확인으로 이 영상 읽기를 거부했습니다. 일시적인 현상이고 이 페이지가 아니라 워커의 Cloudflare 주소에 걸린 것입니다 — 1~2분 뒤 [분석]을 다시 누르거나 다른 영상으로 시도해 주세요. 계속 안 되면 MP4나 .m3u8 직접 링크를 붙여넣으세요. 그쪽은 유튜브를 거치지 않습니다.' + (detail ? ' (유튜브 응답: ' + detail + ')' : '')
+      );
+    }
     var map = {
-      youtube_unavailable: L('YouTube refused this request (' + ((j && j.detail) || 'no reason given') + '). This is usually a bot check on the Worker IP — try again in a few minutes, or another video.', '유튜브가 요청을 거부했습니다(' + ((j && j.detail) || '사유 없음') + '). 대개 워커 IP에 대한 봇 확인입니다 — 몇 분 뒤나 다른 영상으로 시도하세요.'),
+      youtube_unavailable: L('YouTube refused this request (' + (detail || 'no reason given') + ') — the video may be private, age-locked or region-blocked.', '유튜브가 이 요청을 거부했습니다(' + (detail || '사유 없음') + ') — 비공개·연령 제한·지역 제한 영상일 수 있습니다.'),
       no_formats: L('No downloadable format was found for this link.', '이 링크에서 받을 수 있는 형식을 찾지 못했습니다.'),
       no_media_found: L('The Worker read the page but found no video, audio or playlist on it.', '워커가 페이지를 읽었지만 영상·음성·재생목록을 찾지 못했습니다.'),
       host_not_allowed: L('That host is not on the Worker allowlist (MG_HOSTS).', '그 호스트는 워커 허용 목록(MG_HOSTS)에 없습니다.'),

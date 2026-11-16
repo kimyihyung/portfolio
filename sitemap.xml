@@ -49,12 +49,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://kimyihyung.github.io/portfolio/tools/media-grab/</loc>
-    <lastmod>2026-11-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://kimyihyung.github.io/portfolio/labs/liquid-shader/</loc>
     <lastmod>2026-11-15</lastmod>
     <changefreq>monthly</changefreq>
