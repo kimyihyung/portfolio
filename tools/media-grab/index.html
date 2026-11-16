@@ -1,0 +1,1881 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0a0b0d">
+<title>MediaGrab — Zero-Upload Video &amp; HLS Downloader (direct links + your own Worker) | Kim Yihyung</title>
+<meta name="description" content="Paste a direct video, audio or HLS .m3u8 link and save it as one file — assembled in your browser, with nothing uploaded and no third-party downloader service. YouTube and other pages run through a Worker on your own Cloudflare account, with zero logging and zero storage.">
+<meta name="keywords" content="video downloader, hls downloader, m3u8 downloader, mp4 downloader, mp3 extract, zero upload, client side downloader, no log downloader, self hosted downloader, cloudflare worker downloader, browser hls merge, private video downloader">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/media-grab/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0b0d'/%3E%3Cpath d='M16 6v13m0 0l-5.2-5.2M16 19l5.2-5.2' stroke='%23ffc46b' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Crect x='7' y='23' width='18' height='3' rx='1.5' fill='%23ffc46b'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/media-grab/">
+<meta property="og:title" content="MediaGrab — Zero-Upload Video &amp; HLS Downloader">
+<meta property="og:description" content="A link in, a file out. Direct media and HLS streams are assembled in the tab; YouTube and other pages go through your own Cloudflare Worker. No third-party downloader, no database, no logs.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/media-grab.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MediaGrab — a link in, a file out, zero uploads">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MediaGrab — Zero-Upload Video &amp; HLS Downloader">
+<meta name="twitter:description" content="Direct MP4/M4A and HLS .m3u8 links are merged inside the browser. YouTube and other pages run through a Worker on your own Cloudflare account — no logs, no storage.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/media-grab.jpg">
+<meta name="twitter:image:alt" content="MediaGrab — zero-upload video and HLS downloader">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "MediaGrab — Zero-Upload Video & HLS Downloader",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/media-grab/",
+      "description": "Resolves a direct video, audio or HLS playlist link and saves it as a single file assembled in the browser; YouTube, Vimeo and other pages are resolved through a Worker deployed on the user's own Cloudflare account, with no logging and no storage.",
+      "featureList": [
+        "Direct MP4, WebM, MOV, MP3, M4A, WAV, FLAC download with progress",
+        "HLS .m3u8 parsing, variant selection, segment merge into one MP4",
+        "AES-128 encrypted HLS decryption in the browser",
+        "Fragment-MP4 concatenation and MPEG-TS remux to MP4",
+        "YouTube / Vimeo / og:video page resolution through the user's own Worker",
+        "Zero uploads, zero third-party downloader services, zero stored logs"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "MediaGrab", "item": "https://kimyihyung.github.io/portfolio/tools/media-grab/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does the file get uploaded anywhere?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. A direct media link or an HLS playlist is fetched by this tab and assembled in memory; the finished file is written straight to your downloads folder from a Blob. Nothing is uploaded, and no file ever passes through a downloader service." }
+        },
+        {
+          "@type": "Question",
+          "name": "Why does a YouTube link need a Worker?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A browser cannot read youtube.com or the media servers behind it, because they refuse cross-origin requests. The page therefore calls a Worker deployed on your own Cloudflare account, which resolves the stream address and passes the bytes through. That Worker keeps no database, no object storage and no logs." }
+        },
+        {
+          "@type": "Question",
+          "name": "What happens to an HLS stream with hundreds of segments?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Segments are fetched a few at a time, kept in order, and joined into one MP4 — fragment-MP4 parts are concatenated directly, and MPEG-TS parts are remuxed to MP4 in the tab. A 1080p hour-long VOD can be a few gigabytes, which is heavy for a phone tab; the progress bar shows the size as it grows." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I download something that is not mine?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Use it for content you own, content licensed to you, or content published for free download. A downloader does not grant rights, and many platforms' terms forbid saving their streams. What you save and how you use it is your responsibility." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+:root {
+  --bg: #0a0b0d;
+  --bg2: #0e1013;
+  --panel: #12151a;
+  --panel2: #171b21;
+  --line: rgba(255, 255, 255, .09);
+  --line2: rgba(255, 255, 255, .18);
+  --ink: #f2f2ee;
+  --muted: #a6aaa4;
+  --muted2: #7d827c;
+  --accent: #ffc46b;
+  --accent2: #ff9a3c;
+  --on-accent: #1d1204;
+  --good: #7fe3a0;
+  --warn: #ffc06b;
+  --danger: #ff837a;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --shadow: 0 24px 70px rgba(0, 0, 0, .5);
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f6f4ee;
+    --bg2: #efece4;
+    --panel: #ffffff;
+    --panel2: #f8f6f0;
+    --line: rgba(20, 22, 24, .10);
+    --line2: rgba(20, 22, 24, .22);
+    --ink: #16181a;
+    --muted: #5b6058;
+    --muted2: #787d74;
+    --accent: #9a5b00;
+    --accent2: #7a4700;
+    --on-accent: #fff6e6;
+    --good: #1e7a45;
+    --warn: #8a5a00;
+    --danger: #a52a1f;
+    --shadow: 0 20px 50px rgba(30, 25, 15, .12);
+  }
+}
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--bg);
+  background-image:
+    radial-gradient(900px 520px at 12% -10%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 70%),
+    radial-gradient(700px 420px at 100% 0%, color-mix(in srgb, var(--accent2) 8%, transparent), transparent 70%);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.55;
+}
+
+.sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+.wrap { width: min(1180px, 100% - 40px); margin: 0 auto; padding: 22px 0 44px; }
+.wrap--tight { padding-top: 0; padding-bottom: 30px; }
+
+/* ---------- header ---------- */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 6px 2px 18px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); font-weight: 700; letter-spacing: -.01em; }
+.mark {
+  display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px;
+  background: linear-gradient(150deg, var(--accent), var(--accent2)); color: var(--on-accent);
+  font-size: 13px; font-weight: 800; letter-spacing: .04em;
+}
+.brand-txt { font-size: 15px; }
+.top-actions { display: inline-flex; align-items: center; gap: 8px; }
+.lang-toggle {
+  display: inline-flex; align-items: center; gap: 4px; padding: 6px 11px; border-radius: 999px;
+  border: 1px solid var(--line); background: transparent; color: var(--muted);
+  font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; transition: .18s;
+}
+.lang-toggle:hover { border-color: var(--line2); color: var(--ink); }
+.lang-toggle:active { transform: scale(.95); }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.back { color: var(--muted); text-decoration: none; font-size: 12.5px; font-weight: 600; padding: 6px 11px; border: 1px solid var(--line); border-radius: 999px; transition: .18s; }
+.back:hover { color: var(--ink); border-color: var(--line2); }
+
+/* ---------- hero ---------- */
+.hero { padding: 8px 2px 26px; }
+.badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 999px;
+  border: 1px solid var(--line); background: color-mix(in srgb, var(--panel) 70%, transparent);
+  font-size: 11.5px; color: var(--muted); letter-spacing: .01em;
+}
+.pill b { color: var(--ink); font-weight: 700; }
+.pill--live { border-color: color-mix(in srgb, var(--good) 40%, var(--line)); color: color-mix(in srgb, var(--good) 85%, var(--ink)); }
+.pill--live b { color: inherit; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 18%, transparent); }
+h1 { margin: 0 0 12px; font-size: clamp(30px, 4.6vw, 50px); line-height: 1.08; letter-spacing: -.032em; font-weight: 800; }
+h1 .dim { color: var(--muted2); }
+.lede { margin: 0; max-width: 66ch; color: var(--muted); font-size: 15px; }
+
+/* ---------- layout ---------- */
+.grid { display: grid; grid-template-columns: minmax(0, 1fr) 336px; gap: 16px; align-items: start; }
+.panel {
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 18px; box-shadow: 0 1px 0 rgba(255, 255, 255, .02) inset;
+}
+.panel-head { display: flex; align-items: center; gap: 9px; margin-bottom: 14px; }
+.panel-head h2 { margin: 0; font-size: 13px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.panel-head .spacer { flex: 1; }
+.mode-chip {
+  font: 700 10.5px/1 var(--mono); letter-spacing: .08em; padding: 5px 8px; border-radius: 7px;
+  border: 1px solid var(--line); color: var(--muted); background: var(--panel2);
+}
+.mode-chip[data-mode="hls"] { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.mode-chip[data-mode="youtube"], .mode-chip[data-mode="page"] { color: color-mix(in srgb, var(--accent2) 80%, var(--ink)); border-color: color-mix(in srgb, var(--accent2) 45%, var(--line)); }
+
+/* ---------- url row ---------- */
+.urlrow { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; }
+.field {
+  display: flex; align-items: center; gap: 8px; padding: 0 6px 0 12px;
+  border: 1px solid var(--line2); border-radius: 14px; background: var(--bg2);
+  transition: border-color .18s, box-shadow .18s;
+}
+.field:focus-within { border-color: color-mix(in srgb, var(--accent) 60%, var(--line2)); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent); }
+.field svg { flex: none; color: var(--muted2); }
+#urlInput {
+  flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--ink);
+  font: 400 14px/1.4 var(--font); padding: 13px 0;
+}
+#urlInput::placeholder { color: var(--muted2); }
+.mini {
+  flex: none; border: 1px solid var(--line); background: var(--panel2); color: var(--muted);
+  font: 600 11.5px/1 var(--font); padding: 7px 9px; border-radius: 8px; cursor: pointer; transition: .16s;
+}
+.mini:hover { color: var(--ink); border-color: var(--line2); }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  border: 1px solid var(--line2); background: var(--panel2); color: var(--ink);
+  font: 700 13.5px/1 var(--font); padding: 0 18px; min-height: 46px; border-radius: 13px;
+  cursor: pointer; transition: transform .14s, background .16s, border-color .16s, opacity .16s;
+}
+.btn:not(.btn--primary):hover { border-color: var(--line2); background: color-mix(in srgb, var(--panel2) 70%, var(--ink) 6%); }
+.btn:active { transform: scale(.98); }
+.btn[disabled] { opacity: .45; cursor: not-allowed; }
+.btn--primary { background: linear-gradient(150deg, var(--accent), var(--accent2)); color: var(--on-accent); border-color: transparent; }
+.btn--primary:hover, .btn--primary:focus-visible { filter: brightness(1.06); background: linear-gradient(150deg, var(--accent), var(--accent2)); }
+.btn--ghost { background: transparent; }
+.btn--sm { min-height: 34px; padding: 0 12px; font-size: 12px; border-radius: 9px; }
+
+.detect-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 10px; min-height: 24px; }
+.tag {
+  font: 700 10.5px/1 var(--mono); letter-spacing: .06em; padding: 5px 8px; border-radius: 6px;
+  background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+}
+.tag--mute { background: transparent; color: var(--muted2); border-color: var(--line); }
+.hint { margin: 0; font-size: 12px; color: var(--muted2); }
+
+.status { margin-top: 12px; font-size: 13px; color: var(--muted); min-height: 20px; }
+.status b { color: var(--ink); }
+.status.err { color: var(--danger); }
+.status.ok { color: var(--good); }
+
+/* ---------- result ---------- */
+.result { margin-top: 16px; border-top: 1px solid var(--line); padding-top: 16px; }
+.meta { display: flex; gap: 12px; align-items: center; }
+.thumb {
+  width: 108px; height: 62px; flex: none; border-radius: 10px; overflow: hidden;
+  background: var(--panel2); border: 1px solid var(--line); display: grid; place-items: center; color: var(--muted2);
+}
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.meta-txt { min-width: 0; }
+.meta-txt h3 { margin: 0 0 3px; font-size: 15px; line-height: 1.35; font-weight: 700; overflow-wrap: anywhere; }
+.meta-txt p { margin: 0; font-size: 12px; color: var(--muted2); }
+
+.formats { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 7px; max-height: 320px; overflow: auto; }
+.fmt {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 11px;
+  border: 1px solid var(--line); background: var(--panel2); cursor: pointer; transition: .15s;
+}
+.fmt:hover { border-color: var(--line2); }
+.fmt[aria-checked="true"] { border-color: color-mix(in srgb, var(--accent) 65%, transparent); background: color-mix(in srgb, var(--accent) 10%, var(--panel2)); }
+.fmt:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.fmt .radio { width: 15px; height: 15px; flex: none; border-radius: 50%; border: 1.5px solid var(--line2); display: grid; place-items: center; }
+.fmt[aria-checked="true"] .radio { border-color: var(--accent); }
+.fmt[aria-checked="true"] .radio::after { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+.fmt .lbl { flex: 1; min-width: 0; font-size: 13px; font-weight: 600; }
+.fmt .lbl small { display: block; font-weight: 400; color: var(--muted2); font-size: 11.5px; }
+.fmt .badge { font: 700 10px/1 var(--mono); padding: 4px 6px; border-radius: 5px; background: var(--bg2); color: var(--muted); border: 1px solid var(--line); }
+.fmt .badge--a { color: var(--good); }
+.fmt .size { font: 500 11.5px/1 var(--mono); color: var(--muted2); flex: none; }
+
+.actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.prog { margin-top: 14px; }
+.bar { height: 8px; border-radius: 999px; background: var(--bg2); overflow: hidden; border: 1px solid var(--line); }
+.bar > i { display: block; height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 999px; transition: width .18s; }
+.prog-txt { display: flex; justify-content: space-between; gap: 10px; margin-top: 7px; font: 500 11.5px/1 var(--mono); color: var(--muted2); }
+.out { margin: 12px 0 0; font-size: 12px; color: var(--muted2); overflow-wrap: anywhere; }
+.out code { font-family: var(--mono); font-size: 11.5px; background: var(--bg2); border: 1px solid var(--line); padding: 2px 5px; border-radius: 5px; color: var(--ink); }
+
+.checks { display: grid; gap: 7px; margin-top: 13px; }
+.check { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--muted); cursor: pointer; }
+.check input { appearance: none; width: 16px; height: 16px; border-radius: 5px; border: 1.5px solid var(--line2); background: var(--bg2); display: grid; place-items: center; cursor: pointer; flex: none; }
+.check input:checked { background: var(--accent); border-color: var(--accent); }
+.check input:checked::after { content: ""; width: 9px; height: 5px; border-left: 2px solid var(--on-accent); border-bottom: 2px solid var(--on-accent); transform: rotate(-45deg) translateY(-1px); }
+.check input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ---------- side ---------- */
+.side { display: grid; gap: 16px; }
+.wstate { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--muted); }
+.wdot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted2); flex: none; }
+.wdot.ok { background: var(--good); box-shadow: 0 0 0 3px color-mix(in srgb, var(--good) 20%, transparent); }
+.wdot.bad { background: var(--danger); }
+.wdot.wait { background: var(--warn); }
+.wurl { margin: 10px 0 0; font: 500 11.5px/1.5 var(--mono); color: var(--muted2); overflow-wrap: anywhere; }
+.wform { display: grid; gap: 7px; margin-top: 12px; }
+.wform input {
+  width: 100%; border: 1px solid var(--line2); border-radius: 9px; background: var(--bg2);
+  color: var(--ink); font: 400 12px/1.3 var(--mono); padding: 9px 10px; outline: 0;
+}
+.wform input:focus { border-color: color-mix(in srgb, var(--accent) 60%, var(--line2)); }
+.wrow { display: flex; gap: 7px; }
+.note { margin: 10px 0 0; font-size: 11.5px; color: var(--muted2); line-height: 1.55; }
+.note b { color: var(--muted); }
+
+.logl { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 5px; max-height: 220px; overflow: auto; }
+.logl li { display: flex; align-items: center; gap: 7px; font: 500 11.5px/1.4 var(--mono); color: var(--muted); }
+.logl li span.n { color: var(--muted2); margin-left: auto; flex: none; }
+.logl li .h { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.logl li .k { flex: none; width: 5px; height: 5px; border-radius: 50%; background: var(--muted2); }
+.logl li.own .k { background: var(--accent); }
+.logl li.wk .k { background: var(--good); }
+.logl li.media .k { background: var(--accent2); }
+.logempty { font-size: 11.5px; color: var(--muted2); margin-top: 10px; }
+
+/* ---------- modes ---------- */
+.modes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 18px; }
+.mcard { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 16px; }
+.mcard h3 { margin: 0 0 6px; font-size: 13.5px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+.mcard h3 .k { font: 700 9.5px/1 var(--mono); letter-spacing: .08em; padding: 4px 6px; border-radius: 5px; background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent); }
+.mcard p { margin: 0; font-size: 12.5px; color: var(--muted); }
+.mcard ul { margin: 9px 0 0; padding: 0; list-style: none; display: grid; gap: 4px; }
+.mcard li { font: 500 11.5px/1.5 var(--mono); color: var(--muted2); }
+.mcard li::before { content: "· "; color: var(--accent); }
+
+/* ---------- guide / faq ---------- */
+.guide { margin-top: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 22px; }
+.guide h2 { margin: 0 0 12px; font-size: 15px; font-weight: 800; letter-spacing: .02em; }
+.steps { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; counter-reset: s; }
+.steps li { counter-increment: s; position: relative; padding-left: 30px; font-size: 13px; color: var(--muted); }
+.steps li::before {
+  content: counter(s); position: absolute; left: 0; top: 1px; width: 20px; height: 20px; border-radius: 6px;
+  display: grid; place-items: center; font: 700 10.5px/1 var(--mono);
+  background: var(--panel2); border: 1px solid var(--line); color: var(--accent);
+}
+.steps li b { color: var(--ink); }
+details { border-bottom: 1px solid var(--line); padding: 11px 0; }
+details:first-of-type { padding-top: 0; }
+summary { cursor: pointer; font-size: 13px; font-weight: 650; color: var(--ink); list-style: none; display: flex; gap: 8px; align-items: flex-start; }
+summary::-webkit-details-marker { display: none; }
+summary::before { content: "+"; color: var(--accent); font: 700 14px/1.3 var(--mono); flex: none; }
+details[open] summary::before { content: "−"; }
+details p { margin: 8px 0 0 18px; font-size: 12.5px; color: var(--muted); }
+details p code { font-family: var(--mono); font-size: 11.5px; background: var(--bg2); border: 1px solid var(--line); padding: 1px 5px; border-radius: 5px; }
+
+.warnbox {
+  margin-top: 16px; border: 1px solid color-mix(in srgb, var(--warn) 30%, var(--line));
+  background: color-mix(in srgb, var(--warn) 7%, transparent); border-radius: 12px; padding: 12px 14px;
+  font-size: 12px; color: var(--muted);
+}
+.warnbox b { color: var(--warn); }
+
+footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; font-size: 11.5px; color: var(--muted2); }
+footer .mark { width: 26px; height: 26px; border-radius: 8px; font-size: 10px; }
+footer .sp { flex: 1; }
+footer a { color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--line); }
+footer a:hover { color: var(--ink); }
+
+/* ---------- responsive ---------- */
+@media (max-width: 980px) {
+  .grid { grid-template-columns: minmax(0, 1fr); }
+  .side { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 820px) {
+  .modes { grid-template-columns: minmax(0, 1fr); }
+  .guide { grid-template-columns: minmax(0, 1fr); gap: 26px; }
+}
+@media (max-width: 560px) {
+  .wrap { width: min(1180px, 100% - 24px); padding-top: 14px; }
+  h1 { font-size: 30px; }
+  .lede { font-size: 13.5px; }
+  .urlrow { grid-template-columns: minmax(0, 1fr); }
+  .btn { min-height: 44px; }
+  .urlrow .btn { width: 100%; }
+  .side { grid-template-columns: minmax(0, 1fr); }
+  .panel { padding: 15px; border-radius: 16px; }
+  .thumb { width: 84px; height: 50px; }
+  .fmt { padding: 9px 10px; }
+  .fmt .size { display: none; }
+  .lang-toggle, .back { min-height: 34px; }
+  footer { font-size: 11px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <a class="brand" href="/portfolio/" aria-label="Kim Yihyung — portfolio">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="View in Korean" aria-label="View in Korean">
+        <span class="lt on" data-lt="en">EN</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="ko">KO</span>
+      </button>
+      <a class="back" href="../" data-i18n="backTools">← Tools</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="badge-row">
+      <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillLive">0 bytes uploaded</b></span>
+      <span class="pill" data-i18n="pillLocal"><b>Browser</b>-side assemble</span>
+      <span class="pill" data-i18n="pillOut"><b>MP4 · M4A · MP3</b> out · <b>direct link, HLS, page</b> in</span>
+    </div>
+    <h1 data-i18n="h1">One link in.<br><span class="dim">One file out.</span></h1>
+    <p class="lede" data-i18n="lede">Paste a direct media link or an HLS playlist and the file is built in this tab — segments fetched, ordered and joined into a single MP4 that lands straight in your downloads folder. Nothing is uploaded and no downloader service is involved. YouTube and other pages go through a Worker on your own Cloudflare account, which keeps no database and no logs.</p>
+  </section>
+
+  <main class="grid">
+    <section class="panel" aria-labelledby="grabHead">
+      <div class="panel-head">
+        <h2 id="grabHead" data-i18n="grabHead">Grab</h2>
+        <span class="spacer"></span>
+        <span class="mode-chip" id="modeChip" data-mode="auto">AUTO</span>
+      </div>
+
+      <form class="urlrow" id="grabForm" novalidate>
+        <label class="sr" for="urlInput" data-i18n="urlLabel">Media URL</label>
+        <div class="field">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
+          <input id="urlInput" type="text" inputmode="url" autocomplete="off" spellcheck="false"
+                 placeholder="https://…/clip.mp4 · …/stream.m3u8 · youtube.com/watch?v=…"
+                 data-i18n-ph="urlPh">
+          <button class="mini" type="button" id="pasteBtn" data-i18n="paste">Paste</button>
+        </div>
+        <button class="btn btn--primary" type="submit" id="analyzeBtn" data-i18n="analyze">Analyze</button>
+      </form>
+
+      <div class="detect-row">
+        <span class="tag tag--mute" id="detTag">—</span>
+        <p class="hint" id="detHint" data-i18n="detHint">Direct file, HLS playlist or a page — detected from the link.</p>
+      </div>
+
+      <p class="status" id="status" role="status" aria-live="polite" data-i18n="statusIdle">Waiting for a link.</p>
+
+      <div class="result" id="result" hidden>
+        <div class="meta">
+          <div class="thumb" id="thumb"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="M10 10l5 2-5 2z"/></svg><img id="thumbImg" alt="" hidden></div>
+          <div class="meta-txt">
+            <h3 id="resTitle">—</h3>
+            <p id="resSub">—</p>
+          </div>
+        </div>
+
+        <ul class="formats" id="formats" role="radiogroup" aria-label="Available formats"></ul>
+
+        <div class="checks">
+          <label class="check"><input type="checkbox" id="viaWorker"> <span data-i18n="chkWorker">Fetch through the Worker (bypass CORS)</span></label>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn--primary" type="button" id="downloadBtn" disabled data-i18n="download">Download</button>
+          <button class="btn btn--ghost" type="button" id="cancelBtn" hidden data-i18n="cancel">Cancel</button>
+        </div>
+
+        <div class="prog" id="prog" hidden>
+          <div class="bar"><i id="bar"></i></div>
+          <div class="prog-txt"><span id="progTxt">0%</span><span id="progMeta"></span></div>
+        </div>
+
+        <p class="out" id="outNote"></p>
+      </div>
+    </section>
+
+    <aside class="side">
+      <section class="panel" aria-labelledby="wHead">
+        <div class="panel-head">
+          <h2 id="wHead" data-i18n="workerHead">Your Worker</h2>
+          <span class="spacer"></span>
+          <span class="wstate"><span class="wdot" id="wdot"></span><span id="wtext" data-i18n="wChecking">checking…</span></span>
+        </div>
+        <p class="wurl" id="wurl" data-i18n="wNone">Not configured — browser-only modes work without it.</p>
+        <div class="wform">
+          <label class="sr" for="winput" data-i18n="wLabel">Worker base URL</label>
+          <input id="winput" type="text" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://media-grab-api.<you>.workers.dev">
+          <div class="wrow">
+            <button class="btn btn--sm" type="button" id="wcheck" data-i18n="wCheck">Check</button>
+            <button class="btn btn--sm btn--ghost" type="button" id="wclear" data-i18n="wClear">Clear</button>
+          </div>
+        </div>
+        <p class="note" data-i18n="wNote">The address lives in this page's source (<code>API_BASE</code>) or in this tab's memory only — never in storage. A Worker deployed from the runbook answers <code>/api/health</code> with <code>{ok:true}</code>.</p>
+      </section>
+
+      <section class="panel" aria-labelledby="logHead">
+        <div class="panel-head">
+          <h2 id="logHead" data-i18n="logHead">Where this page connected</h2>
+          <span class="spacer"></span>
+          <span class="wstate"><span class="wdot ok"></span><span id="logCount">0</span></span>
+        </div>
+        <ul class="logl" id="logList"></ul>
+        <p class="logempty" id="logEmpty" data-i18n="logEmpty">Nothing yet. Every host this tab reaches is listed here, as it happens.</p>
+        <p class="note" data-i18n="logNote">Categories: <b>this site</b> (page and libraries), <b>your media server</b> (the link you pasted), <b>your Worker</b>. No downloader service, no analytics, no font CDN.</p>
+      </section>
+    </aside>
+  </main>
+
+  <section class="modes" aria-label="Three routes">
+    <article class="mcard">
+      <h3><span class="k">LOCAL</span><span data-i18n="m1t">Direct file</span></h3>
+      <p data-i18n="m1p">A link that already points at a file is fetched by this tab and written straight to disk. No decoding, no server, nothing in between.</p>
+      <ul>
+        <li>MP4 · WebM · MOV · MKV</li>
+        <li>MP3 · M4A · WAV · FLAC · OGG</li>
+        <li data-i18n="m1l3">progress · cancel · resume-free</li>
+      </ul>
+    </article>
+    <article class="mcard">
+      <h3><span class="k">HLS</span><span data-i18n="m2t">Segment merge</span></h3>
+      <p data-i18n="m2p">A playlist is read, its variants listed, and every segment fetched a few at a time — then joined into one MP4 inside the tab.</p>
+      <ul>
+        <li>fMP4 concat · TS → MP4 remux</li>
+        <li data-i18n="m2l2">AES-128 keys decrypted locally</li>
+        <li data-i18n="m2l3">4 parallel segments</li>
+      </ul>
+    </article>
+    <article class="mcard">
+      <h3><span class="k">WORKER</span><span data-i18n="m3t">Page &amp; YouTube</span></h3>
+      <p data-i18n="m3p">YouTube, Vimeo and pages that hide their media behind CORS are resolved by a Worker on your own Cloudflare account, then streamed back byte-for-byte.</p>
+      <ul>
+        <li data-i18n="m3l1">no database · no object storage</li>
+        <li data-i18n="m3l2">no console log · no IP record</li>
+        <li data-i18n="m3l3">free tier · $0</li>
+      </ul>
+    </article>
+  </section>
+</div>
+
+<div class="wrap wrap--tight">
+<section class="guide">
+  <div>
+    <h2 data-i18n="guideHead">How it works</h2>
+    <ol class="steps">
+      <li data-i18n="s1"><b>Paste a link.</b> The mode is detected — direct file, HLS playlist, or a page that needs the Worker.</li>
+      <li data-i18n="s2"><b>Analyze.</b> For HLS you get the variants with resolution and bitrate; for a page you get the formats the Worker found.</li>
+      <li data-i18n="s3"><b>Pick one and download.</b> The progress bar shows bytes as they arrive; Cancel stops the transfer immediately and keeps nothing.</li>
+      <li data-i18n="s4"><b>Keep the file.</b> It is written from a Blob in this tab — the browser's own download, straight to your folder.</li>
+    </ol>
+    <div class="warnbox" data-i18n="warnRights"><b>Rights are not included.</b> Save what you own, what you are licensed to keep, or what is published for download. Many platforms forbid saving their streams in their terms, and a tool does not change that.</div>
+    <div class="warnbox" data-i18n="warnSize"><b>Very large VODs are heavy in a tab.</b> An hour of 1080p can be 1–3 GB held in memory before it is written. On a phone, prefer a shorter clip or a lower variant — the size is shown as it grows.</div>
+  </div>
+  <div>
+    <h2 data-i18n="faqHead">Questions</h2>
+    <details open>
+      <summary data-i18n="q1">Does anything get uploaded?</summary>
+      <p data-i18n="a1">No. Downloads only ever read. The finished file is assembled as a Blob in this tab and handed to the browser's own save dialog. There is no account, no analytics and no font or library pulled from a CDN — the only optional server is the Worker you deploy yourself.</p>
+    </details>
+    <details>
+      <summary data-i18n="q2">Which links work without a Worker?</summary>
+      <p data-i18n="a2">Any direct file link, and any HLS playlist whose host allows cross-origin reads. If a playlist or file refuses the request (CORS), the status line says so — tick <code>Fetch through the Worker</code> and the same URL is fetched by your Worker instead.</p>
+    </details>
+    <details>
+      <summary data-i18n="q3">Why does YouTube need the Worker at all?</summary>
+      <p data-i18n="a3">A page cannot read youtube.com or the media hosts behind it — the browser blocks the cross-origin request and YouTube refuses datacenter traffic from a plain fetch. Your Worker asks for the player response with a mobile client, keeps the stream address, and passes the bytes through. It stores nothing: no KV, no R2, no database, no console output.</p>
+    </details>
+    <details>
+      <summary data-i18n="q4">A YouTube download stops at 0% or says “not available”.</summary>
+      <p data-i18n="a4">Two common causes. First, YouTube sometimes answers a Worker IP with a bot check (“Sign in to confirm you're not a bot”) — nothing to fix in the page; a retry minutes later or a different video usually works. Second, stream addresses expire within a few hours: analyze again rather than reusing an old tab.</p>
+    </details>
+    <details>
+      <summary data-i18n="q5">Can I get 1080p with sound in one file?</summary>
+      <p data-i18n="a5">YouTube serves 1080p and above as separate video and audio streams. This page saves each one cleanly; to put them together, run one command on a desktop: <code>ffmpeg -i video.mp4 -i audio.m4a -c copy out.mp4</code>. Progressive formats (usually 360p/720p) already carry both tracks and need no step.</p>
+    </details>
+    <details>
+      <summary data-i18n="q6">What is kept in my browser?</summary>
+      <p data-i18n="a6">One key: <code>kyh.lang</code>, the EN/KO choice you picked. No history of links, no tokens, no Worker address — the address is either compiled into the page or typed into this tab's memory for the session.</p>
+    </details>
+    <details>
+      <summary data-i18n="q7">Does an iPhone download a Blob?</summary>
+      <p data-i18n="a7">Safari in iOS 13 and later saves it, opening the share sheet or the Files picker. Very large files can be refused by iOS memory limits, so on a phone keep files to a few hundred megabytes; a desktop handles the rest.</p>
+    </details>
+  </div>
+</section>
+</div>
+
+<div class="wrap wrap--tight">
+  <footer>
+    <span class="mark" aria-hidden="true">YH</span>
+    <span>MediaGrab · Kim Yihyung · 2026</span>
+    <span class="sp"></span>
+    <span data-i18n="footLocal">0 uploads</span>
+    <span>·</span>
+    <span id="footReq" data-i18n="footReq">0 outside requests</span>
+    <span>·</span>
+    <a href="../" data-i18n="footTools">All tools</a>
+    <a href="/portfolio/" data-i18n="footHome">Portfolio</a>
+  </footer>
+</div>
+
+
+<script>
+(function () {
+  'use strict';
+
+  /* ------------------------------------------------------------------ *
+   * Deploy point: the Worker origin. Leave empty to run browser-only.
+   * Nothing else in this page needs editing.
+   * ------------------------------------------------------------------ */
+  var API_BASE = '';
+
+  var LANG_KEY = 'kyh.lang';
+  var MAX_WARN = 900 * 1024 * 1024;
+
+  var state = {
+    lang: 'en',
+    mode: 'auto',
+    formats: [],
+    picked: 0,
+    apiBase: '',
+    worker: 'unknown',
+    viaWorker: false,
+    busy: false,
+    abort: null,
+    hosts: {},
+    order: []
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var el = {
+    form: $('grabForm'), input: $('urlInput'), analyze: $('analyzeBtn'), paste: $('pasteBtn'),
+    modeChip: $('modeChip'), detTag: $('detTag'), detHint: $('detHint'), status: $('status'),
+    result: $('result'), thumb: $('thumb'), thumbImg: $('thumbImg'), resTitle: $('resTitle'), resSub: $('resSub'),
+    formats: $('formats'), viaWorker: $('viaWorker'), download: $('downloadBtn'), cancel: $('cancelBtn'),
+    prog: $('prog'), bar: $('bar'), progTxt: $('progTxt'), progMeta: $('progMeta'), out: $('outNote'),
+    wdot: $('wdot'), wtext: $('wtext'), wurl: $('wurl'), winput: $('winput'), wcheck: $('wcheck'), wclear: $('wclear'),
+    logList: $('logList'), logEmpty: $('logEmpty'), logCount: $('logCount'), footReq: $('footReq'),
+    langToggle: $('langToggle')
+  };
+
+  /* ------------------------------------------------------------------ *
+   * Language — the only storage key this page ever writes
+   * ------------------------------------------------------------------ */
+  function L(en, ko) { return state.lang === 'ko' ? ko : en; }
+
+  var KO = {
+    backTools: '← 도구',
+    pillLive: '업로드 0바이트',
+    pillLocal: '<b>브라우저</b>에서 직접 조립',
+    pillOut: '<b>MP4 · M4A · MP3</b> 저장 · <b>직접 링크, HLS, 페이지</b> 입력',
+    h1: '링크 하나 넣고.<br><span class="dim">파일 하나 받기.</span>',
+    lede: '직접 미디어 주소나 HLS 재생목록을 넣으면 이 탭 안에서 파일이 만들어집니다. 조각을 받아 순서대로 붙여 하나의 MP4로 저장하고, 업로드는 없으며 어떤 다운로더 서비스도 거치지 않습니다. 유튜브나 다른 페이지는 이형 님 본인 Cloudflare 계정의 워커를 거치며, 그 워커는 DB도 로그도 남기지 않습니다.',
+    grabHead: '가져오기',
+    urlLabel: '미디어 주소',
+    urlPh: 'https://…/clip.mp4 · …/stream.m3u8 · youtube.com/watch?v=…',
+    paste: '붙여넣기',
+    analyze: '분석',
+    detHint: '직접 파일·HLS 재생목록·페이지를 링크로 판별합니다.',
+    statusIdle: '링크를 기다리는 중입니다.',
+    chkWorker: '워커를 거쳐 받기 (CORS 우회)',
+    download: '다운로드',
+    cancel: '취소',
+    workerHead: '내 워커',
+    wChecking: '확인 중…',
+    wNone: '설정 안 됨 — 워커 없이도 브라우저 모드는 정상 동작합니다.',
+    wLabel: '워커 기본 주소',
+    wCheck: '연결 확인',
+    wClear: '지우기',
+    wNote: '주소는 이 페이지 소스(<code>API_BASE</code>)에 있거나 이 탭의 메모리에만 있습니다. 저장소에는 남기지 않습니다. 런북대로 올린 워커는 <code>/api/health</code>에 <code>{ok:true}</code>로 답합니다.',
+    logHead: '이 페이지가 접속한 곳',
+    logEmpty: '아직 없습니다. 이 탭이 닿는 모든 호스트가 실시간으로 여기 표시됩니다.',
+    logNote: '구분: <b>이 사이트</b>(페이지·라이브러리), <b>이형 님 미디어 서버</b>(붙여넣은 주소), <b>이형 님 워커</b>. 다운로더 서비스·분석·폰트 CDN은 없습니다.',
+    m1t: '직접 파일',
+    m1p: '이미 파일을 가리키는 링크는 이 탭이 받아 그대로 디스크에 씁니다. 디코딩도, 서버도, 중간 단계도 없습니다.',
+    m1l3: '진행률 · 취소',
+    m2t: '조각 병합',
+    m2p: '재생목록을 읽어 화질 목록을 보여주고, 조각을 몇 개씩 나눠 받아 탭 안에서 하나의 MP4로 잇습니다.',
+    m2l2: 'AES-128 키는 로컬에서 복호화',
+    m2l3: '동시 4조각',
+    m3t: '페이지·유튜브',
+    m3p: '유튜브·비메오처럼 CORS 뒤에 미디어를 숨긴 페이지는 이형 님 본인 Cloudflare 계정의 워커가 주소를 찾아 바이트 그대로 넘겨줍니다.',
+    m3l1: 'DB 없음 · 오브젝트 스토리지 없음',
+    m3l2: '콘솔 로그 없음 · IP 기록 없음',
+    m3l3: '무료 티어 · 0원',
+    guideHead: '사용 순서',
+    s1: '<b>링크를 붙여넣습니다.</b> 직접 파일·HLS 재생목록·워커가 필요한 페이지를 자동으로 판별합니다.',
+    s2: '<b>분석을 누릅니다.</b> HLS는 해상도·비트레이트가 붙은 화질 목록이, 페이지는 워커가 찾은 형식 목록이 나옵니다.',
+    s3: '<b>하나를 골라 다운로드합니다.</b> 진행 막대가 도착하는 바이트를 보여주고, 취소를 누르면 즉시 멈추며 아무것도 남기지 않습니다.',
+    s4: '<b>파일을 받습니다.</b> 이 탭의 Blob에서 브라우저 자체 다운로드로 폴더에 바로 저장됩니다.',
+    warnRights: '<b>권리는 따라오지 않습니다.</b> 본인 소유, 사용 허락을 받은 것, 배포용으로 공개된 것만 저장하십시오. 많은 플랫폼 약관이 스트림 저장을 금지하며 도구가 그 권리를 만들어 주지는 않습니다.',
+    warnSize: '<b>아주 큰 VOD는 탭에 부담입니다.</b> 1080p 1시간은 저장 전 메모리에 1~3GB가 쌓입니다. 폰에서는 짧은 영상이나 낮은 화질을 권하고, 크기는 진행 중에 표시됩니다.',
+    faqHead: '질문',
+    q1: '무언가 업로드되나요?',
+    a1: '아니요. 다운로드는 읽기만 합니다. 완성된 파일은 이 탭에서 Blob으로 조립되어 브라우저 자체 저장 대화상자로 넘어갑니다. 계정도 분석도 CDN 폰트도 없고, 유일한 선택적 서버는 직접 올린 워커입니다.',
+    q2: '워커 없이 되는 링크는 무엇인가요?',
+    a2: '직접 파일 링크, 그리고 교차 출처 읽기를 허용하는 호스트의 HLS 재생목록입니다. 요청이 거부되면(CORS) 상태줄이 그렇게 알려줍니다. <code>워커를 거쳐 받기</code>를 켜면 같은 주소를 워커가 대신 받습니다.',
+    q3: '유튜브는 왜 워커가 필요한가요?',
+    a3: '페이지는 youtube.com과 그 뒤 미디어 호스트를 읽을 수 없습니다. 브라우저가 교차 출처 요청을 막고, 유튜브는 데이터센터 회선의 단순 요청도 거부합니다. 워커가 모바일 클라이언트로 플레이어 응답을 받아 스트림 주소를 쥐고 바이트를 넘겨줍니다. 저장은 없습니다 — KV도 R2도 DB도 콘솔 출력도 없습니다.',
+    q4: '유튜브 다운로드가 0%에서 멈추거나 “사용할 수 없음”이 뜹니다.',
+    a4: '흔한 원인 두 가지입니다. 첫째, 유튜브가 워커 IP에 봇 확인(“Sign in to confirm you\'re not a bot”)을 요구하는 경우 — 페이지에서 고칠 것은 없고 몇 분 뒤 재시도하거나 다른 영상으로 시도하면 대개 됩니다. 둘째, 스트림 주소는 몇 시간이면 만료됩니다. 예전 탭을 재사용하지 말고 다시 분석하십시오.',
+    q5: '1080p를 소리와 한 파일로 받을 수 있나요?',
+    a5: '유튜브는 1080p 이상을 영상과 음성으로 나눠 줍니다. 이 페이지는 각각을 깔끔히 저장하고, 합치는 일은 데스크톱에서 한 줄이면 됩니다: <code>ffmpeg -i video.mp4 -i audio.m4a -c copy out.mp4</code>. 보통 360p·720p(프로그레시브)는 두 트랙이 이미 들어 있어 그대로 재생됩니다.',
+    q6: '브라우저에는 무엇이 남나요?',
+    a6: '키 하나, <code>kyh.lang</code>(EN/KO 선택)입니다. 링크 기록도, 토큰도, 워커 주소도 남기지 않습니다. 주소는 페이지에 박혀 있거나 이 탭 메모리에만 있습니다.',
+    q7: '아이폰에서도 저장되나요?',
+    a7: 'iOS 13 이상 Safari는 Blob을 저장하며 공유 시트나 파일 앱 선택창이 뜹니다. 아주 큰 파일은 iOS 메모리 한도에 걸려 거부될 수 있으니 폰에서는 수백 MB 이내로, 그 이상은 데스크톱에서 받으십시오.',
+    footLocal: '업로드 0건',
+    footReq: '외부 요청 0건',
+    footTools: '도구 전체',
+    footHome: '포트폴리오'
+  };
+
+  function applyLang(lang) {
+    state.lang = lang === 'ko' ? 'ko' : 'en';
+    document.documentElement.setAttribute('lang', state.lang);
+
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var n = nodes[i];
+      var key = n.getAttribute('data-i18n');
+      if (!n.hasAttribute('data-en')) n.setAttribute('data-en', n.innerHTML);
+      var ko = KO[key];
+      n.innerHTML = state.lang === 'ko' && ko != null ? ko : n.getAttribute('data-en');
+    }
+    var phs = document.querySelectorAll('[data-i18n-ph]');
+    for (var j = 0; j < phs.length; j++) {
+      var p = phs[j];
+      if (!p.hasAttribute('data-en-ph')) p.setAttribute('data-en-ph', p.getAttribute('placeholder') || '');
+      var kp = KO[p.getAttribute('data-i18n-ph')];
+      p.setAttribute('placeholder', state.lang === 'ko' && kp != null ? kp : p.getAttribute('data-en-ph'));
+    }
+
+    var spans = el.langToggle.querySelectorAll('.lt');
+    for (var s = 0; s < spans.length; s++) spans[s].classList.toggle('on', spans[s].getAttribute('data-lt') === state.lang);
+    el.langToggle.setAttribute('title', L('View in Korean', '영어로 보기'));
+    el.langToggle.setAttribute('aria-label', L('View in Korean', '영어로 보기'));
+
+    if (!state.busy) setStatus(idleStatus(), '');
+    renderFormats();
+    renderWorker();
+    renderLog();
+    try { window.localStorage.setItem(LANG_KEY, state.lang); } catch (e) { /* private mode */ }
+  }
+
+  el.langToggle.addEventListener('click', function () {
+    applyLang(state.lang === 'ko' ? 'en' : 'ko');
+  });
+
+  /* ------------------------------------------------------------------ *
+   * Connection log — every host this tab reaches
+   * ------------------------------------------------------------------ */
+  var nativeFetch = window.fetch ? window.fetch.bind(window) : null;
+
+  function hostOf(url) {
+    try { return new URL(url, location.href).hostname; } catch (e) { return ''; }
+  }
+
+  function hostKind(host) {
+    if (!host) return 'own';
+    if (host === location.hostname || /(^|\.)github\.io$/.test(host)) return 'own';
+    if (state.apiBase && host === hostOf(state.apiBase)) return 'wk';
+    return 'media';
+  }
+
+  function noteHost(url) {
+    var host = hostOf(url);
+    if (!host) return;
+    if (!state.hosts[host]) {
+      state.hosts[host] = { n: 0, kind: hostKind(host) };
+      state.order.push(host);
+    }
+    state.hosts[host].n++;
+    renderLog();
+  }
+
+  function trackedFetch(input, init) {
+    var u = typeof input === 'string' ? input : (input && input.url) || '';
+    if (u && u.slice(0, 4) !== 'blob' && u.slice(0, 4) !== 'data') noteHost(u);
+    return nativeFetch(input, init);
+  }
+
+  if (window.PerformanceObserver) {
+    try {
+      new PerformanceObserver(function (list) {
+        var es = list.getEntries();
+        for (var i = 0; i < es.length; i++) if (es[i].name) noteHost(es[i].name);
+      }).observe({ type: 'resource', buffered: true });
+    } catch (e) { /* older engine */ }
+  }
+
+  function renderLog() {
+    var outside = 0;
+    el.logList.innerHTML = '';
+    for (var i = 0; i < state.order.length; i++) {
+      var h = state.order[i];
+      var rec = state.hosts[h];
+      if (rec.kind !== 'own') outside += rec.n;
+      var li = document.createElement('li');
+      li.className = rec.kind;
+      var dot = document.createElement('span');
+      dot.className = 'k';
+      var name = document.createElement('span');
+      name.className = 'h';
+      name.textContent = h;
+      var n = document.createElement('span');
+      n.className = 'n';
+      n.textContent = rec.n;
+      li.appendChild(dot); li.appendChild(name); li.appendChild(n);
+      el.logList.appendChild(li);
+    }
+    el.logEmpty.hidden = state.order.length > 0;
+    el.logCount.textContent = String(state.order.length);
+    el.footReq.textContent = state.lang === 'ko' ? '외부 요청 ' + outside + '건' : outside + ' outside requests';
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Worker connection
+   * ------------------------------------------------------------------ */
+  function setStatus(text, cls) {
+    el.status.removeAttribute('data-i18n');
+    el.status.textContent = text;
+    el.status.className = 'status' + (cls ? ' ' + cls : '');
+  }
+
+  function idleStatus() {
+    if (state.mode === 'youtube' || state.mode === 'page') {
+      return state.apiBase
+        ? L('Press Analyze — this page needs the Worker.', '분석을 누르세요 — 이 페이지는 워커가 필요합니다.')
+        : L('This link needs a Worker. Set one on the right, or use a direct file or .m3u8 link.', '이 링크는 워커가 필요합니다. 오른쪽에서 설정하거나 직접 파일·.m3u8 링크를 쓰세요.');
+    }
+    return L('Waiting for a link.', '링크를 기다리는 중입니다.');
+  }
+
+  function renderWorker() {
+    var base = state.apiBase;
+    el.wdot.className = 'wdot' + (state.worker === 'ok' ? ' ok' : state.worker === 'bad' ? ' bad' : state.worker === 'wait' ? ' wait' : '');
+    el.wtext.textContent =
+      state.worker === 'ok' ? L('connected', '연결됨') :
+      state.worker === 'bad' ? L('no answer', '응답 없음') :
+      state.worker === 'wait' ? L('checking…', '확인 중…') :
+      base ? L('not checked', '미확인') : L('not configured', '설정 안 됨');
+    el.wurl.innerHTML = base
+      ? '<span style="color:var(--ink)">' + base.replace(/[<>&]/g, '') + '</span>'
+      : L('Not configured — browser-only modes work without it.', '설정 안 됨 — 워커 없이도 브라우저 모드는 정상 동작합니다.');
+    if (base && !el.winput.value) el.winput.value = base;
+  }
+
+  function setApiBase(base) {
+    state.apiBase = (base || '').replace(/\/+$/, '');
+    state.worker = state.apiBase ? 'wait' : 'unknown';
+    renderWorker();
+    if (state.apiBase) checkWorker(true);
+  }
+
+  function checkWorker(quiet) {
+    if (!state.apiBase) { state.worker = 'unknown'; renderWorker(); return Promise.resolve(false); }
+    state.worker = 'wait';
+    renderWorker();
+    var ctl = new AbortController();
+    var timer = setTimeout(function () { ctl.abort(); }, 12000);
+    return trackedFetch(state.apiBase + '/api/health', { cache: 'no-store', signal: ctl.signal })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+      .then(function (res) {
+        clearTimeout(timer);
+        state.worker = res.ok && res.j && res.j.ok ? 'ok' : 'bad';
+        renderWorker();
+        if (!quiet) setStatus(state.worker === 'ok'
+          ? L('Worker answered: signed links ' + (res.j.sign ? 'on' : 'off') + '.', '워커 응답 정상 — 서명 링크 ' + (res.j.sign ? '사용' : '미사용') + '.')
+          : L('Worker answered, but not as expected.', '워커가 응답했지만 예상과 다릅니다.'), state.worker === 'ok' ? 'ok' : 'err');
+        return state.worker === 'ok';
+      })
+      .catch(function () {
+        clearTimeout(timer);
+        state.worker = 'bad';
+        renderWorker();
+        if (!quiet) setStatus(L('No answer from the Worker — check the address, or that it is deployed.', '워커 응답이 없습니다 — 주소나 배포 상태를 확인하세요.'), 'err');
+        return false;
+      });
+  }
+
+  el.wcheck.addEventListener('click', function () {
+    var v = el.winput.value.trim();
+    if (v && !/^https?:\/\//.test(v)) v = 'https://' + v;
+    setApiBase(v);
+  });
+  el.wclear.addEventListener('click', function () {
+    el.winput.value = '';
+    setApiBase('');
+    setStatus(idleStatus(), '');
+  });
+
+  /* ------------------------------------------------------------------ *
+   * URL classification
+   * ------------------------------------------------------------------ */
+  var MEDIA_EXT = /\.(mp4|webm|mov|m4v|mkv|ogv|ts|mp3|m4a|aac|wav|flac|ogg|opus)(\?|#|$)/i;
+
+  function normalize(raw) {
+    var v = (raw || '').trim();
+    if (!v) return '';
+    if (/^[a-z][a-z0-9+.-]*:\/\//i.test(v)) return v;
+    return 'https://' + v;
+  }
+
+  function classify(u) {
+    var host = hostOf(u);
+    var path = u.split('#')[0];
+    if (/(^|\.)youtube\.com$|(^|\.)youtu\.be$|(^|\.)youtube-nocookie\.com$/.test(host)) return 'youtube';
+    if (/(^|\.)vimeo\.com$/.test(host)) return 'page';
+    if (/\.m3u8(\?|$)/i.test(path)) return 'hls';
+    if (MEDIA_EXT.test(path)) return 'direct';
+    return 'page';
+  }
+
+  function setMode(mode) {
+    state.mode = mode;
+    var label = mode === 'auto' ? 'AUTO' : mode.toUpperCase();
+    el.modeChip.textContent = label;
+    el.modeChip.setAttribute('data-mode', mode);
+    var hint = {
+      direct: L('Direct file — fetched by this tab.', '직접 파일 — 이 탭이 받습니다.'),
+      hls: L('HLS playlist — segments merged in this tab.', 'HLS 재생목록 — 이 탭에서 조각을 병합합니다.'),
+      youtube: L('YouTube — resolved through your Worker.', '유튜브 — 이형 님 워커가 해석합니다.'),
+      page: L('Page — the Worker looks for its media.', '페이지 — 워커가 미디어를 찾습니다.'),
+      auto: L('Direct file, HLS playlist or a page — detected from the link.', '직접 파일·HLS 재생목록·페이지를 링크로 판별합니다.')
+    };
+    el.detHint.textContent = hint[mode] || hint.auto;
+  }
+
+  el.input.addEventListener('input', function () {
+    var v = normalize(el.input.value);
+    if (!v) { setMode('auto'); el.detTag.textContent = '—'; el.detTag.className = 'tag tag--mute'; if (!state.busy) setStatus(idleStatus(), ''); return; }
+    var m = classify(v);
+    setMode(m);
+    el.detTag.textContent = m === 'direct' ? 'FILE' : m === 'hls' ? 'HLS' : m === 'youtube' ? 'YOUTUBE' : 'PAGE';
+    el.detTag.className = 'tag';
+  });
+
+  el.paste.addEventListener('click', function () {
+    if (!navigator.clipboard || !navigator.clipboard.readText) {
+      el.input.focus();
+      setStatus(L('This browser will not hand over the clipboard — paste with ⌘V / Ctrl+V.', '이 브라우저는 클립보드를 넘겨주지 않습니다 — ⌘V / Ctrl+V로 붙여넣으세요.'), '');
+      return;
+    }
+    navigator.clipboard.readText().then(function (t) {
+      el.input.value = (t || '').trim();
+      el.input.dispatchEvent(new Event('input'));
+      el.input.focus();
+    }).catch(function () {
+      el.input.focus();
+      setStatus(L('Clipboard blocked — paste with ⌘V / Ctrl+V.', '클립보드가 막혀 있습니다 — ⌘V / Ctrl+V로 붙여넣으세요.'), '');
+    });
+  });
+
+  /* ------------------------------------------------------------------ *
+   * Small helpers
+   * ------------------------------------------------------------------ */
+  function abs(base, href) {
+    try { return new URL(href, base).toString(); } catch (e) { return href; }
+  }
+
+  function fmtBytes(n) {
+    if (!n || n < 0) return '';
+    var u = ['B', 'KB', 'MB', 'GB'], i = 0, x = n;
+    while (x >= 1024 && i < u.length - 1) { x /= 1024; i++; }
+    return (i === 0 ? Math.round(x) : x.toFixed(1)) + ' ' + u[i];
+  }
+
+  function fmtTime(s) {
+    if (!s && s !== 0) return '';
+    s = Math.round(s);
+    var h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+    return (h ? h + ':' + String(m).padStart(2, '0') : m + ':') + String(sec).padStart(2, '0');
+  }
+
+  function dispositionName(cd, fallback) {
+    if (!cd) return fallback;
+    var m = /filename\*=UTF-8''([^;]+)/i.exec(cd);
+    if (m) { try { return decodeURIComponent(m[1]); } catch (e) { /* keep fallback */ } }
+    m = /filename="?([^";]+)"?/i.exec(cd);
+    return m ? m[1] : fallback;
+  }
+
+  function safeName(name, fallback) {
+    var v = (name || '').replace(/[\\/:*?"<>|\u0000-\u001f]+/g, '_').replace(/\s+/g, ' ').trim();
+    if (v.length > 120) v = v.slice(0, 120);
+    return v || fallback || 'media';
+  }
+
+  function nameFromUrl(u, ext) {
+    try {
+      var p = decodeURIComponent(new URL(u).pathname.split('/').filter(Boolean).pop() || '');
+      p = p.replace(/[?#].*$/, '');
+      if (!p) return 'media' + (ext ? '.' + ext : '');
+      if (ext && !new RegExp('\\.' + ext + '$', 'i').test(p)) p += '.' + ext;
+      return safeName(p, 'media');
+    } catch (e) {
+      return 'media' + (ext ? '.' + ext : '');
+    }
+  }
+
+  function saveBlob(blob, filename) {
+    var a = document.createElement('a');
+    var url = URL.createObjectURL(blob);
+    a.href = url;
+    a.download = safeName(filename);
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 120000);
+  }
+
+  function tick(ms) {
+    return new Promise(function (r) { setTimeout(r, ms || 0); });
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Progress + lifecycle
+   * ------------------------------------------------------------------ */
+  function begin() {
+    state.busy = true;
+    state.abort = new AbortController();
+    el.download.disabled = true;
+    el.analyze.disabled = true;
+    el.cancel.hidden = false;
+    el.prog.hidden = false;
+    el.bar.style.width = '0%';
+    el.progTxt.textContent = '0%';
+    el.progMeta.textContent = '';
+    el.out.textContent = '';
+  }
+
+  function end(ok, note) {
+    state.busy = false;
+    el.download.disabled = !state.formats.length;
+    el.analyze.disabled = false;
+    el.cancel.hidden = true;
+    if (ok) {
+      el.bar.style.width = '100%';
+      el.progTxt.textContent = '100%';
+    }
+    if (note) el.out.innerHTML = note;
+  }
+
+  function setProgress(pct, meta) {
+    var p = Math.max(0, Math.min(100, pct));
+    el.bar.style.width = p.toFixed(1) + '%';
+    el.progTxt.textContent = p.toFixed(0) + '%';
+    if (meta != null) el.progMeta.textContent = meta;
+  }
+
+  el.cancel.addEventListener('click', function () {
+    if (state.abort) {
+      try { state.abort.abort(); } catch (e) { /* noop */ }
+    }
+    setStatus(L('Cancelled — nothing was kept.', '취소했습니다 — 남긴 것은 없습니다.'), '');
+  });
+
+  function aborted() {
+    return state.abort && state.abort.signal.aborted;
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Fetching: direct or through the Worker
+   * ------------------------------------------------------------------ */
+  function proxyUrl(u) {
+    return state.apiBase + '/api/stream?u=' + encodeURIComponent(u);
+  }
+
+  function fetchMedia(u, init) {
+    var target = state.viaWorker && state.apiBase ? proxyUrl(u) : u;
+    init = init || {};
+    if (state.abort) init.signal = state.abort.signal;
+    init.credentials = 'omit';
+    init.referrerPolicy = 'no-referrer';
+    return trackedFetch(target, init);
+  }
+
+  function readStream(res, onChunk) {
+    if (!res.body || !res.body.getReader) {
+      return res.arrayBuffer().then(function (b) {
+        var u = new Uint8Array(b);
+        onChunk(u, u.length);
+        return u;
+      });
+    }
+    var reader = res.body.getReader();
+    var chunks = [];
+    var total = 0;
+    function pump() {
+      return reader.read().then(function (r) {
+        if (r.done) {
+          var out = new Uint8Array(total);
+          var off = 0;
+          for (var i = 0; i < chunks.length; i++) { out.set(chunks[i], off); off += chunks[i].length; }
+          return out;
+        }
+        chunks.push(r.value);
+        total += r.value.length;
+        onChunk(r.value, total);
+        if (aborted()) { try { reader.cancel(); } catch (e) { /* noop */ } throw new DOMException('aborted', 'AbortError'); }
+        return pump();
+      });
+    }
+    return pump();
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Analyze
+   * ------------------------------------------------------------------ */
+  function clearResult() {
+    state.formats = [];
+    state.picked = 0;
+    el.result.hidden = true;
+    el.formats.innerHTML = '';
+    el.download.disabled = true;
+  }
+
+  function showResult(meta) {
+    el.result.hidden = false;
+    el.resTitle.textContent = meta.title || L('Untitled', '제목 없음');
+    el.resSub.textContent = meta.sub || '';
+    if (meta.thumb) {
+      el.thumbImg.src = meta.thumb;
+      el.thumbImg.hidden = false;
+      el.thumbImg.onerror = function () { el.thumbImg.hidden = true; };
+    } else {
+      el.thumbImg.hidden = true;
+      el.thumbImg.removeAttribute('src');
+    }
+    renderFormats();
+  }
+
+  function kindBadge(kind) {
+    if (kind === 'audio') return 'AUDIO';
+    if (kind === 'video') return 'VIDEO';
+    if (kind === 'hls') return 'HLS';
+    if (kind === 'dash') return 'DASH';
+    return 'MUXED';
+  }
+
+  function renderFormats() {
+    el.formats.innerHTML = '';
+    for (var i = 0; i < state.formats.length; i++) {
+      (function (f, idx) {
+        var li = document.createElement('li');
+        li.className = 'fmt';
+        li.setAttribute('role', 'radio');
+        li.setAttribute('tabindex', idx === state.picked ? '0' : '-1');
+        li.setAttribute('aria-checked', idx === state.picked ? 'true' : 'false');
+
+        var radio = document.createElement('span');
+        radio.className = 'radio';
+
+        var lbl = document.createElement('span');
+        lbl.className = 'lbl';
+        var main = document.createTextNode(f.label || 'media');
+        var small = document.createElement('small');
+        var bits = [];
+        if (f.codec) bits.push(f.codec);
+        if (f.fps) bits.push(f.fps + ' fps');
+        if (f.kind === 'video') bits.push(L('no sound', '무음'));
+        if (f.kind === 'audio') bits.push(L('audio only', '음성만'));
+        if (f.bitrate && f.origin !== 'hls') bits.push(Math.round(f.bitrate / 1000) + ' kbps');
+        small.textContent = bits.join(' · ');
+        lbl.appendChild(main);
+        if (bits.length) lbl.appendChild(small);
+
+        var badge = document.createElement('span');
+        badge.className = 'badge' + (f.kind === 'audio' ? ' badge--a' : '');
+        badge.textContent = kindBadge(f.kind);
+
+        var size = document.createElement('span');
+        size.className = 'size';
+        size.textContent = f.sizeLabel || '';
+
+        li.appendChild(radio); li.appendChild(lbl); li.appendChild(badge); li.appendChild(size);
+
+        li.addEventListener('click', function () { pick(idx); });
+        li.addEventListener('keydown', function (e) {
+          if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            var next = (idx + (e.key === 'ArrowDown' ? 1 : -1) + state.formats.length) % state.formats.length;
+            pick(next);
+            var nodes = el.formats.querySelectorAll('.fmt');
+            if (nodes[next]) nodes[next].focus();
+          }
+        });
+        el.formats.appendChild(li);
+      })(state.formats[i], i);
+    }
+    el.download.disabled = !state.formats.length || state.busy;
+  }
+
+  function pick(i) {
+    state.picked = i;
+    var nodes = el.formats.querySelectorAll('.fmt');
+    for (var k = 0; k < nodes.length; k++) {
+      nodes[k].setAttribute('aria-checked', k === i ? 'true' : 'false');
+      nodes[k].setAttribute('tabindex', k === i ? '0' : '-1');
+    }
+    var f = state.formats[i];
+    if (!f) return;
+    var notes = [];
+    if (f.kind === 'video') notes.push(L('video track only — pair it with the audio row for a complete file', '영상 트랙만 — 완전한 파일은 음성 행과 함께 받으세요'));
+    if (f.kind === 'hls') notes.push(L('playlist — segments will be merged in this tab', '재생목록 — 이 탭에서 조각을 병합합니다'));
+    if (f.kind === 'dash') notes.push(L('DASH manifests are not merged here; pick an MP4 or HLS row', 'DASH 매니페스트는 여기서 병합하지 않습니다. MP4나 HLS 행을 고르세요'));
+    el.out.innerHTML = notes.length ? notes.join(' · ') : '';
+  }
+
+  function analyzeError(msg) {
+    setStatus(msg, 'err');
+    clearResult();
+  }
+
+  el.form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    analyze();
+  });
+
+  function analyze() {
+    if (state.busy) return;
+    var raw = normalize(el.input.value);
+    if (!raw) { setStatus(L('Paste a link first.', '먼저 링크를 붙여넣으세요.'), 'err'); return; }
+    try { new URL(raw); } catch (e) {
+      setStatus(L('That does not look like a URL.', '주소 형식이 아닙니다.'), 'err');
+      return;
+    }
+    el.input.value = raw;
+    var mode = classify(raw);
+    setMode(mode);
+    clearResult();
+    state.viaWorker = false;
+    el.viaWorker.checked = false;
+
+    if (mode === 'youtube' || mode === 'page') {
+      if (!state.apiBase) {
+        setStatus(L('This link needs your Worker. Paste its address on the right — or use a direct file link or an .m3u8 playlist, which work without it.', '이 링크는 이형 님 워커가 필요합니다. 오른쪽에 주소를 넣으세요. 직접 파일 링크나 .m3u8 재생목록은 워커 없이 동작합니다.'), 'err');
+        return;
+      }
+      return resolveViaWorker(raw);
+    }
+    if (mode === 'hls') return probeHls(raw);
+    return probeDirect(raw);
+  }
+
+  function probeDirect(u) {
+    setStatus(L('Ready — a direct file. Analyzing nothing; press Download.', '준비됨 — 직접 파일입니다. 분석할 것이 없으니 다운로드를 누르세요.'), 'ok');
+    var name = nameFromUrl(u);
+    var ext = (name.split('.').pop() || 'mp4').toLowerCase();
+    state.formats = [{ label: decodeURIComponent(name), kind: 'muxed', ext: ext, url: u, origin: 'direct', mime: '', sizeLabel: '' }];
+    state.picked = 0;
+    showResult({ title: decodeURIComponent(name), sub: L('Direct link · fetched by this tab', '직접 링크 · 이 탭이 받습니다') });
+    setStatus(L('Ready. Download follows the link as it is — no server in between.', '준비되었습니다. 중간 서버 없이 링크를 그대로 받습니다.'), 'ok');
+    el.download.disabled = false;
+  }
+
+  function codecLabel(codecs) {
+    var first = String(codecs || '').split(',')[0].trim();
+    if (!first) return '';
+    if (/^avc1|^avc3/i.test(first)) return 'H.264';
+    if (/^hvc1|^hev1/i.test(first)) return 'HEVC';
+    if (/^av01/i.test(first)) return 'AV1';
+    if (/^vp0?9/i.test(first)) return 'VP9';
+    if (/^mp4a/i.test(first)) return 'AAC';
+    if (/^opus/i.test(first)) return 'Opus';
+    if (/^ec-3/i.test(first)) return 'E-AC-3';
+    if (/^ac-3/i.test(first)) return 'AC-3';
+    return first;
+  }
+
+  function parseAttrs(s) {
+    var o = {}, re = /([A-Z0-9-]+)=("[^"]*"|[^,]*)/g, m;
+    while ((m = re.exec(s))) {
+      var v = m[2];
+      if (v && v.charAt(0) === '"') v = v.slice(1, -1);
+      o[m[1]] = v;
+    }
+    return o;
+  }
+
+  function parseMaster(text, base) {
+    var lines = text.split(/\r?\n/), out = [];
+    for (var i = 0; i < lines.length; i++) {
+      var ln = lines[i].trim();
+      if (ln.indexOf('#EXT-X-STREAM-INF:') !== 0) continue;
+      var a = parseAttrs(ln.slice(18));
+      var uri = null;
+      for (var j = i + 1; j < lines.length; j++) {
+        var t = lines[j].trim();
+        if (t && t.charAt(0) !== '#') { uri = t; i = j; break; }
+      }
+      if (uri) out.push({
+        uri: abs(base, uri),
+        bandwidth: Number(a.BANDWIDTH) || 0,
+        resolution: a.RESOLUTION || '',
+        codecs: a.CODECS || '',
+        name: a.NAME || ''
+      });
+    }
+    return out;
+  }
+
+  function parseMedia(text, base) {
+    var lines = text.split(/\r?\n/);
+    var segs = [], seq = 0, curKey = null, mapUri = null, pendingDur = 0, end = false, version = '';
+    for (var i = 0; i < lines.length; i++) {
+      var ln = lines[i].trim();
+      if (!ln) continue;
+      if (ln.charAt(0) === '#') {
+        if (ln.indexOf('#EXT-X-MEDIA-SEQUENCE:') === 0) seq = Number(ln.split(':')[1]) || 0;
+        else if (ln.indexOf('#EXT-X-ENDLIST') === 0) end = true;
+        else if (ln.indexOf('#EXT-X-VERSION:') === 0) version = ln.split(':')[1];
+        else if (ln.indexOf('#EXT-X-MAP:') === 0) {
+          var ma = parseAttrs(ln.slice(11));
+          if (ma.URI) mapUri = abs(base, ma.URI);
+        } else if (ln.indexOf('#EXT-X-KEY:') === 0) {
+          var ka = parseAttrs(ln.slice(11));
+          var method = (ka.METHOD || 'NONE').toUpperCase();
+          curKey = method === 'NONE' ? null : { method: method, uri: ka.URI ? abs(base, ka.URI) : null, iv: ka.IV || null };
+        } else if (ln.indexOf('#EXTINF:') === 0) {
+          pendingDur = parseFloat(ln.slice(8)) || 0;
+        }
+        continue;
+      }
+      segs.push({ uri: abs(base, ln), dur: pendingDur, seq: seq + segs.length, key: curKey });
+      pendingDur = 0;
+    }
+    return { segments: segs, map: mapUri, end: end, version: version };
+  }
+
+  function isMaster(text) { return text.indexOf('#EXT-X-STREAM-INF:') >= 0; }
+
+  function getText(u) {
+    return fetchMedia(u).then(function (r) {
+      if (!r.ok) throw new HttpError(r.status, u);
+      return r.text();
+    });
+  }
+
+  function HttpError(status, url) {
+    this.name = 'HttpError';
+    this.status = status;
+    this.url = url;
+    this.message = 'HTTP ' + status;
+  }
+  HttpError.prototype = Object.create(Error.prototype);
+
+  function probeHls(u) {
+    setStatus(L('Reading the playlist…', '재생목록을 읽는 중…'), '');
+    return getText(u).then(function (text) {
+      if (text.indexOf('#EXTM3U') !== 0 && text.indexOf('#EXTM3U') < 0) throw new Error('not_m3u8');
+      if (isMaster(text)) {
+        var vars = parseMaster(text, u);
+        vars.sort(function (a, b) { return b.bandwidth - a.bandwidth; });
+        if (!vars.length) throw new Error('empty_master');
+        state.formats = vars.map(function (v, i) {
+          var res = v.resolution ? v.resolution.replace('x', '×') : (v.name || 'variant');
+          return {
+            label: res + (i === 0 ? ' · ' + L('best', '최고') : ''),
+            kind: 'hls',
+            ext: 'mp4',
+            url: v.uri,
+            origin: 'hls',
+            playlist: false,
+            codec: codecLabel(v.codecs),
+            bitrate: v.bandwidth,
+            sizeLabel: v.bandwidth ? Math.round(v.bandwidth / 1000) + ' kbps' : '',
+            mime: 'video/mp4'
+          };
+        });
+        state.picked = 0;
+        showResult({
+          title: nameFromUrl(u),
+          sub: L('Master playlist · ' + vars.length + ' variants · segments merged in this tab', '마스터 재생목록 · 화질 ' + vars.length + '개 · 이 탭에서 조각 병합')
+        });
+        setStatus(L('Master playlist read. Pick a variant — the top one is the highest bitrate.', '마스터 재생목록을 읽었습니다. 화질을 고르세요 — 맨 위가 가장 높은 비트레이트입니다.'), 'ok');
+        el.download.disabled = false;
+        return;
+      }
+      var media = parseMedia(text, u);
+      if (!media.segments.length) throw new Error('no_segments');
+      var dur = media.segments.reduce(function (a, s) { return a + s.dur; }, 0);
+      state.formats = [{
+        label: L('Merge ' + media.segments.length + ' segments', media.segments.length + '개 조각 병합'),
+        kind: 'hls',
+        ext: 'mp4',
+        url: u,
+        origin: 'hls',
+        playlist: false,
+        codec: media.map ? 'fMP4' : 'MPEG-TS',
+        bitrate: 0,
+        sizeLabel: dur ? fmtTime(dur) : '',
+        mime: 'video/mp4',
+        encrypted: !!media.encryptedCount
+      }];
+      state.picked = 0;
+      showResult({
+        title: nameFromUrl(u),
+        sub: L('Media playlist · ' + media.segments.length + ' segments · ' + (dur ? fmtTime(dur) : '?') + (media.end ? '' : ' · live'),
+               '미디어 재생목록 · ' + media.segments.length + '조각 · ' + (dur ? fmtTime(dur) : '?') + (media.end ? '' : ' · 라이브'))
+      });
+      setStatus(L('Playlist read. Press Download to fetch and merge every segment here.', '재생목록을 읽었습니다. 다운로드를 누르면 조각을 모두 받아 여기서 병합합니다.'), 'ok');
+      el.download.disabled = false;
+    }).catch(function (err) {
+      var msg = err && err.status === 0 ? '' : '';
+      if (err && err.name === 'AbortError') return;
+      var base = L('Could not read the playlist', '재생목록을 읽지 못했습니다');
+      if (err && err.status) {
+        analyzeError(base + ' — HTTP ' + err.status + '. ' + L('If the host refuses cross-origin reads, tick “Fetch through the Worker”.', '호스트가 교차 출처 읽기를 막았다면 “워커를 거쳐 받기”를 켜세요.'));
+      } else if (!state.apiBase) {
+        analyzeError(base + '. ' + L('The host or the network refused this tab (CORS). A direct file link works here; for a blocked playlist, deploy the Worker and tick the box.', '호스트나 네트워크가 이 탭을 거부했습니다(CORS). 직접 파일 링크는 여기서 됩니다. 막힌 재생목록은 워커를 올리고 체크박스를 켜세요.'));
+      } else {
+        analyzeError(base + '. ' + L('Check the link, tick “Fetch through the Worker”, or try again.', '링크를 확인하고 “워커를 거쳐 받기”를 켜거나 다시 시도하세요.'));
+      }
+    });
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Worker resolve
+   * ------------------------------------------------------------------ */
+  function explainWorkerError(j) {
+    var code = (j && j.error) || 'unknown';
+    var map = {
+      youtube_unavailable: L('YouTube refused this request (' + ((j && j.detail) || 'no reason given') + '). This is usually a bot check on the Worker IP — try again in a few minutes, or another video.', '유튜브가 요청을 거부했습니다(' + ((j && j.detail) || '사유 없음') + '). 대개 워커 IP에 대한 봇 확인입니다 — 몇 분 뒤나 다른 영상으로 시도하세요.'),
+      no_formats: L('No downloadable format was found for this link.', '이 링크에서 받을 수 있는 형식을 찾지 못했습니다.'),
+      no_media_found: L('The Worker read the page but found no video, audio or playlist on it.', '워커가 페이지를 읽었지만 영상·음성·재생목록을 찾지 못했습니다.'),
+      host_not_allowed: L('That host is not on the Worker allowlist (MG_HOSTS).', '그 호스트는 워커 허용 목록(MG_HOSTS)에 없습니다.'),
+      origin_not_allowed: L('The Worker refuses this page origin (MG_ORIGINS). Add this site to it.', '워커가 이 페이지 출처를 거부합니다(MG_ORIGINS). 이 사이트를 추가하세요.'),
+      bad_signature: L('The Worker wants a signed link (MG_SECRET is set). Re-analyze instead of reusing an old link.', '워커가 서명 링크를 요구합니다(MG_SECRET 설정됨). 예전 링크를 재사용하지 말고 다시 분석하세요.'),
+      bad_url: L('The Worker rejected the address.', '워커가 주소를 거부했습니다.'),
+      upstream_failed: L('The media host refused the Worker.', '미디어 호스트가 워커를 거부했습니다.'),
+      worker_error: L('The Worker hit an error: ' + ((j && j.detail) || ''), '워커에서 오류가 났습니다: ' + ((j && j.detail) || ''))
+    };
+    return map[code] || L('Worker error: ' + code, '워커 오류: ' + code);
+  }
+
+  function resolveViaWorker(u) {
+    setStatus(L('Asking the Worker for this link…', '워커에 이 링크를 물어보는 중…'), '');
+    var ctl = new AbortController();
+    var timer = setTimeout(function () { ctl.abort(); }, 45000);
+    return trackedFetch(state.apiBase + '/api/resolve?url=' + encodeURIComponent(u), { cache: 'no-store', signal: ctl.signal })
+      .then(function (r) {
+        clearTimeout(timer);
+        return r.json().then(function (j) { return { ok: r.ok, j: j }; });
+      })
+      .then(function (res) {
+        var j = res.j || {};
+        if (!res.ok || !j.ok) {
+          if (j.error === 'origin_not_allowed') state.worker = 'bad', renderWorker();
+          analyzeError(explainWorkerError(j));
+          return;
+        }
+        state.formats = (j.formats || []).map(function (f) {
+          return {
+            label: f.label || 'media',
+            kind: f.kind || 'muxed',
+            ext: f.ext || 'mp4',
+            url: f.download,
+            origin: 'worker',
+            playlist: !!f.playlist,
+            codec: f.codec || '',
+            bitrate: f.bitrate || 0,
+            fps: f.fps || 0,
+            height: f.height || 0,
+            size: f.size || 0,
+            sizeLabel: f.sizeLabel || '',
+            mime: f.mime || ''
+          };
+        });
+        state.picked = 0;
+        state.viaWorker = true;
+        el.viaWorker.checked = true;
+        var sub = [];
+        if (j.author) sub.push(j.author);
+        if (j.duration) sub.push(fmtTime(j.duration));
+        sub.push(j.kind === 'youtube' ? L('YouTube', '유튜브') : j.kind === 'vimeo' ? 'Vimeo' : L('page', '페이지'));
+        if (j.notes && j.notes.length) {
+          var client = (j.notes || []).filter(function (n) { return n.indexOf('client_') === 0; })[0];
+          if (client) sub.push(client.replace('client_', 'client '));
+        }
+        showResult({ title: j.title || nameFromUrl(u), sub: sub.join(' · '), thumb: j.thumb || j.thumbnail });
+        var extra = '';
+        if (j.notes && j.notes.indexOf('no_progressive') >= 0) {
+          extra = ' ' + L('This video offers separate video and audio only — take both rows and join them with ffmpeg.', '이 영상은 영상과 음성이 분리되어 있습니다 — 두 행을 모두 받아 ffmpeg로 합치세요.');
+        }
+        setStatus(L('Found ' + state.formats.length + ' formats through your Worker.', '워커로 형식 ' + state.formats.length + '개를 찾았습니다.') + extra, 'ok');
+        el.download.disabled = false;
+        pick(0);
+      })
+      .catch(function (err) {
+        clearTimeout(timer);
+        if (err && err.name === 'AbortError') { analyzeError(L('The Worker took too long to answer.', '워커 응답이 너무 늦습니다.')); return; }
+        state.worker = 'bad';
+        renderWorker();
+        analyzeError(L('Could not reach the Worker — check the address and that it is deployed.', '워커에 닿지 못했습니다 — 주소와 배포 상태를 확인하세요.'));
+      });
+  }
+
+  el.viaWorker.addEventListener('change', function () {
+    state.viaWorker = el.viaWorker.checked;
+    if (state.viaWorker && !state.apiBase) {
+      el.viaWorker.checked = false;
+      state.viaWorker = false;
+      setStatus(L('No Worker address set — add one first.', '워커 주소가 없습니다 — 먼저 설정하세요.'), 'err');
+    }
+  });
+
+  /* ------------------------------------------------------------------ *
+   * Download dispatcher
+   * ------------------------------------------------------------------ */
+  el.download.addEventListener('click', function () {
+    var f = state.formats[state.picked];
+    if (!f || state.busy) return;
+    if (f.kind === 'dash') {
+      setStatus(L('DASH manifests are not merged here — pick an MP4 or HLS row.', 'DASH 매니페스트는 여기서 병합하지 않습니다 — MP4나 HLS 행을 고르세요.'), 'err');
+      return;
+    }
+    if (f.origin === 'worker' && f.kind === 'hls') return runHls(f.url, true);
+    if (f.origin === 'hls' || f.kind === 'hls') return runHls(f.url, state.viaWorker);
+    if (f.origin === 'worker') return runProxied(f);
+    return runDirect(f);
+  });
+
+  function watchProgress(total, label) {
+    var started = Date.now();
+    var lastBytes = 0;
+    return function (bytes) {
+      var pct = total ? (bytes / total) * 100 : 0;
+      var secs = (Date.now() - started) / 1000;
+      var speed = secs > 0.2 ? bytes / secs : 0;
+      var meta = [];
+      meta.push(fmtBytes(bytes) + (total ? ' / ' + fmtBytes(total) : ''));
+      if (speed) meta.push(fmtBytes(speed) + '/s');
+      if (label) meta.push(label);
+      setProgress(pct, meta.join(' · '));
+    };
+  }
+
+  function runDirect(f) {
+    begin();
+    setStatus(L('Downloading…', '다운로드 중…'), '');
+    var total = 0;
+    var label = '';
+    var attempt = function (viaWorker) {
+      var target = viaWorker && state.apiBase ? proxyUrl(f.url) : f.url;
+      return trackedFetch(target, {
+        cache: 'no-store', credentials: 'omit', referrerPolicy: 'no-referrer', signal: state.abort.signal
+      });
+    };
+
+    attempt(state.viaWorker).catch(function (err) {
+      if (state.viaWorker || !state.apiBase || aborted()) throw err;
+      // CORS or network refusal: retry once through the Worker when one exists
+      state.viaWorker = true;
+      el.viaWorker.checked = true;
+      setStatus(L('The host refused this tab — retrying through your Worker…', '호스트가 이 탭을 거부했습니다 — 워커로 다시 시도합니다…'), '');
+      return attempt(true);
+    }).then(function (res) {
+      if (!res.ok) throw new HttpError(res.status, f.url);
+      total = Number(res.headers.get('content-length')) || 0;
+      if (res.headers.get('content-type')) f.mime = res.headers.get('content-type').split(';')[0];
+      var push = watchProgress(total, fmtBytes(total) + ' · ' + (f.ext || '').toUpperCase());
+      return readStream(res, function (chunk, bytes) { push(bytes); });
+    }).then(function (bytes) {
+      if (aborted()) return;
+      var blob = new Blob([bytes], { type: f.mime || 'application/octet-stream' });
+      saveBlob(blob, f.filename || nameFromUrl(f.url, f.ext));
+      var filename = f.filename || nameFromUrl(f.url, f.ext);
+      var note = L('Saved ' + fmtBytes(blob.size) + ' — assembled in this tab, never uploaded.',
+                   fmtBytes(blob.size) + ' 저장 완료 — 이 탭에서 조립했고 업로드된 것은 없습니다.');
+      if (blob.size > MAX_WARN) note += ' ' + L('That was a large file for a tab; keep an eye on memory.', '탭 기준 큰 파일입니다. 메모리를 지켜보세요.');
+      end(true, note);
+      setStatus(L('Done — ' + filename, '완료 — ' + filename), 'ok');
+    }).catch(function (err) {
+      if (err && err.name === 'AbortError') { end(false, '<span style="color:var(--muted2)">' + L('Cancelled.', '취소했습니다.') + '</span>'); return; }
+      end(false, '');
+      if (err instanceof HttpError) {
+        setStatus(L('The server answered HTTP ' + err.status + '. A 403/404 usually means the link expired or needs a session.', '서버가 HTTP ' + err.status + '로 답했습니다. 403/404는 대개 링크 만료나 세션 필요입니다.'), 'err');
+      } else {
+        setStatus(L('The request was refused (CORS or network). ' + (state.apiBase ? 'Tick “Fetch through the Worker”.' : 'Deploy the Worker, then tick “Fetch through the Worker”.'), '요청이 거부되었습니다(CORS 또는 네트워크). ' + (state.apiBase ? '“워커를 거쳐 받기”를 켜세요.' : '워커를 올린 뒤 “워커를 거쳐 받기”를 켜세요.')), 'err');
+      }
+    });
+  }
+
+  function runProxied(f) {
+    begin();
+    setStatus(L('Downloading through your Worker…', '워커를 거쳐 받는 중…'), '');
+    var total = 0;
+    var cdName = '';
+    trackedFetch(f.url, { cache: 'no-store', credentials: 'omit', signal: state.abort.signal })
+      .then(function (res) {
+        if (!res.ok) {
+          return res.json().catch(function () { return {}; }).then(function (j) {
+            throw new Error(explainWorkerError(j));
+          });
+        }
+        total = Number(res.headers.get('content-length')) || f.size || 0;
+        cdName = dispositionName(res.headers.get('content-disposition'), '');
+        var push = watchProgress(total, fmtBytes(total) + ' · ' + (f.ext || '').toUpperCase());
+        return readStream(res, function (c, b) { push(b); });
+      })
+      .then(function (bytes) {
+        if (aborted()) return;
+        var blob = new Blob([bytes], { type: f.mime || 'video/mp4' });
+        var name = f.filename || cdName || nameFromUrl(f.url, f.ext);
+        saveBlob(blob, name);
+        end(true, L('Saved ' + fmtBytes(blob.size) + ' — streamed through your Worker, stored nowhere but here.',
+                    fmtBytes(blob.size) + ' 저장 완료 — 이형 님 워커를 거쳐 왔고 여기 외에 저장된 곳은 없습니다.'));
+        setStatus(L('Done — ' + name, '완료 — ' + name), 'ok');
+      })
+      .catch(function (err) {
+        if (err && err.name === 'AbortError') { end(false, L('Cancelled.', '취소했습니다.')); return; }
+        end(false, '');
+        setStatus(err && err.message ? err.message : L('Download failed.', '다운로드에 실패했습니다.'), 'err');
+      });
+  }
+
+  /* ------------------------------------------------------------------ *
+   * HLS runner
+   * ------------------------------------------------------------------ */
+  function loadMux() {
+    if (window.muxjs) return Promise.resolve(window.muxjs);
+    return new Promise(function (resolve, reject) {
+      var s = document.createElement('script');
+      s.src = './mux.min.js';
+      s.onload = function () { resolve(window.muxjs); };
+      s.onerror = function () { reject(new Error('mux_missing')); };
+      document.head.appendChild(s);
+    });
+  }
+
+  function isFmp4(u8) {
+    if (!u8 || u8.length < 12) return false;
+    var tag = String.fromCharCode(u8[4], u8[5], u8[6], u8[7]);
+    return tag === 'ftyp' || tag === 'styp' || tag === 'moov' || tag === 'sidx';
+  }
+
+  function sniff(u8) {
+    if (!u8 || !u8.length) return 'bin';
+    if (u8[0] === 0x47) return 'ts';
+    if (u8[0] === 0xff && (u8[1] & 0xf6) === 0xf0) return 'aac';
+    if (isFmp4(u8)) return 'mp4';
+    return 'bin';
+  }
+
+  function hexBytes(hex) {
+    var h = hex.replace(/^0x/i, '');
+    if (h.length % 2) h = '0' + h;
+    var out = new Uint8Array(h.length / 2);
+    for (var i = 0; i < out.length; i++) out[i] = parseInt(h.substr(i * 2, 2), 16);
+    return out;
+  }
+
+  function seqIv(seq) {
+    var iv = new Uint8Array(16);
+    var n = seq;
+    for (var i = 15; i >= 0; i--) { iv[i] = n & 0xff; n = Math.floor(n / 256); }
+    return iv;
+  }
+
+  function concatBytes(list) {
+    var total = 0, i;
+    for (i = 0; i < list.length; i++) total += list[i].byteLength;
+    var out = new Uint8Array(total);
+    var off = 0;
+    for (i = 0; i < list.length; i++) { out.set(list[i], off); off += list[i].byteLength; }
+    return out;
+  }
+
+  function transmuxTs(parts) {
+    return loadMux().then(function (muxjs) {
+      if (!muxjs || !muxjs.mp4 || !muxjs.mp4.Transmuxer) throw new Error('mux_missing');
+      var t = new muxjs.mp4.Transmuxer({ remux: true, keepOriginalTimestamps: true });
+      var init = null;
+      var out = [];
+      t.on('data', function (seg) {
+        if (seg.initSegment && !init) init = seg.initSegment;
+        if (seg.data) out.push(seg.data);
+      });
+      var i = 0;
+      function step() {
+        var stop = Math.min(i + 20, parts.length);
+        for (; i < stop; i++) {
+          t.push(new Uint8Array(parts[i]));
+          t.flush();
+        }
+        if (i < parts.length) return tick(0).then(step);
+        return null;
+      }
+      return Promise.resolve(step()).then(function () {
+        if (!out.length) throw new Error('transmux_empty');
+        return { init: init, parts: out };
+      });
+    });
+  }
+
+  function runHls(listUrl, forceWorker) {
+    begin();
+    if (forceWorker && !state.viaWorker && state.apiBase) {
+      state.viaWorker = true;
+      el.viaWorker.checked = true;
+    }
+    var playlistUrl = listUrl;
+    var name = nameFromUrl(listUrl);
+    var segCount = 0;
+    var doneSegs = 0;
+    var bytesSoFar = 0;
+    var started = Date.now();
+    var keyCache = {};
+    var job = state.abort.signal;
+
+    function progressLabel() {
+      var secs = (Date.now() - started) / 1000;
+      var speed = secs > 0.5 ? bytesSoFar / secs : 0;
+      var bits = [fmtBytes(bytesSoFar) + (speed ? ' · ' + fmtBytes(speed) + '/s' : '')];
+      if (segCount) bits.push(doneSegs + '/' + segCount + ' ' + L('segments', '조각'));
+      setProgress(segCount ? (doneSegs / segCount) * 92 : 3, bits.join(' · '));
+    }
+
+    setStatus(L('Reading the playlist…', '재생목록을 읽는 중…'), '');
+    return getText(playlistUrl)
+      .then(function (text) {
+        if (isMaster(text)) {
+          var vars = parseMaster(text, playlistUrl);
+          vars.sort(function (a, b) { return b.bandwidth - a.bandwidth; });
+          if (!vars.length) throw new Error('empty_master');
+          var chosen = null;
+          var want = state.formats[state.picked];
+          if (want && want.url) chosen = vars.filter(function (v) { return v.uri === want.url; })[0];
+          playlistUrl = (chosen || vars[0]).uri;
+          return getText(playlistUrl);
+        }
+        return text;
+      })
+      .then(function (text) {
+        var media = parseMedia(text, playlistUrl);
+        if (!media.segments.length) throw new Error('no_segments');
+        segCount = media.segments.length;
+        if (!media.end) setStatus(L('This looks like a live playlist — only the segments listed now will be saved.', '라이브 재생목록으로 보입니다 — 지금 목록에 있는 조각만 저장됩니다.'), '');
+        else setStatus(L('Fetching ' + segCount + ' segments…', '조각 ' + segCount + '개를 받는 중…'), '');
+        progressLabel();
+
+        var encrypted = media.segments.some(function (s) { return s.key && s.key.method === 'AES-128'; });
+        var sampleAes = media.segments.some(function (s) { return s.key && s.key.method !== 'AES-128'; });
+        if (sampleAes) throw new Error('sample_aes');
+
+        var results = new Array(media.segments.length);
+        var queue = media.segments.map(function (_, i) { return i; });
+
+        function getKey(key) {
+          if (!key || !key.uri) return Promise.resolve(null);
+          if (keyCache[key.uri]) return keyCache[key.uri];
+          keyCache[key.uri] = fetchMedia(key.uri).then(function (r) {
+            if (!r.ok) throw new HttpError(r.status, key.uri);
+            return r.arrayBuffer();
+          }).then(function (buf) {
+            return crypto.subtle.importKey('raw', buf, { name: 'AES-CBC' }, false, ['decrypt']);
+          });
+          return keyCache[key.uri];
+        }
+
+        function fetchSeg(i) {
+          var seg = media.segments[i];
+          return fetchMedia(seg.uri, { headers: {} }).then(function (r) {
+            if (!r.ok) throw new HttpError(r.status, seg.uri);
+            return r.arrayBuffer();
+          }).then(function (buf) {
+            var data = new Uint8Array(buf);
+            bytesSoFar += data.length;
+            if (!seg.key) return data;
+            return getKey(seg.key).then(function (ck) {
+              var iv = seg.key.iv ? hexBytes(seg.key.iv) : seqIv(seg.seq);
+              return crypto.subtle.decrypt({ name: 'AES-CBC', iv: iv }, ck, data);
+            }).then(function (plain) { return new Uint8Array(plain); });
+          }).then(function (data) {
+            results[i] = data;
+            doneSegs++;
+            progressLabel();
+            if (aborted()) throw new DOMException('aborted', 'AbortError');
+            return data;
+          });
+        }
+
+        function lane() {
+          if (!queue.length) return Promise.resolve();
+          var i = queue.shift();
+          return fetchSeg(i).then(lane, function (err) { throw err; });
+        }
+
+        var lanes = [];
+        var width = 4;
+        for (var L2 = 0; L2 < Math.min(width, segCount); L2++) lanes.push(lane());
+
+        return Promise.all(lanes).then(function () {
+          if (aborted()) throw new DOMException('aborted', 'AbortError');
+          setProgress(94, L('joining…', '합치는 중…'));
+          setStatus(L('Joining ' + segCount + ' segments…', '조각 ' + segCount + '개를 잇는 중…'), '');
+
+          var head = null;
+          if (media.map) {
+            head = fetchMedia(media.map).then(function (r) { return r.arrayBuffer(); }).then(function (b) { return new Uint8Array(b); });
+          } else {
+            head = Promise.resolve(null);
+          }
+
+          return head.then(function (initBytes) {
+            var kind = sniff(initBytes || results[0]);
+            var body = results;
+            if (kind === 'ts' && !initBytes) {
+              return transmuxTs(body).then(function (out) {
+                var blob = new Blob([out.init || new Uint8Array(0)].concat(out.parts), { type: 'video/mp4' });
+                return { blob: blob, ext: 'mp4', kind: 'ts→mp4' };
+              }).catch(function () {
+                var blob = new Blob(body.concat([]), { type: 'video/mp2t' });
+                return { blob: blob, ext: 'ts', kind: 'ts raw' };
+              });
+            }
+            if (kind === 'aac') {
+              return { blob: new Blob(body, { type: 'audio/aac' }), ext: 'aac', kind: 'adts' };
+            }
+            var all = initBytes ? [initBytes].concat(body) : body;
+            return { blob: new Blob(all, { type: kind === 'mp4' ? 'video/mp4' : 'application/octet-stream' }), ext: kind === 'mp4' ? 'mp4' : 'bin', kind: kind };
+          });
+        });
+      })
+      .then(function (out) {
+        if (aborted()) return;
+        var base = name.replace(/\.[a-z0-9]{2,5}$/i, '').replace(/\.(m3u8|mpd)$/i, '');
+        var filename = base + '.' + out.ext;
+        saveBlob(out.blob, filename);
+        var note = L('Saved ' + fmtBytes(out.blob.size) + ' · ' + segCount + ' segments ' + (out.kind === 'ts raw' ? 'kept as .ts — the remuxer did not run, open it in VLC' : 'merged (' + out.kind + ')') + ' · built in this tab',
+                     fmtBytes(out.blob.size) + ' 저장 · 조각 ' + segCount + '개 ' + (out.kind === 'ts raw' ? '.ts로 저장 — 리먹서가 동작하지 않았습니다. VLC로 여세요' : '병합(' + out.kind + ')') + ' · 이 탭에서 조립');
+        end(true, note);
+        setStatus(L('Done — ' + filename, '완료 — ' + filename), 'ok');
+      })
+      .catch(function (err) {
+        if (err && err.name === 'AbortError') { end(false, L('Cancelled.', '취소했습니다.')); setStatus(L('Cancelled — nothing was kept.', '취소했습니다 — 남긴 것은 없습니다.'), ''); return; }
+        end(false, '');
+        if (err && err.message === 'sample_aes') {
+          setStatus(L('This playlist uses SAMPLE-AES encryption, which a browser cannot decrypt here.', '이 재생목록은 SAMPLE-AES 암호화를 써서 브라우저에서 복호화할 수 없습니다.'), 'err');
+        } else if (err instanceof HttpError) {
+          setStatus(L('A segment answered HTTP ' + err.status + ' — the link may have expired, or the Worker must fetch it.', '조각이 HTTP ' + err.status + '로 답했습니다 — 링크가 만료됐거나 워커가 받아야 합니다.'), 'err');
+        } else {
+          setStatus(L('The merge stopped: ' + ((err && err.message) || 'unknown error') + '. Tick “Fetch through the Worker” if the host blocks this tab.', '병합이 멈췄습니다: ' + ((err && err.message) || '알 수 없는 오류') + '. 호스트가 이 탭을 막았다면 “워커를 거쳐 받기”를 켜세요.'), 'err');
+        }
+      });
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Boot
+   * ------------------------------------------------------------------ */
+  var savedLang = null;
+  try { savedLang = window.localStorage.getItem(LANG_KEY); } catch (e) { savedLang = null; }
+  var initial = savedLang === 'ko' || savedLang === 'en'
+    ? savedLang
+    : ((navigator.language || '').toLowerCase().indexOf('ko') === 0 ? 'ko' : 'en');
+
+  applyLang(initial);
+  setMode('auto');
+
+  if (API_BASE) {
+    setApiBase(API_BASE);
+  } else {
+    state.worker = 'unknown';
+    renderWorker();
+  }
+  renderLog();
+})();
+</script>
+
+</body>
+</html>
