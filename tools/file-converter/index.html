@@ -2843,11 +2843,12 @@ footer.foot .sep { color: var(--line2); }
   function loadPdfDoc(file) {
     if (!pdfjs) return Promise.reject(new Error('nolib'));
     return file.arrayBuffer().then(function (buf) {
+      var baseDir = new URL('.', location.href).href;
       return pdfjs.getDocument({
         data: new Uint8Array(buf),
-        cMapUrl: 'vendor/cmaps/',
+        cMapUrl: baseDir + 'vendor/cmaps/',
         cMapPacked: true,
-        standardFontDataUrl: 'vendor/standard_fonts/',
+        standardFontDataUrl: baseDir + 'vendor/standard_fonts/',
         isEvalSupported: false,
         useSystemFonts: true
       }).promise;
@@ -4460,12 +4461,14 @@ footer.foot .sep { color: var(--line2); }
   }
 
   function t2pRuns(line) {
-    var parts = String(line).split(/(\*\*[^*]+\*\*|__[^_]+__|`[^`]+`|\*[^*\s][^*]*\*|_[^_\s][^_]*_)/);
+    var parts = String(line).split(/(!\[[^\]]*\]\([^)]*\)|\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*|__[^_]+__|`[^`]+`|\*[^*\s][^*]*\*|_[^_\s][^_]*_)/);
     var runs = [];
     parts.forEach(function (p) {
       if (!p) return;
       var m;
-      if ((m = /^\*\*([^*]+)\*\*$/.exec(p)) || (m = /^__([^_]+)__$/.exec(p))) runs.push({ s: m[1], b: true });
+      if ((m = /^!\[([^\]]*)\]\(([^)]*)\)$/.exec(p))) runs.push({ s: m[1] || m[2] });
+      else if ((m = /^\[([^\]]+)\]\(([^)]+)\)$/.exec(p))) runs.push({ s: m[1] });
+      else if ((m = /^\*\*([^*]+)\*\*$/.exec(p)) || (m = /^__([^_]+)__$/.exec(p))) runs.push({ s: m[1], b: true });
       else if ((m = /^`([^`]+)`$/.exec(p))) runs.push({ s: m[1], c: true });
       else if ((m = /^\*([^*]+)\*$/.exec(p)) || (m = /^_([^_]+)_$/.exec(p))) runs.push({ s: m[1], i: true });
       else runs.push({ s: p });
@@ -4619,10 +4622,26 @@ footer.foot .sep { color: var(--line2); }
       lines.forEach(function (ln) {
         need(lineH);
         var top = y, x = x0;
+        // 같은 스타일이 이어지는 조각은 하나의 텍스트 런으로 합친다(복사·검색 시 단어가 끊기지 않게)
+        var buf = '', bufSt = null, bufX = 0;
+        var flush = function () {
+          if (buf && bufSt) ops.push({ k: 'text', x: bufX, y: top + lineH * 0.5 + bufSt.size * 0.34, s: buf, st: bufSt });
+          buf = '';
+          bufSt = null;
+        };
         ln.forEach(function (p) {
-          if (p.s) ops.push({ k: 'text', x: x, y: top + lineH * 0.5 + p.st.size * 0.34, s: p.s, st: p.st });
+          if (!p.s) { x += p.w; return; }
+          if (bufSt && p.st === bufSt) {
+            buf += p.s;
+          } else {
+            flush();
+            bufX = x;
+            bufSt = p.st;
+            buf = p.s;
+          }
           x += p.w;
         });
+        flush();
         y += lineH;
       });
     }
