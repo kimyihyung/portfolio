@@ -1,0 +1,1895 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0b0d">
+<title>QRForge — Zero-Upload QR Code Generator &amp; Image Decoder | Kim Yihyung</title>
+<meta name="description" content="Generate QR codes for links, text, Wi-Fi and contacts with custom colours, quiet zone and error correction, download as PNG or SVG, and read any QR image or camera frame back — all in your browser with zero uploads and zero external requests.">
+<meta name="keywords" content="qr code generator, qr code maker, qr decoder, qr reader, wifi qr code, vcard qr code, svg qr code, png qr code, qr colour, error correction, no upload qr, offline qr generator, private qr tool, client-side qr">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/qr-forge/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0b0d'/%3E%3Cg fill='%237fd7e8'%3E%3Crect x='7' y='7' width='7' height='7' rx='1.4'/%3E%3Crect x='18' y='7' width='7' height='7' rx='1.4'/%3E%3Crect x='7' y='18' width='7' height='7' rx='1.4'/%3E%3Crect x='17.5' y='17.5' width='3' height='3'/%3E%3Crect x='22.5' y='17.5' width='2.5' height='2.5'/%3E%3Crect x='17.5' y='22.5' width='2.5' height='2.5'/%3E%3Crect x='22' y='22' width='3' height='3'/%3E%3C/g%3E%3C/svg%3E">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/qr-forge/">
+<meta property="og:title" content="QRForge — Zero-Upload QR Code Generator &amp; Decoder">
+<meta property="og:description" content="Make a QR code — link, text, Wi-Fi, contact — in custom colours, then read one back from an image or the camera. 0 bytes uploaded, 0 external requests.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/qr-forge.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="QRForge — zero-upload QR code generator and decoder running in the browser">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="QRForge — Zero-Upload QR Code Generator &amp; Decoder">
+<meta name="twitter:description" content="Generate a QR code in the colours you want, download PNG or SVG, and decode any QR image or camera frame — inside one tab, with nothing uploaded.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/qr-forge.jpg">
+<meta name="twitter:image:alt" content="QRForge — zero-upload QR code generator and decoder running in the browser">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "QRForge — Zero-Upload QR Code Generator & Image Decoder",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/qr-forge/",
+      "description": "Generates QR codes for links, text, Wi-Fi networks and contact cards with custom colours, quiet zone and error correction, exports PNG and SVG, and decodes QR codes from local images or the camera — entirely in the browser with zero uploads and zero external requests.",
+      "featureList": [
+        "QR generation for URL, text, Wi-Fi and vCard contact payloads",
+        "Foreground and background colour, quiet zone and error-correction control",
+        "PNG export at 512 to 2048 px and scalable SVG export",
+        "QR decoding from a dragged, pasted or chosen image file",
+        "Camera decoding with frames processed in the tab",
+        "100% client-side: no uploads, no accounts, no external requests"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "QRForge", "item": "https://kimyihyung.github.io/portfolio/tools/qr-forge/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does the QR code or the image leave my device?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. The encoder and the decoder are both loaded from this site and run as JavaScript in the tab. An image you drop is read into canvas pixels in memory, and the counter in the footer shows how many network requests the page has made — it stays at zero for anything outside this site." }
+        },
+        {
+          "@type": "Question",
+          "name": "Which QR settings matter when I print the code?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Keep the quiet zone at four modules or more, keep the foreground darker than the background, and choose error correction M for a balanced code or Q/H where the print may get dirty or the code may be partly covered. Below about 2 cm of printed width most phone cameras start to struggle." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I generate a QR code for Wi-Fi without exposing the password?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The code for a Wi-Fi network contains the password in plain text, because that is how phones join without typing it. Anyone who scans it gets the network, so treat a printed Wi-Fi QR like the password itself and change the password if the code leaks." }
+        },
+        {
+          "@type": "Question",
+          "name": "Why does a QR image sometimes fail to decode?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Common causes are a photo where the code is small, cropped, blurred, at a steep angle or under glare. The decoder tries several scales and both inverted and normal pixels, but a sharper original — the whole code in frame, in focus — is what makes it work." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+:root {
+  --bg: #0a0b0d;
+  --bg2: #0e1113;
+  --panel: #12161a;
+  --panel2: #171c20;
+  --line: rgba(255, 255, 255, .09);
+  --line2: rgba(255, 255, 255, .18);
+  --ink: #f1f5f3;
+  --muted: #97a29f;
+  --muted2: #6b7674;
+  --accent: #7fd7e8;
+  --accent2: #35b3cd;
+  --on-accent: #04181c;
+  --warn: #ffc06b;
+  --danger: #ff837a;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --shadow: 0 24px 70px rgba(0, 0, 0, .5);
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--bg);
+  background-image:
+    radial-gradient(120% 70% at 50% -20%, rgba(127, 215, 232, .13), transparent 60%),
+    radial-gradient(90% 60% at 100% 0%, rgba(127, 215, 232, .05), transparent 55%);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: 1.5;
+}
+
+::selection { background: var(--accent); color: var(--on-accent); }
+a { color: inherit; }
+button, input, select, textarea { font-family: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.wrap { width: 100%; max-width: 1080px; margin: 0 auto; padding: 0 16px 40px; }
+
+/* ── header ─────────────────────────────────────────── */
+.top {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 10px; padding: 18px 0 0;
+}
+.brand { display: inline-flex; align-items: center; gap: 9px; text-decoration: none; color: var(--ink); }
+.mark {
+  min-width: 30px; height: 30px; padding: 0 6px;
+  border-radius: 9px; border: 1px solid var(--line2);
+  background: var(--panel); color: var(--accent);
+  display: grid; place-items: center;
+  font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .06em;
+}
+.brand-txt { font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; white-space: nowrap; }
+.top-actions { display: flex; align-items: center; gap: 8px; }
+.lang-toggle {
+  display: inline-flex; align-items: center; gap: 5px;
+  height: 30px; padding: 0 9px;
+  border: 1px solid var(--line); border-radius: 8px;
+  background: rgba(255, 255, 255, .03); color: var(--muted2);
+  cursor: pointer; font-family: var(--mono); font-size: 10.5px;
+  font-weight: 700; letter-spacing: .08em; line-height: 1;
+  transition: border-color .18s ease, transform .12s ease;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.95); }
+.lang-toggle .lt { transition: color .18s ease; }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.back {
+  font-size: 12px; color: var(--muted); text-decoration: none;
+  border: 1px solid var(--line); border-radius: 8px;
+  padding: 7px 10px; line-height: 1;
+  transition: color .18s ease, border-color .18s ease;
+}
+.back:hover { color: var(--ink); border-color: var(--line2); }
+
+/* ── hero ───────────────────────────────────────────── */
+.hero { padding: 30px 0 22px; }
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 16px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--line); background: rgba(255, 255, 255, .025);
+  border-radius: 999px; padding: 5px 11px;
+  font-size: 11px; letter-spacing: .02em; color: var(--muted);
+}
+.pill b { color: var(--ink); font-weight: 650; }
+.pill--live { border-color: rgba(127, 215, 232, .32); color: var(--accent); }
+.pill .dot {
+  width: 5px; height: 5px; border-radius: 50%; background: var(--accent);
+  box-shadow: 0 0 0 3px rgba(127, 215, 232, .14);
+}
+.hero h1 {
+  margin: 0 0 13px;
+  font-size: clamp(29px, 6.2vw, 50px);
+  line-height: 1.06; letter-spacing: -.035em; font-weight: 730;
+  max-width: 22ch;
+}
+.hero h1 .dim { color: var(--muted2); }
+.lede { margin: 0; max-width: 64ch; font-size: 14.5px; line-height: 1.68; color: var(--muted); }
+.lede b { color: var(--ink); font-weight: 600; }
+
+/* ── tabs ───────────────────────────────────────────── */
+.tabs {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4px;
+  padding: 4px; margin: 6px 0 16px;
+  border: 1px solid var(--line); border-radius: 999px;
+  background: var(--panel);
+}
+.tab {
+  appearance: none; border: 0; background: transparent; color: var(--muted);
+  font-size: 13px; font-weight: 650; letter-spacing: -.01em;
+  padding: 9px 14px; border-radius: 999px; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  transition: background .18s ease, color .18s ease;
+}
+.tab:hover { color: var(--ink); }
+.tab[aria-selected="true"] { background: var(--accent); color: var(--on-accent); }
+.tab svg { width: 15px; height: 15px; }
+
+/* ── layout ─────────────────────────────────────────── */
+.grid { display: grid; grid-template-columns: 1fr; gap: 14px; align-items: start; }
+.panel {
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--panel); padding: 16px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .03);
+}
+.ph {
+  margin: 0 0 12px; font-size: 11px; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--muted2);
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+
+/* ── QR stage ───────────────────────────────────────── */
+.stage {
+  display: grid; place-items: center;
+  padding: 14px; border-radius: var(--radius-sm);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .03), rgba(255, 255, 255, 0) 60%),
+    var(--bg2);
+  border: 1px solid var(--line);
+  min-height: 240px;
+}
+#qrCanvas {
+  display: block; width: 100%; max-width: 300px; height: auto;
+  border-radius: 6px; background: #f7f5ef;
+  image-rendering: pixelated;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .45);
+}
+.stage-empty {
+  margin: 0; font-size: 12.5px; color: var(--muted2); text-align: center;
+  max-width: 24ch; line-height: 1.6;
+}
+.meta-line {
+  margin: 12px 0 0; font-family: var(--mono); font-size: 10.5px;
+  letter-spacing: .05em; color: var(--muted2);
+  display: flex; flex-wrap: wrap; gap: 4px 10px;
+}
+.meta-line b { color: var(--accent); font-weight: 700; }
+.payload {
+  margin: 10px 0 0; padding: 9px 11px;
+  border: 1px solid var(--line); border-radius: 9px;
+  background: rgba(0, 0, 0, .28);
+  font-family: var(--mono); font-size: 11px; line-height: 1.55;
+  color: var(--muted); white-space: pre-wrap; word-break: break-all;
+  max-height: 88px; overflow: auto;
+}
+.dl-row { display: flex; gap: 8px; margin: 12px 0 0; }
+.dl-row .btn { flex: 1; justify-content: center; }
+
+.btn {
+  appearance: none; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--line2); background: var(--panel2); color: var(--ink);
+  border-radius: 10px; padding: 9px 13px;
+  font-size: 12.5px; font-weight: 600; letter-spacing: -.01em;
+  transition: background .18s ease, border-color .18s ease, color .18s ease, transform .12s ease;
+}
+.btn:hover { border-color: var(--accent); }
+.btn:active { transform: scale(.985); }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.btn:disabled:hover { border-color: var(--line2); }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 700; }
+.btn--primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.btn--ghost { background: transparent; color: var(--muted); border-color: var(--line); }
+.btn--ghost:hover { color: var(--ink); }
+.btn--sm { padding: 7px 10px; font-size: 11.5px; border-radius: 9px; }
+.btn svg { width: 14px; height: 14px; flex: none; }
+
+/* ── controls ───────────────────────────────────────── */
+.seg {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px;
+  padding: 3px; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--bg2); margin: 0 0 14px;
+}
+.seg-btn {
+  appearance: none; border: 0; background: transparent; color: var(--muted);
+  padding: 8px 6px; border-radius: 8px; cursor: pointer;
+  font-size: 12px; font-weight: 600; letter-spacing: -.01em;
+  transition: background .16s ease, color .16s ease;
+}
+.seg-btn:hover { color: var(--ink); }
+.seg-btn[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); font-weight: 700; }
+
+.field { margin: 0 0 10px; }
+.field label, .lbl {
+  display: block; margin: 0 0 5px;
+  font-size: 11.5px; color: var(--muted); letter-spacing: .01em;
+}
+.field input[type="text"], .field input[type="url"], .field input[type="tel"],
+.field input[type="email"], .field select, .field textarea {
+  width: 100%; appearance: none;
+  border: 1px solid var(--line); border-radius: 9px;
+  background: var(--bg2); color: var(--ink);
+  padding: 9px 11px; font-size: 13px; line-height: 1.4;
+  transition: border-color .18s ease, background .18s ease;
+}
+.field textarea { min-height: 84px; resize: vertical; }
+.field input::placeholder, .field textarea::placeholder { color: var(--muted2); }
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: rgba(127, 215, 232, .55); background: #0c1114; outline: none;
+}
+.field select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%2397a29f' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 11px center; background-size: 11px;
+  padding-right: 30px;
+}
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.chk {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12.5px; color: var(--muted); cursor: pointer;
+  padding: 4px 0;
+}
+.chk input { accent-color: var(--accent); width: 15px; height: 15px; }
+.hint { margin: 8px 0 0; font-size: 11.5px; line-height: 1.55; color: var(--muted2); }
+.hint--warn { color: var(--warn); }
+.hint--err { color: var(--danger); }
+.count-note { font-family: var(--mono); font-size: 10px; letter-spacing: .04em; color: var(--muted2); }
+
+hr.sep { border: 0; border-top: 1px solid var(--line); margin: 16px 0 14px; }
+
+/* colour pickers */
+.color-field { display: flex; align-items: center; gap: 8px; }
+.color-field input[type="color"] {
+  appearance: none; -webkit-appearance: none;
+  width: 38px; height: 34px; padding: 0; cursor: pointer;
+  border: 1px solid var(--line2); border-radius: 8px; background: transparent;
+}
+.color-field input[type="color"]::-webkit-color-swatch-wrapper { padding: 3px; }
+.color-field input[type="color"]::-webkit-color-swatch { border: 0; border-radius: 5px; }
+.color-field input[type="text"] {
+  width: 100%; font-family: var(--mono); font-size: 12px; text-transform: uppercase;
+  border: 1px solid var(--line); border-radius: 9px;
+  background: var(--bg2); color: var(--ink); padding: 9px 10px; letter-spacing: .06em;
+}
+.swap {
+  align-self: end; margin-bottom: 10px;
+  width: 100%; justify-content: center;
+}
+
+input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 4px; border-radius: 999px; background: var(--line2);
+  outline: none; margin: 8px 0 2px;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--accent); border: 0; cursor: pointer;
+  box-shadow: 0 0 0 4px rgba(127, 215, 232, .14);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 16px; height: 16px; border: 0; border-radius: 50%;
+  background: var(--accent); cursor: pointer;
+}
+.slider-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.slider-head .num { font-family: var(--mono); font-size: 11.5px; color: var(--ink); }
+
+/* ── decode ─────────────────────────────────────────── */
+.drop {
+  display: grid; place-items: center; text-align: center;
+  padding: 26px 18px; border-radius: var(--radius);
+  border: 1px dashed var(--line2);
+  background: linear-gradient(180deg, rgba(255, 255, 255, .02), transparent);
+  cursor: pointer; transition: border-color .2s ease, background-color .2s ease;
+}
+.drop:hover, .drop:focus-visible { border-color: rgba(127, 215, 232, .45); background-color: rgba(127, 215, 232, .03); }
+.drop.is-over { border-color: var(--accent); background-color: rgba(127, 215, 232, .07); }
+.drop-ico { color: var(--accent); opacity: .9; margin-bottom: 8px; }
+.drop-ico svg { width: 36px; height: 36px; }
+.drop-title { margin: 0; font-size: 16px; font-weight: 650; letter-spacing: -.01em; }
+.drop-sub { margin: 6px 0 0; font-size: 12.5px; color: var(--muted); }
+.drop-fmt {
+  margin: 10px 0 0; font-family: var(--mono); font-size: 10px;
+  letter-spacing: .06em; color: var(--muted2); text-transform: uppercase;
+}
+.drop-note { margin: 12px 0 0; font-size: 11.5px; color: var(--muted2); max-width: 46ch; line-height: 1.55; }
+
+.preview-thumb {
+  display: flex; gap: 12px; align-items: center;
+  padding: 10px; border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--bg2); margin: 0 0 12px;
+}
+.preview-thumb img {
+  width: 72px; height: 72px; object-fit: contain;
+  border-radius: 8px; background: rgba(255, 255, 255, .04); flex: none;
+}
+.preview-thumb .tmeta { min-width: 0; }
+.preview-thumb .tmeta strong {
+  display: block; font-size: 12.5px; font-weight: 600;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.preview-thumb .tmeta span { font-family: var(--mono); font-size: 10.5px; color: var(--muted2); letter-spacing: .05em; }
+
+.result-out {
+  margin: 0; padding: 11px 12px; min-height: 92px; max-height: 240px; overflow: auto;
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, .28);
+  font-family: var(--mono); font-size: 12px; line-height: 1.6;
+  color: var(--ink); white-space: pre-wrap; word-break: break-word;
+}
+.result-out.is-empty { color: var(--muted2); font-family: var(--font); font-size: 12.5px; }
+.res-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 11px 0 0; }
+.kind-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 1px solid rgba(127, 215, 232, .3); background: rgba(127, 215, 232, .08);
+  color: var(--accent); border-radius: 999px; padding: 3px 9px;
+  font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase;
+}
+.cam-wrap { margin: 14px 0 0; }
+.cam-frame {
+  position: relative; margin: 0 0 10px; border-radius: var(--radius-sm);
+  overflow: hidden; border: 1px solid var(--line); background: #000;
+  max-width: 420px;
+}
+.cam-frame video { display: block; width: 100%; height: auto; }
+.cam-frame::after {
+  content: ""; position: absolute; inset: 14%; pointer-events: none;
+  border: 2px solid rgba(127, 215, 232, .55); border-radius: 12px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, .18);
+}
+
+/* ── notes / faq ────────────────────────────────────── */
+.notes, .faq { margin: 34px 0 0; display: grid; grid-template-columns: 1fr; gap: 16px; }
+.note { border-top: 1px solid var(--line); padding-top: 12px; }
+.note h3 {
+  margin: 0 0 6px; font-size: 13.5px; font-weight: 650;
+  letter-spacing: -.01em; display: flex; gap: 8px; align-items: baseline;
+}
+.note h3 span { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: .1em; }
+.note p { margin: 0; font-size: 12.5px; line-height: 1.65; color: var(--muted2); }
+
+.sec-title {
+  margin: 34px 0 0; padding-bottom: 10px; border-bottom: 1px solid var(--line);
+  font-size: 11px; font-weight: 700; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--muted);
+}
+.faq-item { border-top: 1px solid var(--line); padding-top: 12px; }
+.faq-item:first-of-type { border-top: 0; padding-top: 0; }
+.faq-item h3 { margin: 0 0 5px; font-size: 13.5px; font-weight: 650; letter-spacing: -.01em; }
+.faq-item p { margin: 0; font-size: 12.5px; line-height: 1.65; color: var(--muted2); }
+
+.caveat {
+  margin: 22px 0 0; padding: 12px 14px;
+  border: 1px solid rgba(255, 192, 107, .25); border-radius: var(--radius-sm);
+  background: rgba(255, 192, 107, .05);
+  font-size: 12px; line-height: 1.65; color: var(--muted);
+}
+.caveat strong { color: var(--warn); font-weight: 600; }
+
+.foot {
+  display: flex; flex-wrap: wrap; gap: 8px 16px;
+  align-items: center; justify-content: space-between;
+  margin-top: 34px; padding-top: 16px; border-top: 1px solid var(--line);
+  font-family: var(--mono); font-size: 10px; letter-spacing: .06em;
+  color: var(--muted2); text-transform: uppercase;
+}
+.foot .net b { color: var(--accent); font-weight: 700; }
+.foot a { color: var(--muted2); text-decoration: none; border-bottom: 1px solid transparent; }
+.foot a:hover { color: var(--ink); border-bottom-color: var(--line2); }
+.lic { margin: 10px 0 0; font-size: 10.5px; line-height: 1.6; color: var(--muted2); }
+.lic a { color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--line); }
+
+@media (min-width: 700px) {
+  .wrap { padding: 0 24px 48px; }
+  .hero { padding: 40px 0 26px; }
+  .panel { padding: 20px; }
+  .notes { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  #qrCanvas { max-width: 340px; }
+  .drop { padding: 34px 22px; }
+}
+@media (min-width: 940px) {
+  .top { padding-top: 24px; }
+  .grid { grid-template-columns: 360px minmax(0, 1fr); gap: 18px; }
+  .grid--dec { grid-template-columns: minmax(0, 1fr) 380px; }
+  .sticky { position: sticky; top: 18px; }
+}
+@media (max-width: 420px) {
+  .seg-btn { font-size: 11px; padding: 8px 4px; }
+  .brand-txt { display: none; }
+  .row2 { grid-template-columns: 1fr; }
+  .dl-row { flex-direction: column; }
+}
+@media (hover: none) {
+  .btn:active { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    transition-duration: .001ms !important;
+  }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <a class="brand" href="/portfolio/" aria-label="Kim Yihyung — portfolio" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="View in Korean" aria-label="View in Korean">
+        <span class="lt on" data-lt="en">EN</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="ko">KO</span>
+      </button>
+      <a class="back" href="../" data-i18n="backTools">← Tools</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="badge-row">
+      <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillLive">0 bytes uploaded</b></span>
+      <span class="pill" data-i18n-html="pillLocal">In-browser <b>100% local</b></span>
+      <span class="pill" data-i18n-html="pillOut"><b>PNG · SVG</b> out · <b>image</b> in</span>
+    </div>
+    <h1 data-i18n-html="h1">Make a QR code.<br><span class="dim">Read one back.</span></h1>
+    <p class="lede" data-i18n="lede">A generator and a reader in one page. Type a link, a note, a Wi-Fi network or a contact card and take it away as a PNG or an SVG — or drop a photo of a code and read the text back out of it. Both directions run inside this tab: no upload, no account, no library pulled from a CDN.</p>
+  </section>
+
+  <div class="tabs" role="tablist" aria-label="Mode" data-i18n-aria="tabAria">
+    <button class="tab" id="tabGen" type="button" role="tab" aria-selected="true" aria-controls="panelGen" tabindex="0">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.4"/><rect x="14" y="3" width="7" height="7" rx="1.4"/><rect x="3" y="14" width="7" height="7" rx="1.4"/><path d="M14 14h3v3h-3zM20 20h1M20 14h1M14 20h1"/></svg>
+      <span data-i18n="tabGen">Generate</span>
+    </button>
+    <button class="tab" id="tabDec" type="button" role="tab" aria-selected="false" aria-controls="panelDec" tabindex="-1">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 8V5h3M20 8V5h-3M4 16v3h3M20 16v3h-3"/><path d="M4 12h16" opacity=".6"/></svg>
+      <span data-i18n="tabDec">Decode</span>
+    </button>
+  </div>
+
+  <!-- ══════════════ GENERATE ══════════════ -->
+  <section id="panelGen" role="tabpanel" aria-labelledby="tabGen" tabindex="0">
+    <div class="grid">
+
+      <div class="panel sticky">
+        <h2 class="ph"><span data-i18n="prevTitle">Preview</span><span class="count-note" id="prevKind">—</span></h2>
+        <div class="stage">
+          <canvas id="qrCanvas" width="300" height="300" role="img" aria-label="QR code preview" data-i18n-aria="prevAria"></canvas>
+          <p class="stage-empty" id="stageEmpty" data-i18n="emptyState">Type something and the code appears here.</p>
+        </div>
+        <p class="meta-line" id="metaLine"></p>
+        <pre class="payload" id="payloadOut" hidden></pre>
+        <p class="hint hint--warn" id="genWarn" hidden></p>
+        <div class="dl-row">
+          <button class="btn btn--primary" id="dlPng" type="button" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 4v11m0 0 4-4m-4 4-4-4M5 19h14"/></svg>
+            <span data-i18n="dlPng">PNG</span>
+          </button>
+          <button class="btn" id="dlSvg" type="button" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 4v11m0 0 4-4m-4 4-4-4M5 19h14"/></svg>
+            <span data-i18n="dlSvg">SVG</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="seg" role="group" aria-label="QR content type" data-i18n-aria="typeAria">
+          <button class="seg-btn" type="button" data-type="url" aria-pressed="true" data-i18n="tUrl">URL</button>
+          <button class="seg-btn" type="button" data-type="text" aria-pressed="false" data-i18n="tText">Text</button>
+          <button class="seg-btn" type="button" data-type="wifi" aria-pressed="false" data-i18n="tWifi">Wi-Fi</button>
+          <button class="seg-btn" type="button" data-type="card" aria-pressed="false" data-i18n="tCard">Contact</button>
+        </div>
+
+        <div data-fields="url">
+          <div class="field">
+            <label for="inUrl" data-i18n="urlLabel">Link</label>
+            <input type="text" id="inUrl" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://example.com" value="">
+          </div>
+          <p class="hint" data-i18n="urlHint">A bare domain gets https:// in front of it. The exact encoded text is shown under the preview.</p>
+        </div>
+
+        <div data-fields="text" hidden>
+          <div class="field">
+            <label for="inText" data-i18n="textLabel">Text</label>
+            <textarea id="inText" spellcheck="false" placeholder="Any text — a note, a code, an address"></textarea>
+          </div>
+          <p class="hint"><span class="count-note" id="textCount">0 / 2900 bytes</span></p>
+        </div>
+
+        <div data-fields="wifi" hidden>
+          <div class="field">
+            <label for="inSsid" data-i18n="ssidLabel">Network name (SSID)</label>
+            <input type="text" id="inSsid" autocomplete="off" spellcheck="false" placeholder="Cafe_Guest">
+          </div>
+          <div class="field">
+            <label for="inPass" data-i18n="passLabel">Password</label>
+            <input type="text" id="inPass" autocomplete="off" spellcheck="false" placeholder="••••••••">
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label for="inSec" data-i18n="secLabel">Security</label>
+              <select id="inSec">
+                <option value="WPA" selected data-i18n="secWpa">WPA / WPA2 / WPA3</option>
+                <option value="WEP" data-i18n="secWep">WEP</option>
+                <option value="nopass" data-i18n="secNone">None (open)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="chk" for="inHidden" style="margin-top:26px">
+                <input type="checkbox" id="inHidden">
+                <span data-i18n="hiddenLabel">Hidden network</span>
+              </label>
+            </div>
+          </div>
+          <p class="hint hint--warn" data-i18n="wifiWarn">The password is inside the code in plain text, as every Wi-Fi QR is. Treat the printed code like the password.</p>
+        </div>
+
+        <div data-fields="card" hidden>
+          <div class="row2">
+            <div class="field">
+              <label for="inName" data-i18n="nameLabel">Name</label>
+              <input type="text" id="inName" autocomplete="off" placeholder="Kim Yihyung">
+            </div>
+            <div class="field">
+              <label for="inPhone" data-i18n="phoneLabel">Phone</label>
+              <input type="tel" id="inPhone" autocomplete="off" placeholder="+82 10 0000 0000">
+            </div>
+          </div>
+          <div class="field">
+            <label for="inEmail" data-i18n="emailLabel">Email</label>
+            <input type="email" id="inEmail" autocomplete="off" placeholder="name@example.com">
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label for="inOrg" data-i18n="orgLabel">Organisation</label>
+              <input type="text" id="inOrg" autocomplete="off">
+            </div>
+            <div class="field">
+              <label for="inCardUrl" data-i18n="cardUrlLabel">Website</label>
+              <input type="text" id="inCardUrl" autocomplete="off" placeholder="https://">
+            </div>
+          </div>
+        </div>
+
+        <hr class="sep">
+
+        <h2 class="ph"><span data-i18n="styleTitle">Style &amp; output</span><span class="count-note" id="styleNote">ISO/IEC 18004</span></h2>
+
+        <div class="row2">
+          <div class="field">
+            <span class="lbl" data-i18n="fgLabel">Foreground</span>
+            <div class="color-field">
+              <input type="color" id="fgColor" value="#0a0b0d" aria-label="Foreground colour" data-i18n-aria="fgAria">
+              <input type="text" id="fgHex" value="#0A0B0D" maxlength="7" spellcheck="false" aria-label="Foreground hex" data-i18n-aria="fgAria">
+            </div>
+          </div>
+          <div class="field">
+            <span class="lbl" data-i18n="bgLabel">Background</span>
+            <div class="color-field">
+              <input type="color" id="bgColor" value="#f7f5ef" aria-label="Background colour" data-i18n-aria="bgAria">
+              <input type="text" id="bgHex" value="#F7F5EF" maxlength="7" spellcheck="false" aria-label="Background hex" data-i18n-aria="bgAria">
+            </div>
+          </div>
+        </div>
+        <button class="btn btn--ghost btn--sm swap" id="swapColors" type="button" data-i18n="swapColors">Swap colours</button>
+
+        <div class="field" style="margin-top:6px">
+          <div class="slider-head">
+            <span class="lbl" style="margin:0" data-i18n="marginLabel">Quiet zone</span>
+            <span class="num" id="marginOut">4</span>
+          </div>
+          <input type="range" id="marginRange" min="0" max="8" step="1" value="4" aria-label="Quiet zone modules" data-i18n-aria="marginAria">
+          <p class="hint" data-i18n="marginHint">Four modules is the standard border scanners expect; below two is risky.</p>
+        </div>
+
+        <div class="row2">
+          <div class="field">
+            <label for="ecSel" data-i18n="ecLabel">Error correction</label>
+            <select id="ecSel">
+              <option value="L">L — 7%</option>
+              <option value="M" selected>M — 15%</option>
+              <option value="Q">Q — 25%</option>
+              <option value="H">H — 30%</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="sizeSel" data-i18n="sizeLabel">PNG size</label>
+            <select id="sizeSel">
+              <option value="512">512 px</option>
+              <option value="1024" selected>1024 px</option>
+              <option value="2048">2048 px</option>
+            </select>
+          </div>
+        </div>
+        <p class="hint" data-i18n="ecHint">Higher correction survives scratches and glare but fits fewer characters. SVG scales without limit.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ DECODE ══════════════ -->
+  <section id="panelDec" role="tabpanel" aria-labelledby="tabDec" tabindex="0" hidden>
+    <div class="grid grid--dec">
+
+      <div class="panel">
+        <h2 class="ph"><span data-i18n="decInTitle">Image</span><span class="count-note" id="decFileNote">0 B</span></h2>
+
+        <div class="drop" id="dropZone" role="button" tabindex="0" aria-label="Choose a QR image or drop it here" data-i18n-aria="dropAria">
+          <div class="drop-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1.4"/><rect x="14" y="3" width="7" height="7" rx="1.4"/><rect x="3" y="14" width="7" height="7" rx="1.4"/><path d="M14 14h3v3h-3zM20 17h1M17 20h1M14 20h1"/></svg>
+          </div>
+          <p class="drop-title" data-i18n="dropTitle">Drop a QR image here</p>
+          <p class="drop-sub" data-i18n="dropSub">or click to choose · or paste with ⌘V / Ctrl+V</p>
+          <p class="drop-fmt" data-i18n="dropFmt">PNG · JPG · WebP · GIF · BMP · AVIF — whatever this browser can open</p>
+          <p class="drop-note" data-i18n="dropNote">The file is read from your disk into canvas pixels in this tab. Nothing is copied out.</p>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" class="sr-only" tabindex="-1">
+
+        <div class="cam-wrap">
+          <div class="cam-frame" id="camFrame" hidden>
+            <video id="camVideo" playsinline muted autoplay aria-label="Camera viewfinder" data-i18n-aria="camAria"></video>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px">
+            <button class="btn btn--sm" id="camStart" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h1L9 4h6l1.5 2h1A2.5 2.5 0 0 1 20 8.5v8A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5z"/><circle cx="12" cy="12.5" r="3.2"/></svg>
+              <span data-i18n="camStart">Scan with camera</span>
+            </button>
+            <button class="btn btn--ghost btn--sm" id="camStop" type="button" hidden data-i18n="camStop">Stop camera</button>
+          </div>
+          <p class="hint" id="camHint" data-i18n="camNote">Camera frames are decoded in this tab and never leave the device.</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="ph"><span data-i18n="resTitle">Result</span><span class="kind-chip" id="kindChip" hidden>—</span></h2>
+
+        <div class="preview-thumb" id="thumbWrap" hidden>
+          <img id="thumb" alt="Decoded image preview" data-i18n-alt="thumbAlt">
+          <div class="tmeta">
+            <strong id="thumbName">—</strong>
+            <span id="thumbMeta">—</span>
+          </div>
+        </div>
+
+        <p class="result-out is-empty" id="resOut" aria-live="polite" data-i18n="resEmpty">Nothing decoded yet.</p>
+
+        <div class="res-actions">
+          <button class="btn btn--sm" id="copyRes" type="button" disabled data-i18n="copy">Copy</button>
+          <button class="btn btn--sm" id="openRes" type="button" disabled data-i18n="openLink">Open link</button>
+          <button class="btn btn--ghost btn--sm" id="clearRes" type="button" hidden data-i18n="clear">Clear</button>
+        </div>
+        <p class="hint" id="decMeta" hidden></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="notes" aria-label="How it works" data-i18n-aria="notesAria">
+    <div class="note">
+      <h3 data-i18n-html="note1h"><span>01</span> Opened, never uploaded</h3>
+      <p data-i18n="note1d">The image you drop is turned into canvas pixels in memory, decoded, and dropped again. There is no endpoint for it to be sent to, and the counter at the bottom of this page reports every request this page makes.</p>
+    </div>
+    <div class="note">
+      <h3 data-i18n-html="note2h"><span>02</span> A real QR code</h3>
+      <p data-i18n="note2d">Output follows ISO/IEC 18004: byte mode, the smallest version from 1 to 40 that fits, automatic mask selection and error correction from L to H. The quiet zone and the two colours are printed into the file itself.</p>
+    </div>
+    <div class="note">
+      <h3 data-i18n-html="note3h"><span>03</span> A decoder that stays local</h3>
+      <p data-i18n="note3d">Decoding uses jsQR, served from this site with the page rather than from a CDN, over pixels from your own file. Several scales and both normal and inverted pixel grids are tried before giving up.</p>
+    </div>
+  </section>
+
+  <h2 class="sec-title" data-i18n="faqTitle">Questions</h2>
+  <div class="faq">
+    <div class="faq-item">
+      <h3 data-i18n="q1">Does the code or the image leave my device?</h3>
+      <p data-i18n="a1">No. Both directions are JavaScript in this tab. The footer counts this page's network requests, so you can see that nothing outside this site is contacted.</p>
+    </div>
+    <div class="faq-item">
+      <h3 data-i18n="q2">What settings matter when I print it?</h3>
+      <p data-i18n="a2">Keep the quiet zone at four modules or more, keep the foreground darker than the background, and use M for a balanced code or Q/H where the print may smudge or be partly covered. Under about 2 cm of printed width, phone cameras start to struggle.</p>
+    </div>
+    <div class="faq-item">
+      <h3 data-i18n="q3">Is a Wi-Fi code safe to hand out?</h3>
+      <p data-i18n="a3">The code carries the password in plain text, because that is how a phone joins without typing it. Anyone who scans it gets the network — hand it out the way you would hand out the password, and change it if the code travels too far.</p>
+    </div>
+    <div class="faq-item">
+      <h3 data-i18n="q4">Why does an image sometimes fail to read?</h3>
+      <p data-i18n="a4">Small, cropped, blurred, angled or glared photos are the usual causes. The decoder tries several sizes and inverted pixels too, but a sharper original — whole code in frame, in focus — is what makes it work.</p>
+    </div>
+  </div>
+
+  <p class="caveat" data-i18n-html="caveat"><strong>Note.</strong> A QR code is a picture of data, not a link that can be checked: scan a code from someone else before you trust what it opens. When in doubt about a printed code, print a test copy and read it with your own phone first.</p>
+
+  <p class="lic" data-i18n-html="lic">Encoder: <a href="https://github.com/kazuhikoarase/qrcode-generator" target="_blank" rel="noopener">QR Code Generator for JavaScript</a> (MIT) · decoder: <a href="https://github.com/cozmo/jsQR" target="_blank" rel="noopener">jsQR</a> (Apache-2.0) — both served from this site with the page, never from a CDN. “QR Code” is a registered trademark of DENSO WAVE INCORPORATED.</p>
+
+  <footer class="foot">
+    <span data-i18n="foot1">0 uploads · 0 servers · 0 cookies</span>
+    <span class="net"><span data-i18n="netLabel">external requests made by this page</span>: <b id="netCount">0</b></span>
+    <span><a href="/portfolio/" data-i18n="back">← Portfolio</a> · <a href="../" data-i18n="footTools">All tools</a></span>
+  </footer>
+</div>
+
+<script src="lib/qrcode.js"></script>
+<script src="lib/jsQR.js"></script>
+<script>
+/* Fault trap: keeps a list of runtime errors so a broken step can be traced instead of
+   freezing silently. It costs nothing when the page runs cleanly. */
+window.__qfFaults = [];
+window.addEventListener('error', function (e) {
+  try { window.__qfFaults.push(String((e && (e.message || e.type)) || 'error')); } catch (err) {}
+});
+window.addEventListener('unhandledrejection', function (e) {
+  try { window.__qfFaults.push('rejection: ' + String(e && e.reason)); } catch (err) {}
+});
+</script>
+<script>
+(function () {
+  'use strict';
+
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
+  function bytesOf(s) { try { return new TextEncoder().encode(s).length; } catch (e) { return s.length; } }
+
+  /* ─────────────────────────────── 언어 ─────────────────────────────── */
+  /* Only the shared language key is written to storage: no input, image or
+     payload of the user is ever persisted. */
+  var LANG_KEY = 'kyh.lang';
+  var MAX_BYTES = 2900;   /* byte-mode ceiling at version 40, level L */
+
+  var I18N = {
+    en: {
+      docTitle: 'QRForge — Zero-Upload QR Code Generator & Image Decoder | Kim Yihyung',
+      metaDesc: 'Generate QR codes for links, text, Wi-Fi and contacts with custom colours, quiet zone and error correction, download as PNG or SVG, and read any QR image or camera frame back — all in your browser with zero uploads and zero external requests.',
+      ogTitle: 'QRForge — Zero-Upload QR Code Generator & Decoder',
+      ogDesc: 'Make a QR code — link, text, Wi-Fi, contact — in custom colours, then read one back from an image or the camera. 0 bytes uploaded, 0 external requests.',
+
+      brandAria: 'Kim Yihyung — portfolio',
+      backTools: '← Tools',
+      toggleTo: 'View in Korean',
+      tabAria: 'Mode',
+      tabGen: 'Generate',
+      tabDec: 'Decode',
+
+      pillLive: '0 bytes uploaded',
+      pillLocal: 'In-browser <b>100% local</b>',
+      pillOut: '<b>PNG · SVG</b> out · <b>image</b> in',
+      h1: 'Make a QR code.<br><span class="dim">Read one back.</span>',
+      lede: 'A generator and a reader in one page. Type a link, a note, a Wi-Fi network or a contact card and take it away as a PNG or an SVG — or drop a photo of a code and read the text back out of it. Both directions run inside this tab: no upload, no account, no library pulled from a CDN.',
+
+      prevTitle: 'Preview',
+      prevAria: 'QR code preview',
+      emptyState: 'Type something and the code appears here.',
+      dlPng: 'PNG',
+      dlSvg: 'SVG',
+      tooLong: 'Too much data for a QR code — {n} bytes is past the {max}-byte ceiling. Shorten it or drop the error correction to L.',
+      lowContrast: 'Low contrast: a scanner may refuse this. A dark foreground on a light background reads best.',
+      inverted: 'Background is darker than the foreground — an inverted code. Some scanner apps handle it, many do not.',
+      metaPat: '{bytes} bytes · v{ver} · {mods}×{mods} modules · EC {ec}',
+      metaEmpty: 'waiting for input',
+
+      typeAria: 'QR content type',
+      tUrl: 'URL', tText: 'Text', tWifi: 'Wi-Fi', tCard: 'Contact',
+      urlLabel: 'Link',
+      urlHint: 'A bare domain gets https:// in front of it. The exact encoded text is shown under the preview.',
+      textLabel: 'Text',
+      ssidLabel: 'Network name (SSID)',
+      passLabel: 'Password',
+      secLabel: 'Security',
+      secWpa: 'WPA / WPA2 / WPA3',
+      secWep: 'WEP',
+      secNone: 'None (open)',
+      hiddenLabel: 'Hidden network',
+      wifiWarn: 'The password is inside the code in plain text, as every Wi-Fi QR is. Treat the printed code like the password.',
+      nameLabel: 'Name',
+      phoneLabel: 'Phone',
+      emailLabel: 'Email',
+      orgLabel: 'Organisation',
+      cardUrlLabel: 'Website',
+      wifiNeedSsid: 'Enter a network name to make a Wi-Fi code.',
+      cardNeedName: 'Enter a name to make a contact code.',
+
+      styleTitle: 'Style & output',
+      fgLabel: 'Foreground',
+      bgLabel: 'Background',
+      fgAria: 'Foreground colour',
+      bgAria: 'Background colour',
+      swapColors: 'Swap colours',
+      marginLabel: 'Quiet zone',
+      marginAria: 'Quiet zone in modules',
+      marginHint: 'Four modules is the standard border scanners expect; below two is risky.',
+      marginValue: '{n} modules',
+      marginValueOne: '1 module',
+      ecLabel: 'Error correction',
+      ecHint: 'Higher correction survives scratches and glare but fits fewer characters. SVG scales without limit.',
+      sizeLabel: 'PNG size',
+
+      decInTitle: 'Image',
+      dropAria: 'Choose a QR image or drop it here',
+      dropTitle: 'Drop a QR image here',
+      dropSub: 'or click to choose · or paste with ⌘V / Ctrl+V',
+      dropFmt: 'PNG · JPG · WebP · GIF · BMP · AVIF — whatever this browser can open',
+      dropNote: 'The file is read from your disk into canvas pixels in this tab. Nothing is copied out.',
+      camAria: 'Camera viewfinder',
+      camStart: 'Scan with camera',
+      camStop: 'Stop camera',
+      camNote: 'Camera frames are decoded in this tab and never leave the device.',
+      camScanning: 'Point the camera at a code — it reads as soon as one is in frame.',
+      camDenied: 'Camera access was refused. Reading an image file still works.',
+      camUnsupported: 'This browser exposes no camera API here — drop an image instead.',
+      camFailed: 'The camera could not start ({why}). An image file still works.',
+      resTitle: 'Result',
+      resEmpty: 'Nothing decoded yet.',
+      thumbAlt: 'Decoded image preview',
+      copy: 'Copy',
+      copied: 'Copied',
+      openLink: 'Open link',
+      clear: 'Clear',
+      copyBlocked: 'The browser refused clipboard access — select the text and copy it by hand.',
+      decoding: 'Reading the image…',
+      notFound: 'No QR code found. Try a sharper original, or one where the whole code is in frame.',
+      notImage: 'That file is not an image this browser can open.',
+      decMeta: '{w}×{h} px · {n} pass(es) · {t} ms',
+      kindUrl: 'Link', kindWifi: 'Wi-Fi', kindCard: 'Contact',
+      kindMail: 'Email', kindTel: 'Phone', kindGeo: 'Place', kindText: 'Text',
+
+      notesAria: 'How it works',
+      note1h: '<span>01</span> Opened, never uploaded',
+      note1d: 'The image you drop is turned into canvas pixels in memory, decoded, and dropped again. There is no endpoint for it to be sent to, and the counter at the bottom of this page reports every request this page makes.',
+      note2h: '<span>02</span> A real QR code',
+      note2d: 'Output follows ISO/IEC 18004: byte mode, the smallest version from 1 to 40 that fits, automatic mask selection and error correction from L to H. The quiet zone and the two colours are printed into the file itself.',
+      note3h: '<span>03</span> A decoder that stays local',
+      note3d: 'Decoding uses jsQR, served from this site with the page rather than from a CDN, over pixels from your own file. Several scales and both normal and inverted pixel grids are tried before giving up.',
+
+      faqTitle: 'Questions',
+      q1: 'Does the code or the image leave my device?',
+      a1: 'No. Both directions are JavaScript in this tab. The footer counts this page\'s network requests, so you can see that nothing outside this site is contacted.',
+      q2: 'What settings matter when I print it?',
+      a2: 'Keep the quiet zone at four modules or more, keep the foreground darker than the background, and use M for a balanced code or Q/H where the print may smudge or be partly covered. Under about 2 cm of printed width, phone cameras start to struggle.',
+      q3: 'Is a Wi-Fi code safe to hand out?',
+      a3: 'The code carries the password in plain text, because that is how a phone joins without typing it. Anyone who scans it gets the network — hand it out the way you would hand out the password, and change it if the code travels too far.',
+      q4: 'Why does an image sometimes fail to read?',
+      a4: 'Small, cropped, blurred, angled or glared photos are the usual causes. The decoder tries several sizes and inverted pixels too, but a sharper original — whole code in frame, in focus — is what makes it work.',
+
+      caveat: '<strong>Note.</strong> A QR code is a picture of data, not a link that can be checked: scan a code from someone else before you trust what it opens. When in doubt about a printed code, print a test copy and read it with your own phone first.',
+      lic: 'Encoder: <a href="https://github.com/kazuhikoarase/qrcode-generator" target="_blank" rel="noopener">QR Code Generator for JavaScript</a> (MIT) · decoder: <a href="https://github.com/cozmo/jsQR" target="_blank" rel="noopener">jsQR</a> (Apache-2.0) — both served from this site with the page, never from a CDN. “QR Code” is a registered trademark of DENSO WAVE INCORPORATED.',
+
+      foot1: '0 uploads · 0 servers · 0 cookies',
+      netLabel: 'external requests made by this page',
+      back: '← Portfolio',
+      footTools: 'All tools'
+    },
+    ko: {
+      docTitle: 'QRForge — 업로드 없는 QR 코드 생성기·이미지 판독기 | Kim Yihyung',
+      metaDesc: '링크·텍스트·Wi-Fi·연락처 QR을 색상과 여백, 오류 정정 단계까지 조절해 만들고 PNG·SVG로 내려받으며, 이미지나 카메라 화면의 QR을 그 자리에서 읽어 냅니다. 업로드도 외부 요청도 없이 브라우저 안에서 끝납니다.',
+      ogTitle: 'QRForge — 업로드 없는 QR 생성기·판독기',
+      ogDesc: '링크·텍스트·Wi-Fi·연락처 QR을 원하는 색으로 만들고, 이미지나 카메라로 다시 읽어 냅니다. 업로드 0바이트, 외부 요청 0건.',
+
+      brandAria: 'Kim Yihyung — 포트폴리오',
+      backTools: '← 도구',
+      toggleTo: 'View in English',
+      tabAria: '모드',
+      tabGen: '생성',
+      tabDec: '해독',
+
+      pillLive: '업로드 0바이트',
+      pillLocal: '브라우저 안에서 <b>100% 로컬</b>',
+      pillOut: '<b>PNG · SVG</b> 내보내기 · <b>이미지</b> 읽기',
+      h1: 'QR 코드를 만들고,<br><span class="dim">다시 읽어 냅니다.</span>',
+      lede: '한 페이지에 생성기와 판독기를 함께 두었습니다. 링크·메모·Wi-Fi·연락처를 넣어 PNG나 SVG로 가져가고, QR 사진을 놓으면 안의 내용을 다시 읽어 냅니다. 양쪽 모두 이 탭 안에서 실행됩니다. 업로드도, 계정도, CDN에서 받아오는 라이브러리도 없습니다.',
+
+      prevTitle: '미리보기',
+      prevAria: 'QR 코드 미리보기',
+      emptyState: '내용을 입력하면 여기에 코드가 나타납니다.',
+      dlPng: 'PNG',
+      dlSvg: 'SVG',
+      tooLong: 'QR 코드에 담기에는 내용이 너무 많습니다 — {n}바이트로 한도 {max}바이트를 넘었습니다. 내용을 줄이거나 오류 정정을 L로 낮춰 주세요.',
+      lowContrast: '대비가 낮습니다. 스캐너가 읽지 못할 수 있습니다. 밝은 배경에 어두운 전경이 가장 잘 읽힙니다.',
+      inverted: '배경이 전경보다 어둡습니다 — 반전된 코드입니다. 읽어 주는 앱도 있지만 대부분은 실패합니다.',
+      metaPat: '{bytes}바이트 · v{ver} · {mods}×{mods} 모듈 · 정정 {ec}',
+      metaEmpty: '입력 대기',
+
+      typeAria: 'QR 내용 종류',
+      tUrl: 'URL', tText: '텍스트', tWifi: 'Wi-Fi', tCard: '연락처',
+      urlLabel: '주소',
+      urlHint: '도메인만 적으면 앞에 https://를 붙입니다. 실제로 인코딩되는 문자열은 미리보기 아래에 그대로 표시됩니다.',
+      textLabel: '텍스트',
+      ssidLabel: '네트워크 이름(SSID)',
+      passLabel: '비밀번호',
+      secLabel: '보안 방식',
+      secWpa: 'WPA / WPA2 / WPA3',
+      secWep: 'WEP',
+      secNone: '없음(개방)',
+      hiddenLabel: '숨겨진 네트워크',
+      wifiWarn: 'Wi-Fi QR에는 비밀번호가 그대로 들어갑니다. 휴대폰이 입력 없이 접속하는 방식이 그렇기 때문입니다. 찍은 코드는 비밀번호처럼 다루세요.',
+      nameLabel: '이름',
+      phoneLabel: '전화',
+      emailLabel: '이메일',
+      orgLabel: '소속',
+      cardUrlLabel: '웹사이트',
+      wifiNeedSsid: 'Wi-Fi 코드를 만들려면 네트워크 이름이 필요합니다.',
+      cardNeedName: '연락처 코드를 만들려면 이름이 필요합니다.',
+
+      styleTitle: '스타일 · 출력',
+      fgLabel: '전경색',
+      bgLabel: '배경색',
+      fgAria: '전경색',
+      bgAria: '배경색',
+      swapColors: '색 맞바꾸기',
+      marginLabel: '여백',
+      marginAria: '여백(모듈)',
+      marginHint: '스캐너가 기대하는 표준 여백은 4모듈입니다. 2모듈 아래로는 위험합니다.',
+      marginValue: '{n}칸',
+      marginValueOne: '1칸',
+      ecLabel: '오류 정정',
+      ecHint: '높을수록 긁힘과 반사에 강하지만 담을 수 있는 양이 줄어듭니다. SVG는 크기 제한이 없습니다.',
+      sizeLabel: 'PNG 크기',
+
+      decInTitle: '이미지',
+      dropAria: 'QR 이미지를 고르거나 여기에 놓으세요',
+      dropTitle: 'QR 이미지를 여기에 놓으세요',
+      dropSub: '또는 눌러서 고르기 · ⌘V / Ctrl+V로 붙여넣기',
+      dropFmt: 'PNG · JPG · WebP · GIF · BMP · AVIF — 이 브라우저가 열 수 있는 형식',
+      dropNote: '파일은 디스크에서 이 탭의 캔버스 픽셀로 읽힙니다. 어디로도 복사되지 않습니다.',
+      camAria: '카메라 화면',
+      camStart: '카메라로 스캔',
+      camStop: '카메라 끄기',
+      camNote: '카메라 프레임은 이 탭에서 해독되고 기기를 벗어나지 않습니다.',
+      camScanning: '카메라를 코드 쪽으로 향하세요. 화면에 들어오면 바로 읽습니다.',
+      camDenied: '카메라 권한이 거부되었습니다. 이미지 파일 해독은 그대로 쓸 수 있습니다.',
+      camUnsupported: '이 브라우저에서는 카메라를 쓸 수 없습니다. 이미지를 놓아 주세요.',
+      camFailed: '카메라를 시작하지 못했습니다({why}). 이미지 파일은 그대로 됩니다.',
+      resTitle: '결과',
+      resEmpty: '아직 해독한 결과가 없습니다.',
+      thumbAlt: '해독한 이미지 미리보기',
+      copy: '복사',
+      copied: '복사됨',
+      openLink: '링크 열기',
+      clear: '지우기',
+      copyBlocked: '브라우저가 클립보드 접근을 막았습니다. 텍스트를 직접 선택해 복사해 주세요.',
+      decoding: '이미지를 읽는 중…',
+      notFound: 'QR 코드를 찾지 못했습니다. 더 선명한 원본이나 코드 전체가 담긴 사진으로 다시 시도해 주세요.',
+      notImage: '이 브라우저가 열 수 없는 파일입니다.',
+      decMeta: '{w}×{h}px · {n}회 시도 · {t}ms',
+      kindUrl: '링크', kindWifi: 'Wi-Fi', kindCard: '연락처',
+      kindMail: '메일', kindTel: '전화', kindGeo: '위치', kindText: '텍스트',
+
+      notesAria: '동작 방식',
+      note1h: '<span>01</span> 열기만 하고, 업로드는 없음',
+      note1d: '놓은 이미지는 메모리에서 캔버스 픽셀로 바뀌어 해독된 뒤 버려집니다. 보낼 곳이 아예 없고, 페이지 맨 아래 카운터가 이 페이지가 실제로 낸 요청을 보여 줍니다.',
+      note2h: '<span>02</span> 진짜 QR 코드',
+      note2d: '출력은 ISO/IEC 18004를 따릅니다. 바이트 모드, 1~40 중 내용에 맞는 가장 작은 버전, 자동 마스크 선택, L~H 오류 정정. 여백과 두 색은 파일 자체에 새겨집니다.',
+      note3h: '<span>03</span> 판독기도 로컬에서',
+      note3d: '해독은 CDN이 아니라 이 사이트가 함께 내려 주는 jsQR이 맡고, 입력은 내 파일에서 나온 픽셀입니다. 여러 배율과 정상·반전 픽셀을 차례로 시도한 뒤에야 포기합니다.',
+
+      faqTitle: '자주 묻는 것',
+      q1: '코드나 이미지가 기기를 떠나나요?',
+      a1: '아니요. 양쪽 모두 이 탭의 자바스크립트로만 돌아갑니다. 페이지 아래 카운터가 이 페이지의 네트워크 요청을 세므로, 이 사이트 밖과 통신이 없다는 것을 직접 확인할 수 있습니다.',
+      q2: '인쇄할 때 어떤 설정이 중요한가요?',
+      a2: '여백은 4모듈 이상, 전경은 배경보다 어둡게, 그리고 무난하게는 M, 번지거나 일부가 가려질 자리라면 Q나 H를 쓰세요. 인쇄 폭이 2cm 아래로 내려가면 휴대폰 카메라가 힘들어합니다.',
+      q3: 'Wi-Fi 코드를 나눠 줘도 괜찮나요?',
+      a3: 'Wi-Fi QR에는 비밀번호가 그대로 담깁니다. 휴대폰이 입력 없이 접속하는 방식이 그렇기 때문입니다. 찍는 사람은 누구나 네트워크를 얻으니, 비밀번호를 건네는 것과 같은 기준으로 다루고 코드가 퍼졌다면 비밀번호를 바꾸세요.',
+      q4: '이미지가 안 읽히는 이유는 뭔가요?',
+      a4: '작거나, 잘렸거나, 흐리거나, 비스듬하거나, 빛이 반사된 사진이 흔한 원인입니다. 판독기는 여러 크기와 반전 픽셀까지 시도하지만, 코드 전체가 초점 안에 담긴 선명한 원본이 결국 답입니다.',
+
+      caveat: '<strong>참고.</strong> QR 코드는 검사할 수 있는 링크가 아니라 데이터를 그린 그림입니다. 남이 준 코드는 무엇이 열리는지 확인한 뒤에 믿으세요. 인쇄물이 의심되면 시험 인쇄를 해서 내 휴대폰으로 먼저 읽어 보세요.',
+      lic: '인코더: <a href="https://github.com/kazuhikoarase/qrcode-generator" target="_blank" rel="noopener">QR Code Generator for JavaScript</a>(MIT) · 디코더: <a href="https://github.com/cozmo/jsQR" target="_blank" rel="noopener">jsQR</a>(Apache-2.0) — 둘 다 CDN이 아니라 이 사이트가 페이지와 함께 내려 줍니다. “QR Code”는 DENSO WAVE INCORPORATED의 등록상표입니다.',
+
+      foot1: '업로드 0 · 서버 0 · 쿠키 0',
+      netLabel: '이 페이지의 외부 요청',
+      back: '← 포트폴리오',
+      footTools: '도구 전체'
+    }
+  };
+
+  var state = {
+    lang: 'en',
+    type: 'url',
+    tab: 'gen',
+    ec: 'M',
+    fg: '#0a0b0d',
+    bg: '#f7f5ef',
+    margin: 4,
+    size: 1024,
+    qr: null,          /* {qr, version, modules} */
+    payload: '',       /* exact encoded string */
+    result: null       /* last decoded {text, kind} */
+  };
+
+  function t(key) {
+    var d = I18N[state.lang] || I18N.en;
+    if (d[key] != null) return d[key];
+    return I18N.en[key] != null ? I18N.en[key] : '';
+  }
+  function fmt(key, map) {
+    var s = t(key);
+    Object.keys(map || {}).forEach(function (k) {
+      s = s.split('{' + k + '}').join(String(map[k]));
+    });
+    return s;
+  }
+  function readLang() {
+    try {
+      var v = localStorage.getItem(LANG_KEY);
+      return v === 'ko' || v === 'en' ? v : '';
+    } catch (e) { return ''; }
+  }
+
+  /* ─────────────────────────── QR 엔진 ─────────────────────────── */
+  if (typeof qrcode === 'function') {
+    qrcode.stringToBytes = qrcode.stringToBytesFuncs['UTF-8'];
+  }
+
+  /* Smallest version (1–40) whose capacity holds the text at this EC level.
+     Each attempt is a real build, so a binary search keeps the live typing cheap. */
+  function tryBuild(text, ec, ver) {
+    try {
+      var q = qrcode(ver, ec);
+      q.addData(text);
+      q.make();
+      return q;
+    } catch (e) { return null; }
+  }
+  function buildQR(text, ec) {
+    if (!text) return null;
+    var probe = tryBuild(text, ec, 40);
+    if (!probe) return null;
+    var lo = 1, hi = 40, mid, ok;
+    while (lo < hi) {
+      mid = (lo + hi) >> 1;
+      ok = tryBuild(text, ec, mid);
+      if (ok) hi = mid; else lo = mid + 1;
+    }
+    var qr = tryBuild(text, ec, lo);
+    if (!qr) return null;
+    return { qr: qr, version: lo, modules: qr.getModuleCount() };
+  }
+
+  /* ─────────────────────────── 페이로드 ─────────────────────────── */
+  function escWifi(s) {
+    return String(s).replace(/([\\;,:"])/g, '\\$1');
+  }
+  function buildPayload() {
+    var v;
+    if (state.type === 'url') {
+      v = ($('inUrl').value || '').trim();
+      if (!v) return { empty: true };
+      if (!/^[a-zA-Z][a-zA-Z0-9+.\-]*:/.test(v) && /\./.test(v)) v = 'https://' + v;
+      return { text: v };
+    }
+    if (state.type === 'text') {
+      v = $('inText').value || '';
+      if (!v) return { empty: true };
+      return { text: v };
+    }
+    if (state.type === 'wifi') {
+      var ssid = $('inSsid').value || '';
+      if (!ssid) return { need: 'wifiNeedSsid' };
+      var sec = $('inSec').value;
+      var pass = $('inPass').value || '';
+      var out = 'WIFI:T:' + (sec === 'nopass' ? 'nopass' : sec) + ';S:' + escWifi(ssid) + ';';
+      if (sec !== 'nopass' && pass) out += 'P:' + escWifi(pass) + ';';
+      if ($('inHidden').checked) out += 'H:true;';
+      out += ';';
+      return { text: out };
+    }
+    /* contact — vCard 3.0 */
+    var name = ($('inName').value || '').trim();
+    if (!name) return { need: 'cardNeedName' };
+    var lines = ['BEGIN:VCARD', 'VERSION:3.0', 'N:' + name + ';;;;', 'FN:' + name];
+    var org = ($('inOrg').value || '').trim();
+    var tel = ($('inPhone').value || '').trim();
+    var mail = ($('inEmail').value || '').trim();
+    var site = ($('inCardUrl').value || '').trim();
+    if (org) lines.push('ORG:' + org);
+    if (tel) lines.push('TEL;TYPE=CELL:' + tel);
+    if (mail) lines.push('EMAIL;TYPE=INTERNET:' + mail);
+    if (site) lines.push('URL:' + site);
+    lines.push('END:VCARD');
+    return { text: lines.join('\r\n') };
+  }
+
+  /* ─────────────────────────── 그리기 ─────────────────────────── */
+  function drawQR(qr, fg, bg, margin, canvas, target) {
+    var n = qr.getModuleCount();
+    var total = n + margin * 2;
+    var scale = Math.max(1, Math.floor((target || 420) / total));
+    var px = total * scale;
+    canvas.width = px;
+    canvas.height = px;
+    var ctx = canvas.getContext('2d');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, px, px);
+    ctx.fillStyle = fg;
+    var r, c, run;
+    for (r = 0; r < n; r++) {
+      run = -1;
+      for (c = 0; c < n; c++) {
+        if (qr.isDark(r, c)) {
+          if (run < 0) run = c;
+        } else if (run >= 0) {
+          ctx.fillRect((run + margin) * scale, (r + margin) * scale, (c - run) * scale, scale);
+          run = -1;
+        }
+      }
+      if (run >= 0) ctx.fillRect((run + margin) * scale, (r + margin) * scale, (n - run) * scale, scale);
+    }
+    return px;
+  }
+
+  function svgString(qr, fg, bg, margin) {
+    var n = qr.getModuleCount();
+    var total = n + margin * 2;
+    var d = '', r, c, start;
+    for (r = 0; r < n; r++) {
+      c = 0;
+      while (c < n) {
+        if (!qr.isDark(r, c)) { c++; continue; }
+        start = c;
+        while (c < n && qr.isDark(r, c)) c++;
+        d += 'M' + (start + margin) + ' ' + (r + margin) + 'h' + (c - start) + 'v1h-' + (c - start) + 'z';
+      }
+    }
+    return '<?xml version="1.0" encoding="UTF-8"?>\n' +
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + total + ' ' + total + '" ' +
+      'width="1024" height="1024" shape-rendering="crispEdges" role="img" aria-label="QR code" ' +
+      'data-version="' + state.qr.version + '" data-ec="' + state.ec + '">\n' +
+      '<rect width="' + total + '" height="' + total + '" fill="' + bg + '"/>\n' +
+      '<path fill="' + fg + '" d="' + d + '"/>\n</svg>\n';
+  }
+
+  function marginLabel(n) {
+    return String(n) === '1' ? t('marginValueOne') : fmt('marginValue', { n: n });
+  }
+
+  function relLum(hex) {
+    var m = /^#?([0-9a-f]{6})$/i.exec(String(hex).trim());
+    if (!m) return null;
+    var v = m[1], out = [];
+    for (var i = 0; i < 3; i++) {
+      var c = parseInt(v.substr(i * 2, 2), 16) / 255;
+      out.push(c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
+    }
+    return 0.2126 * out[0] + 0.7152 * out[1] + 0.0722 * out[2];
+  }
+
+  /* ─────────────────────────── 렌더 ─────────────────────────── */
+  var renderTimer = null;
+  function scheduleRender() {
+    clearTimeout(renderTimer);
+    renderTimer = setTimeout(render, 110);
+  }
+
+  function render() {
+    var canvas = $('qrCanvas');
+    var empty = $('stageEmpty');
+    var meta = $('metaLine');
+    var payloadOut = $('payloadOut');
+    var warn = $('genWarn');
+    var pngBtn = $('dlPng');
+    var svgBtn = $('dlSvg');
+    var kindNote = $('prevKind');
+
+    var pay = buildPayload();
+    warn.hidden = true;
+    warn.textContent = '';
+
+    if (pay.empty) {
+      state.qr = null; state.payload = '';
+      canvas.hidden = true; empty.hidden = false;
+      meta.innerHTML = '<span>' + esc(t('metaEmpty')) + '</span>';
+      payloadOut.hidden = true;
+      pngBtn.disabled = true; svgBtn.disabled = true;
+      kindNote.textContent = '—';
+      return;
+    }
+    if (pay.need) {
+      state.qr = null; state.payload = '';
+      canvas.hidden = true; empty.hidden = false;
+      empty.textContent = t(pay.need);
+      meta.innerHTML = '<span>' + esc(t('metaEmpty')) + '</span>';
+      payloadOut.hidden = true;
+      pngBtn.disabled = true; svgBtn.disabled = true;
+      kindNote.textContent = '—';
+      return;
+    }
+
+    empty.textContent = t('emptyState');
+    var text = pay.text;
+    var bytes = bytesOf(text);
+
+    var built = buildQR(text, state.ec);
+    if (!built) {
+      state.qr = null; state.payload = '';
+      canvas.hidden = true; empty.hidden = false;
+      empty.textContent = fmt('tooLong', { n: bytes, max: MAX_BYTES });
+      meta.innerHTML = '<span>' + esc(t('metaEmpty')) + '</span>';
+      payloadOut.hidden = true;
+      pngBtn.disabled = true; svgBtn.disabled = true;
+      kindNote.textContent = state.type.toUpperCase();
+      return;
+    }
+
+    state.qr = built;
+    state.payload = text;
+    canvas.hidden = false;
+    empty.hidden = true;
+    drawQR(built.qr, state.fg, state.bg, state.margin, canvas, 420);
+
+    /* readout: bytes · vN · N×N modules · EC L/M/Q/H */
+    meta.innerHTML = esc(fmt('metaPat', {
+      bytes: bytes, ver: built.version, mods: built.modules, ec: state.ec
+    }));
+
+    payloadOut.hidden = false;
+    payloadOut.textContent = text.length > 320 ? text.slice(0, 320) + ' …' : text;
+    pngBtn.disabled = false; svgBtn.disabled = false;
+    kindNote.textContent = state.type.toUpperCase();
+
+    var lf = relLum(state.fg), lb = relLum(state.bg);
+    if (lf != null && lb != null) {
+      if (lf > lb) { warn.hidden = false; warn.textContent = t('inverted'); }
+      else if ((lb + 0.05) / (lf + 0.05) < 3) { warn.hidden = false; warn.textContent = t('lowContrast'); }
+    }
+  }
+
+  /* ─────────────────────────── 다운로드 ─────────────────────────── */
+  function fileBase() {
+    var base = 'qrforge-' + state.type + '-v' + (state.qr ? state.qr.version : 1) + state.ec;
+    return base.replace(/[^a-z0-9\-_]/gi, '');
+  }
+  function download(blob, name) {
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 1200);
+  }
+  function dlPng() {
+    if (!state.qr) return;
+    var c = document.createElement('canvas');
+    drawQR(state.qr.qr, state.fg, state.bg, state.margin, c, state.size);
+    if (c.toBlob) {
+      c.toBlob(function (b) { if (b) download(b, fileBase() + '.png'); }, 'image/png');
+    } else {
+      var a = document.createElement('a');
+      a.href = c.toDataURL('image/png');
+      a.download = fileBase() + '.png';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    }
+  }
+  function dlSvg() {
+    if (!state.qr) return;
+    var s = svgString(state.qr.qr, state.fg, state.bg, state.margin);
+    download(new Blob([s], { type: 'image/svg+xml;charset=utf-8' }), fileBase() + '.svg');
+  }
+
+  /* ─────────────────────────── 해독 ─────────────────────────── */
+  function kindOf(text) {
+    if (/^https?:\/\//i.test(text)) return 'url';
+    if (/^wifi:/i.test(text)) return 'wifi';
+    if (/^BEGIN:VCARD/i.test(text)) return 'card';
+    if (/^mailto:/i.test(text)) return 'mail';
+    if (/^tel:/i.test(text)) return 'tel';
+    if (/^geo:/i.test(text)) return 'geo';
+    return 'text';
+  }
+  function kindLabel(kind) {
+    return t('kind' + kind.charAt(0).toUpperCase() + kind.slice(1));
+  }
+
+  function setResult(text, meta) {
+    state.result = text ? { text: text, kind: kindOf(text) } : null;
+    var out = $('resOut');
+    var chip = $('kindChip');
+    var copyBtn = $('copyRes');
+    var openBtn = $('openRes');
+    var clearBtn = $('clearRes');
+    var decMeta = $('decMeta');
+
+    if (!text) {
+      out.textContent = t('resEmpty');
+      out.classList.add('is-empty');
+      chip.hidden = true;
+      copyBtn.disabled = true; openBtn.disabled = true; clearBtn.hidden = true;
+      if (decMeta) { decMeta.hidden = true; decMeta.textContent = ''; }
+      return;
+    }
+    out.textContent = text;
+    out.classList.remove('is-empty');
+    var kind = state.result.kind;
+    chip.hidden = false;
+    chip.textContent = kindLabel(kind);
+    copyBtn.disabled = false;
+    openBtn.disabled = !(kind === 'url' || kind === 'mail' || kind === 'tel' || kind === 'geo');
+    openBtn.hidden = openBtn.disabled;
+    clearBtn.hidden = false;
+    if (meta && decMeta) { decMeta.hidden = false; decMeta.textContent = meta; }
+  }
+
+  function decodePixels(imgEl, w, h) {
+    var maxSide = Math.max(w, h);
+    var targets = [];
+    if (maxSide > 1600) targets.push(1600);
+    targets.push(Math.min(maxSide, 1200));
+    if (maxSide < 520) targets.push(Math.min(maxSide * 3, 1560));
+    targets = targets.filter(function (v, i, a) { return a.indexOf(v) === i && v > 40; });
+
+    var t0 = (window.performance && performance.now) ? performance.now() : Date.now();
+    var tries = 0;
+    for (var i = 0; i < targets.length; i++) {
+      var scale = targets[i] / maxSide;
+      var cw = Math.max(24, Math.round(w * scale));
+      var ch = Math.max(24, Math.round(h * scale));
+      var c = document.createElement('canvas');
+      c.width = cw; c.height = ch;
+      var ctx = c.getContext('2d', { willReadFrequently: true });
+      if (!ctx) continue;
+      ctx.imageSmoothingEnabled = true;
+      if (ctx.imageSmoothingQuality) ctx.imageSmoothingQuality = 'high';
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, cw, ch);
+      try { ctx.drawImage(imgEl, 0, 0, cw, ch); } catch (e) { continue; }
+      var data = ctx.getImageData(0, 0, cw, ch);
+      tries++;
+      var code = null;
+      try {
+        code = jsQR(data.data, cw, ch, { inversionAttempts: 'attemptBoth' });
+      } catch (e) { code = null; }
+      if (code && code.data) {
+        var ms = Math.round(((window.performance && performance.now) ? performance.now() : Date.now()) - t0);
+        return { text: code.data, w: w, h: h, ms: ms, tries: tries };
+      }
+    }
+    return { text: '', w: w, h: h, tries: tries, ms: Math.round(((window.performance && performance.now) ? performance.now() : Date.now()) - t0) };
+  }
+
+  function loadBitmap(file) {
+    return new Promise(function (resolve, reject) {
+      var done = false;
+      function fail() { if (!done) { done = true; reject(new Error('decode-failed')); } }
+      if (window.createImageBitmap) {
+        createImageBitmap(file, { imageOrientation: 'from-image' })
+          .then(function (bmp) { done = true; resolve({ el: bmp, w: bmp.width, h: bmp.height, closeable: true }); })
+          .catch(function () {
+            var img = new Image();
+            var url = URL.createObjectURL(file);
+            img.onload = function () {
+              if (done) return;
+              done = true;
+              resolve({ el: img, w: img.naturalWidth, h: img.naturalHeight, url: url });
+            };
+            img.onerror = function () { URL.revokeObjectURL(url); fail(); };
+            img.src = url;
+          });
+        return;
+      }
+      var im = new Image();
+      var u = URL.createObjectURL(file);
+      im.onload = function () {
+        if (done) return; done = true;
+        resolve({ el: im, w: im.naturalWidth, h: im.naturalHeight, url: u });
+      };
+      im.onerror = function () { URL.revokeObjectURL(u); fail(); };
+      im.src = u;
+    });
+  }
+
+  function handleFile(file) {
+    if (!file) return;
+    if (!/^image\//.test(file.type) && !/\.(png|jpe?g|webp|gif|bmp|avif)$/i.test(file.name || '')) {
+      setResult('', null);
+      var out = $('resOut');
+      out.classList.add('is-empty');
+      out.textContent = t('notImage');
+      return;
+    }
+    $('decFileNote').textContent = (file.size >= 1024 ? Math.round(file.size / 1024) + ' KB' : file.size + ' B');
+    var outEl = $('resOut');
+    outEl.classList.add('is-empty');
+    outEl.textContent = t('decoding');
+
+    var thumb = $('thumb');
+    var oldUrl = thumb.getAttribute('data-url');
+    if (oldUrl) { try { URL.revokeObjectURL(oldUrl); } catch (e) {} }
+    var thumbUrl = URL.createObjectURL(file);
+    thumb.setAttribute('data-url', thumbUrl);
+    thumb.src = thumbUrl;
+    $('thumbName').textContent = file.name || 'image';
+    $('thumbMeta').textContent = (file.type || 'image') + ' · ' + $('decFileNote').textContent;
+    $('thumbWrap').hidden = false;
+
+    loadBitmap(file).then(function (bmp) {
+      var r = decodePixels(bmp.el, bmp.w, bmp.h);
+      if (bmp.closeable && bmp.el.close) { try { bmp.el.close(); } catch (e) {} }
+      if (r.text) {
+        setResult(r.text, fmt('decMeta', { w: r.w, h: r.h, n: r.tries, t: r.ms }));
+      } else {
+        setResult('', null);
+        outEl.classList.add('is-empty');
+        outEl.textContent = t('notFound');
+        var dm = $('decMeta');
+        dm.hidden = false;
+        dm.textContent = fmt('decMeta', { w: r.w, h: r.h, n: r.tries, t: r.ms });
+      }
+    }).catch(function () {
+      setResult('', null);
+      outEl.classList.add('is-empty');
+      outEl.textContent = t('notImage');
+    });
+  }
+
+  /* ─────────────────────────── 카메라 ─────────────────────────── */
+  var cam = { stream: null, timer: null };
+  function camHint(msg, cls) {
+    var el = $('camHint');
+    el.textContent = msg;
+    el.className = 'hint' + (cls ? ' ' + cls : '');
+  }
+  function stopCam() {
+    if (cam.timer) { clearInterval(cam.timer); cam.timer = null; }
+    if (cam.stream) {
+      cam.stream.getTracks().forEach(function (tr) { try { tr.stop(); } catch (e) {} });
+      cam.stream = null;
+    }
+    var v = $('camVideo');
+    try { v.srcObject = null; } catch (e) {}
+    $('camFrame').hidden = true;
+    $('camStop').hidden = true;
+    $('camStart').hidden = false;
+  }
+  function camTick() {
+    var v = $('camVideo');
+    if (!v || v.readyState < 2 || !v.videoWidth) return;
+    var w = v.videoWidth, h = v.videoHeight;
+    var scale = Math.min(1, 720 / Math.max(w, h));
+    var cw = Math.round(w * scale), ch = Math.round(h * scale);
+    var c = cam.canvas || (cam.canvas = document.createElement('canvas'));
+    c.width = cw; c.height = ch;
+    var ctx = c.getContext('2d', { willReadFrequently: true });
+    ctx.drawImage(v, 0, 0, cw, ch);
+    var data = ctx.getImageData(0, 0, cw, ch);
+    var code = null;
+    try { code = jsQR(data.data, cw, ch, { inversionAttempts: 'dontInvert' }); } catch (e) { code = null; }
+    if (code && code.data) {
+      stopCam();
+      setResult(code.data, 'camera · ' + w + '×' + h + ' px');
+    }
+  }
+  function startCam() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      camHint(t('camUnsupported'), 'hint--err');
+      return;
+    }
+    camHint(t('camScanning'));
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false })
+      .then(function (stream) {
+        cam.stream = stream;
+        var v = $('camVideo');
+        v.srcObject = stream;
+        $('camFrame').hidden = false;
+        $('camStart').hidden = true;
+        $('camStop').hidden = false;
+        var play = v.play();
+        if (play && play.catch) play.catch(function () {});
+        cam.timer = setInterval(camTick, 220);
+      })
+      .catch(function (err) {
+        var why = (err && (err.name || err.message)) || 'unknown';
+        camHint(err && err.name === 'NotAllowedError' ? t('camDenied') : fmt('camFailed', { why: why }), 'hint--err');
+        stopCam();
+      });
+  }
+
+  /* ─────────────────────────── 연결 ─────────────────────────── */
+  function syncTypeButtons() {
+    var btns = document.querySelectorAll('.seg-btn');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].setAttribute('aria-pressed', String(btns[i].getAttribute('data-type') === state.type));
+    }
+    var groups = document.querySelectorAll('[data-fields]');
+    for (var j = 0; j < groups.length; j++) {
+      groups[j].hidden = groups[j].getAttribute('data-fields') !== state.type;
+    }
+  }
+
+  function applyLang(lang) {
+    state.lang = lang === 'ko' ? 'ko' : 'en';
+    document.documentElement.setAttribute('lang', state.lang);
+
+    document.title = t('docTitle');
+    var md = document.querySelector('meta[name="description"]'); if (md) md.setAttribute('content', t('metaDesc'));
+    var ot = document.querySelector('meta[property="og:title"]'); if (ot) ot.setAttribute('content', t('ogTitle'));
+    var od = document.querySelector('meta[property="og:description"]'); if (od) od.setAttribute('content', t('ogDesc'));
+    var tt = document.querySelector('meta[name="twitter:title"]'); if (tt) tt.setAttribute('content', t('ogTitle'));
+    var td = document.querySelector('meta[name="twitter:description"]'); if (td) td.setAttribute('content', t('ogDesc'));
+
+    var nodes = document.querySelectorAll('[data-i18n]'), i, k, v;
+    for (i = 0; i < nodes.length; i++) {
+      k = nodes[i].getAttribute('data-i18n');
+      v = t(k);
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < nodes.length; i++) {
+      k = nodes[i].getAttribute('data-i18n-html');
+      v = t(k);
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-aria'));
+      if (v) nodes[i].setAttribute('aria-label', v);
+    }
+    nodes = document.querySelectorAll('[data-i18n-alt]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-alt'));
+      if (v) nodes[i].setAttribute('alt', v);
+    }
+
+    var spans = document.querySelectorAll('#langToggle [data-lt]');
+    for (i = 0; i < spans.length; i++) {
+      spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
+    }
+    var lt = $('langToggle');
+    lt.setAttribute('title', t('toggleTo'));
+    lt.setAttribute('aria-label', t('toggleTo'));
+
+    $('marginOut').textContent = marginLabel(state.margin);
+    if (!state.result) {
+      var out = $('resOut');
+      out.textContent = t('resEmpty');
+    } else {
+      $('kindChip').textContent = kindLabel(state.result.kind);
+    }
+    if (cam.timer) camHint(t('camScanning'));
+    updateTextCount();
+    render();
+  }
+
+  function updateTextCount() {
+    var el = $('textCount');
+    if (!el) return;
+    var n = bytesOf($('inText').value || '');
+    el.textContent = n + ' / ' + MAX_BYTES + (state.lang === 'ko' ? '바이트' : ' bytes');
+  }
+
+  function selectTab(name) {
+    state.tab = name;
+    var gen = name === 'gen';
+    $('tabGen').setAttribute('aria-selected', String(gen));
+    $('tabDec').setAttribute('aria-selected', String(!gen));
+    $('tabGen').tabIndex = gen ? 0 : -1;
+    $('tabDec').tabIndex = gen ? -1 : 0;
+    $('panelGen').hidden = !gen;
+    $('panelDec').hidden = gen;
+    if (!gen) {
+      /* a decoded result must not be reachable by a stale object URL */
+      try { history.replaceState(null, '', location.pathname + '#decode'); } catch (e) {}
+    } else {
+      try { history.replaceState(null, '', location.pathname); } catch (e) {}
+    }
+  }
+
+  function setColor(which, hex, fromPicker) {
+    var m = /^#?([0-9a-f]{6})$/i.exec(String(hex).trim());
+    if (!m) {
+      /* put the valid value back so the field never holds junk */
+      $(which + 'Hex').value = state[which].toUpperCase();
+      return;
+    }
+    var v = '#' + m[1].toLowerCase();
+    state[which] = v;
+    $(which + 'Color').value = v;
+    $(which + 'Hex').value = v.toUpperCase();
+    if (!fromPicker) scheduleRender(); else scheduleRender();
+  }
+
+  /* ─────────────────────────── 초기화 ─────────────────────────── */
+  function init() {
+    /* language */
+    lt_init();
+
+    /* tabs */
+    $('tabGen').addEventListener('click', function () { selectTab('gen'); });
+    $('tabDec').addEventListener('click', function () { selectTab('dec'); });
+    [['tabGen', 'tabDec'], ['tabDec', 'tabGen']].forEach(function (pair, idx) {
+      $(pair[0]).addEventListener('keydown', function (e) {
+        if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+        e.preventDefault();
+        var target = idx === 0 ? 'tabDec' : 'tabGen';
+        selectTab(target === 'tabDec' ? 'dec' : 'gen');
+        $(target).focus();
+      });
+    });
+    if (/^#decode$/i.test(location.hash)) selectTab('dec');
+
+    /* type segmented control */
+    var btns = document.querySelectorAll('.seg-btn');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].addEventListener('click', function () {
+        state.type = this.getAttribute('data-type');
+        syncTypeButtons();
+        render();
+      });
+    }
+
+    /* inputs */
+    ['inUrl', 'inText', 'inSsid', 'inPass', 'inHidden', 'inSec', 'inName', 'inPhone', 'inEmail', 'inOrg', 'inCardUrl'].forEach(function (id) {
+      var el = $(id);
+      if (!el) return;
+      el.addEventListener('input', function () {
+        if (id === 'inText') updateTextCount();
+        scheduleRender();
+      });
+      el.addEventListener('change', scheduleRender);
+    });
+
+    /* style */
+    $('fgColor').addEventListener('input', function () { setColor('fg', this.value, true); });
+    $('bgColor').addEventListener('input', function () { setColor('bg', this.value, true); });
+    $('fgHex').addEventListener('change', function () { setColor('fg', this.value, false); });
+    $('bgHex').addEventListener('change', function () { setColor('bg', this.value, false); });
+    $('swapColors').addEventListener('click', function () {
+      var f = state.fg, b = state.bg;
+      state.fg = b; state.bg = f;
+      $('fgColor').value = state.fg; $('fgHex').value = state.fg.toUpperCase();
+      $('bgColor').value = state.bg; $('bgHex').value = state.bg.toUpperCase();
+      render();
+    });
+    $('marginRange').addEventListener('input', function () {
+      state.margin = clamp(parseInt(this.value, 10) || 0, 0, 8);
+      $('marginOut').textContent = marginLabel(state.margin);
+      scheduleRender();
+    });
+    $('ecSel').addEventListener('change', function () { state.ec = this.value; render(); });
+    $('sizeSel').addEventListener('change', function () { state.size = parseInt(this.value, 10) || 1024; });
+
+    $('dlPng').addEventListener('click', dlPng);
+    $('dlSvg').addEventListener('click', dlSvg);
+
+    /* decode: file picker, drop, paste */
+    var drop = $('dropZone');
+    var fileInput = $('fileInput');
+    drop.addEventListener('click', function () { fileInput.click(); });
+    drop.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); }
+    });
+    fileInput.addEventListener('change', function () {
+      if (this.files && this.files[0]) handleFile(this.files[0]);
+      this.value = '';
+    });
+    ['dragenter', 'dragover'].forEach(function (ev) {
+      drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add('is-over'); });
+    });
+    ['dragleave', 'dragend'].forEach(function (ev) {
+      drop.addEventListener(ev, function () { drop.classList.remove('is-over'); });
+    });
+    drop.addEventListener('drop', function (e) {
+      e.preventDefault();
+      drop.classList.remove('is-over');
+      var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (f) handleFile(f);
+    });
+    /* the whole page accepts a drop of an image while the decode tab is open */
+    document.addEventListener('dragover', function (e) { if (state.tab === 'dec') e.preventDefault(); });
+    document.addEventListener('drop', function (e) {
+      if (state.tab !== 'dec') return;
+      var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (!f) return;
+      if (!/^image\//.test(f.type)) return;
+      e.preventDefault();
+      handleFile(f);
+    });
+    document.addEventListener('paste', function (e) {
+      if (state.tab !== 'dec') return;
+      var tag = (e.target && e.target.tagName) || '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      var items = (e.clipboardData && e.clipboardData.items) || [];
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].type && /^image\//.test(items[i].type)) {
+          var f = items[i].getAsFile();
+          if (f) { e.preventDefault(); handleFile(f); return; }
+        }
+      }
+    });
+
+    $('camStart').addEventListener('click', startCam);
+    $('camStop').addEventListener('click', function () { stopCam(); camHint(t('camNote')); });
+
+    $('copyRes').addEventListener('click', function () {
+      if (!state.result) return;
+      var btn = this;
+      var text = state.result.text;
+      function ok() {
+        btn.textContent = t('copied');
+        setTimeout(function () { btn.textContent = t('copy'); }, 1400);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(ok, function () {
+          var dm = $('decMeta');
+          dm.hidden = false; dm.textContent = t('copyBlocked');
+        });
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); ok(); } catch (e) {}
+        document.body.removeChild(ta);
+      }
+    });
+    $('openRes').addEventListener('click', function () {
+      if (!state.result) return;
+      var kind = state.result.kind;
+      if (kind !== 'url' && kind !== 'mail' && kind !== 'tel' && kind !== 'geo') return;
+      window.open(state.result.text, '_blank', 'noopener');
+    });
+    $('clearRes').addEventListener('click', function () {
+      setResult('', null);
+      $('thumbWrap').hidden = true;
+      var u = $('thumb').getAttribute('data-url');
+      if (u) { try { URL.revokeObjectURL(u); } catch (e) {} $('thumb').removeAttribute('data-url'); }
+      $('decFileNote').textContent = '0 B';
+    });
+
+    /* network counter — external requests only */
+    var ext = 0;
+    function note(list) {
+      for (var i = 0; i < list.length; i++) {
+        try {
+          var u = new URL(list[i].name, location.href);
+          if (u.origin !== location.origin) ext++;
+        } catch (e) { /* opaque entry */ }
+      }
+      var el = $('netCount');
+      if (el) el.textContent = String(ext);
+    }
+    if (window.PerformanceObserver) {
+      try {
+        new PerformanceObserver(function (l) { note(l.getEntries()); })
+          .observe({ entryTypes: ['resource'] });
+      } catch (e) {}
+    }
+    window.addEventListener('load', function () {
+      setTimeout(function () {
+        if (window.performance && performance.getEntriesByType) {
+          note(performance.getEntriesByType('resource'));
+        }
+      }, 350);
+    });
+
+    syncTypeButtons();
+    updateTextCount();
+    setColor('fg', state.fg, true);
+    setColor('bg', state.bg, true);
+    applyLang(readLang() || 'en');
+  }
+
+  function lt_init() {
+    var btn = $('langToggle');
+    btn.addEventListener('click', function () {
+      var next = state.lang === 'ko' ? 'en' : 'ko';
+      try { localStorage.setItem(LANG_KEY, next); } catch (e) {}
+      applyLang(next);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>
