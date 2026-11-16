@@ -991,7 +991,9 @@ button { font-family: inherit; color: inherit; }
     var q = '';
     try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
     if (q === 'ko' || q === 'en') return q;
-    return readLang(LANG_KEY) || readLang(SHARED_KEY) || 'en';
+    /* The shared key carries the last choice made on any page of the site, so it
+       wins over this page's own older key — one tap on any tool holds here too. */
+    return readLang(SHARED_KEY) || readLang(LANG_KEY) || 'en';
   }
 
   /* ─────────────────────────── 필터 ─────────────────────────── */
