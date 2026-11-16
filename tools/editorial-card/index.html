@@ -141,7 +141,9 @@ button { font-family: inherit; color: inherit; }
 
 /* ---------- layout ---------- */
 .layout { display: grid; grid-template-columns: 372px minmax(0, 1fr); gap: 20px; align-items: start; }
-@media (max-width: 1000px) { .layout { grid-template-columns: 1fr; } .stage { order: -1; } }
+/* minmax(0,1fr) + min-width:0 lets the column shrink to the phone width; a bare
+   1fr takes the track to the stage's min-content (489px) and the page scrolls sideways */
+@media (max-width: 1000px) { .layout { grid-template-columns: minmax(0, 1fr); } .layout > * { min-width: 0; } .stage { order: -1; } }
 
 .panel { display: flex; flex-direction: column; gap: 12px; }
 .card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 15px 15px 16px; }
@@ -282,6 +284,7 @@ textarea.inp { resize: vertical; min-height: 62px; }
 }
 html[data-theme="light"] .canvas-wrap { background: #ded7c8; background: repeating-conic-gradient(#e6dfd1 0% 25%, #dcd4c4 0% 50%) 50%/24px 24px; }
 #cv { display: block; width: 100%; max-width: 460px; height: auto; border-radius: 4px; box-shadow: 0 12px 34px rgba(0,0,0,.42); background: #111; }
+@media (max-width: 560px) { #cv { max-width: 100%; } }
 
 .strip-wrap { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
 .strip { display: flex; gap: 7px; overflow-x: auto; padding: 2px 2px 6px; flex: 1; scrollbar-width: thin; }
