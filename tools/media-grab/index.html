@@ -1264,7 +1264,8 @@ footer a:hover { color: var(--ink); }
   }
 
   function codecLabel(codecs) {
-    var first = String(codecs || '').split(',')[0].trim();
+    var list = String(codecs || '').split(',').map(function (c) { return c.trim(); }).filter(Boolean);
+    var first = list.filter(function (c) { return /^(avc1|avc3|hvc1|hev1|av01|vp0?9|vp8)/i.test(c); })[0] || list[0] || '';
     if (!first) return '';
     if (/^avc1|^avc3/i.test(first)) return 'H.264';
     if (/^hvc1|^hev1/i.test(first)) return 'HEVC';
@@ -1866,6 +1867,7 @@ footer a:hover { color: var(--ink); }
 
   applyLang(initial);
   setMode('auto');
+  noteHost(location.href);
 
   if (API_BASE) {
     setApiBase(API_BASE);
