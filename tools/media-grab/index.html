@@ -661,7 +661,7 @@ footer a:hover { color: var(--ink); }
     pillLocal: '<b>브라우저</b>에서 직접 조립',
     pillOut: '<b>MP4 · M4A · MP3</b> 저장 · <b>직접 링크, HLS, 페이지</b> 입력',
     h1: '링크 하나 넣고.<br><span class="dim">파일 하나 받기.</span>',
-    lede: '직접 미디어 주소나 HLS 재생목록을 넣으면 이 탭 안에서 파일이 만들어집니다. 조각을 받아 순서대로 붙여 하나의 MP4로 저장하고, 업로드는 없으며 어떤 다운로더 서비스도 거치지 않습니다. 유튜브나 다른 페이지는 이형 님 본인 Cloudflare 계정의 워커를 거치며, 그 워커는 DB도 로그도 남기지 않습니다.',
+    lede: '직접 미디어 주소나 HLS 재생목록을 넣으면 이 탭 안에서 파일이 만들어집니다. 조각을 받아 순서대로 붙여 하나의 MP4로 저장하고, 업로드는 없으며 어떤 다운로더 서비스도 거치지 않습니다. 유튜브나 다른 페이지는 운영자의 Cloudflare 워커를 거치며, 그 워커는 DB도 로그도 남기지 않습니다.',
     grabHead: '가져오기',
     urlLabel: '미디어 주소',
     urlPh: 'https://…/clip.mp4 · …/stream.m3u8 · youtube.com/watch?v=…',
@@ -681,7 +681,7 @@ footer a:hover { color: var(--ink); }
     wNote: '주소는 이 페이지 소스(<code>API_BASE</code>)에 있거나 이 탭의 메모리에만 있습니다. 저장소에는 남기지 않습니다. 런북대로 올린 워커는 <code>/api/health</code>에 <code>{ok:true}</code>로 답합니다.',
     logHead: '이 페이지가 접속한 곳',
     logEmpty: '아직 없습니다. 이 탭이 닿는 모든 호스트가 실시간으로 여기 표시됩니다.',
-    logNote: '구분: <b>이 사이트</b>(페이지·라이브러리), <b>이형 님 미디어 서버</b>(붙여넣은 주소), <b>이형 님 워커</b>. 다운로더 서비스·분석·폰트 CDN은 없습니다.',
+    logNote: '구분: <b>이 사이트</b>(페이지·라이브러리), <b>대상 미디어 서버</b>(붙여넣은 주소), <b>사이트 워커</b>. 다운로더 서비스·분석·폰트 CDN은 없습니다.',
     m1t: '직접 파일',
     m1p: '이미 파일을 가리키는 링크는 이 탭이 받아 그대로 디스크에 씁니다. 디코딩도, 서버도, 중간 단계도 없습니다.',
     m1l3: '진행률 · 취소',
@@ -690,7 +690,7 @@ footer a:hover { color: var(--ink); }
     m2l2: 'AES-128 키는 로컬에서 복호화',
     m2l3: '동시 4조각',
     m3t: '페이지·유튜브',
-    m3p: '유튜브·비메오처럼 CORS 뒤에 미디어를 숨긴 페이지는 이형 님 본인 Cloudflare 계정의 워커가 주소를 찾아 바이트 그대로 넘겨줍니다.',
+    m3p: '유튜브·비메오처럼 CORS 뒤에 미디어를 숨긴 페이지는 운영자의 Cloudflare 워커가 주소를 찾아 바이트 그대로 넘겨줍니다.',
     m3l1: 'DB 없음 · 오브젝트 스토리지 없음',
     m3l2: '콘솔 로그 없음 · IP 기록 없음',
     m3l3: '무료 티어 · 0원',
@@ -931,7 +931,7 @@ footer a:hover { color: var(--ink); }
     var hint = {
       direct: L('Direct file — fetched by this tab.', '직접 파일 — 이 탭이 받습니다.'),
       hls: L('HLS playlist — segments merged in this tab.', 'HLS 재생목록 — 이 탭에서 조각을 병합합니다.'),
-      youtube: L('YouTube — resolved through your Worker.', '유튜브 — 이형 님 워커가 해석합니다.'),
+      youtube: L('YouTube — resolved through your Worker.', '유튜브 — 사이트 워커가 해석합니다.'),
       page: L('Page — the Worker looks for its media.', '페이지 — 워커가 미디어를 찾습니다.'),
       auto: L('Direct file, HLS playlist or a page — detected from the link.', '직접 파일·HLS 재생목록·페이지를 링크로 판별합니다.')
     };
@@ -1264,7 +1264,7 @@ footer a:hover { color: var(--ink); }
 
     if (mode === 'youtube' || mode === 'page') {
       if (!state.apiBase) {
-        setStatus(L('This link needs your Worker. Paste its address on the right — or use a direct file link or an .m3u8 playlist, which work without it.', '이 링크는 이형 님 워커가 필요합니다. 오른쪽에 주소를 넣으세요. 직접 파일 링크나 .m3u8 재생목록은 워커 없이 동작합니다.'), 'err');
+        setStatus(L('This link needs your Worker. Paste its address on the right — or use a direct file link or an .m3u8 playlist, which work without it.', '이 링크는 사이트 워커가 필요합니다. 오른쪽에 주소를 넣으세요. 직접 파일 링크나 .m3u8 재생목록은 워커 없이 동작합니다.'), 'err');
         return;
       }
       return resolveViaWorker(raw);
@@ -1648,7 +1648,7 @@ footer a:hover { color: var(--ink); }
         var name = f.filename || cdName || nameFromUrl(f.url, f.ext);
         saveBlob(blob, name);
         end(true, L('Saved ' + fmtBytes(blob.size) + ' — streamed through your Worker, stored nowhere but here.',
-                    fmtBytes(blob.size) + ' 저장 완료 — 이형 님 워커를 거쳐 왔고 여기 외에 저장된 곳은 없습니다.'));
+                    fmtBytes(blob.size) + ' 저장 완료 — 사이트 워커를 거쳐 왔고 여기 외에 저장된 곳은 없습니다.'));
         setStatus(L('Done — ' + name, '완료 — ' + name), 'ok');
       })
       .catch(function (err) {

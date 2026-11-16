@@ -2308,6 +2308,8 @@ if (qs.get('reel') === '1') setReel(true);
 canvas.addEventListener('pointerdown', () => { idleAt = performance.now(); });
 canvas.addEventListener('wheel', () => { idleAt = performance.now(); }, { passive: true });
 window.addEventListener('dblclick', () => { goPreset(currentPreset); idleAt = performance.now(); });
+/* 카메라 프리셋 칩: 클릭하면 해당 프리셋으로 이동한다 */
+$$('#presets .chip').forEach((c) => c.addEventListener('click', () => { goPreset(c.dataset.preset); idleAt = performance.now(); }));
 
 const clearance = clearanceReport();
 if (window.console && console.info) console.info('[twin-dragons] clearance', JSON.stringify(clearance));
