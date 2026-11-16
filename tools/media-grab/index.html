@@ -1130,12 +1130,20 @@ footer a:hover { color: var(--ink); }
     el.download.disabled = true;
   }
 
+  function thumbSrc(u) {
+    if (!u) return '';
+    if (!state.apiBase || String(u).indexOf(state.apiBase) === 0) return u;
+    /* Keep the tab's own traffic on this page and the Worker: a thumbnail for a
+       resolved page is fetched by the Worker, not straight from the media site. */
+    return state.apiBase + '/api/stream?u=' + encodeURIComponent(u);
+  }
+
   function showResult(meta) {
     el.result.hidden = false;
     el.resTitle.textContent = meta.title || L('Untitled', '제목 없음');
     el.resSub.textContent = meta.sub || '';
     if (meta.thumb) {
-      el.thumbImg.src = meta.thumb;
+      el.thumbImg.src = thumbSrc(meta.thumb);
       el.thumbImg.hidden = false;
       el.thumbImg.onerror = function () { el.thumbImg.hidden = true; };
     } else {
