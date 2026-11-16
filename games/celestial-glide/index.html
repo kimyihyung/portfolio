@@ -24,7 +24,6 @@
 <meta name="twitter:description" content="Thread glowing gates through a shader-built nebula. Free 3D browser game, no install." />
 <meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/celestial-glide.jpg" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2304060f'/%3E%3Ccircle cx='16' cy='16' r='7.5' fill='none' stroke='%237cd6ff' stroke-width='2.2'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%23ffcf7a'/%3E%3C/svg%3E" />
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"VideoGame","name":"Celestial Glide","alternateName":"셀레스티얼 글라이드","url":"https://kimyihyung.github.io/portfolio/games/celestial-glide/","description":"A 3D endless dodge racer built with Three.js: fly a light craft through a procedurally shaded nebula, thread glowing gates, graze crystals for combo points and burn boost charges. Free to play in the browser with mouse, keyboard or touch.","genre":["Arcade","Action"],"gamePlatform":["Web browser","Mobile web"],"applicationCategory":"GameApplication","operatingSystem":"Any (WebGL browser)","playMode":"SinglePlayer","inLanguage":["en","ko"],"author":{"@type":"Person","name":"Kim Yihyung","url":"https://kimyihyung.github.io/portfolio/"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD","availability":"https://schema.org/InStock"}}
 </script>
@@ -433,7 +432,7 @@ main{position:relative;z-index:11;background:linear-gradient(180deg,#04060f,#050
           <p data-i18n-html="g3d">Arrow keys or <b>WASD</b> nudge the aim, <b>Space</b> or <b>Shift</b> burns a boost charge, <b>P</b> pauses, <b>M</b> mutes. <b>Enter</b> starts and restarts.</p>
         </div>
       </div>
-      <p style="margin-top:20px" data-i18n-html="gFoot">A run ends when the last shield is gone. Nothing is installed, no account is created, and the page never asks for a file — the whole game is one HTML file and one JavaScript module.</p>
+      <p style="margin-top:20px" data-i18n-html="gFoot">A run ends when the last shield is gone. Nothing is installed, no account is created, and the page never asks for a file — the whole game is one HTML file, two local scripts and a local three.js build — nothing is fetched from a CDN.</p>
     </div>
   </section>
 
@@ -478,7 +477,7 @@ main{position:relative;z-index:11;background:linear-gradient(180deg,#04060f,#050
     <div class="wrap">
       <p class="eyebrow" data-i18n="bEyebrow">Inside the build</p>
       <h2 data-i18n="bTitle">A nebula with no texture files</h2>
-      <p class="lead" data-i18n-html="bLead">The page ships as one HTML file and two JavaScript modules. There is not a single image, model or audio file in the build: the sky is a fragment shader, the objects are primitives, and every sound is an oscillator. That is why it loads in a second and keeps working on a five-year-old phone.</p>
+      <p class="lead" data-i18n-html="bLead">The page ships as one HTML file, two local scripts and a local three.js build, so it makes no third-party request at all. There is not a single image, model or audio file in the build: the sky is a fragment shader, the objects are primitives, and every sound is an oscillator. That is why it loads in a second and keeps working on a five-year-old phone.</p>
       <div class="grid3">
         <div class="card">
           <b data-i18n="b1t">Shader sky</b>
@@ -577,7 +576,7 @@ main{position:relative;z-index:11;background:linear-gradient(180deg,#04060f,#050
 </footer>
 
 <script type="importmap">
-{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js" } }
+{ "imports": { "three": "./vendor/three.module.min.js" } }
 </script>
 <script>
 (function () {
@@ -631,7 +630,7 @@ main{position:relative;z-index:11;background:linear-gradient(180deg,#04060f,#050
       g2d: 'Press and drag anywhere. Steering is <b>relative</b> — the ship moves with your finger instead of jumping under it, so your thumb never hides the thing you are avoiding.',
       g3t: 'Keyboard',
       g3d: 'Arrow keys or <b>WASD</b> nudge the aim, <b>Space</b> or <b>Shift</b> burns a boost charge, <b>P</b> pauses, <b>M</b> mutes. <b>Enter</b> starts and restarts.',
-      gFoot: 'A run ends when the last shield is gone. Nothing is installed, no account is created, and the page never asks for a file — the whole game is one HTML file and one JavaScript module.',
+      gFoot: 'A run ends when the last shield is gone. Nothing is installed, no account is created, and the page never asks for a file — the whole game is one HTML file, two local scripts and a local three.js build — nothing is fetched from a CDN.',
 
       sEyebrow: 'Scoring',
       sTitle: 'What the numbers actually mean',
@@ -660,7 +659,7 @@ main{position:relative;z-index:11;background:linear-gradient(180deg,#04060f,#050
 
       bEyebrow: 'Inside the build',
       bTitle: 'A nebula with no texture files',
-      bLead: 'The page ships as one HTML file and two JavaScript modules. There is not a single image, model or audio file in the build: the sky is a fragment shader, the objects are primitives, and every sound is an oscillator. That is why it loads in a second and keeps working on a five-year-old phone.',
+      bLead: 'The page ships as one HTML file, two local scripts and a local three.js build, so it makes no third-party request at all. There is not a single image, model or audio file in the build: the sky is a fragment shader, the objects are primitives, and every sound is an oscillator. That is why it loads in a second and keeps working on a five-year-old phone.',
       b1t: 'Shader sky',
       b1d: 'One back-facing sphere runs a value-noise FBM — three octaves, slowly rotating, with a second layer of star specks. On a slow device the game drops to two octaves and a lower pixel ratio instead of dropping frames.',
       b2t: 'Pooled objects',
@@ -741,7 +740,7 @@ main{position:relative;z-index:11;background:linear-gradient(180deg,#04060f,#050
       g2d: '아무 곳이나 눌러 끌면 됩니다. 조종은 <b>상대 이동</b>이라 손가락 아래로 기체가 순간이동하지 않습니다. 피해야 할 것이 엄지에 가려지지 않습니다.',
       g3t: '키보드',
       g3d: '방향키 또는 <b>WASD</b>로 조준을 옮기고, <b>Space</b>·<b>Shift</b>로 부스트를 씁니다. <b>P</b> 일시정지, <b>M</b> 음소거, <b>Enter</b> 시작과 재시작.',
-      gFoot: '방어막을 모두 잃으면 한 판이 끝납니다. 설치도, 계정도, 파일 요구도 없습니다. 게임 전체가 HTML 한 장과 자바스크립트 모듈 하나로 되어 있습니다.',
+      gFoot: '방어막을 모두 잃으면 한 판이 끝납니다. 설치도, 계정도, 파일 요구도 없습니다. 게임 전체가 HTML 한 장, 로컬 스크립트 두 개, 로컬 three.js 빌드 하나로 되어 있고 CDN에서 받아오는 것은 없습니다.',
 
       sEyebrow: '점수 계산',
       sTitle: '숫자가 실제로 뜻하는 것',
@@ -770,7 +769,7 @@ main{position:relative;z-index:11;background:linear-gradient(180deg,#04060f,#050
 
       bEyebrow: '만든 방식',
       bTitle: '텍스처 파일이 하나도 없는 성운',
-      bLead: '이 페이지는 HTML 한 장과 자바스크립트 모듈 두 개로 되어 있습니다. 이미지도, 모델도, 오디오 파일도 없습니다. 하늘은 프래그먼트 셰이더이고, 물체는 기본 도형이며, 모든 소리는 오실레이터입니다. 그래서 1초 안에 열리고 5년 된 휴대폰에서도 돌아갑니다.',
+      bLead: '이 페이지는 HTML 한 장, 로컬 스크립트 두 개, 로컬 three.js 빌드 하나로 되어 있어 외부 요청이 전혀 없습니다. 이미지도, 모델도, 오디오 파일도 없습니다. 하늘은 프래그먼트 셰이더이고, 물체는 기본 도형이며, 모든 소리는 오실레이터입니다. 그래서 1초 안에 열리고 5년 된 휴대폰에서도 돌아갑니다.',
       b1t: '셰이더 하늘',
       b1d: '안쪽을 향한 구 하나에 값 노이즈 FBM을 돌립니다. 옥타브 세 개가 천천히 회전하고 그 위에 별 티끌 층이 얹힙니다. 느린 기기에서는 프레임을 떨어뜨리는 대신 옥타브를 둘로 줄이고 픽셀 비율을 낮춥니다.',
       b2t: '풀링된 오브젝트',

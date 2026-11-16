@@ -19,8 +19,15 @@ window.__cgErrors = window.__cgErrors || [];
 window.__cgReady = false;
 
 /* ── dimensions ─────────────────────────────────────────────────────── */
-const FX = 7.4;          // field half-width
-const FY = 4.6;          // field half-height
+/* The corridor is authored at a fixed size and then scaled by K so that a
+   narrow (portrait) viewport frames exactly the same composition as a wide
+   one. K is derived from the camera frustum in resize(); on a desktop aspect
+   it is 1, so the authored numbers below are the desktop field. */
+const FIELD_W = 7.4;     // authored field half-width
+const FIELD_H = 4.6;     // authored field half-height
+let K = 1;               // viewport scale (1 on wide screens, smaller on portrait)
+let FX = FIELD_W * K;    // effective field half-width in world units
+let FY = FIELD_H * K;    // effective field half-height in world units
 const SPAWN_Z = 205;     // where objects are born
 const KILL_Z = 1.2;      // rocks and motes are culled just past the ship
 const RING_KILL_Z = 6;   // rings grow past the camera, then die
@@ -101,7 +108,10 @@ try {
 }
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(62, window.innerWidth / Math.max(1, window.innerHeight), 0.1, 1200);
+/* near 0.5 (nothing in the scene is closer than the ship, ~10 units away)
+   keeps the far/near ratio at 1:2400, so depth comparisons stay exact and no
+   pair of surfaces can trade places in the depth buffer. */
+const camera = new THREE.PerspectiveCamera(62, window.innerWidth / Math.max(1, window.innerHeight), 0.5, 1200);
 camera.position.set(0, 2.4, CAM_BACK);
 
 /* ── nebula sky ─────────────────────────────────────────────────────── */
@@ -294,7 +304,7 @@ scene.add(rimLight);
    the ship
    ══════════════════════════════════════════════════════════════════════ */
 const ship = new THREE.Group();
-ship.scale.setScalar(0.58);
+ship.scale.setScalar(0.58 * K);
 scene.add(ship);
 
 const hullMat = new THREE.MeshStandardMaterial({
@@ -607,6 +617,15 @@ function newRing() {
   const core = new THREE.Mesh(ringCoreGeo, ringCoreMats.cyan);
   const halo = new THREE.Mesh(ringHaloGeo, ringHaloMats.cyan);
   const disc = new THREE.Mesh(discGeo, discMat);
+  /* Three concentric layers at the same place: they are additive and write no
+     depth, but giving each its own z (1.5 cm apart) and draw order makes the
+     sort deterministic, so the bright core always sits over the halo and no
+     layer can flicker against another at distance. */
+  disc.position.z = -0.03;
+  halo.position.z = -0.015;
+  disc.renderOrder = 0;
+  halo.renderOrder = 1;
+  core.renderOrder = 2;
   g.add(core, halo, disc);
   g.visible = false;
   scene.add(g);
@@ -683,17 +702,18 @@ function spawnMote(x, y) {
   if (!o) return null;
   o.active = true;
   o.g.visible = true;
+  o.g.scale.setScalar(K);
   o.g.position.set(x, y, -SPAWN_Z - rnd(0, 20));
   o.px = x; o.py = y; o.pz = o.g.position.z;
   return o;
 }
 
-function laneX() { return rnd(-FX + 1.2, FX - 1.2); }
-function laneY() { return rnd(-FY + 1, FY - 1); }
+function laneX() { return rnd(-FX + 1.2 * K, FX - 1.2 * K); }
+function laneY() { return rnd(-FY + 1 * K, FY - 1 * K); }
 
 function spawnGate() {
   const s = S.sector;
-  const radius = clamp(3.35 - (s - 1) * 0.14, 2.35, 3.35);
+  const radius = clamp(3.35 - (s - 1) * 0.14, 2.35, 3.35) * K;
   const gold = Math.random() < 0.14;
   const x = rnd(-FX + radius * 0.55, FX - radius * 0.55);
   const y = rnd(-FY + radius * 0.35, FY - radius * 0.35);
@@ -702,12 +722,12 @@ function spawnGate() {
 }
 
 function spawnRockLine() {
-  const cols = [-5.4, -1.9, 1.9, 5.4];
+  const cols = [-5.4, -1.9, 1.9, 5.4].map((c) => c * K);
   const skip = Math.floor(rnd(0, 4));
-  const y = rnd(-1.8, 1.8);
+  const y = rnd(-1.8, 1.8) * K;
   for (let i = 0; i < cols.length; i++) {
     if (i === skip) continue;
-    spawnRock(cols[i] + rnd(-0.3, 0.3), y + rnd(-0.5, 0.5), rnd(0.72, 1.1));
+    spawnRock(cols[i] + rnd(-0.3, 0.3) * K, y + rnd(-0.5, 0.5) * K, rnd(0.72, 1.1) * K);
   }
 }
 
@@ -716,21 +736,21 @@ function spawnRockCluster() {
   let x = laneX();
   let y = laneY();
   for (let i = 0; i < n; i++) {
-    spawnRock(clamp(x, -FX, FX), clamp(y, -FY, FY), rnd(0.7, 1.15));
-    x += rnd(-3.4, 3.4);
-    y += rnd(-2.2, 2.2);
+    spawnRock(clamp(x, -FX, FX), clamp(y, -FY, FY), rnd(0.7, 1.15) * K);
+    x += rnd(-3.4, 3.4) * K;
+    y += rnd(-2.2, 2.2) * K;
   }
 }
 
 function spawnGateWithRocks() {
   const s = S.sector;
-  const radius = clamp(3.2 - (s - 1) * 0.12, 2.4, 3.2);
-  const x = rnd(-FX + radius + 0.6, FX - radius - 0.6);
+  const radius = clamp(3.2 - (s - 1) * 0.12, 2.4, 3.2) * K;
+  const x = rnd(-FX + radius + 0.6 * K, FX - radius - 0.6 * K);
   const y = rnd(-FY + radius * 0.4, FY - radius * 0.4);
   spawnRing(x, y, radius, Math.random() < 0.18);
   const side = Math.random() < 0.5 ? -1 : 1;
-  spawnRock(clamp(x + side * (radius + 2.2), -FX, FX), y + rnd(-1.2, 1.2), rnd(0.7, 1));
-  spawnRock(clamp(x - side * (radius + 2.2), -FX, FX), y + rnd(-1.2, 1.2), rnd(0.7, 1));
+  spawnRock(clamp(x + side * (radius + 2.2 * K), -FX, FX), y + rnd(-1.2, 1.2) * K, rnd(0.7, 1) * K);
+  spawnRock(clamp(x - side * (radius + 2.2 * K), -FX, FX), y + rnd(-1.2, 1.2) * K, rnd(0.7, 1) * K);
 }
 
 function spawnWave() {
@@ -749,15 +769,15 @@ function spawnWave() {
 /* A short runway of objects already in flight, so the first second of a run
    is not empty sky. Positions are set directly instead of at SPAWN_Z. */
 function prewarm() {
-  const g1 = spawnRing(0, 0, 3.2, false);
+  const g1 = spawnRing(0, 0, 3.2 * K, false);
   if (g1) { g1.g.position.z = -52; g1.pz = -52; }
-  const r1 = spawnRock(-4.2, 1.4, 0.95);
+  const r1 = spawnRock(-4.2 * K, 1.4 * K, 0.95 * K);
   if (r1) { r1.g.position.z = -96; r1.pz = -96; }
-  const r2 = spawnRock(4.4, -1.6, 0.85);
+  const r2 = spawnRock(4.4 * K, -1.6 * K, 0.85 * K);
   if (r2) { r2.g.position.z = -92; r2.pz = -92; }
-  const g2 = spawnRing(1.6, -0.6, 3.0, false);
+  const g2 = spawnRing(1.6 * K, -0.6 * K, 3.0 * K, false);
   if (g2) { g2.g.position.z = -148; g2.pz = -148; }
-  const m1 = spawnMote(0, 2.4);
+  const m1 = spawnMote(0, 2.4 * K);
   if (m1) { m1.g.position.z = -60; m1.pz = -60; }
 }
 
@@ -1077,18 +1097,18 @@ function testCross(o, isRing, isMote) {
   const d = Math.hypot(x - S.px, y - S.py);
 
   if (isRing) {
-    const hole = o.hole - 0.55;
-    const band = o.hole * 0.075 + 0.55;
+    const hole = o.hole - 0.55 * K;
+    const band = o.hole * 0.075 + 0.55 * K;
     if (d < hole) onGate(o);
     else if (Math.abs(d - o.hole) < band) onHit(o);
     return;
   }
   if (isMote) {
-    if (d < 1.15) onMote(o);
+    if (d < 1.15 * K) onMote(o);
     return;
   }
-  if (d < o.r * 0.92 + 0.5) onHit(o);
-  else if (d < o.r + 2.1) onNearMiss(o);
+  if (d < o.r * 0.92 + 0.5 * K) onHit(o);
+  else if (d < o.r + 2.1 * K) onNearMiss(o);
 }
 
 function updatePlayer(dt) {
@@ -1411,6 +1431,43 @@ function resize() {
       dustMat.uniforms.uPixel.value = renderer.getPixelRatio();
   trailMat.uniforms.uPixel.value = renderer.getPixelRatio();
   sparkMat.uniforms.uPixel.value = renderer.getPixelRatio();
+
+  /* Fit the corridor to the frame. The half-width the camera can see at the
+     play plane (z = 0) fixes the scale; the field keeps 75% of that width, as
+     on a desktop. A portrait phone therefore gets the same composition, just
+     smaller, instead of gates spawning outside the screen. */
+  const tanHalf = Math.tan((62 * Math.PI) / 360);
+  const halfW = tanHalf * CAM_BACK * camera.aspect;
+  const k = clamp((halfW * 0.75) / FIELD_W, 0.26, 1);
+  if (Math.abs(k - K) > 0.001) {
+    const r = k / K;
+    K = k;
+    FX = FIELD_W * K;
+    FY = FIELD_H * K;
+    if (ship) ship.scale.setScalar(0.58 * K);
+    /* objects already in flight keep their relative size */
+    for (let i = 0; i < rings.length; i++) {
+      const o = rings[i];
+      if (!o.active) continue;
+      o.hole *= r;
+      o.g.scale.setScalar(o.hole);
+    }
+    for (let i = 0; i < rocks.length; i++) {
+      const o = rocks[i];
+      if (!o.active) continue;
+      o.r *= r;
+      o.g.scale.setScalar(o.r);
+      o.g.position.x *= r; o.g.position.y *= r;
+    }
+    for (let i = 0; i < motes.length; i++) {
+      const o = motes[i];
+      if (!o.active) continue;
+      o.g.scale.setScalar(K);
+      o.g.position.x *= r; o.g.position.y *= r;
+    }
+    S.tx = clamp(S.tx, -FX, FX);
+    S.ty = clamp(S.ty, -FY, FY);
+  }
 }
 window.addEventListener('resize', resize);
 window.addEventListener('orientationchange', () => setTimeout(resize, 250));

@@ -564,7 +564,41 @@ function initScene() {
   floor.position.set(0, 0, -68);
   scene.add(floor);
 
-  const wallMat = new THREE.MeshBasicMaterial({ color: 0x080e1c, side: THREE.DoubleSide });
+  /* The side walls used to be flat dark planes, which read as two hard-edged
+     black slabs floating over the horizon. They are now a soft neon gradient
+     that is bright at the floor, fades out with height and with distance, so
+     the corridor has edges without any visible seam. */
+  const wallMat = new THREE.ShaderMaterial({
+    uniforms: {
+      uColorA: { value: new THREE.Color(0x2f6bff) },
+      uColorB: { value: new THREE.Color(0x7a35ff) }
+    },
+    transparent: true,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+    blending: THREE.AdditiveBlending,
+    vertexShader: `
+      varying vec2 vUv; varying vec3 vW;
+      void main(){
+        vUv = uv;
+        vec4 wp = modelMatrix * vec4(position, 1.0);
+        vW = wp.xyz;
+        gl_Position = projectionMatrix * viewMatrix * wp;
+      }`,
+    fragmentShader: `
+      precision highp float;
+      varying vec2 vUv; varying vec3 vW;
+      uniform vec3 uColorA, uColorB;
+      void main(){
+        float up = 1.0 - smoothstep(0.0, 11.0, vW.y);    // bright at the floor
+        float far = smoothstep(-118.0, -32.0, vW.z);    // fade into the distance
+        float band = 0.5 + 0.5 * sin(vW.z * 0.42);
+        vec3 col = mix(uColorA, uColorB, band);
+        float a = up * up * far * 0.22;
+        a += (1.0 - smoothstep(0.0, 0.9, abs(vW.y))) * far * 0.10;   // lip at the floor
+        gl_FragColor = vec4(col * (0.55 + up * 0.9), a);
+      }`
+  });
   const wallGeo = new THREE.PlaneGeometry(172, 26);
   const wallL = new THREE.Mesh(wallGeo, wallMat);
   wallL.rotation.y = Math.PI / 2;
@@ -600,8 +634,10 @@ function initScene() {
   sg.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   sg.setAttribute('color', new THREE.BufferAttribute(col, 3));
   stars = new THREE.Points(sg, new THREE.PointsMaterial({
-    size: 0.16, vertexColors: true, transparent: true, opacity: 0.85,
-    blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true, fog: false
+    /* a round glow sprite, not a bare square point */
+    size: 0.24, map: glowTex, alphaTest: 0.02, vertexColors: true, transparent: true,
+    opacity: 0.85, blending: THREE.AdditiveBlending, depthWrite: false,
+    sizeAttenuation: true, fog: false
   }));
   scene.add(stars);
 
@@ -635,20 +671,63 @@ function initScene() {
   scene.add(coreMesh);
 
   for (let i = 0; i < LANES; i++) {
-    const padMat = new THREE.MeshBasicMaterial({
-      color: LANE_COLOR[i], transparent: true, opacity: 0.2,
-      blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide
+    const padMat = new THREE.ShaderMaterial({
+      uniforms: {
+        uColor: { value: new THREE.Color(LANE_COLOR[i]) },
+        uGlow: { value: 0.18 }
+      },
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+      vertexShader: `
+        varying vec2 vUv;
+        void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+      fragmentShader: `
+        precision highp float;
+        varying vec2 vUv;
+        uniform vec3 uColor; uniform float uGlow;
+        void main(){
+          /* soft pad: bright rim, calm centre, no hard rectangle edge */
+          vec2 d = abs(vUv - 0.5) * 2.0;
+          float side = 1.0 - smoothstep(0.55, 1.0, d.x);
+          float across = 1.0 - smoothstep(0.35, 1.0, d.y);
+          float a = side * across * (0.34 + uGlow);
+          gl_FragColor = vec4(uColor * (1.0 + uGlow), a);
+        }`
     });
     const pad = new THREE.Mesh(new THREE.PlaneGeometry(LANE_W * 0.9, 0.5), padMat);
     pad.position.set(LANE_X[i], NOTE_Y, 0.03);
     scene.add(pad);
 
-    const pillarMat = new THREE.MeshBasicMaterial({
-      color: LANE_COLOR[i], transparent: true, opacity: 0.05,
-      blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide
+    /* A light column per lane. It fades to nothing at the top, so it reads as
+       a beam rising off the hit pad instead of a flat panel with a hard edge. */
+    const pillarMat = new THREE.ShaderMaterial({
+      uniforms: {
+        uColor: { value: new THREE.Color(LANE_COLOR[i]) },
+        uFlash: { value: 0 },
+        uPulse: { value: 0 }
+      },
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+      vertexShader: `
+        varying vec2 vUv;
+        void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+      fragmentShader: `
+        precision highp float;
+        varying vec2 vUv;
+        uniform vec3 uColor; uniform float uFlash; uniform float uPulse;
+        void main(){
+          float h = 1.0 - vUv.y;                // 1 at the pad, 0 at the top
+          float side = 1.0 - smoothstep(0.22, 0.5, abs(vUv.x - 0.5));  // soft sides
+          float a = pow(h, 2.6) * side * (0.16 + uFlash * 0.55 + uPulse * 0.06);
+          gl_FragColor = vec4(uColor * (0.85 + uFlash * 1.4), a);
+        }`
     });
     const pillar = new THREE.Mesh(new THREE.PlaneGeometry(LANE_W * 0.86, 7), pillarMat);
-    pillar.position.set(LANE_X[i], NOTE_Y + 3.5, -6);
+    pillar.position.set(LANE_X[i], NOTE_Y + 3.5, -8);
     scene.add(pillar);
 
     pads.push({ mat: padMat, pillar: pillarMat, flash: 0 });
@@ -711,7 +790,9 @@ const state = {
   beatPulse: 0,
   shake: 0,
   sectionName: '',
-  plays: 0
+  plays: 0,
+  clockSrc: 'perf',
+  lastSong: 0
 };
 
 let quality = 1;
@@ -738,7 +819,20 @@ function write(key, val) {
 function best(diff) { return readNum(STORE.bestKey(diff), 0); }
 function setBest(diff, v) { write(STORE.bestKey(diff), v); if (v > readNum(STORE.best, 0)) write(STORE.best, v); }
 
-const nowSong = () => (synth.ready ? synth.ctx.currentTime - synth.latency - state.startT : 0);
+/* One clock drives the chart. Web Audio time is used while the context is
+   really running; when it is not — a device with no audio output, a context
+   the browser keeps locked — the run falls back to the wall clock instead of
+   freezing at zero. The chart, the judging and the HUD all read this, so a
+   silent run is still a playable run. */
+function rawClock() {
+  const c = synth.ctx;
+  if (synth.ready && c && c.state === 'running') return c.currentTime - synth.latency;
+  return performance.now() / 1000;
+}
+function clockSrc() {
+  return synth.ready && synth.ctx && synth.ctx.state === 'running' ? 'audio' : 'perf';
+}
+const nowSong = () => rawClock() - state.startT;
 
 /* ═══════════════════════════════ music ═══════════════════════════════ */
 const CHORD = [
@@ -965,7 +1059,9 @@ for (let i = 0; i < padBtns.length; i++) {
 
 /* ═══════════════════════════════ run control ═══════════════════════════════ */
 function startRun() {
-  if (!synth.init()) { showFallback(); return; }
+  /* Audio is optional: if the device gives us no output, the run continues on
+     the wall clock and plays silently. */
+  synth.init();
   synth.resume();
 
   state.notes = buildChart(state.diff);
@@ -982,7 +1078,9 @@ function startRun() {
   state.plays = readNum(STORE.plays, 0) + 1;
   write(STORE.plays, state.plays);
   write(STORE.diff, state.diff);
-  state.startT = synth.ctx.currentTime + 0.42 - synth.latency;
+  state.clockSrc = clockSrc();
+  state.startT = rawClock() + 0.42;
+  state.lastSong = 0;
   state.mode = 'play';
 
   setOverlay('ovStart', false);
@@ -1008,7 +1106,9 @@ function pauseRun() {
 function resumeRun() {
   if (state.mode !== 'pause') return;
   synth.resume();
-  state.startT = synth.ctx.currentTime - synth.latency - state.pausedAt;
+  state.clockSrc = clockSrc();
+  state.startT = rawClock() - state.pausedAt;
+  state.lastSong = state.pausedAt;
   state.mode = 'play';
   setOverlay('ovPause', false);
   document.body.classList.add('playing');
@@ -1177,13 +1277,27 @@ function frame(now) {
   }
 
   const playing = state.mode === 'play';
+  if (playing) {
+    /* keep the song position continuous if the clock source changes mid-run
+       (audio context waking up, or dying) */
+    const src = clockSrc();
+    if (src !== state.clockSrc) {
+      state.startT = rawClock() - state.lastSong;
+      state.clockSrc = src;
+    }
+  }
   const sp = playing ? nowSong() : state.mode === 'pause' ? state.pausedAt : state.mode === 'over' ? SONG_LEN : idleT;
+  if (playing) state.lastSong = sp;
   const speed = DIFFS[state.diff].speed;
 
-  if (playing && synth.ready) {
+  if (playing && synth.ready && state.clockSrc === 'audio') {
     const horizonT = sp + 0.2;
+    const now = synth.ctx.currentTime;
     while (state.step * S16 < horizonT && state.step < BARS * 16) {
-      scheduleStep(state.step, state.startT + synth.latency + state.step * S16);
+      const when = state.startT + synth.latency + state.step * S16;
+      /* never hand the audio engine a moment that has already passed: after a
+         stall that would throw for every remaining step */
+      if (when > now - 0.02) scheduleStep(state.step, when);
       state.step++;
     }
   }
@@ -1251,8 +1365,9 @@ function frame(now) {
   for (let i = 0; i < LANES; i++) {
     const p = pads[i];
     p.flash = Math.max(0, p.flash - dt * 3.2);
-    p.mat.opacity = 0.14 + p.flash * 0.8;
-    p.pillar.opacity = 0.03 + p.flash * 0.1 + state.beatPulse * 0.02;
+    p.mat.uniforms.uGlow.value = 0.14 + p.flash * 0.8;
+    p.pillar.uniforms.uFlash.value = p.flash;
+    p.pillar.uniforms.uPulse.value = state.beatPulse;
   }
   pads.lineMat.opacity = 0.32 + state.beatPulse * 0.35;
 
