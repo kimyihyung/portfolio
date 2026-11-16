@@ -898,7 +898,7 @@ function clearObjects() {
 function resetRun() {
   S.px = 0; S.py = 0; S.tx = 0; S.ty = 0; S.vx = 0; S.vy = 0;
   S.speed = 24; S.dist = 0; S.score = 0; S.combo = 0; S.comboT = 0; S.mult = 1;
-  S.shield = 3; S.boost = 1; S.boostT = 0;
+  S.shield = 3; S.boost = 3; S.boostT = 0;
   S.invuln = 0; S.shake = 0; S.flash = 0; S.runTime = 0;
   S.gates = 0; S.bestCombo = 0; S.peakMult = 1; S.sector = 1; S.nextWave = 150;
   S.newRecord = false;

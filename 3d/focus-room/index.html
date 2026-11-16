@@ -280,7 +280,7 @@ const I18N = {
     metaIdle: '오늘의 몰입',
     hint: '드래그로 360° 시점 회전 · 두 손가락으로 확대<br />램프를 탭하면 조명이 꺼지고, 창문을 탭하면 밖의 밤이 바뀝니다',
     toastMode: (n) => n + ' · 창밖의 공기가 바뀌었습니다',
-    toastDuration: (n) => n + '(으)로 설정했습니다',
+    toastDuration: (n) => n + '로 설정했습니다',
     toastReset: '타이머를 리셋했습니다',
     toastPause: '잠시 멈췄습니다 · 다시 누르면 이어집니다',
     toastFocusDone: '집중 세션 완료 · 5분 휴식을 권합니다',
@@ -2075,6 +2075,7 @@ function applyLang() {
   const fbr = $('#fbreason');
   if (fbr && !window.__errors.length) fbr.innerHTML = T('fbBody');
   $('#fbretry').textContent = T('retry');
+  $('#resetc').textContent = T('reset');
   const hintEl = $('#hint');
   hintEl.innerHTML = T('hint');
   syncSoundUI();

@@ -1218,6 +1218,7 @@ function applyQuery(v) {
     if (first) flyTo({ target: first.pos.clone(), r: mode === 'focus' ? Math.max(14, focusCh.R * 0.55) : 34, dur: 0.9 });
   }
   window.__galaxyInfo.queryHits = hits;
+  if (typeof renderDrawer === 'function' && $('#drawer')?.classList.contains('on')) renderDrawer();
   syncUrl();
 }
 
@@ -1245,7 +1246,7 @@ function openCard(node) {
   chip.style.background = 'rgba(255,255,255,.05)';
   chip.style.borderColor = ch.css + '55';
   let chipText = LANG === 'en' ? ch.en : ch.ko;
-  if (node.b) chipText += ' · ' + node.b;
+  if (node.b && node.b !== ch.ko && node.b !== ch.en) chipText += ' · ' + node.b;
   if (node.cn) chipText += ' · ' + T('chain') + ' ' + node.cn + '/' + node.ct;
   $('#chiptext').textContent = chipText;
   $('#ctitle').textContent = node.t + (node.t2 && LANG === 'en' ? ' · ' + node.t2 : '');
