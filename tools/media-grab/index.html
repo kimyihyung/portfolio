@@ -1082,8 +1082,15 @@ footer a:hover { color: var(--ink); }
   }
 
   function fetchMedia(u, init) {
-    var target = state.viaWorker && state.apiBase ? proxyUrl(u) : u;
+    var proxied = state.viaWorker && state.apiBase;
+    var target = proxied ? proxyUrl(u) : u;
     init = init || {};
+    if (proxied) {
+      /* Through the Worker, ask for the bytes as a range: CDNs pace a plain GET
+         to about real time, while `Range: bytes=0-` runs at full speed. */
+      init.headers = init.headers || {};
+      init.headers.Range = 'bytes=0-';
+    }
     if (state.abort) init.signal = state.abort.signal;
     init.credentials = 'omit';
     init.referrerPolicy = 'no-referrer';
@@ -1619,7 +1626,11 @@ footer a:hover { color: var(--ink); }
     setStatus(L('Downloading through your Worker…', '워커를 거쳐 받는 중…'), '');
     var total = 0;
     var cdName = '';
-    trackedFetch(f.url, { cache: 'no-store', credentials: 'omit', signal: state.abort.signal })
+    /* Ask for the whole file as one byte range. YouTube's CDN paces a plain
+       GET (no Range) to roughly real time — 1.2 MB took 96 s — while the same
+       bytes arrive in under a second as `Range: bytes=0-`. The Worker already
+       forwards Range and exposes Content-Range, so this costs nothing else. */
+    trackedFetch(f.url, { cache: 'no-store', credentials: 'omit', headers: { Range: 'bytes=0-' }, signal: state.abort.signal })
       .then(function (res) {
         if (!res.ok) {
           return res.json().catch(function () { return {}; }).then(function (j) {
