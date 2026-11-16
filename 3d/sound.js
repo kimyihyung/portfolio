@@ -139,7 +139,7 @@
       var wrap = this._ui || document.querySelector('[data-snd]');
       if (!wrap) return this;
       this._wrap = wrap;
-      this._btn = wrap.querySelector('.sndbtn');
+      this._btn = (wrap.tagName === 'BUTTON' || wrap.classList.contains('sndbtn')) ? wrap : wrap.querySelector('.sndbtn');
       this._range = wrap.querySelector('.sndvol');
       var self = this;
       if (this._btn) {
