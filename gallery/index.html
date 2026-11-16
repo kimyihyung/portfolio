@@ -360,7 +360,7 @@ scene.background = new THREE.Color(0x07080a);
 scene.fog = new THREE.Fog(0x101216, 18, 62);
 
 
-const camera = new THREE.PerspectiveCamera(62, window.innerWidth / Math.max(1, window.innerHeight), 0.05, 280);
+const camera = new THREE.PerspectiveCamera(62, window.innerWidth / Math.max(1, window.innerHeight), 0.22, 210);
 camera.rotation.order = 'YXZ';
 
 
@@ -575,13 +575,14 @@ function boxMesh(w, h, d, material) {
   m.receiveShadow = true;
   return m;
 }
+const WALL_SKIRT = 0.10;   /* 벽을 바닥 아래로 내려 붙인다 — 이격·빛 샘 방지 */
 function addWallX(z, x0, x1, h, material, thickness) {
   const t = thickness || 0.4;
   const len = Math.abs(x1 - x0);
   if (len < 0.02) return null;
-  const m = boxMesh(len, h, t, material);
-  scaleBoxUV(m.geometry, len, h, t);
-  m.position.set((x0 + x1) / 2, h / 2, z);
+  const m = boxMesh(len, h + WALL_SKIRT, t, material);
+  scaleBoxUV(m.geometry, len, h + WALL_SKIRT, t);
+  m.position.set((x0 + x1) / 2, (h - WALL_SKIRT) / 2, z);
   scene.add(m);
   addCollider(x0, z - t / 2, x1, z + t / 2);
   return m;
@@ -590,9 +591,9 @@ function addWallZ(x, z0, z1, h, material, thickness) {
   const t = thickness || 0.4;
   const len = Math.abs(z1 - z0);
   if (len < 0.02) return null;
-  const m = boxMesh(t, h, len, material);
-  scaleBoxUV(m.geometry, t, h, len);
-  m.position.set(x, h / 2, (z0 + z1) / 2);
+  const m = boxMesh(t, h + WALL_SKIRT, len, material);
+  scaleBoxUV(m.geometry, t, h + WALL_SKIRT, len);
+  m.position.set(x, (h - WALL_SKIRT) / 2, (z0 + z1) / 2);
   scene.add(m);
   addCollider(x - t / 2, z0, x + t / 2, z1);
   return m;
@@ -715,9 +716,9 @@ const matGlowSoft = new THREE.MeshBasicMaterial({ color: 0xffe6c0, toneMapped: f
 addFloor(ATRIUM.x0, ATRIUM.z0, ATRIUM.x1, ATRIUM.z1, matAtriumFloor);
 const atriumLight = skylightCeiling(ATRIUM.x0, ATRIUM.z0, ATRIUM.x1, ATRIUM.z1, ATRIUM.h, matCeilingDark, 2.6, 2.4);
 addWallX(ATRIUM.z0, ATRIUM.x0 - 0.2, ATRIUM.x1 + 0.2, ATRIUM.h, matAtriumWall);
-addWallZ(ATRIUM.x0, ATRIUM.z0 - 0.2, ATRIUM.z1 + 0.2, ATRIUM.h, matAtriumWall);
+addWallZ(ATRIUM.x0, ATRIUM.z0 + 0.2, ATRIUM.z1 - 0.2, ATRIUM.h, matAtriumWall);
 wallXMulti(ATRIUM.z1, ATRIUM.x0 - 0.2, ATRIUM.x1 + 0.2, ATRIUM.h, matAtriumWall, 0.4, [{ a: -1.9, b: 1.9, h: 2.9 }]);
-wallZWithOpening(ATRIUM.x1, ATRIUM.z0 - 0.2, ATRIUM.z1 + 0.2, ATRIUM.h, matAtriumWall, 0.4, -1.6, 1.6, 2.6);
+wallZWithOpening(ATRIUM.x1, ATRIUM.z0 + 0.2, ATRIUM.z1 - 0.2, ATRIUM.h, matAtriumWall, 0.4, -1.6, 1.6, 2.6);
 
 
 /* 기둥 4개 */
@@ -745,8 +746,8 @@ addCollider(-1.7, 1.15, 1.7, 2.05);
 const matVestFloor = new THREE.MeshStandardMaterial({ color: 0x2b2d31, roughness: 0.2, metalness: 0.18, envMapIntensity: 1.0 });
 addFloor(VEST.x0, VEST.z0, VEST.x1, VEST.z1, matVestFloor);
 addCeiling(VEST.x0, VEST.z0, VEST.x1, VEST.z1, VEST.h, matCeilingDark);
-addWallZ(VEST.x0, VEST.z0, VEST.z1, VEST.h, matAtriumWall);
-addWallZ(VEST.x1, VEST.z0, VEST.z1, VEST.h, matAtriumWall);
+addWallZ(VEST.x0, VEST.z0 + 0.2, VEST.z1, VEST.h, matAtriumWall);
+addWallZ(VEST.x1, VEST.z0 + 0.2, VEST.z1, VEST.h, matAtriumWall);
 /* 바깥으로 통하는 유리벽 */
 const glassMat = new THREE.MeshStandardMaterial({ color: 0x9fb4c9, roughness: 0.08, metalness: 0.1, transparent: true, opacity: 0.34, side: THREE.DoubleSide });
 const glass = new THREE.Mesh(new THREE.PlaneGeometry(VEST.x1 - VEST.x0, VEST.h - 0.1), glassMat);
@@ -774,11 +775,11 @@ const DOORS = [
   { a: 32.4, b: 34.2, z: -1.8, room: 'C' },
   { a: 35.4, b: 37.2, z: 1.8, room: 'D' }
 ];
-wallXMulti(-1.8, COR.x0 - 0.2, COR.x1, 6.8, matCorridorWall, 0.4, [
+wallXMulti(-1.8, COR.x0 + 0.2, COR.x1, 6.8, matCorridorWall, 0.4, [
   { a: 13.6, b: 15.4, h: 2.35 },
   { a: 32.4, b: 34.2, h: 2.35 }
 ]);
-wallXMulti(1.8, COR.x0 - 0.2, COR.x1, 6.8, matCorridorWall, 0.4, [
+wallXMulti(1.8, COR.x0 + 0.2, COR.x1, 6.8, matCorridorWall, 0.4, [
   { a: 23.4, b: 25.1, h: 2.35 },
   { a: 35.4, b: 37.2, h: 2.35 }
 ]);
@@ -820,8 +821,10 @@ function buildRoom(r) {
   /* 복도와 맞닿은 쪽은 복도 벽 두께 안쪽에서 끝낸다.
      벽 바깥면과 딱 맞추면 방벽 단면과 복도 벽 면이 같은 평면에 겹쳐(Z-파이팅)
      벽마다 밝은 줄무늬가 지지직거리고, 반대로 너무 내밀면 복도로 튀어나온다. */
-  const zA = (corridorSide === 'z1') ? r.z0 - 0.2 : r.z0 - 0.05;
-  const zB = (corridorSide === 'z1') ? r.z1 + 0.05 : r.z1 + 0.2;
+  /* 옆벽은 마주 보는 벽의 안쪽 면에서 시작해 바깥 면에서 끝낸다.
+     벽 부피가 겹치면 같은 평면 두 장이 생겨 모서리가 모자이크처럼 지지직거린다. */
+  const zA = (corridorSide === 'z1') ? r.z0 : r.z0 + 0.2;
+  const zB = (corridorSide === 'z1') ? r.z1 - 0.2 : r.z1;
   addWallZ(r.x0 - 0.2, zA, zB, r.h, wallMat);
   addWallZ(r.x1 + 0.2, zA, zB, r.h, wallMat);
 
@@ -1246,6 +1249,93 @@ scene.add(sun.target);
   addPoint(p[0], 6.5, p[1], 0xffe2bb, 16, 16);
 });
 
+
+/* ── 아트리움 벽등(sconce) + 월워시(wall wash) ──
+   벽등 메쉬는 벽면에서 6cm, 조명은 34cm 띄워 공면 겹침을 만들지 않는다. */
+function glowCanvas(size, draw) {
+  const c = makeCanvas(size, size);
+  draw(c.getContext('2d'), size, size);
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+const sconceGlow = glowCanvas(128, function (ctx, w, h) {
+  const g = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2);
+  g.addColorStop(0, 'rgba(255,238,205,1)');
+  g.addColorStop(0.25, 'rgba(255,205,140,.55)');
+  g.addColorStop(0.6, 'rgba(255,180,110,.14)');
+  g.addColorStop(1, 'rgba(255,170,100,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+});
+const washTex = glowCanvas(256, function (ctx, w, h) {
+  const g = ctx.createLinearGradient(0, 0, 0, h);
+  g.addColorStop(0, 'rgba(255,225,185,0)');
+  g.addColorStop(0.10, 'rgba(255,225,185,.85)');
+  g.addColorStop(0.42, 'rgba(255,205,160,.40)');
+  g.addColorStop(0.80, 'rgba(255,180,120,.08)');
+  g.addColorStop(1, 'rgba(255,170,110,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+  const hg = ctx.createLinearGradient(0, 0, w, 0);
+  hg.addColorStop(0, 'rgba(0,0,0,1)');
+  hg.addColorStop(0.18, 'rgba(0,0,0,0)');
+  hg.addColorStop(0.82, 'rgba(0,0,0,0)');
+  hg.addColorStop(1, 'rgba(0,0,0,1)');
+  ctx.globalCompositeOperation = 'destination-out';
+  ctx.fillStyle = hg; ctx.fillRect(0, 0, w, h);
+});
+const matWash = new THREE.MeshBasicMaterial({
+  map: washTex, transparent: true, opacity: 0.26, blending: THREE.AdditiveBlending,
+  depthWrite: false, toneMapped: false, side: THREE.DoubleSide
+});
+function addSconce(x, y, z, nx, nz, withLight) {
+  const g = new THREE.Group();
+  const off = 0.06;
+  g.position.set(x + nx * off, y, z + nz * off);
+  g.rotation.y = Math.atan2(nx, nz);
+  const plate = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.32, 0.05), matDarkMetal);
+  plate.position.z = 0.025; plate.castShadow = false; g.add(plate);
+  const arm = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.05, 0.20), matDarkMetal);
+  arm.position.set(0, 0.03, 0.12); g.add(arm);
+  const shade = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.115, 0.17, 14, 1, true),
+    new THREE.MeshStandardMaterial({ color: 0x2b2c30, roughness: 0.5, metalness: 0.6, side: THREE.DoubleSide }));
+  shade.position.set(0, 0.05, 0.22); g.add(shade);
+  const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.062, 14, 10), new THREE.MeshBasicMaterial({ color: 0xffe4b8, toneMapped: false }));
+  bulb.position.set(0, 0.05, 0.22); g.add(bulb);
+  const halo = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: sconceGlow, color: 0xffcf9a, transparent: true, opacity: 0.62,
+    blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false, fog: false
+  }));
+  halo.scale.set(1.5, 1.5, 1); halo.position.set(0, 0.05, 0.26); g.add(halo);
+  scene.add(g);
+  if (withLight) {
+    const l = new THREE.PointLight(0xffc98a, 9.5, 7.2, 2);
+    l.position.set(x + nx * 0.34, y + 0.04, z + nz * 0.34);
+    scene.add(l);
+  }
+  return g;
+}
+function addWallWash(x, z, nx, nz, yTop, height, width, op) {
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(width, height), matWash.clone());
+  m.material.opacity = op === undefined ? 0.30 : op;
+  m.position.set(x + nx * 0.035, yTop - height / 2, z + nz * 0.035);
+  m.rotation.y = Math.atan2(nx, nz);
+  m.renderOrder = 2;
+  scene.add(m);
+  return m;
+}
+/* 뒷벽 · 서벽 · 앞벽의 벽등과 벽면 월워시 */
+addSconce(ATRIUM.x0 + 0.2, 3.0, ATRIUM.z0 + 0.2, 0, 1, true);
+addSconce(ATRIUM.x1 - 0.2, 3.0, ATRIUM.z0 + 0.2, 0, 1, true);
+addSconce(ATRIUM.x0 + 0.2, 3.0, ATRIUM.z0 + 4.9, 1, 0, true);
+addSconce(ATRIUM.x0 + 0.2, 3.0, ATRIUM.z1 - 3.2, 1, 0, true);
+addSconce(ATRIUM.x0 + 4.6, 3.0, ATRIUM.z1 - 0.2, 0, -1, false);
+addSconce(ATRIUM.x1 - 4.6, 3.0, ATRIUM.z1 - 0.2, 0, -1, false);
+addWallWash(ATRIUM.x0 + 4.0, ATRIUM.z0 + 0.2, 0, 1, ATRIUM.h - 0.4, 5.6, 2.6, 0.34);
+addWallWash(ATRIUM.x1 - 4.0, ATRIUM.z0 + 0.2, 0, 1, ATRIUM.h - 0.4, 5.6, 2.6, 0.34);
+addWallWash(ATRIUM.x0 + 0.2, ATRIUM.z0 + 4.6, 1, 0, ATRIUM.h - 0.4, 5.2, 2.4, 0.28);
+addWallWash(ATRIUM.x0 + 0.2, ATRIUM.z1 - 3.2, 1, 0, ATRIUM.h - 0.4, 5.2, 2.4, 0.28);
+addWallWash(ATRIUM.x0 + 4.6, ATRIUM.z1 - 0.2, 0, -1, 5.4, 4.2, 2.2, 0.22);
+addWallWash(ATRIUM.x1 - 4.6, ATRIUM.z1 - 0.2, 0, -1, 5.4, 4.2, 2.2, 0.22);
 
 /* 복도 조명 — 벽 바로 옆에서 태우면 하이라이트가 타 버려 벽면이 얼룩처럼 보이므로,
    천장 가까이에 두고 밝기를 낮춰 벽에는 부드러운 빛만 남긴다. */
@@ -1809,6 +1899,20 @@ function animate() {
   }
 }
 
+
+/* QA: 카메라 자세 지정 (검증 스크린샷용) */
+window.__gallery = {
+  state: state, camera: camera, scene: scene, renderer: renderer, EYE: EYE,
+  pose: function (x, z, yaw, pitch) {
+    state.mode = 'walk'; state.focus = null; state.saved = null;
+    state.pos.set(x, EYE, z);
+    state.yaw = yaw; state.pitch = pitch || 0;
+    state.bob = 0;
+    document.getElementById('intro').classList.add('hidden');
+    document.getElementById('loading').classList.add('hidden');
+    document.body.classList.remove('focusing');
+  }
+};
 
 /* ---------- 9) 시작 · 창 ---------- */
 function openPause() {
