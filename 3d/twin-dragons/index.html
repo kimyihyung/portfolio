@@ -2024,7 +2024,8 @@ function tourAdvance(first) {
   tourLeg(w, first ? 'enter' : 'leg');
 }
 function tourStart() {
-  if (reelMode || tourOn) return;   /* 모션 최소화 설정에서도 버튼으로 직접 요청하면 동작한다 */
+  /* 모션 최소화 설정에서도 버튼으로 직접 요청하면 동작한다. 단 드래그 중에는 절대 켜지 않는다 */
+  if (reelMode || tourOn || isDragging) return;
   intro.active = false;
   camAnim = null;
   tourOn = true;
@@ -2311,6 +2312,9 @@ const clock = new THREE.Clock();
 let elapsed = parseFloat(qs.get('t') || '0') || 0;
 let frames = 0, fpsT = 0;
 let idleAt = performance.now();
+/* 드래그 상태. 예전에는 드래그 중에도 유휴 타이머가 계속 돌아, 7초를 넘기는 드래그에서
+   자동 투어가 되살아나 손가락 밑에서 카메라가 다른 곳으로 날아갔다. */
+let isDragging = false;
 
 function tick() {
   const dt = Math.min(clock.getDelta(), 0.05);
@@ -2350,10 +2354,10 @@ function tick() {
     updateTour(dt);
   }
 
-  if (!reelMode && !intro.active && !camAnim && !REDUCE) {
+  if (!reelMode && !intro.active && !camAnim && !REDUCE && !isDragging) {
     const idle = (performance.now() - idleAt) / 1000;
     controls.autoRotate = false;
-    if (!tourOn && idle > TOUR_IDLE) tourStart();
+    if (!tourOn && !isDragging && idle > TOUR_IDLE) tourStart();
   }
   if (!reelMode && !tourOn) controls.update();
 
@@ -2438,7 +2442,31 @@ if (qs.get('ui') === '0') setCinema(true);
 if (qs.get('tour') === '1') tourStart();
 if (qs.get('preset') && PRESETS[qs.get('preset')]) goPreset(qs.get('preset'), true);
 if (qs.get('reel') === '1') setReel(true);
-canvas.addEventListener('pointerdown', () => { idleAt = performance.now(); if (tourOn) tourStop(); });
+/* 드래그 시작·끝을 명시적으로 관리한다: 드래그 중에는 유휴 타이머가 자동 투어를 켜지 않고,
+   pointerup/pointercancel로 손을 뗀 시점부터 다시 센다. */
+function dragBegin(e) {
+  if (e && e.pointerType === 'mouse' && e.button !== 0) return;   /* 오른쪽·휠 클릭은 드래그가 아니다 */
+  isDragging = true;
+  idleAt = performance.now();
+  if (tourOn) tourStop();
+}
+function dragEnd() {
+  if (!isDragging) return;
+  isDragging = false;
+  idleAt = performance.now();
+}
+canvas.addEventListener('pointerdown', dragBegin);
+canvas.addEventListener('pointermove', (e) => {
+  /* 창 바깥에서 놓인 경우까지 스스로 풀리게: 버튼이 하나도 안 눌렸으면 드래그가 아니다 */
+  if (isDragging && e.buttons === 0) { dragEnd(); return; }
+  if (isDragging) idleAt = performance.now();
+}, { passive: true });
+canvas.addEventListener('pointerup', dragEnd);
+canvas.addEventListener('pointercancel', dragEnd);
+/* 포인터가 캔버스를 벗어나 놓이는 경우까지 잡아야 드래그 상태가 남지 않는다 */
+addEventListener('pointerup', dragEnd);
+addEventListener('pointercancel', dragEnd);
+addEventListener('blur', dragEnd);
 canvas.addEventListener('wheel', () => { idleAt = performance.now(); if (tourOn) tourStop(); }, { passive: true });
 canvas.addEventListener('touchstart', () => { idleAt = performance.now(); if (tourOn) tourStop(); }, { passive: true });
 /* H: 시네마 모드 — 오버레이를 전부 걷어 순수 3D 화면만 남긴다 (Esc로 복원) */
