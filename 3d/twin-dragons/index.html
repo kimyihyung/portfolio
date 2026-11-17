@@ -1966,9 +1966,9 @@ $('#btnExitReel').addEventListener('click', () => setReel(false));
    9b. cinema HUD · cinematic auto tour
    ══════════════════════════════════════════════ */
 const TOUR_NAMES = ['guardian', 'orbit', 'coil', 'orb'];
-const TOUR_ENTER = 2.1, TOUR_LEG = 6.4, TOUR_HOLD = 2.8, TOUR_IDLE = 7.0;
+const TOUR_HOLD = 2.8, TOUR_IDLE = 7.0;
 const tour = {
-  i: -1, phase: 'idle', t: 0, dur: TOUR_LEG,
+  i: -1, phase: 'idle', t: 0, dur: 6.4,
   p0: new THREE.Vector3(), t0: new THREE.Vector3(), f0: 44,
   p1: new THREE.Vector3(), t1: new THREE.Vector3(), f1: 44
 };
@@ -2006,20 +2006,25 @@ function tourWaypoint(i) {
   const p = PRESETS[name];
   return { name: name, pos: presetPos(p), target: p.target.clone(), fov: p.fov };
 }
-function tourLeg(to, dur) {
+function tourLeg(to, mode) {
   tour.p0.copy(camera.position); tour.t0.copy(controls.target); tour.f0 = camera.fov;
   tour.p1.copy(to.pos); tour.t1.copy(to.target); tour.f1 = to.fov;
-  tour.dur = Math.max(0.01, dur); tour.t = 0; tour.phase = 'move';
+  /* 구간 길이에 맞춰 속도를 일정하게 — 9:16 세로 화면처럼 카메라가 멀리 설수록 길게 잡는다 */
+  const dist = tour.p0.distanceTo(tour.p1);
+  tour.dur = mode === 'enter'
+    ? Math.min(4.6, Math.max(1.8, dist / 9))
+    : Math.min(9.5, Math.max(3.6, dist / 7.5));
+  tour.t = 0; tour.phase = 'move';
 }
 function tourAdvance(first) {
   tour.i += 1;
   const w = tourWaypoint(tour.i);
   currentPreset = w.name;
   $$('#presets .chip').forEach((c) => c.classList.toggle('on', c.dataset.preset === w.name));
-  tourLeg(w, first ? TOUR_ENTER : TOUR_LEG);
+  tourLeg(w, first ? 'enter' : 'leg');
 }
 function tourStart() {
-  if (REDUCE || reelMode || tourOn) return;
+  if (reelMode || tourOn) return;   /* 모션 최소화 설정에서도 버튼으로 직접 요청하면 동작한다 */
   intro.active = false;
   camAnim = null;
   tourOn = true;
