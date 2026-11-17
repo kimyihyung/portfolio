@@ -1611,7 +1611,7 @@ window.addEventListener('unhandledrejection', function (e) {
     L.push('');
     L.push('💰 ' + t('msgTotal') + ' ' + money(R.total) + ' · ' + t('headCount')(S.people.length));
     L.push('');
-    L.push('· ' + t('msgEach'));
+    L.push('💸 ' + t('msgEach'));
     for (var j = 0; j < S.people.length; j++) {
       var p = S.people[j];
       var v = R.totals[p.id] || 0;
