@@ -1,0 +1,1975 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0b0d">
+<title>글자수 세기 — 자소서·블로그 글자수·바이트·줄바꿈 정리기 TextLens | Kim Yihyung</title>
+<meta name="description" content="자소서·블로그 원고의 글자수(공백 포함·제외), UTF-8·EUC-KR 바이트, 단어·문장·읽기 시간을 실시간으로 세고, 목표 글자수 게이지와 빈 줄·공백·PDF 줄바꿈·마크다운 정리, 80자 긴 문장·상투어·어미 반복 점검까지 브라우저 안에서 끝냅니다. 업로드 0바이트, 외부 요청 0건.">
+<meta name="keywords" content="글자수 세기, 글자수세기, 자소서 글자수, 공백 포함, 공백 제외, 바이트 계산, euc-kr 바이트, utf-8 바이트, 줄바꿈 정리, 빈 줄 제거, 마크다운 제거, 맞춤법 아닌 문체, 상투어, 자소서 첨삭, 블로그 원고, 네이버 블로그 글자수, character counter korean, byte counter, text cleaner, no upload">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/text-lens/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b0d'/%3E%3Cpath d='M9 22V10h2.6v5h5.2v-5H19.4v12h-2.6v-4.8h-5.2V22z' fill='%23e5b45c'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/text-lens/">
+<meta property="og:title" content="TextLens — 글자수·바이트·줄바꿈·문체 정리기">
+<meta property="og:description" content="붙여넣으면 공백 포함·제외 글자수와 UTF-8·EUC-KR 바이트가 동시에 나옵니다. 목표 게이지, 빈 줄·PDF 줄바꿈·마크다운 정리, 긴 문장·상투어 점검. 업로드 0바이트, 외부 요청 0건.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="TextLens — zero-upload Korean character, byte and line-break counter running in the browser">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TextLens — 글자수·바이트·줄바꿈·문체 정리기">
+<meta name="twitter:description" content="자소서 1,000자, 공공기관 500자 — 공백 포함·제외와 EUC-KR 바이트를 같이 세고, 목표선까지 몇 자 남았는지 보여 줍니다. 원고는 탭을 떠나지 않습니다.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta name="twitter:image:alt" content="TextLens — zero-upload Korean character, byte and line-break counter running in the browser">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "TextLens — 글자수·바이트·줄바꿈·문체 정리기",
+      "alternateName": "TextLens",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/text-lens/",
+      "description": "Counts Korean characters with and without spaces, UTF-8 and EUC-KR bytes, words, sentences, lines and reading time as you type, tracks a target character count, cleans blank lines, broken line breaks and Markdown, and flags long sentences, repeated endings and cliché phrases — entirely in the browser with zero uploads and zero external requests.",
+      "featureList": [
+        "Live character count with spaces, without spaces, without line breaks",
+        "UTF-8 bytes and EUC-KR (CP949) bytes side by side",
+        "Words, sentences, lines, paragraphs and estimated reading time",
+        "Target character gauge with 300 / 500 / 700 / 1,000 / 1,500 / 2,000 presets and a custom target",
+        "One-click clean-up of blank lines, double spaces, broken PDF line breaks and Markdown or HTML marks",
+        "Undo for every clean-up step",
+        "Sentence-length, ending-style, repeated-word and cliché checks computed in the tab",
+        "Korean and English interface in one toggle",
+        "100% client-side: no uploads, no accounts, no external requests"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "TextLens", "item": "https://kimyihyung.github.io/portfolio/tools/text-lens/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "글자수를 어떻게 세나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "입력한 그대로를 세는 방식과 사람이 읽는 단위를 나눠서 보여 줍니다. 공백 포함·공백 제외·줄바꿈 제외 글자수, 단어 수, 문장 수, 줄·문단 수를 동시에 계산하고, 바이트는 UTF-8과 EUC-KR(CP949) 두 기준으로 따로 셉니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "EUC-KR 바이트는 어떻게 계산하나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "브라우저에 내장된 euc-kr 디코더로 CP949 2바이트 영역 전체를 실제로 풀어 문자 대응표를 만들고, 글자마다 1바이트(ASCII)인지 2바이트(한글·한자·가나·전각 기호)인지 더합니다. 표에 없는 문자는 3바이트로 계산하고 몇 개인지 따로 알려 줍니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "원고가 서버로 올라가나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "아니요. 계산도 정리도 전부 이 탭의 자바스크립트로만 이루어지고, 저장도 하지 않습니다. 페이지 아래 카운터가 이 페이지가 바깥으로 만든 요청 수를 세며 0으로 유지됩니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "긴 문장과 상투어 표시는 AI 판별인가요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "판별기가 아닙니다. 80자를 넘는 문장, 습니다·해요·한다체의 비율, 자주 반복되는 단어, 흔한 상투어의 빈도를 세는 규칙 기반 점검이고, 고칠지 말지는 사람이 정합니다." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  --bg: #0b0b0d;
+  --bg2: #0e0e11;
+  --panel: #121216;
+  --panel2: #17171c;
+  --panel3: #1c1c22;
+  --line: rgba(255,255,255,.08);
+  --line2: rgba(255,255,255,.17);
+  --ink: #f5f2ea;
+  --muted: #a8a296;
+  --muted2: #736d63;
+  --accent: #e5b45c;
+  --accent-dim: rgba(229,180,92,.13);
+  --on-accent: #191104;
+  --ok: #7ad9c0;
+  --ok-dim: rgba(122,217,192,.14);
+  --warn: #e8a559;
+  --bad: #ec7a63;
+  --bad-dim: rgba(236,122,99,.14);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --maxw: 1180px;
+}
+
+html { -webkit-text-size-adjust: 100%; }
+html, body { margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(120% 55% at 50% -18%, rgba(229,180,92,.10), transparent 60%),
+    radial-gradient(60% 40% at 100% 2%, rgba(122,217,192,.045), transparent 58%);
+  background-repeat: no-repeat;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+::selection { background: var(--accent); color: var(--on-accent); }
+a { color: inherit; }
+button { font-family: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+[hidden] { display: none !important; }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+.wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 22px 40px; }
+
+/* ---------- top bar ---------- */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 20px 0 14px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); min-width: 0; }
+.mark {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 9px; flex: 0 0 auto;
+  background: linear-gradient(160deg, #f0c878, #c9974a);
+  color: #1a1204; font-size: 11.5px; font-weight: 800; letter-spacing: .04em;
+  box-shadow: 0 1px 0 rgba(255,255,255,.25) inset, 0 6px 18px rgba(229,180,92,.18);
+}
+.brand-txt { font-size: 12px; font-weight: 650; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.top-actions { display: flex; align-items: center; gap: 10px; }
+.lang-toggle {
+  display: inline-flex; align-items: center; gap: 5px; height: 32px; padding: 0 10px;
+  border: 1px solid var(--line2); border-radius: 999px; background: rgba(255,255,255,.02);
+  font-size: 11.5px; letter-spacing: .08em; cursor: pointer; color: var(--muted2);
+  transition: border-color .15s ease, color .15s ease;
+}
+.lang-toggle:hover { border-color: var(--accent); color: var(--ink); }
+.lang-toggle .lt { font-weight: 700; transition: color .15s ease; }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--muted2); opacity: .7; }
+.back {
+  display: inline-flex; align-items: center; height: 32px; padding: 0 12px; gap: 6px;
+  border: 1px solid var(--line); border-radius: 999px; text-decoration: none;
+  font-size: 12px; color: var(--muted); white-space: nowrap; transition: border-color .15s ease, color .15s ease;
+}
+.back:hover { border-color: var(--line2); color: var(--ink); }
+
+/* ---------- hero ---------- */
+.hero { padding: 14px 0 22px; max-width: 860px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; margin: 0 0 12px;
+  font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted2);
+}
+.eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px rgba(229,180,92,.14); }
+.hero h1 {
+  margin: 0 0 14px; font-size: clamp(28px, 4.6vw, 44px); line-height: 1.18;
+  letter-spacing: -.022em; font-weight: 750;
+}
+.hero h1 .dim { color: var(--muted2); }
+.lede { margin: 0; font-size: 14.6px; line-height: 1.78; color: var(--muted); max-width: 72ch; }
+.lede b { color: var(--ink); font-weight: 650; }
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 16px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px;
+  border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,.02);
+  font-size: 11.2px; color: var(--muted); white-space: nowrap;
+}
+.pill b { color: var(--ink); font-weight: 650; }
+.pill--live { border-color: rgba(122,217,192,.32); color: #bfe9dd; background: rgba(122,217,192,.06); }
+.pill--live b { color: var(--ok); }
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); animation: beat 2.4s ease-in-out infinite; }
+@keyframes beat { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .45; transform: scale(.82); } }
+
+/* ---------- workbench layout ---------- */
+.work { display: grid; grid-template-columns: minmax(0, 1.42fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.col { min-width: 0; display: grid; gap: 14px; }
+
+.card {
+  border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel);
+  box-shadow: 0 1px 0 rgba(255,255,255,.03) inset, 0 18px 40px -30px rgba(0,0,0,.8);
+}
+.card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 13px 16px 0; }
+.ph {
+  display: flex; align-items: center; gap: 8px; margin: 0; padding: 0;
+  font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted2); font-weight: 650;
+}
+.ph .n {
+  display: inline-flex; width: 18px; height: 18px; align-items: center; justify-content: center;
+  border-radius: 5px; background: var(--accent-dim); color: var(--accent);
+  font-size: 9.5px; font-family: var(--mono); letter-spacing: 0;
+}
+.note-sm { letter-spacing: .02em; text-transform: none; color: var(--muted2); font-weight: 500; font-size: 11px; white-space: nowrap; }
+
+/* ---------- editor ---------- */
+.editor-card { padding: 0 0 12px; }
+.editor-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 12px 14px 10px; border-bottom: 1px solid var(--line); }
+.editor-tools { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.mini-btn {
+  display: inline-flex; align-items: center; gap: 5px; height: 30px; padding: 0 10px;
+  border: 1px solid var(--line); border-radius: 8px; background: var(--panel2);
+  font-size: 11.6px; color: var(--muted); cursor: pointer;
+  transition: border-color .15s ease, color .15s ease, background .15s ease;
+}
+.mini-btn:hover { border-color: var(--line2); color: var(--ink); background: var(--panel3); }
+.mini-btn:active { transform: translateY(1px); }
+.mini-btn--accent { border-color: rgba(229,180,92,.42); color: var(--accent); background: var(--accent-dim); }
+.mini-btn[disabled] { opacity: .42; cursor: not-allowed; }
+.mini-btn[disabled]:hover { border-color: var(--line); color: var(--muted); background: var(--panel2); }
+
+.editor-shell { position: relative; }
+#text {
+  display: block; width: 100%; min-height: 372px; margin: 0; padding: 16px 18px 18px;
+  border: 0; border-bottom: 1px solid var(--line); border-radius: 0;
+  background: transparent; color: var(--ink); resize: vertical;
+  font-family: var(--font); font-size: 15.4px; line-height: 1.86; letter-spacing: -.005em;
+  caret-color: var(--accent); tab-size: 4;
+}
+#text::placeholder { color: var(--muted2); opacity: 1; line-height: 1.9; }
+#text:focus { outline: none; }
+.editor-shell.is-drag { background: rgba(229,180,92,.06); box-shadow: inset 0 0 0 2px rgba(229,180,92,.5); }
+.drop-hint {
+  position: absolute; inset: 12px; display: none; align-items: center; justify-content: center;
+  border: 1px dashed rgba(229,180,92,.55); border-radius: 12px;
+  background: rgba(11,11,13,.82); font-size: 13px; color: var(--accent); pointer-events: none; text-align: center; padding: 12px;
+}
+.editor-shell.is-drag .drop-hint { display: flex; }
+
+.editor-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 10px 14px 0; }
+.file-line { display: flex; align-items: center; gap: 8px; min-width: 0; font-size: 11.4px; color: var(--muted2); }
+.file-line .fname { color: var(--muted); max-width: 210px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-line .sep { opacity: .5; }
+.foot-hint { font-size: 11.2px; color: var(--muted2); }
+
+/* ---------- cleaner row ---------- */
+.clean-card { padding: 13px 14px 14px; }
+.clean-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 11px; }
+.clean-btn {
+  display: inline-flex; align-items: center; gap: 7px; min-height: 36px; padding: 0 12px;
+  border: 1px solid var(--line2); border-radius: 9px; background: var(--panel2);
+  font-size: 12.4px; color: var(--ink); cursor: pointer;
+  transition: border-color .15s ease, background .15s ease, transform .08s ease;
+}
+.clean-btn:hover { border-color: var(--accent); background: var(--panel3); }
+.clean-btn:active { transform: translateY(1px); }
+.clean-btn .k { font-family: var(--mono); font-size: 10px; color: var(--muted2); }
+.clean-btn[disabled] { opacity: .4; cursor: not-allowed; }
+.undo-line { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 11.4px; color: var(--muted2); min-height: 16px; }
+.undo-line b { color: var(--muted); font-weight: 600; }
+.toast {
+  margin-top: 9px; padding: 8px 11px; border-radius: 9px; border: 1px solid rgba(122,217,192,.3);
+  background: var(--ok-dim); color: #cfeee5; font-size: 11.8px; display: none;
+}
+.toast.show { display: block; }
+.toast.warn { border-color: rgba(232,165,89,.35); background: rgba(232,165,89,.12); color: #f0d3ac; }
+
+/* ---------- stats ---------- */
+.stat-card { padding: 14px 16px 16px; }
+.stat-primary { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+.tile {
+  border: 1px solid var(--line); border-radius: 12px; background: var(--panel2);
+  padding: 11px 12px 10px; min-width: 0;
+}
+.tile--lead { grid-column: 1 / -1; background: linear-gradient(150deg, rgba(229,180,92,.10), rgba(229,180,92,.02) 60%), var(--panel2); border-color: rgba(229,180,92,.3); }
+.tile .lbl { display: block; font-size: 10.6px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tile .val { display: block; margin-top: 3px; font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 23px; font-weight: 600; line-height: 1.15; letter-spacing: -.02em; }
+.tile .val small { font-size: 11px; font-weight: 500; color: var(--muted2); margin-left: 3px; letter-spacing: 0; }
+.tile--lead .val { font-size: 40px; letter-spacing: -.035em; }
+.tile--lead .val small { font-size: 13px; }
+.tile .sub { display: block; margin-top: 2px; font-size: 10.6px; color: var(--muted2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stat-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 8px; }
+.stat-grid .tile { padding: 8px 10px 7px; }
+.stat-grid .tile .val { font-size: 15.5px; margin-top: 1px; }
+.stat-grid .tile .lbl { font-size: 9.6px; letter-spacing: .06em; }
+.read-line { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--line); font-size: 11.4px; color: var(--muted2); }
+.read-line b { color: var(--ink); font-size: 13px; font-weight: 600; }
+.note-line { margin: 8px 0 0; font-size: 10.9px; line-height: 1.6; color: var(--muted2); }
+.note-line.is-warn { color: #e6bf8e; }
+
+/* ---------- goal ---------- */
+.goal-card { padding: 14px 16px 16px; }
+.goal-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 12px; }
+.goal-value { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 13px; color: var(--muted); }
+.goal-value b { color: var(--ink); font-size: 15px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.chip {
+  height: 30px; padding: 0 10px; border-radius: 8px; border: 1px solid var(--line);
+  background: var(--panel2); color: var(--muted); font-size: 11.8px; cursor: pointer;
+  font-family: var(--mono); font-variant-numeric: tabular-nums;
+  transition: border-color .15s ease, color .15s ease, background .15s ease;
+}
+.chip:hover { border-color: var(--line2); color: var(--ink); }
+.chip[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+.goal-custom { display: flex; align-items: center; gap: 7px; margin-top: 8px; }
+.goal-custom label { font-size: 11.2px; color: var(--muted2); white-space: nowrap; }
+.goal-custom input[type="number"] {
+  width: 96px; height: 30px; padding: 0 9px; border-radius: 8px; border: 1px solid var(--line2);
+  background: var(--panel2); color: var(--ink); font-family: var(--mono); font-size: 12px;
+}
+.goal-basis { display: flex; align-items: center; gap: 7px; margin-top: 8px; flex-wrap: wrap; }
+.goal-basis label { font-size: 11.2px; color: var(--muted2); white-space: nowrap; }
+.goal-basis select {
+  height: 30px; padding: 0 8px; border-radius: 8px; border: 1px solid var(--line2);
+  background: var(--panel2); color: var(--ink); font-size: 11.6px; font-family: inherit; max-width: 100%;
+}
+.bar { position: relative; height: 10px; margin-top: 12px; border-radius: 999px; background: var(--panel3); overflow: hidden; }
+.bar-fill { position: absolute; inset: 0 auto 0 0; width: 0; border-radius: 999px; background: linear-gradient(90deg, #c9974a, var(--accent)); transition: width .22s ease, background .22s ease; }
+.bar-fill.near { background: linear-gradient(90deg, #d38f45, #e8a559); }
+.bar-fill.over { background: linear-gradient(90deg, #d0664f, #ec7a63); }
+.bar-note { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-top: 7px; font-size: 11.4px; color: var(--muted2); }
+.bar-note b { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--ink); font-weight: 600; }
+.bar-note .state-over { color: var(--bad); }
+.bar-note .state-ok { color: var(--ok); }
+
+/* ---------- checks ---------- */
+.check-card { padding: 14px 16px 6px; }
+.check-block { padding: 12px 0 13px; border-top: 1px solid var(--line); }
+.check-block:first-of-type { border-top: 0; padding-top: 10px; }
+.check-block:last-child { border-bottom: 0; }
+.check-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 7px; }
+.check-title { display: flex; align-items: center; gap: 7px; margin: 0; font-size: 11.4px; font-weight: 650; letter-spacing: .04em; color: var(--ink); }
+.check-title .cnt { font-family: var(--mono); font-size: 10.4px; color: var(--muted2); font-weight: 500; }
+.tag-ok { display: inline-flex; align-items: center; gap: 5px; font-size: 10.6px; color: var(--ok); }
+.tag-ok::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--ok); }
+.tag-warn { display: inline-flex; align-items: center; gap: 5px; font-size: 10.6px; color: var(--warn); }
+.tag-warn::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--warn); }
+
+.issue-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; max-height: 208px; overflow-y: auto; overscroll-behavior: contain; }
+.issue {
+  display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center;
+  width: 100%; text-align: left; padding: 7px 9px; border: 1px solid transparent; border-radius: 8px;
+  background: rgba(255,255,255,.022); color: var(--muted); font-size: 11.6px; line-height: 1.5; cursor: pointer;
+  transition: border-color .15s ease, background .15s ease, color .15s ease;
+}
+.issue:hover { border-color: var(--line2); background: var(--panel3); color: var(--ink); }
+.issue .txt { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.issue .n { font-family: var(--mono); font-size: 10.2px; color: var(--muted2); white-space: nowrap; }
+.issue--long .n { color: var(--warn); }
+.empty-ok { margin: 0; font-size: 11.6px; color: var(--muted2); }
+
+.rep-list { display: grid; gap: 6px; }
+.rep { display: grid; grid-template-columns: minmax(0, 1fr) 46px; gap: 8px; align-items: center; font-size: 11.8px; color: var(--muted); }
+.rep .w { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.rep .w span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rep .track { height: 5px; border-radius: 3px; background: var(--panel3); overflow: hidden; width: 62px; flex: 0 0 auto; order: -1; }
+.rep .fill { height: 100%; border-radius: 3px; background: rgba(229,180,92,.55); }
+.rep .c { font-family: var(--mono); font-size: 10.4px; color: var(--muted2); text-align: right; }
+
+.style-bars { display: grid; gap: 7px; }
+.style-row { display: grid; grid-template-columns: 64px minmax(0, 1fr) 46px; gap: 8px; align-items: center; font-size: 11.2px; color: var(--muted); }
+.style-row .track { height: 6px; border-radius: 3px; background: var(--panel3); overflow: hidden; }
+.style-row .fill { height: 100%; border-radius: 3px; transition: width .25s ease; }
+.style-row .pct { font-family: var(--mono); font-size: 10.6px; color: var(--muted2); text-align: right; }
+.style-row.f1 .fill { background: rgba(122,217,192,.65); }
+.style-row.f2 .fill { background: rgba(229,180,92,.6); }
+.style-row.f3 .fill { background: rgba(236,122,99,.55); }
+.style-row.f4 .fill { background: rgba(255,255,255,.2); }
+.style-note { margin: 8px 0 0; font-size: 11px; line-height: 1.6; color: var(--muted2); }
+
+/* ---------- highlight preview ---------- */
+.preview-card { padding: 13px 16px 15px; }
+.preview-toggle { display: flex; align-items: center; gap: 8px; background: none; border: 0; padding: 0; cursor: pointer; }
+.preview-toggle .ph { color: var(--muted2); }
+.preview-toggle .caret { font-size: 10px; color: var(--muted2); transition: transform .18s ease; }
+.preview-toggle[aria-expanded="true"] .caret { transform: rotate(90deg); }
+#preview {
+  margin: 11px 0 0; padding: 13px 14px; border-radius: 10px; border: 1px solid var(--line);
+  background: var(--bg2); font-size: 13px; line-height: 1.85; color: var(--muted);
+  max-height: 320px; overflow-y: auto; white-space: pre-wrap; overflow-wrap: anywhere;
+}
+#preview[hidden] { display: none; }
+#preview mark { background: rgba(236,122,99,.20); color: #ffd9d1; border-radius: 3px; padding: 0 1px; box-shadow: 0 0 0 1px rgba(236,122,99,.25) inset; }
+#preview mark.mk-cliche { background: rgba(229,180,92,.18); color: #f4d9ab; box-shadow: 0 0 0 1px rgba(229,180,92,.28) inset; }
+.preview-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 9px; font-size: 10.8px; color: var(--muted2); }
+.preview-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.preview-legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+.lg-long { background: rgba(236,122,99,.35); }
+.lg-cliche { background: rgba(229,180,92,.35); }
+
+/* ---------- notes / faq ---------- */
+.notes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 26px 0 0; }
+.note { border: 1px solid var(--line); border-radius: 13px; background: rgba(255,255,255,.016); padding: 14px 15px; }
+.note h3 { display: flex; align-items: baseline; gap: 8px; margin: 0 0 6px; font-size: 12.4px; font-weight: 650; color: var(--ink); }
+.note h3 span { font-family: var(--mono); font-size: 10px; color: var(--accent); }
+.note p { margin: 0; font-size: 12px; line-height: 1.72; color: var(--muted2); }
+.faq { margin: 26px 0 0; }
+.faq h2 { margin: 0 0 12px; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted2); font-weight: 650; }
+.faq-item { padding: 12px 0; border-top: 1px solid var(--line); }
+.faq-item h3 { margin: 0 0 5px; font-size: 13px; font-weight: 650; color: var(--ink); }
+.faq-item p { margin: 0; font-size: 12.4px; line-height: 1.75; color: var(--muted); max-width: 92ch; }
+.caveat { margin: 22px 0 0; padding: 12px 14px; border: 1px solid rgba(229,180,92,.22); border-radius: 12px; background: rgba(229,180,92,.05); font-size: 12px; line-height: 1.75; color: #e6cfa6; }
+.caveat strong { color: var(--accent); }
+
+/* ---------- footer ---------- */
+.foot {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+  margin-top: 26px; padding-top: 16px; border-top: 1px solid var(--line);
+  font-size: 11.4px; color: var(--muted2);
+}
+.foot .net b { color: var(--accent); font-weight: 700; font-family: var(--mono); }
+.foot a { color: var(--muted2); text-decoration: none; border-bottom: 1px solid transparent; }
+.foot a:hover { color: var(--ink); border-bottom-color: var(--line2); }
+
+/* ---------- mobile sticky meter ---------- */
+.sticky-meter {
+  display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+  padding: 8px 14px calc(8px + env(safe-area-inset-bottom));
+  background: rgba(11,11,13,.94); border-top: 1px solid var(--line);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+}
+.sticky-inner { display: flex; align-items: center; gap: 12px; max-width: 560px; margin: 0 auto; }
+.sm-item { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.sm-item .k { font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted2); }
+.sm-item .v { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 14px; color: var(--ink); }
+.sm-item .v small { font-size: 10px; color: var(--muted2); }
+.sm-bar { flex: 1 1 auto; height: 6px; border-radius: 3px; background: var(--panel3); overflow: hidden; min-width: 40px; }
+.sm-bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #c9974a, var(--accent)); }
+.sm-bar i.near { background: #e8a559; }
+.sm-bar i.over { background: #ec7a63; }
+.sm-zero { margin-left: auto; font-size: 10px; color: #a9dccd; white-space: nowrap; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 980px) {
+  .work { grid-template-columns: minmax(0, 1fr); }
+  .notes { grid-template-columns: minmax(0, 1fr); }
+  .sticky-meter { display: block; }
+  body { padding-bottom: 62px; }
+}
+@media (max-width: 720px) {
+  .wrap { padding: 0 15px 30px; }
+  .hero { padding: 8px 0 16px; }
+  .hero h1 { font-size: clamp(25px, 7.4vw, 34px); }
+  .lede { font-size: 13.6px; }
+  .brand-txt { display: none; }
+  #text { min-height: 300px; font-size: 15px; padding: 13px 14px 15px; }
+  .stat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .tile--lead .val { font-size: 34px; }
+  .issue-list { max-height: 240px; }
+  .editor-head { padding: 10px 12px 9px; }
+  .editor-foot { padding: 9px 12px 0; }
+  .stat-card, .goal-card, .check-card, .clean-card, .preview-card { padding-left: 13px; padding-right: 13px; }
+}
+@media (max-width: 420px) {
+  .stat-primary { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .stat-grid { grid-template-columns: 1fr 1fr; }
+  .tile--lead .val { font-size: 30px; }
+  .top-actions .back { padding: 0 10px; }
+  .clean-btn { font-size: 11.8px; padding: 0 10px; }
+  .file-line .fname { max-width: 120px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <a class="brand" href="/portfolio/" aria-label="Kim Yihyung — portfolio" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="View in English" aria-label="View in English">
+        <span class="lt on" data-lt="ko">KO</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="en">EN</span>
+      </button>
+      <a class="back" href="../" data-i18n="backTools">← Tools</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="badge-row">
+      <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b>0 bytes uploaded</b> · <b><span id="extBadge">0</span> external requests</b></span>
+      <span class="pill" data-i18n-html="pillLocal">In-browser <b>100% local</b></span>
+      <span class="pill" data-i18n-html="pillBytes"><b>UTF-8 · EUC-KR</b> at once</span>
+      <span class="pill" data-i18n="pillUse">Resume · blog · public forms</span>
+    </div>
+    <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="eyebrow">TextLens · No. 1 of the Korean-first shelf</span></p>
+    <h1 data-i18n-html="h1">Count the characters.<br><span class="dim">Keep the words.</span></h1>
+    <p class="lede" data-i18n-html="lede">Korean forms still cut people off by <b>characters with spaces</b> and <b>EUC-KR bytes</b>. Paste your text and both numbers appear at once, with how many characters are left before the limit. Blank lines, broken line breaks and Markdown marks clean up in one click, and sentences over 80 characters and clichés get marked. The draft never leaves this tab.</p>
+  </section>
+
+  <div class="work">
+
+    <!-- ─────────── left: editor ─────────── -->
+    <div class="col">
+      <section class="card editor-card" aria-labelledby="editorTitle">
+        <div class="editor-head">
+          <h2 class="ph" id="editorTitle"><span class="n">01</span><span data-i18n="secWrite">Write or paste</span></h2>
+          <div class="editor-tools">
+            <button class="mini-btn" id="btnSample" type="button" data-i18n="btnSample">Sample</button>
+            <button class="mini-btn" id="btnCopy" type="button" data-i18n="btnCopy">Copy all</button>
+            <button class="mini-btn" id="btnDownload" type="button" data-i18n="btnDownload">Save .txt</button>
+            <button class="mini-btn" id="btnClear" type="button" data-i18n="btnClear">Clear</button>
+          </div>
+        </div>
+        <div class="editor-shell" id="editorShell">
+          <textarea id="text" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="Text to count" data-i18n-aria="editorAria" placeholder="여기에 자소서나 블로그 원고를 붙여넣으세요.&#10;&#10;붙여넣기 · 드래그 · Ctrl+V 어느 쪽이든 됩니다. 글자수와 바이트가 바로 세어집니다." data-i18n-placeholder="editorPh"></textarea>
+          <div class="drop-hint" data-i18n="dropHint">Drop a .txt or .md file here</div>
+        </div>
+        <div class="editor-foot">
+          <div class="file-line">
+            <button class="mini-btn" id="btnFile" type="button" data-i18n="btnFile">Open file</button>
+            <input type="file" id="fileInput" accept=".txt,.md,.markdown,.csv,text/plain" class="sr-only" aria-label="Open a text file" data-i18n-aria="fileAria">
+            <span class="fname" id="fileName" data-i18n="noFile">No file — paste or drop</span>
+            <span class="sep" aria-hidden="true">·</span>
+            <span id="fileSize" class="num">0 B</span>
+          </div>
+          <span class="foot-hint" data-i18n="noSave">Nothing is saved — close the tab and it is gone</span>
+        </div>
+      </section>
+
+      <section class="card clean-card" aria-labelledby="cleanTitle">
+        <div class="card-head">
+          <h2 class="ph" id="cleanTitle"><span class="n">02</span><span data-i18n="secClean">Clean up</span></h2>
+          <span class="note-sm" data-i18n="cleanNote">One click · undo kept</span>
+        </div>
+        <div class="clean-row">
+          <button class="clean-btn" id="cBlank" type="button"><span data-i18n="cBlank">Blank lines</span><span class="k">↵↵</span></button>
+          <button class="clean-btn" id="cSpace" type="button"><span data-i18n="cSpace">Spaces &amp; indent</span><span class="k">␣</span></button>
+          <button class="clean-btn" id="cLines" type="button"><span data-i18n="cLines">Restore line breaks</span><span class="k">¶</span></button>
+          <button class="clean-btn" id="cMd" type="button"><span data-i18n="cMd">Strip Markdown · HTML</span><span class="k">#</span></button>
+          <button class="clean-btn" id="cQuote" type="button"><span data-i18n="cQuote">Tidy punctuation</span><span class="k">”</span></button>
+        </div>
+        <div class="undo-line">
+          <button class="mini-btn mini-btn--accent" id="btnUndo" type="button" disabled data-i18n="btnUndo">Undo clean-up</button>
+          <span id="undoNote" data-i18n="undoNone">No clean-up yet</span>
+        </div>
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      </section>
+
+      <section class="card preview-card" aria-labelledby="previewTitle">
+        <button class="preview-toggle" id="previewToggle" type="button" aria-expanded="false" aria-controls="preview">
+          <span class="caret" aria-hidden="true">▸</span>
+          <span class="ph" id="previewTitle"><span class="n">04</span><span data-i18n="secPreview">Read it marked</span></span>
+          <span class="note-sm" data-i18n="previewNote">Long sentences · clichés</span>
+        </button>
+        <div class="preview-legend">
+          <span><i class="lg-long" aria-hidden="true"></i><span data-i18n="lgLong">Sentence over 80 characters</span></span>
+          <span><i class="lg-cliche" aria-hidden="true"></i><span data-i18n="lgCliche">Cliché · stock phrase</span></span>
+        </div>
+        <div id="preview" hidden></div>
+      </section>
+    </div>
+
+    <!-- ─────────── right: numbers ─────────── -->
+    <div class="col">
+      <section class="card stat-card" aria-labelledby="statTitle">
+        <div class="card-head">
+          <h2 class="ph" id="statTitle"><span class="n">03</span><span data-i18n="secCount">Counts</span></h2>
+          <span class="note-sm" id="eucState" data-i18n="eucReady">EUC-KR ready</span>
+        </div>
+        <div class="stat-primary">
+          <div class="tile tile--lead">
+            <span class="lbl" data-i18n="chars">Characters with spaces</span>
+            <span class="val num" id="vChars">0</span>
+            <span class="sub" id="vCharsSub" data-i18n="charsSub">the number Korean forms usually ask for</span>
+          </div>
+          <div class="tile">
+            <span class="lbl" data-i18n="euc">EUC-KR bytes</span>
+            <span class="val num" id="vEuc">0<small>B</small></span>
+            <span class="sub" data-i18n="eucSub">Hangul · Hanja 2B</span>
+          </div>
+          <div class="tile">
+            <span class="lbl" data-i18n="utf8">UTF-8 bytes</span>
+            <span class="val num" id="vUtf8">0<small>B</small></span>
+            <span class="sub" data-i18n="utf8Sub">Hangul 3B</span>
+          </div>
+        </div>
+        <div class="stat-grid">
+          <div class="tile"><span class="lbl" data-i18n="charsNoSpace">No spaces</span><span class="val num" id="vNoSpace">0</span></div>
+          <div class="tile"><span class="lbl" data-i18n="charsNoNl">No line breaks</span><span class="val num" id="vNoNl">0</span></div>
+          <div class="tile"><span class="lbl" data-i18n="words">Words</span><span class="val num" id="vWords">0</span></div>
+          <div class="tile"><span class="lbl" data-i18n="sentences">Sentences</span><span class="val num" id="vSent">0</span></div>
+          <div class="tile"><span class="lbl" data-i18n="lines">Lines</span><span class="val num" id="vLines">0</span></div>
+          <div class="tile"><span class="lbl" data-i18n="paragraphs">Paragraphs</span><span class="val num" id="vPara">0</span></div>
+        </div>
+        <div class="read-line">
+          <span data-i18n="readLabel">Estimated reading time</span>
+          <b id="vRead">0초</b>
+        </div>
+        <p class="note-line" id="eucNote" data-i18n="eucNote">EUC-KR is measured with the browser's own CP949 table, not guessed from a rule of thumb.</p>
+      </section>
+
+      <section class="card goal-card" aria-labelledby="goalTitle">
+        <div class="card-head">
+          <h2 class="ph" id="goalTitle"><span class="n">05</span><span data-i18n="secGoal">Target</span></h2>
+          <span class="note-sm" data-i18n="goalNote">Gauge + limit warning</span>
+        </div>
+        <div class="goal-top">
+          <span class="goal-value"><b id="goalNow">0</b> / <span id="goalMax" class="num">1,000</span></span>
+          <span class="num" id="goalPct" style="font-size:11.5px;color:var(--muted2)">0%</span>
+        </div>
+        <div class="chips" id="goalChips" role="group" aria-label="Target character count" data-i18n-aria="goalAria">
+          <button class="chip" type="button" data-goal="300" aria-pressed="false">300</button>
+          <button class="chip" type="button" data-goal="500" aria-pressed="false">500</button>
+          <button class="chip" type="button" data-goal="700" aria-pressed="false">700</button>
+          <button class="chip" type="button" data-goal="1000" aria-pressed="true">1,000</button>
+          <button class="chip" type="button" data-goal="1500" aria-pressed="false">1,500</button>
+          <button class="chip" type="button" data-goal="2000" aria-pressed="false">2,000</button>
+        </div>
+        <div class="goal-basis">
+          <label for="goalBasis" data-i18n="basisLabel">Count by</label>
+          <select id="goalBasis">
+            <option value="chars" data-i18n="basisChars">Characters with spaces</option>
+            <option value="noSpace" data-i18n="basisNoSpace">Characters without spaces</option>
+            <option value="euc" data-i18n="basisBytes">EUC-KR bytes</option>
+          </select>
+          <div class="goal-custom">
+            <label for="goalInput" data-i18n="customLabel">Custom</label>
+            <input type="number" id="goalInput" min="20" max="100000" step="10" value="1000" inputmode="numeric" aria-label="Custom target" data-i18n-aria="customAria">
+          </div>
+        </div>
+        <div class="bar" role="progressbar" id="goalBar" aria-valuemin="0" aria-valuemax="1000" aria-valuenow="0" aria-label="Progress to target" data-i18n-aria="barAria">
+          <span class="bar-fill" id="barFill"></span>
+        </div>
+        <div class="bar-note">
+          <span id="goalState" class="state-ok">0 characters to go</span>
+          <b id="goalLeft" class="num">1,000</b>
+        </div>
+      </section>
+
+      <section class="card check-card" aria-labelledby="checkTitle">
+        <div class="card-head">
+          <h2 class="ph" id="checkTitle"><span class="n">06</span><span data-i18n="secCheck">Check</span></h2>
+          <span class="note-sm" data-i18n="checkNote">Rules, not a verdict</span>
+        </div>
+
+        <div class="check-block">
+          <div class="check-head">
+            <h3 class="check-title"><span data-i18n="longTitle">Sentences over 80 characters</span> <span class="cnt" id="longCnt">0</span></h3>
+            <span class="tag-ok" id="longTag" data-i18n="okTag">Clear</span>
+          </div>
+          <ul class="issue-list" id="longList"></ul>
+          <p class="empty-ok" id="longEmpty" data-i18n="longNone">No sentence runs past 80 characters.</p>
+        </div>
+
+        <div class="check-block">
+          <div class="check-head">
+            <h3 class="check-title"><span data-i18n="styleTitle">Ending style</span> <span class="cnt" id="styleCnt">0</span></h3>
+            <span class="tag-warn" id="styleTag" hidden data-i18n="styleMixTag">Mixed</span>
+          </div>
+          <div class="style-bars">
+            <div class="style-row f1"><span data-i18n="styleFormal">-습니다</span><span class="track"><i class="fill" id="sf1"></i></span><span class="pct num" id="sp1">0%</span></div>
+            <div class="style-row f2"><span data-i18n="stylePolite">-해요</span><span class="track"><i class="fill" id="sf2"></i></span><span class="pct num" id="sp2">0%</span></div>
+            <div class="style-row f3"><span data-i18n="stylePlain">-한다</span><span class="track"><i class="fill" id="sf3"></i></span><span class="pct num" id="sp3">0%</span></div>
+            <div class="style-row f4"><span data-i18n="styleOther">other</span><span class="track"><i class="fill" id="sf4"></i></span><span class="pct num" id="sp4">0%</span></div>
+          </div>
+          <p class="style-note" id="styleNote" data-i18n="styleNote">One Korean prose should keep one ending: a resume in -습니다 stays in -습니다.</p>
+        </div>
+
+        <div class="check-block">
+          <div class="check-head">
+            <h3 class="check-title"><span data-i18n="repTitle">Repeated words</span> <span class="cnt" id="repCnt">0</span></h3>
+            <span class="tag-warn" id="repTag" hidden data-i18n="repTag">Repeats</span>
+          </div>
+          <div class="rep-list" id="repList"></div>
+          <p class="empty-ok" id="repEmpty" data-i18n="repNone">Nothing repeats more than three times yet.</p>
+        </div>
+
+        <div class="check-block">
+          <div class="check-head">
+            <h3 class="check-title"><span data-i18n="clicheTitle">Clichés · stock phrases</span> <span class="cnt" id="clicheCnt">0</span></h3>
+            <span class="tag-warn" id="clicheTag" hidden data-i18n="clicheTag">Watch</span>
+          </div>
+          <ul class="issue-list" id="clicheList"></ul>
+          <p class="empty-ok" id="clicheEmpty" data-i18n="clicheNone">No stock phrase from the list appears.</p>
+        </div>
+
+        <p class="note-line" id="lintLine" data-i18n="lintNone">Double spaces 0 · trailing spaces 0 · tabs 0 · full-width spaces 0 · zero-width 0</p>
+      </section>
+    </div>
+  </div>
+
+  <div class="notes">
+    <div class="note">
+      <h3><span>01</span><span data-i18n="note1h">Opened, never uploaded</span></h3>
+      <p data-i18n="note1d">There is no endpoint for text to be sent to. The counter at the bottom of this page reports every request the page makes, and it stays at zero for anything outside this site.</p>
+    </div>
+    <div class="note">
+      <h3><span>02</span><span data-i18n="note2h">Two byte counts, both real</span></h3>
+      <p data-i18n="note2d">UTF-8 comes from the browser's own encoder. EUC-KR is measured by decoding the CP949 table with the browser's euc-kr decoder once, then adding each character's real width — 1 byte or 2 — instead of assuming every Hangul is 2 bytes and everything else 1.</p>
+    </div>
+    <div class="note">
+      <h3><span>03</span><span data-i18n="note3h">A check, not a judge</span></h3>
+      <p data-i18n="note3d">Sentence length, ending style, repeated words and stock phrases are counted by fixed rules. Nothing here decides whether a text was written by a person or a machine, and nothing is rewritten for you.</p>
+    </div>
+  </div>
+
+  <section class="faq" aria-labelledby="faqTitle">
+    <h2 id="faqTitle" data-i18n="faqTitle">Questions</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <h3 data-i18n="q1">Which number do Korean forms actually cut me at?</h3>
+        <p data-i18n="a1">Most job sites count characters with spaces, while public-sector and some university forms count EUC-KR bytes because their systems were built on that encoding. Both numbers sit side by side here, and the target gauge can follow either one — pick the basis the form itself states.</p>
+      </div>
+      <div class="faq-item">
+        <h3 data-i18n="q2">How is the EUC-KR byte count measured?</h3>
+        <p data-i18n="a2">The page asks the browser to decode every valid CP949 two-byte pair once, keeps the characters that come back and adds each one's real width: 1 byte for ASCII, 2 bytes for Hangul, Hanja, kana and full-width marks. Characters that CP949 cannot hold — emoji, for instance — are counted as 3 bytes and reported separately, because a form that expects EUC-KR will mangle them.</p>
+      </div>
+      <div class="faq-item">
+        <h3 data-i18n="q3">Does "restore line breaks" change my wording?</h3>
+        <p data-i18n="a3">It only joins lines that were broken mid-sentence, the way a PDF or a web page copy arrives. A line that ends in a full stop, a question mark or a closing quote keeps its break, and blank lines between paragraphs are preserved. Every clean-up can be undone once with the button, and the full text is never rewritten beyond those joins.</p>
+      </div>
+      <div class="faq-item">
+        <h3 data-i18n="q4">Is any of this saved or sent anywhere?</h3>
+        <p data-i18n="a4">No. The draft lives in the textarea and in memory only — there is no localStorage copy, no cookie carrying it, no request that could carry it. Only the interface language and your target setting are remembered, and both are numbers and language codes, not text.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="caveat" data-i18n-html="caveat"><strong>Note.</strong> A counter is a ruler, not an editor: it cannot know that a sentence is wrong, only that it is long. Check the form's own rule for what counts — characters or bytes — and keep the version you submitted, since some portals silently trim what is pasted.</p>
+
+  <footer class="foot">
+    <span data-i18n="foot1">0 uploads · 0 servers · 0 cookies</span>
+    <span class="net"><span data-i18n="netLabel">external requests made by this page</span>: <b id="netCount">0</b></span>
+    <span><a href="/portfolio/" data-i18n="back">← Portfolio</a> · <a href="../" data-i18n="footTools">All tools</a></span>
+  </footer>
+</div>
+
+<div class="sticky-meter" id="stickyMeter" aria-hidden="true">
+  <div class="sticky-inner">
+    <span class="sm-item"><span class="k" data-i18n="smChars">Chars</span><span class="v num" id="smChars">0</span></span>
+    <span class="sm-bar"><i id="smFill"></i></span>
+    <span class="sm-item"><span class="k" data-i18n="smLeft">Left</span><span class="v num" id="smLeft">1,000</span></span>
+    <span class="sm-zero" data-i18n="smZero">0 uploaded</span>
+  </div>
+</div>
+<script>
+/* Fault trap: records a runtime error so a broken step can be traced instead of
+   freezing silently. Costs nothing when the page runs cleanly. */
+window.__tlFaults = [];
+window.addEventListener('error', function (e) {
+  try { window.__tlFaults.push(String((e && (e.message || e.type)) || 'error')); } catch (err) {}
+});
+window.addEventListener('unhandledrejection', function (e) {
+  try { window.__tlFaults.push('rejection: ' + String(e && e.reason)); } catch (err) {}
+});
+</script>
+<script>
+(function () {
+  'use strict';
+
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function fmt(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+
+  /* ─────────────────────────── 언어 ─────────────────────────── */
+  /* Only the interface language, the target number and the counting basis are
+     stored. No input, file or draft is ever persisted. */
+  var LANG_KEY = 'kyh.lang';
+  var GOAL_KEY = 'kyh.textlens.goal';
+  var BASIS_KEY = 'kyh.textlens.basis';
+
+  var I18N = {
+    ko: {
+      docTitle: '글자수 세기 — 자소서·블로그 글자수·바이트·줄바꿈 정리기 TextLens | Kim Yihyung',
+      metaDesc: '자소서·블로그 원고의 글자수(공백 포함·제외), UTF-8·EUC-KR 바이트, 단어·문장·읽기 시간을 실시간으로 세고, 목표 글자수 게이지와 빈 줄·공백·PDF 줄바꿈·마크다운 정리, 80자 긴 문장·상투어·어미 반복 점검까지 브라우저 안에서 끝냅니다. 업로드 0바이트, 외부 요청 0건.',
+
+      brandAria: 'Kim Yihyung — 포트폴리오',
+      backTools: '← 도구 전체',
+      toggleTo: 'View in English',
+      eyebrow: 'TextLens · 한국인 특화 1호',
+      pillLocal: '브라우저 안 <b>100% 로컬</b>',
+      pillBytes: '<b>UTF-8 · EUC-KR</b> 동시',
+      pillUse: '자소서 · 블로그 · 공공양식',
+      h1: '글자수부터 바이트까지.<br><span class="dim">문장은 그대로.</span>',
+      lede: '한국 양식은 아직도 <b>공백 포함 글자수</b>와 <b>EUC-KR 바이트</b>로 사람을 자릅니다. 붙여넣는 순간 두 숫자가 같이 나오고, 목표선까지 몇 자 남았는지 보입니다. 빈 줄·깨진 줄바꿈·마크다운 기호는 한 번에 정리하고, 80자가 넘는 문장과 상투어는 표시해 둡니다. 원고는 이 탭을 떠나지 않습니다.',
+
+      secWrite: '쓰거나 붙여넣기',
+      btnSample: '예시',
+      btnCopy: '전체 복사',
+      btnDownload: 'TXT 저장',
+      btnClear: '지우기',
+      editorAria: '글자수를 셀 텍스트',
+      editorPh: '여기에 자소서나 블로그 원고를 붙여넣으세요.\n\n붙여넣기 · 드래그 · Ctrl+V 어느 쪽이든 됩니다. 글자수와 바이트가 바로 세어집니다.',
+      dropHint: '.txt · .md 파일을 여기에 놓아도 됩니다',
+      btnFile: '파일 열기',
+      fileAria: '텍스트 파일 열기',
+      noFile: '파일 없음 — 붙여넣기 또는 드래그',
+      noSave: '저장하지 않습니다 — 탭을 닫으면 사라집니다',
+
+      secClean: '정리',
+      cleanNote: '한 번에 · 되돌리기 유지',
+      cBlank: '빈 줄 정리',
+      cSpace: '공백·들여쓰기',
+      cLines: '줄바꿈 복원',
+      cMd: '마크다운·HTML 제거',
+      cQuote: '문장부호 정리',
+      btnUndo: '정리 되돌리기',
+      undoNone: '아직 정리한 적 없음',
+      undoOne: '한 단계 되돌렸습니다',
+      undoN: '{n}단계까지 되돌릴 수 있습니다',
+      undoAria: '정리를 되돌리기',
+
+      tBlank: '빈 줄·끝 공백 {n}곳을 정리했습니다',
+      tNothing: '바꿀 것이 없습니다',
+      tSpace: '공백 {n}곳을 정리했습니다',
+      tLines: '{n}줄을 이어 붙였습니다',
+      tMd: '기호 {n}개를 지웠습니다',
+      tQuote: '문장부호 {n}곳을 정리했습니다',
+      tCopied: '전체 복사했습니다',
+      tCopyFail: '브라우저가 클립보드를 막았습니다 — 직접 선택해 복사하세요',
+      tDownloaded: 'TXT 파일로 저장했습니다',
+      tCleared: '비웠습니다',
+      tSampleEssay: '자소서 예시를 넣었습니다',
+      tSampleBlog: '블로그 예시를 넣었습니다',
+      tReadFail: '파일을 읽지 못했습니다',
+      tTooBig: '파일이 너무 큽니다 (2MB까지)',
+      tFileRead: '{name} · {size}',
+
+      secCount: '계측',
+      eucReady: 'EUC-KR 준비됨',
+      eucBuilding: 'EUC-KR 표 만드는 중',
+      eucOff: 'EUC-KR 미지원 브라우저',
+      chars: '공백 포함 글자',
+      charsSub: '한국 양식이 주로 세는 값',
+      euc: 'EUC-KR 바이트',
+      eucSub: '한글·한자 2B',
+      utf8: 'UTF-8 바이트',
+      utf8Sub: '한글 3B',
+      charsNoSpace: '공백 제외',
+      charsNoNl: '줄바꿈 제외',
+      words: '단어',
+      sentences: '문장',
+      lines: '줄',
+      paragraphs: '문단',
+      readLabel: '예상 읽기 시간',
+      readZero: '0초',
+      readUnderMin: '{s}초',
+      readMinSec: '{m}분 {s}초',
+      readMinOnly: '{m}분',
+      eucNote: 'EUC-KR은 눈대중이 아니라 브라우저의 CP949 표를 직접 풀어 셉니다.',
+      eucFallback: '이 브라우저에는 euc-kr 디코더가 없어 글자 종류로 추정했습니다(한글 2 · ASCII 1 · 그 밖 3).',
+      eucMissing: 'EUC-KR에 없는 문자 {n}개 — 3바이트로 계산했습니다. 이모지 등은 EUC-KR 양식에서 깨질 수 있습니다.',
+
+      secGoal: '목표',
+      goalNote: '게이지 + 초과 경고',
+      goalToGo: '목표까지',
+      goalOver: '초과',
+      goalDone: '목표 달성',
+      unitChars: '자',
+      unitBytes: 'B',
+      goalAria: '목표 글자수',
+      customLabel: '직접 입력',
+      customAria: '직접 입력할 목표 값',
+      barAria: '목표까지 진행률',
+      basisLabel: '세는 기준',
+      basisChars: '공백 포함 글자',
+      basisNoSpace: '공백 제외 글자',
+      basisBytes: 'EUC-KR 바이트',
+
+      secCheck: '검사',
+      checkNote: '규칙 기반, 판정 아님',
+      longTitle: '80자 넘는 문장',
+      okTag: '없음',
+      longNone: '80자를 넘는 문장이 없습니다.',
+      longUnit: '{n}자',
+      styleTitle: '어미',
+      styleMixTag: '혼용',
+      styleFormal: '-습니다',
+      stylePolite: '-해요',
+      stylePlain: '-한다',
+      styleOther: '기타',
+      styleNote: '한 편의 글은 한 어미로 두는 편이 좋습니다. 자소서는 보통 -습니다체로 통일합니다.',
+      styleMixNote: '어미가 섞였습니다 — -습니다체 하나로 맞추면 문장이 단단해집니다.',
+      repTitle: '반복 단어',
+      repTag: '반복',
+      repNone: '세 번 넘게 반복되는 단어가 없습니다.',
+      clicheTitle: '상투어·군더더기',
+      clicheTag: '주의',
+      clicheNone: '목록의 상투어가 보이지 않습니다.',
+      clicheCaveat: 'AI 판별이 아닙니다. 흔히 쓰이는 표현의 빈도일 뿐입니다.',
+      lintNone: '이중 공백 {a} · 줄 끝 공백 {b} · 탭 {c} · 전각 공백 {d} · 제로폭 {e}',
+
+      secPreview: '표시해서 읽기',
+      previewNote: '긴 문장 · 상투어',
+      lgLong: '80자 넘는 문장',
+      lgCliche: '상투어·군더더기',
+      previewEmpty: '표시할 것이 없습니다.',
+      previewMore: '… 이후 {n}자 더 있습니다.',
+
+      note1h: '열어 둘 뿐, 올리지 않습니다',
+      note1d: '원고를 보낼 곳이 아예 없습니다. 페이지 아래 카운터가 이 페이지가 바깥으로 만든 요청 수를 세고, 사이트 밖으로는 0으로 유지됩니다.',
+      note2h: '바이트 두 가지, 둘 다 실측',
+      note2d: 'UTF-8은 브라우저 인코더로, EUC-KR은 브라우저의 euc-kr 디코더로 CP949 표를 한 번 풀어 글자마다 실제 폭(1바이트·2바이트)을 더합니다. 한글은 무조건 2바이트라고 가정하지 않습니다.',
+      note3h: '판정이 아니라 점검',
+      note3d: '문장 길이·어미·반복 단어·상투어는 정해진 규칙으로 세기만 합니다. 사람이 썼는지 기계가 썼는지 판정하지 않고, 문장을 대신 고쳐 주지도 않습니다.',
+
+      faqTitle: '질문',
+      q1: '한국 양식은 대체 어느 숫자로 자르나요?',
+      a1: '채용 사이트는 대부분 공백 포함 글자수로, 공공기관·일부 대학 양식은 EUC-KR 바이트로 자릅니다. 두 숫자를 나란히 두고, 게이지의 기준도 지원하는 양식이 적은 쪽으로 바꿀 수 있게 했습니다.',
+      q2: 'EUC-KR 바이트는 어떻게 세나요?',
+      a2: '브라우저에 내장된 euc-kr 디코더로 CP949 2바이트 영역을 한 번 전부 풀어, 실제로 되살아난 문자마다 2바이트를 부여합니다. ASCII는 1바이트, 한글·한자·가나·전각 기호는 2바이트, CP949에 없는 문자(이모지 등)는 3바이트로 세고 몇 개인지 따로 알려 줍니다.',
+      q3: '줄바꿈 복원이 문장을 바꾸지 않나요?',
+      a3: 'PDF나 웹에서 복사할 때 문장 중간에 생긴 줄만 이어 붙입니다. 마침표·물음표·닫는 따옴표로 끝난 줄은 그대로 두고, 문단 사이 빈 줄도 유지합니다. 모든 정리는 되돌리기 한 번으로 원문으로 돌아갑니다.',
+      q4: '어딘가에 저장되거나 전송되나요?',
+      a4: '아니요. 원고는 텍스트 상자와 메모리에만 있고, localStorage 복사본도, 원고를 담은 쿠키도, 보낼 요청도 없습니다. 기억하는 것은 인터페이스 언어와 목표 숫자, 세는 기준뿐입니다.',
+
+      caveat: '<strong>주의.</strong> 계수기는 자이고 편집자는 아닙니다. 문장이 틀렸는지는 알 수 없고 길다는 것만 알 수 있습니다. 지원하는 양식이 글자수인지 바이트인지 먼저 확인하고, 제출본은 따로 보관하세요. 포털이 붙여넣은 글을 조용히 잘라내는 경우도 있습니다.',
+      foot1: '업로드 0 · 서버 0 · 쿠키 0',
+      netLabel: '이 페이지가 만든 외부 요청',
+      back: '← 포트폴리오',
+      footTools: '도구 전체',
+      smChars: '글자',
+      smLeft: '남음',
+      smZero: '업로드 0'
+    },
+
+    en: {
+      docTitle: 'TextLens — Character, Byte & Line-Break Counter for Korean Writing | Kim Yihyung',
+      metaDesc: 'Count Korean characters with and without spaces, UTF-8 and EUC-KR bytes, words, sentences and reading time as you type. Track a target count, clean blank lines, broken line breaks and Markdown, and flag long sentences, repeated endings and clichés — all in your browser with zero uploads and zero external requests.',
+
+      brandAria: 'Kim Yihyung — portfolio',
+      backTools: '← Tools',
+      toggleTo: '한국어로 보기',
+      eyebrow: 'TextLens · No. 1 of the Korean-first shelf',
+      pillLocal: 'In-browser <b>100% local</b>',
+      pillBytes: '<b>UTF-8 · EUC-KR</b> at once',
+      pillUse: 'Resume · blog · public forms',
+      h1: 'Count the characters.<br><span class="dim">Keep the words.</span>',
+      lede: 'Korean forms still cut people off by <b>characters with spaces</b> and <b>EUC-KR bytes</b>. Paste your text and both numbers appear at once, with how many characters are left before the limit. Blank lines, broken line breaks and Markdown marks clean up in one click, and sentences over 80 characters and clichés get marked. The draft never leaves this tab.',
+
+      secWrite: 'Write or paste',
+      btnSample: 'Sample',
+      btnCopy: 'Copy all',
+      btnDownload: 'Save .txt',
+      btnClear: 'Clear',
+      editorAria: 'Text to count',
+      editorPh: 'Paste a resume, a blog draft or any Korean text here.\n\nPaste, drop a file or type — characters and bytes are counted as you go.',
+      dropHint: 'Drop a .txt or .md file here',
+      btnFile: 'Open file',
+      fileAria: 'Open a text file',
+      noFile: 'No file — paste or drop',
+      noSave: 'Nothing is saved — close the tab and it is gone',
+
+      secClean: 'Clean up',
+      cleanNote: 'One click · undo kept',
+      cBlank: 'Blank lines',
+      cSpace: 'Spaces & indent',
+      cLines: 'Restore line breaks',
+      cMd: 'Strip Markdown · HTML',
+      cQuote: 'Tidy punctuation',
+      btnUndo: 'Undo clean-up',
+      undoNone: 'No clean-up yet',
+      undoOne: 'One step undone',
+      undoN: '{n} step(s) can be undone',
+      undoAria: 'Undo the last clean-up',
+
+      tBlank: 'Tidied {n} blank lines and trailing spaces',
+      tNothing: 'Nothing to change',
+      tSpace: 'Tidied {n} spaces',
+      tLines: 'Joined {n} lines',
+      tMd: 'Removed {n} marks',
+      tQuote: 'Tidied {n} punctuation marks',
+      tCopied: 'Copied the whole text',
+      tCopyFail: 'The browser refused the clipboard — select and copy by hand',
+      tDownloaded: 'Saved as a .txt file',
+      tCleared: 'Cleared',
+      tSampleEssay: 'Resume sample loaded',
+      tSampleBlog: 'Blog sample loaded',
+      tReadFail: 'Could not read that file',
+      tTooBig: 'That file is too big (2 MB limit)',
+      tFileRead: '{name} · {size}',
+
+      secCount: 'Counts',
+      eucReady: 'EUC-KR ready',
+      eucBuilding: 'Building EUC-KR table',
+      eucOff: 'EUC-KR unsupported here',
+      chars: 'Characters with spaces',
+      charsSub: 'the number Korean forms usually ask for',
+      euc: 'EUC-KR bytes',
+      eucSub: 'Hangul · Hanja 2B',
+      utf8: 'UTF-8 bytes',
+      utf8Sub: 'Hangul 3B',
+      charsNoSpace: 'No spaces',
+      charsNoNl: 'No line breaks',
+      words: 'Words',
+      sentences: 'Sentences',
+      lines: 'Lines',
+      paragraphs: 'Paragraphs',
+      readLabel: 'Estimated reading time',
+      readZero: '0 s',
+      readUnderMin: '{s} s',
+      readMinSec: '{m} min {s} s',
+      readMinOnly: '{m} min',
+      eucNote: "EUC-KR is measured with the browser's own CP949 table, not guessed from a rule of thumb.",
+      eucFallback: 'This browser has no euc-kr decoder, so the count is estimated from character classes (Hangul 2 · ASCII 1 · other 3).',
+      eucMissing: '{n} character(s) outside EUC-KR — counted as 3 bytes. Emoji and the like can be mangled by an EUC-KR form.',
+
+      secGoal: 'Target',
+      goalNote: 'Gauge + limit warning',
+      goalToGo: 'to go',
+      goalOver: 'over',
+      goalDone: 'target met',
+      unitChars: ' chars',
+      unitBytes: ' B',
+      goalAria: 'Target character count',
+      customLabel: 'Custom',
+      customAria: 'Custom target value',
+      barAria: 'Progress to the target',
+      basisLabel: 'Count by',
+      basisChars: 'Characters with spaces',
+      basisNoSpace: 'Characters without spaces',
+      basisBytes: 'EUC-KR bytes',
+
+      secCheck: 'Check',
+      checkNote: 'Rules, not a verdict',
+      longTitle: 'Sentences over 80 characters',
+      okTag: 'Clear',
+      longNone: 'No sentence runs past 80 characters.',
+      longUnit: '{n} chars',
+      styleTitle: 'Ending style',
+      styleMixTag: 'Mixed',
+      styleFormal: '-습니다',
+      stylePolite: '-해요',
+      stylePlain: '-한다',
+      styleOther: 'other',
+      styleNote: 'One Korean text should keep one ending: a resume usually stays in the formal -습니다 form.',
+      styleMixNote: 'The endings are mixed — settling on -습니다 makes the prose firmer.',
+      repTitle: 'Repeated words',
+      repTag: 'Repeats',
+      repNone: 'Nothing repeats more than three times yet.',
+      clicheTitle: 'Clichés · stock phrases',
+      clicheTag: 'Watch',
+      clicheNone: 'No stock phrase from the list appears.',
+      clicheCaveat: 'This is not AI detection — only the frequency of phrases people overuse.',
+      lintNone: 'Double spaces {a} · trailing spaces {b} · tabs {c} · full-width spaces {d} · zero-width {e}',
+
+      secPreview: 'Read it marked',
+      previewNote: 'Long sentences · clichés',
+      lgLong: 'Sentence over 80 characters',
+      lgCliche: 'Cliché · stock phrase',
+      previewEmpty: 'Nothing to mark yet.',
+      previewMore: '… {n} more characters follow.',
+
+      note1h: 'Opened, never uploaded',
+      note1d: 'There is no endpoint for text to be sent to. The counter at the bottom of this page reports every request the page makes, and it stays at zero for anything outside this site.',
+      note2h: 'Two byte counts, both real',
+      note2d: "UTF-8 comes from the browser's own encoder. EUC-KR is measured by decoding the whole CP949 table with the browser's euc-kr decoder once, then adding each character's real width — 1 or 2 bytes — instead of assuming every Hangul is 2 bytes.",
+      note3h: 'A check, not a judge',
+      note3d: 'Sentence length, ending style, repeated words and stock phrases are counted by fixed rules. Nothing decides whether a text was written by a person or a machine, and nothing is rewritten for you.',
+
+      faqTitle: 'Questions',
+      q1: 'Which number do Korean forms actually cut me at?',
+      a1: 'Most job sites count characters with spaces, while public-sector and some university forms count EUC-KR bytes because their systems were built on that encoding. Both numbers sit side by side here, and the target gauge can follow either one.',
+      q2: 'How is the EUC-KR byte count measured?',
+      a2: 'The page asks the browser to decode every valid CP949 two-byte pair once, keeps the characters that come back, and adds each one\'s real width: 1 byte for ASCII, 2 for Hangul, Hanja, kana and full-width marks. Characters CP949 cannot hold — emoji, for instance — are counted as 3 bytes and reported separately.',
+      q3: 'Does "restore line breaks" change my wording?',
+      a3: 'It only joins lines that were broken mid-sentence, the way a PDF or web copy arrives. A line that ends in a full stop, a question mark or a closing quote keeps its break, and blank lines between paragraphs stay. Every clean-up is one undo away from the original.',
+      q4: 'Is any of this saved or sent anywhere?',
+      a4: 'No. The draft lives in the textarea and in memory only — no localStorage copy, no cookie carrying it, no request that could carry it. Only the interface language, your target number and the counting basis are remembered.',
+
+      caveat: '<strong>Note.</strong> A counter is a ruler, not an editor: it cannot know a sentence is wrong, only that it is long. Check whether the form counts characters or bytes, and keep the version you submitted — some portals silently trim what is pasted.',
+      foot1: '0 uploads · 0 servers · 0 cookies',
+      netLabel: 'external requests made by this page',
+      back: '← Portfolio',
+      footTools: 'All tools',
+      smChars: 'Chars',
+      smLeft: 'Left',
+      smZero: '0 uploaded'
+    }
+  };
+
+  function t(key) {
+    var d = I18N[state.lang] || I18N.ko;
+    return (key in d) ? d[key] : (I18N.ko[key] !== undefined ? I18N.ko[key] : key);
+  }
+  function tx(key, map) {
+    var s = t(key);
+    Object.keys(map).forEach(function (k) { s = s.split('{' + k + '}').join(String(map[k])); });
+    return s;
+  }
+
+  var state = {
+    lang: 'ko',
+    goal: 1000,
+    basis: 'chars',
+    undo: [],
+    sample: 0,
+    stats: null,
+    checks: null,
+    eucReady: false
+  };
+
+  function readStored(key, fallback) {
+    try { var v = localStorage.getItem(key); return v === null ? fallback : v; } catch (e) { return fallback; }
+  }
+  function store(key, value) { try { localStorage.setItem(key, value); } catch (e) {} }
+
+  /* ─────────────────────────── EUC-KR (CP949) ─────────────────────────── */
+  /* The browser ships a real euc-kr decoder. Decoding every valid two-byte
+     pair once gives the exact set of characters CP949 can hold, so the count
+     is measured instead of estimated from Unicode blocks. */
+  var cp949 = null;
+  var cp949MissingThreshold = 0;
+
+  function buildCp949() {
+    if (cp949 !== null) return cp949;
+    var td;
+    try {
+      td = new TextDecoder('euc-kr');
+      if (!td || td.encoding !== 'euc-kr') { cp949 = false; return cp949; }
+    } catch (e) { cp949 = false; return cp949; }
+    var map = new Map();
+    var b = new Uint8Array(2);
+    var ranges = [[0x41, 0x5A], [0x61, 0x7A], [0x81, 0xFE]];
+    for (var lead = 0x81; lead <= 0xFE; lead++) {
+      for (var r = 0; r < ranges.length; r++) {
+        for (var tr = ranges[r][0]; tr <= ranges[r][1]; tr++) {
+          b[0] = lead; b[1] = tr;
+          var s = td.decode(b);
+          if (s.length === 1 && s !== '\uFFFD' && !map.has(s)) map.set(s, 2);
+        }
+      }
+    }
+    cp949 = map;
+    return cp949;
+  }
+
+  function eucEstimate(text) {
+    var total = 0, missing = 0;
+    var cps = Array.from(text);
+    for (var i = 0; i < cps.length; i++) {
+      var c = cps[i].codePointAt(0);
+      if (c < 0x80) total += 1;
+      else if ((c >= 0xAC00 && c <= 0xD7A3) || (c >= 0x4E00 && c <= 0x9FFF) ||
+               (c >= 0x3040 && c <= 0x30FF) || (c >= 0xFF00 && c <= 0xFF60) ||
+               c === 0x00B7 || c === 0x2014 || c === 0x201C || c === 0x201D ||
+               c === 0x2018 || c === 0x2019 || c === 0x2026) total += 2;
+      else { total += 3; missing++; }
+    }
+    return { bytes: total, missing: missing };
+  }
+
+  function eucCount(text) {
+    if (!cp949) return eucEstimate(text);
+    var total = 0, missing = 0;
+    for (var ch of text) {
+      var c = ch.codePointAt(0);
+      if (c < 0x80) { total += 1; continue; }
+      if (cp949.get(ch) === 2) { total += 2; continue; }
+      total += 3; missing++;
+    }
+    return { bytes: total, missing: missing };
+  }
+
+  /* ─────────────────────────── 계측 ─────────────────────────── */
+  function computeStats(text) {
+    var cps = Array.from(text);
+    var chars = cps.length;
+    var noSpace = 0, noNl = 0;
+    for (var i = 0; i < chars; i++) {
+      var ch = cps[i];
+      if (ch !== '\n' && ch !== '\r') noNl++;
+      if (!/\s/.test(ch)) noSpace++;
+    }
+    var trimmed = text.replace(/^\s+|\s+$/g, '');
+    var words = trimmed ? trimmed.split(/\s+/).filter(function (w) {
+      return /[0-9A-Za-z\uAC00-\uD7A3\u4E00-\u9FFF]/.test(w);
+    }).length : 0;
+    var lines = text === '' ? 0 : text.split('\n').length;
+    var blocks = text.split(/\n{2,}/).filter(function (b) { return b.trim() !== ''; });
+    var sentences = scanSentences(text);
+    var utf8 = 0;
+    try { utf8 = new TextEncoder().encode(text).length; } catch (e) { utf8 = text.length; }
+    var euc = eucCount(text);
+    return {
+      chars: chars, noSpace: noSpace, noNl: noNl, words: words, sentences: sentences.length,
+      lines: lines, paragraphs: blocks.length, utf8: utf8, euc: euc.bytes, eucMissing: euc.missing,
+      sentenceList: sentences
+    };
+  }
+
+  function scanSentences(text) {
+    var out = [];
+    var lineRe = /[^\n]+/g, lm;
+    while ((lm = lineRe.exec(text)) !== null) {
+      var line = lm[0], base = lm.index;
+      var sRe = /[^.!?…。？！]+[.!?…。？！]*["'”’)\]】》]*/g, sm;
+      while ((sm = sRe.exec(line)) !== null) {
+        var raw = sm[0];
+        var lead = raw.length - raw.replace(/^\s+/, '').length;
+        var body = raw.trim();
+        if (body) {
+          out.push({
+            text: body,
+            start: base + sm.index + lead,
+            end: base + sm.index + lead + body.length,
+            len: Array.from(body).length
+          });
+        }
+        if (sm.index === sRe.lastIndex) sRe.lastIndex++;
+      }
+    }
+    return out;
+  }
+
+  /* ─────────────────────────── 상투어 ─────────────────────────── */
+  var CLICHE_KO = [
+    '저는', '귀사', '본인은', '또한', '더불어', '결론적으로', '시사하는 바', '매우',
+    '정말', '다양한', '폭넓은', '지속적으로', '최선을 다하', '힘쓰겠습니다',
+    '성장할 수 있었', '배움을 얻', '라고 생각합니다', '라고 할 수 있', '에 있어서',
+    '를 통해', '을 통해', '할 수 있습니다', '것입니다', '바랍니다', '소중한 경험',
+    '한 걸음 더', '앞으로도', '진심으로', '많은 것을 느꼈', '노력하겠습니다', '역량을 발휘'
+  ];
+  var CLICHE_EN = [
+    'very', 'really', 'passionate', 'team player', 'hard-working', 'hardworking',
+    'utilize', 'leverage', 'in order to', 'a lot of', 'I believe', 'synergy',
+    'dynamic', 'proven track record', 'hit the ground running', 'go-getter'
+  ];
+
+  function clicheEntries(text) {
+    var out = [];
+    var lower = text.toLowerCase();
+    CLICHE_KO.forEach(function (p) {
+      var positions = [];
+      var from = 0, i;
+      while ((i = text.indexOf(p, from)) !== -1 && positions.length < 60) {
+        positions.push(i); from = i + p.length;
+      }
+      if (positions.length) out.push({ label: p, count: positions.length, positions: positions });
+    });
+    CLICHE_EN.forEach(function (p) {
+      var re = new RegExp('(^|[^A-Za-z])' + p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '($|[^A-Za-z])', 'gi');
+      var positions = [], m;
+      while ((m = re.exec(lower)) !== null && positions.length < 60) {
+        positions.push(m.index + m[1].length);
+        if (m.index === re.lastIndex) re.lastIndex++;
+      }
+      if (positions.length) out.push({ label: p, count: positions.length, positions: positions });
+    });
+    out.sort(function (a, b) { return b.count - a.count; });
+    return out;
+  }
+
+  var STOP_KO = ['있습니다', '합니다', '했습니다', '입니다', '하는', '에서', '으로', '에게', '부터', '까지',
+    '보다', '처럼', '그리고', '하지만', '그러나', '또한', '때문에', '대해', '통해', '위해', '모두',
+    '매우', '정말', '다양한', '대한', '있는', '없는', '한다', '된다', '같은', '이런', '그런', '저런',
+    '제가', '우리', '그것', '이것', '저것', '수의', '수도', '경우', '때문', '사람', '생각'];
+  var STOP_EN = ['the', 'and', 'for', 'that', 'with', 'this', 'from', 'have', 'has', 'are', 'was', 'were',
+    'will', 'would', 'you', 'your', 'not', 'but', 'they', 'their', 'there', 'been', 'being', 'into',
+    'about', 'which', 'what', 'when', 'more', 'most', 'some', 'such', 'than', 'then', 'them', 'these',
+    'those', 'can', 'could', 'should', 'also', 'very', 'really', 'just', 'only', 'over', 'under',
+    'after', 'before', 'because', 'while', 'where', 'were', 'been'];
+
+  function repeatedWords(text) {
+    var re = /[\uAC00-\uD7A3]{2,}|[0-9A-Za-z]{3,}/g;
+    var counts = {}, m;
+    while ((m = re.exec(text)) !== null) {
+      var w = m[0];
+      var lower = w.toLowerCase();
+      if (STOP_KO.indexOf(w) !== -1 || STOP_EN.indexOf(lower) !== -1) continue;
+      counts[lower] = (counts[lower] || 0) + 1;
+    }
+    var out = Object.keys(counts).map(function (k) { return { word: k, count: counts[k] }; })
+      .filter(function (o) { return o.count >= 3; })
+      .sort(function (a, b) { return b.count - a.count || a.word.localeCompare(b.word); });
+    return out.slice(0, 7);
+  }
+
+  function endingStyles(sentences) {
+    var res = { formal: 0, polite: 0, plain: 0, other: 0, total: 0 };
+    sentences.forEach(function (s) {
+      var core = s.text.replace(/[\s"'”’)\]】》.!?…。？！]+$/g, '');
+      if (core === '') return;
+      res.total++;
+      if (/(습니다|ㅂ니다|입니다|십니다)$/.test(core)) res.formal++;
+      else if (/니다$/.test(core)) res.formal++;
+      else if (/요$/.test(core)) res.polite++;
+      else if (/다$/.test(core)) res.plain++;
+      else res.other++;
+    });
+    return res;
+  }
+
+  /* ─────────────────────────── 렌더 ─────────────────────────── */
+  function currentValue() {
+    var s = state.stats;
+    if (!s) return 0;
+    if (state.basis === 'noSpace') return s.noSpace;
+    if (state.basis === 'euc') return s.euc;
+    return s.chars;
+  }
+
+  function readTimeText(s) {
+    if (!s || s.chars === 0) return t('readZero');
+    var sec;
+    if (state.lang === 'ko') sec = Math.round(s.noSpace / 500 * 60);
+    else sec = Math.round(s.words / 220 * 60);
+    if (sec < 60) return tx('readUnderMin', { s: Math.max(sec, 1) });
+    var m = Math.floor(sec / 60), r = sec % 60;
+    return r === 0 ? tx('readMinOnly', { m: m }) : tx('readMinSec', { m: m, s: r });
+  }
+
+  function renderStats() {
+    var s = state.stats;
+    $('vChars').textContent = fmt(s.chars);
+    $('vNoSpace').textContent = fmt(s.noSpace);
+    $('vNoNl').textContent = fmt(s.noNl);
+    $('vWords').textContent = fmt(s.words);
+    $('vSent').textContent = fmt(s.sentences);
+    $('vLines').textContent = fmt(s.lines);
+    $('vPara').textContent = fmt(s.paragraphs);
+    $('vUtf8').innerHTML = fmt(s.utf8) + '<small>B</small>';
+    $('vEuc').innerHTML = fmt(s.euc) + '<small>B</small>';
+    $('vRead').textContent = readTimeText(s);
+
+    var eucState = $('eucState');
+    if (cp949 === false) eucState.textContent = t('eucOff');
+    else if (!state.eucReady) eucState.textContent = t('eucBuilding');
+    else eucState.textContent = t('eucReady');
+
+    var note = $('eucNote');
+    if (cp949 === false) {
+      note.textContent = t('eucFallback');
+      note.classList.add('is-warn');
+    } else if (state.eucReady && s.eucMissing > 0) {
+      note.textContent = tx('eucMissing', { n: s.eucMissing });
+      note.classList.add('is-warn');
+    } else {
+      note.textContent = t('eucNote');
+      note.classList.remove('is-warn');
+    }
+  }
+
+  function renderGoal() {
+    var value = currentValue();
+    var goal = Math.max(1, state.goal);
+    var unit = state.basis === 'euc' ? t('unitBytes') : t('unitChars');
+    var pct = Math.round(value / goal * 1000) / 10;
+
+    $('goalNow').textContent = fmt(value);
+    $('goalMax').textContent = fmt(goal) + (state.basis === 'euc' ? 'B' : '');
+    $('goalPct').textContent = (pct > 999 ? '999+' : Math.round(pct)) + '%';
+
+    var fill = $('barFill');
+    fill.style.width = Math.min(100, Math.max(0, pct)) + '%';
+    fill.className = 'bar-fill' + (value > goal ? ' over' : (pct >= 85 ? ' near' : ''));
+
+    var st = $('goalState'), left = $('goalLeft');
+    left.textContent = '';
+    if (value > goal) {
+      st.textContent = t('goalOver');
+      st.className = 'state-over';
+      left.textContent = fmt(value - goal) + unit;
+    } else if (value === goal && value > 0) {
+      st.textContent = t('goalDone');
+      st.className = 'state-ok';
+      left.textContent = '0' + unit;
+    } else {
+      st.textContent = t('goalToGo');
+      st.className = 'state-ok';
+      left.textContent = fmt(goal - value) + unit;
+    }
+    $('goalBar').setAttribute('aria-valuenow', String(Math.round(pct)));
+    $('goalBar').setAttribute('aria-valuemax', '100');
+
+    $('smChars').textContent = fmt((state.stats || { chars: 0 }).chars);
+    $('smLeft').textContent = (value > goal ? '+' : '') + fmt(value > goal ? value - goal : goal - value) + (state.basis === 'euc' ? 'B' : '');
+    var smf = $('smFill');
+    smf.style.width = Math.min(100, Math.max(0, pct)) + '%';
+    smf.className = value > goal ? 'over' : (pct >= 85 ? 'near' : '');
+  }
+
+  function renderChecks() {
+    var s = state.stats;
+    var c = state.checks;
+    if (!c) return;
+
+    /* long sentences */
+    var longs = c.long;
+    $('longCnt').textContent = String(longs.length);
+    $('longList').innerHTML = longs.slice(0, 10).map(function (item) {
+      return '<li><button class="issue issue--long" type="button" title="' + esc(item.text) + '" data-start="' + item.start + '" data-end="' + item.end + '">' +
+        '<span class="txt">' + esc(item.text) + '</span><span class="n">' + tx('longUnit', { n: item.len }) + '</span></button></li>';
+    }).join('');
+    $('longEmpty').hidden = longs.length > 0;
+    $('longTag').hidden = longs.length > 0;
+
+    /* ending style */
+    var es = c.endings;
+    var total = es.total || 1;
+    /* rounded parts that still add up to 100: the tail takes the remainder */
+    var p1 = Math.round(es.formal / total * 100);
+    var p2 = Math.round(es.polite / total * 100);
+    var p3 = Math.round(es.plain / total * 100);
+    var p4 = es.other > 0 ? Math.max(0, 100 - p1 - p2 - p3) : 0;
+    if (p1 + p2 + p3 + p4 > 100) p1 = Math.max(0, 100 - p2 - p3 - p4);
+    $('styleCnt').textContent = String(es.total);
+    $('sf1').style.width = p1 + '%';
+    $('sf2').style.width = p2 + '%';
+    $('sf3').style.width = p3 + '%';
+    $('sf4').style.width = p4 + '%';
+    $('sp1').textContent = p1 + '%';
+    $('sp2').textContent = p2 + '%';
+    $('sp3').textContent = p3 + '%';
+    $('sp4').textContent = p4 + '%';
+    var mixed = es.formal > 0 && es.plain > 0 && Math.min(es.formal, es.plain) / total > 0.12;
+    $('styleTag').hidden = !mixed;
+    $('styleNote').textContent = mixed ? t('styleMixNote') : t('styleNote');
+
+    /* repeated words */
+    var reps = c.reps;
+    $('repCnt').textContent = String(reps.length);
+    var maxCount = reps.length ? reps[0].count : 1;
+    $('repList').innerHTML = reps.map(function (r) {
+      return '<div class="rep"><span class="w"><span class="track"><span class="fill" style="width:' +
+        Math.round(r.count / maxCount * 100) + '%"></span></span><span>' + esc(r.word) + '</span></span>' +
+        '<span class="c">' + r.count + '</span></div>';
+    }).join('');
+    $('repEmpty').hidden = reps.length > 0;
+    $('repTag').hidden = reps.length === 0;
+
+    /* clichés */
+    var cl = c.cliches;
+    $('clicheCnt').textContent = String(cl.reduce(function (n, o) { return n + o.count; }, 0));
+    $('clicheList').innerHTML = cl.slice(0, 8).map(function (o) {
+      return '<li><button class="issue" type="button" data-start="' + o.positions[0] + '" data-end="' +
+        (o.positions[0] + o.label.length) + '"><span class="txt">' + esc(o.label) + '</span><span class="n">' + o.count + '×</span></button></li>';
+    }).join('');
+    $('clicheEmpty').hidden = cl.length > 0;
+    $('clicheTag').hidden = cl.length === 0;
+
+    /* lint */
+    var lint = c.lint;
+    $('lintLine').textContent = tx('lintNone', { a: lint.double, b: lint.trail, c: lint.tabs, d: lint.full, e: lint.zero });
+    $('lintLine').classList.toggle('is-warn', (lint.double + lint.trail + lint.tabs + lint.full + lint.zero) > 0);
+
+    if (previewOpen) renderPreview();
+  }
+
+  function renderPreview() {
+    var text = $('text').value;
+    var box = $('preview');
+    if (!text.trim()) { box.innerHTML = '<span style="color:var(--muted2)">' + esc(t('previewEmpty')) + '</span>'; return; }
+
+    var CAP = 20000;
+    var head = text.slice(0, CAP);
+    var ranges = [];
+    scanSentences(head).forEach(function (s) {
+      if (s.len >= 80) ranges.push({ start: s.start, end: s.end, kind: 'long' });
+    });
+    clicheEntries(head).forEach(function (o) {
+      o.positions.forEach(function (p) { ranges.push({ start: p, end: p + o.label.length, kind: 'cliche' }); });
+    });
+    ranges.sort(function (a, b) { return a.start - b.start || b.end - a.end; });
+    var merged = [];
+    ranges.forEach(function (r) {
+      var last = merged[merged.length - 1];
+      if (last && r.start < last.end) {
+        if (r.end > last.end) last.end = r.end;
+        if (r.kind === 'long') last.kind = 'long';
+      } else merged.push({ start: r.start, end: r.end, kind: r.kind });
+    });
+    if (merged.length > 420) merged = merged.slice(0, 420);
+
+    var out = '', cursor = 0;
+    merged.forEach(function (r) {
+      if (r.start > cursor) out += esc(head.slice(cursor, r.start));
+      var cls = r.kind === 'long' ? 'mk-long' : 'mk-cliche';
+      out += '<mark class="' + cls + '">' + esc(head.slice(r.start, r.end)) + '</mark>';
+      cursor = r.end;
+    });
+    out += esc(head.slice(cursor));
+    if (text.length > CAP) out += '<span style="color:var(--muted2)">\n' + esc(tx('previewMore', { n: fmt(text.length - CAP) })) + '</span>';
+    box.innerHTML = out;
+  }
+
+  function renderUndo() {
+    var btn = $('btnUndo');
+    btn.disabled = state.undo.length === 0;
+    $('undoNote').textContent = state.undo.length ? tx('undoN', { n: state.undo.length }) : t('undoNone');
+  }
+
+  function renderAll() {
+    renderStats();
+    renderGoal();
+    renderChecks();
+    renderUndo();
+  }
+
+  /* ─────────────────────────── 검사 계산 ─────────────────────────── */
+  function runChecks() {
+    var text = $('text').value;
+    var s = state.stats;
+    var sentences = s.sentenceList;
+    var long = sentences.filter(function (x) { return x.len >= 80; })
+      .sort(function (a, b) { return b.len - a.len; });
+    var lint = {
+      double: (text.match(/[^\S\n]{2,}/g) || []).length,
+      trail: (text.match(/[^\S\n]+$/gm) || []).length,
+      tabs: (text.match(/\t/g) || []).length,
+      full: (text.match(/\u3000/g) || []).length,
+      zero: (text.match(/[\u200B-\u200D\uFEFF]/g) || []).length
+    };
+    state.checks = {
+      long: long,
+      endings: endingStyles(sentences),
+      reps: repeatedWords(text),
+      cliches: clicheEntries(text),
+      lint: lint
+    };
+  }
+
+  var checkTimer = null;
+  function onInput() {
+    var text = $('text').value;
+    state.stats = computeStats(text);
+    renderStats();
+    renderGoal();
+    if (checkTimer) clearTimeout(checkTimer);
+    checkTimer = setTimeout(function () {
+      runChecks();
+      renderChecks();
+    }, 130);
+  }
+
+  /* ─────────────────────────── 정리 도구 ─────────────────────────── */
+  var toastTimer = null;
+  function toast(msg, warn) {
+    var el = $('toast');
+    el.textContent = msg;
+    el.className = 'toast show' + (warn ? ' warn' : '');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.className = 'toast'; }, 3600);
+  }
+
+  function pushUndo() {
+    var v = $('text').value;
+    if (!v) return;
+    state.undo.push(v);
+    if (state.undo.length > 30) state.undo.shift();
+  }
+
+  function applyClean(fn, msgKey, warn) {
+    var before = $('text').value;
+    if (!before) { toast(t('tNothing'), true); return; }
+    var result = fn(before);
+    if (result.text === before) { toast(t('tNothing'), true); return; }
+    pushUndo();
+    $('text').value = result.text;
+    onInput();
+    renderUndo();
+    toast(tx(msgKey, { n: fmt(result.n) }), warn);
+  }
+
+  function cleanBlank(text) {
+    var edited = 0;
+    var out = text.replace(/[ \t\u00A0\u3000]+$/gm, function () { edited++; return ''; });
+    out = out.replace(/\n{3,}/g, function (m) { edited += m.length - 2; return '\n\n'; });
+    out = out.replace(/^\n+/, function (m) { edited += m.length; return ''; });
+    out = out.replace(/\n+$/, function (m) { edited += Math.max(0, m.length - 1); return ''; });
+    return { text: out, n: edited };
+  }
+
+  function cleanSpace(text) {
+    var n = 0;
+    var out = text.replace(/[\u00A0\u3000]/g, function () { n++; return ' '; });
+    out = out.replace(/[ \t]{2,}/g, function (m) { n += m.length - 1; return ' '; });
+    out = out.replace(/^[ \t]+/gm, function (m) { n += m.length; return ''; });
+    out = out.replace(/[ \t]+$/gm, function (m) { n += m.length; return ''; });
+    return { text: out, n: n };
+  }
+
+  function cleanLines(text) {
+    var blocks = text.split(/\n{2,}/);
+    var joined = 0;
+    var outBlocks = blocks.map(function (block) {
+      if (!block.trim()) return block;
+      var lines = block.split('\n');
+      var acc = lines[0];
+      for (var i = 1; i < lines.length; i++) {
+        var cur = lines[i];
+        var prev = acc.replace(/\s+$/, '');
+        var head = cur.replace(/^\s+/, '');
+        var startsNew = /^([-*+•·‣▪◦]|\d+[.)]\s|[①-⑳]|#{1,6}\s|>|\[|<|\|)/.test(head);
+        var endsSentence = /[.!?…。？！:：;；"'”’)\]】》]$/.test(prev);
+        /* a break inside a Korean ending (…있 / 습니다) joins without a space */
+        var insideEnding = /[\uAC00-\uD7A3]$/.test(prev) &&
+          /^(습니다|ㅂ니다|십시오|세요|지만|는데|므로|면서|나요|까요|죠|니다)/.test(head);
+        if (prev === '' || startsNew || endsSentence) {
+          acc += '\n' + cur;
+        } else if (insideEnding) {
+          acc += head;
+          joined++;
+        } else {
+          acc += ' ' + head;
+          joined++;
+        }
+      }
+      return acc;
+    });
+    return { text: outBlocks.join('\n\n'), n: joined };
+  }
+
+  function cleanMd(text) {
+    var n = 0;
+    var out = text;
+    var steps = [
+      [/!\[([^\]]*)\]\([^)]*\)/g, '$1'],
+      [/\[([^\]]+)\]\([^)]*\)/g, '$1'],
+      [/`{1,3}([^`\n]*)`{1,3}/g, '$1'],
+      [/^\s{0,3}#{1,6}\s+/gm, ''],
+      [/^\s{0,3}>\s?/gm, ''],
+      [/^\s{0,3}([-*+])\s+/gm, ''],
+      [/^\s*([-*_]\s*){3,}$/gm, ''],
+      [/(\*\*|__)([^*_\n]+)\1/g, '$2'],
+      [/(\*|_)([^*_\n]+)\1/g, '$2'],
+      [/<\/?[a-zA-Z][^>]*>/g, ''],
+      [/&nbsp;/g, ' '], [/&amp;/g, '&'], [/&lt;/g, '<'], [/&gt;/g, '>'], [/&quot;/g, '"']
+    ];
+    steps.forEach(function (st) {
+      var hits = out.match(st[0]);
+      if (!hits) return;
+      n += hits.length;
+      out = out.replace(st[0], st[1]);
+    });
+    return { text: out, n: n };
+  }
+
+  function cleanQuotes(text) {
+    var n = 0;
+    var out = text
+      .replace(/\s+([,.!?;:)\]}】])/g, function (m) { n++; return m.replace(/\s+/, ''); })
+      .replace(/([(\[{（【「])\s+/g, function (m) { n++; return m.replace(/\s+$/, ''); })
+      .replace(/\.{3,}/g, function () { n++; return '…'; })
+      .replace(/([!?])\1{1,}/g, function (m) { n++; return m[0]; })
+      .replace(/([,.])[ \t]*\1+/g, function (m) { n++; return m[0]; });
+    return { text: out, n: n };
+  }
+
+  /* ─────────────────────────── 선택·복사·파일 ─────────────────────────── */
+  function selectRange(start, end) {
+    var ta = $('text');
+    ta.focus();
+    ta.setSelectionRange(start, end);
+    var lineHeight = 27;
+    var before = ta.value.slice(0, start).split('\n').length;
+    ta.scrollTop = Math.max(0, (before - 3) * lineHeight);
+  }
+
+  function copyAll() {
+    var ta = $('text');
+    var value = ta.value;
+    if (!value) { toast(t('tNothing'), true); return; }
+    function fallback() {
+      try {
+        ta.focus(); ta.select();
+        var ok = document.execCommand('copy');
+        ta.setSelectionRange(ta.value.length, ta.value.length);
+        toast(ok ? t('tCopied') : t('tCopyFail'), !ok);
+      } catch (e) { toast(t('tCopyFail'), true); }
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(value).then(function () { toast(t('tCopied')); }, fallback);
+    } else fallback();
+  }
+
+  function downloadTxt() {
+    var value = $('text').value;
+    if (!value) { toast(t('tNothing'), true); return; }
+    try {
+      var blob = new Blob([value], { type: 'text/plain;charset=utf-8' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      var d = new Date();
+      var stamp = d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0') +
+        '-' + String(d.getHours()).padStart(2, '0') + String(d.getMinutes()).padStart(2, '0');
+      a.href = url;
+      a.download = 'textlens-' + stamp + '.txt';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+      toast(t('tDownloaded'));
+    } catch (e) { toast(t('tNothing'), true); }
+  }
+
+  function humanSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / 1024 / 1024).toFixed(2) + ' MB';
+  }
+
+  function loadFile(file) {
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) { toast(t('tTooBig'), true); return; }
+    var reader = new FileReader();
+    reader.onload = function () {
+      var buf = reader.result;
+      var text = '';
+      try {
+        text = new TextDecoder('utf-8', { fatal: true }).decode(buf);
+      } catch (e) {
+        try { text = new TextDecoder('euc-kr').decode(buf); } catch (e2) { text = ''; }
+      }
+      if (!text) { toast(t('tReadFail'), true); return; }
+      pushUndo();
+      $('text').value = text;
+      $('fileName').textContent = file.name;
+      $('fileSize').textContent = humanSize(file.size);
+      onInput();
+      renderUndo();
+      toast(tx('tFileRead', { name: file.name, size: humanSize(file.size) }));
+    };
+    reader.onerror = function () { toast(t('tReadFail'), true); };
+    reader.readAsArrayBuffer(file);
+  }
+
+  /* ─────────────────────────── 예시 ─────────────────────────── */
+  var SAMPLES = {
+    ko: [
+      '지원 동기\n\n저는 데이터를 사람의 언어로 번역하는 일에 관심이 많습니다. 대학 3학년 때 교내 식당의 대기 줄 문제를 해결하고 싶어서, 2주 동안 400명의 이용 패턴을 직접 기록하고 시간대별로 분석했습니다. 그 결과 가장 붐비는 12시 10분에서 12시 40분 사이에만 창구를 하나 더 열어도 평균 대기 시간이 11분에서 4분으로 줄어든다는 것을 확인했고, 총무팀에 근거 자료와 함께 제안서를 제출해 실제 운영에 반영되었습니다. 이 과정에서 저는 문제를 정의하고 데이터로 확인하는 습관을 얻었습니다. 또한 다양한 이해관계자와 협의하면서 정확한 수치가 설득의 가장 단단한 근거라는 점을 배웠습니다.\n\n입사 후에는 귀사의 물류 데이터 파이프라인에서 반복되는 오류를 줄이는 일부터 맡고 싶습니다. 최선을 다하겠습니다.',
+      '## 매일 쓰는 글, 3분이면 정리됩니다\n\n블로그 원고를 쓰다 보면 **PDF에서 복사한 문장**이 중간에서 끊겨 있\n는 경우가 많습니다. 이럴 때 줄바꿈을 하나씩 지우는 대신,\n\n- 빈 줄을 먼저 정리하고\n- 공백과 들여쓰기를 맞춘 뒤\n- 줄바꿈 복원을 누르면\n\n문장이 자연스럽게 이어집니다. 마크다운 기호도 한 번에 지울 수 있어서\n[초안](https://example.com)을 붙여넣고 바로 발행용 텍스트로 바꾸기 좋습니다.\n\n> 물론 문장이 길어지면 읽기 어려워집니다. 80자가 넘는 문장은 표시해 두고 직접 손보는 편이 좋습니다.'
+    ],
+    en: [
+      'Why this role\n\nI have always enjoyed turning raw data into language people can act on. In my third year I noticed the queue at the campus canteen and spent two weeks logging four hundred visits by hand, then charted them by the hour. The chart showed that opening a second counter between 12:10 and 12:40 alone would cut the average wait from eleven minutes to four, and the facilities team adopted the change the following term. That project taught me to define a problem before solving it, and to bring numbers rather than opinions into a room.\n\nIn your logistics team I would start with the recurring errors in the data pipeline. I will do my best.',
+      '## Three minutes to a clean draft\n\nWhen you copy a paragraph out of a PDF, the lines break in the middle of\nsentences. Instead of deleting each break by hand,\n\n- clear the blank lines first,\n- tidy the spaces and indents,\n- then restore the line breaks,\n\nand the prose joins itself back together. Markdown marks go in the same pass, so a [draft](https://example.com) becomes publishable text in one move.\n\n> Long sentences still read badly, though. Anything past eighty characters gets marked so you can cut it yourself.'
+    ]
+  };
+
+  /* ─────────────────────────── 언어 적용 ─────────────────────────── */
+  function applyLang(lang) {
+    state.lang = (lang === 'en') ? 'en' : 'ko';
+    var dict = I18N[state.lang];
+    document.documentElement.lang = state.lang;
+    document.title = dict.docTitle;
+    var md = document.querySelector('meta[name="description"]');
+    if (md) md.setAttribute('content', dict.metaDesc);
+
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+      var k = el.getAttribute('data-i18n');
+      if (dict[k] !== undefined) el.textContent = dict[k];
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(function (el) {
+      var k = el.getAttribute('data-i18n-html');
+      if (dict[k] !== undefined) el.innerHTML = dict[k];
+    });
+    document.querySelectorAll('[data-i18n-aria]').forEach(function (el) {
+      var k = el.getAttribute('data-i18n-aria');
+      if (dict[k] !== undefined) el.setAttribute('aria-label', dict[k]);
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(function (el) {
+      var k = el.getAttribute('data-i18n-placeholder');
+      if (dict[k] !== undefined) el.setAttribute('placeholder', dict[k]);
+    });
+    document.querySelectorAll('[data-i18n-title]').forEach(function (el) {
+      var k = el.getAttribute('data-i18n-title');
+      if (dict[k] !== undefined) el.setAttribute('title', dict[k]);
+    });
+
+    var btn = $('langToggle');
+    btn.querySelectorAll('.lt').forEach(function (sp) {
+      sp.classList.toggle('on', sp.getAttribute('data-lt') === state.lang);
+    });
+    btn.setAttribute('title', dict.toggleTo);
+    btn.setAttribute('aria-label', dict.toggleTo);
+
+    if (state.stats) { renderStats(); renderGoal(); renderChecks(); renderUndo(); }
+    if (previewOpen) renderPreview();
+  }
+
+  /* ─────────────────────────── 초기화 ─────────────────────────── */
+  var previewOpen = false;
+
+  function bind() {
+    $('text').addEventListener('input', onInput);
+
+    $('langToggle').addEventListener('click', function () {
+      var next = state.lang === 'ko' ? 'en' : 'ko';
+      store(LANG_KEY, next);
+      applyLang(next);
+    });
+
+    $('btnSample').addEventListener('click', function () {
+      var list = SAMPLES[state.lang];
+      pushUndo();
+      $('text').value = list[state.sample % list.length];
+      $('fileName').textContent = t('noFile');
+      $('fileSize').textContent = '0 B';
+      toast(state.sample % list.length === 0 ? t('tSampleEssay') : t('tSampleBlog'));
+      state.sample++;
+      onInput();
+      renderUndo();
+    });
+
+    $('btnCopy').addEventListener('click', copyAll);
+    $('btnDownload').addEventListener('click', downloadTxt);
+    $('btnClear').addEventListener('click', function () {
+      if (!$('text').value) { toast(t('tNothing'), true); return; }
+      pushUndo();
+      $('text').value = '';
+      $('fileName').textContent = t('noFile');
+      $('fileSize').textContent = '0 B';
+      onInput();
+      renderUndo();
+      toast(t('tCleared'));
+    });
+
+    $('btnFile').addEventListener('click', function () { $('fileInput').click(); });
+    $('fileInput').addEventListener('change', function (e) {
+      var f = e.target.files && e.target.files[0];
+      loadFile(f);
+      e.target.value = '';
+    });
+
+    var shell = $('editorShell');
+    ['dragenter', 'dragover'].forEach(function (ev) {
+      shell.addEventListener(ev, function (e) { e.preventDefault(); shell.classList.add('is-drag'); });
+    });
+    ['dragleave', 'drop'].forEach(function (ev) {
+      shell.addEventListener(ev, function (e) { e.preventDefault(); if (ev === 'drop' || e.target === shell) shell.classList.remove('is-drag'); });
+    });
+    shell.addEventListener('drop', function (e) {
+      var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (f) loadFile(f);
+    });
+    window.addEventListener('dragover', function (e) { e.preventDefault(); });
+    window.addEventListener('drop', function (e) { e.preventDefault(); });
+
+    $('cBlank').addEventListener('click', function () { applyClean(cleanBlank, 'tBlank'); });
+    $('cSpace').addEventListener('click', function () { applyClean(cleanSpace, 'tSpace'); });
+    $('cLines').addEventListener('click', function () { applyClean(cleanLines, 'tLines'); });
+    $('cMd').addEventListener('click', function () { applyClean(cleanMd, 'tMd'); });
+    $('cQuote').addEventListener('click', function () { applyClean(cleanQuotes, 'tQuote'); });
+
+    $('btnUndo').addEventListener('click', function () {
+      if (!state.undo.length) return;
+      $('text').value = state.undo.pop();
+      onInput();
+      renderUndo();
+      toast(t('undoOne'));
+    });
+
+    $('goalChips').addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('[data-goal]') : null;
+      if (!b) return;
+      setGoal(parseInt(b.getAttribute('data-goal'), 10));
+    });
+    $('goalInput').addEventListener('input', function () {
+      var v = parseInt(this.value, 10);
+      if (!isNaN(v) && v >= 20 && v <= 100000) setGoal(v, true);
+    });
+    $('goalBasis').addEventListener('change', function () {
+      state.basis = this.value;
+      store(BASIS_KEY, state.basis);
+      renderGoal();
+    });
+
+    $('longList').addEventListener('click', onIssueClick);
+    $('clicheList').addEventListener('click', onIssueClick);
+
+    $('previewToggle').addEventListener('click', function () {
+      previewOpen = !previewOpen;
+      this.setAttribute('aria-expanded', String(previewOpen));
+      $('preview').hidden = !previewOpen;
+      if (previewOpen) renderPreview();
+    });
+
+    /* network counter — external requests only */
+    var ext = 0;
+    function noteRequests(list) {
+      for (var i = 0; i < list.length; i++) {
+        try {
+          var u = new URL(list[i].name, location.href);
+          if (u.origin !== location.origin) ext++;
+        } catch (e) { /* opaque entry */ }
+      }
+      $('netCount').textContent = String(ext);
+      $('extBadge').textContent = String(ext);
+    }
+    if (window.PerformanceObserver) {
+      try {
+        new PerformanceObserver(function (l) { noteRequests(l.getEntries()); }).observe({ entryTypes: ['resource'] });
+      } catch (e) {}
+    }
+    window.addEventListener('load', function () {
+      setTimeout(function () {
+        if (window.performance && performance.getEntriesByType) noteRequests(performance.getEntriesByType('resource'));
+      }, 400);
+    });
+  }
+
+  function onIssueClick(e) {
+    var b = e.target.closest ? e.target.closest('[data-start]') : null;
+    if (!b) return;
+    selectRange(parseInt(b.getAttribute('data-start'), 10), parseInt(b.getAttribute('data-end'), 10));
+  }
+
+  function setGoal(value, fromInput) {
+    state.goal = Math.max(20, Math.min(100000, value));
+    store(GOAL_KEY, String(state.goal));
+    if (!fromInput) $('goalInput').value = String(state.goal);
+    $('goalChips').querySelectorAll('[data-goal]').forEach(function (c) {
+      c.setAttribute('aria-pressed', String(parseInt(c.getAttribute('data-goal'), 10) === state.goal));
+    });
+    renderGoal();
+  }
+
+  function init() {
+    var stored = readStored(LANG_KEY, null);
+    if (!stored) {
+      var nav = (navigator.language || 'ko').toLowerCase();
+      stored = nav.indexOf('ko') === 0 ? 'ko' : 'en';
+    }
+    var g = parseInt(readStored(GOAL_KEY, '1000'), 10);
+    state.goal = (!isNaN(g) && g >= 20 && g <= 100000) ? g : 1000;
+    var b = readStored(BASIS_KEY, 'chars');
+    state.basis = (b === 'noSpace' || b === 'euc') ? b : 'chars';
+
+    $('goalInput').value = String(state.goal);
+    $('goalBasis').value = state.basis;
+
+    state.stats = computeStats('');
+    setGoal(state.goal, true);
+
+    bind();
+
+    runChecks();
+    applyLang(stored);
+    renderAll();
+
+    /* The EUC-KR table is built after the first paint so typing never waits. */
+    setTimeout(function () {
+      try {
+        buildCp949();
+        state.eucReady = cp949 !== false && cp949 !== null;
+      } catch (e) { state.eucReady = false; }
+      if (cp949 === null) cp949 = false;
+      state.stats = computeStats($('text').value);
+      renderStats();
+      renderGoal();
+    }, 60);
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+</body>
+</html>

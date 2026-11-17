@@ -15,6 +15,7 @@
 | `/tools/` | 도구 모음 |
 | `/tools/zero-exif-webp/` | EXIF 제거 + WebP 변환 (브라우저 내 처리) |
 | `/tools/editorial-card/` | 에디토리얼 카드 생성기 |
+| `/tools/text-lens/` | 글자수·바이트·줄바꿈·문체 정리기 (자소서·블로그) |
 | `/labs/liquid-shader/` | GLSL 리퀴드 셰이더 실험 |
 
 ## 검색·공유(SEO)
