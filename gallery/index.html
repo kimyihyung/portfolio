@@ -88,6 +88,23 @@ body.touch #joy{display:block}
   color:rgba(242,239,233,.9);letter-spacing:.06em;line-height:1}
 #tourcap .tname{display:block;margin-top:16px;font-family:Georgia,serif;font-size:15px;letter-spacing:.04em;color:rgba(242,239,233,.52)}
 body.touring #roombar,body.touring #joy{display:none}
+/* ── cinema mode: the HUD fades away and only the exhibition remains ── */
+#topbar,#roombar,#map,#dot,#joy,#toast{transition:opacity .5s ease}
+#cinebtn{position:fixed;right:26px;bottom:26px;z-index:11;width:30px;height:30px;padding:0;display:grid;place-items:center;
+  border:1px solid rgba(255,255,255,.16);background:rgba(10,11,13,.52);color:rgba(242,239,233,.62);
+  font:400 11px/1 "Helvetica Neue",sans-serif;cursor:pointer;
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  transition:opacity .5s ease,border-color .25s,color .25s,background .25s}
+#cinebtn:hover{border-color:#c9a97c;color:#f6e6cd;background:rgba(201,169,124,.18)}
+#cinebtn.on{border-color:#c9a97c;color:#f6e6cd}
+body.cardon:not(.cinema) #cinebtn{opacity:0;pointer-events:none}
+body.cinema #topbar,body.cinema #roombar,body.cinema #card,body.cinema #map,
+body.cinema #dot,body.cinema #joy,body.cinema #toast,
+body.cinema #tourfade #tourcap{opacity:0!important;pointer-events:none!important;transition:opacity .55s ease}
+body.cinema #scene{cursor:none}
+body.cinema #cinebtn{opacity:.14}
+body.cinema #cinebtn:hover,body.cinema #cinebtn:focus-visible{opacity:1}
+@media (max-width:760px){#cinebtn{right:16px;bottom:72px;width:28px;height:28px}}
 .touchonly{display:none}
 body.touch .touchonly{display:block}
 body.touch .nohover{display:none}
@@ -171,6 +188,8 @@ body.touch .nohover{display:none}
   </div>
 </div>
 
+<button id="cinebtn" type="button" aria-pressed="false" aria-label="시네마 모드 (H) — 화면 UI 숨기기" title="시네마 모드 · H"><span aria-hidden="true">◻</span></button>
+
 
 <div id="intro" class="layer overlay">
   <div class="panel">
@@ -182,6 +201,7 @@ body.touch .nohover{display:none}
       <li><b>마우스</b> — 시선 (클릭하면 포인터 잠금)</li>
       <li><b>클릭</b> — 가까운 작품 확대 &nbsp;·&nbsp; <b>Esc</b> — 돌아가기</li>
       <li><b>자동 관람</b> (T) — 도슨트가 여덟 점을 차례로 안내 &nbsp;·&nbsp; 움직이면 자유 관람</li>
+      <li><b>시네마</b> (H) — UI를 모두 숨긴 순수 3D 화면 &nbsp;·&nbsp; 한동안 가만히 있으면 자동 관람이 시작됩니다</li>
       <li class="touchonly"><b>왼쪽 조이스틱</b> — 이동 &nbsp;·&nbsp; <b>드래그</b> — 시선 &nbsp;·&nbsp; <b>탭</b> — 그 자리로 걷기</li>
     </ul>
     <button id="startbtn" type="button">입장하기</button>
@@ -208,8 +228,8 @@ body.touch .nohover{display:none}
       <li><b>W A S D</b> / 방향키 — 이동</li>
       <li><b>마우스</b> — 시선 &nbsp;·&nbsp; <b>Shift</b> — 빠르게</li>
       <li><b>클릭</b> — 작품 확대 &nbsp;·&nbsp; <b>Esc</b> — 해제</li>
-      <li><b>T</b> — 자동 관람 &nbsp;·&nbsp; <b>H</b> — 이 창 &nbsp;·&nbsp; <b>Esc</b> — 잠시 멈춤</li>
-      <li><b>보기</b> — 자동 관람 중 화면을 누르거나 움직이면 자유 관람으로 전환</li>
+      <li><b>T</b> — 자동 관람 &nbsp;·&nbsp; <b>H</b> — 시네마 모드 &nbsp;·&nbsp; <b>?</b> — 이 창 &nbsp;·&nbsp; <b>Esc</b> — 잠시 멈춤</li>
+      <li><b>보기</b> — 자동 관람 중 화면을 누르거나 움직이면 자유 관람으로 · 자동 관람은 여덟 점을 계속 돌립니다</li>
     </ul>
     <button id="helpclose" type="button" class="ghost">닫기</button>
   </div>
@@ -1043,6 +1063,43 @@ const elTourBtn = document.getElementById('tourbtn');
 const elDot = document.getElementById('dot');
 
 
+/* ---------- 4c) 시네마 모드 · 유휴 자동 관람 ---------- */
+const elCineBtn = document.getElementById('cinebtn');
+const REDUCE_MOTION = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+const TOUR_IDLE = 26;            /* 이만큼 입력이 없으면 스스로 관람을 시작한다 */
+const TOUR_PUSH = 0.22;          /* 정지 구간의 느린 다가들임 */
+let cinemaOn = false;
+let lastInput = performance.now();
+function markInput() { lastInput = performance.now(); }
+['pointerdown', 'keydown', 'wheel', 'touchstart', 'touchmove'].forEach(function (t) {
+  window.addEventListener(t, markInput, { passive: true, capture: true });
+});
+function paintCineBtn() {
+  if (!elCineBtn) return;
+  elCineBtn.classList.toggle('on', cinemaOn);
+  elCineBtn.setAttribute('aria-pressed', cinemaOn ? 'true' : 'false');
+  elCineBtn.title = cinemaOn ? 'UI 복원 (H)' : '시네마 모드 (H)';
+}
+function setCinema(on) {
+  cinemaOn = !!on;
+  document.body.classList.toggle('cinema', cinemaOn);
+  if (cinemaOn) {
+    if (state.mode === 'focus') exitFocus();
+    toggleHelp(false);
+    if (state.mode === 'pause') {
+      document.getElementById('pause').classList.add('hidden');
+      state.mode = 'walk';
+    }
+  }
+  paintCineBtn();
+}
+if (elCineBtn) elCineBtn.addEventListener('click', function (e) {
+  e.stopPropagation();
+  markInput();
+  setCinema(!cinemaOn);
+});
+
+
 function tourCaption(rec) {
   const n = rec ? rec.tourOrder + 1 : 0;
   elTourCapTop.textContent = rec.roomName + ' · ' + rec.roomSub;
@@ -1087,7 +1144,7 @@ function syncTourBtn() {
   elTourBtn.classList.toggle('active', tour.on);
   elTourBtn.textContent = tour.on ? '관람 중지' : '자동 관람';
 }
-function startTour() {
+function startTour(auto) {
   if (!TOUR_STOPS.length) { toast('아직 걸린 작품이 없습니다'); return; }
   if (tour.on) { stopTour(true); return; }
   if (state.mode === 'focus') exitFocus();
@@ -1106,7 +1163,8 @@ function startTour() {
   syncTourBtn();
   tourCaption(TOUR_STOPS[0]);
   elTourFade.classList.add('on');
-  toast('도슨트 자동 관람 — 화면을 누르거나 움직이면 멈춥니다');
+  toast(auto ? '잠시 조용해서 자동 관람을 시작합니다 — 움직이면 바로 멈춥니다'
+             : '도슨트 자동 관람 — 화면을 누르거나 움직이면 멈춥니다');
 }
 function stopTour(manual) {
   const wasOn = tour.on;
@@ -1122,9 +1180,12 @@ function stopTour(manual) {
 }
 function nextStop() {
   const cur = TOUR_STOPS[tour.i];
-  if (tour.i >= TOUR_STOPS.length - 1) { finishTour(); return; }
-  const nxt = TOUR_STOPS[tour.i + 1];
-  tour.i += 1;
+  if (TOUR_STOPS.length < 2) { finishTour(); return; }
+  /* 마지막 작품 뒤에는 다시 첫 작품으로 돌아가 관람을 계속 돈다 */
+  const wrap = tour.i >= TOUR_STOPS.length - 1;
+  const nxt = TOUR_STOPS[wrap ? 0 : tour.i + 1];
+  if (wrap) tour.lap = (tour.lap || 0) + 1;
+  tour.i = wrap ? 0 : tour.i + 1;
   tour.t = 0;
   if (nxt.room === cur.room) {
     const near = tourPose(nxt, TOUR_NEAR);
@@ -1168,6 +1229,11 @@ function updateTour(dt) {
     if (k >= 1) { tour.phase = 'hold'; tour.t = 0; }
   } else if (tour.phase === 'hold') {
     aimAt(rec, dt, 2.2);
+    /* 정지 구간에서도 아주 느리게 다가들며 화면을 살아 있게 유지한다 */
+    const near = tourPose(rec, Math.max(1.6, TOUR_NEAR - TOUR_PUSH));
+    const kk = 1 - Math.exp(-dt * 0.4);
+    state.pos.x += (near.x - state.pos.x) * kk;
+    state.pos.z += (near.z - state.pos.z) * kk;
     if (tour.t >= TOUR_HOLD) nextStop();
   }
   updateZone();
@@ -1435,6 +1501,13 @@ function clampPitch(v) {
 
 window.addEventListener('keydown', function (e) {
   keys[e.code] = true;
+  markInput();
+  /* H — 시네마 모드 (모든 HUD를 걷어 순수 3D 화면만 남긴다) */
+  if (e.code === 'KeyH') {
+    e.preventDefault();
+    setCinema(!cinemaOn);
+    return;
+  }
   if (e.code === 'KeyT') {
     e.preventDefault();
     if (tour.on) stopTour(true); else startTour();
@@ -1442,12 +1515,13 @@ window.addEventListener('keydown', function (e) {
   }
   if (tour.on) stopTour(true);
   if (e.code === 'Escape') {
+    if (cinemaOn) { setCinema(false); e.preventDefault(); return; }
     if (document.pointerLockElement === canvas) { document.exitPointerLock(); e.preventDefault(); return; }
     if (state.mode === 'focus') { exitFocus(); e.preventDefault(); }
     else if (state.mode === 'walk') { openPause(); }
     else if (document.getElementById('help').classList.contains('hidden') === false) { toggleHelp(false); }
   }
-  if (e.code === 'KeyH') toggleHelp();
+  if (e.code === 'Slash' || e.key === '?') toggleHelp();
   if (e.code === 'KeyW' || e.code === 'KeyA' || e.code === 'KeyS' || e.code === 'KeyD' ||
       e.code === 'ArrowUp' || e.code === 'ArrowDown' || e.code === 'ArrowLeft' || e.code === 'ArrowRight' ||
       e.code === 'Space') {
@@ -1462,6 +1536,7 @@ document.addEventListener('mousemove', function (e) {
   if (document.pointerLockElement !== canvas) return;
   if (state.mode !== 'walk' && state.mode !== 'focus') return;
   if (state.mode === 'focus') return;
+  markInput();
   const s = 0.0021;
   state.yaw -= e.movementX * s;
   state.pitch = clampPitch(state.pitch - e.movementY * s);
@@ -1472,6 +1547,7 @@ document.addEventListener('mousemove', function (e) {
 let dragLook = false, dragX = 0, dragY = 0, dragMoved = 0, swallowClick = false;
 canvas.addEventListener('pointerdown', function (e) {
   lastPointerType = e.pointerType || 'mouse';
+  markInput();
   if (tour.on) { stopTour(true); swallowClick = true; return; }
   if (e.pointerType === 'touch') {
     document.body.classList.add('touch');
@@ -1667,10 +1743,12 @@ function showCard(rec, focused, hint) {
   elCardHint.textContent = hint || (rec.filled ? (focused ? 'ESC 또는 탭으로 돌아가기' : '클릭하여 확대') : '아직 비어 있는 자리');
   elCard.classList.add('on');
   elCard.classList.toggle('focus', !!focused);
+  document.body.classList.add('cardon');
   state.cardIndex = rec.index;
 }
 function hideCard() {
   elCard.classList.remove('on');
+  document.body.classList.remove('cardon');
   state.cardIndex = -1;
 }
 function markViewed(rec) {
@@ -1872,6 +1950,11 @@ let frames = 0;
 function animate() {
   requestAnimationFrame(animate);
   const dt = Math.min(clock.getDelta(), 0.05);
+  /* 한동안 아무 입력이 없으면 시네마틱 자동 관람을 스스로 시작한다 */
+  if (!tour.on && state.mode === 'walk' && !REDUCE_MOTION && TOUR_STOPS.length > 1 &&
+      (performance.now() - lastInput) / 1000 > TOUR_IDLE) {
+    startTour(true);
+  }
   if (state.mode === 'walk') updateWalk(dt);
   else if (state.mode === 'focus') updateFocus(dt);
   else if (state.mode === 'tour') updateTour(dt);
@@ -1903,6 +1986,13 @@ function animate() {
 /* QA: 카메라 자세 지정 (검증 스크린샷용) */
 window.__gallery = {
   state: state, camera: camera, scene: scene, renderer: renderer, EYE: EYE,
+  setCinema: setCinema, cinema: function () { return cinemaOn; },
+  tourState: function () { return { on: tour.on, i: tour.i, phase: tour.phase, stops: TOUR_STOPS.length }; },
+  stops: function () {
+    return TOUR_STOPS.map(function (r) {
+      return { i: r.tourOrder, room: r.room, title: r.title, pos: r.pos.toArray(), normal: r.normal.toArray() };
+    });
+  },
   pose: function (x, z, yaw, pitch) {
     state.mode = 'walk'; state.focus = null; state.saved = null;
     state.pos.set(x, EYE, z);
