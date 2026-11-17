@@ -1,0 +1,1964 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0b0d">
+<title>AudioTrim — Zero-Upload Audio Cutter &amp; WAV Exporter | Kim Yihyung</title>
+<meta name="description" content="Cut MP3, WAV, M4A, OGG or FLAC down to the part you want on a waveform, with fade in/out, level control and a WAV download — all inside your browser with zero uploads and zero external requests.">
+<meta name="keywords" content="audio trimmer, cut mp3, trim wav, audio cutter, fade in fade out, wav export, waveform editor, no upload audio, offline audio trimmer, private audio editor, client-side audio, browser audio editor">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/audio-trim/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0b0d'/%3E%3Cg fill='none' stroke='%23e5b45c' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M7 13v6M11 9v14M15 12v8M19 6v20M23 11v10M27 14v4'/%3E%3C/g%3E%3C/svg%3E">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/audio-trim/">
+<meta property="og:title" content="AudioTrim — Zero-Upload Audio Cutter &amp; WAV Exporter">
+<meta property="og:description" content="Drop an audio file, drag the waveform handles, fade it, and take a trimmed WAV away — built in the tab. 0 bytes uploaded, 0 external requests.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="AudioTrim — a waveform editor cutting an audio file inside the browser">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AudioTrim — Zero-Upload Audio Cutter">
+<meta name="twitter:description" content="Trim an MP3, WAV or M4A on a waveform, add fades and level, download a WAV — with nothing uploaded.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta name="twitter:image:alt" content="AudioTrim — a waveform editor cutting an audio file inside the browser">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "AudioTrim — Zero-Upload Audio Cutter & WAV Exporter",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/audio-trim/",
+      "description": "Trims audio files on a waveform with drag handles or millisecond input, previews the selection with fade in, fade out and level applied, and exports a WAV encoded in the browser — with no uploads and no external requests.",
+      "featureList": [
+        "Waveform view of MP3, WAV, M4A, OGG and FLAC files decoded in the tab",
+        "Selection by dragging the waveform handles or typing start and end to the millisecond",
+        "Preview playback of the selection with loop",
+        "Fade in and fade out up to 5 seconds, level control up to 200%",
+        "Zero-crossing snap to avoid clicks at the cut",
+        "16-bit PCM WAV written by JavaScript in the page, optional mono downmix and peak normalise",
+        "Built-in 5-second test chord so the tool can be tried without a file",
+        "100% client-side: no uploads, no accounts, no external requests"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "AudioTrim", "item": "https://kimyihyung.github.io/portfolio/tools/audio-trim/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does my audio file get uploaded anywhere?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. The file is read by the page itself, decoded with the browser's Web Audio decoder, and the WAV is written by JavaScript in the same tab. The counter in the footer reports how many requests the page has made outside this site, and it stays at zero." }
+        },
+        {
+          "@type": "Question",
+          "name": "Which formats can be trimmed?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Whatever the browser can decode: MP3 and WAV everywhere, M4A/AAC in Safari and Chrome, OGG and Opus in Chrome and Firefox, FLAC in Chrome and Firefox. Safari does not decode OGG or FLAC, so an iPhone cannot open those two — convert them first or trim on a desktop browser." }
+        },
+        {
+          "@type": "Question",
+          "name": "Why is the exported WAV so much larger than the MP3?",
+          "acceptedAnswer": { "@type": "Answer", "text": "WAV stores uncompressed samples: about 10 MB per minute in stereo at 44.1 kHz. That is the price of a file that needs no encoder and loses nothing after the original decode. If you need a small file, keep the original and use this export as a master." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+:root {
+  --bg: #0a0b0d;
+  --bg2: #0d0e10;
+  --panel: #14130f;
+  --panel2: #1a1813;
+  --line: rgba(255, 255, 255, .09);
+  --line2: rgba(255, 255, 255, .19);
+  --ink: #f4f1ea;
+  --muted: #a8a29a;
+  --muted2: #837d74;
+  --accent: #e5b45c;
+  --accent2: #c8952f;
+  --on-accent: #1a1205;
+  --ok: #79dfa3;
+  --warn: #ffc06b;
+  --danger: #ff837a;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--bg);
+  background-image:
+    radial-gradient(120% 70% at 50% -20%, rgba(229, 180, 92, .12), transparent 60%),
+    radial-gradient(90% 60% at 100% 0%, rgba(229, 180, 92, .05), transparent 55%);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: 1.5;
+}
+
+::selection { background: var(--accent); color: var(--on-accent); }
+a { color: inherit; }
+[hidden] { display: none !important; }
+button, input, select, textarea { font-family: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.wrap { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 16px 40px; }
+
+/* ── header ─────────────────────────────────────────── */
+.top {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 10px; padding: 18px 0 0;
+}
+.brand { display: inline-flex; align-items: center; gap: 9px; text-decoration: none; color: var(--ink); }
+.mark {
+  min-width: 30px; height: 30px; padding: 0 6px;
+  border-radius: 9px; border: 1px solid var(--line2);
+  background: var(--panel); color: var(--accent);
+  display: grid; place-items: center;
+  font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .06em;
+}
+.brand-txt { font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; white-space: nowrap; }
+.top-actions { display: flex; align-items: center; gap: 8px; }
+.lang-toggle {
+  display: inline-flex; align-items: center; gap: 5px;
+  height: 30px; padding: 0 9px;
+  border: 1px solid var(--line); border-radius: 8px;
+  background: rgba(255, 255, 255, .03); color: var(--muted2);
+  cursor: pointer; font-family: var(--mono); font-size: 10.5px;
+  font-weight: 700; letter-spacing: .08em; line-height: 1;
+  transition: border-color .18s ease, transform .12s ease;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.95); }
+.lang-toggle .lt { transition: color .18s ease; }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.back {
+  font-size: 12px; color: var(--muted); text-decoration: none;
+  border: 1px solid var(--line); border-radius: 8px;
+  padding: 7px 10px; line-height: 1;
+  transition: color .18s ease, border-color .18s ease;
+}
+.back:hover { color: var(--ink); border-color: var(--line2); }
+
+/* ── hero ───────────────────────────────────────────── */
+.hero { padding: 26px 0 18px; }
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 16px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--line); background: rgba(255, 255, 255, .025);
+  border-radius: 999px; padding: 5px 11px;
+  font-size: 11px; letter-spacing: .02em; color: var(--muted);
+}
+.pill b { color: var(--ink); font-weight: 650; }
+.pill--live { border-color: rgba(229, 180, 92, .34); color: var(--accent); }
+.pill--live b { color: var(--accent); }
+.pill .dot {
+  width: 5px; height: 5px; border-radius: 50%; background: var(--accent);
+  box-shadow: 0 0 0 3px rgba(229, 180, 92, .14);
+}
+.hero h1 {
+  margin: 0 0 13px;
+  font-size: clamp(28px, 6vw, 46px);
+  line-height: 1.07; letter-spacing: -.035em; font-weight: 730;
+  max-width: 22ch;
+}
+.hero h1 .dim { color: var(--muted2); }
+.lede { margin: 0; max-width: 66ch; font-size: 14.5px; line-height: 1.68; color: var(--muted); }
+.lede b { color: var(--ink); font-weight: 600; }
+
+/* ── layout ─────────────────────────────────────────── */
+.grid { display: grid; grid-template-columns: 1fr; gap: 14px; align-items: start; }
+.col-left { display: contents; }
+#panelWave { order: 1; }
+#panelControls { order: 2; }
+#panelExport { order: 3; }
+.panel {
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--panel); padding: 16px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .03);
+}
+.ph {
+  margin: 0 0 12px; font-size: 11px; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--muted2);
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+.ph .count-note { text-transform: none; }
+
+/* ── stage ──────────────────────────────────────────── */
+.stage {
+  position: relative;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .028), rgba(255, 255, 255, 0) 60%),
+    #0b0a08;
+  overflow: hidden;
+}
+.stage.is-over { border-color: rgba(229, 180, 92, .6); }
+#wave { display: block; width: 100%; height: 208px; touch-action: none; cursor: crosshair; }
+.stage-empty {
+  position: absolute; inset: 0;
+  display: grid; place-content: center; gap: 8px; justify-items: center;
+  padding: 20px; text-align: center; pointer-events: none;
+}
+.stage-empty svg { width: 30px; height: 30px; color: var(--muted2); opacity: .8; }
+.stage-empty p { margin: 0; font-size: 12.5px; color: var(--muted2); max-width: 34ch; line-height: 1.6; }
+.stage-empty p b { color: var(--muted); font-weight: 600; }
+
+.readout {
+  display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 0;
+}
+.chip {
+  display: inline-flex; align-items: baseline; gap: 6px;
+  border: 1px solid var(--line); border-radius: 9px;
+  background: var(--bg2); padding: 6px 9px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: .06em;
+  color: var(--muted2); text-transform: uppercase;
+}
+.chip b { color: var(--ink); font-size: 12px; font-weight: 700; letter-spacing: 0; }
+.chip--accent { border-color: rgba(229, 180, 92, .32); }
+.chip--accent b { color: var(--accent); }
+
+/* ── drop / file bar ────────────────────────────────── */
+.drop {
+  margin: 14px 0 0; padding: 16px;
+  border: 1px dashed var(--line2); border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, .015);
+  text-align: center;
+}
+.drop.is-over { border-color: var(--accent); background: rgba(229, 180, 92, .06); }
+.drop-title { margin: 0 0 4px; font-size: 14px; font-weight: 650; letter-spacing: -.01em; }
+.drop-note { margin: 0 0 12px; font-size: 12px; line-height: 1.55; color: var(--muted2); }
+.drop-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+
+.filebar {
+  margin: 14px 0 0; padding: 10px 12px;
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--bg2);
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px;
+}
+.filebar .fname {
+  font-size: 12.5px; color: var(--ink); font-weight: 600;
+  flex: 1 1 160px; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.filebar .fmeta { font-family: var(--mono); font-size: 10px; letter-spacing: .05em; color: var(--muted2); }
+.filebar .fbtns { display: flex; gap: 6px; }
+
+/* ── buttons ────────────────────────────────────────── */
+.btn {
+  appearance: none; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  border: 1px solid var(--line2); background: var(--panel2); color: var(--ink);
+  border-radius: 10px; padding: 9px 13px;
+  font-size: 12.5px; font-weight: 600; letter-spacing: -.01em;
+  transition: background .18s ease, border-color .18s ease, color .18s ease, transform .12s ease;
+}
+.btn:hover { border-color: var(--accent); }
+.btn:active { transform: scale(.985); }
+.btn:disabled { opacity: .38; cursor: not-allowed; }
+.btn:disabled:hover { border-color: var(--line2); }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 700; }
+.btn--primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.btn--primary:disabled { background: var(--panel2); border-color: var(--line2); color: var(--muted2); }
+.btn--ghost { background: transparent; color: var(--muted); border-color: var(--line); }
+.btn--ghost:hover { color: var(--ink); }
+.btn--sm { padding: 6px 9px; font-size: 11.5px; border-radius: 8px; }
+.btn svg { width: 14px; height: 14px; flex: none; }
+.btn--block { width: 100%; }
+
+/* ── controls ───────────────────────────────────────── */
+.sec { padding: 0 0 14px; margin: 0 0 14px; border-bottom: 1px solid var(--line); }
+.sec:last-child { padding-bottom: 0; margin-bottom: 0; border-bottom: 0; }
+.sec-h {
+  margin: 0 0 10px; font-size: 11px; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--muted2);
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+.sec-h .note { font-family: var(--mono); font-size: 10px; letter-spacing: .04em; text-transform: none; color: var(--muted2); }
+
+.field { margin: 0 0 10px; }
+.field:last-child { margin-bottom: 0; }
+.lbl { display: block; margin: 0 0 5px; font-size: 12px; color: var(--muted); letter-spacing: .01em; }
+.timepair {
+  display: flex; align-items: center; gap: 5px;
+  border: 1px solid var(--line); border-radius: 9px;
+  background: var(--bg2); padding: 3px 6px;
+  transition: border-color .18s ease;
+}
+.timepair:focus-within { border-color: rgba(229, 180, 92, .55); }
+.timepair input {
+  width: 100%; min-width: 0; appearance: none; border: 0; background: transparent;
+  padding: 6px 2px; font-family: var(--mono); font-size: 13px; color: var(--ink);
+  text-align: right;
+}
+.timepair input::-webkit-outer-spin-button, .timepair input::-webkit-inner-spin-button { appearance: none; margin: 0; }
+.timepair input[type="number"] { -moz-appearance: textfield; }
+.timepair .unit { font-family: var(--mono); font-size: 10px; color: var(--muted2); letter-spacing: .04em; }
+.stamp { margin: 4px 0 0; font-family: var(--mono); font-size: 10.5px; letter-spacing: .04em; color: var(--muted2); }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.btn-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 0; }
+
+.slider-row { display: flex; align-items: center; gap: 10px; }
+input[type="range"] {
+  appearance: none; -webkit-appearance: none;
+  flex: 1; height: 22px; background: transparent; cursor: pointer; min-width: 0;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px; border-radius: 99px; background: #2a251c;
+}
+input[type="range"]::-moz-range-track { height: 4px; border-radius: 99px; background: #2a251c; }
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 15px; height: 15px; margin-top: -5.5px;
+  border-radius: 50%; background: var(--accent); border: 0;
+  box-shadow: 0 0 0 3px rgba(229, 180, 92, .16);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 15px; height: 15px; border-radius: 50%; background: var(--accent); border: 0;
+}
+input[type="range"]:disabled { opacity: .4; cursor: not-allowed; }
+.num {
+  font-family: var(--mono); font-size: 11.5px; color: var(--ink);
+  min-width: 46px; text-align: right; letter-spacing: .02em;
+}
+.chk {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12.5px; color: var(--muted); cursor: pointer;
+  padding: 3px 0;
+}
+.chk input { accent-color: var(--accent); width: 15px; height: 15px; flex: none; }
+.chk--top { align-items: flex-start; }
+.chk--top input { margin-top: 2px; }
+.hint { margin: 8px 0 0; font-size: 12px; line-height: 1.55; color: var(--muted2); }
+.hint--warn { color: var(--warn); }
+.hint--err { color: var(--danger); }
+.hint--ok { color: var(--ok); }
+.mono-note { font-family: var(--mono); font-size: 10px; letter-spacing: .04em; color: var(--muted2); }
+
+/* ── notes / faq ────────────────────────────────────── */
+.notes { display: grid; grid-template-columns: 1fr; gap: 14px; margin: 26px 0 0; }
+.note h3 { margin: 0 0 5px; font-size: 13.5px; font-weight: 650; letter-spacing: -.01em; }
+.note p { margin: 0; font-size: 12.5px; line-height: 1.65; color: var(--muted2); }
+.faq { margin: 22px 0 0; }
+.faq h2 { margin: 0 0 12px; font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--muted2); }
+.faq-item { padding: 12px 0; border-top: 1px solid var(--line); }
+.faq-item h3 { margin: 0 0 5px; font-size: 13.5px; font-weight: 650; letter-spacing: -.01em; }
+.faq-item p { margin: 0; font-size: 12.5px; line-height: 1.65; color: var(--muted2); }
+
+.caveat {
+  margin: 22px 0 0; padding: 12px 14px;
+  border: 1px solid rgba(255, 192, 107, .25); border-radius: var(--radius-sm);
+  background: rgba(255, 192, 107, .05);
+  font-size: 12px; line-height: 1.65; color: var(--muted);
+}
+.caveat strong { color: var(--warn); font-weight: 600; }
+.lic { margin: 10px 0 0; font-size: 10.5px; line-height: 1.6; color: var(--muted2); }
+
+.foot {
+  display: flex; flex-wrap: wrap; gap: 8px 16px;
+  align-items: center; justify-content: space-between;
+  margin-top: 34px; padding-top: 16px; border-top: 1px solid var(--line);
+  font-family: var(--mono); font-size: 10px; letter-spacing: .06em;
+  color: var(--muted2); text-transform: uppercase;
+}
+.foot .net b { color: var(--accent); font-weight: 700; }
+.foot a { color: var(--muted2); text-decoration: none; border-bottom: 1px solid transparent; }
+.foot a:hover { color: var(--ink); border-bottom-color: var(--line2); }
+
+@media (min-width: 700px) {
+  .wrap { padding: 0 24px 48px; }
+  .hero { padding: 40px 0 26px; }
+  .panel { padding: 20px; }
+  .notes { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  #wave { height: 236px; }
+}
+@media (min-width: 980px) {
+  .top { padding-top: 24px; }
+  .grid {
+    grid-template-columns: minmax(0, 1fr) 348px;
+    gap: 18px;
+  }
+  .col-left { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+  .sticky { position: sticky; top: 18px; }
+}
+@media (max-width: 700px) {
+  #wave { height: 150px; }
+  .btn { min-height: 42px; }
+  .btn--sm { min-height: 38px; }
+  .lang-toggle, .back { min-height: 34px; }
+}
+@media (max-width: 420px) {
+  .row2 { grid-template-columns: 1fr; }
+  .brand-txt { display: none; }
+  .drop-actions .btn { flex: 1 1 100%; }
+}
+@media (hover: none) {
+  .btn:active { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <a class="brand" href="/portfolio/" aria-label="Kim Yihyung — portfolio" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="View in Korean" aria-label="View in Korean">
+        <span class="lt on" data-lt="en">EN</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="ko">KO</span>
+      </button>
+      <a class="back" href="../" data-i18n="backTools">← Tools</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="badge-row">
+      <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillLive">0 bytes uploaded</b></span>
+      <span class="pill" data-i18n-html="pillLocal">In-browser <b>100% local</b></span>
+      <span class="pill" data-i18n-html="pillOut"><b>WAV</b> out · <b>MP3 · WAV · M4A · OGG</b> in</span>
+      <span class="pill" data-i18n-html="pillFade"><b>Fade</b> · <b>level</b> · <b>zero-cross snap</b></span>
+    </div>
+    <h1 data-i18n-html="h1">Trim the sound.<br><span class="dim">Not the upload.</span></h1>
+    <p class="lede" data-i18n-html="lede">Drop an audio file and keep the part you want. Drag the handles on the waveform or type a start and end to the millisecond, preview it with <b>fade in, fade out and level</b> applied, and take away a WAV written by this page. No upload, no account, no library pulled from a CDN — the audio never leaves your device.</p>
+  </section>
+
+  <main class="grid">
+
+    <div class="col-left">
+
+    <!-- ═══════════════ WAVEFORM ═══════════════ -->
+    <section class="panel" id="panelWave">
+      <h2 class="ph"><span data-i18n="waveTitle">Waveform</span><span class="count-note" id="waveMeta">—</span></h2>
+
+      <div class="stage" id="stage">
+        <canvas id="wave" role="img" aria-label="Audio waveform with selection handles" data-i18n-aria="waveAria"></canvas>
+        <div class="stage-empty" id="stageEmpty">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+            <path d="M4 10v4M8 6v12M12 9v6M16 3v18M20 8v8" stroke-linecap="round"/>
+          </svg>
+          <p data-i18n-html="waveEmpty"><b>No audio loaded.</b> The waveform appears here as soon as a file is in.</p>
+        </div>
+      </div>
+
+      <div class="readout">
+        <span class="chip"><span data-i18n="chipStart">start</span><b id="chipStart">0:00.000</b></span>
+        <span class="chip"><span data-i18n="chipEnd">end</span><b id="chipEnd">0:00.000</b></span>
+        <span class="chip chip--accent"><span data-i18n="chipLen">length</span><b id="chipLen">0:00.000</b></span>
+      </div>
+
+      <div class="drop" id="drop">
+        <p class="drop-title" data-i18n="dropTitle">Drop an audio file</p>
+        <p class="drop-note" data-i18n="dropNote">MP3 · WAV · M4A · AAC · OGG · Opus · FLAC — whatever this browser can decode. Nothing is uploaded.</p>
+        <div class="drop-actions">
+          <button class="btn btn--primary" id="pickFile" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 16V5m0 0-4 4m4-4 4 4M5 19h14" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span data-i18n="pickFile">Choose a file</span>
+          </button>
+          <button class="btn" id="loadTone" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 12v2M8 8v8M12 5v14M16 9v6M20 11v2" stroke-linecap="round"/></svg>
+            <span data-i18n="toneBtn">5-second test tone</span>
+          </button>
+        </div>
+        <input type="file" id="fileInput" accept="audio/*,.mp3,.wav,.m4a,.aac,.ogg,.oga,.opus,.flac,.webm" hidden>
+      </div>
+
+      <div class="filebar" id="fileBar" hidden>
+        <span class="fname" id="fileName">—</span>
+        <span class="fmeta" id="fileMeta"></span>
+        <div class="fbtns">
+          <button class="btn btn--ghost btn--sm" id="replaceFile" type="button" data-i18n="replaceFile">Replace</button>
+          <button class="btn btn--ghost btn--sm" id="loadTone2" type="button" data-i18n="toneShort">Test tone</button>
+          <button class="btn btn--ghost btn--sm" id="clearFile" type="button" data-i18n="clearFile">Clear</button>
+        </div>
+      </div>
+
+      <p class="hint hint--err" id="loadErr" hidden></p>
+      <p class="hint" id="waveHint" data-i18n="waveHint" hidden>Drag either handle to move a cut, drag across the middle to select, or click to place the playhead. <b>Space</b> plays the selection.</p>
+    </section>
+
+    <!-- ═══════════════ EXPORT ═══════════════ -->
+    <section class="panel" id="panelExport">
+      <div class="sec">
+        <h3 class="sec-h"><span data-i18n="outTitle">Export</span><span class="note" data-i18n="outFormat">WAV · 16-bit PCM</span></h3>
+        <div class="row2">
+          <label class="chk">
+            <input type="checkbox" id="monoChk">
+            <span data-i18n="monoLabel">Mono (average the channels)</span>
+          </label>
+          <label class="chk">
+            <input type="checkbox" id="normChk">
+            <span data-i18n="normLabel">Normalise peak to −0.2 dBFS</span>
+          </label>
+        </div>
+        <p class="hint" data-i18n="sizeHint">Estimated file <b id="sizeEst">—</b></p>
+        <button class="btn btn--primary btn--block" id="exportBtn" type="button" disabled style="margin-top:10px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 4v11m0 0 4-4m-4 4-4-4M5 19h14" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span data-i18n="exportBtn">Download trimmed WAV</span>
+        </button>
+        <p class="hint" id="outInfo" aria-live="polite" data-i18n="outIdle">Load a file to enable the export.</p>
+      </div>
+    </section>
+    </div>
+
+    <!-- ═══════════════ CONTROLS ═══════════════ -->
+    <section class="panel sticky" id="panelControls">
+      <div class="sec">
+        <h3 class="sec-h"><span data-i18n="selTitle">Selection</span><span class="note" id="selNote">—</span></h3>
+        <div class="row2">
+          <div class="field">
+            <span class="lbl" data-i18n="startLabel">Start</span>
+            <div class="timepair">
+              <input type="number" id="startSec" min="0" step="1" value="0" inputmode="numeric" aria-label="Start seconds">
+              <span class="unit" aria-hidden="true">s</span>
+              <input type="number" id="startMs" min="0" max="999" step="1" value="0" inputmode="numeric" aria-label="Start milliseconds">
+              <span class="unit" aria-hidden="true">ms</span>
+            </div>
+            <p class="stamp" id="startStamp">0:00.000</p>
+          </div>
+          <div class="field">
+            <span class="lbl" data-i18n="endLabel">End</span>
+            <div class="timepair">
+              <input type="number" id="endSec" min="0" step="1" value="0" inputmode="numeric" aria-label="End seconds">
+              <span class="unit" aria-hidden="true">s</span>
+              <input type="number" id="endMs" min="0" max="999" step="1" value="0" inputmode="numeric" aria-label="End milliseconds">
+              <span class="unit" aria-hidden="true">ms</span>
+            </div>
+            <p class="stamp" id="endStamp">0:00.000</p>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn--ghost btn--sm" id="setStart" type="button" data-i18n="setStart">Start at playhead</button>
+          <button class="btn btn--ghost btn--sm" id="setEnd" type="button" data-i18n="setEnd">End at playhead</button>
+          <button class="btn btn--ghost btn--sm" id="selAll" type="button" data-i18n="wholeFile">Whole file</button>
+        </div>
+        <label class="chk chk--top" style="margin-top:8px">
+          <input type="checkbox" id="snapChk" checked>
+          <span data-i18n="snapLabel">Snap the cuts to the nearest zero crossing</span>
+        </label>
+        <p class="hint" data-i18n="snapHint">A cut between samples can click. Snapping moves both edges to where the wave crosses silence, within a few milliseconds.</p>
+      </div>
+
+      <div class="sec">
+        <h3 class="sec-h"><span data-i18n="prevTitle">Preview</span><span class="note" id="prevNote"></span></h3>
+        <div class="btn-row" style="margin-top:0">
+          <button class="btn btn--primary" id="playBtn" type="button" style="flex:1" disabled>
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" id="playIcon"><path d="M7 4.5v15l13-7.5z"/></svg>
+            <span data-i18n="play">Play</span>
+          </button>
+          <button class="btn" id="stopBtn" type="button" disabled>
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+            <span data-i18n="stop">Stop</span>
+          </button>
+        </div>
+        <label class="chk" style="margin-top:6px">
+          <input type="checkbox" id="loopChk">
+          <span data-i18n="loopLabel">Loop the selection</span>
+        </label>
+      </div>
+
+      <div class="sec">
+        <h3 class="sec-h"><span data-i18n="fadeTitle">Fades</span><span class="note" data-i18n="fadeUnit">up to 5 s each</span></h3>
+        <label class="chk">
+          <input type="checkbox" id="fadeInChk">
+          <span data-i18n="fadeIn">Fade in</span>
+        </label>
+        <div class="slider-row">
+          <input type="range" id="fadeInRange" min="0" max="5" step="0.1" value="0.5" disabled aria-label="Fade in seconds">
+          <span class="num" id="fadeInOut">0.5 s</span>
+        </div>
+        <label class="chk" style="margin-top:8px">
+          <input type="checkbox" id="fadeOutChk">
+          <span data-i18n="fadeOut">Fade out</span>
+        </label>
+        <div class="slider-row">
+          <input type="range" id="fadeOutRange" min="0" max="5" step="0.1" value="0.5" disabled aria-label="Fade out seconds">
+          <span class="num" id="fadeOutOut">0.5 s</span>
+        </div>
+        <p class="hint" data-i18n="fadeHint">Used for a ringtone, a clip for a video, or a voice note that starts mid-word.</p>
+      </div>
+
+      <div class="sec">
+        <h3 class="sec-h"><span data-i18n="levelTitle">Level</span><span class="note" id="volNote">100%</span></h3>
+        <div class="slider-row">
+          <input type="range" id="volRange" min="0" max="200" step="1" value="100" aria-label="Output level percent">
+          <span class="num" id="volOut">100%</span>
+        </div>
+        <p class="hint" data-i18n="volHint">Level changes the export and the preview together, so what you hear is what the WAV holds.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="notes">
+    <div class="note">
+      <h3 data-i18n="n1t">Nothing leaves the tab</h3>
+      <p data-i18n="n1">The file is opened by this page, decoded with the browser's own audio decoder, and encoded back to WAV in JavaScript. The counter in the footer reports every request this page makes outside its own origin; it stays at zero.</p>
+    </div>
+    <div class="note">
+      <h3 data-i18n="n2t">What the WAV keeps</h3>
+      <p data-i18n="n2">The export is uncompressed 16-bit PCM at the rate the browser decoded at — usually 44.1 or 48 kHz. That is a lossless copy of the decoded audio, and roughly 10 MB per minute in stereo.</p>
+    </div>
+    <div class="note">
+      <h3 data-i18n="n3t">Cuts that do not click</h3>
+      <p data-i18n="n3">Zero-crossing snap keeps both edges at points where the waveform is already at silence, and a fade of 20–50 ms covers the rest. For a looping clip, set a fade out of 0 and cut exactly on the beat.</p>
+    </div>
+  </div>
+
+  <div class="faq">
+    <h2 data-i18n="faqTitle">Questions</h2>
+    <div class="faq-item">
+      <h3 data-i18n="q1">Does it work on a phone?</h3>
+      <p data-i18n="a1">Yes. The waveform responds to touch, and the file picker opens the phone's own files. Safari decodes MP3, WAV, M4A and AAC but not OGG or FLAC, so those two need Chrome, Firefox or a desktop.</p>
+    </div>
+    <div class="faq-item">
+      <h3 data-i18n="q2">How long a file can it open?</h3>
+      <p data-i18n="a2">The limit is the memory of the tab, not a counter: a one-hour stereo file decoded at 48 kHz takes about 1.4 GB, which most phones will refuse. Under about 30 minutes works on a normal laptop; for a full podcast, cut it in pieces.</p>
+    </div>
+    <div class="faq-item">
+      <h3 data-i18n="q3">Can I export MP3 instead?</h3>
+      <p data-i18n="a3">Not from this page — an MP3 encoder is a sizeable library and would have to be shipped with the page. WAV needs no encoder, so the tool stays small and the output is exact. Convert the WAV afterwards if you need a smaller file.</p>
+    </div>
+  </div>
+
+  <p class="caveat" data-i18n-html="caveat"><strong>Note.</strong> Only trim audio you have the right to use. A browser tab can be reloaded by accident, so keep the original file where it is — the export is a new file and the source is never modified.</p>
+
+  <p class="lic" data-i18n="lic">No third-party audio library: decoding uses the Web Audio API and the WAV writer is part of this page. Everything is served from this site with the page, never from a CDN.</p>
+
+  <footer class="foot">
+    <span data-i18n="foot1">0 uploads · 0 servers · 0 cookies</span>
+    <span class="net"><span data-i18n="netLabel">external requests made by this page</span>: <b id="netCount">0</b></span>
+    <span><a href="/portfolio/" data-i18n="back">← Portfolio</a> · <a href="../" data-i18n="footTools">All tools</a></span>
+  </footer>
+</div>
+
+<script>
+/* Fault trap: keeps a list of runtime errors so a broken step can be traced instead of
+   freezing silently. It costs nothing when the page runs cleanly. */
+window.__atFaults = [];
+window.addEventListener('error', function (e) {
+  try { window.__atFaults.push(String((e && (e.message || e.type)) || 'error')); } catch (err) {}
+});
+window.addEventListener('unhandledrejection', function (e) {
+  try { window.__atFaults.push('rejection: ' + String(e && e.reason)); } catch (err) {}
+});
+</script>
+<script>
+(function () {
+  'use strict';
+
+  var $ = function (id) { return document.getElementById(id); };
+  function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
+
+  /* ─────────────────────────────── 언어 ─────────────────────────────── */
+  /* Only the shared language key is written to storage: no audio, name or
+     selection of the user is ever persisted. */
+  var LANG_KEY = 'kyh.lang';
+  var state = {
+    lang: 'en',
+    buf: null, name: '', size: 0, generated: false,
+    selStart: 0, selEnd: 0, playhead: 0,
+    peaks: null,
+    ac: null, src: null, gain: null,
+    playing: false, playT0: 0, playFrom: 0, raf: 0, lastDraw: 0,
+    decoding: false, drag: null
+  };
+
+  var I18N = {
+    en: {
+      docTitle: 'AudioTrim — Zero-Upload Audio Cutter & WAV Exporter | Kim Yihyung',
+      metaDesc: 'Cut MP3, WAV, M4A, OGG or FLAC down to the part you want on a waveform, with fade in/out, level control and a WAV download — all inside your browser with zero uploads and zero external requests.',
+      ogTitle: 'AudioTrim — Zero-Upload Audio Cutter & WAV Exporter',
+      ogDesc: 'Drop an audio file, drag the waveform handles, fade it, and take a trimmed WAV away — built in the tab. 0 bytes uploaded, 0 external requests.',
+
+      brandAria: 'Kim Yihyung — portfolio',
+      backTools: '← Tools',
+      toggleTo: 'View in Korean',
+
+      pillLive: '0 bytes uploaded',
+      pillLocal: 'In-browser <b>100% local</b>',
+      pillOut: '<b>WAV</b> out · <b>MP3 · WAV · M4A · OGG</b> in',
+      pillFade: '<b>Fade</b> · <b>level</b> · <b>zero-cross snap</b>',
+      h1: 'Trim the sound.<br><span class="dim">Not the upload.</span>',
+      lede: 'Drop an audio file and keep the part you want. Drag the handles on the waveform or type a start and end to the millisecond, preview it with <b>fade in, fade out and level</b> applied, and take away a WAV written by this page. No upload, no account, no library pulled from a CDN — the audio never leaves your device.',
+
+      waveTitle: 'Waveform',
+      waveAria: 'Audio waveform with selection handles',
+      waveEmpty: '<b>No audio loaded.</b> The waveform appears here as soon as a file is in.',
+      chipStart: 'start',
+      chipEnd: 'end',
+      chipLen: 'length',
+
+      dropTitle: 'Drop an audio file',
+      dropNote: 'MP3 · WAV · M4A · AAC · OGG · Opus · FLAC — whatever this browser can decode. Nothing is uploaded.',
+      pickFile: 'Choose a file',
+      toneBtn: '5-second test tone',
+      replaceFile: 'Replace',
+      toneShort: 'Test tone',
+      clearFile: 'Clear',
+      waveHint: 'Drag either handle to move a cut, drag across the middle to select, or click to place the playhead. <b>Space</b> plays the selection.',
+
+      selTitle: 'Selection',
+      startLabel: 'Start',
+      endLabel: 'End',
+      setStart: 'Start at playhead',
+      setEnd: 'End at playhead',
+      wholeFile: 'Whole file',
+      snapLabel: 'Snap the cuts to the nearest zero crossing',
+      snapHint: 'A cut between samples can click. Snapping moves both edges to where the wave crosses silence, within a few milliseconds.',
+
+      prevTitle: 'Preview',
+      play: 'Play',
+      pause: 'Pause',
+      stop: 'Stop',
+      loopLabel: 'Loop the selection',
+
+      fadeTitle: 'Fades',
+      fadeUnit: 'up to 5 s each',
+      fadeIn: 'Fade in',
+      fadeOut: 'Fade out',
+      fadeHint: 'Used for a ringtone, a clip for a video, or a voice note that starts mid-word.',
+
+      levelTitle: 'Level',
+      volHint: 'Level changes the export and the preview together, so what you hear is what the WAV holds.',
+      normLabel: 'Normalise peak to −0.2 dBFS',
+
+      outTitle: 'Export',
+      outFormat: 'WAV · 16-bit PCM',
+      monoLabel: 'Mono (average the channels)',
+      sizeHint: 'Estimated file <b id="sizeEst">—</b>',
+      exportBtn: 'Download trimmed WAV',
+      outIdle: 'Load a file to enable the export.',
+
+      n1t: 'Nothing leaves the tab',
+      n1: 'The file is opened by this page, decoded with the browser\'s own audio decoder, and encoded back to WAV in JavaScript. The counter in the footer reports every request this page makes outside its own origin; it stays at zero.',
+      n2t: 'What the WAV keeps',
+      n2: 'The export is uncompressed 16-bit PCM. Where the file states its own rate — WAV, FLAC, MP3 and OGG do — the audio is decoded at exactly that rate and the WAV keeps it; other containers fall back to the browser rate. That is a lossless copy of the decoded audio, and roughly 10 MB per minute in stereo.',
+      n3t: 'Cuts that do not click',
+      n3: 'Zero-crossing snap keeps both edges at points where the waveform is already at silence, and a fade of 20–50 ms covers the rest. For a looping clip, set a fade out of 0 and cut exactly on the beat.',
+
+      faqTitle: 'Questions',
+      q1: 'Does it work on a phone?',
+      a1: 'Yes. The waveform responds to touch, and the file picker opens the phone\'s own files. Safari decodes MP3, WAV, M4A and AAC but not OGG or FLAC, so those two need Chrome, Firefox or a desktop.',
+      q2: 'How long a file can it open?',
+      a2: 'The limit is the memory of the tab, not a counter: a one-hour stereo file decoded at 48 kHz takes about 1.4 GB, which most phones will refuse. Under about 30 minutes works on a normal laptop; for a full podcast, cut it in pieces.',
+      q3: 'Can I export MP3 instead?',
+      a3: 'Not from this page — an MP3 encoder is a sizeable library and would have to be shipped with the page. WAV needs no encoder, so the tool stays small and the output is exact. Convert the WAV afterwards if you need a smaller file.',
+
+      caveat: '<strong>Note.</strong> Only trim audio you have the right to use. A browser tab can be reloaded by accident, so keep the original file where it is — the export is a new file and the source is never modified.',
+      lic: 'No third-party audio library: decoding uses the Web Audio API and the WAV writer is part of this page. Everything is served from this site with the page, never from a CDN.',
+
+      foot1: '0 uploads · 0 servers · 0 cookies',
+      netLabel: 'external requests made by this page',
+      back: '← Portfolio',
+      footTools: 'All tools',
+
+      decoding: 'Decoding…',
+      errDecode: 'This browser could not decode that file. Try WAV or MP3, or convert it on a desktop browser.',
+      errNotAudio: 'That file does not look like audio. Choose an MP3, WAV, M4A, OGG or FLAC file.',
+      errExport: 'The export failed while writing the WAV. Try a shorter selection.',
+      toneName: 'test-tone-440hz-chord.wav',
+      toneDetail: '440 Hz chord · generated here',
+      loadedFiles: '{n} channels · {sr} kHz',
+      outReady: 'WAV ready — {size} · {dur} at {sr} kHz.',
+      outGenFail: 'Could not build the WAV.',
+      outPrep: 'Writing the WAV…',
+      estLabel: '{size} · {dur}',
+      metaIdle: 'no file',
+      metaLoaded: '{dur} · {sr} kHz · {ch} ch',
+      metaSel: '{dur} selected'
+    },
+    ko: {
+      docTitle: 'AudioTrim — 업로드 없는 오디오 자르기 & WAV 내보내기 | 김이형',
+      metaDesc: 'MP3·WAV·M4A·OGG·FLAC을 파형에서 원하는 구간만 잘라 페이드 인/아웃과 볼륨을 적용하고 WAV로 내려받으세요. 업로드 0바이트, 외부 요청 0건으로 브라우저 안에서 끝납니다.',
+      ogTitle: 'AudioTrim — 업로드 없는 오디오 자르기 & WAV 내보내기',
+      ogDesc: '오디오 파일을 놓고 파형 핸들을 끌어 자른 뒤 페이드를 얹어 WAV로 받으세요. 탭 안에서만 처리하며 업로드 0바이트, 외부 요청 0건입니다.',
+
+      brandAria: '김이형 — 포트폴리오',
+      backTools: '← 도구',
+      toggleTo: '영어로 보기',
+
+      pillLive: '업로드 0바이트',
+      pillLocal: '브라우저 안에서 <b>100% 로컬</b>',
+      pillOut: '<b>WAV</b> 내보내기 · <b>MP3 · WAV · M4A · OGG</b> 불러오기',
+      pillFade: '<b>페이드</b> · <b>볼륨</b> · <b>제로크로싱 스냅</b>',
+      h1: '소리만 자릅니다.<br><span class="dim">업로드는 안 합니다.</span>',
+      lede: '오디오 파일을 놓고 원하는 구간만 남기세요. 파형의 핸들을 끌거나 시작·끝을 밀리초까지 직접 입력하고, <b>페이드 인·아웃과 볼륨</b>을 적용한 상태로 미리 듣고, 이 페이지가 만든 WAV를 받으면 됩니다. 업로드도, 계정도, CDN에서 받아오는 라이브러리도 없습니다 — 오디오는 기기를 떠나지 않습니다.',
+
+      waveTitle: '파형',
+      waveAria: '선택 핸들이 있는 오디오 파형',
+      waveEmpty: '<b>아직 오디오가 없습니다.</b> 파일이 들어오면 이 자리에 파형이 그려집니다.',
+      chipStart: '시작',
+      chipEnd: '끝',
+      chipLen: '길이',
+
+      dropTitle: '오디오 파일을 놓으세요',
+      dropNote: 'MP3 · WAV · M4A · AAC · OGG · Opus · FLAC — 이 브라우저가 해석할 수 있는 형식이면 됩니다. 업로드는 하지 않습니다.',
+      pickFile: '파일 선택',
+      toneBtn: '5초 테스트 톤',
+      replaceFile: '교체',
+      toneShort: '테스트 톤',
+      clearFile: '비우기',
+      waveHint: '핸들을 끌면 컷이 움직이고, 가운데를 끌면 구간이 잡히고, 클릭하면 재생 위치가 잡힙니다. <b>스페이스</b>로 선택 구간을 재생합니다.',
+
+      selTitle: '구간',
+      startLabel: '시작',
+      endLabel: '끝',
+      setStart: '재생 위치를 시작으로',
+      setEnd: '재생 위치를 끝으로',
+      wholeFile: '전체 구간',
+      snapLabel: '컷을 가장 가까운 제로크로싱에 맞추기',
+      snapHint: '샘플 사이를 자르면 딱 소리가 날 수 있습니다. 스냅을 켜면 양쪽 끝이 무음 지점으로 몇 밀리초 안에서 옮겨집니다.',
+
+      prevTitle: '미리 듣기',
+      play: '재생',
+      pause: '일시정지',
+      stop: '정지',
+      loopLabel: '선택 구간 반복',
+
+      fadeTitle: '페이드',
+      fadeUnit: '각 최대 5초',
+      fadeIn: '페이드 인',
+      fadeOut: '페이드 아웃',
+      fadeHint: '벨소리, 영상에 넣을 클립, 말 중간에서 시작하는 음성 메모에 쓰입니다.',
+
+      levelTitle: '볼륨',
+      volHint: '볼륨은 미리 듣기와 내보내기에 함께 적용됩니다. 들리는 소리가 그 WAV에 담기는 소리입니다.',
+      normLabel: '피크를 −0.2 dBFS로 노멀라이즈',
+
+      outTitle: '내보내기',
+      outFormat: 'WAV · 16비트 PCM',
+      monoLabel: '모노 (채널 평균)',
+      sizeHint: '예상 파일 크기 <b id="sizeEst">—</b>',
+      exportBtn: '잘라낸 WAV 내려받기',
+      outIdle: '파일을 불러오면 내보낼 수 있습니다.',
+
+      n1t: '아무것도 탭을 떠나지 않습니다',
+      n1: '파일은 이 페이지가 직접 열고, 브라우저 자체 오디오 디코더로 해석한 뒤 자바스크립트로 WAV를 만듭니다. 아래 카운터는 이 페이지가 자기 사이트 밖으로 보낸 요청 수이며, 계속 0으로 남습니다.',
+      n2t: 'WAV에 남는 것',
+      n2: '내보내기는 비압축 16비트 PCM입니다. 파일 자체에 레이트가 적혀 있으면(WAV·FLAC·MP3·OGG) 그 레이트로 해석해 WAV가 그대로 유지하고, 그 밖의 컨테이너는 브라우저 레이트를 씁니다. 해석된 오디오의 무손실 사본이며 스테레오 기준 1분에 약 10 MB입니다.',
+      n3t: '딱 소리 없는 컷',
+      n3: '제로크로싱 스냅은 양쪽 끝을 파형이 이미 무음인 지점에 맞추고, 20~50 ms 페이드가 나머지를 덮습니다. 반복 재생할 클립이라면 페이드 아웃을 0으로 두고 박자에 정확히 자르세요.',
+
+      faqTitle: '자주 묻는 질문',
+      q1: '휴대폰에서도 되나요?',
+      a1: '됩니다. 파형은 터치에 반응하고 파일 선택은 휴대폰 파일 앱을 엽니다. 다만 Safari는 MP3·WAV·M4A·AAC는 해석하지만 OGG와 FLAC은 안 되므로, 그 두 형식은 Chrome·Firefox나 데스크톱이 필요합니다.',
+      q2: '어느 정도 길이까지 열리나요?',
+      a2: '숫자로 정해진 한도가 아니라 탭의 메모리가 한도입니다. 48 kHz 스테레오 1시간 파일은 해석에 약 1.4 GB가 들어 대부분의 휴대폰이 거부합니다. 30분 이하는 보통의 노트북에서 되고, 긴 팟캐스트는 나눠서 자르세요.',
+      q3: 'MP3로 내보낼 수 있나요?',
+      a3: '이 페이지에서는 안 됩니다. MP3 인코더는 상당한 크기의 라이브러리라 페이지에 함께 실어야 합니다. WAV는 인코더가 필요 없어 도구가 가볍고 결과가 정확합니다. 더 작은 파일이 필요하면 WAV를 받은 뒤 변환하세요.',
+
+      caveat: '<strong>참고.</strong> 사용할 권리가 있는 오디오만 자르세요. 브라우저 탭은 실수로 새로고침될 수 있으니 원본 파일은 그대로 두세요 — 내보내기는 새 파일이고 원본은 수정되지 않습니다.',
+      lic: '제3자 오디오 라이브러리를 쓰지 않습니다. 해석은 Web Audio API가, WAV 작성은 이 페이지의 코드가 합니다. 모든 파일은 페이지와 함께 이 사이트에서만 오고 CDN을 쓰지 않습니다.',
+
+      foot1: '업로드 0 · 서버 0 · 쿠키 0',
+      netLabel: '이 페이지가 보낸 외부 요청',
+      back: '← 포트폴리오',
+      footTools: '도구 전체',
+
+      decoding: '해석 중…',
+      errDecode: '이 브라우저가 그 파일을 해석하지 못했습니다. WAV나 MP3로 시도하거나 데스크톱 브라우저에서 변환해 보세요.',
+      errNotAudio: '오디오 파일로 보이지 않습니다. MP3·WAV·M4A·OGG·FLAC 파일을 골라 주세요.',
+      errExport: 'WAV를 쓰는 중에 실패했습니다. 구간을 조금 줄여 다시 시도해 주세요.',
+      toneName: 'test-tone-440hz-chord.wav',
+      toneDetail: '440 Hz 화음 · 이 페이지에서 생성',
+      loadedFiles: '{n}채널 · {sr} kHz',
+      outReady: 'WAV 완성 — {size} · {dur} · {sr} kHz.',
+      outGenFail: 'WAV를 만들지 못했습니다.',
+      outPrep: 'WAV를 쓰는 중…',
+      estLabel: '{size} · {dur}',
+      metaIdle: '파일 없음',
+      metaLoaded: '{dur} · {sr} kHz · {ch}채널',
+      metaSel: '{dur} 선택'
+    }
+  };
+
+  function t(key) {
+    var d = I18N[state.lang] || I18N.en;
+    if (d[key] != null) return d[key];
+    return I18N.en[key] != null ? I18N.en[key] : '';
+  }
+  function fmt(key, map) {
+    var s = t(key);
+    Object.keys(map || {}).forEach(function (k) {
+      s = s.split('{' + k + '}').join(String(map[k]));
+    });
+    return s;
+  }
+  function readLang() {
+    try {
+      var v = localStorage.getItem(LANG_KEY);
+      return v === 'ko' || v === 'en' ? v : '';
+    } catch (e) { return ''; }
+  }
+
+  /* ─────────────────────────── 표시 도우미 ─────────────────────────── */
+  function timeStr(sec, withMs) {
+    sec = Math.max(0, sec || 0);
+    var total = Math.round(sec * 1000);
+    var m = Math.floor(total / 60000);
+    var s = Math.floor((total % 60000) / 1000);
+    var ms = total % 1000;
+    var base = m + ':' + (s < 10 ? '0' + s : s);
+    if (withMs === false) return base;
+    return base + '.' + (ms < 100 ? (ms < 10 ? '00' : '0') : '') + ms;
+  }
+  function sizeStr(bytes) {
+    if (!isFinite(bytes) || bytes <= 0) return '0 KB';
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(bytes < 102400 ? 1 : 0) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  }
+  function durWords(sec) {
+    if (sec < 1) return Math.round(sec * 1000) + ' ms';
+    return sec.toFixed(sec < 10 ? 2 : 1) + ' s';
+  }
+
+  function ac() {
+    if (!state.ac) {
+      var C = window.AudioContext || window.webkitAudioContext;
+      state.ac = new C();
+    }
+    return state.ac;
+  }
+
+  /* ─────────────────────────── 파형 ─────────────────────────── */
+  var WAVE = { top: 10, ruler: 22, buckets: 3000 };
+
+  function computePeaks(buf) {
+    var buckets = WAVE.buckets;
+    var len = buf.length, ch = buf.numberOfChannels;
+    var chans = [], c;
+    for (c = 0; c < ch; c++) chans.push(buf.getChannelData(c));
+    var mins = new Float32Array(buckets), maxs = new Float32Array(buckets);
+    var per = len / buckets;
+    var step = per > 96 ? Math.max(1, Math.floor(per / 96)) : 1;
+    for (var b = 0; b < buckets; b++) {
+      var s = Math.floor(b * per);
+      var e = Math.min(len, Math.max(s + 1, Math.floor((b + 1) * per)));
+      var mn = 1, mx = -1;
+      for (var i = s; i < e; i += step) {
+        var v = 0;
+        for (c = 0; c < ch; c++) v += chans[c][i];
+        v /= ch;
+        if (v < mn) mn = v;
+        if (v > mx) mx = v;
+      }
+      if (mn > mx) { mn = 0; mx = 0; }
+      mins[b] = mn; maxs[b] = mx;
+    }
+    return { mins: mins, maxs: maxs, buckets: buckets, len: len };
+  }
+
+  function cvSize() {
+    var cv = $('wave');
+    var r = cv.getBoundingClientRect();
+    return { w: Math.max(1, Math.round(r.width)), h: Math.max(1, Math.round(r.height)), rect: r };
+  }
+
+  function drawWave() {
+    var cv = $('wave');
+    var size = cvSize();
+    var dpr = Math.min(2, window.devicePixelRatio || 1);
+    if (cv.width !== Math.round(size.w * dpr) || cv.height !== Math.round(size.h * dpr)) {
+      cv.width = Math.round(size.w * dpr);
+      cv.height = Math.round(size.h * dpr);
+    }
+    var ctx = cv.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, size.w, size.h);
+
+    var W = size.w, H = size.h;
+    var top = WAVE.top, bottom = H - WAVE.ruler, half = (bottom - top) / 2, cy = top + half;
+
+    /* 눈금 */
+    ctx.fillStyle = '#0b0a08';
+    ctx.fillRect(0, 0, W, H);
+
+    if (!state.buf || !state.peaks) {
+      ctx.strokeStyle = 'rgba(255,255,255:.07)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(0, Math.round(cy) + .5);
+      ctx.lineTo(W, Math.round(cy) + .5);
+      ctx.stroke();
+      return;
+    }
+
+    var dur = state.buf.duration || 1;
+    var P = state.peaks, nb = P.buckets;
+    var x0 = clamp((state.selStart / dur) * W, 0, W);
+    var x1 = clamp((state.selEnd / dur) * W, 0, W);
+
+    /* 배경 격자 */
+    ctx.strokeStyle = 'rgba(255,255,255:.05)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, Math.round(cy) + .5);
+    ctx.lineTo(W, Math.round(cy) + .5);
+    ctx.stroke();
+
+    function peaks(xa, xb, color) {
+      ctx.fillStyle = color;
+      var from = Math.floor(xa), to = Math.ceil(xb);
+      for (var x = from; x < to; x++) {
+        var idx = clamp(Math.floor((x / W) * nb), 0, nb - 1);
+        var mn = P.mins[idx], mx = P.maxs[idx];
+        var y1 = cy - mx * half, y2 = cy - mn * half;
+        if (y2 - y1 < 1) { y1 = cy - .5; y2 = cy + .5; }
+        ctx.fillRect(x, y1, 1, y2 - y1);
+      }
+    }
+
+    peaks(0, W, 'rgba(150,143,133,.5)');
+
+    /* 선택 구간 강조 */
+    if (x1 > x0) {
+      var grad = ctx.createLinearGradient(0, top, 0, bottom);
+      grad.addColorStop(0, 'rgba(229,180,92,.14)');
+      grad.addColorStop(.5, 'rgba(229,180,92,.05)');
+      grad.addColorStop(1, 'rgba(229,180,92,.14)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(x0, top, x1 - x0, bottom - top);
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(x0, top, x1 - x0, bottom - top);
+      ctx.clip();
+      peaks(x0, x1, '#e5b45c');
+      ctx.restore();
+
+      ctx.fillStyle = 'rgba(8,8,10,.58)';
+      if (x0 > 0) ctx.fillRect(0, top, x0, bottom - top);
+      if (x1 < W) ctx.fillRect(x1, top, W - x1, bottom - top);
+    }
+
+    /* 선택 경계와 손잡이 */
+    function handle(x) {
+      ctx.fillStyle = '#e5b45c';
+      ctx.fillRect(Math.round(x) - 1, top, 2, bottom - top);
+      ctx.beginPath();
+      var hw = 5, hh = 13, r = 3;
+      var bx = Math.round(x) - hw, by = top + 1;
+      ctx.moveTo(bx + r, by);
+      ctx.arcTo(bx + hw * 2, by, bx + hw * 2, by + hh, r);
+      ctx.arcTo(bx + hw * 2, by + hh, bx, by + hh, r);
+      ctx.arcTo(bx, by + hh, bx, by, r);
+      ctx.arcTo(bx, by, bx + hw * 2, by, r);
+      ctx.closePath();
+      ctx.fill();
+    }
+    if (x1 > x0) { handle(x0); handle(x1); }
+
+    /* 재생 위치 */
+    if (state.playing || state.playhead > 0) {
+      var px = clamp((state.playhead / dur) * W, 0, W);
+      ctx.save();
+      ctx.strokeStyle = state.playing ? 'rgba(255,255,255,.85)' : 'rgba(255,255,255,.4)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(Math.round(px) + .5, top);
+      ctx.lineTo(Math.round(px) + .5, bottom);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    /* 시간 눈금 */
+    var steps = [0.05, 0.1, 0.25, 0.5, 1, 2, 5, 10, 15, 30, 60, 120, 300, 600];
+    var step = steps[steps.length - 1];
+    var maxTicks = W < 420 ? 5 : 9;
+    for (var si = 0; si < steps.length; si++) {
+      if (dur / steps[si] <= maxTicks) { step = steps[si]; break; }
+    }
+    ctx.font = '10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+    ctx.textBaseline = 'top';
+    ctx.fillStyle = 'rgba(168,162,154,.9)';
+    ctx.strokeStyle = 'rgba(255,255,255,.09)';
+    var ty = bottom + 5;
+    for (var tsec = 0; tsec <= dur + 0.0001; tsec += step) {
+      var tx = (tsec / dur) * W;
+      if (tx > W - 1) break;
+      ctx.beginPath();
+      ctx.moveTo(Math.round(tx) + .5, bottom);
+      ctx.lineTo(Math.round(tx) + .5, bottom + 4);
+      ctx.stroke();
+      var label = step < 1 ? timeStr(tsec) : timeStr(tsec, false);
+      if (tx + 4 + ctx.measureText(label).width > W) continue;
+      ctx.fillText(label, tx + 4, ty);
+    }
+  }
+
+  /* ─────────────────────────── 선택 구간 ─────────────────────────── */
+  function bufDur() { return state.buf ? state.buf.duration : 0; }
+
+  function xToTime(x, W) {
+    var dur = bufDur();
+    if (!dur) return 0;
+    return clamp((x / W) * dur, 0, dur);
+  }
+
+  function snapToZero(sec) {
+    if (!$('snapChk').checked || !state.buf) return sec;
+    var buf = state.buf, sr = buf.sampleRate;
+    var data = buf.getChannelData(0);
+    var i = clamp(Math.round(sec * sr), 0, Math.max(0, buf.length - 1));
+    var span = Math.max(1, Math.round(sr * 0.006));
+    var a = Math.max(0, i - span), b = Math.min(buf.length - 1, i + span);
+    var best = i, bestVal = Math.abs(data[i] || 0);
+    for (var k = a; k <= b; k++) {
+      var v = Math.abs(data[k] || 0);
+      if (v < bestVal) { bestVal = v; best = k; }
+    }
+    return best / sr;
+  }
+
+  function setSelection(s, e, opts) {
+    opts = opts || {};
+    var dur = bufDur();
+    if (!dur) return;
+    s = clamp(s, 0, dur);
+    e = clamp(e, 0, dur);
+    if (e < s) { var tmp = s; s = e; e = tmp; }
+    if (!opts.noSnap) {
+      s = snapToZero(s);
+      e = snapToZero(e);
+    }
+    var minLen = Math.min(0.005, dur / 2);
+    if (e - s < minLen) {
+      if (e + minLen <= dur) e = Math.min(dur, s + minLen);
+      else s = Math.max(0, e - minLen);
+    }
+    state.selStart = s;
+    state.selEnd = e;
+    updateSelectionUI(!opts.keepPlayhead);
+    drawWave();
+  }
+
+  function updateSelectionUI(fixPlayhead) {
+    var dur = bufDur();
+    var s = state.selStart, e = state.selEnd;
+
+    if (fixPlayhead) { state.playhead = clamp(state.playhead, s, e); }
+
+    function setPair(secEl, msEl, stampEl, val) {
+      var total = Math.round(val * 1000);
+      var sec = Math.floor(total / 1000), ms = total % 1000;
+      if (document.activeElement !== secEl) secEl.value = String(sec);
+      if (document.activeElement !== msEl) msEl.value = String(ms).padStart(3, '0');
+      if (stampEl) stampEl.textContent = timeStr(val);
+    }
+    setPair($('startSec'), $('startMs'), $('startStamp'), s);
+    setPair($('endSec'), $('endMs'), $('endStamp'), e);
+
+    var len = Math.max(0, e - s);
+    $('chipStart').textContent = timeStr(s);
+    $('chipEnd').textContent = timeStr(e);
+    $('chipLen').textContent = timeStr(len);
+    $('selNote').textContent = t('metaSel').replace('{dur}', durWords(len));
+
+    updateEstimate();
+    $('waveMeta').textContent = state.buf
+      ? fmt('metaLoaded', {
+          dur: durWords(bufDur()),
+          sr: (state.buf.sampleRate / 1000).toFixed(1),
+          ch: state.buf.numberOfChannels
+        })
+      : t('metaIdle');
+  }
+
+  function readInputs() {
+    var sSec = parseFloat($('startSec').value), sMs = parseFloat($('startMs').value);
+    var eSec = parseFloat($('endSec').value), eMs = parseFloat($('endMs').value);
+    if (isNaN(sSec)) sSec = Math.floor(state.selStart);
+    if (isNaN(sMs)) sMs = Math.round((state.selStart % 1) * 1000);
+    if (isNaN(eSec)) eSec = Math.floor(state.selEnd);
+    if (isNaN(eMs)) eMs = Math.round((state.selEnd % 1) * 1000);
+    sMs = clamp(sMs, 0, 999);
+    eMs = clamp(eMs, 0, 999);
+    setSelection(sSec + sMs / 1000, eSec + eMs / 1000, { noSnap: true });
+  }
+
+  function outChannels() {
+    if (!state.buf) return 1;
+    return $('monoChk').checked ? 1 : Math.min(2, state.buf.numberOfChannels);
+  }
+
+  function sampleCount() {
+    if (!state.buf) return 0;
+    var sr = state.buf.sampleRate;
+    return Math.max(0, Math.round(state.selEnd * sr) - Math.round(state.selStart * sr));
+  }
+
+  function updateEstimate() {
+    if (!state.buf) { $('sizeEst').textContent = '—'; return; }
+    var bytes = sampleCount() * outChannels() * 2 + 44;
+    $('sizeEst').textContent = sizeStr(bytes) + ' · ' + durWords(state.selEnd - state.selStart);
+  }
+
+  /* ─────────────────────────── 재생 ─────────────────────────── */
+  function fadeValues(dur) {
+    var fi = $('fadeInChk').checked ? parseFloat($('fadeInRange').value) : 0;
+    var fo = $('fadeOutChk').checked ? parseFloat($('fadeOutRange').value) : 0;
+    var maxFade = Math.max(0, dur / 2);
+    return { fi: Math.min(fi, maxFade), fo: Math.min(fo, maxFade) };
+  }
+
+  function stopPlay(keepHead) {
+    state.playing = false;
+    if (state.raf) { cancelAnimationFrame(state.raf); state.raf = 0; }
+    if (state.src) {
+      try { state.src.onended = null; state.src.stop(); } catch (e) {}
+      try { state.src.disconnect(); } catch (e) {}
+      state.src = null;
+    }
+    if (state.gain) {
+      try { state.gain.disconnect(); } catch (e) {}
+      state.gain = null;
+    }
+    $('playIcon').innerHTML = '<path d="M7 4.5v15l13-7.5z"/>';
+    var sb = $('stopBtn');
+    if (sb) sb.disabled = true;
+    /* 재생 위치는 그대로 둔다 — 멈춘 지점에서 시작·끝을 잡을 수 있게 */
+    drawWave();
+  }
+
+  function playSel() {
+    if (!state.buf) return;
+    stopPlay(true);
+    var c = ac();
+    if (c.state === 'suspended') { c.resume(); }
+    var s = state.selStart, e = state.selEnd, dur = e - s;
+    if (dur <= 0.001) return;
+    var vol = clamp(parseFloat($('volRange').value) / 100, 0, 2);
+    var f = fadeValues(dur);
+
+    var src = c.createBufferSource();
+    src.buffer = state.buf;
+    var g = c.createGain();
+    src.connect(g);
+    g.connect(c.destination);
+
+    var t0 = c.currentTime + 0.04;
+    var fi = f.fi, fo = f.fo;
+    if (fi > 0) {
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.linearRampToValueAtTime(vol, t0 + fi);
+    } else {
+      g.gain.setValueAtTime(vol, t0);
+    }
+    if (fo > 0) {
+      g.gain.setValueAtTime(vol, Math.max(t0, t0 + dur - fo));
+      g.gain.linearRampToValueAtTime(0.0001, t0 + dur);
+    }
+
+    var loop = $('loopChk').checked;
+    src.loop = loop;
+    if (loop) { src.loopStart = s; src.loopEnd = e; }
+
+    state.src = src;
+    state.gain = g;
+    state.playing = true;
+    state.playT0 = t0;
+    state.playFrom = s;
+    state.playhead = s;
+    $('playIcon').innerHTML = '<rect x="6" y="5" width="4" height="14" rx="1.2"/><rect x="14" y="5" width="4" height="14" rx="1.2"/>';
+
+    src.onended = function () {
+      if (!state.playing) return;
+      stopPlay(false);
+      $('prevNote').textContent = '';
+    };
+
+    src.start(t0, s, loop ? undefined : dur);
+
+    var last = 0;
+    function tick(now) {
+      if (!state.playing) return;
+      if (!last || now - last > 32) {
+        last = now;
+        var elapsed = c.currentTime - t0;
+        if (elapsed < 0) elapsed = 0;
+        var head = s + elapsed;
+        if (loop && dur > 0) {
+          head = s + (elapsed % dur);
+        } else if (head > e) {
+          head = e;
+        }
+        state.playhead = head;
+        drawWave();
+      }
+      state.raf = requestAnimationFrame(tick);
+    }
+    state.raf = requestAnimationFrame(tick);
+  }
+
+  /* ─────────────────────────── 불러오기 ─────────────────────────── */
+  function showErr(msg) {
+    var el = $('loadErr');
+    if (!msg) { el.hidden = true; el.textContent = ''; return; }
+    el.textContent = msg;
+    el.hidden = false;
+  }
+
+  function afterLoad(buf, name, size, generated) {
+    stopPlay(true);
+    state.buf = buf;
+    state.name = name;
+    state.size = size;
+    state.generated = !!generated;
+    state.playhead = 0;
+    state.selStart = 0;
+    state.selEnd = buf.duration;
+    state.peaks = computePeaks(buf);
+
+    $('stageEmpty').hidden = true;
+    $('drop').hidden = true;
+    $('fileBar').hidden = false;
+    $('waveHint').hidden = false;
+    $('fileName').textContent = name;
+    $('fileMeta').textContent = generated
+      ? t('toneDetail')
+      : fmt('loadedFiles', { n: buf.numberOfChannels, sr: (buf.sampleRate / 1000).toFixed(1) });
+    $('playBtn').disabled = false;
+    $('stopBtn').disabled = true;
+    $('exportBtn').disabled = false;
+    $('outInfo').textContent = '';
+    $('outInfo').className = 'hint';
+    $('outInfo').dataset.bytes = '';
+    $('prevNote').textContent = '';
+    showErr('');
+    updateSelectionUI(true);
+    drawWave();
+  }
+
+  function decodeAsync(ctx, ab) {
+    return new Promise(function (resolve, reject) {
+      var settled = false;
+      function ok(b) { if (!settled) { settled = true; resolve(b); } }
+      function bad(e) { if (!settled) { settled = true; reject(e || new Error('decode')); } }
+      var ret;
+      try {
+        ret = ctx.decodeAudioData(ab, ok, bad);
+      } catch (e) { bad(e); return; }
+      if (ret && typeof ret.then === 'function') {
+        ret.then(ok).catch(bad);
+      }
+    });
+  }
+
+  /* ─────────────────────── 원본 샘플레이트 ─────────────────────── */
+  /* AudioContext 는 해석할 때 기기 레이트로 리샘플한다. 파일 헤더에 적힌
+     레이트를 먼저 읽어, 그 레이트의 OfflineAudioContext 로 해석하면
+     내보내는 WAV 가 원본 레이트를 그대로 유지한다. */
+  function detectSampleRate(ab) {
+    try {
+      var u8 = new Uint8Array(ab), dv = new DataView(ab), n = u8.length, i;
+      function ascii(o, len) {
+        if (o + len > n) return '';
+        var s = '';
+        for (var q = 0; q < len; q++) s += String.fromCharCode(u8[o + q]);
+        return s;
+      }
+      if (n > 24 && ascii(0, 4) === 'RIFF' && ascii(8, 4) === 'WAVE') {
+        var p = 12;
+        while (p + 16 <= n) {
+          var id = ascii(p, 4), sz = dv.getUint32(p + 4, true);
+          if (id === 'fmt ') return dv.getUint32(p + 12, true);
+          if (sz > n) break;
+          p += 8 + sz + (sz % 2);
+        }
+      }
+      if (n > 44 && ascii(0, 4) === 'fLaC') {
+        var o = 18; /* 4 magic + 4 block header + 10 bytes into STREAMINFO */
+        var fr = ((u8[o] << 12) | (u8[o + 1] << 4) | (u8[o + 2] >> 4));
+        if (fr) return fr;
+      }
+      if (n > 60 && ascii(0, 4) === 'OggS') {
+        for (i = 0; i < Math.min(n - 14, 600); i++) {
+          if (u8[i] === 1 && ascii(i + 1, 6) === 'vorbis') {
+            return dv.getUint32(i + 12, true);
+          }
+        }
+      }
+      var start = 0;
+      if (n > 10 && ascii(0, 3) === 'ID3') {
+        var tagSize = ((u8[6] & 0x7f) << 21) | ((u8[7] & 0x7f) << 14) | ((u8[8] & 0x7f) << 7) | (u8[9] & 0x7f);
+        start = 10 + tagSize;
+      }
+      var vtab = { 3: [44100, 48000, 32000], 2: [22050, 24000, 16000], 0: [11025, 12000, 8000] };
+      var limit = Math.min(n - 4, start + 200000);
+      for (i = Math.max(0, start); i < limit; i++) {
+        if (u8[i] === 0xFF && (u8[i + 1] & 0xE0) === 0xE0) {
+          var verBits = (u8[i + 1] >> 3) & 0x03;
+          var layerBits = (u8[i + 1] >> 1) & 0x03;
+          var rateIdx = (u8[i + 2] >> 2) & 0x03;
+          if (!vtab[verBits] || layerBits === 0 || rateIdx === 3) continue;
+          var rv = vtab[verBits][rateIdx];
+          if (rv) return rv;
+        }
+      }
+    } catch (e) {}
+    return 0;
+  }
+
+  function decodeFile(ab) {
+    var rate = detectSampleRate(ab);
+    if (rate >= 8000 && rate <= 384000) {
+      var OC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+      if (OC) {
+        try {
+          var oc = new OC(1, 1, rate);
+          return decodeAsync(oc, ab.slice(0)).catch(function () {
+            return decodeAsync(ac(), ab.slice(0));
+          });
+        } catch (e) {}
+      }
+    }
+    return decodeAsync(ac(), ab.slice(0));
+  }
+
+  function loadFile(file) {
+    if (!file) return;
+    var looksAudio = /^audio\//.test(file.type || '') ||
+      /\.(mp3|wav|wave|m4a|mp4|aac|ogg|oga|opus|flac|webm|aif|aiff|caf)$/i.test(file.name || '');
+    if (!looksAudio) { showErr(t('errNotAudio')); return; }
+    showErr('');
+    $('fileName').textContent = file.name;
+    $('fileMeta').textContent = t('decoding');
+    $('fileBar').hidden = false;
+    $('drop').hidden = true;
+    var reader = new FileReader();
+    reader.onload = function () {
+      decodeFile(reader.result).then(function (buf) {
+        afterLoad(buf, file.name, file.size, false);
+      }).catch(function () {
+        showErr(t('errDecode'));
+        $('fileMeta').textContent = '';
+        if (!state.buf) {
+          $('fileBar').hidden = true;
+          $('drop').hidden = false;
+        }
+      });
+    };
+    reader.onerror = function () { showErr(t('errDecode')); };
+    reader.readAsArrayBuffer(file);
+  }
+
+  function loadTone() {
+    var c = ac();
+    if (c.state === 'suspended') c.resume();
+    var sr = c.sampleRate, dur = 5;
+    var n = Math.round(sr * dur);
+    var buf = c.createBuffer(2, n, sr);
+    var freqs = [440, 554.3653, 659.2551, 880];
+    var amps = [0.5, 0.3, 0.22, 0.1];
+    for (var ch = 0; ch < 2; ch++) {
+      var d = buf.getChannelData(ch);
+      var detune = ch === 0 ? 0 : 0.35;
+      for (var i = 0; i < n; i++) {
+        var tsec = i / sr;
+        var env = Math.min(1, tsec / 0.35) * Math.min(1, (dur - tsec) / 0.7);
+        var pulse = 0.86 + 0.14 * Math.sin(2 * Math.PI * 4 * tsec);
+        var v = 0;
+        for (var k = 0; k < freqs.length; k++) {
+          v += amps[k] * Math.sin(2 * Math.PI * (freqs[k] + detune) * tsec + k * 0.4);
+        }
+        d[i] = clamp(v * env * pulse * 0.9, -1, 1);
+      }
+    }
+    afterLoad(buf, t('toneName'), 0, true);
+  }
+
+  /* ─────────────────────────── WAV 쓰기 ─────────────────────────── */
+  function encodeWav() {
+    var buf = state.buf;
+    var sr = buf.sampleRate;
+    var s0 = clamp(Math.round(state.selStart * sr), 0, buf.length);
+    var s1 = clamp(Math.round(state.selEnd * sr), s0, buf.length);
+    var n = s1 - s0;
+    if (n <= 0) return null;
+
+    var mono = $('monoChk').checked;
+    var srcCh = buf.numberOfChannels;
+    var outCh = mono ? 1 : Math.min(2, srcCh);
+    var dur = n / sr;
+
+    var vol = clamp(parseFloat($('volRange').value) / 100, 0, 2);
+    var f = fadeValues(dur);
+    var norm = $('normChk').checked;
+
+    var data = [];
+    var c, i;
+    for (c = 0; c < srcCh; c++) data.push(buf.getChannelData(c));
+
+    /* float mix per output channel */
+    var out = [];
+    for (c = 0; c < outCh; c++) out.push(new Float32Array(n));
+    if (mono) {
+      var acc = out[0];
+      for (i = 0; i < n; i++) {
+        var sum = 0;
+        for (c = 0; c < srcCh; c++) sum += data[c][s0 + i];
+        acc[i] = sum / srcCh;
+      }
+    } else {
+      for (c = 0; c < outCh; c++) {
+        var dd = data[Math.min(c, srcCh - 1)];
+        var oo = out[c];
+        for (i = 0; i < n; i++) oo[i] = dd[s0 + i];
+      }
+    }
+
+    /* volume + fades */
+    var peak = 0;
+    for (c = 0; c < outCh; c++) {
+      var o = out[c];
+      for (i = 0; i < n; i++) {
+        var tsec = i / sr;
+        var env = vol;
+        if (f.fi > 0 && tsec < f.fi) env *= tsec / f.fi;
+        if (f.fo > 0 && tsec > dur - f.fo) env *= Math.max(0, (dur - tsec) / f.fo);
+        var v = o[i] * env;
+        o[i] = v;
+        var av = v < 0 ? -v : v;
+        if (av > peak) peak = av;
+      }
+    }
+
+    var gain = 1;
+    if (norm && peak > 0) gain = 0.9772 / peak; /* −0.2 dBFS */
+
+    var bytes = 44 + n * outCh * 2;
+    var ab = new ArrayBuffer(bytes);
+    var view = new DataView(ab);
+    function str(off, s) { for (var q = 0; q < s.length; q++) view.setUint8(off + q, s.charCodeAt(q)); }
+
+    str(0, 'RIFF');
+    view.setUint32(4, bytes - 8, true);
+    str(8, 'WAVE');
+    str(12, 'fmt ');
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    view.setUint16(22, outCh, true);
+    view.setUint32(24, sr, true);
+    view.setUint32(28, sr * outCh * 2, true);
+    view.setUint16(32, outCh * 2, true);
+    view.setUint16(34, 16, true);
+    str(36, 'data');
+    view.setUint32(40, n * outCh * 2, true);
+
+    var off = 44;
+    for (i = 0; i < n; i++) {
+      for (c = 0; c < outCh; c++) {
+        var x = out[c][i] * gain;
+        if (x > 1) x = 1; else if (x < -1) x = -1;
+        var iv = x < 0 ? Math.round(x * 32768) : Math.round(x * 32767);
+        view.setInt16(off, iv, true);
+        off += 2;
+      }
+    }
+
+    return { blob: new Blob([ab], { type: 'audio/wav' }), bytes: bytes, dur: dur, sr: sr, ch: outCh };
+  }
+
+  function downloadBlob(blob, filename) {
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 8000);
+  }
+
+  function exportWav() {
+    if (!state.buf) return;
+    $('outInfo').textContent = t('outPrep');
+    $('outInfo').className = 'hint';
+    var res;
+    try {
+      res = encodeWav();
+    } catch (e) {
+      $('outInfo').textContent = t('errExport');
+      $('outInfo').className = 'hint hint--err';
+      return;
+    }
+    if (!res) {
+      $('outInfo').textContent = t('outGenFail');
+      $('outInfo').className = 'hint hint--err';
+      return;
+    }
+    var base = (state.name || 'audio').replace(/\.[^.]+$/, '');
+    var fname = base + '-trim.wav';
+    downloadBlob(res.blob, fname);
+    $('outInfo').textContent = fmt('outReady', {
+      size: sizeStr(res.bytes),
+      dur: durWords(res.dur),
+      sr: (res.sr / 1000).toFixed(1)
+    });
+    $('outInfo').className = 'hint hint--ok';
+    $('outInfo').dataset.fname = fname;
+    $('outInfo').dataset.bytes = String(res.bytes);
+  }
+
+  /* ─────────────────────────── 파형 입력 ─────────────────────────── */
+  function bindWave() {
+    var cv = $('wave');
+
+    function localX(ev) {
+      var r = cv.getBoundingClientRect();
+      return clamp(ev.clientX - r.left, 0, r.width);
+    }
+    function xs(tsec) {
+      var r = cv.getBoundingClientRect();
+      var dur = bufDur() || 1;
+      return (tsec / dur) * r.width;
+    }
+
+    cv.addEventListener('pointerdown', function (ev) {
+      if (!state.buf) return;
+      ev.preventDefault();
+      var r = cv.getBoundingClientRect();
+      var x = localX(ev);
+      var sX = xs(state.selStart), eX = xs(state.selEnd);
+      var nearS = Math.abs(x - sX) <= 12, nearE = Math.abs(x - eX) <= 12;
+      var mode;
+      if (nearS && (!nearE || Math.abs(x - sX) <= Math.abs(x - eX))) mode = 'start';
+      else if (nearE) mode = 'end';
+      else mode = 'new';
+      state.drag = { mode: mode, moved: false, anchor: xToTime(x, r.width) };
+      cv.setPointerCapture(ev.pointerId);
+      state.playhead = state.drag.anchor;
+      if (mode === 'start') setSelection(xToTime(x, r.width), state.selEnd);
+      else if (mode === 'end') setSelection(state.selStart, xToTime(x, r.width));
+      drawWave();
+    });
+
+    cv.addEventListener('pointermove', function (ev) {
+      var r = cv.getBoundingClientRect();
+      var x = localX(ev);
+      if (!state.drag) {
+        var sX = xs(state.selStart), eX = xs(state.selEnd);
+        cv.style.cursor = (Math.abs(x - sX) <= 12 || Math.abs(x - eX) <= 12) ? 'ew-resize' : 'crosshair';
+        return;
+      }
+      var d = state.drag;
+      if (Math.abs(x - d.anchor * (r.width / (bufDur() || 1))) > 2) d.moved = true;
+      var tsec = xToTime(x, r.width);
+      state.playhead = tsec;
+      if (d.mode === 'start') setSelection(tsec, state.selEnd);
+      else if (d.mode === 'end') setSelection(state.selStart, tsec);
+      else {
+        if (d.moved) setSelection(Math.min(d.anchor, tsec), Math.max(d.anchor, tsec));
+      }
+      drawWave();
+    });
+
+    function endDrag(ev) {
+      if (!state.drag) return;
+      var d = state.drag;
+      state.drag = null;
+      if (d.mode === 'new' && !d.moved) {
+        /* 한 번 클릭 = 재생 위치만 이동 */
+        state.playhead = d.anchor;
+        drawWave();
+        updateSelectionUI(true);
+      }
+    }
+    cv.addEventListener('pointerup', endDrag);
+    cv.addEventListener('pointercancel', endDrag);
+    cv.addEventListener('pointerleave', function () { if (!state.drag) cv.style.cursor = 'crosshair'; });
+  }
+
+  /* ─────────────────────────── 언어 적용 ─────────────────────────── */
+  function applyLang(lang) {
+    state.lang = lang === 'ko' ? 'ko' : 'en';
+    document.documentElement.setAttribute('lang', state.lang);
+
+    document.title = t('docTitle');
+    var md = document.querySelector('meta[name="description"]'); if (md) md.setAttribute('content', t('metaDesc'));
+    var ot = document.querySelector('meta[property="og:title"]'); if (ot) ot.setAttribute('content', t('ogTitle'));
+    var od = document.querySelector('meta[property="og:description"]'); if (od) od.setAttribute('content', t('ogDesc'));
+    var tt = document.querySelector('meta[name="twitter:title"]'); if (tt) tt.setAttribute('content', t('ogTitle'));
+    var td = document.querySelector('meta[name="twitter:description"]'); if (td) td.setAttribute('content', t('ogDesc'));
+
+    var nodes = document.querySelectorAll('[data-i18n]'), i, k, v;
+    for (i = 0; i < nodes.length; i++) {
+      k = nodes[i].getAttribute('data-i18n');
+      v = t(k);
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < nodes.length; i++) {
+      k = nodes[i].getAttribute('data-i18n-html');
+      v = t(k);
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-aria'));
+      if (v) nodes[i].setAttribute('aria-label', v);
+    }
+
+    var spans = document.querySelectorAll('#langToggle [data-lt]');
+    for (i = 0; i < spans.length; i++) {
+      spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
+    }
+    var lt = $('langToggle');
+    lt.setAttribute('title', t('toggleTo'));
+    lt.setAttribute('aria-label', t('toggleTo'));
+
+    /* 크기 예상 문구는 <b> 를 포함하므로 다시 그린다 */
+    updateEstimate();
+    if (state.buf) {
+      updateSelectionUI(false);
+      $('fileMeta').textContent = state.generated
+        ? t('toneDetail')
+        : fmt('loadedFiles', { n: state.buf.numberOfChannels, sr: (state.buf.sampleRate / 1000).toFixed(1) });
+    } else {
+      $('waveMeta').textContent = t('metaIdle');
+    }
+    if (!$('exportBtn').disabled && (!$('outInfo').dataset.bytes)) {
+      $('outInfo').textContent = '';
+    } else if (state.buf === null) {
+      $('outInfo').textContent = t('outIdle');
+    }
+    $('prevNote').textContent = '';
+    drawWave();
+  }
+
+  /* ─────────────────────────── 연결 ─────────────────────────── */
+  function bindUI() {
+    $('langToggle').addEventListener('click', function () {
+      var next = state.lang === 'ko' ? 'en' : 'ko';
+      try { localStorage.setItem(LANG_KEY, next); } catch (e) {}
+      applyLang(next);
+    });
+
+    $('pickFile').addEventListener('click', function () { $('fileInput').click(); });
+    $('replaceFile').addEventListener('click', function () { $('fileInput').click(); });
+    $('fileInput').addEventListener('change', function (ev) {
+      var f = ev.target.files && ev.target.files[0];
+      if (f) loadFile(f);
+      ev.target.value = '';
+    });
+    $('loadTone').addEventListener('click', loadTone);
+    $('loadTone2').addEventListener('click', loadTone);
+    $('clearFile').addEventListener('click', function () {
+      stopPlay(false);
+      state.buf = null; state.peaks = null; state.name = ''; state.size = 0;
+      state.selStart = 0; state.selEnd = 0; state.playhead = 0;
+      $('fileBar').hidden = true;
+      $('drop').hidden = false;
+      $('stageEmpty').hidden = false;
+      $('waveHint').hidden = true;
+      $('playBtn').disabled = true;
+      $('stopBtn').disabled = true;
+      $('exportBtn').disabled = true;
+      $('outInfo').textContent = t('outIdle');
+      $('outInfo').className = 'hint';
+      $('outInfo').dataset.bytes = '';
+      $('waveMeta').textContent = t('metaIdle');
+      $('selNote').textContent = '—';
+      $('chipStart').textContent = '0:00.000';
+      $('chipEnd').textContent = '0:00.000';
+      $('chipLen').textContent = '0:00.000';
+      $('sizeEst').textContent = '—';
+      showErr('');
+      drawWave();
+    });
+
+    var inputs = ['startSec', 'startMs', 'endSec', 'endMs'];
+    inputs.forEach(function (id) {
+      $(id).addEventListener('input', readInputs);
+      $(id).addEventListener('change', readInputs);
+    });
+
+    $('setStart').addEventListener('click', function () {
+      if (!state.buf) return;
+      setSelection(Math.min(state.playhead, state.selEnd - 0.005), state.selEnd);
+    });
+    $('setEnd').addEventListener('click', function () {
+      if (!state.buf) return;
+      setSelection(state.selStart, Math.max(state.playhead, state.selStart + 0.005));
+    });
+    $('selAll').addEventListener('click', function () {
+      if (!state.buf) return;
+      setSelection(0, bufDur(), { noSnap: true });
+    });
+
+    $('playBtn').addEventListener('click', function () {
+      if (!state.buf) return;
+      if (state.playing) { stopPlay(false); $('stopBtn').disabled = true; $('prevNote').textContent = ''; }
+      else { playSel(); $('stopBtn').disabled = false; }
+    });
+    $('stopBtn').addEventListener('click', function () {
+      stopPlay(false);
+      $('stopBtn').disabled = true;
+    });
+
+    $('fadeInChk').addEventListener('change', function () {
+      $('fadeInRange').disabled = !this.checked;
+      if (state.playing) playSel();
+    });
+    $('fadeOutChk').addEventListener('change', function () {
+      $('fadeOutRange').disabled = !this.checked;
+      if (state.playing) playSel();
+    });
+    $('fadeInRange').addEventListener('input', function () {
+      $('fadeInOut').textContent = parseFloat(this.value).toFixed(1) + ' s';
+    });
+    $('fadeOutRange').addEventListener('input', function () {
+      $('fadeOutOut').textContent = parseFloat(this.value).toFixed(1) + ' s';
+    });
+    $('volRange').addEventListener('input', function () {
+      var v = parseFloat(this.value);
+      $('volOut').textContent = v + '%';
+      var vn = $('volNote');
+      if (vn) vn.textContent = v + '%';
+      if (state.playing) playSel();
+    });
+    $('monoChk').addEventListener('change', updateEstimate);
+    $('normChk').addEventListener('change', updateEstimate);
+    $('snapChk').addEventListener('change', function () {
+      if (this.checked && state.buf) setSelection(state.selStart, state.selEnd);
+    });
+
+    $('exportBtn').addEventListener('click', exportWav);
+
+    document.addEventListener('keydown', function (ev) {
+      var tag = (ev.target && ev.target.tagName) || '';
+      if (/INPUT|TEXTAREA|SELECT|BUTTON/.test(tag) || ev.target.isContentEditable) return;
+      if (ev.code === 'Space') {
+        ev.preventDefault();
+        if (!state.buf) return;
+        if (state.playing) { stopPlay(false); $('stopBtn').disabled = true; }
+        else { playSel(); $('stopBtn').disabled = false; }
+      } else if (ev.key === 's' || ev.key === 'S') {
+        if (state.buf) setSelection(Math.min(state.playhead, state.selEnd - 0.005), state.selEnd);
+      } else if (ev.key === 'e' || ev.key === 'E') {
+        if (state.buf) setSelection(state.selStart, Math.max(state.playhead, state.selStart + 0.005));
+      }
+    });
+
+    /* 드래그 & 드롭 */
+    ['dragenter', 'dragover'].forEach(function (evt) {
+      document.addEventListener(evt, function (ev) {
+        if (!ev.dataTransfer) return;
+        ev.preventDefault();
+        $('stage').classList.add('is-over');
+        if (!$('drop').hidden) $('drop').classList.add('is-over');
+      });
+    });
+    ['dragleave', 'drop'].forEach(function (evt) {
+      document.addEventListener(evt, function (ev) {
+        if (evt === 'dragleave' && ev.target !== document.documentElement && ev.target !== document.body) return;
+        $('stage').classList.remove('is-over');
+        $('drop').classList.remove('is-over');
+      });
+    });
+    document.addEventListener('drop', function (ev) {
+      if (!ev.dataTransfer) return;
+      ev.preventDefault();
+      var f = ev.dataTransfer.files && ev.dataTransfer.files[0];
+      if (f) {
+        if (!state.buf) { $('drop').hidden = true; }
+        loadFile(f);
+      }
+    });
+
+    if (window.ResizeObserver) {
+      new ResizeObserver(function () { drawWave(); }).observe($('wave'));
+    } else {
+      window.addEventListener('resize', function () { drawWave(); });
+    }
+
+    bindWave();
+  }
+
+  /* ─────────────────────── 외부 요청 카운터 ─────────────────────── */
+  var ext = 0;
+  function countExt() {
+    var el = $('netCount');
+    if (el) el.textContent = String(ext);
+  }
+  function note(list) {
+    for (var i = 0; i < list.length; i++) {
+      try {
+        var u = new URL(list[i].name, location.href);
+        if (u.origin !== location.origin) ext++;
+      } catch (e) {}
+    }
+    countExt();
+  }
+  if (window.PerformanceObserver) {
+    try {
+      new PerformanceObserver(function (l) { note(l.getEntries()); })
+        .observe({ entryTypes: ['resource'] });
+    } catch (e) {}
+  }
+  window.addEventListener('load', function () {
+    setTimeout(function () {
+      if (window.performance && performance.getEntriesByType) {
+        note(performance.getEntriesByType('resource'));
+      }
+    }, 350);
+  });
+
+  function init() {
+    bindUI();
+    drawWave();
+    $('waveMeta').textContent = t('metaIdle');
+    applyLang(readLang() || 'en');
+    window.__atDetectRate = detectSampleRate; /* 헤더 레이트 검출 검증용 */
+    window.__atReady = true;
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,2023 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0b0d">
+<title>DiffForge — Zero-Upload JSON &amp; Text Diff, JSON ↔ CSV Converter | Kim Yihyung</title>
+<meta name="description" content="Compare two texts, JSON documents or CSV files side by side and see added, removed and changed lines or keys; format, minify, sort keys and convert JSON ↔ CSV — all in your browser with zero uploads and zero external requests.">
+<meta name="keywords" content="json diff, text diff, compare json, json formatter, json validator, json to csv, csv to json, json minify, sort json keys, side by side diff, no upload diff, offline json tool, private diff tool, client-side json">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/diff-forge/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0b0d'/%3E%3Cg stroke='%23e5b45c' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M16 6v20M9 10h4M9 22h4M20 10h3M20 22h3'/%3E%3C/g%3E%3C/svg%3E">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/diff-forge/">
+<meta property="og:title" content="DiffForge — Zero-Upload JSON &amp; Text Diff, JSON ↔ CSV Converter">
+<meta property="og:description" content="Paste two versions and see every added, removed and changed line or key. Format, minify, sort keys, convert JSON ↔ CSV — nothing leaves the tab.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="DiffForge — a side-by-side JSON diff running in the browser">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="DiffForge — Zero-Upload JSON &amp; Text Diff">
+<meta name="twitter:description" content="Two panes, one comparison: added, removed and changed lines or JSON keys, plus JSON ↔ CSV conversion. 0 bytes uploaded.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta name="twitter:image:alt" content="DiffForge — a side-by-side JSON diff running in the browser">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "DiffForge — Zero-Upload JSON & Text Diff and JSON ↔ CSV Converter",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/diff-forge/",
+      "description": "Compares two texts, JSON documents or CSV files line by line or by JSON structure, highlighting additions, deletions and changes with counts, and formats, minifies, sorts keys and converts between JSON and CSV — entirely in the browser with no uploads and no external requests.",
+      "featureList": [
+        "Side-by-side diff of two texts with added, removed and changed rows",
+        "Structural JSON diff by key and array index with JSONPath-style output",
+        "JSON formatter with 2 or 4 space indent, key sorting and minify",
+        "JSON parse errors shown with line and column",
+        "JSON to CSV and CSV to JSON conversion with RFC 4180 quoting",
+        "Copy the report or download it as .json or .csv",
+        "100% client-side: no uploads, no accounts, no external requests"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "DiffForge", "item": "https://kimyihyung.github.io/portfolio/tools/diff-forge/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is my JSON or CSV uploaded to a server?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. Both panes are plain text areas and the comparison runs as JavaScript in this tab. The footer counts requests made outside this site and it stays at zero, so a private API response or an exported customer list never leaves the machine." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between the line diff and the JSON structure diff?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The line diff compares the text as it is written, so moving a key or changing indentation shows as a change. The structure diff parses both documents first and compares keys and array positions, so it finds that $.orders[2].total changed even when the whole file was reformatted." }
+        },
+        {
+          "@type": "Question",
+          "name": "Why does my JSON show a parse error?",
+          "acceptedAnswer": { "@type": "Answer", "text": "JSON.parse is strict: no trailing commas, no comments, no single quotes, and every key in double quotes. The error chip gives the line and column the parser stopped at, and the structure diff stays off until both sides parse." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+:root {
+  --bg: #0a0b0d;
+  --bg2: #0d0e10;
+  --panel: #14130f;
+  --panel2: #1a1813;
+  --line: rgba(255, 255, 255, .09);
+  --line2: rgba(255, 255, 255, .19);
+  --ink: #f4f1ea;
+  --muted: #a8a29a;
+  --muted2: #837d74;
+  --accent: #e5b45c;
+  --accent2: #c8952f;
+  --on-accent: #1a1205;
+  --ok: #79dfa3;
+  --warn: #ffc06b;
+  --danger: #ff837a;
+  --add: #79dfa3;
+  --del: #ff837a;
+  --chg: #ffc06b;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+[hidden] { display: none !important; }
+
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--bg);
+  background-image:
+    radial-gradient(120% 70% at 50% -20%, rgba(229, 180, 92, .12), transparent 60%),
+    radial-gradient(90% 60% at 100% 0%, rgba(229, 180, 92, .05), transparent 55%);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: 1.5;
+}
+
+::selection { background: var(--accent); color: var(--on-accent); }
+a { color: inherit; }
+button, input, select, textarea { font-family: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.wrap { width: 100%; max-width: 1240px; margin: 0 auto; padding: 0 16px 40px; }
+
+/* ── header ─────────────────────────────────────────── */
+.top {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 10px; padding: 18px 0 0;
+}
+.brand { display: inline-flex; align-items: center; gap: 9px; text-decoration: none; color: var(--ink); }
+.mark {
+  min-width: 30px; height: 30px; padding: 0 6px;
+  border-radius: 9px; border: 1px solid var(--line2);
+  background: var(--panel); color: var(--accent);
+  display: grid; place-items: center;
+  font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .06em;
+}
+.brand-txt { font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; white-space: nowrap; }
+.top-actions { display: flex; align-items: center; gap: 8px; }
+.lang-toggle {
+  display: inline-flex; align-items: center; gap: 5px;
+  height: 30px; padding: 0 9px;
+  border: 1px solid var(--line); border-radius: 8px;
+  background: rgba(255, 255, 255, .03); color: var(--muted2);
+  cursor: pointer; font-family: var(--mono); font-size: 10.5px;
+  font-weight: 700; letter-spacing: .08em; line-height: 1;
+  transition: border-color .18s ease, transform .12s ease;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.95); }
+.lang-toggle .lt { transition: color .18s ease; }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.back {
+  font-size: 12px; color: var(--muted); text-decoration: none;
+  border: 1px solid var(--line); border-radius: 8px;
+  padding: 7px 10px; line-height: 1;
+  transition: color .18s ease, border-color .18s ease;
+}
+.back:hover { color: var(--ink); border-color: var(--line2); }
+
+/* ── hero ───────────────────────────────────────────── */
+.hero { padding: 26px 0 18px; }
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 16px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--line); background: rgba(255, 255, 255, .025);
+  border-radius: 999px; padding: 5px 11px;
+  font-size: 11px; letter-spacing: .02em; color: var(--muted);
+}
+.pill b { color: var(--ink); font-weight: 650; }
+.pill--live { border-color: rgba(229, 180, 92, .34); color: var(--accent); }
+.pill--live b { color: var(--accent); }
+.pill .dot {
+  width: 5px; height: 5px; border-radius: 50%; background: var(--accent);
+  box-shadow: 0 0 0 3px rgba(229, 180, 92, .14);
+}
+.hero h1 {
+  margin: 0 0 13px;
+  font-size: clamp(28px, 6vw, 46px);
+  line-height: 1.07; letter-spacing: -.035em; font-weight: 730;
+  max-width: 22ch;
+}
+.hero h1 .dim { color: var(--muted2); }
+.lede { margin: 0; max-width: 68ch; font-size: 14.5px; line-height: 1.68; color: var(--muted); }
+.lede b { color: var(--ink); font-weight: 600; }
+
+/* ── panels ─────────────────────────────────────────── */
+.panel {
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--panel); padding: 16px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .03);
+}
+.ph {
+  margin: 0 0 12px; font-size: 11px; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--muted2);
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+
+/* ── options bar ────────────────────────────────────── */
+.bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin: 0 0 14px; }
+.seg {
+  display: inline-flex; gap: 3px; padding: 3px;
+  border: 1px solid var(--line); border-radius: 10px; background: var(--bg2);
+}
+.seg-btn {
+  appearance: none; border: 0; background: transparent; color: var(--muted);
+  padding: 7px 11px; border-radius: 8px; cursor: pointer;
+  font-size: 12px; font-weight: 600; letter-spacing: -.01em; white-space: nowrap;
+  transition: background .16s ease, color .16s ease;
+}
+.seg-btn:hover { color: var(--ink); }
+.seg-btn[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); font-weight: 700; }
+.bar .lbl-inline { font-size: 12px; color: var(--muted); }
+.bar select {
+  appearance: none; border: 1px solid var(--line); border-radius: 9px;
+  background: var(--bg2); color: var(--ink);
+  padding: 7px 26px 7px 9px; font-size: 12px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%23837d74' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 9px center; background-size: 10px;
+}
+.chk {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 12px; color: var(--muted); cursor: pointer;
+}
+.chk input { accent-color: var(--accent); width: 15px; height: 15px; flex: none; }
+.bar .spacer { flex: 1 1 auto; }
+
+/* ── buttons ────────────────────────────────────────── */
+.btn {
+  appearance: none; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  border: 1px solid var(--line2); background: var(--panel2); color: var(--ink);
+  border-radius: 10px; padding: 8px 12px;
+  font-size: 12px; font-weight: 600; letter-spacing: -.01em; white-space: nowrap;
+  transition: background .18s ease, border-color .18s ease, color .18s ease, transform .12s ease;
+}
+.btn:hover { border-color: var(--accent); }
+.btn:active { transform: scale(.985); }
+.btn:disabled { opacity: .38; cursor: not-allowed; }
+.btn:disabled:hover { border-color: var(--line2); }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 700; }
+.btn--primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.btn--ghost { background: transparent; color: var(--muted); border-color: var(--line); }
+.btn--ghost:hover { color: var(--ink); border-color: var(--line2); }
+.btn--sm { padding: 6px 9px; font-size: 11px; border-radius: 8px; }
+.btn svg { width: 13px; height: 13px; flex: none; }
+
+/* ── panes ──────────────────────────────────────────── */
+.panes { display: grid; grid-template-columns: 1fr; gap: 14px; margin: 0 0 14px; }
+.pane { padding: 0; overflow: hidden; }
+.pane-head {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+  padding: 10px 12px; border-bottom: 1px solid var(--line);
+}
+.pane-title { font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--muted2); }
+.kind {
+  font-family: var(--mono); font-size: 10px; letter-spacing: .06em;
+  padding: 3px 7px; border-radius: 999px;
+  border: 1px solid var(--line); color: var(--muted2); white-space: nowrap;
+}
+.kind--json { border-color: rgba(229, 180, 92, .4); color: var(--accent); }
+.kind--csv { border-color: rgba(121, 223, 163, .35); color: var(--ok); }
+.kind--err { border-color: rgba(255, 131, 122, .45); color: var(--danger); }
+.pane-head .grow { flex: 1 1 auto; }
+.pane-head .btn { padding: 5px 8px; font-size: 11px; border-radius: 8px; }
+
+.editor {
+  position: relative;
+  display: grid; grid-template-columns: auto minmax(0, 1fr);
+  height: 262px; background: #0b0a08;
+}
+.gutter {
+  margin: 0; padding: 9px 8px 9px 10px;
+  overflow: hidden; user-select: none;
+  font-family: var(--mono); font-size: 11.5px; line-height: 1.62;
+  color: #5e5951; text-align: right; white-space: pre;
+  border-right: 1px solid var(--line); background: #0d0c0a;
+}
+.editor textarea {
+  appearance: none; resize: none; border: 0; outline: none;
+  width: 100%; height: 100%;
+  padding: 9px 12px; background: transparent; color: var(--ink);
+  font-family: var(--mono); font-size: 11.5px; line-height: 1.62;
+  white-space: pre; overflow: auto; tab-size: 2;
+}
+.editor textarea::placeholder { color: #5e5951; }
+.pane.is-drag { border-color: var(--accent); }
+.pane-tools {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  padding: 9px 12px; border-top: 1px solid var(--line); background: var(--panel);
+}
+.pane-tools .sep-v { width: 1px; background: var(--line); margin: 2px 3px; }
+.pane-foot {
+  padding: 7px 12px 9px; font-family: var(--mono); font-size: 10px; letter-spacing: .04em;
+  color: var(--muted2); display: flex; flex-wrap: wrap; gap: 4px 10px; min-height: 26px;
+}
+.pane-foot .err { color: var(--danger); }
+
+/* ── result ─────────────────────────────────────────── */
+.res-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 12px; }
+.sum { display: flex; flex-wrap: wrap; gap: 6px; }
+.sum-chip {
+  display: inline-flex; align-items: baseline; gap: 6px;
+  border: 1px solid var(--line); border-radius: 9px;
+  background: var(--bg2); padding: 5px 9px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: .05em;
+  color: var(--muted2); text-transform: uppercase;
+}
+.sum-chip b { font-size: 13px; font-weight: 700; color: var(--ink); letter-spacing: 0; }
+.sum-chip--add { border-color: rgba(121, 223, 163, .32); }
+.sum-chip--add b { color: var(--add); }
+.sum-chip--del { border-color: rgba(255, 131, 122, .32); }
+.sum-chip--del b { color: var(--del); }
+.sum-chip--chg { border-color: rgba(255, 192, 107, .32); }
+.sum-chip--chg b { color: var(--chg); }
+.res-mode { font-family: var(--mono); font-size: 10px; letter-spacing: .05em; color: var(--muted2); }
+.res-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-left: auto; }
+
+.diff {
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: #0b0a08; overflow: auto; max-height: 540px;
+}
+.diff-inner { min-width: 620px; }
+.dhead {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  position: sticky; top: 0; z-index: 2;
+  background: #14120e; border-bottom: 1px solid var(--line);
+}
+.dhead > div {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 7px 12px; font-family: var(--mono); font-size: 10px;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--muted2);
+}
+.dhead > div + div { border-left: 1px solid var(--line); }
+.drow { display: grid; grid-template-columns: 1fr 1fr; }
+.drow > .dc + .dc { border-left: 1px solid var(--line); }
+.dc {
+  display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 8px;
+  padding: 1px 10px 1px 0;
+  font-family: var(--mono); font-size: 11.5px; line-height: 1.62;
+}
+.dc .ln { text-align: right; color: #5e5951; user-select: none; }
+.dc .lt { white-space: pre-wrap; overflow-wrap: anywhere; }
+.dc .lt.empty { color: #4a463f; }
+.drow.del > .dc:first-child { background: rgba(255, 131, 122, .12); box-shadow: inset 2px 0 0 rgba(255, 131, 122, .7); }
+.drow.add > .dc:last-child { background: rgba(121, 223, 163, .11); box-shadow: inset 2px 0 0 rgba(121, 223, 163, .7); }
+.drow.chg > .dc { background: rgba(255, 192, 107, .09); }
+.drow.chg > .dc:first-child { box-shadow: inset 2px 0 0 rgba(255, 192, 107, .6); }
+.drow.chg > .dc:last-child { box-shadow: inset 2px 0 0 rgba(255, 192, 107, .6); }
+.dc .wd-del { background: rgba(255, 131, 122, .3); border-radius: 2px; }
+.dc .wd-ins { background: rgba(121, 223, 163, .3); border-radius: 2px; }
+
+.jdiff { border: 1px solid var(--line); border-radius: var(--radius-sm); background: #0b0a08; overflow: auto; max-height: 540px; }
+.jdiff-inner { min-width: 600px; }
+.jhead {
+  display: grid; grid-template-columns: minmax(150px, 1.3fr) 1fr 1fr;
+  position: sticky; top: 0; z-index: 2; background: #14120e; border-bottom: 1px solid var(--line);
+}
+.jhead > div { padding: 7px 12px; font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted2); }
+.jrow {
+  display: grid; grid-template-columns: minmax(150px, 1.3fr) 1fr 1fr;
+  font-family: var(--mono); font-size: 11.5px; line-height: 1.62;
+}
+.jrow > div { padding: 1px 12px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.jrow > div + div { border-left: 1px solid var(--line); }
+.jrow .jpath { color: var(--muted); }
+.jrow.j-add { background: rgba(121, 223, 163, .09); }
+.jrow.j-add .jpath, .jrow.j-add .jto { color: var(--add); }
+.jrow.j-del { background: rgba(255, 131, 122, .09); }
+.jrow.j-del .jpath, .jrow.j-del .jfrom { color: var(--del); }
+.jrow.j-chg { background: rgba(255, 192, 107, .09); }
+.jrow.j-chg .jpath { color: var(--chg); }
+.jrow.j-chg .jfrom { color: var(--del); }
+.jrow.j-chg .jto { color: var(--add); }
+.jrow.j-same .jfrom, .jrow.j-same .jto { color: var(--muted2); }
+
+.empty-state {
+  padding: 26px 16px; text-align: center;
+  font-size: 12.5px; color: var(--muted2); line-height: 1.6;
+}
+.empty-state b { color: var(--muted); font-weight: 600; }
+.hint { margin: 8px 0 0; font-size: 12px; line-height: 1.55; color: var(--muted2); }
+
+/* ── notes / faq ────────────────────────────────────── */
+.notes { display: grid; grid-template-columns: 1fr; gap: 14px; margin: 26px 0 0; }
+.note h3 { margin: 0 0 5px; font-size: 13.5px; font-weight: 650; letter-spacing: -.01em; }
+.note p { margin: 0; font-size: 12.5px; line-height: 1.65; color: var(--muted2); }
+.faq { margin: 22px 0 0; }
+.faq h2 { margin: 0 0 12px; font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--muted2); }
+.faq-item { padding: 12px 0; border-top: 1px solid var(--line); }
+.faq-item h3 { margin: 0 0 5px; font-size: 13.5px; font-weight: 650; letter-spacing: -.01em; }
+.faq-item p { margin: 0; font-size: 12.5px; line-height: 1.65; color: var(--muted2); }
+.caveat {
+  margin: 22px 0 0; padding: 12px 14px;
+  border: 1px solid rgba(255, 192, 107, .25); border-radius: var(--radius-sm);
+  background: rgba(255, 192, 107, .05);
+  font-size: 12px; line-height: 1.65; color: var(--muted);
+}
+.caveat strong { color: var(--warn); font-weight: 600; }
+.lic { margin: 10px 0 0; font-size: 10.5px; line-height: 1.6; color: var(--muted2); }
+.foot {
+  display: flex; flex-wrap: wrap; gap: 8px 16px;
+  align-items: center; justify-content: space-between;
+  margin-top: 34px; padding-top: 16px; border-top: 1px solid var(--line);
+  font-family: var(--mono); font-size: 10px; letter-spacing: .06em;
+  color: var(--muted2); text-transform: uppercase;
+}
+.foot .net b { color: var(--accent); font-weight: 700; }
+.foot a { color: var(--muted2); text-decoration: none; border-bottom: 1px solid transparent; }
+.foot a:hover { color: var(--ink); border-bottom-color: var(--line2); }
+
+/* ── toast ──────────────────────────────────────────── */
+.toast {
+  position: fixed; left: 50%; bottom: 22px; transform: translate(-50%, 12px);
+  max-width: calc(100vw - 32px);
+  padding: 9px 14px; border-radius: 10px;
+  border: 1px solid var(--line2); background: #1b1813; color: var(--ink);
+  font-size: 12.5px; box-shadow: 0 12px 30px rgba(0, 0, 0, .5);
+  opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
+  z-index: 40;
+}
+.toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+@media (min-width: 760px) {
+  .wrap { padding: 0 24px 48px; }
+  .hero { padding: 40px 0 26px; }
+  .panel { padding: 18px; }
+  .pane { padding: 0; }
+  .notes { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .panes { grid-template-columns: 1fr 1fr; }
+  .editor { height: 300px; }
+}
+@media (min-width: 1100px) {
+  .top { padding-top: 24px; }
+  .editor { height: 330px; }
+}
+@media (max-width: 699px) {
+  .btn { min-height: 40px; }
+  .btn--sm { min-height: 34px; }
+  .lang-toggle, .back { min-height: 34px; }
+  .editor { height: 210px; }
+  .seg-btn { min-height: 36px; }
+  .pane-tools { gap: 5px; }
+  .pane-tools .btn { padding: 6px 8px; font-size: 10.5px; }
+  .pane-head .btn { padding: 5px 7px; font-size: 10.5px; }
+  .res-actions { margin-left: 0; width: 100%; }
+
+  /* 한 폭에서는 두 판을 위아래로 놓고 빈 편은 감춘다 */
+  .diff-inner { min-width: 0; }
+  .dhead { grid-template-columns: 1fr; }
+  .dhead > div + div { border-left: 0; border-top: 1px solid var(--line); }
+  .drow { grid-template-columns: 1fr; }
+  .drow > .dc + .dc { border-left: 0; }
+  .drow.eq > .dc:last-child,
+  .drow.del > .dc:last-child,
+  .drow.add > .dc:first-child { display: none; }
+  .drow.chg > .dc + .dc { border-top: 1px dashed rgba(255, 192, 107, .35); }
+  .drow.chg > .dc:last-child .lt::before { content: '→ '; color: rgba(255, 192, 107, .75); }
+
+  .jdiff-inner { min-width: 0; }
+  .jhead { display: none; }
+  .jrow { grid-template-columns: 1fr 1fr; }
+  .jrow > div + div { border-left: 0; }
+  .jrow .jpath { grid-column: 1 / -1; border-bottom: 1px solid var(--line); color: var(--muted2); }
+  .jrow.j-add .jfrom, .jrow.j-del .jto { display: none; }
+  .jrow.j-add .jto, .jrow.j-del .jfrom { grid-column: 1 / -1; }
+  .jrow.j-chg .jto { border-left: 1px solid var(--line); }
+  .jrow.j-chg .jto::before { content: '→ '; color: rgba(255, 192, 107, .75); }
+}
+@media (max-width: 420px) {
+  .brand-txt { display: none; }
+  .bar { gap: 8px; }
+  .pane-head .pane-title { font-size: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <a class="brand" href="/portfolio/" aria-label="Kim Yihyung — portfolio" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="View in Korean" aria-label="View in Korean">
+        <span class="lt on" data-lt="en">EN</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="ko">KO</span>
+      </button>
+      <a class="back" href="../" data-i18n="backTools">← Tools</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="badge-row">
+      <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillLive">0 bytes uploaded · 0 external requests</b></span>
+      <span class="pill" data-i18n-html="pillLocal">In-browser <b>100% local</b></span>
+      <span class="pill" data-i18n-html="pillFmt"><b>JSON ↔ CSV</b> · format · minify · sort keys</span>
+      <span class="pill" data-i18n-html="pillDiff"><b>line</b> or <b>structure</b> diff</span>
+    </div>
+    <h1 data-i18n-html="h1">See what changed.<br><span class="dim">Without the upload.</span></h1>
+    <p class="lede" data-i18n-html="lede">Paste two versions of a document: compare text line by line, or let both sides be parsed and compare <b>JSON keys and array positions</b>. Added, removed and changed rows are counted and coloured, and either side can be formatted, minified, key-sorted or converted between <b>JSON and CSV</b>. Nothing is uploaded and no library comes from a CDN.</p>
+  </section>
+
+  <main>
+    <div class="bar panel">
+      <div class="seg" role="group" aria-label="Compare mode" data-i18n-aria="modeAria">
+        <button class="seg-btn" type="button" data-mode="auto" aria-pressed="true" data-i18n="modeAuto">Auto</button>
+        <button class="seg-btn" type="button" data-mode="lines" aria-pressed="false" data-i18n="modeLines">Lines</button>
+        <button class="seg-btn" type="button" data-mode="json" aria-pressed="false" data-i18n="modeJson">JSON</button>
+      </div>
+      <label class="chk"><input type="checkbox" id="ignoreWs"><span data-i18n="ignoreWs">Ignore trailing spaces</span></label>
+      <label class="chk"><input type="checkbox" id="ignoreCase"><span data-i18n="ignoreCase">Ignore case</span></label>
+      <span class="lbl-inline" data-i18n="indentLabel">Indent</span>
+      <select id="indentSel" aria-label="JSON indent">
+        <option value="2">2</option>
+        <option value="4">4</option>
+      </select>
+      <label class="chk"><input type="checkbox" id="typedChk"><span data-i18n="typedLabel">Typed values in CSV</span></label>
+      <span class="spacer"></span>
+      <button class="btn btn--ghost btn--sm" id="swapBtn" type="button" data-i18n="swap">⇄ Swap sides</button>
+      <button class="btn btn--ghost btn--sm" id="clearBtn" type="button" data-i18n="clearAll">Clear both</button>
+    </div>
+
+    <div class="panes">
+      <section class="panel pane" id="paneL">
+        <div class="pane-head">
+          <span class="pane-title" data-i18n="leftTitle">Left · original</span>
+          <span class="kind" id="kindL">—</span>
+          <span class="grow"></span>
+          <button class="btn btn--ghost btn--sm" type="button" data-example="json" data-side="L" data-i18n="exJson">JSON example</button>
+          <button class="btn btn--ghost btn--sm" type="button" data-example="csv" data-side="L" data-i18n="exCsv">CSV example</button>
+          <button class="btn btn--ghost btn--sm" type="button" data-clear="L" data-i18n="clearOne">Clear</button>
+        </div>
+        <div class="editor">
+          <pre class="gutter" id="gutterL" aria-hidden="true">1</pre>
+          <textarea id="left" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off" placeholder="Paste the first version here…" aria-label="Left document"></textarea>
+        </div>
+        <div class="pane-tools">
+          <button class="btn btn--ghost btn--sm" type="button" data-act="format" data-side="L" data-i18n="format">Format</button>
+          <button class="btn btn--ghost btn--sm" type="button" data-act="minify" data-side="L" data-i18n="minify">Minify</button>
+          <button class="btn btn--ghost btn--sm" type="button" data-act="sort" data-side="L" data-i18n="sortKeys">Sort keys</button>
+          <button class="btn btn--ghost btn--sm" type="button" data-act="tocsv" data-side="L" data-i18n="toCsv">→ CSV</button>
+          <button class="btn btn--ghost btn--sm" type="button" data-act="tojson" data-side="L" data-i18n="toJson">→ JSON</button>
+          <span class="sep-v" aria-hidden="true"></span>
+          <button class="btn btn--ghost btn--sm" type="button" data-act="copy" data-side="L" data-i18n="copy">Copy</button>
+          <button class="btn btn--ghost btn--sm" type="button" data-act="download" data-side="L" data-i18n="download">↓</button>
+        </div>
+        <div class="pane-foot" id="footL"></div>
+      </section>
+
+      <section class="panel pane" id="paneR">
+        <div class="pane-head">
+          <span class="pane-title" data-i18n="rightTitle">Right · changed</span>
+          <span class="kind" id="kindR">—</span>
+          <span class="grow"></span>
+          <button class="btn btn--ghost btn--sm" type="button" data-example="json" data-side="R" data-i18n="exJson">JSON example</button>
+          <button class="btn btn--ghost btn--sm" type="button" data-example="csv" data-side="R" data-i18n="exCsv">CSV example</button>
+          <button class="btn btn--ghost btn--sm" type="button" data-clear="R" data-i18n="clearOne">Clear</button>
+        </div>
+        <div class="editor">
+          <pre class="gutter" id="gutterR" aria-hidden="true">1</pre>
+          <textarea id="right" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off" placeholder="Paste the second version here…" aria-label="Right document"></textarea>
+        </div>
+        <div class="pane-tools">
+          <button class="btn btn--ghost btn--sm" type="button" data-act="format" data-side="R" data-i18n="format">Format</button>
+          <button class="btn btn--ghost btn--sm" type="button" data-act="minify" data-side="R" data-i18n="minify">Minify</button>
+          <button class="btn btn--ghost btn--sm" type="button" data-act="sort" data-side="R" data-i18n="sortKeys">Sort keys</button>
+          <button class="btn btn--ghost btn--sm" type="button" data-act="tocsv" data-side="R" data-i18n="toCsv">→ CSV</button>
+          <button class="btn btn--ghost btn--sm" type="button" data-act="tojson" data-side="R" data-i18n="toJson">→ JSON</button>
+          <span class="sep-v" aria-hidden="true"></span>
+          <button class="btn btn--ghost btn--sm" type="button" data-act="copy" data-side="R" data-i18n="copy">Copy</button>
+          <button class="btn btn--ghost btn--sm" type="button" data-act="download" data-side="R" data-i18n="download">↓</button>
+        </div>
+        <div class="pane-foot" id="footR"></div>
+      </section>
+    </div>
+
+    <section class="panel">
+      <h2 class="ph"><span data-i18n="resTitle">Result</span><span class="res-mode" id="resMode">—</span></h2>
+
+      <div class="res-head">
+        <div class="sum" aria-live="polite">
+          <span class="sum-chip sum-chip--add"><span data-i18n="sumAdd">added</span><b id="sumAdd">0</b></span>
+          <span class="sum-chip sum-chip--del"><span data-i18n="sumDel">removed</span><b id="sumDel">0</b></span>
+          <span class="sum-chip sum-chip--chg"><span data-i18n="sumChg">changed</span><b id="sumChg">0</b></span>
+          <span class="sum-chip"><span data-i18n="sumSame">unchanged</span><b id="sumSame">0</b></span>
+        </div>
+        <div class="res-actions">
+          <button class="btn btn--ghost btn--sm" id="copyRes" type="button" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M15 6V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h1"/></svg>
+            <span data-i18n="copyReport">Copy report</span>
+          </button>
+          <button class="btn btn--ghost btn--sm" id="dlJson" type="button" disabled><span data-i18n="dlJson">↓ .json</span></button>
+          <button class="btn btn--ghost btn--sm" id="dlCsv" type="button" disabled><span data-i18n="dlCsv">↓ .csv</span></button>
+        </div>
+      </div>
+
+      <div id="diffOut">
+        <p class="empty-state" data-i18n-html="emptyBoth"><b>Two documents, one comparison.</b> Paste something into both panes, or press a JSON or CSV example button above.</p>
+      </div>
+    </section>
+  </main>
+
+  <div class="notes">
+    <div class="note">
+      <h3 data-i18n="n1t">Nothing leaves the tab</h3>
+      <p data-i18n="n1">Both panes are ordinary text areas; parsing and comparison run as JavaScript in this page. The footer counts every request made outside this site, and it stays at zero — an API response or a customer export stays where it is.</p>
+    </div>
+    <div class="note">
+      <h3 data-i18n="n2t">Lines or structure</h3>
+      <p data-i18n="n2">The line diff compares the text as written, so re-indenting shows as change. The structure diff parses both sides first and compares keys and array positions, so it finds that $.orders[2].total changed even after a reformat.</p>
+    </div>
+    <div class="note">
+      <h3 data-i18n="n3t">What to do with the result</h3>
+      <p data-i18n="n3">Copy the report into a ticket, or download it as .json for a reviewer or .csv for a spreadsheet. Each pane also keeps its own copy and download, in the format it currently holds.</p>
+    </div>
+  </div>
+
+  <div class="faq">
+    <h2 data-i18n="faqTitle">Questions</h2>
+    <div class="faq-item">
+      <h3 data-i18n="q1">Can it compare files instead of pasted text?</h3>
+      <p data-i18n="a1">Paste the file contents — open it in any editor and copy. There is no file picker here on purpose: a pasted pane leaves nothing on disk, and a diff rarely needs more than the part that changed.</p>
+    </div>
+    <div class="faq-item">
+      <h3 data-i18n="q2">How large a document can it handle?</h3>
+      <p data-i18n="a2">Line comparison is quick when the two sides are similar, because unchanged head and tail are trimmed first. Beyond roughly 2 500 changed lines at once the page falls back to pairing lines by position, which is fast but coarser; JSON structure comparison is limited only by memory.</p>
+    </div>
+    <div class="faq-item">
+      <h3 data-i18n="q3">Why is my CSV followed by a JSON array of objects?</h3>
+      <p data-i18n="a3">The first row is read as column names and every later row becomes an object with those keys. Values stay strings so leading zeros and long IDs survive; tick “Typed values in CSV” to turn numbers, true/false and null into their JSON types.</p>
+    </div>
+  </div>
+
+  <p class="caveat" data-i18n-html="caveat"><strong>Note.</strong> A formatting difference is usually not a data difference: if the structure diff reports nothing, the two documents hold the same values even when they do not look the same. Check the CSV conversion before pasting it into a spreadsheet with leading-zero IDs.</p>
+
+  <p class="lic" data-i18n="lic">No third-party library: the diff, the JSON formatter and the CSV reader and writer are part of this page. Everything is served from this site with the page, never from a CDN.</p>
+
+  <footer class="foot">
+    <span data-i18n="foot1">0 uploads · 0 servers · 0 cookies</span>
+    <span class="net"><span data-i18n="netLabel">external requests made by this page</span>: <b id="netCount">0</b></span>
+    <span><a href="/portfolio/" data-i18n="back">← Portfolio</a> · <a href="../" data-i18n="footTools">All tools</a></span>
+  </footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+window.__dfFaults = [];
+window.addEventListener('error', function (e) {
+  try { window.__dfFaults.push(String((e && (e.message || e.type)) || 'error')); } catch (err) {}
+});
+window.addEventListener('unhandledrejection', function (e) {
+  try { window.__dfFaults.push('rejection: ' + String(e && e.reason)); } catch (err) {}
+});
+</script>
+<script>
+(function () {
+  'use strict';
+
+  var $ = function (id) { return document.getElementById(id); };
+  var LANG_KEY = 'kyh.lang';
+  var MAX_LCS_CELLS = 2600000;
+  var MAX_ROWS = 4000;
+
+  var state = {
+    lang: 'en',
+    mode: 'auto',
+    indent: 2,
+    ignoreWs: false,
+    ignoreCase: false,
+    typed: false,
+    result: null
+  };
+
+  var I18N = {
+    en: {
+      docTitle: 'DiffForge — Zero-Upload JSON & Text Diff, JSON ↔ CSV Converter | Kim Yihyung',
+      metaDesc: 'Compare two texts, JSON documents or CSV files side by side and see added, removed and changed lines or keys; format, minify, sort keys and convert JSON ↔ CSV — all in your browser with zero uploads and zero external requests.',
+      ogTitle: 'DiffForge — Zero-Upload JSON & Text Diff, JSON ↔ CSV Converter',
+      ogDesc: 'Paste two versions and see every added, removed and changed line or key. Format, minify, sort keys, convert JSON ↔ CSV — nothing leaves the tab.',
+
+      brandAria: 'Kim Yihyung — portfolio',
+      backTools: '← Tools',
+      toggleTo: 'View in Korean',
+
+      pillLive: '0 bytes uploaded · 0 external requests',
+      pillLocal: 'In-browser <b>100% local</b>',
+      pillFmt: '<b>JSON ↔ CSV</b> · format · minify · sort keys',
+      pillDiff: '<b>line</b> or <b>structure</b> diff',
+      h1: 'See what changed.<br><span class="dim">Without the upload.</span>',
+      lede: 'Paste two versions of a document: compare text line by line, or let both sides be parsed and compare <b>JSON keys and array positions</b>. Added, removed and changed rows are counted and coloured, and either side can be formatted, minified, key-sorted or converted between <b>JSON and CSV</b>. Nothing is uploaded and no library comes from a CDN.',
+
+      modeAria: 'Compare mode',
+      modeAuto: 'Auto',
+      modeLines: 'Lines',
+      modeJson: 'JSON',
+      ignoreWs: 'Ignore trailing spaces',
+      ignoreCase: 'Ignore case',
+      indentLabel: 'Indent',
+      typedLabel: 'Typed values in CSV',
+      swap: '⇄ Swap sides',
+      clearAll: 'Clear both',
+
+      leftTitle: 'Left · original',
+      rightTitle: 'Right · changed',
+      exJson: 'JSON example',
+      exCsv: 'CSV example',
+      clearOne: 'Clear',
+      format: 'Format',
+      minify: 'Minify',
+      sortKeys: 'Sort keys',
+      toCsv: '→ CSV',
+      toJson: '→ JSON',
+      copy: 'Copy',
+      download: '↓',
+
+      resTitle: 'Result',
+      sumAdd: 'added',
+      sumDel: 'removed',
+      sumChg: 'changed',
+      sumSame: 'unchanged',
+      copyReport: 'Copy report',
+      dlJson: '↓ .json',
+      dlCsv: '↓ .csv',
+      emptyBoth: '<b>Two documents, one comparison.</b> Paste something into both panes, or press a JSON or CSV example button above.',
+      emptyOne: '<b>One side is empty.</b> Paste into both panes to see the comparison.',
+      sameBoth: '<b>No differences.</b> The two sides hold the same values.',
+
+      modeUsedLines: 'compared line by line',
+      modeUsedJson: 'compared by JSON structure',
+      modeTooBig: 'too many changed lines — compared by position',
+
+      kindEmpty: 'empty',
+      kindJson: 'JSON',
+      kindJsonArray: 'JSON array · {n}',
+      kindCsv: 'CSV · {r}×{c}',
+      kindText: 'text · {n} lines',
+      kindJsonErr: 'JSON error · line {line}, col {col}',
+      kindUnknown: 'unparsed',
+
+      footLines: '{n} lines · {c} chars',
+      footNoBom: 'no upload · nothing stored',
+      footCsvDelim: 'delimiter {d}',
+      footJsonOk: 'parses cleanly',
+
+      errNothing: 'Nothing to convert here.',
+      errJsonForCsv: 'For CSV a JSON array or object is needed. Fix the JSON error first.',
+      errCsvForJson: 'This needs JSON or CSV text in the pane.',
+      copied: 'Copied.',
+      copyFail: 'The browser refused clipboard access. Select the text and copy it yourself.',
+      dlDone: 'Saved {name}.',
+      convertedCsv: 'Converted to CSV.',
+      convertedJson: 'Converted to JSON.',
+      formatted: 'Formatted.',
+      minified: 'Minified.',
+      sorted: 'Keys sorted.',
+      cleared: 'Cleared.',
+      exLoaded: 'Example loaded.',
+      swapped: 'Sides swapped.',
+
+      jsonLeft: 'left',
+      jsonRight: 'right',
+      colLineL: 'left line',
+      colLineR: 'right line',
+      colType: 'type',
+      colLeft: 'left',
+      colRight: 'right',
+      colPath: 'path',
+      colBefore: 'before',
+      colAfter: 'after',
+      headLeft: 'left',
+      headRight: 'right',
+      rows: '{n} rows',
+      linesN: '{n} lines',
+      linesOne: '{n} line',
+      truncated: 'Showing the first {n} rows of {total}.',
+
+      n1t: 'Nothing leaves the tab',
+      n1: 'Both panes are ordinary text areas; parsing and comparison run as JavaScript in this page. The footer counts every request made outside this site, and it stays at zero — an API response or a customer export stays where it is.',
+      n2t: 'Lines or structure',
+      n2: 'The line diff compares the text as written, so re-indenting shows as change. The structure diff parses both sides first and compares keys and array positions, so it finds that $.orders[2].total changed even after a reformat.',
+      n3t: 'What to do with the result',
+      n3: 'Copy the report into a ticket, or download it as .json for a reviewer or .csv for a spreadsheet. Each pane also keeps its own copy and download, in the format it currently holds.',
+      faqTitle: 'Questions',
+      q1: 'Can it compare files instead of pasted text?',
+      a1: 'Paste the file contents — open it in any editor and copy. There is no file picker here on purpose: a pasted pane leaves nothing on disk, and a diff rarely needs more than the part that changed.',
+      q2: 'How large a document can it handle?',
+      a2: 'Line comparison is quick when the two sides are similar, because unchanged head and tail are trimmed first. Beyond roughly 2 500 changed lines at once the page falls back to pairing lines by position, which is fast but coarser; JSON structure comparison is limited only by memory.',
+      q3: 'Why is my CSV followed by a JSON array of objects?',
+      a3: 'The first row is read as column names and every later row becomes an object with those keys. Values stay strings so leading zeros and long IDs survive; tick “Typed values in CSV” to turn numbers, true/false and null into their JSON types.',
+      caveat: '<strong>Note.</strong> A formatting difference is usually not a data difference: if the structure diff reports nothing, the two documents hold the same values even when they do not look the same. Check the CSV conversion before pasting it into a spreadsheet with leading-zero IDs.',
+      lic: 'No third-party library: the diff, the JSON formatter and the CSV reader and writer are part of this page. Everything is served from this site with the page, never from a CDN.',
+
+      foot1: '0 uploads · 0 servers · 0 cookies',
+      netLabel: 'external requests made by this page',
+      back: '← Portfolio',
+      footTools: 'All tools',
+
+      reportTitle: 'DiffForge report',
+      reportMode: 'mode',
+      reportSummary: 'summary',
+      reportNoChange: 'identical'
+    },
+    ko: {
+      docTitle: 'DiffForge — 업로드 없는 JSON·텍스트 비교, JSON ↔ CSV 변환 | 김이형',
+      metaDesc: '텍스트·JSON·CSV 두 판을 나란히 비교해 추가·삭제·변경된 줄과 키를 표시하고, 포맷·압축·키 정렬과 JSON ↔ CSV 변환까지 브라우저 안에서 처리합니다. 업로드 0바이트, 외부 요청 0건.',
+      ogTitle: 'DiffForge — 업로드 없는 JSON·텍스트 비교, JSON ↔ CSV 변환',
+      ogDesc: '두 판을 붙여 넣고 추가·삭제·변경된 줄이나 키를 확인하세요. 포맷·압축·키 정렬, JSON ↔ CSV 변환까지 탭 안에서 끝납니다.',
+
+      brandAria: '김이형 — 포트폴리오',
+      backTools: '← 도구',
+      toggleTo: '영어로 보기',
+
+      pillLive: '업로드 0바이트 · 외부 요청 0건',
+      pillLocal: '브라우저 안에서 <b>100% 로컬</b>',
+      pillFmt: '<b>JSON ↔ CSV</b> · 포맷 · 압축 · 키 정렬',
+      pillDiff: '<b>줄</b> 또는 <b>구조</b> 비교',
+      h1: '무엇이 바뀌었는지만.<br><span class="dim">업로드는 없이.</span>',
+      lede: '문서 두 판을 붙여 넣으세요. 텍스트를 줄 단위로 비교하거나, 양쪽을 해석해 <b>JSON 키와 배열 위치</b>로 비교할 수 있습니다. 추가·삭제·변경된 줄이 색과 숫자로 정리되고, 각 판을 포맷·압축·키 정렬하거나 <b>JSON과 CSV</b> 사이로 바꿀 수 있습니다. 업로드도, CDN에서 받는 라이브러리도 없습니다.',
+
+      modeAria: '비교 방식',
+      modeAuto: '자동',
+      modeLines: '줄',
+      modeJson: 'JSON',
+      ignoreWs: '줄 끝 공백 무시',
+      ignoreCase: '대소문자 무시',
+      indentLabel: '들여쓰기',
+      typedLabel: 'CSV 값 타입 추론',
+      swap: '⇄ 좌우 바꾸기',
+      clearAll: '둘 다 비우기',
+
+      leftTitle: '왼쪽 · 원본',
+      rightTitle: '오른쪽 · 변경본',
+      exJson: 'JSON 예시',
+      exCsv: 'CSV 예시',
+      clearOne: '비우기',
+      format: '포맷',
+      minify: '압축',
+      sortKeys: '키 정렬',
+      toCsv: '→ CSV',
+      toJson: '→ JSON',
+      copy: '복사',
+      download: '↓',
+
+      resTitle: '결과',
+      sumAdd: '추가',
+      sumDel: '삭제',
+      sumChg: '변경',
+      sumSame: '동일',
+      copyReport: '결과 복사',
+      dlJson: '↓ .json',
+      dlCsv: '↓ .csv',
+      emptyBoth: '<b>문서 둘, 비교 하나.</b> 양쪽에 내용을 붙여 넣거나 위의 JSON·CSV 예시 버튼을 눌러 보세요.',
+      emptyOne: '<b>한쪽이 비어 있습니다.</b> 양쪽을 채우면 비교가 시작됩니다.',
+      sameBoth: '<b>차이가 없습니다.</b> 두 문서의 값이 같습니다.',
+
+      modeUsedLines: '줄 단위로 비교',
+      modeUsedJson: 'JSON 구조로 비교',
+      modeTooBig: '변경된 줄이 너무 많아 위치 기준으로 비교',
+
+      kindEmpty: '비어 있음',
+      kindJson: 'JSON',
+      kindJsonArray: 'JSON 배열 · {n}',
+      kindCsv: 'CSV · {r}×{c}',
+      kindText: '텍스트 · {n}줄',
+      kindJsonErr: 'JSON 오류 · {line}행 {col}열',
+      kindUnknown: '해석 안 됨',
+
+      footLines: '{n}줄 · {c}자',
+      footNoBom: '업로드 없음 · 저장 없음',
+      footCsvDelim: '구분자 {d}',
+      footJsonOk: '문법 정상',
+
+      errNothing: '변환할 내용이 없습니다.',
+      errJsonForCsv: 'CSV로 바꾸려면 JSON 배열이나 객체가 필요합니다. 먼저 JSON 오류를 고쳐 주세요.',
+      errCsvForJson: '이 판에는 JSON 또는 CSV 내용이 필요합니다.',
+      copied: '복사했습니다.',
+      copyFail: '브라우저가 클립보드 접근을 거부했습니다. 직접 선택해 복사해 주세요.',
+      dlDone: '{name} 저장했습니다.',
+      convertedCsv: 'CSV로 바꿨습니다.',
+      convertedJson: 'JSON으로 바꿨습니다.',
+      formatted: '포맷했습니다.',
+      minified: '압축했습니다.',
+      sorted: '키를 정렬했습니다.',
+      cleared: '비웠습니다.',
+      exLoaded: '예시를 불러왔습니다.',
+      swapped: '좌우를 바꿨습니다.',
+
+      jsonLeft: '왼쪽',
+      jsonRight: '오른쪽',
+      colLineL: '왼쪽 줄',
+      colLineR: '오른쪽 줄',
+      colType: '종류',
+      colLeft: '왼쪽',
+      colRight: '오른쪽',
+      colPath: '경로',
+      colBefore: '이전',
+      colAfter: '이후',
+      headLeft: '왼쪽',
+      headRight: '오른쪽',
+      rows: '{n}행',
+      linesN: '{n}줄',
+      linesOne: '{n}줄',
+      truncated: '전체 {total}행 중 {n}행까지 표시합니다.',
+
+      n1t: '아무것도 탭을 떠나지 않습니다',
+      n1: '두 판은 평범한 텍스트 상자이고, 해석과 비교는 이 페이지의 자바스크립트가 합니다. 아래 카운터는 이 사이트 밖으로 나간 요청 수이며 계속 0입니다 — API 응답이나 고객 명세도 제자리에 남습니다.',
+      n2t: '줄 비교와 구조 비교',
+      n2: '줄 비교는 적힌 그대로의 텍스트를 비교하므로 들여쓰기만 바뀌어도 변경으로 보입니다. 구조 비교는 양쪽을 먼저 해석해 키와 배열 위치를 비교하므로, 전체를 다시 정렬한 뒤에도 $.orders[2].total이 바뀐 것을 찾아냅니다.',
+      n3t: '결과를 어디에 쓰나요',
+      n3: '보고서를 티켓에 붙이거나, 리뷰용 .json·스프레드시트용 .csv로 받으세요. 각 판도 지금 담긴 형식 그대로 복사·다운로드를 따로 제공합니다.',
+      faqTitle: '자주 묻는 질문',
+      q1: '붙여 넣기 말고 파일을 비교할 수 있나요?',
+      a1: '파일 내용을 열어 복사해 붙여 넣으세요. 파일 선택을 일부러 두지 않았습니다 — 붙여 넣은 판은 디스크에 아무것도 남기지 않고, 비교에는 보통 바뀐 부분만 있으면 됩니다.',
+      q2: '얼마나 큰 문서까지 되나요?',
+      a2: '양쪽이 비슷하면 앞뒤의 같은 부분을 먼저 잘라내므로 빠릅니다. 한 번에 바뀐 줄이 약 2 500줄을 넘으면 위치 기준으로 짝을 맞추는 방식으로 바뀌며, 이는 빠르지만 성깁니다. JSON 구조 비교는 메모리만큼 됩니다.',
+      q3: 'CSV를 넣었는데 왜 JSON 객체 배열이 되나요?',
+      a3: '첫 줄을 열 이름으로 읽고 이후 각 줄을 그 키를 가진 객체로 만듭니다. 앞자리 0이나 긴 ID가 살아남도록 값은 문자열로 두고, 숫자·true/false·null로 바꾸려면 “CSV 값 타입 추론”을 켜세요.',
+      caveat: '<strong>참고.</strong> 서식 차이는 대개 데이터 차이가 아닙니다. 구조 비교가 아무것도 보고하지 않으면 두 문서의 값은 같고, 모양만 다를 뿐입니다. 앞자리 0이 있는 ID를 스프레드시트로 옮기기 전에 CSV 변환 결과를 확인하세요.',
+      lic: '제3자 라이브러리를 쓰지 않습니다. 비교, JSON 포맷터, CSV 읽기·쓰기는 모두 이 페이지의 코드입니다. 모든 파일은 페이지와 함께 이 사이트에서만 오고 CDN을 쓰지 않습니다.',
+
+      foot1: '업로드 0 · 서버 0 · 쿠키 0',
+      netLabel: '이 페이지가 보낸 외부 요청',
+      back: '← 포트폴리오',
+      footTools: '도구 전체',
+
+      reportTitle: 'DiffForge 비교 결과',
+      reportMode: '방식',
+      reportSummary: '요약',
+      reportNoChange: '동일'
+    }
+  };
+
+  function t(key) {
+    var d = I18N[state.lang] || I18N.en;
+    if (d[key] != null) return d[key];
+    return I18N.en[key] != null ? I18N.en[key] : '';
+  }
+  function fmt(key, map) {
+    var s = t(key);
+    Object.keys(map || {}).forEach(function (k) {
+      s = s.split('{' + k + '}').join(String(map[k]));
+    });
+    return s;
+  }
+  function readLang() {
+    try {
+      var v = localStorage.getItem(LANG_KEY);
+      return v === 'ko' || v === 'en' ? v : '';
+    } catch (e) { return ''; }
+  }
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
+
+  var toastTimer = 0;
+  function toast(msg) {
+    var el = $('toast');
+    el.textContent = msg;
+    el.classList.add('on');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.classList.remove('on'); }, 2400);
+  }
+
+  /* ─────────────────────────── 텍스트 읽기 ─────────────────────────── */
+  function sideEl(side) { return side === 'L' ? $('left') : $('right'); }
+  function gutterEl(side) { return side === 'L' ? $('gutterL') : $('gutterR'); }
+  function textOf(side) { return sideEl(side).value; }
+
+  function setText(side, text) {
+    var el = sideEl(side);
+    el.value = text;
+    el.scrollTop = 0;
+    syncGutter(side);
+    schedule(0);
+  }
+
+  function syncGutter(side) {
+    var el = sideEl(side), g = gutterEl(side);
+    var lines = el.value.length ? el.value.split('\n').length : 1;
+    var out = [], i;
+    for (i = 1; i <= lines; i++) out.push(i);
+    var next = out.join('\n');
+    if (g.textContent !== next) g.textContent = next;
+    g.scrollTop = el.scrollTop;
+  }
+
+  /* ──────────────────────── JSON 오류 위치 계산 ──────────────────────── */
+  /* 브라우저마다 오류 메시지 모양이 달라서(위치 숫자가 없거나 문맥 일부만 주는 경우도 있다)
+     직접 훑어 처음 어긋난 자리를 찾는다. 반환값이 있으면 그 위치가 오류다. */
+  function jsonLocate(text) {
+    var i = 0, n = text.length, line = 1, col = 1, depthGuard = 0;
+    function bump() { if (text.charCodeAt(i) === 10) { line++; col = 1; } else { col++; } i++; }
+    function fail(msg) { return { line: line, col: col, message: msg }; }
+    function skipWs() {
+      while (i < n) {
+        var c = text.charCodeAt(i);
+        if (c === 32 || c === 9 || c === 10 || c === 13) bump(); else break;
+      }
+    }
+    function parseString() {
+      bump();
+      while (i < n) {
+        var c = text.charAt(i);
+        if (c === '"') { bump(); return null; }
+        if (c === '\\') {
+          bump();
+          if (i >= n) return fail('Unterminated string');
+          var e = text.charAt(i);
+          if ('"\\/bfnrt'.indexOf(e) >= 0) bump();
+          else if (e === 'u') {
+            bump();
+            for (var k = 0; k < 4; k++) {
+              if (i >= n || !/[0-9a-fA-F]/.test(text.charAt(i))) return fail('Bad unicode escape');
+              bump();
+            }
+          } else return fail('Bad escape sequence');
+          continue;
+        }
+        if (c.charCodeAt(0) < 0x20) return fail('Control character in string');
+        bump();
+      }
+      return fail('Unterminated string');
+    }
+    function parseNumber() {
+      var rest = text.slice(i);
+      var m = /^-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?/.exec(rest);
+      if (!m || !m[0].length) return fail('Invalid number');
+      for (var k = 0; k < m[0].length; k++) bump();
+      return null;
+    }
+    function parseValue() {
+      if (depthGuard++ > 400) return fail('Nesting is too deep');
+      skipWs();
+      if (i >= n) return fail('Unexpected end of input');
+      var ch = text.charAt(i), res;
+      if (ch === '{') res = parseObject();
+      else if (ch === '[') res = parseArray();
+      else if (ch === '"') res = parseString();
+      else if (ch === '-' || (ch >= '0' && ch <= '9')) res = parseNumber();
+      else if (text.substr(i, 4) === 'true') { i += 4; col += 4; res = null; }
+      else if (text.substr(i, 5) === 'false') { i += 5; col += 5; res = null; }
+      else if (text.substr(i, 4) === 'null') { i += 4; col += 4; res = null; }
+      else res = fail('Unexpected character ' + JSON.stringify(ch));
+      depthGuard--;
+      return res;
+    }
+    function parseObject() {
+      bump();
+      skipWs();
+      if (text.charAt(i) === '}') { bump(); return null; }
+      while (true) {
+        skipWs();
+        if (i >= n) return fail('Unexpected end of input');
+        if (text.charAt(i) !== '"') return fail('Expected a double-quoted property name');
+        var e1 = parseString(); if (e1) return e1;
+        skipWs();
+        if (text.charAt(i) !== ':') return fail('Expected a colon after the property name');
+        bump();
+        var e2 = parseValue(); if (e2) return e2;
+        skipWs();
+        var c = text.charAt(i);
+        if (c === ',') { bump(); continue; }
+        if (c === '}') { bump(); return null; }
+        if (i >= n) return fail('Unexpected end of input');
+        return fail('Expected a comma or a closing brace');
+      }
+    }
+    function parseArray() {
+      bump();
+      skipWs();
+      if (text.charAt(i) === ']') { bump(); return null; }
+      while (true) {
+        var e = parseValue(); if (e) return e;
+        skipWs();
+        var c = text.charAt(i);
+        if (c === ',') { bump(); continue; }
+        if (c === ']') { bump(); return null; }
+        if (i >= n) return fail('Unexpected end of input');
+        return fail('Expected a comma or a closing bracket');
+      }
+    }
+    var r = parseValue();
+    if (r) return r;
+    skipWs();
+    if (i < n) return fail('Unexpected characters after the JSON value');
+    return null;
+  }
+
+  function jsonErrorInfo(text, err) {
+    var scan = jsonLocate(text);
+    if (scan) {
+      scan.message = scan.message || String((err && err.message) || 'JSON error');
+      return scan;
+    }
+    var msg = String((err && err.message) || err || '');
+    var line = 0, col = 0;
+    var lm = /line\s+(\d+)\s+column\s+(\d+)/i.exec(msg);
+    if (lm) {
+      line = parseInt(lm[1], 10);
+      col = parseInt(lm[2], 10);
+    } else {
+      var pm = /position\s+(\d+)/i.exec(msg);
+      if (pm) {
+        var pos = Math.min(parseInt(pm[1], 10), text.length);
+        for (var i = 0; i < pos; i++) {
+          if (text.charCodeAt(i) === 10) { line++; col = 0; } else { col++; }
+        }
+        line += 1; col += 1;
+      }
+    }
+    return { line: line, col: col, message: msg };
+  }
+
+  /* ─────────────────────────── CSV ─────────────────────────── */
+  function guessDelim(text) {
+    var line = text.split(/\r?\n/)[0] || '';
+    var best = ',', bestN = -1;
+    [',', ';', '\t', '|'].forEach(function (d) {
+      var n = line.split(d).length - 1;
+      if (n > bestN) { bestN = n; best = d; }
+    });
+    return bestN > 0 ? best : ',';
+  }
+
+  function parseCsv(text, delim) {
+    if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+    var rows = [], row = [], cell = '', q = false, i, ch, n = text.length;
+    for (i = 0; i < n; i++) {
+      ch = text.charAt(i);
+      if (q) {
+        if (ch === '"') {
+          if (text.charAt(i + 1) === '"') { cell += '"'; i++; }
+          else q = false;
+        } else cell += ch;
+      } else if (ch === '"') {
+        q = true;
+      } else if (ch === delim) {
+        row.push(cell); cell = '';
+      } else if (ch === '\n') {
+        row.push(cell); rows.push(row); row = []; cell = '';
+      } else if (ch === '\r') {
+        /* CRLF: 줄바꿈은 \n 에서 처리 */
+      } else {
+        cell += ch;
+      }
+    }
+    if (cell.length || row.length) { row.push(cell); rows.push(row); }
+    while (rows.length && rows[rows.length - 1].every(function (c) { return c === ''; })) rows.pop();
+    return rows;
+  }
+
+  function csvEscape(v) {
+    var s = String(v == null ? '' : v);
+    if (/[",\n\r]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+    return s;
+  }
+
+  function typedValue(s) {
+    if (s === '') return '';
+    if (/^-?\d+(\.\d+)?([eE][+-]?\d+)?$/.test(s)) {
+      var num = Number(s);
+      if (isFinite(num)) return num;
+    }
+    if (s === 'true') return true;
+    if (s === 'false') return false;
+    if (s === 'null') return null;
+    return s;
+  }
+
+  function csvToJson(rows, typed) {
+    if (!rows.length) return [];
+    var head = rows[0].map(function (h, i) {
+      var name = String(h == null ? '' : h).trim();
+      return name || ('col_' + (i + 1));
+    });
+    var seen = {};
+    head = head.map(function (h) {
+      var base = h, k = 2;
+      while (seen[h]) { h = base + '_' + k; k++; }
+      seen[h] = true;
+      return h;
+    });
+    var out = [];
+    for (var r = 1; r < rows.length; r++) {
+      var o = {}, row = rows[r];
+      for (var c = 0; c < head.length; c++) {
+        var v = row[c] == null ? '' : row[c];
+        o[head[c]] = typed ? typedValue(v) : v;
+      }
+      out.push(o);
+    }
+    return out;
+  }
+
+  function jsonToCsv(value) {
+    var rows = [], i, k;
+    function cell(v) {
+      if (v === null || v === undefined) return '';
+      if (typeof v === 'object') return JSON.stringify(v);
+      return String(v);
+    }
+    if (Array.isArray(value)) {
+      if (!value.length) return '';
+      var allObj = value.every(function (v) { return v && typeof v === 'object' && !Array.isArray(v); });
+      var allArr = value.every(function (v) { return Array.isArray(v); });
+      if (allObj) {
+        var keys = [];
+        value.forEach(function (o) {
+          Object.keys(o).forEach(function (kk) { if (keys.indexOf(kk) < 0) keys.push(kk); });
+        });
+        rows.push(keys.map(csvEscape).join(','));
+        value.forEach(function (o) {
+          rows.push(keys.map(function (kk) { return csvEscape(cell(o[kk])); }).join(','));
+        });
+      } else if (allArr) {
+        value.forEach(function (r) { rows.push(r.map(function (c) { return csvEscape(cell(c)); }).join(',')); });
+      } else {
+        rows.push('value');
+        value.forEach(function (v) { rows.push(csvEscape(cell(v))); });
+      }
+    } else if (value && typeof value === 'object') {
+      rows.push('key,value');
+      Object.keys(value).forEach(function (kk) {
+        rows.push(csvEscape(kk) + ',' + csvEscape(cell(value[kk])));
+      });
+    } else {
+      rows.push('value');
+      rows.push(csvEscape(cell(value)));
+    }
+    return rows.join('\n');
+  }
+
+  /* ─────────────────────────── 판 해석 ─────────────────────────── */
+  function detectSide(text) {
+    var s = text.replace(/^\uFEFF/, '');
+    var trimmed = s.trim();
+    if (!trimmed) return { kind: 'empty' };
+    if (/^[[{]/.test(trimmed)) {
+      try {
+        return { kind: 'json', value: JSON.parse(trimmed) };
+      } catch (e) {
+        var info = jsonErrorInfo(s, e);
+        return { kind: 'json-err', error: info };
+      }
+    }
+    var nl = s.indexOf('\n');
+    if (nl > 0) {
+      var delim = guessDelim(s);
+      var rows = parseCsv(s, delim);
+      var firstCount = rows.length ? rows[0].length : 0;
+      var consistent = rows.length > 1 && firstCount > 1 && rows.every(function (r) { return r.length === firstCount; });
+      if (consistent && (delim !== ',' || s.indexOf(',') > 0)) {
+        return { kind: 'csv', rows: rows, delim: delim };
+      }
+    }
+    return { kind: 'text' };
+  }
+
+  function kindLabel(side, info) {
+    var el = side === 'L' ? $('kindL') : $('kindR');
+    el.className = 'kind';
+    if (info.kind === 'empty') { el.textContent = t('kindEmpty'); return; }
+    if (info.kind === 'json') {
+      el.classList.add('kind--json');
+      el.textContent = Array.isArray(info.value)
+        ? fmt('kindJsonArray', { n: info.value.length })
+        : t('kindJson');
+      return;
+    }
+    if (info.kind === 'json-err') {
+      el.classList.add('kind--err');
+      el.textContent = fmt('kindJsonErr', { line: info.error.line || '?', col: info.error.col || '?' });
+      el.title = info.error.message || '';
+      return;
+    }
+    if (info.kind === 'csv') {
+      el.classList.add('kind--csv');
+      el.textContent = fmt('kindCsv', { r: Math.max(0, info.rows.length - 1), c: info.rows[0] ? info.rows[0].length : 0 });
+      return;
+    }
+    var n = textOf(side).length ? textOf(side).split('\n').length : 0;
+    el.textContent = fmt('kindText', { n: n });
+  }
+
+  /* ──────────────────────── 줄 단위 diff ──────────────────────── */
+  function normLine(s) {
+    var v = s;
+    if (state.ignoreWs) v = v.replace(/[ \t]+$/, '');
+    if (state.ignoreCase) v = v.toLowerCase();
+    return v;
+  }
+
+  function diffLines(aText, bText) {
+    var a = aText.length ? aText.split(/\r\n|\n|\r/) : [];
+    var b = bText.length ? bText.split(/\r\n|\n|\r/) : [];
+    var na = a.map(normLine), nb = b.map(normLine);
+    var n = na.length, m = nb.length;
+
+    var p = 0;
+    while (p < n && p < m && na[p] === nb[p]) p++;
+    var s = 0;
+    while (s < n - p && s < m - p && na[n - 1 - s] === nb[m - 1 - s]) s++;
+
+    var rows = [], i;
+    for (i = 0; i < p; i++) rows.push({ type: 'eq', l: i, r: i });
+
+    var midA = na.slice(p, n - s), midB = nb.slice(p, m - s);
+    var tooBig = (midA.length * midB.length) > MAX_LCS_CELLS;
+
+    if (tooBig) {
+      var lim = Math.max(midA.length, midB.length);
+      for (i = 0; i < lim; i++) {
+        if (i < midA.length && i < midB.length) {
+          rows.push({ type: midA[i] === midB[i] ? 'eq' : 'chg', l: p + i, r: p + i });
+        } else if (i < midA.length) {
+          rows.push({ type: 'del', l: p + i, r: null });
+        } else {
+          rows.push({ type: 'add', l: null, r: p + i });
+        }
+      }
+    } else {
+      var ops = lcsOps(midA, midB);
+      var k = 0;
+      while (k < ops.length) {
+        if (ops[k][0] === 'eq') {
+          rows.push({ type: 'eq', l: p + ops[k][1], r: p + ops[k][2] });
+          k++;
+          continue;
+        }
+        var dels = [], adds = [];
+        while (k < ops.length && ops[k][0] !== 'eq') {
+          if (ops[k][0] === 'del') dels.push(p + ops[k][1]);
+          else adds.push(p + ops[k][2]);
+          k++;
+        }
+        var pair = Math.min(dels.length, adds.length), q;
+        for (q = 0; q < pair; q++) rows.push({ type: 'chg', l: dels[q], r: adds[q] });
+        for (q = pair; q < dels.length; q++) rows.push({ type: 'del', l: dels[q], r: null });
+        for (q = pair; q < adds.length; q++) rows.push({ type: 'add', l: null, r: adds[q] });
+      }
+    }
+    for (i = 0; i < s; i++) rows.push({ type: 'eq', l: n - s + i, r: m - s + i });
+
+    var t = 0;
+    rows.forEach(function (row) {
+      if (row.l != null) row.lt = a[row.l];
+      if (row.r != null) row.rt = b[row.r];
+    });
+    return { rows: rows, a: a, b: b, tooBig: tooBig };
+  }
+
+  function lcsOps(A, B) {
+    var n = A.length, m = B.length, W = m + 1;
+    var dp = new Int32Array((n + 1) * W);
+    var i, j;
+    for (i = n - 1; i >= 0; i--) {
+      for (j = m - 1; j >= 0; j--) {
+        dp[i * W + j] = A[i] === B[j]
+          ? dp[(i + 1) * W + j + 1] + 1
+          : Math.max(dp[(i + 1) * W + j], dp[i * W + j + 1]);
+      }
+    }
+    var ops = [];
+    i = 0; j = 0;
+    while (i < n && j < m) {
+      if (A[i] === B[j]) { ops.push(['eq', i, j]); i++; j++; }
+      else if (dp[(i + 1) * W + j] >= dp[i * W + j + 1]) { ops.push(['del', i, -1]); i++; }
+      else { ops.push(['add', -1, j]); j++; }
+    }
+    while (i < n) { ops.push(['del', i, -1]); i++; }
+    while (j < m) { ops.push(['add', -1, j]); j++; }
+    return ops;
+  }
+
+  /* ──────────────────────── 단어 단위 강조 ──────────────────────── */
+  function wordDiff(a, b) {
+    var ta = a.split(/(\s+)/), tb = b.split(/(\s+)/);
+    if (ta.length > 400 || tb.length > 400) return null;
+    var ops = lcsOps(ta, tb);
+    var outL = '', outR = '', openL = false, openR = false;
+    function closeL() { if (openL) { outL += '</span>'; openL = false; } }
+    function closeR() { if (openR) { outR += '</span>'; openR = false; } }
+    ops.forEach(function (o) {
+      if (o[0] === 'eq') {
+        closeL(); closeR();
+        outL += esc(ta[o[1]]);
+        outR += esc(tb[o[2]]);
+      } else if (o[0] === 'del') {
+        closeR();
+        if (!openL) { outL += '<span class="wd-del">'; openL = true; }
+        outL += esc(ta[o[1]]);
+      } else {
+        closeL();
+        if (!openR) { outR += '<span class="wd-ins">'; openR = true; }
+        outR += esc(tb[o[2]]);
+      }
+    });
+    closeL(); closeR();
+    return { l: outL, r: outR };
+  }
+
+  /* ─────────────────────── JSON 구조 diff ─────────────────────── */
+  function jkind(v) {
+    if (v === null) return 'null';
+    if (Array.isArray(v)) return 'array';
+    return typeof v;
+  }
+  function shortVal(v) {
+    var s;
+    if (v === undefined) return '';
+    if (typeof v === 'string') s = JSON.stringify(v);
+    else if (v === null) s = 'null';
+    else if (typeof v === 'object') s = JSON.stringify(v);
+    else s = String(v);
+    if (s.length > 180) s = s.slice(0, 177) + '…';
+    return s;
+  }
+
+  function diffJson(a, b) {
+    var out = [];
+    var same = 0;
+    function walk(path, va, vb) {
+      var ka = jkind(va), kb = jkind(vb);
+      if (ka !== kb) {
+        out.push({ type: 'chg', path: path, from: shortVal(va), to: shortVal(vb) });
+        return;
+      }
+      if (ka === 'object') {
+        var seen = {};
+        var keysA = Object.keys(va), keysB = Object.keys(vb);
+        keysA.forEach(function (k) {
+          seen[k] = true;
+          var p = path + '.' + k;
+          if (!(k in vb)) out.push({ type: 'del', path: p, from: shortVal(va[k]), to: '' });
+          else walk(p, va[k], vb[k]);
+        });
+        keysB.forEach(function (k) {
+          if (!seen[k]) out.push({ type: 'add', path: path + '.' + k, from: '', to: shortVal(vb[k]) });
+        });
+        if (!keysA.length && !keysB.length) same++;
+        return;
+      }
+      if (ka === 'array') {
+        var n = Math.max(va.length, vb.length);
+        if (!n) { same++; return; }
+        for (var i = 0; i < n; i++) {
+          var pi = path + '[' + i + ']';
+          if (i >= va.length) out.push({ type: 'add', path: pi, from: '', to: shortVal(vb[i]) });
+          else if (i >= vb.length) out.push({ type: 'del', path: pi, from: shortVal(va[i]), to: '' });
+          else walk(pi, va[i], vb[i]);
+        }
+        return;
+      }
+      if (va !== vb) out.push({ type: 'chg', path: path, from: shortVal(va), to: shortVal(vb) });
+      else same++;
+    }
+    walk('$', a, b);
+    return { changes: out, same: same };
+  }
+
+  /* ─────────────────────────── 렌더 ─────────────────────────── */
+  function countsOf(rows, typeKey) {
+    var c = { add: 0, del: 0, chg: 0, eq: 0 };
+    rows.forEach(function (r) {
+      var k = r[typeKey];
+      if (c[k] != null) c[k]++;
+    });
+    return c;
+  }
+
+  function linesLabel(n) {
+    return fmt(n === 1 ? 'linesOne' : 'linesN', { n: n });
+  }
+
+  function render() {
+    var lt = textOf('L'), rt = textOf('R');
+    var iL = detectSide(lt), iR = detectSide(rt);
+    kindLabel('L', iL);
+    kindLabel('R', iR);
+    footInfo('L', iL, lt);
+    footInfo('R', iR, rt);
+
+    var bothJson = iL.kind === 'json' && iR.kind === 'json';
+    var mode = state.mode === 'auto' ? (bothJson ? 'json' : 'lines') : state.mode;
+    if (mode === 'json' && !bothJson) mode = 'lines';
+
+    $('resMode').textContent = t(mode === 'json' ? 'modeUsedJson' : 'modeUsedLines');
+
+    var box = $('diffOut');
+    if (!lt.trim() && !rt.trim()) {
+      box.innerHTML = '<p class="empty-state">' + t('emptyBoth') + '</p>';
+      setSums(null);
+      setResActions(false);
+      state.result = null;
+      return;
+    }
+    if (!lt.trim() || !rt.trim()) {
+      box.innerHTML = '<p class="empty-state">' + t('emptyOne') + '</p>';
+      setSums(null);
+      setResActions(false);
+      state.result = null;
+      return;
+    }
+
+    if (mode === 'json') {
+      var jd = diffJson(iL.value, iR.value);
+      var changes = jd.changes;
+      var c = { add: 0, del: 0, chg: 0, eq: jd.same };
+      changes.forEach(function (x) { c[x.type]++; });
+      setSums(c);
+      state.result = { mode: 'json', changes: changes, counts: c, left: iL.value, right: iR.value };
+      setResActions(true);
+      box.innerHTML = changes.length
+        ? renderJsonDiff(changes)
+        : '<p class="empty-state">' + t('sameBoth') + '</p>';
+      return;
+    }
+
+    var d = diffLines(lt, rt);
+    var cnt = countsOf(d.rows, 'type');
+    setSums(cnt);
+    state.result = { mode: 'lines', rows: d.rows, counts: cnt, left: lt, right: rt, tooBig: d.tooBig };
+    if (d.tooBig) $('resMode').textContent = t('modeTooBig');
+    setResActions(true);
+    box.innerHTML = (cnt.add + cnt.del + cnt.chg) === 0
+      ? '<p class="empty-state">' + t('sameBoth') + '</p>'
+      : renderLineDiff(d);
+  }
+
+  function footInfo(side, info, text) {
+    var el = side === 'L' ? $('footL') : $('footR');
+    var bits = [];
+    if (text.length) bits.push(fmt('footLines', { n: text.split('\n').length, c: text.length }));
+    if (info.kind === 'csv') bits.push(fmt('footCsvDelim', { d: info.delim === '\t' ? 'TAB' : info.delim }));
+    if (info.kind === 'json') bits.push(t('footJsonOk'));
+    if (info.kind === 'json-err') {
+      el.innerHTML = '<span class="err">' + esc(info.error.message || 'JSON error') +
+        (info.error.line ? ' — ' + fmt('kindJsonErr', { line: info.error.line, col: info.error.col }) : '') + '</span>';
+      return;
+    }
+    el.textContent = bits.join(' · ');
+  }
+
+  function setSums(c) {
+    $('sumAdd').textContent = c ? String(c.add) : '0';
+    $('sumDel').textContent = c ? String(c.del) : '0';
+    $('sumChg').textContent = c ? String(c.chg) : '0';
+    $('sumSame').textContent = c ? String(c.eq) : '0';
+  }
+
+  function setResActions(on) {
+    $('copyRes').disabled = !on;
+    $('dlJson').disabled = !on;
+    $('dlCsv').disabled = !on;
+  }
+
+  function renderLineDiff(d) {
+    var rows = d.rows, shown = rows.slice(0, MAX_ROWS);
+    var doWord = rows.length <= 600;
+    var html = ['<div class="diff"><div class="diff-inner">'];
+    html.push('<div class="dhead"><div><span>' + esc(t('headLeft')) + '</span><span>' + linesLabel(d.a.length) + '</span></div>' +
+      '<div><span>' + esc(t('headRight')) + '</span><span>' + linesLabel(d.b.length) + '</span></div></div>');
+    shown.forEach(function (r) {
+      var lHtml = '', rHtml = '';
+      if (r.type === 'chg' && r.lt != null && r.rt != null) {
+        var w = (doWord && (r.lt.length + r.rt.length < 700)) ? wordDiff(r.lt, r.rt) : null;
+        if (w) { lHtml = w.l; rHtml = w.r; }
+        else { lHtml = esc(r.lt); rHtml = esc(r.rt); }
+      } else {
+        lHtml = r.lt != null ? esc(r.lt) : '';
+        rHtml = r.rt != null ? esc(r.rt) : '';
+      }
+      if (lHtml === '') lHtml = '';
+      if (rHtml === '') rHtml = '';
+      html.push('<div class="drow ' + r.type + '">' +
+        '<div class="dc"><span class="ln">' + (r.l != null ? r.l + 1 : '') + '</span><span class="lt">' + lHtml + '</span></div>' +
+        '<div class="dc"><span class="ln">' + (r.r != null ? r.r + 1 : '') + '</span><span class="lt">' + rHtml + '</span></div>' +
+        '</div>');
+    });
+    html.push('</div></div>');
+    if (rows.length > MAX_ROWS) {
+      html.push('<p class="hint">' + fmt('truncated', { n: MAX_ROWS, total: rows.length }) + '</p>');
+    }
+    return html.join('');
+  }
+
+  function renderJsonDiff(changes) {
+    var html = ['<div class="jdiff"><div class="jdiff-inner">'];
+    html.push('<div class="jhead"><div>' + esc(t('colPath')) + '</div><div>' + esc(t('colBefore')) + '</div><div>' + esc(t('colAfter')) + '</div></div>');
+    if (!changes.length) {
+      html.push('<p class="empty-state">' + t('sameBoth') + '</p>');
+    }
+    changes.slice(0, MAX_ROWS).forEach(function (c) {
+      html.push('<div class="jrow j-' + c.type + '">' +
+        '<div class="jpath">' + esc(c.path) + '</div>' +
+        '<div class="jfrom">' + esc(c.from) + '</div>' +
+        '<div class="jto">' + esc(c.to) + '</div>' +
+        '</div>');
+    });
+    html.push('</div></div>');
+    if (changes.length > MAX_ROWS) {
+      html.push('<p class="hint">' + fmt('truncated', { n: MAX_ROWS, total: changes.length }) + '</p>');
+    }
+    return html.join('');
+  }
+
+  /* ─────────────────────────── 판 동작 ─────────────────────────── */
+  function parseSideJson(side) {
+    var info = detectSide(textOf(side));
+    return info.kind === 'json' ? { ok: true, value: info.value } : { ok: false, info: info };
+  }
+
+  function applyAct(side, act) {
+    var text = textOf(side);
+    if (!text.trim() && act !== 'download') { toast(t('errNothing')); return; }
+    var info = detectSide(text);
+    if (act === 'format') {
+      if (info.kind !== 'json') { toast(info.kind === 'json-err' ? fmt('kindJsonErr', { line: info.error.line, col: info.error.col }) : t('errCsvForJson')); return; }
+      setText(side, JSON.stringify(info.value, null, state.indent));
+      toast(t('formatted'));
+      return;
+    }
+    if (act === 'minify') {
+      if (info.kind !== 'json') { toast(t('errCsvForJson')); return; }
+      setText(side, JSON.stringify(info.value));
+      toast(t('minified'));
+      return;
+    }
+    if (act === 'sort') {
+      if (info.kind !== 'json') { toast(t('errCsvForJson')); return; }
+      setText(side, JSON.stringify(sortDeep(info.value), null, state.indent));
+      toast(t('sorted'));
+      return;
+    }
+    if (act === 'tocsv') {
+      if (info.kind === 'json') {
+        setText(side, jsonToCsv(info.value));
+        toast(t('convertedCsv'));
+      } else if (info.kind === 'csv') {
+        setText(side, jsonToCsv(csvToJson(info.rows, state.typed)));
+        toast(t('convertedCsv'));
+      } else {
+        toast(t('errJsonForCsv'));
+      }
+      return;
+    }
+    if (act === 'tojson') {
+      if (info.kind === 'csv') {
+        setText(side, JSON.stringify(csvToJson(info.rows, state.typed), null, state.indent));
+        toast(t('convertedJson'));
+      } else if (info.kind === 'json') {
+        setText(side, JSON.stringify(info.value, null, state.indent));
+        toast(t('convertedJson'));
+      } else if (info.kind === 'json-err') {
+        toast(fmt('kindJsonErr', { line: info.error.line, col: info.error.col }));
+      } else {
+        toast(t('errCsvForJson'));
+      }
+      return;
+    }
+    if (act === 'copy') {
+      copyText(text, t('copied'));
+      return;
+    }
+    if (act === 'download') {
+      if (!text.trim()) { toast(t('errNothing')); return; }
+      var ext = info.kind === 'json' ? 'json' : info.kind === 'csv' ? 'csv' : 'txt';
+      var name = 'diff-' + (side === 'L' ? 'left' : 'right') + '.' + ext;
+      download(text, name, ext === 'json' ? 'application/json' : ext === 'csv' ? 'text/csv' : 'text/plain');
+      toast(fmt('dlDone', { name: name }));
+    }
+  }
+
+  function sortDeep(v) {
+    if (Array.isArray(v)) return v.map(sortDeep);
+    if (v && typeof v === 'object') {
+      var out = {};
+      Object.keys(v).sort().forEach(function (k) { out[k] = sortDeep(v[k]); });
+      return out;
+    }
+    return v;
+  }
+
+  function copyText(text, okMsg) {
+    function fallback() {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      ta.remove();
+      toast(ok ? okMsg : t('copyFail'));
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { toast(okMsg); }, fallback);
+    } else fallback();
+  }
+
+  function download(text, name, mime) {
+    var blob = new Blob([text], { type: mime + ';charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = name;
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 6000);
+  }
+
+  /* ─────────────────────────── 결과 보고서 ─────────────────────────── */
+  function reportText() {
+    var r = state.result;
+    if (!r) return '';
+    var lines = [];
+    var head = t('reportTitle') + ' — ' + (r.mode === 'json' ? t('modeUsedJson') : t('modeUsedLines'));
+    lines.push(head);
+    lines.push(t('reportSummary') + ': +' + r.counts.add + ' / -' + r.counts.del + ' / ~' + r.counts.chg);
+    lines.push('');
+    if (r.mode === 'json') {
+      if (!r.changes.length) lines.push(t('reportNoChange'));
+      r.changes.forEach(function (c) {
+        if (c.type === 'add') lines.push('+ ' + c.path + ': ' + c.to);
+        else if (c.type === 'del') lines.push('- ' + c.path + ': ' + c.from);
+        else lines.push('~ ' + c.path + ': ' + c.from + ' → ' + c.to);
+      });
+    } else {
+      var changed = 0;
+      r.rows.forEach(function (row) {
+        if (row.type === 'add') { lines.push('+ ' + (row.rt == null ? '' : row.rt)); changed++; }
+        else if (row.type === 'del') { lines.push('- ' + (row.lt == null ? '' : row.lt)); changed++; }
+        else if (row.type === 'chg') { lines.push('~ ' + (row.lt == null ? '' : row.lt) + '  →  ' + (row.rt == null ? '' : row.rt)); changed++; }
+      });
+      if (!changed) lines.push(t('reportNoChange'));
+    }
+    return lines.join('\n');
+  }
+
+  function reportJson() {
+    var r = state.result;
+    if (!r) return '';
+    var out = {
+      tool: 'DiffForge',
+      mode: r.mode,
+      summary: { added: r.counts.add, removed: r.counts.del, changed: r.counts.chg, unchanged: r.counts.eq }
+    };
+    if (r.mode === 'json') {
+      out.changes = r.changes.map(function (c) {
+        return { path: c.path, type: c.type, before: c.type === 'add' ? null : c.from, after: c.type === 'del' ? null : c.to };
+      });
+    } else {
+      out.changes = r.rows.filter(function (x) { return x.type !== 'eq'; }).map(function (x) {
+        return {
+          type: x.type === 'add' ? 'added' : x.type === 'del' ? 'removed' : 'changed',
+          leftLine: x.l == null ? null : x.l + 1,
+          rightLine: x.r == null ? null : x.r + 1,
+          left: x.lt == null ? null : x.lt,
+          right: x.rt == null ? null : x.rt
+        };
+      });
+    }
+    return JSON.stringify(out, null, 2);
+  }
+
+  function reportCsv() {
+    var r = state.result;
+    if (!r) return '';
+    var rows = [];
+    if (r.mode === 'json') {
+      rows.push('path,type,before,after');
+      r.changes.forEach(function (c) {
+        rows.push([csvEscape(c.path), c.type, csvEscape(c.type === 'add' ? '' : c.from), csvEscape(c.type === 'del' ? '' : c.to)].join(','));
+      });
+    } else {
+      rows.push('leftLine,rightLine,type,left,right');
+      r.rows.forEach(function (x) {
+        if (x.type === 'eq') return;
+        rows.push([x.l == null ? '' : x.l + 1, x.r == null ? '' : x.r + 1,
+          x.type === 'add' ? 'added' : x.type === 'del' ? 'removed' : 'changed',
+          csvEscape(x.lt || ''), csvEscape(x.rt || '')].join(','));
+      });
+    }
+    return rows.join('\n') + '\n';
+  }
+
+  /* ─────────────────────────── 예시 데이터 ─────────────────────────── */
+  var EXAMPLE = {
+    jsonL: '{\n  "order": "A-1042",\n  "currency": "KRW",\n  "customer": {\n    "name": "Kim Yihyung",\n    "email": "yh@example.com",\n    "vip": false\n  },\n  "items": [\n    { "sku": "KB-01", "qty": 1, "price": 89000 },\n    { "sku": "MS-14", "qty": 2, "price": 39000 }\n  ],\n  "total": 167000,\n  "note": "deliver after 6pm"\n}',
+    jsonR: '{\n  "order": "A-1042",\n  "currency": "KRW",\n  "customer": {\n    "name": "Kim Yihyung",\n    "email": "yh@example.com",\n    "vip": true\n  },\n  "items": [\n    { "sku": "KB-01", "qty": 1, "price": 89000 },\n    { "sku": "MS-14", "qty": 3, "price": 39000 },\n    { "sku": "CB-02", "qty": 1, "price": 12000 }\n  ],\n  "total": 218000,\n  "shippedAt": "2026-11-17T09:30:00Z"\n}',
+    csvL: 'sku,name,qty,price\nKB-01,Keyboard,1,89000\nMS-14,Mouse,2,39000\nHD-07,Headset,1,65000',
+    csvR: 'sku,name,qty,price\nKB-01,Keyboard,1,89000\nMS-14,Mouse,3,39000\nCB-02,USB-C Cable,1,12000\nHD-07,Headset,1,65000'
+  };
+
+  function loadExample(side, kind) {
+    setText(side, kind === 'csv' ? (side === 'L' ? EXAMPLE.csvL : EXAMPLE.csvR) : (side === 'L' ? EXAMPLE.jsonL : EXAMPLE.jsonR));
+    toast(t('exLoaded'));
+  }
+
+  /* ─────────────────────────── 스케줄 ─────────────────────────── */
+  var timer = 0;
+  function schedule(ms) {
+    clearTimeout(timer);
+    timer = setTimeout(render, ms == null ? 200 : ms);
+  }
+
+  /* ─────────────────────────── 언어 ─────────────────────────── */
+  function applyLang(lang) {
+    state.lang = lang === 'ko' ? 'ko' : 'en';
+    document.documentElement.setAttribute('lang', state.lang);
+
+    document.title = t('docTitle');
+    var md = document.querySelector('meta[name="description"]'); if (md) md.setAttribute('content', t('metaDesc'));
+    var ot = document.querySelector('meta[property="og:title"]'); if (ot) ot.setAttribute('content', t('ogTitle'));
+    var od = document.querySelector('meta[property="og:description"]'); if (od) od.setAttribute('content', t('ogDesc'));
+    var tt = document.querySelector('meta[name="twitter:title"]'); if (tt) tt.setAttribute('content', t('ogTitle'));
+    var td = document.querySelector('meta[name="twitter:description"]'); if (td) td.setAttribute('content', t('ogDesc'));
+
+    var nodes = document.querySelectorAll('[data-i18n]'), i, k, v;
+    for (i = 0; i < nodes.length; i++) {
+      k = nodes[i].getAttribute('data-i18n');
+      v = t(k);
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < nodes.length; i++) {
+      k = nodes[i].getAttribute('data-i18n-html');
+      v = t(k);
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-aria'));
+      if (v) nodes[i].setAttribute('aria-label', v);
+    }
+
+    var spans = document.querySelectorAll('#langToggle [data-lt]');
+    for (i = 0; i < spans.length; i++) {
+      spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
+    }
+    var lt = $('langToggle');
+    lt.setAttribute('title', t('toggleTo'));
+    lt.setAttribute('aria-label', t('toggleTo'));
+
+    var ph = document.querySelectorAll('.editor textarea');
+    if (ph[0]) ph[0].placeholder = state.lang === 'ko' ? '첫 번째 판을 붙여 넣으세요…' : 'Paste the first version here…';
+    if (ph[1]) ph[1].placeholder = state.lang === 'ko' ? '두 번째 판을 붙여 넣으세요…' : 'Paste the second version here…';
+
+    render();
+  }
+
+  /* ─────────────────────────── 연결 ─────────────────────────── */
+  function bind() {
+    $('langToggle').addEventListener('click', function () {
+      var next = state.lang === 'ko' ? 'en' : 'ko';
+      try { localStorage.setItem(LANG_KEY, next); } catch (e) {}
+      applyLang(next);
+    });
+
+    document.querySelectorAll('[data-mode]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        state.mode = b.getAttribute('data-mode');
+        document.querySelectorAll('[data-mode]').forEach(function (o) {
+          o.setAttribute('aria-pressed', o === b ? 'true' : 'false');
+        });
+        render();
+      });
+    });
+
+    $('indentSel').addEventListener('change', function () { state.indent = parseInt(this.value, 10) || 2; });
+    $('ignoreWs').addEventListener('change', function () { state.ignoreWs = this.checked; render(); });
+    $('ignoreCase').addEventListener('change', function () { state.ignoreCase = this.checked; render(); });
+    $('typedChk').addEventListener('change', function () { state.typed = this.checked; });
+
+    ['L', 'R'].forEach(function (side) {
+      var ta = sideEl(side);
+      ta.addEventListener('input', function () { syncGutter(side); schedule(220); });
+      ta.addEventListener('scroll', function () { gutterEl(side).scrollTop = ta.scrollTop; });
+      ta.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Tab' && !ev.ctrlKey && !ev.metaKey && !ev.altKey) {
+          ev.preventDefault();
+          var s = ta.selectionStart, e = ta.selectionEnd;
+          var pad = state.indent === 4 ? '    ' : '  ';
+          ta.value = ta.value.slice(0, s) + pad + ta.value.slice(e);
+          ta.selectionStart = ta.selectionEnd = s + pad.length;
+          syncGutter(side); schedule(220);
+        }
+      });
+    });
+
+    document.querySelectorAll('[data-act]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        applyAct(b.getAttribute('data-side'), b.getAttribute('data-act'));
+        if (b.getAttribute('data-act') === 'format' || b.getAttribute('data-act') === 'minify' ||
+            b.getAttribute('data-act') === 'sort' || b.getAttribute('data-act') === 'tocsv' ||
+            b.getAttribute('data-act') === 'tojson') {
+          render();
+        }
+      });
+    });
+
+    document.querySelectorAll('[data-example]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        loadExample(b.getAttribute('data-side'), b.getAttribute('data-example'));
+      });
+    });
+    document.querySelectorAll('[data-clear]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var side = b.getAttribute('data-clear');
+        setText(side, '');
+        toast(t('cleared'));
+      });
+    });
+
+    $('swapBtn').addEventListener('click', function () {
+      var a = textOf('L'), b2 = textOf('R');
+      sideEl('L').value = b2; sideEl('R').value = a;
+      syncGutter('L'); syncGutter('R');
+      render();
+      toast(t('swapped'));
+    });
+    $('clearBtn').addEventListener('click', function () {
+      sideEl('L').value = ''; sideEl('R').value = '';
+      syncGutter('L'); syncGutter('R');
+      render();
+      toast(t('cleared'));
+    });
+
+    $('copyRes').addEventListener('click', function () {
+      if (!state.result) return;
+      copyText(reportText(), t('copied'));
+    });
+    $('dlJson').addEventListener('click', function () {
+      if (!state.result) return;
+      download(reportJson(), 'diffforge-report.json', 'application/json');
+      toast(fmt('dlDone', { name: 'diffforge-report.json' }));
+    });
+    $('dlCsv').addEventListener('click', function () {
+      if (!state.result) return;
+      download(reportCsv(), 'diffforge-report.csv', 'text/csv');
+      toast(fmt('dlDone', { name: 'diffforge-report.csv' }));
+    });
+
+    /* 붙여넣기 / 드래그로 판 채우기 — 클립보드 텍스트만, 파일은 읽지 않는다 */
+    ['paneL', 'paneR'].forEach(function (id) {
+      var pane = $(id);
+      pane.addEventListener('dragover', function (ev) {
+        if (ev.dataTransfer && ev.dataTransfer.types.indexOf('Files') < 0) {
+          ev.preventDefault();
+          pane.classList.add('is-drag');
+        }
+      });
+      pane.addEventListener('dragleave', function () { pane.classList.remove('is-drag'); });
+      pane.addEventListener('drop', function (ev) { pane.classList.remove('is-drag'); });
+    });
+  }
+
+  /* ─────────────────── 외부 요청 카운터 ─────────────────── */
+  var ext = 0;
+  function note(list) {
+    for (var i = 0; i < list.length; i++) {
+      try {
+        var u = new URL(list[i].name, location.href);
+        if (u.origin !== location.origin) ext++;
+      } catch (e) {}
+    }
+    var el = $('netCount');
+    if (el) el.textContent = String(ext);
+  }
+  if (window.PerformanceObserver) {
+    try {
+      new PerformanceObserver(function (l) { note(l.getEntries()); }).observe({ entryTypes: ['resource'] });
+    } catch (e) {}
+  }
+  window.addEventListener('load', function () {
+    setTimeout(function () {
+      if (window.performance && performance.getEntriesByType) note(performance.getEntriesByType('resource'));
+    }, 350);
+  });
+
+  function init() {
+    bind();
+    syncGutter('L');
+    syncGutter('R');
+    applyLang(readLang() || 'en');
+    window.__dfReady = true;
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>

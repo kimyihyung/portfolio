@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0b0d">
+<title>DayOff — Korean Annual Leave &amp; Golden Week Planner | Kim Yihyung</title>
+<meta name="description" content="Count your annual leave under the Korean Labor Standards Act — 11 monthly days in year one, 15 days after a year, +1 every two years up to 25 — then find every 2026–2027 stretch where 1–3 leave days buy 4–9 days off. 100% in your browser, 0 bytes uploaded, 0 external requests.">
+<meta name="keywords" content="연차 계산기, 연차 일수 계산, 근로기준법 연차, 황금연휴, 2026 공휴일, 2027 공휴일, 대체공휴일, 연차 소진, korean annual leave calculator, korea holidays 2026, golden week korea, annual leave accrual korea, substitute holiday korea">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/day-off/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b0d'/%3E%3Crect x='6' y='8' width='20' height='18' rx='3' fill='none' stroke='%23e5b45c' stroke-width='2'/%3E%3Cpath d='M6 14h20M11 5v5M21 5v5' stroke='%23e5b45c' stroke-width='2' stroke-linecap='round'/%3E%3Crect x='16' y='17' width='6' height='5' rx='1' fill='%23e5b45c'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/day-off/">
+<meta property="og:title" content="DayOff — How Many Days Off You Actually Have">
+<meta property="og:description" content="Korean annual leave counted by law, plus every 2026–2027 window where one leave day turns into eight days off. 0 bytes uploaded, 0 external requests.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="DayOff — Korean annual leave and golden week planner in the browser">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="DayOff — How Many Days Off You Actually Have">
+<meta name="twitter:description" content="Korean annual leave by the Labor Standards Act, plus every 2026–2027 golden window: 1–3 leave days for 4–9 days off.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "DayOff — Korean Annual Leave & Golden Week Planner",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/day-off/",
+      "description": "Calculates Korean annual leave under the Labor Standards Act — up to 11 monthly days in the first year, 15 days from one year, one extra day every two years to a maximum of 25 — and finds every 2026–2027 window where 1–3 leave days combine with weekends and substitute holidays into 4–9 consecutive days off, with a leave-budget simulator and a one-tap summary.",
+      "featureList": [
+        "Annual leave days under Articles 60 of the Korean Labor Standards Act",
+        "Monthly leave for the first year, the 15-day base and the two-year increment up to 25",
+        "Hire-anniversary and calendar-year accrual bases with the expiry date",
+        "2026–2027 statutory holidays and substitute holidays built in",
+        "Golden week planner: 1–3 leave days for 4–9 consecutive days off",
+        "Leave budget simulator and one-tap summary copy",
+        "100% client-side: no uploads, no accounts, no external requests"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "DayOff", "item": "https://kimyihyung.github.io/portfolio/tools/day-off/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Will this match the number my company gives me?",
+          "acceptedAnswer": { "@type": "Answer", "text": "It matches the Labor Standards Act default: 15 days from one year of service, one extra day for every two years beyond the first, capped at 25, and up to 11 monthly days before that. Companies may use a calendar-year basis, prorate a partial year, round fractions differently, or grant more in their rules of employment — so treat this as the legal baseline and check your contract." }
+        },
+        {
+          "@type": "Question",
+          "name": "Why does the first year give only 11 days?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Article 60(2) gives one paid day for each month of full attendance in the first year, which reaches 11 days before the one-year anniversary. On the anniversary the 15-day entitlement of Article 60(1) starts instead, so the two are not added together." }
+        },
+        {
+          "@type": "Question",
+          "name": "Which holidays are included, and what about substitute holidays?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The built-in list follows the Regulation on Public Holidays of Public Offices as amended on 30 April 2026, which added Labour Day (1 May) and Constitution Day (17 July). A holiday overlapping a Saturday, a Sunday or another holiday moves to the next non-holiday — except New Year's Day and Memorial Day, which never move. Temporary holidays declared by the government are not in the list and can change any plan." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does my hire date leave the browser?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. The calculation runs in this tab, nothing is stored on a server, and the counters in the header and footer read the page's own network activity. There is no endpoint to send a date to." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+:root {
+  --bg: #0b0b0d;
+  --bg2: #0e0e11;
+  --panel: #141311;
+  --panel2: #1b1917;
+  --line: rgba(255,255,255,.09);
+  --line2: rgba(255,255,255,.18);
+  --ink: #f7f2e9;
+  --muted: #a9a29a;
+  --muted2: #7d766e;
+  --accent: #e5b45c;
+  --accent2: #f3cf85;
+  --accent-dim: rgba(229,180,92,.12);
+  --on-accent: #1d1503;
+  --ok: #7fd6a0;
+  --warn: #ffa06b;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --shadow: 0 24px 70px rgba(0,0,0,.55);
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-family: var(--font);
+  color: var(--ink);
+  line-height: 1.6;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(110% 55% at 50% -18%, rgba(229,180,92,.13), transparent 62%),
+    radial-gradient(60% 40% at 100% 2%, rgba(229,180,92,.05), transparent 60%);
+  background-repeat: no-repeat;
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: var(--accent); color: var(--on-accent); }
+a { color: inherit; }
+button, input, select { font-family: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+.wrap { width: 100%; max-width: 1220px; margin: 0 auto; padding: 0 20px 48px; }
+
+/* ---------- topbar ---------- */
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0 12px; }
+.brand { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: var(--ink); }
+.mark {
+  min-width: 28px; height: 22px; padding: 0 6px; border-radius: 7px;
+  border: 1px solid rgba(229,180,92,.45); background: var(--accent-dim);
+  display: grid; place-items: center; font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: var(--accent);
+}
+.top-actions { display: inline-flex; align-items: center; gap: 9px; }
+.lang-toggle {
+  appearance: none; border: 1px solid var(--line); background: var(--panel); color: var(--muted2);
+  height: 34px; padding: 0 11px; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px;
+  cursor: pointer; font-size: 11px; font-weight: 700; letter-spacing: .06em; line-height: 1;
+  transition: color .2s, border-color .2s, transform .15s;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.94); }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; }
+.topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
+
+/* ---------- hero ---------- */
+.hero { padding: 22px 0 18px; max-width: 780px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; margin: 0 0 14px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--accent);
+  border: 1px solid rgba(229,180,92,.28); background: rgba(229,180,92,.06); padding: 6px 11px; border-radius: 999px;
+}
+.eyebrow .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+h1 { margin: 0 0 14px; font-size: clamp(29px, 4.6vw, 46px); line-height: 1.06; letter-spacing: -.02em; font-weight: 800; }
+h1 .soft { color: var(--muted); }
+h1 .gold { color: var(--accent); }
+.lede { margin: 0 0 16px; color: var(--muted); font-size: 15px; max-width: 700px; }
+.lede strong { color: var(--ink); font-weight: 600; }
+
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--panel); font-size: 11.5px; color: var(--muted);
+  font-family: var(--mono); letter-spacing: .02em;
+}
+.pill b { color: var(--ink); font-weight: 700; }
+.pill--live { border-color: rgba(127,214,160,.32); background: rgba(127,214,160,.07); color: #a6e6c4; }
+.pill--live b { color: #bff3d8; }
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px rgba(127,214,160,.14); }
+
+/* ---------- layout ---------- */
+.work { display: grid; grid-template-columns: minmax(0,1fr) 340px; gap: 16px; align-items: start; margin-top: 6px; }
+@media (max-width: 1000px) { .work { grid-template-columns: 1fr; } }
+
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); }
+.panel { padding: 16px; display: grid; gap: 13px; }
+.panel h3 { margin: 0; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted2); font-family: var(--mono); font-weight: 700; }
+.side { display: grid; gap: 12px; position: sticky; top: 14px; }
+@media (max-width: 1000px) { .side { position: static; } }
+
+.btn {
+  appearance: none; cursor: pointer; border-radius: 11px; border: 1px solid var(--line2);
+  background: var(--panel2); color: var(--ink); font-size: 13px; font-weight: 650;
+  padding: 10px 16px; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  transition: transform .12s, border-color .2s, background .2s, opacity .2s;
+}
+.btn:hover { border-color: rgba(255,255,255,.3); }
+.btn:active { transform: scale(.98); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 750; }
+.btn--primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.btn--ghost { background: transparent; }
+.btn--sm { padding: 7px 11px; font-size: 12px; border-radius: 9px; }
+.btn--block { width: 100%; }
+
+/* ---------- calculator ---------- */
+.calc { display: grid; gap: 14px; }
+.calc-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.calc-head h2 { margin: 0; font-size: 16px; letter-spacing: -.01em; }
+.calc-head span { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted2); }
+.in-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(146px, 1fr)); gap: 10px; }
+.in {
+  display: grid; gap: 5px; padding: 9px 11px 7px; border: 1px solid var(--line);
+  border-radius: 11px; background: var(--panel2); min-width: 0;
+}
+.in label { font-size: 10.5px; font-family: var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted2); }
+.in input {
+  appearance: none; border: 0; background: transparent; color: var(--ink);
+  font-size: 14.5px; font-weight: 600; padding: 0; width: 100%; min-width: 0; line-height: 1.4;
+}
+.in input::-webkit-calendar-picker-indicator { filter: invert(.72) sepia(.4) saturate(2) hue-rotate(2deg); cursor: pointer; }
+.in input:focus { outline: none; }
+.in:focus-within { border-color: rgba(229,180,92,.6); }
+
+.seg { display: flex; gap: 3px; padding: 3px; background: var(--panel2); border: 1px solid var(--line); border-radius: 11px; }
+.seg button { flex: 1; appearance: none; border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; font-weight: 650; padding: 8px 4px; border-radius: 8px; line-height: 1.2; }
+.seg button[aria-pressed="true"] { background: var(--accent-dim); color: var(--accent); box-shadow: inset 0 0 0 1px rgba(229,180,92,.35); }
+.seg-label { font-size: 10.5px; font-family: var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted2); }
+
+.result { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px 16px; padding: 16px; border-radius: var(--radius-sm); border: 1px solid rgba(229,180,92,.26); background: linear-gradient(180deg, rgba(229,180,92,.10), rgba(229,180,92,.02)); }
+.result .num { font-family: var(--mono); font-size: 46px; line-height: 1; font-weight: 700; letter-spacing: -.03em; color: var(--accent); }
+.result .num small { font-size: 15px; letter-spacing: .02em; color: var(--muted); margin-left: 5px; font-weight: 600; }
+.result .meta { display: grid; gap: 2px; font-size: 12px; color: var(--muted); }
+.result .meta b { color: var(--ink); font-weight: 650; }
+
+.break { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.break li { display: flex; justify-content: space-between; gap: 12px; font-size: 12.6px; color: var(--muted); border-bottom: 1px dashed rgba(255,255,255,.07); padding-bottom: 5px; }
+.break li:last-child { border-bottom: 0; padding-bottom: 0; }
+.break li b { color: var(--ink); font-family: var(--mono); font-weight: 650; font-size: 12px; white-space: nowrap; }
+
+.kv { display: grid; gap: 7px; margin: 0; padding: 0; list-style: none; }
+.kv li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; font-size: 12.4px; color: var(--muted); }
+.kv li b { color: var(--ink); font-family: var(--mono); font-weight: 600; font-size: 12px; min-width: 0; flex: 0 1 auto; text-align: right; overflow-wrap: anywhere; }
+.caveat { margin: 0; font-size: 11.6px; color: var(--muted2); line-height: 1.6; }
+.caveat b { color: var(--muted); }
+
+/* ---------- planner ---------- */
+.section { margin-top: 40px; scroll-margin-top: 18px; }
+.sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 12px; border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 16px; }
+.sec-head h2 { margin: 0; font-size: 17px; letter-spacing: -.01em; }
+.sec-head span { font-family: var(--mono); font-size: 11px; color: var(--muted2); letter-spacing: .08em; text-transform: uppercase; }
+
+.filters { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 14px; }
+.chips { display: inline-flex; gap: 3px; padding: 3px; background: var(--panel2); border: 1px solid var(--line); border-radius: 11px; }
+.chips button {
+  appearance: none; border: 0; background: transparent; color: var(--muted); cursor: pointer;
+  font-size: 12px; font-weight: 650; padding: 7px 11px; border-radius: 8px; line-height: 1; white-space: nowrap;
+}
+.chips button[aria-pressed="true"] { background: var(--accent-dim); color: var(--accent); box-shadow: inset 0 0 0 1px rgba(229,180,92,.35); }
+.filters .grow { flex: 1; }
+
+.plan-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(262px, 1fr)); gap: 12px; }
+.plan { position: relative; display: grid; gap: 7px; padding: 14px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); transition: border-color .2s, transform .15s; }
+.plan:hover { border-color: rgba(229,180,92,.34); }
+.plan.is-added { border-color: rgba(229,180,92,.65); background: linear-gradient(180deg, rgba(229,180,92,.08), rgba(229,180,92,.01)); }
+.plan-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.plan-badge { font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); background: var(--accent-dim); border: 1px solid rgba(229,180,92,.3); border-radius: 999px; padding: 3px 9px; }
+.plan-eff { font-family: var(--mono); font-size: 10.5px; color: var(--muted2); letter-spacing: .04em; }
+.plan-days { display: flex; align-items: baseline; gap: 6px; }
+.plan-days b { font-family: var(--mono); font-size: 30px; line-height: 1; letter-spacing: -.03em; color: var(--ink); }
+.plan-days span { font-size: 12px; color: var(--muted); }
+.plan-range { font-size: 13.5px; font-weight: 650; letter-spacing: -.01em; }
+.plan-name { font-size: 12px; color: var(--muted); }
+.plan-leave { font-family: var(--mono); font-size: 11px; color: var(--muted2); letter-spacing: .02em; word-break: break-word; }
+.plan .btn { margin-top: 3px; justify-self: start; }
+.plan-empty { grid-column: 1 / -1; padding: 22px; text-align: center; color: var(--muted2); font-size: 13px; border: 1px dashed var(--line); border-radius: var(--radius-sm); }
+
+/* ---------- summary / meter ---------- */
+.meter { height: 8px; border-radius: 999px; background: rgba(255,255,255,.09); overflow: hidden; }
+.meter i { display: block; height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 999px; transition: width .3s; }
+.meter-row { display: flex; justify-content: space-between; gap: 10px; font-family: var(--mono); font-size: 11px; color: var(--muted2); letter-spacing: .02em; }
+.meter-row b { color: var(--ink); }
+.sel-list { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.sel-list li { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--muted); border-bottom: 1px dashed rgba(255,255,255,.07); padding-bottom: 5px; }
+.sel-list li:last-child { border-bottom: 0; }
+.sel-list li b { color: var(--ink); font-weight: 600; }
+.sel-list li button { appearance: none; border: 0; background: transparent; color: var(--muted2); cursor: pointer; font-size: 14px; line-height: 1; padding: 2px 4px; border-radius: 6px; }
+.sel-list li button:hover { color: var(--warn); }
+.sel-empty { margin: 0; font-size: 12px; color: var(--muted2); }
+.status { min-height: 16px; margin: 0; font-size: 12px; color: var(--muted); }
+.status.is-ok { color: var(--ok); }
+.status.is-warn { color: var(--warn); }
+
+/* ---------- holiday table ---------- */
+.hol-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 760px) { .hol-wrap { grid-template-columns: 1fr; } }
+.hol-year { padding: 14px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); }
+.hol-year h3 { margin: 0 0 10px; font-size: 13px; display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.hol-year h3 span { font-family: var(--mono); font-size: 10.5px; color: var(--muted2); letter-spacing: .06em; font-weight: 500; text-transform: none; }
+.hol-list { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+.hol-list li { display: grid; grid-template-columns: 76px 1fr auto; gap: 8px; align-items: baseline; padding: 5px 0; border-bottom: 1px dashed rgba(255,255,255,.06); font-size: 12.2px; }
+.hol-list li:last-child { border-bottom: 0; }
+.hol-list .d { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: .02em; white-space: nowrap; }
+.hol-list .n { color: var(--ink); }
+.hol-list .n em { font-style: normal; color: var(--muted2); font-size: 11px; }
+.hol-list .tag { font-family: var(--mono); font-size: 9.5px; letter-spacing: .04em; border: 1px solid var(--line); border-radius: 999px; padding: 1px 6px; color: var(--muted2); white-space: nowrap; }
+.hol-list .tag.is-sub { border-color: rgba(229,180,92,.34); color: var(--accent); }
+
+/* ---------- notes / faq ---------- */
+.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(258px, 1fr)); gap: 12px; }
+.note { padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel); }
+.note h3 { margin: 0 0 8px; font-size: 14px; display: flex; gap: 8px; align-items: baseline; }
+.note h3 span { font-family: var(--mono); font-size: 10.5px; color: var(--accent); letter-spacing: .1em; }
+.note p { margin: 0; font-size: 12.8px; color: var(--muted); line-height: 1.62; }
+.note b { color: var(--ink); font-weight: 600; }
+
+.faq { display: grid; gap: 8px; }
+details.qa { border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); overflow: hidden; }
+details.qa summary { cursor: pointer; padding: 13px 44px 13px 15px; font-size: 13.5px; font-weight: 600; list-style: none; position: relative; }
+details.qa summary::-webkit-details-marker { display: none; }
+details.qa summary::after { content: "+"; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--accent); font-family: var(--mono); font-size: 15px; }
+details.qa[open] summary::after { content: "−"; }
+details.qa .a { padding: 0 15px 14px; font-size: 12.8px; color: var(--muted); line-height: 1.68; }
+details.qa .a b { color: var(--ink); font-weight: 600; }
+
+/* ---------- footer ---------- */
+.foot { margin-top: 34px; padding-top: 14px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--muted2); }
+.foot-links { display: inline-flex; flex-wrap: wrap; gap: 12px; }
+.foot-links a { text-decoration: none; color: var(--muted); border-bottom: 1px solid transparent; }
+.foot-links a:hover { color: var(--ink); border-bottom-color: var(--line2); }
+.foot .net { font-family: var(--mono); letter-spacing: .02em; }
+.foot .net b { color: var(--ok); }
+
+@media (max-width: 640px) {
+  .wrap { padding: 0 14px 36px; }
+  .topbar { padding: 14px 0 8px; }
+  .brand-txt { font-size: 12px; letter-spacing: .1em; }
+  .hero { padding: 16px 0 12px; }
+  .lede { font-size: 14px; }
+  .panel { padding: 13px; }
+  .result .num { font-size: 40px; }
+  .plan-grid { grid-template-columns: 1fr; }
+  .hol-list li { grid-template-columns: 68px 1fr auto; }
+  .sec-head h2 { font-size: 16px; }
+  .chips button { padding: 7px 9px; font-size: 11.5px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="/portfolio/" aria-label="Kim Yihyung — portfolio" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="한국어로 보기" aria-label="한국어로 보기">
+        <span class="lt on" data-lt="en">EN</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="ko">KO</span>
+      </button>
+      <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← All tools</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="eyebrow">DayOff · Korean leave · 업로드 0</span></p>
+      <h1 data-i18n-html="h1">Count the days you have.<br><span class="soft">Then spend them well.</span><br><span class="gold">Every bridge in 2026–2027.</span></h1>
+      <p class="lede" data-i18n-html="lede">
+        Your annual leave by the <strong>Korean Labor Standards Act</strong>, and every stretch where
+        <strong>1–3 leave days turn into 4–9 days off</strong> — weekends, substitute holidays and all.
+        Typed into this tab, calculated in this tab, sent nowhere.
+      </p>
+      <div class="badge-row">
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillUp">0 bytes uploaded</b></span>
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillNet">0 external requests</b></span>
+        <span class="pill" data-i18n="pillLaw">근로기준법 제60조</span>
+        <span class="pill" data-i18n="pillYears">2026–2027</span>
+      </div>
+    </section>
+
+    <!-- ══════════ calculator ══════════ -->
+    <section class="work" aria-label="Leave calculator" data-i18n-aria="calcAria">
+      <div class="card panel calc" id="calcCard">
+        <div class="calc-head">
+          <h2 data-i18n="calcTitle">Annual leave calculator</h2>
+          <span data-i18n="calcNote">개근 가정</span>
+        </div>
+
+        <div class="in-row">
+          <div class="in">
+            <label for="hire" data-i18n="hireLabel">Hire date</label>
+            <input type="date" id="hire" min="1950-01-01" max="2027-12-31">
+          </div>
+          <div class="in">
+            <label for="base" data-i18n="baseLabel">As of</label>
+            <input type="date" id="base" min="1950-01-01" max="2027-12-31">
+          </div>
+          <div class="in">
+            <label for="used" data-i18n="usedLabel">Already used (days)</label>
+            <input type="number" id="used" min="0" step="0.5" value="0" inputmode="decimal">
+          </div>
+        </div>
+
+        <div>
+          <p class="seg-label" id="modeLabel" data-i18n="modeLabel">Accrual basis</p>
+          <div class="seg" id="mode" role="group" aria-labelledby="modeLabel">
+            <button type="button" data-mode="hire" aria-pressed="true" data-i18n="modeHire">Hire anniversary</button>
+            <button type="button" data-mode="fiscal" aria-pressed="false" data-i18n="modeFiscal">Calendar year</button>
+          </div>
+        </div>
+
+        <div class="result" id="result">
+          <div class="num" id="bigDays">—<small id="bigUnit" data-i18n="dayUnit">days</small></div>
+          <div class="meta">
+            <span id="resSub" data-i18n="resEmpty">Enter a hire date to calculate.</span>
+            <span id="resNote" hidden></span>
+          </div>
+        </div>
+
+        <div>
+          <p class="seg-label" data-i18n="breakHead">How it adds up</p>
+          <ul class="break" id="breakList"><li><span data-i18n="breakEmpty">Nothing to calculate yet.</span><b>—</b></li></ul>
+        </div>
+
+        <div>
+          <p class="seg-label" data-i18n="rulesHead">Accrual &amp; expiry</p>
+          <ul class="kv" id="rulesList">
+            <li><span data-i18n="rAccrue">Next accrual</span><b>—</b></li>
+            <li><span data-i18n="rExpire">Expires</span><b>—</b></li>
+            <li><span data-i18n="rCarry">Unused leave</span><b data-i18n="rCarryVal">lapses after 1 year</b></li>
+          </ul>
+        </div>
+
+        <p class="caveat" data-i18n-html="caveat">Baseline under the Labor Standards Act for a workplace with <b>5 or more employees</b>, assuming full attendance. Your contract, rules of employment or a calendar-year scheme can give more or round differently — the company figure wins.</p>
+      </div>
+
+      <!-- summary rail -->
+      <aside class="side">
+        <div class="card panel">
+          <h3 data-i18n="sumHead">Your leave plan</h3>
+          <div class="meter-row"><span data-i18n="sumAvail">Available</span><span><b id="availDays">—</b> <span id="unitAvail" data-i18n="dayUnit2">days</span></span></div>
+          <div class="meter" aria-hidden="true"><i id="meterFill"></i></div>
+          <div class="meter-row"><span data-i18n="sumPlanned">Planned</span><b><span id="spentDays">0</span> <span id="unitSpent" data-i18n="dayUnit2">days</span></b></div>
+          <div class="meter-row"><span data-i18n="sumOff">Days off</span><b><span id="offDays">0</span> <span id="unitOff" data-i18n="dayUnit2">days</span></b></div>
+          <ul class="sel-list" id="selList"></ul>
+          <p class="sel-empty" id="selEmpty" data-i18n="selEmpty">Nothing picked yet. Add a window below.</p>
+          <button class="btn btn--primary btn--block" id="copyBtn" type="button" data-i18n="copyBtn">Copy summary</button>
+          <div class="row2" style="display:flex;gap:8px">
+            <button class="btn btn--ghost btn--sm" id="clearBtn" type="button" data-i18n="clearBtn" style="flex:1">Clear all</button>
+            <button class="btn btn--ghost btn--sm" id="jumpBtn" type="button" data-i18n="jumpBtn" style="flex:1">Find windows</button>
+          </div>
+          <p class="status" id="status" role="status" aria-live="polite"></p>
+        </div>
+      </aside>
+    </section>
+
+    <!-- ══════════ planner ══════════ -->
+    <section class="section" id="planner" aria-labelledby="plannerTitle">
+      <div class="sec-head">
+        <h2 id="plannerTitle" data-i18n="plannerTitle">Golden week planner</h2>
+        <span data-i18n="plannerNote">1–3 leave days → 4–9 days off</span>
+      </div>
+      <div class="filters">
+        <div class="chips" id="yearFilter" role="group" aria-label="Year" data-i18n-aria="yearAria">
+          <button type="button" data-year="all" aria-pressed="true" data-i18n="yAll">All</button>
+          <button type="button" data-year="2026" aria-pressed="false">2026</button>
+          <button type="button" data-year="2027" aria-pressed="false">2027</button>
+        </div>
+        <div class="chips" id="costFilter" role="group" aria-label="Leave days" data-i18n-aria="costAria">
+          <button type="button" data-cost="all" aria-pressed="true" data-i18n="cAll">Any cost</button>
+          <button type="button" data-cost="1" aria-pressed="false" data-i18n="cOne">1 day</button>
+          <button type="button" data-cost="2" aria-pressed="false" data-i18n="cTwo">2 days</button>
+          <button type="button" data-cost="3" aria-pressed="false" data-i18n="cThree">3 days</button>
+        </div>
+        <span class="grow"></span>
+        <button class="btn btn--ghost btn--sm" id="moreBtn" type="button" data-i18n="moreBtn">Show all</button>
+      </div>
+      <div class="plan-grid" id="plans" aria-live="polite"></div>
+    </section>
+
+    <!-- ══════════ holidays ══════════ -->
+    <section class="section" id="holidays" aria-labelledby="holTitle">
+      <div class="sec-head">
+        <h2 id="holTitle" data-i18n="holTitle">2026–2027 public holidays</h2>
+        <span data-i18n="holNote">Substitute holidays included</span>
+      </div>
+      <div class="hol-wrap" id="holWrap"></div>
+    </section>
+
+    <section class="section" aria-labelledby="howTitle">
+      <div class="sec-head">
+        <h2 id="howTitle" data-i18n="howTitle">How it works</h2>
+        <span data-i18n="howNote">Three things worth knowing</span>
+      </div>
+      <div class="notes">
+        <div class="note">
+          <h3><span>01</span> <span class="t" data-i18n="n1h">The law, not a calendar trick</span></h3>
+          <p data-i18n-html="n1p">In the first year it is <b>one day per month of full attendance, up to 11</b>. From the one-year anniversary it becomes <b>15 days</b>, and from the third year <b>one more day for every two years</b> beyond the first, up to 25. This tool counts from your hire date, not from January.</p>
+        </div>
+        <div class="note">
+          <h3><span>02</span> <span class="t" data-i18n="n2h">Unused leave has a deadline</span></h3>
+          <p data-i18n-html="n2p">Leave generally lapses <b>one year after it accrues</b>, so the last day to use it is the day before your next anniversary — or 31 December under a calendar-year scheme. If the leave could not be used because of the employer, it carries over or is paid out instead.</p>
+        </div>
+        <div class="note">
+          <h3><span>03</span> <span class="t" data-i18n="n3h">Holidays are the official list</span></h3>
+          <p data-i18n-html="n3p">The built-in data follows the <b>Regulation on Public Holidays of Public Offices</b> as amended on 30 April 2026 — including Labour Day (1 May) and Constitution Day (17 July), new that year — and the substitute-holiday rule that moves a weekend holiday to the next free weekday. Temporary holidays are not included.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="faqTitle">
+      <div class="sec-head">
+        <h2 id="faqTitle" data-i18n="faqTitle">Questions</h2>
+        <span data-i18n="faqNote">Straight answers</span>
+      </div>
+      <div class="faq">
+        <details class="qa">
+          <summary data-i18n="q1">Will this match the number my company gives me?</summary>
+          <div class="a" data-i18n-html="a1">It matches the statutory default. Companies may use a <b>calendar-year basis</b>, prorate a partial first year, round fractions differently, or grant more in their rules of employment. Use this as the floor the law guarantees, then check your contract — where the two differ, the company's obligation is the better of the two.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q2">Why only 11 days in the first year?</summary>
+          <div class="a" data-i18n-html="a2">Article 60(2) gives <b>one paid day for each month of full attendance</b> in the first year, which reaches 11 before the anniversary. On the anniversary the 15-day entitlement of Article 60(1) starts fresh, so the two are never added together.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q3">How are substitute holidays treated?</summary>
+          <div class="a" data-i18n-html="a3">When a holiday overlaps a Saturday, a Sunday or another holiday, it moves to the next non-holiday. <b>New Year's Day and Memorial Day never move.</b> The planner counts those moved days as free time, which is why some windows reach nine days without a single leave day in the middle.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q4">Does my hire date leave the browser?</summary>
+          <div class="a" data-i18n-html="a4">No. The calculation runs in this tab, nothing is stored on a server, and the counters in the header and footer read the page's own network activity. There is no endpoint to send a date to.</div>
+        </details>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <span data-i18n="footCopy">© 2026 Kim Yihyung · Built in the browser, for the browser.</span>
+      <span class="foot-links">
+        <a href="/portfolio/" data-i18n="footP1">Portfolio</a>
+        <a href="/portfolio/tools/" data-i18n="footP2">All tools</a>
+      </span>
+      <span class="net"><span data-i18n="netLabel">external requests by this page</span>: <b id="netCount">0</b></span>
+    </footer>
+  </main>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ═════════════════════ 사전 ═════════════════════ */
+  var I18N = {
+    en: {
+      docTitle: 'DayOff — Korean Annual Leave & Golden Week Planner | Kim Yihyung',
+      brandAria: 'Kim Yihyung — portfolio',
+      back: '← All tools',
+      eyebrow: 'DayOff · Korean leave · zero upload',
+      h1: 'Count the days you have.<br><span class="soft">Then spend them well.</span><br><span class="gold">Every bridge in 2026–2027.</span>',
+      lede: 'Your annual leave by the <strong>Korean Labor Standards Act</strong>, and every stretch where <strong>1–3 leave days turn into 4–9 days off</strong> — weekends, substitute holidays and all. Typed into this tab, calculated in this tab, sent nowhere.',
+      pillUp: '0 bytes uploaded', pillNet: '0 external requests',
+      pillLaw: 'Labor Standards Act §60', pillYears: '2026–2027',
+      calcAria: 'Annual leave calculator',
+      calcTitle: 'Annual leave calculator', calcNote: 'full attendance assumed',
+      hireLabel: 'Hire date', baseLabel: 'As of', usedLabel: 'Used (days)',
+      modeLabel: 'Accrual basis', modeHire: 'Hire anniversary', modeFiscal: 'Calendar year (Jan 1)',
+      dayUnit: ' days', dayUnit2: 'days',
+      resEmpty: 'Enter a hire date to calculate.',
+      resUnder1: '{m} full months since {hire} · monthly leave',
+      resOne: '{y} years of service as of {base}',
+      resOneOne: '{y} year of service as of {base}',      resFiscal: 'Calendar-year basis · accrued 1 Jan {y}',
+      resProrated: 'Prorated first year: {d} of 365 days',
+      breakEmpty: 'Nothing to calculate yet.',
+      bMonthly: 'Monthly leave (1 per full month)',
+      bBase: 'Base entitlement after 1 year',
+      bAdd: 'Increment (every 2 years past year 1)',
+      bCap: 'Statutory cap',
+      bProrate: 'Prorated for the first calendar year',
+      bTotal: 'Total',
+      rulesHead: 'Accrual & expiry',
+      rAccrue: 'Next accrual', rExpire: 'Expires to use by',
+      rCarry: 'Unused leave', rCarryVal: 'lapses after 1 year',
+      rMonthlyLimit: 'use before the 1-year mark',
+      rFiscalAccrue: 'Every 1 January', rFiscalExpire: '31 December each year',
+      caveat: 'Baseline under the Labor Standards Act for a workplace with <b>5 or more employees</b>, assuming full attendance. Your contract, rules of employment or a calendar-year scheme can give more or round differently — the company figure wins.',
+      sumHead: 'Your leave plan',
+      sumAvail: 'Available', sumPlanned: 'Leave committed', sumOff: 'Consecutive days off',
+      selEmpty: 'Nothing picked yet. Add a window below.',
+      copyBtn: 'Copy summary', clearBtn: 'Clear all', jumpBtn: 'Find windows',
+      plannerTitle: 'Golden week planner', plannerNote: '1–3 leave days → 4–9 days off',
+      yearAria: 'Year', costAria: 'Leave days', yAll: 'All', cAll: 'Any cost',
+      cOne: '1 day', cTwo: '2 days', cThree: '3 days',
+      moreBtn: 'Show more ({n}/{total})',
+      effNote: 'days off per leave day',
+      holTitle: '2026–2027 public holidays', holNote: 'Substitute holidays included',
+      howTitle: 'How it works', howNote: 'Three things worth knowing',
+      n1h: 'The law, not a calendar trick',
+      n1p: 'In the first year it is <b>one day per month of full attendance, up to 11</b>. From the one-year anniversary it becomes <b>15 days</b>, and from the third year <b>one more day for every two years</b> beyond the first, up to 25. This tool counts from your hire date, not from January.',
+      n2h: 'Unused leave has a deadline',
+      n2p: 'Leave generally lapses <b>one year after it accrues</b>, so the last day to use it is the day before your next anniversary — or 31 December under a calendar-year scheme. If the leave could not be used because of the employer, it carries over or is paid out instead.',
+      n3h: 'Holidays are the official list',
+      n3p: 'The built-in data follows the <b>Regulation on Public Holidays of Public Offices</b> as amended on 30 April 2026 — including Labour Day (1 May) and Constitution Day (17 July), new that year — and the substitute-holiday rule that moves a weekend holiday to the next free weekday. Temporary holidays are not included.',
+      faqTitle: 'Questions', faqNote: 'Straight answers',
+      q1: 'Will this match the number my company gives me?',
+      a1: 'It matches the statutory default. Companies may use a <b>calendar-year basis</b>, prorate a partial first year, round fractions differently, or grant more in their rules of employment. Use this as the floor the law guarantees, then check your contract — where the two differ, the company\'s obligation is the better of the two.',
+      q2: 'Why only 11 days in the first year?',
+      a2: 'Article 60(2) gives <b>one paid day for each month of full attendance</b> in the first year, which reaches 11 before the anniversary. On the anniversary the 15-day entitlement of Article 60(1) starts fresh, so the two are never added together.',
+      q3: 'How are substitute holidays treated?',
+      a3: 'When a holiday overlaps a Saturday, a Sunday or another holiday, it moves to the next non-holiday. <b>New Year\'s Day and Memorial Day never move.</b> The planner counts those moved days as free time, which is why some windows reach nine days without a single leave day in the middle.',
+      q4: 'Does my hire date leave the browser?',
+      a4: 'No. The calculation runs in this tab, nothing is stored on a server, and the counters read the page\'s own network activity. There is no endpoint to send a date to.',
+      footCopy: '© 2026 Kim Yihyung · Built in the browser, for the browser.',
+      footP1: 'Portfolio', footP2: 'All tools',
+      netLabel: 'external requests by this page', toggleTo: '한국어로 보기',
+      /* dynamic */
+      leaveOne: '{c} leave day', leaveMany: '{c} leave days',
+      offOne: '{n} day off', offMany: '{n} days off',
+      planRange: '{a} – {b}', planLeave: 'Leave to book: {d}',
+      addBtn: 'Add to plan', addedBtn: 'In plan', removeBtn: 'Remove',
+      noPlans: 'No window matches these filters.',
+      stAdded: 'Added — {n} left to spend.',
+      stDup: 'Already in your plan.',
+      stFull: 'Not enough leave left for this window ({need} day(s) needed).',
+      stCleared: 'Plan cleared.',
+      stCopied: 'Summary copied to the clipboard.',
+      stCopyFail: 'The clipboard was refused — select the text instead.',
+      stOrder: 'The hire date must be before the as-of date.',
+      stNoHire: 'Add a hire date first, then pick a window.',
+      sumHeader: 'DayOff — leave summary',
+      sumHire: 'Hire date', sumBase: 'As of', sumDays: 'Annual leave', sumNext: 'Next accrual', sumExp: 'Use by',
+      sumPlannedHead: 'Planned windows', sumTotals: 'Total: {c} day(s) of leave → {n} day(s) off',
+      sumFoot: 'Reference only, official public holidays; your company rules come first.',
+      wd: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+      md: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+      holCount: '{n} days'
+    },
+    ko: {
+      docTitle: 'DayOff — 연차 계산기 & 황금연휴 플래너 | Kim Yihyung',
+      brandAria: '김미형 — 포트폴리오',
+      back: '← 도구 전체',
+      eyebrow: 'DayOff · 한국 연차 · 업로드 0',
+      h1: '내가 쓸 수 있는 날을<br><span class="soft">정확히 세고,</span><br><span class="gold">가장 긴 연휴에 씁니다.</span>',
+      lede: '<strong>근로기준법 제60조</strong> 기준으로 내 연차 일수를 계산하고, 주말·대체공휴일까지 붙여 <strong>연차 1~3일로 4~9일을 쉬는 구간</strong>을 2026~2027년 전체에서 찾습니다. 입력한 날짜는 이 탭을 떠나지 않습니다.',
+      pillUp: '업로드 0바이트', pillNet: '외부 요청 0건',
+      pillLaw: '근로기준법 제60조', pillYears: '2026–2027',
+      calcAria: '연차 계산기',
+      calcTitle: '연차 계산기', calcNote: '개근 가정',
+      hireLabel: '입사일', baseLabel: '기준일', usedLabel: '사용한 연차',
+      modeLabel: '산정 방식', modeHire: '입사일 기준', modeFiscal: '회계연도 기준(1/1)',
+      dayUnit: '일', dayUnit2: '일',
+      resEmpty: '입사일을 넣으면 바로 계산됩니다.',
+      resUnder1: '{hire}부터 {m}개월 개근 · 월차',
+      resOne: '{base} 기준 근속 {y}년',
+      resOneOne: '{base} 기준 근속 1년',
+      resFiscal: '회계연도 기준 · {y}년 1월 1일 발생',
+      resProrated: '입사 첫해 비례: 365일 중 {d}일',
+      breakEmpty: '아직 계산된 값이 없습니다.',
+      bMonthly: '월차 (1개월 개근당 1일)',
+      bBase: '1년 이상 기본 연차',
+      bAdd: '가산 (최초 1년 초과 2년마다 1일)',
+      bCap: '법정 상한',
+      bProrate: '입사 첫해 비례 적용',
+      bTotal: '합계',
+      rulesHead: '발생과 소멸',
+      rAccrue: '다음 발생일', rExpire: '사용 기한',
+      rCarry: '미사용 연차', rCarryVal: '발생 1년 뒤 소멸',
+      rMonthlyLimit: '입사 1년까지 사용',
+      rFiscalAccrue: '매년 1월 1일', rFiscalExpire: '매년 12월 31일',
+      caveat: '상시 근로자 <b>5인 이상</b> 사업장의 근로기준법 기준값이며 개근을 가정합니다. 근로계약·취업규칙·회계연도 방식에 따라 더 많거나 소수점 처리가 다를 수 있으니, 실제로는 회사 기준이 우선입니다.',
+      sumHead: '내 연차 계획',
+      sumAvail: '사용 가능', sumPlanned: '계획에 쓴 연차', sumOff: '연속 휴무',
+      selEmpty: '아직 담은 구간이 없습니다. 아래에서 골라 보세요.',
+      copyBtn: '요약 복사', clearBtn: '전체 해제', jumpBtn: '구간 찾기',
+      plannerTitle: '황금연휴 플래너', plannerNote: '연차 1~3일 → 4~9일 휴무',
+      yearAria: '연도', costAria: '연차 일수', yAll: '전체', cAll: '모든 비용',
+      cOne: '1일', cTwo: '2일', cThree: '3일',
+      moreBtn: '더 보기 ({n}/{total})',
+      effNote: '연차 1일당 휴무일',
+      holTitle: '2026–2027 공휴일', holNote: '대체공휴일 포함',
+      howTitle: '이렇게 계산합니다', howNote: '알아 두면 좋은 세 가지',
+      n1h: '달력이 아니라 법으로',
+      n1p: '1년 미만은 <b>1개월 개근마다 1일, 최대 11일</b>. 입사 1년이 되면 <b>15일</b>이 발생하고, 3년차부터는 <b>최초 1년을 초과한 기간이 2년 늘 때마다 1일</b>씩 더해져 최대 25일이 됩니다. 1월 1일이 아니라 입사일에서 셉니다.',
+      n2h: '연차에도 기한이 있습니다',
+      n2p: '연차는 보통 <b>발생한 날부터 1년</b>이 지나면 소멸하므로, 다음 발생일 하루 전까지가 사용 기한입니다. 회계연도 기준이면 12월 31일까지입니다. 회사 사정으로 쓰지 못했다면 이월되거나 보상되어야 합니다.',
+      n3h: '공휴일은 법정 목록 그대로',
+      n3p: '2026년 4월 30일 개정된 <b>「관공서의 공휴일에 관한 규정」</b>을 반영했습니다. 그해 새로 들어온 <b>노동절(5/1)</b>과 <b>제헌절(7/17)</b>, 그리고 주말·공휴일과 겹치면 다음 평일로 옮기는 대체공휴일 규칙까지 포함합니다. 정부가 따로 정하는 임시공휴일은 들어 있지 않습니다.',
+      faqTitle: '자주 묻는 질문', faqNote: '짧고 정확하게',
+      q1: '회사에서 주는 일수와 같게 나오나요?',
+      a1: '법정 기본값과 같습니다. 다만 회사가 <b>회계연도 기준</b>을 쓰거나, 첫해를 비례로 계산하거나, 소수점을 다르게 처리하거나, 취업규칙으로 더 줄 수도 있습니다. 법이 보장하는 최소선으로 보고 근로계약을 확인하세요. 둘이 다르면 근로자에게 유리한 쪽이 적용됩니다.',
+      q2: '1년 미만인데 왜 11일인가요?',
+      a2: '제60조 제2항이 1년 미만 근로자에게 <b>1개월 개근마다 1일</b>을 주기 때문에, 1년이 되기 전까지 최대 11일이 쌓입니다. 1년이 되는 날부터는 제60조 제1항의 15일이 새로 발생하며 두 개를 더하지는 않습니다.',
+      q3: '대체공휴일은 어떻게 반영되나요?',
+      a3: '공휴일이 토요일·일요일이나 다른 공휴일과 겹치면 다음 비공휴일로 옮겨집니다. <b>신정과 현충일은 옮겨지지 않습니다.</b> 플래너는 이렇게 옮겨진 날도 휴무로 세기 때문에, 중간에 연차를 하나도 쓰지 않고 9일이 되는 구간이 나옵니다.',
+      q4: '입사일이 어디로 전송되나요?',
+      a4: '아니요. 계산은 이 탭 안에서만 이루어지고 서버에 저장하지 않습니다. 화면 위아래의 숫자는 이 페이지가 실제로 만든 외부 요청 수를 그대로 읽은 값입니다.',
+      footCopy: '© 2026 Kim Yihyung · 브라우저 안에서, 브라우저를 위해.',
+      footP1: '포트폴리오', footP2: '도구 전체',
+      netLabel: '이 페이지가 만든 외부 요청', toggleTo: 'View in English',
+      /* dynamic */
+      leaveOne: '연차 {c}일', leaveMany: '연차 {c}일',
+      offOne: '{n}일 휴무', offMany: '{n}일 휴무',
+      planRange: '{a} ~ {b}', planLeave: '연차: {d}',
+      addBtn: '계획에 담기', addedBtn: '담김', removeBtn: '빼기',
+      noPlans: '이 조건에 맞는 구간이 없습니다.',
+      stAdded: '담았습니다. 남은 연차 {n}.',
+      stDup: '이미 계획에 있습니다.',
+      stFull: '남은 연차가 모자랍니다 (이 구간에 {need}일 필요).',
+      stCleared: '계획을 비웠습니다.',
+      stCopied: '요약을 클립보드에 복사했습니다.',
+      stCopyFail: '클립보드가 거부되었습니다. 화면에서 직접 선택해 복사해 주세요.',
+      stOrder: '입사일이 기준일보다 앞서야 합니다.',
+      stNoHire: '먼저 입사일을 넣고 구간을 고르세요.',
+      sumHeader: 'DayOff — 연차 요약',
+      sumHire: '입사일', sumBase: '기준일', sumDays: '발생 연차', sumNext: '다음 발생', sumExp: '사용 기한',
+      sumPlannedHead: '계획한 구간', sumTotals: '합계: 연차 {c}일로 {n}일 휴무',
+      sumFoot: '관공서 공휴일 기준 참고용입니다. 회사 규정이 우선합니다.',
+      wd: ['일','월','화','수','목','금','토'],
+      md: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+      holCount: '{n}일'
+    }
+  };
+
+  /* ═════════════════════ 공휴일 데이터 ═════════════════════ */
+  /* 「관공서의 공휴일에 관한 규정」 (2026.4.30 개정, 시행 2026.5.11)
+     · 2026년부터 노동절(5/1)·제헌절(7/17) 공휴일
+     · 대체공휴일: 국경일·부처님오신날·노동절·어린이날·성탄절이 토·일과 겹칠 때,
+       설·추석 연휴가 일요일과 겹칠 때, 공휴일끼리 겹칠 때 → 다음 첫 비공휴일
+     · 신정·현충일은 대체 없음
+     · 임시공휴일은 미포함 (2026-06-03 지방선거일은 확정된 임기만료 선거일) */
+  var HOLIDAYS = [
+    { d: '2026-01-01', k: 'newyear' },
+    { d: '2026-02-16', k: 'seollal' },
+    { d: '2026-02-17', k: 'seollal' },
+    { d: '2026-02-18', k: 'seollal' },
+    { d: '2026-03-01', k: 'mar1' },
+    { d: '2026-03-02', k: 'mar1', sub: true },
+    { d: '2026-05-01', k: 'labor' },
+    { d: '2026-05-05', k: 'children' },
+    { d: '2026-05-24', k: 'buddha' },
+    { d: '2026-05-25', k: 'buddha', sub: true },
+    { d: '2026-06-03', k: 'election' },
+    { d: '2026-06-06', k: 'memorial' },
+    { d: '2026-07-17', k: 'constitution' },
+    { d: '2026-08-15', k: 'liberation' },
+    { d: '2026-08-17', k: 'liberation', sub: true },
+    { d: '2026-09-24', k: 'chuseok' },
+    { d: '2026-09-25', k: 'chuseok' },
+    { d: '2026-09-26', k: 'chuseok' },
+    { d: '2026-10-03', k: 'gaecheon' },
+    { d: '2026-10-05', k: 'gaecheon', sub: true },
+    { d: '2026-10-09', k: 'hangeul' },
+    { d: '2026-12-25', k: 'christmas' },
+    { d: '2027-01-01', k: 'newyear' },
+    { d: '2027-02-06', k: 'seollal' },
+    { d: '2027-02-07', k: 'seollal' },
+    { d: '2027-02-08', k: 'seollal' },
+    { d: '2027-02-09', k: 'seollal', sub: true },
+    { d: '2027-03-01', k: 'mar1' },
+    { d: '2027-05-01', k: 'labor' },
+    { d: '2027-05-03', k: 'labor', sub: true },
+    { d: '2027-05-05', k: 'children' },
+    { d: '2027-05-13', k: 'buddha' },
+    { d: '2027-06-06', k: 'memorial' },
+    { d: '2027-07-17', k: 'constitution' },
+    { d: '2027-07-19', k: 'constitution', sub: true },
+    { d: '2027-08-15', k: 'liberation' },
+    { d: '2027-08-16', k: 'liberation', sub: true },
+    { d: '2027-09-14', k: 'chuseok' },
+    { d: '2027-09-15', k: 'chuseok' },
+    { d: '2027-09-16', k: 'chuseok' },
+    { d: '2027-10-03', k: 'gaecheon' },
+    { d: '2027-10-04', k: 'gaecheon', sub: true },
+    { d: '2027-10-09', k: 'hangeul' },
+    { d: '2027-10-11', k: 'hangeul', sub: true },
+    { d: '2027-12-25', k: 'christmas' },
+    { d: '2027-12-27', k: 'christmas', sub: true }
+  ];
+
+  var HNAME = {
+    newyear: { ko: '신정', en: "New Year's Day" },
+    seollal: { ko: '설날 연휴', en: 'Seollal' },
+    mar1: { ko: '삼일절', en: 'Independence Movement Day' },
+    labor: { ko: '노동절', en: 'Labour Day' },
+    children: { ko: '어린이날', en: "Children's Day" },
+    buddha: { ko: '부처님오신날', en: "Buddha's Birthday" },
+    election: { ko: '전국동시지방선거일', en: 'Local Election Day' },
+    memorial: { ko: '현충일', en: 'Memorial Day' },
+    constitution: { ko: '제헌절', en: 'Constitution Day' },
+    liberation: { ko: '광복절', en: 'Liberation Day' },
+    chuseok: { ko: '추석 연휴', en: 'Chuseok' },
+    gaecheon: { ko: '개천절', en: 'National Foundation Day' },
+    hangeul: { ko: '한글날', en: 'Hangeul Day' },
+    christmas: { ko: '기독탄신일', en: 'Christmas' }
+  };
+
+  var LANG_KEY = 'dayoff.lang';
+  var SHARED_KEY = 'kyh.lang';
+
+  var state = {
+    lang: 'en', mode: 'hire', year: 'all', cost: 'all', limit: 9,
+    hire: '', base: '', used: 0,
+    calc: null, plans: [], selected: [],
+    balance: 0
+  };
+
+  function $(id) { return document.getElementById(id); }
+  function t(key) {
+    var d = I18N[state.lang] || I18N.en;
+    if (d[key] != null) return d[key];
+    return I18N.en[key] != null ? I18N.en[key] : '';
+  }
+  function fmt(str, vars) {
+    return String(str).replace(/\{(\w+)\}/g, function (m, k) {
+      return vars && vars[k] != null ? vars[k] : m;
+    });
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+  function readLang(key) {
+    try { var v = localStorage.getItem(key); return v === 'ko' || v === 'en' ? v : ''; } catch (e) { return ''; }
+  }
+  function initialLang() {
+    var q = '';
+    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
+    if (q === 'ko' || q === 'en') return q;
+    if (readLang(SHARED_KEY)) return readLang(SHARED_KEY);
+    if (readLang(LANG_KEY)) return readLang(LANG_KEY);
+    var nav = (navigator.language || '').toLowerCase();
+    return nav.indexOf('ko') === 0 ? 'ko' : 'en';
+  }
+
+  /* ═════════════════════ 날짜 유틸 (UTC 기준) ═════════════════════ */
+  function D(y, m, d) { return new Date(Date.UTC(y, m - 1, d)); }
+  function parseISO(s) {
+    var p = String(s).split('-');
+    return D(+p[0], +p[1], +p[2]);
+  }
+  function iso(dt) {
+    var y = dt.getUTCFullYear(), m = dt.getUTCMonth() + 1, d = dt.getUTCDate();
+    return y + '-' + (m < 10 ? '0' + m : m) + '-' + (d < 10 ? '0' + d : d);
+  }
+  function addDays(dt, n) { return new Date(dt.getTime() + n * 86400000); }
+  function todayISO() {
+    var n = new Date();
+    return iso(D(n.getFullYear(), n.getMonth() + 1, n.getDate()));
+  }
+  function ageInYears(hire, base) {
+    var y = base.getUTCFullYear() - hire.getUTCFullYear();
+    var anniv = D(hire.getUTCFullYear() + y, hire.getUTCMonth() + 1, hire.getUTCDate());
+    if (anniv.getTime() > base.getTime()) y--;
+    return y;
+  }
+  function fullMonths(hire, base) {
+    var m = (base.getUTCFullYear() - hire.getUTCFullYear()) * 12 + (base.getUTCMonth() - hire.getUTCMonth());
+    if (base.getUTCDate() < hire.getUTCDate()) m--;
+    return Math.max(0, m);
+  }
+  function dstr(s) {
+    var dt = parseISO(s);
+    var md = t('md');
+    if (state.lang === 'ko') {
+      return (dt.getUTCMonth() + 1) + '/' + dt.getUTCDate() + '(' + t('wd')[dt.getUTCDay()] + ')';
+    }
+    return md[dt.getUTCMonth()] + ' ' + dt.getUTCDate() + ' (' + t('wd')[dt.getUTCDay()] + ')';
+  }
+  function dfull(s) {
+    var dt = parseISO(s);
+    if (state.lang === 'ko') return dt.getUTCFullYear() + '년 ' + (dt.getUTCMonth() + 1) + '월 ' + dt.getUTCDate() + '일';
+    return t('md')[dt.getUTCMonth()] + ' ' + dt.getUTCDate() + ', ' + dt.getUTCFullYear();
+  }
+  function dfullShort(s) {
+    var dt = parseISO(s);
+    if (state.lang === 'ko') return dt.getUTCFullYear() + '.' + (dt.getUTCMonth() + 1) + '.' + dt.getUTCDate();
+    return t('md')[dt.getUTCMonth()] + ' ' + dt.getUTCDate() + ', ' + dt.getUTCFullYear();
+  }
+
+  /* ═════════════════════ 연차 계산 ═════════════════════ */
+  function entitlement(years) {
+    return Math.min(25, 15 + Math.max(0, Math.floor((years - 1) / 2)));
+  }
+
+  function computeLeave(hireISO, baseISO, mode) {
+    if (!hireISO || !baseISO) return null;
+    var hire = parseISO(hireISO), base = parseISO(baseISO);
+    if (base.getTime() < hire.getTime()) return { err: 'order' };
+
+    var yrs = ageInYears(hire, base);
+    var oneYear = D(hire.getUTCFullYear() + 1, hire.getUTCMonth() + 1, hire.getUTCDate());
+    var monthly = 0, days = 0, parts = [], prorated = null, nextAccrual = null, expiry = null;
+
+    if (mode === 'fiscal') {
+      var cy = base.getUTCFullYear();
+      var ent = entitlement(Math.max(yrs, 0));
+      var baseEnt = yrs >= 1 ? ent : 15;
+      if (hire.getUTCFullYear() === cy && base.getTime() < oneYear.getTime() + 0) {
+        /* 첫 회계연도: 입사일~12/31 비례 */
+        var yearEnd = D(cy, 12, 31);
+        var worked = Math.round((yearEnd.getTime() - hire.getTime()) / 86400000) + 1;
+        var ratio = Math.min(1, worked / 365);
+        days = Math.round(baseEnt * ratio * 10) / 10;
+        parts.push({ k: 'bBase', n: baseEnt });
+        prorated = { worked: worked, days: days };
+        parts.push({ k: 'bProrate', r: ratio });
+      } else {
+        days = baseEnt;
+        parts.push({ k: 'bBase', n: 15 });
+        var addF = Math.min(10, Math.max(0, Math.floor((yrs - 1) / 2)));
+        if (addF > 0) parts.push({ k: 'bAdd', n: addF });
+      }
+      if (days > 25) days = 25;
+      nextAccrual = D(cy + 1, 1, 1);
+      expiry = D(cy, 12, 31);
+    } else {
+      if (yrs >= 1) {
+        var add = Math.min(10, Math.max(0, Math.floor((yrs - 1) / 2)));
+        days = 15 + add;
+        parts.push({ k: 'bBase', n: 15 });
+        if (add > 0) parts.push({ k: 'bAdd', n: add });
+        nextAccrual = D(hire.getUTCFullYear() + yrs + 1, hire.getUTCMonth() + 1, hire.getUTCDate());
+        expiry = addDays(nextAccrual, -1);
+      } else {
+        var months = Math.min(11, fullMonths(hire, base));
+        monthly = months;
+        days = months;
+        parts.push({ k: 'bMonthly', n: months });
+        nextAccrual = oneYear;
+        expiry = oneYear;
+      }
+    }
+
+    parts.push({ k: 'bTotal', n: Math.round(days * 10) / 10 });
+
+    return {
+      days: Math.round(days * 10) / 10,
+      yrs: yrs, monthly: monthly, parts: parts, prorated: prorated,
+      nextAccrual: nextAccrual ? iso(nextAccrual) : null,
+      expiry: expiry ? iso(expiry) : null,
+      mode: mode, hire: hireISO, base: baseISO,
+      under1: yrs < 1
+    };
+  }
+
+  /* ═════════════════════ 황금연휴 계산 ═════════════════════ */
+  var HOLMAP = null;
+  function holMap() {
+    if (HOLMAP) return HOLMAP;
+    HOLMAP = {};
+    for (var i = 0; i < HOLIDAYS.length; i++) HOLMAP[HOLIDAYS[i].d] = HOLIDAYS[i];
+    return HOLMAP;
+  }
+
+  function dayList() {
+    var list = [], dt = D(2026, 1, 1), end = D(2027, 12, 31), map = holMap();
+    while (dt.getTime() <= end.getTime()) {
+      var s = iso(dt), w = dt.getUTCDay(), h = map[s] || null;
+      list.push({ iso: s, off: w === 0 || w === 6 || !!h, h: h });
+      dt = addDays(dt, 1);
+    }
+    return list;
+  }
+
+  function holidayNames(list, a, b) {
+    var keys = [], i, k;
+    for (i = a; i <= b; i++) {
+      if (list[i].h && !list[i].h.sub) {
+        k = list[i].h.k;
+        if (keys.indexOf(k) < 0) keys.push(k);
+      }
+    }
+    return keys;
+  }
+
+  function buildPlans() {
+    var list = dayList();
+    var runs = [], i = 0;
+    while (i < list.length) {
+      if (!list[i].off) { i++; continue; }
+      var s = i;
+      while (i < list.length && list[i].off) i++;
+      runs.push({ s: s, e: i - 1 });
+    }
+
+    var out = [], seen = {};
+    function pushPlan(st, en, cost) {
+      if (st < 0 || en >= list.length) return;
+      var span = en - st + 1;
+      if (span < 4 || span > 9 || cost < 1 || cost > 3) return;
+      var leave = [];
+      for (var q = st; q <= en; q++) if (!list[q].off) leave.push(list[q].iso);
+      if (leave.length !== cost) return;
+      var startISO = list[st].iso, endISO = list[en].iso;
+      var key = startISO + '~' + endISO;
+      if (seen[key]) return;
+      seen[key] = 1;
+      out.push({
+        key: key, start: startISO, end: endISO,
+        days: span, cost: cost, leave: leave,
+        names: holidayNames(list, st, en),
+        year: startISO.slice(0, 4)
+      });
+    }
+
+    /* ① 공휴일 구간 두 개를 연차로 잇는 경우 */
+    for (var a = 0; a < runs.length; a++) {
+      var cost = 0;
+      for (var b = a + 1; b < runs.length && b <= a + 2; b++) {
+        cost += runs[b].s - runs[b - 1].e - 1;
+        if (cost > 3) break;
+        if (cost < 1) continue;
+        pushPlan(runs[a].s, runs[b].e, cost);
+      }
+    }
+
+    /* ② 한쪽에만 연차를 붙이는 경우 (공휴일이 낀 구간만) */
+    for (a = 0; a < runs.length; a++) {
+      var runLen = runs[a].e - runs[a].s + 1;
+      var hasHol = false;
+      for (i = runs[a].s; i <= runs[a].e; i++) if (list[i].h) { hasHol = true; break; }
+      if (!hasHol) continue;
+      var cap = Math.min(3, 9 - runLen);
+      if (cap < 1) continue;
+      var entry = Math.max(1, 4 - runLen);
+      if (entry > cap) continue;
+      var gapBefore = a > 0 ? runs[a].s - runs[a - 1].e - 1 : 99;
+      var gapAfter = a < runs.length - 1 ? runs[a + 1].s - runs[a].e - 1 : 99;
+      var opts = entry === cap ? [entry] : [entry, cap];
+      for (var o = 0; o < opts.length; o++) {
+        var L = opts[o];
+        if (L < gapBefore) pushPlan(runs[a].s - L, runs[a].e, L);
+        if (L < gapAfter) pushPlan(runs[a].s, runs[a].e + L, L);
+      }
+    }
+
+    out.sort(function (x, y) {
+      var ex = x.days / x.cost, ey = y.days / y.cost;
+      if (ey !== ex) return ey - ex;
+      if (y.days !== x.days) return y.days - x.days;
+      return x.start < y.start ? -1 : 1;
+    });
+    return out;
+  }
+
+  function planName(p) {
+    if (!p.names.length) return state.lang === 'ko' ? '주말 연휴' : 'Weekend bridge';
+    var labels = p.names.map(function (k) { return HNAME[k] ? HNAME[k][state.lang] : k; });
+    return labels.slice(0, 2).join(state.lang === 'ko' ? ' + ' : ' + ');
+  }
+
+  /* ═════════════════════ 화면 그리기 ═════════════════════ */
+  function paintCalc() {
+    var calc = state.calc;
+    var big = $('bigDays'), unit = $('bigUnit'), sub = $('resSub'), note = $('resNote');
+    var bList = $('breakList'), rList = $('rulesList');
+    var availEl = $('availDays');
+
+    if (!calc) {
+      big.innerHTML = '—' + '<small id="bigUnit">' + esc(t('dayUnit')) + '</small>';
+      sub.textContent = t('resEmpty');
+      note.hidden = true;
+      bList.innerHTML = '<li><span>' + esc(t('breakEmpty')) + '</span><b>—</b></li>';
+      rList.innerHTML = '<li><span>' + esc(t('rAccrue')) + '</span><b>—</b></li>' +
+                        '<li><span>' + esc(t('rExpire')) + '</span><b>—</b></li>' +
+                        '<li><span>' + esc(t('rCarry')) + '</span><b>' + esc(t('rCarryVal')) + '</b></li>';
+      if (availEl) availEl.textContent = '—';
+      state.balance = 0;
+      paintSummary();
+      return;
+    }
+    if (calc.err) {
+      big.innerHTML = '—' + '<small id="bigUnit">' + esc(t('dayUnit')) + '</small>';
+      sub.textContent = t('stOrder');
+      note.hidden = true;
+      bList.innerHTML = '<li><span>' + esc(t('breakEmpty')) + '</span><b>—</b></li>';
+      rList.innerHTML = '<li><span>' + esc(t('rAccrue')) + '</span><b>—</b></li>' +
+                        '<li><span>' + esc(t('rExpire')) + '</span><b>—</b></li>';
+      state.balance = 0;
+      paintSummary();
+      return;
+    }
+
+    var dayTxt = calc.days === Math.floor(calc.days) ? String(calc.days) : calc.days.toFixed(1);
+    big.innerHTML = esc(dayTxt) + '<small id="bigUnit">' + esc(t('dayUnit')) + '</small>';
+
+    var line1 = '';
+    if (calc.mode === 'fiscal') {
+      line1 = fmt(t('resFiscal'), { y: calc.base.slice(0, 4) });
+    } else if (calc.under1) {
+      line1 = fmt(t('resUnder1'), { hire: dfullShort(calc.hire), m: calc.monthly });
+    } else {
+      line1 = fmt(calc.yrs === 1 ? t('resOneOne') : t('resOne'), { base: dfullShort(calc.base), y: calc.yrs });
+    }
+    sub.textContent = line1;
+    if (calc.prorated) {
+      note.hidden = false;
+      note.textContent = fmt(t('resProrated'), { d: calc.prorated.worked });
+    } else {
+      note.hidden = true;
+    }
+
+    var html = '', unit = state.lang === 'ko' ? '일' : ' days';
+    for (var i = 0; i < calc.parts.length; i++) {
+      var p = calc.parts[i];
+      var lbl = t(p.k);
+      var isTotal = p.k === 'bTotal';
+      var val = (p.r != null) ? '× ' + p.r.toFixed(2) : (p.n != null ? p.n + unit : '');
+      if (isTotal) lbl = t('bTotal');
+      html += '<li' + (isTotal ? ' style="border-top:1px solid rgba(255,255,255,.12);padding-top:6px;margin-top:2px"' : '') +
+              '><span>' + esc(lbl) + '</span><b style="color:' + (isTotal ? 'var(--accent)' : 'var(--ink)') + '">' +
+              esc(val) + '</b></li>';
+    }
+    bList.innerHTML = html;
+
+    var accrueTxt, expireTxt, carryTxt = t('rCarryVal');
+    if (calc.mode === 'fiscal') {
+      accrueTxt = dfullShort(calc.nextAccrual) + ' · ' + t('rFiscalAccrue');
+      expireTxt = dfullShort(calc.expiry) + ' · ' + t('rFiscalExpire');
+    } else if (calc.under1) {
+      accrueTxt = dfullShort(calc.nextAccrual);
+      expireTxt = dfullShort(calc.expiry);
+      carryTxt = t('rMonthlyLimit');
+    } else {
+      accrueTxt = dfullShort(calc.nextAccrual);
+      expireTxt = dfullShort(calc.expiry);
+    }
+    rList.innerHTML = '<li><span>' + esc(t('rAccrue')) + '</span><b>' + esc(accrueTxt) + '</b></li>' +
+                      '<li><span>' + esc(t('rExpire')) + '</span><b>' + esc(expireTxt) + '</b></li>' +
+                      '<li><span>' + esc(t('rCarry')) + '</span><b>' + esc(carryTxt) + '</b></li>';
+
+    var avail = Math.max(0, calc.days - state.used);
+    state.balance = Math.floor(avail * 2) / 2;
+    if (availEl) availEl.textContent = (state.balance === Math.floor(state.balance) ? String(state.balance) : state.balance.toFixed(1));
+    paintSummary();
+  }
+
+  function unit(n) { return state.lang === 'ko' ? '일' : (Number(n) === 1 ? 'day' : 'days'); }
+
+  function paintPlans() {
+    var box = $('plans');
+    var list = state.plans.filter(function (p) {
+      if (state.year !== 'all' && p.year !== state.year) return false;
+      if (state.cost !== 'all' && String(p.cost) !== String(state.cost)) return false;
+      return true;
+    });
+
+    var limit = Math.min(list.length, state.limit);
+    var shown = list.slice(0, limit);
+
+    if (!shown.length) {
+      box.innerHTML = '<p class="plan-empty">' + esc(t('noPlans')) + '</p>';
+      $('moreBtn').hidden = true;
+      return;
+    }
+
+    var spent = 0;
+    for (var s = 0; s < state.selected.length; s++) spent += state.selected[s].cost;
+
+    var html = '';
+    for (var i = 0; i < shown.length; i++) {
+      var p = shown[i];
+      var added = state.selected.some(function (x) { return x.key === p.key; });
+      var enough = state.balance - spent >= p.cost;
+      var leaveTxt = p.leave.map(function (d) { return dstr(d); }).join(', ');
+      var badge = p.cost === 1 ? t('leaveOne') : t('leaveMany');
+      badge = fmt(badge, { c: p.cost });
+      html += '<article class="plan' + (added ? ' is-added' : '') + '" data-key="' + esc(p.key) + '" data-start="' + p.start +
+              '" data-end="' + p.end + '" data-cost="' + p.cost + '" data-days="' + p.days + '">' +
+              '<div class="plan-top"><span class="plan-badge">' + esc(badge) + '</span>' +
+              '<span class="plan-eff" title="' + esc(t('effNote')) + '">×' + (Math.round(p.days / p.cost * 10) / 10).toFixed(1) + '</span></div>' +
+              '<div class="plan-days"><b>' + p.days + '</b><span>' + esc(state.lang === 'ko' ? '일 휴무' : 'days off') + '</span></div>' +
+              '<div class="plan-range">' + esc(dstr(p.start) + ' – ' + dstr(p.end)) + ' <span style="color:var(--muted2);font-weight:500;font-size:11.5px">' + p.start.slice(0, 4) + '</span></div>' +
+              '<div class="plan-name">' + esc(planName(p)) + '</div>' +
+              '<div class="plan-leave">' + esc(fmt(t('planLeave'), { d: leaveTxt })) + '</div>' +
+              '<button class="btn btn--sm' + (added ? ' btn--ghost' : '') + '" type="button" data-add="' + esc(p.key) + '"' +
+              (added || !enough ? ' disabled' : '') + '>' + esc(added ? t('addedBtn') : t('addBtn')) + '</button>' +
+              '</article>';
+    }
+    box.innerHTML = html;
+
+    var moreBtn = $('moreBtn');
+    moreBtn.hidden = list.length <= limit;
+    moreBtn.textContent = fmt(t('moreBtn'), { n: limit, total: list.length });
+  }
+
+  function paintSummary() {
+    var spent = 0, off = 0;
+    for (var i = 0; i < state.selected.length; i++) { spent += state.selected[i].cost; off += state.selected[i].days; }
+    $('spentDays').textContent = String(spent);
+    $('offDays').textContent = String(off);
+    $('unitAvail').textContent = unit(state.balance);
+    $('unitSpent').textContent = unit(spent);
+    $('unitOff').textContent = unit(off);
+    var pct = 0;
+    if (state.calc && state.calc.days > 0) pct = Math.min(100, spent / state.calc.days * 100);
+    $('meterFill').style.width = pct.toFixed(1) + '%';
+
+    var list = $('selList'), empty = $('selEmpty');
+    if (!state.selected.length) {
+      list.innerHTML = '';
+      empty.hidden = false;
+    } else {
+      empty.hidden = true;
+      var html = '';
+      for (i = 0; i < state.selected.length; i++) {
+        var p = state.selected[i];
+        html += '<li><span>' + esc(dstr(p.start) + ' – ' + dstr(p.end)) +
+                '<br><b>' + esc(fmt(p.cost === 1 ? t('leaveOne') : t('leaveMany'), { c: p.cost })) +
+                ' → ' + esc(fmt(t('offOne'), { n: p.days })) + '</b></span>' +
+                '<button type="button" data-del="' + esc(p.key) + '" aria-label="' + esc(t('removeBtn')) + '">×</button></li>';
+      }
+      list.innerHTML = html;
+    }
+    paintPlans();
+  }
+
+  function paintHolidays() {
+    var box = $('holWrap');
+    var years = ['2026', '2027'];
+    var html = '';
+    for (var y = 0; y < years.length; y++) {
+      var yr = years[y];
+      var rows = HOLIDAYS.filter(function (h) { return h.d.slice(0, 4) === yr; });
+      html += '<div class="hol-year"><h3>' + yr + ' <span>' + fmt(t('holCount'), { n: rows.length }) + '</span></h3><ul class="hol-list">';
+      for (var i = 0; i < rows.length; i++) {
+        var h = rows[i];
+        var nm = HNAME[h.k] ? HNAME[h.k][state.lang] : h.k;
+        var dt = parseISO(h.d);
+        var dateTxt = (dt.getUTCMonth() + 1) + '/' + dt.getUTCDate();
+        html += '<li><span class="d">' + dateTxt + ' (' + t('wd')[dt.getUTCDay()] + ')</span>' +
+                '<span class="n">' + esc(nm) + '</span>' +
+                '<span class="tag' + (h.sub ? ' is-sub' : '') + '">' + (h.sub ? (state.lang === 'ko' ? '대체' : 'SUB') : (state.lang === 'ko' ? '공휴일' : 'HOL')) + '</span></li>';
+      }
+      html += '</ul></div>';
+    }
+    box.innerHTML = html;
+  }
+
+  /* ═════════════════════ 네트워크 계측 ═════════════════════ */
+  var net = { ext: 0, bytes: 0 };
+  function isExternal(u) {
+    try {
+      var x = new URL(u, location.href);
+      if (x.protocol === 'blob:' || x.protocol === 'data:') return false;
+      return x.origin !== location.origin;
+    } catch (e) { return true; }
+  }
+  function paintNet() {
+    var n = $('netCount');
+    if (n) n.textContent = String(net.ext);
+    var p = document.querySelector('[data-i18n="pillUp"]');
+    var q = document.querySelector('[data-i18n="pillNet"]');
+    if (p) p.textContent = state.lang === 'ko' ? '업로드 ' + net.bytes + '바이트' : net.bytes + ' bytes uploaded';
+    if (q) q.textContent = state.lang === 'ko' ? '외부 요청 ' + net.ext + '건' : net.ext + ' external requests';
+  }
+  try {
+    var origFetch = window.fetch;
+    if (origFetch) {
+      window.fetch = function (input, init) {
+        var url = typeof input === 'string' ? input : (input && input.url) || '';
+        var body = init && init.body;
+        if (isExternal(url)) {
+          net.ext++;
+          if (body && body.size) net.bytes += body.size;
+          else if (typeof body === 'string') net.bytes += body.length;
+          paintNet();
+        }
+        return origFetch.apply(this, arguments);
+      };
+    }
+    var openXHR = XMLHttpRequest.prototype.open;
+    XMLHttpRequest.prototype.open = function (method, url) {
+      this.__ext = isExternal(url);
+      if (this.__ext) { net.ext++; paintNet(); }
+      return openXHR.apply(this, arguments);
+    };
+    var sendXHR = XMLHttpRequest.prototype.send;
+    XMLHttpRequest.prototype.send = function (body) {
+      if (this.__ext && body) {
+        if (body.size) net.bytes += body.size;
+        else if (typeof body === 'string') net.bytes += body.length;
+        paintNet();
+      }
+      return sendXHR.apply(this, arguments);
+    };
+    if ('PerformanceObserver' in window) {
+      try {
+        new PerformanceObserver(function (list) {
+          var entries = list.getEntries();
+          for (var i = 0; i < entries.length; i++) if (isExternal(entries[i].name)) net.ext++;
+          paintNet();
+        }).observe({ type: 'resource', buffered: true });
+      } catch (e) { /* buffered 미지원 */ }
+    }
+  } catch (e) { /* 계측 실패는 동작에 영향 없음 */ }
+
+  /* ═════════════════════ 언어 ═════════════════════ */
+  function applyLang(lang) {
+    state.lang = lang === 'ko' ? 'ko' : 'en';
+    document.documentElement.setAttribute('lang', state.lang);
+    document.title = t('docTitle');
+
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var v = t(nodes[i].getAttribute('data-i18n'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < nodes.length; i++) {
+      var vh = t(nodes[i].getAttribute('data-i18n-html'));
+      if (vh) nodes[i].innerHTML = vh;
+    }
+    nodes = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < nodes.length; i++) {
+      var va = t(nodes[i].getAttribute('data-i18n-aria'));
+      if (va) nodes[i].setAttribute('aria-label', va);
+    }
+
+    var lt = $('langToggle');
+    if (lt) {
+      var spans = lt.querySelectorAll('[data-lt]');
+      for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
+      lt.setAttribute('aria-label', t('toggleTo'));
+      lt.setAttribute('title', t('toggleTo'));
+    }
+    $('mode').setAttribute('aria-labelledby', 'modeLabel');
+
+    paintNet();
+    paintCalc();
+    paintHolidays();
+    paintPlans();
+    paintSummary();
+    try {
+      localStorage.setItem(LANG_KEY, state.lang);
+      localStorage.setItem(SHARED_KEY, state.lang);
+    } catch (e) { /* 저장 실패 무해 */ }
+  }
+
+  function status(msg, kind) {
+    var el = $('status');
+    el.textContent = msg || '';
+    el.className = 'status' + (kind ? ' is-' + kind : '');
+  }
+
+  /* ═════════════════════ 입력 처리 ═════════════════════ */
+  function recalc() {
+    var hire = $('hire').value, base = $('base').value;
+    state.hire = hire; state.base = base;
+    var used = parseFloat($('used').value);
+    state.used = isFinite(used) && used > 0 ? used : 0;
+
+    state.calc = (hire && base) ? computeLeave(hire, base, state.mode) : null;
+
+    /* 잔여가 줄면 계획에서 초과분 제거 */
+    if (state.calc && !state.calc.err) {
+      var cap = Math.floor((state.calc.days - state.used) * 2) / 2;
+      var spent = 0;
+      var keep = [];
+      for (var i = 0; i < state.selected.length; i++) {
+        if (spent + state.selected[i].cost <= cap) { keep.push(state.selected[i]); spent += state.selected[i].cost; }
+      }
+      state.selected = keep;
+    }
+    paintCalc();
+  }
+
+  function addPlan(key) {
+    var p = null;
+    for (var i = 0; i < state.plans.length; i++) if (state.plans[i].key === key) p = state.plans[i];
+    if (!p) return;
+    if (!state.calc || state.calc.err) { status(t('stNoHire'), 'warn'); return; }
+    if (state.selected.some(function (x) { return x.key === key; })) { status(t('stDup'), 'warn'); return; }
+    var spent = 0;
+    for (i = 0; i < state.selected.length; i++) spent += state.selected[i].cost;
+    if (state.balance - spent < p.cost) { status(fmt(t('stFull'), { need: p.cost }), 'warn'); return; }
+    state.selected.push(p);
+    paintSummary();
+    var left = state.balance - spent - p.cost;
+    status(fmt(t('stAdded'), { n: left + (state.lang === 'ko' ? '일' : ' ' + unit(left)) }), 'ok');
+  }
+
+  function copySummary() {
+    var calc = state.calc;
+    if (!calc || calc.err) { status(t('stNoHire'), 'warn'); return; }
+    var L = [];
+    L.push(t('sumHeader'));
+    L.push(t('sumHire') + ': ' + calc.hire + '  ' + t('sumBase') + ': ' + calc.base);
+    L.push(t('sumDays') + ': ' + calc.days + (state.lang === 'ko' ? '일' : ' days'));
+    L.push(t('sumNext') + ': ' + calc.nextAccrual + '  ' + t('sumExp') + ': ' + calc.expiry);
+    var spent = 0, off = 0;
+    if (state.selected.length) {
+      L.push('');
+      L.push(t('sumPlannedHead'));
+      for (var i = 0; i < state.selected.length; i++) {
+        var p = state.selected[i];
+        L.push('· ' + p.start + ' ~ ' + p.end + ' (' + fmt(t('offOne'), { n: p.days }) + ') — ' +
+               fmt(p.cost === 1 ? t('leaveOne') : t('leaveMany'), { c: p.cost }) +
+               ' (' + p.leave.join(', ') + ')');
+        spent += p.cost; off += p.days;
+      }
+      L.push(t('sumTotals').replace('{c}', spent).replace('{n}', off));
+    }
+    L.push('');
+    L.push(t('sumFoot'));
+    var text = L.join('\n');
+
+    function ok() { status(t('stCopied'), 'ok'); }
+    function fail() { status(t('stCopyFail'), 'warn'); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(ok, function () { legacyCopy(text) ? ok() : fail(); });
+    } else {
+      legacyCopy(text) ? ok() : fail();
+    }
+  }
+  function legacyCopy(text) {
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.top = '-1000px';
+      document.body.appendChild(ta);
+      ta.select();
+      var r = document.execCommand('copy');
+      document.body.removeChild(ta);
+      return r;
+    } catch (e) { return false; }
+  }
+
+  /* ═════════════════════ 초기화 ═════════════════════ */
+  state.plans = buildPlans();
+
+  $('base').value = todayISO();
+  state.base = $('base').value;
+
+  $('hire').addEventListener('change', recalc);
+  $('hire').addEventListener('input', recalc);
+  $('base').addEventListener('change', recalc);
+  $('used').addEventListener('input', recalc);
+
+  $('mode').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-mode]');
+    if (!b) return;
+    state.mode = b.getAttribute('data-mode');
+    var bs = $('mode').querySelectorAll('button');
+    for (var i = 0; i < bs.length; i++) bs[i].setAttribute('aria-pressed', String(bs[i] === b));
+    recalc();
+  });
+
+  $('yearFilter').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-year]');
+    if (!b) return;
+    state.year = b.getAttribute('data-year');
+    state.limit = 9;
+    var bs = $('yearFilter').querySelectorAll('button');
+    for (var i = 0; i < bs.length; i++) bs[i].setAttribute('aria-pressed', String(bs[i] === b));
+    paintPlans();
+  });
+
+  $('costFilter').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-cost]');
+    if (!b) return;
+    state.cost = b.getAttribute('data-cost');
+    state.limit = 9;
+    var bs = $('costFilter').querySelectorAll('button');
+    for (var i = 0; i < bs.length; i++) bs[i].setAttribute('aria-pressed', String(bs[i] === b));
+    paintPlans();
+  });
+
+  $('moreBtn').addEventListener('click', function () {
+    state.limit += 18;
+    paintPlans();
+  });
+
+  $('plans').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-add]');
+    if (!b) return;
+    addPlan(b.getAttribute('data-add'));
+  });
+
+  $('selList').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-del]');
+    if (!b) return;
+    var key = b.getAttribute('data-del');
+    state.selected = state.selected.filter(function (x) { return x.key !== key; });
+    paintSummary();
+  });
+
+  $('copyBtn').addEventListener('click', copySummary);
+
+  $('clearBtn').addEventListener('click', function () {
+    state.selected = [];
+    paintSummary();
+    status(t('stCleared'));
+  });
+
+  $('jumpBtn').addEventListener('click', function () {
+    var el = $('planner');
+    if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  $('langToggle').addEventListener('click', function () {
+    applyLang(state.lang === 'ko' ? 'en' : 'ko');
+  });
+
+  applyLang(initialLang());
+  recalc();
+
+  /* 테스트·자동화용 읽기 전용 창구 */
+  window.DayOff = {
+    compute: function (hire, base, mode) { return computeLeave(hire, base, mode || 'hire'); },
+    plans: function () { return state.plans.slice(); },
+    state: function () { return { mode: state.mode, year: state.year, cost: state.cost, balance: state.balance, selected: state.selected.map(function (p) { return p.key; }), lang: state.lang }; },
+    holidays: function () { return HOLIDAYS.slice(); },
+    add: addPlan,
+    version: '1.0'
+  };
+})();
+</script>
+</body>
+</html>
