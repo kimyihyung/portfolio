@@ -1,0 +1,2317 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0c0b09">
+<title>SplitSnap — 차수별 더치페이·정산 카드 생성기 | Kim Yihyung</title>
+<meta name="description" content="Split a night out round by round: 1차–3차 with different participants, alcohol taken off for non-drinkers, discounts, 0.5×–2× weights and 10/100-won rounding, then copy a KakaoTalk-ready summary or save a receipt card PNG. Everything runs in your browser with zero uploads.">
+<meta name="keywords" content="dutch pay calculator, bill splitter, 더치페이 계산기, 차수별 정산, 모임 회비 정산, n빵 계산기, 술값 제외 정산, 카톡 정산 문구, receipt card png, split bill by round, expense splitter korea, no upload calculator, offline bill splitter">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/split-snap/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230c0b09'/%3E%3Cpath d='M9 8h14l-1.6 13.2A2 2 0 0 1 19.4 23h-6.8a2 2 0 0 1-2-1.8L9 8Z' fill='none' stroke='%23ffb86b' stroke-width='1.8' stroke-linejoin='round'/%3E%3Cpath d='M12 8V6.5M16 8V6M20 8V6.5' stroke='%23ffb86b' stroke-width='1.6' stroke-linecap='round'/%3E%3Cpath d='M12 13h8M12.6 17.5h6.8' stroke='%23ffb86b' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/split-snap/">
+<meta property="og:title" content="SplitSnap — Round-by-Round Bill Splitter & Receipt Card">
+<meta property="og:description" content="Dinner for four, the café for three, the taxi for two — each round split between the people who were there, the soju off the non-drinkers share, 10-won rounding, then one tap to a KakaoTalk message and a receipt card. 0 bytes uploaded.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="SplitSnap — a Korean round-by-round bill splitter running in the browser">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SplitSnap — Round-by-Round Bill Splitter & Receipt Card">
+<meta name="twitter:description" content="Split a night out by round, leave the soju off the non-drinkers' share, and post one receipt card to the group chat. All in the tab, nothing uploaded.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta name="twitter:image:alt" content="SplitSnap — a Korean round-by-round bill splitter running in the browser">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "SplitSnap — Round-by-Round Bill Splitter & Receipt Card",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/split-snap/",
+      "description": "Splits a group night out by round — dinner, café, taxi — with a different set of people in each round, alcohol removed from the share of anyone who did not drink, round-level discounts, 0.5x to 2x weights per person, and 1/10/100-unit rounding with the leftover shown. Produces a KakaoTalk-ready text summary in one tap and a receipt-style PNG card, entirely in the browser with zero uploads and zero external requests.",
+      "featureList": [
+        "Unlimited rounds, each with its own participants and amount",
+        "Alcohol excluded for non-drinkers within a round",
+        "Round discount by percentage or amount",
+        "Per-person weight of 0.5x, 1x, 1.5x, 2x or 3x, toggled per round",
+        "1, 10 and 100 unit rounding, round up, down or nearest, leftover shown",
+        "Designated treasurer and settlement amounts per person",
+        "One-tap KakaoTalk text copy",
+        "Receipt-style PNG card rendered on canvas",
+        "Won, dollar, euro and yen",
+        "100% client-side: no uploads, no accounts, no external requests"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "SplitSnap", "item": "https://kimyihyung.github.io/portfolio/tools/split-snap/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How is a round-by-round split different from an even split?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A group rarely has the same people for dinner, the café and the taxi home. SplitSnap keeps each round separate: you pick who was there for that amount, so someone who left after dinner pays for dinner only, and the taxi is divided between the two who actually took it." }
+        },
+        {
+          "@type": "Question",
+          "name": "How does the alcohol exclusion work?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Inside a round, enter the part of the bill that was alcohol and mark who drank. That amount is split only between the drinkers; everything else on the bill is split between everybody at the table. On a 120,000 won dinner with 30,000 won of soju, a non-drinker pays their share of the food only." }
+        },
+        {
+          "@type": "Question",
+          "name": "Where does the rounding difference go?",
+          "acceptedAnswer": { "@type": "Answer", "text": "If you round every share down to the nearest 10 won, the shares add up to less than the bill. The tool shows that difference and, by default, puts it on the treasurer so the total still matches what was actually paid. You can also leave it unallocated and see it as a separate line." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is the account number I type saved anywhere?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. Names, amounts and the bank account exist only in this tab's memory. Nothing is written to storage, nothing is sent anywhere, and the page's own request counter stays at zero. Close the tab and it is gone — use the copy or PNG button for the record you want to keep." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+:root {
+  --bg: #0c0b09;
+  --bg2: #100e0c;
+  --panel: #151310;
+  --panel2: #1b1815;
+  --line: rgba(255, 246, 232, .09);
+  --line2: rgba(255, 246, 232, .18);
+  --ink: #f7f2e8;
+  --muted: #aca39a;
+  --muted2: #857c72;
+  --accent: #ffb86b;
+  --accent2: #f09243;
+  --on-accent: #241305;
+  --good: #9bdc9b;
+  --warn: #ffd166;
+  --danger: #ff9384;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", "Noto Sans KR", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--bg);
+  background-image:
+    radial-gradient(120% 70% at 50% -20%, rgba(255, 184, 107, .13), transparent 60%),
+    radial-gradient(90% 60% at 100% 0%, rgba(255, 184, 107, .05), transparent 55%);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: 1.5;
+}
+
+::selection { background: var(--accent); color: var(--on-accent); }
+a { color: inherit; }
+button, input, select, textarea { font-family: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.wrap { width: 100%; max-width: 1160px; margin: 0 auto; padding: 0 14px 40px; }
+
+/* ── header ─────────────────────────────────────────── */
+.top {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 10px; padding: 16px 0 0;
+}
+.brand { display: inline-flex; align-items: center; gap: 9px; text-decoration: none; color: var(--ink); min-width: 0; }
+.mark {
+  min-width: 30px; height: 30px; padding: 0 6px;
+  border-radius: 9px; border: 1px solid var(--line2);
+  background: var(--panel); color: var(--accent);
+  display: grid; place-items: center;
+  font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .06em;
+}
+.brand-txt { font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; white-space: nowrap; }
+.top-actions { display: flex; align-items: center; gap: 8px; }
+.lang-toggle {
+  display: inline-flex; align-items: center; gap: 5px;
+  height: 30px; padding: 0 9px;
+  border: 1px solid var(--line); border-radius: 8px;
+  background: rgba(255, 255, 255, .03); color: var(--muted2);
+  cursor: pointer; font-family: var(--mono); font-size: 10.5px;
+  font-weight: 700; letter-spacing: .08em; line-height: 1;
+  transition: border-color .18s ease, transform .12s ease;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.95); }
+.lang-toggle .lt { transition: color .18s ease; }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.back {
+  font-size: 12px; color: var(--muted); text-decoration: none;
+  border: 1px solid var(--line); border-radius: 8px;
+  padding: 7px 10px; line-height: 1;
+  transition: color .18s ease, border-color .18s ease;
+}
+.back:hover { color: var(--ink); border-color: var(--line2); }
+
+/* ── hero ───────────────────────────────────────────── */
+.hero { padding: 24px 0 14px; }
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 14px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--line); background: rgba(255, 255, 255, .025);
+  border-radius: 999px; padding: 5px 11px;
+  font-size: 11px; letter-spacing: .02em; color: var(--muted);
+}
+.pill b { color: var(--ink); font-weight: 650; }
+.pill--live { border-color: rgba(255, 184, 107, .34); color: var(--accent); }
+.pill .dot {
+  width: 5px; height: 5px; border-radius: 50%; background: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255, 184, 107, .14);
+}
+.hero h1 {
+  margin: 0 0 12px;
+  font-size: clamp(26px, 6.4vw, 44px);
+  line-height: 1.1; letter-spacing: -.035em; font-weight: 750;
+  max-width: 24ch;
+}
+.hero h1 .dim { color: var(--muted2); }
+.lede { margin: 0; max-width: 66ch; font-size: 14px; line-height: 1.68; color: var(--muted); }
+.lede b { color: var(--ink); font-weight: 600; }
+
+/* ── layout ─────────────────────────────────────────── */
+.app { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; align-items: start; margin: 8px 0 0; }
+.col { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; align-content: start; min-width: 0; }
+.panel {
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--panel); padding: 14px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .03);
+  min-width: 0;
+}
+.ph {
+  margin: 0 0 11px; font-size: 11px; font-weight: 700;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--muted2);
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  flex-wrap: wrap;
+}
+.ph .note-in { font-family: var(--mono); font-size: 10px; letter-spacing: .04em; text-transform: none; color: var(--muted2); }
+.hint { margin: 9px 0 0; font-size: 11.5px; line-height: 1.6; color: var(--muted2); }
+.hint--warn { color: var(--warn); }
+.hint--err { color: var(--danger); }
+.hint b { color: var(--muted); font-weight: 600; }
+
+.btn {
+  appearance: none; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  border: 1px solid var(--line2); background: var(--panel2); color: var(--ink);
+  border-radius: 10px; padding: 9px 13px;
+  font-size: 12.5px; font-weight: 600; letter-spacing: -.01em;
+  transition: background .18s ease, border-color .18s ease, color .18s ease, transform .12s ease;
+  text-align: center;
+}
+.btn:hover { border-color: var(--accent); }
+.btn:active { transform: scale(.985); }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.btn:disabled:hover { border-color: var(--line2); }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 750; }
+.btn--primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.btn--ghost { background: transparent; color: var(--muted); border-color: var(--line); }
+.btn--ghost:hover { color: var(--ink); }
+.btn--sm { padding: 7px 10px; font-size: 11.5px; border-radius: 9px; }
+.btn--full { width: 100%; }
+.btn svg { width: 14px; height: 14px; flex: none; }
+
+.field { margin: 0 0 10px; min-width: 0; }
+.field:last-child { margin-bottom: 0; }
+.field label, .lbl {
+  display: block; margin: 0 0 5px;
+  font-size: 11.5px; color: var(--muted); letter-spacing: .01em;
+}
+.field input, .field select, .field textarea {
+  width: 100%; appearance: none; min-width: 0;
+  border: 1px solid var(--line); border-radius: 9px;
+  background: var(--bg2); color: var(--ink);
+  padding: 9px 11px; font-size: 13px; line-height: 1.4;
+  transition: border-color .18s ease, background .18s ease;
+}
+.field input::placeholder, .field textarea::placeholder { color: var(--muted2); }
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: rgba(255, 184, 107, .55); background: #141110; outline: none;
+}
+.field select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%23a79c90' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 11px center; background-size: 11px;
+  padding-right: 30px;
+}
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+.row3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+
+/* ── people ─────────────────────────────────────────── */
+.people { display: grid; gap: 6px; }
+.prow { display: grid; grid-template-columns: 22px minmax(0, 1fr) 30px; gap: 6px; align-items: center; }
+.pidx {
+  font-family: var(--mono); font-size: 10px; color: var(--muted2);
+  text-align: center; letter-spacing: .02em;
+}
+.prow input {
+  width: 100%; min-width: 0; appearance: none;
+  border: 1px solid var(--line); border-radius: 8px;
+  background: var(--bg2); color: var(--ink);
+  padding: 8px 10px; font-size: 13px;
+}
+.prow input:focus { border-color: rgba(255, 184, 107, .55); outline: none; background: #141110; }
+.pdel {
+  appearance: none; cursor: pointer; height: 30px; padding: 0;
+  border: 1px solid transparent; border-radius: 8px;
+  background: transparent; color: var(--muted2); font-size: 13px; line-height: 1;
+}
+.pdel:hover { color: var(--danger); border-color: rgba(255, 147, 132, .32); background: rgba(255, 147, 132, .06); }
+.add-row { display: flex; gap: 7px; margin-top: 9px; }
+.add-row .btn { flex: 1; }
+
+/* ── rounds ─────────────────────────────────────────── */
+.rounds { display: grid; gap: 10px; }
+.round {
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--bg2); padding: 11px;
+}
+.round.is-empty { border-style: dashed; }
+.round-head { display: grid; grid-template-columns: auto minmax(0, 1fr) 28px; gap: 7px; align-items: center; margin-bottom: 9px; }
+.rno {
+  font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .08em;
+  color: var(--accent); background: rgba(255, 184, 107, .1);
+  border: 1px solid rgba(255, 184, 107, .24); border-radius: 6px;
+  padding: 4px 7px; white-space: nowrap;
+}
+.round-head input {
+  width: 100%; min-width: 0; appearance: none;
+  border: 1px solid transparent; border-radius: 7px;
+  background: transparent; color: var(--ink);
+  padding: 5px 6px; font-size: 12.5px; font-weight: 600;
+}
+.round-head input:hover { border-color: var(--line); }
+.round-head input:focus { border-color: rgba(255, 184, 107, .5); background: #141110; outline: none; }
+.rdel {
+  appearance: none; cursor: pointer; height: 28px; padding: 0;
+  border: 1px solid transparent; border-radius: 7px;
+  background: transparent; color: var(--muted2); font-size: 12px; line-height: 1;
+}
+.rdel:hover { color: var(--danger); border-color: rgba(255, 147, 132, .32); }
+.amt-wrap { position: relative; }
+.amt-wrap input {
+  width: 100%; appearance: none;
+  border: 1px solid var(--line); border-radius: 9px;
+  background: var(--panel); color: var(--ink);
+  padding: 10px 46px 10px 11px; font-size: 17px; font-weight: 700;
+  letter-spacing: -.01em; font-variant-numeric: tabular-nums;
+  font-family: var(--mono);
+}
+.amt-wrap input:focus { border-color: rgba(255, 184, 107, .6); outline: none; background: #141110; }
+.amt-unit {
+  position: absolute; right: 11px; top: 50%; transform: translateY(-50%);
+  font-size: 11.5px; color: var(--muted2); pointer-events: none;
+}
+.tgs { display: flex; flex-wrap: wrap; gap: 5px; margin: 9px 0 0; }
+.tg {
+  appearance: none; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 5px;
+  border: 1px solid var(--line); border-radius: 999px;
+  background: transparent; color: var(--muted);
+  padding: 5px 10px; font-size: 11.5px; font-weight: 600; letter-spacing: -.01em;
+  transition: background .16s ease, color .16s ease, border-color .16s ease;
+}
+.tg:hover { border-color: var(--line2); color: var(--ink); }
+.tg[aria-pressed="true"] { background: rgba(255, 184, 107, .14); border-color: rgba(255, 184, 107, .5); color: var(--accent); }
+.tg .tgx { font-family: var(--mono); font-size: 10px; opacity: .8; }
+.sub {
+  margin: 9px 0 0; padding: 9px; border-radius: 9px;
+  border: 1px solid var(--line); background: rgba(0, 0, 0, .22);
+}
+.sub .field { margin-bottom: 8px; }
+.sub .field:last-child { margin-bottom: 0; }
+.sub .field input { font-size: 12.5px; padding: 7px 9px; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 5px; margin: 9px 0 0; }
+.pchip {
+  appearance: none; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 0;
+  border: 1px solid var(--line); border-radius: 999px;
+  background: transparent; color: var(--muted2);
+  padding: 4px 5px 4px 10px; font-size: 11.5px; font-weight: 600;
+  max-width: 100%; transition: border-color .16s ease, color .16s ease, background .16s ease;
+}
+.pchip .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 11ch; }
+.pchip .wx {
+  margin-left: 5px; padding: 2px 5px; border-radius: 6px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: .02em;
+  border: 1px solid var(--line); color: var(--muted2); background: rgba(255, 255, 255, .02);
+}
+.pchip[aria-pressed="true"] { color: var(--ink); border-color: rgba(255, 184, 107, .42); background: rgba(255, 184, 107, .08); }
+.pchip[aria-pressed="true"] .wx { color: var(--accent); border-color: rgba(255, 184, 107, .3); }
+.pchip .wx.w-on { color: var(--accent); border-color: rgba(255, 184, 107, .5); background: rgba(255, 184, 107, .12); }
+.pchip .wx:hover { border-color: var(--accent); }
+.rsum {
+  margin: 9px 0 0; padding-top: 8px; border-top: 1px dashed var(--line2);
+  font-size: 11.5px; line-height: 1.6; color: var(--muted2);
+  display: flex; flex-wrap: wrap; gap: 3px 10px; align-items: baseline;
+}
+.rsum b { color: var(--ink); font-weight: 650; }
+.rsum .rs-mini { font-family: var(--mono); font-size: 10.5px; letter-spacing: .02em; }
+.rsum .rs-warn { color: var(--warn); }
+
+/* ── options ────────────────────────────────────────── */
+.seg {
+  display: grid; gap: 3px; padding: 3px;
+  border: 1px solid var(--line); border-radius: 10px; background: var(--bg2);
+}
+.seg--3 { grid-template-columns: repeat(3, 1fr); }
+.seg--4 { grid-template-columns: repeat(4, 1fr); }
+.seg2 { grid-template-columns: repeat(2, 1fr); }
+.seg-btn {
+  appearance: none; border: 0; background: transparent; color: var(--muted);
+  padding: 7px 4px; border-radius: 8px; cursor: pointer;
+  font-size: 11.5px; font-weight: 600; letter-spacing: -.01em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  transition: background .16s ease, color .16s ease;
+}
+.seg-btn:hover { color: var(--ink); }
+.seg-btn[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); font-weight: 750; }
+
+/* ── summary ────────────────────────────────────────── */
+.total-box {
+  border: 1px solid rgba(255, 184, 107, .26); border-radius: var(--radius-sm);
+  background: linear-gradient(180deg, rgba(255, 184, 107, .1), rgba(255, 184, 107, .02));
+  padding: 12px; margin: 0 0 12px;
+}
+.total-box .tb-k { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.total-box .tb-v {
+  font-family: var(--mono); font-size: clamp(24px, 7vw, 32px); font-weight: 700;
+  letter-spacing: -.02em; color: var(--ink); line-height: 1.15; margin: 2px 0 3px;
+  font-variant-numeric: tabular-nums;
+}
+.total-box .tb-s { font-size: 11.5px; color: var(--muted2); }
+.total-box .tb-s b { color: var(--muted); font-weight: 600; }
+
+.shares { display: grid; gap: 7px; }
+.srow {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center;
+  padding: 8px 9px; border-radius: 9px; border: 1px solid var(--line);
+  background: rgba(255, 255, 255, .015);
+}
+.srow.is-treasurer { border-color: rgba(255, 184, 107, .32); background: rgba(255, 184, 107, .05); }
+.srow .nm { font-size: 13px; font-weight: 650; display: flex; align-items: center; gap: 6px; min-width: 0; }
+.srow .nm span.t { font-size: 9.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); border: 1px solid rgba(255, 184, 107, .38); border-radius: 5px; padding: 1px 4px; white-space: nowrap; }
+.srow .nm em { font-style: normal; font-family: var(--mono); font-size: 10px; color: var(--muted2); }
+.srow .vv { font-family: var(--mono); font-size: 14px; font-weight: 700; letter-spacing: -.01em; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.srow .bar { grid-column: 1 / -1; height: 3px; border-radius: 999px; background: rgba(255, 255, 255, .06); overflow: hidden; }
+.srow .bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+.sum-note { margin: 11px 0 0; font-size: 11.5px; line-height: 1.6; color: var(--muted2); }
+.sum-note b { color: var(--ink); }
+.sum-note .warn { color: var(--warn); }
+
+/* ── kakao / card ───────────────────────────────────── */
+.kakao-out {
+  margin: 0 0 10px; padding: 11px; max-height: 300px; overflow: auto;
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: #0a0908;
+  font-family: var(--mono); font-size: 11.5px; line-height: 1.72;
+  color: var(--ink); white-space: pre-wrap; word-break: break-word;
+  min-height: 120px;
+}
+.kakao-out.is-empty { color: var(--muted2); font-family: var(--font); }
+.act-row { display: flex; gap: 7px; }
+.act-row .btn { flex: 1; }
+.card-stage {
+  display: grid; place-items: center; padding: 9px;
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: #0a0908; margin: 0 0 10px;
+}
+#cardCanvas {
+  display: block; width: 100%; max-width: 340px; height: auto;
+  border-radius: 8px; box-shadow: 0 14px 34px rgba(0, 0, 0, .5);
+}
+.toast {
+  position: fixed; left: 50%; bottom: 22px; transform: translate(-50%, 16px);
+  z-index: 60; max-width: calc(100vw - 28px);
+  padding: 10px 15px; border-radius: 999px;
+  background: #221c14; border: 1px solid rgba(255, 184, 107, .4);
+  color: var(--ink); font-size: 12.5px; font-weight: 600;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .55);
+  opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
+  text-align: center;
+}
+.toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+/* ── notes / faq ────────────────────────────────────── */
+.notes, .faq { margin: 30px 0 0; display: grid; grid-template-columns: 1fr; gap: 14px; }
+.note { border-top: 1px solid var(--line); padding-top: 11px; }
+.note h3 {
+  margin: 0 0 5px; font-size: 13px; font-weight: 650;
+  letter-spacing: -.01em; display: flex; gap: 8px; align-items: baseline;
+}
+.note h3 span { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: .1em; }
+.note p { margin: 0; font-size: 12px; line-height: 1.66; color: var(--muted2); }
+.sec-title {
+  margin: 30px 0 0; padding-bottom: 9px; border-bottom: 1px solid var(--line);
+  font-size: 11px; font-weight: 700; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--muted);
+}
+.faq-item { border-top: 1px solid var(--line); padding-top: 11px; }
+.faq-item:first-of-type { border-top: 0; padding-top: 0; }
+.faq-item h3 { margin: 0 0 4px; font-size: 13px; font-weight: 650; letter-spacing: -.01em; }
+.faq-item p { margin: 0; font-size: 12px; line-height: 1.66; color: var(--muted2); }
+.caveat {
+  margin: 20px 0 0; padding: 11px 13px;
+  border: 1px solid rgba(255, 209, 102, .24); border-radius: var(--radius-sm);
+  background: rgba(255, 209, 102, .045);
+  font-size: 11.5px; line-height: 1.65; color: var(--muted);
+}
+.caveat strong { color: var(--warn); font-weight: 600; }
+.foot {
+  display: flex; flex-wrap: wrap; gap: 8px 16px;
+  align-items: center; justify-content: space-between;
+  margin-top: 30px; padding-top: 15px; border-top: 1px solid var(--line);
+  font-family: var(--mono); font-size: 10px; letter-spacing: .05em;
+  color: var(--muted2); text-transform: uppercase;
+}
+.foot .net b { color: var(--accent); font-weight: 700; }
+.foot a { color: var(--muted2); text-decoration: none; border-bottom: 1px solid transparent; }
+.foot a:hover { color: var(--ink); border-bottom-color: var(--line2); }
+
+@media (min-width: 700px) {
+  .wrap { padding: 0 22px 48px; }
+  .hero { padding: 38px 0 22px; }
+  .panel { padding: 17px; }
+  .notes { grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .app { gap: 14px; }
+  .col { gap: 14px; }
+  .round { padding: 13px; }
+}
+@media (min-width: 1000px) {
+  .top { padding-top: 22px; }
+  .app { grid-template-columns: minmax(0, 1fr) 402px; gap: 18px; }
+  .col--side { position: sticky; top: 16px; }
+  #cardCanvas { max-width: 356px; }
+  .kakao-out { max-height: 340px; }
+}
+@media (max-width: 700px) {
+  .btn { min-height: 42px; }
+  .btn--sm { min-height: 38px; }
+  .seg-btn { min-height: 38px; }
+  .tg { min-height: 34px; }
+  .pchip { min-height: 32px; }
+  .lang-toggle, .back { min-height: 34px; }
+  .field input, .field select { min-height: 42px; font-size: 15px; }
+  .prow input { min-height: 40px; font-size: 15px; }
+  .amt-wrap input { font-size: 19px; }
+  .round-head input { font-size: 14px; }
+  .kakao-out { font-size: 12px; }
+}
+@media (max-width: 420px) {
+  .brand-txt { display: none; }
+  .row2 { grid-template-columns: 1fr; }
+  .pchip .nm { max-width: 8ch; }
+}
+@media (hover: none) {
+  .btn:active { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    transition-duration: .001ms !important;
+  }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <a class="brand" href="/portfolio/" aria-label="Kim Yihyung — portfolio" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="View in English" aria-label="View in English">
+        <span class="lt on" data-lt="ko">KO</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="en">EN</span>
+      </button>
+      <a class="back" href="../" data-i18n="backTools">← 도구</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="badge-row">
+      <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillLive">0 bytes uploaded</b></span>
+      <span class="pill"><b data-i18n="pillRounds">1·2·3차</b> <span data-i18n="pillRoundsSub">차수마다 다른 인원</span></span>
+      <span class="pill"><b data-i18n="pillCard">영수증 카드 PNG</b> <span data-i18n="pillCardSub">＋ 카톡 복붙</span></span>
+    </div>
+    <h1 data-i18n-html="h1">한 번의 모임, <span class="dim">차수별로 나눠서.</span></h1>
+    <p class="lede" data-i18n="lede">1차는 넷이, 2차는 셋이, 3차 택시는 둘이 탔습니다. 술 안 마신 사람은 술값을 빼고, 늦게 온 사람은 그 차수만. 차수마다 총액과 인원을 넣으면 1인 금액이 바로 나오고, 단톡방에 붙일 문구와 영수증 카드까지 한 번에 만들어집니다. 계산은 전부 이 탭 안에서, 서버로 가는 값은 없습니다.</p>
+  </section>
+
+  <div class="app">
+
+    <!-- ── 왼쪽: 입력 ───────────────────────────────── -->
+    <div class="col">
+
+      <section class="panel" aria-labelledby="peopleH">
+        <h2 class="ph" id="peopleH">
+          <span><span data-i18n="peopleTitle">참여자</span></span>
+          <span class="note-in" id="peopleCount">4</span>
+        </h2>
+        <div class="people" id="peopleList"></div>
+        <div class="add-row">
+          <button class="btn btn--ghost btn--sm" id="addPerson" type="button" data-i18n="addPerson">＋ 참여자 추가</button>
+        </div>
+        <p class="hint" data-i18n="peopleHint">이름은 이 탭 안에서만 쓰입니다. 저장하지도, 보내지도 않습니다.</p>
+      </section>
+
+      <section class="panel" aria-labelledby="roundsH">
+        <h2 class="ph" id="roundsH">
+          <span data-i18n="roundsTitle">차수</span>
+          <span class="note-in" id="roundsMeta">3 · 135,000원</span>
+        </h2>
+        <div class="rounds" id="roundsList"></div>
+        <div class="add-row">
+          <button class="btn btn--ghost btn--sm" id="addRound" type="button" data-i18n="addRound">＋ 다음 차수</button>
+          <button class="btn btn--ghost btn--sm" id="addFree" type="button" data-i18n="addFree">＋ 자유 항목</button>
+        </div>
+        <p class="hint" data-i18n="roundsHint">이름을 눌러 차수 이름을 바꿀 수 있습니다(식당·카페·택시·선물 등). 사람 칩을 눌러 그 차수에 참여한 사람만 남기세요.</p>
+      </section>
+
+      <section class="panel" aria-labelledby="optH">
+        <h2 class="ph" id="optH"><span data-i18n="optTitle">계산 규칙</span><span class="note-in" id="unitNote">1원 단위</span></h2>
+
+        <div class="field">
+          <span class="lbl" data-i18n="currencyLabel">통화</span>
+          <div class="seg seg--4" role="group" aria-label="Currency" data-i18n-aria="currencyAria">
+            <button class="seg-btn" type="button" data-cur="KRW" aria-pressed="true">₩ KRW</button>
+            <button class="seg-btn" type="button" data-cur="USD" aria-pressed="false">$ USD</button>
+            <button class="seg-btn" type="button" data-cur="EUR" aria-pressed="false">€ EUR</button>
+            <button class="seg-btn" type="button" data-cur="JPY" aria-pressed="false">¥ JPY</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="lbl" data-i18n="unitLabel">반올림 단위</span>
+          <div class="seg seg--3" role="group" aria-label="Rounding unit" data-i18n-aria="unitAria" id="unitSeg">
+            <button class="seg-btn" type="button" data-unit="1" aria-pressed="true">1</button>
+            <button class="seg-btn" type="button" data-unit="10" aria-pressed="false">10</button>
+            <button class="seg-btn" type="button" data-unit="100" aria-pressed="false">100</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="lbl" data-i18n="modeLabel">버림 · 반올림 · 올림</span>
+          <div class="seg seg--3" role="group" aria-label="Rounding mode" data-i18n-aria="modeAria" id="modeSeg">
+            <button class="seg-btn" type="button" data-mode="down" aria-pressed="false" data-i18n="modeDown">버림</button>
+            <button class="seg-btn" type="button" data-mode="round" aria-pressed="true" data-i18n="modeRound">반올림</button>
+            <button class="seg-btn" type="button" data-mode="up" aria-pressed="false" data-i18n="modeUp">올림</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="lbl" data-i18n="residualLabel">차액 처리</span>
+          <div class="seg seg2" role="group" aria-label="Rounding difference" data-i18n-aria="residualAria" id="resSeg">
+            <button class="seg-btn" type="button" data-res="treasurer" aria-pressed="true" data-i18n="resToTreasurer">정산자가 부담</button>
+            <button class="seg-btn" type="button" data-res="none" aria-pressed="false" data-i18n="resLeave">미배분으로 표시</button>
+          </div>
+        </div>
+
+        <div class="row2">
+          <div class="field">
+            <label for="treasurerSel" data-i18n="treasurerLabel">정산자</label>
+            <select id="treasurerSel"></select>
+          </div>
+          <div class="field">
+            <label for="dateInput" data-i18n="dateLabel">날짜</label>
+            <input type="date" id="dateInput">
+          </div>
+        </div>
+        <p class="hint" data-i18n="optHint">차액은 버림·올림으로 생긴 몇십 원입니다. '정산자가 부담'이면 합계가 실제 결제액과 정확히 맞고, '미배분'이면 그만큼을 따로 표시합니다.</p>
+      </section>
+
+      <section class="panel" aria-labelledby="acctH">
+        <h2 class="ph" id="acctH"><span data-i18n="acctTitle">정산자 계좌</span><span class="note-in" data-i18n="acctOptional">선택</span></h2>
+        <div class="field">
+          <label for="bankInput" data-i18n="bankLabel">은행</label>
+          <input id="bankInput" type="text" list="bankList" autocomplete="off" spellcheck="false" placeholder="국민" data-i18n-ph="bankPh">
+          <datalist id="bankList">
+            <option value="국민"></option><option value="신한"></option><option value="우리"></option>
+            <option value="하나"></option><option value="농협"></option><option value="기업"></option>
+            <option value="카카오뱅크"></option><option value="토스뱅크"></option><option value="케이뱅크"></option>
+            <option value="새마을"></option><option value="우체국"></option><option value="SC제일"></option>
+          </datalist>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="acctInput" data-i18n="acctNumLabel">계좌번호</label>
+            <input id="acctInput" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" placeholder="123-456-789012" data-i18n-ph="acctNumPh">
+          </div>
+          <div class="field">
+            <label for="holderInput" data-i18n="holderLabel">예금주</label>
+            <input id="holderInput" type="text" autocomplete="off" spellcheck="false" maxlength="20" placeholder="홍길동" data-i18n-ph="holderPh">
+          </div>
+        </div>
+        <p class="hint hint--warn" data-i18n="acctHint">저장하지 않습니다. 이 탭을 닫으면 입력한 계좌는 사라지고, 어디로도 전송되지 않습니다.</p>
+      </section>
+
+    </div>
+
+    <!-- ── 오른쪽: 결과 ─────────────────────────────── -->
+    <div class="col col--side">
+
+      <section class="panel" aria-labelledby="sumH">
+        <h2 class="ph" id="sumH"><span data-i18n="sumTitle">정산 결과</span><span class="note-in" id="sumMeta">4명 · 3차수</span></h2>
+        <div class="total-box">
+          <div class="tb-k" data-i18n="totalLabel">총 결제액</div>
+          <div class="tb-v" id="totalValue">135,000원</div>
+          <div class="tb-s" id="totalSub">3차수 · 4명 · 1인 평균 33,750원</div>
+        </div>
+        <div class="shares" id="shareList"></div>
+        <p class="sum-note" id="sumNote"></p>
+      </section>
+
+      <section class="panel" aria-labelledby="kakaoH">
+        <h2 class="ph" id="kakaoH"><span data-i18n="kakaoTitle">카톡에 붙일 문구</span><span class="note-in" id="kakaoMeta">12줄</span></h2>
+        <pre class="kakao-out" id="kakaoOut" tabindex="0"></pre>
+        <div class="act-row">
+          <button class="btn btn--primary" id="copyText" type="button" data-i18n="copyText">문구 복사</button>
+          <button class="btn btn--ghost" id="copyAcct" type="button" data-i18n="copyAcct">계좌만 복사</button>
+        </div>
+        <p class="hint" data-i18n="kakaoHint">복사한 뒤 카카오톡 단톡방에 그대로 붙여넣으면 됩니다. 줄바꿈과 이모지가 유지됩니다.</p>
+      </section>
+
+      <section class="panel" aria-labelledby="cardH">
+        <h2 class="ph" id="cardH"><span data-i18n="cardTitle">영수증 카드</span><span class="note-in">1080px PNG</span></h2>
+        <div class="card-stage">
+          <canvas id="cardCanvas" width="1080" height="1350" role="img" aria-label="Settlement receipt card preview" data-i18n-aria="cardAria"></canvas>
+        </div>
+        <div class="act-row">
+          <button class="btn btn--primary" id="savePng" type="button" data-i18n="savePng">PNG 저장</button>
+          <button class="btn btn--ghost" id="copyPng" type="button" data-i18n="copyPng">이미지 복사</button>
+        </div>
+        <p class="hint" data-i18n="cardHint">이미지 복사는 카카오톡 PC·아이폰에서 바로 붙여넣을 수 있습니다. 안 되면 PNG로 저장해 사진첩에서 보내세요.</p>
+      </section>
+
+    </div>
+  </div>
+
+  <div class="notes">
+    <div class="note">
+      <h3><span>01</span><span data-i18n="n1t">차수마다 인원이 다릅니다</span></h3>
+      <p data-i18n="n1p">저녁은 넷이 먹었지만 카페는 셋, 택시는 둘이 탔습니다. 전체를 한 금액으로 나누면 먼저 간 사람이 남의 택시비를 내게 됩니다. 차수를 나눠 두면 각자 실제로 앉아 있던 자리만 계산됩니다.</p>
+    </div>
+    <div class="note">
+      <h3><span>02</span><span data-i18n="n2t">술값은 마신 사람끼리</span></h3>
+      <p data-i18n="n2p">한 차수 안에서 주류 금액과 마신 사람을 표시하면, 술값은 그 사람들끼리만 나뉘고 나머지 금액은 전원이 나눕니다. 12만 원 식사에 술값 3만 원이면, 안 마신 사람은 음식값 몫만 냅니다.</p>
+    </div>
+    <div class="note">
+      <h3><span>03</span><span data-i18n="n3t">10원·100원 단위로 떨어지게</span></h3>
+      <p data-i18n="n3p">계좌이체는 1원 단위까지 되지만 현금은 그렇지 않습니다. 버림·반올림·올림과 단위를 고르면 1인 금액이 딱 떨어지고, 생긴 차액은 정산자에게 붙여 합계를 실제 결제액과 맞춥니다.</p>
+    </div>
+  </div>
+
+  <h2 class="sec-title" data-i18n="faqTitle">자주 묻는 질문</h2>
+  <div class="faq">
+    <div class="faq-item">
+      <h3 data-i18n="q1">금액은 어디에 저장되나요?</h3>
+      <p data-i18n="a1">어디에도 저장되지 않습니다. 이름·금액·계좌는 이 탭의 메모리에만 있고, 새로고침하거나 탭을 닫으면 사라집니다. 아래 카운터는 이 페이지가 바깥으로 보낸 요청 수로, 0에서 움직이지 않습니다.</p>
+    </div>
+    <div class="faq-item">
+      <h3 data-i18n="q2">정산자는 무슨 역할인가요?</h3>
+      <p data-i18n="a2">카드를 먼저 긁은 사람입니다. 정산 결과의 '보낼 금액'은 나머지 사람이 정산자에게 보낼 액수이고, 정산자 본인 몫은 이미 결제에 포함되어 있습니다. 반올림 차액도 기본적으로 정산자에게 붙습니다.</p>
+    </div>
+    <div class="faq-item">
+      <h3 data-i18n="q3">0.5배·2배 가중치는 언제 쓰나요?</h3>
+      <p data-i18n="a3">술을 거의 안 마신 사람, 아이와 함께 온 경우, 택시를 혼자 멀리 간 경우처럼 같은 자리에 있었지만 몫이 다른 때 씁니다. 차수의 '가중치'를 켜고 사람 칩의 ×표시를 눌러 0.5·1·1.5·2·3배로 바꿉니다.</p>
+    </div>
+    <div class="faq-item">
+      <h3 data-i18n="q4">다른 통화로도 쓸 수 있나요?</h3>
+      <p data-i18n="a4">됩니다. 원·달러·유로·엔을 고를 수 있고, 달러와 유로는 소수 둘째 자리까지 계산합니다. 해외여행에서 카드값을 나눌 때 그대로 쓰면 됩니다.</p>
+    </div>
+    <div class="faq-item">
+      <h3 data-i18n="q5">결과를 나중에 다시 볼 수 있나요?</h3>
+      <p data-i18n="a5">이 페이지는 기록을 남기지 않으므로, 남길 것은 문구 복사나 PNG 저장으로 가져가야 합니다. 영수증 카드는 1080px 폭으로 만들어져 단톡방에서도 숫자가 또렷합니다.</p>
+    </div>
+  </div>
+
+  <p class="caveat" data-i18n-html="caveat"><strong>참고.</strong> 정산 결과는 입력한 금액과 인원을 그대로 나눈 계산입니다. 실제 결제 금액·봉사료·할인 적용 여부는 카드 명세서와 한 번 대조해 보세요. 계좌번호는 편한 사람에게만 보내고, 단톡방에 오래 남는 것이 싫다면 문구 대신 카드 이미지만 보내는 편이 낫습니다.</p>
+
+  <footer class="foot">
+    <span data-i18n="foot1">0 uploads · 0 servers · 0 cookies</span>
+    <span class="net"><span data-i18n="netLabel">이 페이지가 만든 외부 요청</span>: <b id="netCount">0</b></span>
+    <span><a href="/portfolio/" data-i18n="back">← Portfolio</a> · <a href="../" data-i18n="footTools">All tools</a></span>
+  </footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<noscript>
+  <div class="wrap"><p class="caveat">This calculator runs entirely in JavaScript in your browser. Turn JavaScript on to use it — nothing is sent anywhere either way.</p></div>
+</noscript>
+<script>
+/* Fault trap: a broken step is recorded instead of freezing silently. Costs nothing when clean. */
+window.__ssFaults = [];
+window.addEventListener('error', function (e) {
+  try { window.__ssFaults.push(String((e && (e.message || e.type)) || 'error')); } catch (err) {}
+});
+window.addEventListener('unhandledrejection', function (e) {
+  try { window.__ssFaults.push('rejection: ' + String(e && e.reason)); } catch (err) {}
+});
+</script>
+<script>
+(function () {
+  'use strict';
+
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
+  function num(v) { var n = parseFloat(String(v == null ? '' : v).replace(/[^0-9.\-]/g, '')); return isFinite(n) ? n : 0; }
+
+  /* ─────────────────────────────── 언어 ─────────────────────────────── */
+  /* Only the interface language is written to storage. Names, amounts, the
+     account and the card never touch localStorage, IndexedDB or the network. */
+  var LANG_KEY = 'kyh.lang';
+
+  var I18N = {
+    ko: {
+      docTitle: 'SplitSnap — 차수별 더치페이·정산 카드 생성기 | Kim Yihyung',
+      metaDesc: '1차·2차·3차 차수마다 인원과 금액을 따로 넣고, 술 안 마신 사람은 술값을 빼고, 0.5~2배 가중치와 10·100원 단위 반올림까지. 카톡에 붙일 문구 복사와 영수증 카드 PNG를 한 번에. 전부 브라우저 안에서, 업로드 0바이트.',
+      ogTitle: 'SplitSnap — 차수별 더치페이·정산 카드 생성기',
+      ogDesc: '1차·2차·3차 인원이 달라도 각자 앉았던 자리만 계산. 술값 제외, 할인, 가중치, 10원 단위 반올림 — 그리고 카톡 복붙 문구와 영수증 카드.',
+
+      brandAria: 'Kim Yihyung — 포트폴리오',
+      backTools: '← 도구',
+      toggleTo: 'View in English',
+
+      pillLive: '0 bytes uploaded',
+      pillRounds: '1·2·3차',
+      pillRoundsSub: '차수마다 다른 인원',
+      pillCard: '영수증 카드 PNG',
+      pillCardSub: '＋ 카톡 복붙',
+      h1: '한 번의 모임, <span class="dim">차수별로 나눠서.</span>',
+      lede: '1차는 넷이, 2차는 셋이, 3차 택시는 둘이 탔습니다. 술 안 마신 사람은 술값을 빼고, 늦게 온 사람은 그 차수만. 차수마다 총액과 인원을 넣으면 1인 금액이 바로 나오고, 단톡방에 붙일 문구와 영수증 카드까지 한 번에 만들어집니다. 계산은 전부 이 탭 안에서, 서버로 가는 값은 없습니다.',
+
+      peopleTitle: '참여자',
+      addPerson: '＋ 참여자 추가',
+      peopleHint: '이름은 이 탭 안에서만 쓰입니다. 저장하지도, 보내지도 않습니다.',
+      nameAria: '참여자 이름',
+      delPersonAria: '참여자 삭제',
+
+      roundsTitle: '차수',
+      addRound: '＋ 다음 차수',
+      addFree: '＋ 자유 항목',
+      roundsHint: '이름을 눌러 차수 이름을 바꿀 수 있습니다(식당·카페·택시·선물 등). 사람 칩을 눌러 그 차수에 참여한 사람만 남기세요.',
+      roundNameAria: '차수 이름',
+      delRoundAria: '차수 삭제',
+      amtAria: '이 차수의 총액',
+      amtUnitLabel: '원',
+      tgAlcohol: '주류 제외',
+      tgDiscount: '할인',
+      tgWeight: '가중치',
+      alcoholAmount: '주류 금액',
+      drinkersLabel: '마신 사람',
+      drinkNone: '아무도 안 마심',
+      discModePct: '정률 %',
+      discModeAmt: '정액',
+      discValue: '할인',
+      weightHint: '사람 칩의 ×표시를 눌러 0.5·1·1.5·2·3배로 바꿉니다. 이 차수에만 적용됩니다.',
+
+      optTitle: '계산 규칙',
+      currencyLabel: '통화',
+      currencyAria: '통화 선택',
+      unitLabel: '반올림 단위',
+      unitAria: '반올림 단위',
+      modeLabel: '버림 · 반올림 · 올림',
+      modeAria: '반올림 방식',
+      modeDown: '버림',
+      modeRound: '반올림',
+      modeUp: '올림',
+      residualLabel: '차액 처리',
+      residualAria: '차액 처리 방식',
+      resToTreasurer: '정산자가 부담',
+      resLeave: '미배분으로 표시',
+      treasurerLabel: '정산자',
+      dateLabel: '날짜',
+      optHint: "차액은 버림·올림으로 생긴 몇십 원입니다. '정산자가 부담'이면 합계가 실제 결제액과 정확히 맞고, '미배분'이면 그만큼을 따로 표시합니다.",
+
+      acctTitle: '정산자 계좌',
+      acctOptional: '선택',
+      bankLabel: '은행',
+      bankPh: '국민',
+      acctNumLabel: '계좌번호',
+      acctNumPh: '123-456-789012',
+      holderLabel: '예금주',
+      holderPh: '홍길동',
+      acctHint: '저장하지 않습니다. 이 탭을 닫으면 입력한 계좌는 사라지고, 어디로도 전송되지 않습니다.',
+
+      sumTitle: '정산 결과',
+      totalLabel: '총 결제액',
+      kakaoTitle: '카톡에 붙일 문구',
+      copyText: '문구 복사',
+      copyAcct: '계좌만 복사',
+      kakaoHint: '복사한 뒤 카카오톡 단톡방에 그대로 붙여넣으면 됩니다. 줄바꿈과 이모지가 유지됩니다.',
+      cardTitle: '영수증 카드',
+      cardAria: '정산 영수증 카드 미리보기',
+      savePng: 'PNG 저장',
+      copyPng: '이미지 복사',
+      cardHint: '이미지 복사는 카카오톡 PC·아이폰에서 바로 붙여넣을 수 있습니다. 안 되면 PNG로 저장해 사진첩에서 보내세요.',
+
+      n1t: '차수마다 인원이 다릅니다',
+      n1p: '저녁은 넷이 먹었지만 카페는 셋, 택시는 둘이 탔습니다. 전체를 한 금액으로 나누면 먼저 간 사람이 남의 택시비를 내게 됩니다. 차수를 나눠 두면 각자 실제로 앉아 있던 자리만 계산됩니다.',
+      n2t: '술값은 마신 사람끼리',
+      n2p: '한 차수 안에서 주류 금액과 마신 사람을 표시하면, 술값은 그 사람들끼리만 나뉘고 나머지 금액은 전원이 나눕니다. 12만 원 식사에 술값 3만 원이면, 안 마신 사람은 음식값 몫만 냅니다.',
+      n3t: '10원·100원 단위로 떨어지게',
+      n3p: '계좌이체는 1원 단위까지 되지만 현금은 그렇지 않습니다. 버림·반올림·올림과 단위를 고르면 1인 금액이 딱 떨어지고, 생긴 차액은 정산자에게 붙여 합계를 실제 결제액과 맞춥니다.',
+      faqTitle: '자주 묻는 질문',
+      q1: '금액은 어디에 저장되나요?',
+      a1: '어디에도 저장되지 않습니다. 이름·금액·계좌는 이 탭의 메모리에만 있고, 새로고침하거나 탭을 닫으면 사라집니다. 아래 카운터는 이 페이지가 바깥으로 보낸 요청 수로, 0에서 움직이지 않습니다.',
+      q2: '정산자는 무슨 역할인가요?',
+      a2: "카드를 먼저 긁은 사람입니다. 정산 결과의 '보낼 금액'은 나머지 사람이 정산자에게 보낼 액수이고, 정산자 본인 몫은 이미 결제에 포함되어 있습니다. 반올림 차액도 기본적으로 정산자에게 붙습니다.",
+      q3: '0.5배·2배 가중치는 언제 쓰나요?',
+      a3: "술을 거의 안 마신 사람, 아이와 함께 온 경우, 택시를 혼자 멀리 간 경우처럼 같은 자리에 있었지만 몫이 다른 때 씁니다. 차수의 '가중치'를 켜고 사람 칩의 ×표시를 눌러 0.5·1·1.5·2·3배로 바꿉니다.",
+      q4: '다른 통화로도 쓸 수 있나요?',
+      a4: '됩니다. 원·달러·유로·엔을 고를 수 있고, 달러와 유로는 소수 둘째 자리까지 계산합니다. 해외여행에서 카드값을 나눌 때 그대로 쓰면 됩니다.',
+      q5: '결과를 나중에 다시 볼 수 있나요?',
+      a5: '이 페이지는 기록을 남기지 않으므로, 남길 것은 문구 복사나 PNG 저장으로 가져가야 합니다. 영수증 카드는 1080px 폭으로 만들어져 단톡방에서도 숫자가 또렷합니다.',
+      caveat: '<strong>참고.</strong> 정산 결과는 입력한 금액과 인원을 그대로 나눈 계산입니다. 실제 결제 금액·봉사료·할인 적용 여부는 카드 명세서와 한 번 대조해 보세요. 계좌번호는 편한 사람에게만 보내고, 단톡방에 오래 남는 것이 싫다면 문구 대신 카드 이미지만 보내는 편이 낫습니다.',
+      foot1: '0 uploads · 0 servers · 0 cookies',
+      netLabel: '이 페이지가 만든 외부 요청',
+      back: '← Portfolio',
+      footTools: 'All tools',
+
+      /* 계산 결과 문구 */
+      peopleUnit: '명',
+      roundUnit: '차수',
+      peopleCount: function (n) { return n + '명'; },
+      roundsMeta: function (n, m) { return n + '차수 · ' + m; },
+      sumMeta: function (p, n) { return p + '명 · ' + n + '차수'; },
+      totalSub: function (n, p, avg) { return n + '차수 · ' + p + '명 · 1인 평균 ' + avg; },
+      perHead: function (v) { return '1인 ' + v; },
+      perHeadRange: function (a, b) { return '1인 ' + a + '~' + b; },
+      headCount: function (n) { return n + '명'; },
+      alcoholNote: function (amt, n) { return '술값 ' + amt + '은 마신 ' + n + '명만'; },
+      discountNote: function (amt) { return '할인 ' + amt; },
+      roundEmpty: '금액을 넣으면 1인 금액이 나옵니다',
+      roundNoPeople: '참여자를 한 명 이상 선택하세요',
+      noDrinkers: '마신 사람이 없어 술값을 전원이 나눕니다',
+      residualAbsorbed: function (amt, name) { return '차액 ' + amt + ' → ' + name + ' 부담'; },
+      residualLeft: function (amt) { return '미배분 ' + amt; },
+      treasurerNote: function (name, k, sum) { return name + '님이 먼저 결제 · 나머지 ' + k + '명이 보낼 금액 합계 ' + sum; },
+      zeroNote: function (names) { return names + '은(는) 이 모임에 참여 기록이 없어 0원입니다.'; },
+      unallocNote: function (amt) { return '미배분 ' + amt + '은 어느 사람에게도 붙지 않았습니다. 실제 결제액과 ' + amt + ' 차이가 납니다.'; },
+      treasurerTag: '정산자',
+      noOne: '없음',
+      emptyAll: '참여자와 차수를 넣으면 여기에 정산이 나옵니다.',
+      kakaoEmpty: '차수 금액과 참여자를 넣으면 카톡에 붙일 문구가 만들어집니다.',
+
+      /* 토스트 */
+      tCopied: '복사했습니다. 단톡방에 붙여넣으세요.',
+      tCopyFail: '복사가 막혔습니다. 문구를 길게 눌러 직접 선택해 주세요.',
+      tAcctCopied: '계좌를 복사했습니다.',
+      tAcctEmpty: '계좌를 먼저 입력해 주세요.',
+      tImgCopied: '이미지를 복사했습니다. 붙여넣기 하세요.',
+      tImgFail: '이 브라우저는 이미지 복사를 막습니다. PNG 저장을 써 주세요.',
+      tSaved: 'PNG로 저장했습니다.',
+      tSaveFail: '저장에 실패했습니다. 미리보기를 길게 눌러 저장해 주세요.',
+
+      /* 카톡 문구 · 카드 */
+      msgTitle: '모임 정산',
+      msgEach: '각자 보낼 금액',
+      msgTotal: '총',
+      msgSend: function (name) { return '정산자 ' + name + '에게 보내 주세요'; },
+      msgAccount: '계좌',
+      cardKicker: 'SPLIT · SNAP',
+      cardTitle: '모임 정산',
+      cardEach: '각자 보낼 금액',
+      cardPaid: '먼저 결제',
+      cardFooter: '0 server · 0 upload · split-snap',
+      cardEmpty: '차수를 추가하세요'
+    },
+
+    en: {
+      docTitle: 'SplitSnap — Round-by-Round Bill Splitter & Receipt Card',
+      metaDesc: 'Split a night out round by round: 1차–3차 with different participants, alcohol taken off for non-drinkers, discounts, 0.5×–2× weights and 10/100-won rounding, then copy a KakaoTalk-ready summary or save a receipt card PNG. Everything runs in your browser with zero uploads.',
+      ogTitle: 'SplitSnap — Round-by-Round Bill Splitter & Receipt Card',
+      ogDesc: 'Dinner for four, café for three, taxi for two. Each round split between the people who were actually there, with the soju off the non-drinkers share.',
+
+      brandAria: 'Kim Yihyung — portfolio',
+      backTools: '← Tools',
+      toggleTo: '한국어로 보기',
+
+      pillLive: '0 bytes uploaded',
+      pillRounds: '1 · 2 · 3 rounds',
+      pillRoundsSub: 'different people each round',
+      pillCard: 'Receipt card PNG',
+      pillCardSub: '+ KakaoTalk text',
+      h1: 'One night out, <span class="dim">split round by round.</span>',
+      lede: 'Dinner for four, the café for three, the taxi for the two who shared it. Take the soju off the share of whoever did not drink, and charge the late arrival for that round only. Enter the amount and the people for each round and every per-head figure follows, with a message ready for the group chat and a receipt card to post with it. The arithmetic happens in this tab; nothing is sent to a server.',
+
+      peopleTitle: 'People',
+      addPerson: '+ Add person',
+      peopleHint: 'Names live in this tab only. Not saved, not sent anywhere.',
+      nameAria: 'Participant name',
+      delPersonAria: 'Remove person',
+
+      roundsTitle: 'Rounds',
+      addRound: '+ Next round',
+      addFree: '+ Free item',
+      roundsHint: 'Tap a round name to rename it (dinner, café, taxi, a gift). Tap a person chip to leave only those who were there for that round.',
+      roundNameAria: 'Round name',
+      delRoundAria: 'Remove round',
+      amtAria: 'Amount for this round',
+      amtUnitLabel: '',
+      tgAlcohol: 'Alcohol out',
+      tgDiscount: 'Discount',
+      tgWeight: 'Weights',
+      alcoholAmount: 'Alcohol amount',
+      drinkersLabel: 'Who drank',
+      drinkNone: 'Nobody drank',
+      discModePct: 'Percent',
+      discModeAmt: 'Amount',
+      discValue: 'Discount',
+      weightHint: 'Tap the × badge on a chip to cycle 0.5, 1, 1.5, 2 and 3. It applies to this round only.',
+
+      optTitle: 'Rules',
+      currencyLabel: 'Currency',
+      currencyAria: 'Choose currency',
+      unitLabel: 'Rounding unit',
+      unitAria: 'Rounding unit',
+      modeLabel: 'Down · nearest · up',
+      modeAria: 'Rounding mode',
+      modeDown: 'Down',
+      modeRound: 'Nearest',
+      modeUp: 'Up',
+      residualLabel: 'Rounding difference',
+      residualAria: 'How to handle the rounding difference',
+      resToTreasurer: 'Treasurer pays it',
+      resLeave: 'Show as unallocated',
+      treasurerLabel: 'Treasurer',
+      dateLabel: 'Date',
+      optHint: 'The difference is the few coins that rounding creates. With "treasurer pays it" the shares add up to exactly what was paid; with "unallocated" the gap is shown separately.',
+
+      acctTitle: 'Treasurer account',
+      acctOptional: 'optional',
+      bankLabel: 'Bank',
+      bankPh: 'KB',
+      acctNumLabel: 'Account number',
+      acctNumPh: '123-456-789012',
+      holderLabel: 'Account holder',
+      holderPh: 'Full name',
+      acctHint: 'Not saved. Close this tab and the account is gone; it is never transmitted.',
+
+      sumTitle: 'Settlement',
+      totalLabel: 'Total paid',
+      kakaoTitle: 'Message for the group chat',
+      copyText: 'Copy message',
+      copyAcct: 'Copy account',
+      kakaoHint: 'Paste it straight into the KakaoTalk room — line breaks and emoji survive.',
+      cardTitle: 'Receipt card',
+      cardAria: 'Settlement receipt card preview',
+      savePng: 'Save PNG',
+      copyPng: 'Copy image',
+      cardHint: 'Copy image pastes straight into KakaoTalk on desktop or iPhone. If it is blocked, save the PNG and send it from Photos.',
+
+      n1t: 'The head count changes',
+      n1p: 'Four for dinner, three for the café, two in the taxi. Divided as one bill, whoever left early pays for a ride they never took. Keeping rounds apart charges each person only for the seat they actually occupied.',
+      n2t: 'The drinks stay with the drinkers',
+      n2p: 'Inside a round, mark the alcohol amount and who drank: that part is split between the drinkers alone, and the rest of the bill between everybody. On a 120,000 won dinner with 30,000 won of soju, a non-drinker pays their share of the food only.',
+      n3t: 'Land on a clean number',
+      n3p: 'Cash does not do single won. Choose round down, nearest or up and a unit, and every share becomes a number people can actually hand over. Whatever difference that creates goes on the treasurer so the total still matches the card slip.',
+      faqTitle: 'Questions',
+      q1: 'Is any of this stored?',
+      a1: 'Nowhere. Names, amounts and the account live in this tab memory only; reload or close it and they are gone. The counter below shows how many requests the page has made outside itself, and it stays at zero.',
+      q2: 'What is the treasurer for?',
+      a2: 'The person whose card was charged first. Each "to send" figure is what the others transfer to them; the treasurer own share is already inside the payment. The rounding difference lands on them by default.',
+      q3: 'When do I need the 0.5× or 2× weight?',
+      a3: 'Barely drank, came with a child, took the taxi alone across town — same table, different share. Turn on Weights for that round and tap the × badge on a chip to cycle 0.5, 1, 1.5, 2 and 3.',
+      q4: 'Can I use another currency?',
+      a4: 'Yes — won, dollar, euro and yen, with cents kept to two decimals on dollar and euro. Handy for splitting a card bill on a trip.',
+      q5: 'Can I come back to this result later?',
+      a5: 'The page keeps no history, so take what you need with Copy message or Save PNG. The card is rendered 1080 px wide, so the figures stay sharp in a chat room.',
+      caveat: '<strong>Note.</strong> The figures here are the arithmetic of the amounts and head counts you entered. Check the actual slip for service charges and discounts applied. Send the account only to people who need it, and if you would rather not leave it in the room for ever, post the card image instead of the text.',
+      foot1: '0 uploads · 0 servers · 0 cookies',
+      netLabel: 'external requests made by this page',
+      back: '← Portfolio',
+      footTools: 'All tools',
+
+      peopleUnit: 'people',
+      roundUnit: 'rounds',
+      peopleCount: function (n) { return n + (n === 1 ? ' person' : ' people'); },
+      roundsMeta: function (n, m) { return n + (n === 1 ? ' round · ' : ' rounds · ') + m; },
+      sumMeta: function (p, n) { return p + (p === 1 ? ' person · ' : ' people · ') + n + (n === 1 ? ' round' : ' rounds'); },
+      totalSub: function (n, p, avg) { return n + (n === 1 ? ' round · ' : ' rounds · ') + p + (p === 1 ? ' person · ' : ' people · ') + 'avg ' + avg; },
+      perHead: function (v) { return v + ' each'; },
+      perHeadRange: function (a, b) { return a + '–' + b + ' each'; },
+      headCount: function (n) { return n + (n === 1 ? ' person' : ' people'); },
+      alcoholNote: function (amt, n) { return 'drinks ' + amt + ' on ' + n + ' only'; },
+      discountNote: function (amt) { return 'discount ' + amt; },
+      roundEmpty: 'Enter an amount and the per-head figure appears',
+      roundNoPeople: 'Pick at least one person',
+      noDrinkers: 'Nobody marked as drinking — the alcohol is split by everyone',
+      residualAbsorbed: function (amt, name) { return 'rounding ' + amt + ' → ' + name; },
+      residualLeft: function (amt) { return 'unallocated ' + amt; },
+      treasurerNote: function (name, k, sum) { return name + ' paid first · the other ' + k + ' send ' + sum + ' between them'; },
+      zeroNote: function (names) { return names + ' is not in any round, so 0.'; },
+      unallocNote: function (amt) { return amt + ' is not on anyone, so the shares differ from what was paid by that much.'; },
+      treasurerTag: 'treasurer',
+      noOne: 'nobody',
+      emptyAll: 'Add people and a round and the settlement appears here.',
+      kakaoEmpty: 'Enter a round amount and who was there, and the message appears here.',
+
+      tCopied: 'Copied — paste it into the room.',
+      tCopyFail: 'The browser blocked the copy. Select the text and copy it by hand.',
+      tAcctCopied: 'Account copied.',
+      tAcctEmpty: 'Enter the account first.',
+      tImgCopied: 'Image copied. Paste it.',
+      tImgFail: 'This browser blocks image copying. Use Save PNG.',
+      tSaved: 'Saved as PNG.',
+      tSaveFail: 'The save failed. Long-press the preview to save it.',
+
+      msgTitle: 'The night, split',
+      msgEach: 'To send',
+      msgTotal: 'Total',
+      msgSend: function (name) { return 'Send it to ' + name + ', who paid first'; },
+      msgAccount: 'Account',
+      cardKicker: 'SPLIT · SNAP',
+      cardTitle: 'The night, split',
+      cardEach: 'TO SEND',
+      cardPaid: 'paid first',
+      cardFooter: '0 server · 0 upload · split-snap',
+      cardEmpty: 'Add a round'
+    }
+  };
+
+  function t(key) {
+    var d = I18N[S.lang] || I18N.ko;
+    var v = d[key];
+    if (v == null) v = I18N.ko[key];
+    return v == null ? '' : v;
+  }
+
+  var CUR = {
+    KRW: { dec: 0, sym: '₩', code: 'KRW', unit: '원' },
+    USD: { dec: 2, sym: '$', code: 'USD', unit: 'USD' },
+    EUR: { dec: 2, sym: '€', code: 'EUR', unit: 'EUR' },
+    JPY: { dec: 0, sym: '¥', code: 'JPY', unit: 'JPY' }
+  };
+
+  /* ─────────────────────────────── 상태 ─────────────────────────────── */
+  var NAMES = { ko: ['민준', '서연', '도윤', '지우'], en: ['Alex', 'Sam', 'Jamie', 'Robin'] };
+  var ROUND_WORDS = { ko: ['식당', '카페', '택시', '4차'], en: ['Dinner', 'Café', 'Taxi', 'Round 4'] };
+  var W_CYCLE = [1, 0.5, 2, 1.5, 3];
+  var seq = 0;
+
+  function uid(p) { seq += 1; return p + seq; }
+  function todayISO() {
+    var d = new Date();
+    var m = String(d.getMonth() + 1), day = String(d.getDate());
+    return d.getFullYear() + '-' + (m.length < 2 ? '0' + m : m) + '-' + (day.length < 2 ? '0' + day : day);
+  }
+
+  var S = {
+    lang: 'ko',
+    currency: 'KRW',
+    unit: 1,
+    mode: 'round',
+    residual: 'treasurer',
+    treasurer: null,
+    date: todayISO(),
+    people: [],
+    rounds: [],
+    account: { bank: '', num: '', holder: '' }
+  };
+
+  function roundTag(i) { return S.lang === 'ko' ? (i + 1) + '차' : 'R' + (i + 1); }
+  function autoLabel(i) {
+    var w = ROUND_WORDS[S.lang] || ROUND_WORDS.ko;
+    return w[i] || (S.lang === 'ko' ? (i + 1) + '차' : 'Round ' + (i + 1));
+  }
+
+  function seed() {
+    var names = NAMES[S.lang] || NAMES.ko;
+    S.people = names.map(function (n) { return { id: uid('p'), name: n }; });
+    var ids = S.people.map(function (p) { return p.id; });
+    S.treasurer = ids[0];
+    S.rounds = [
+      mkRound(0, 84000, ids.slice()),
+      mkRound(1, 36000, ids.slice(0, 3)),
+      mkRound(2, 15000, ids.slice(0, 2))
+    ];
+  }
+  function mkRound(i, amount, ids) {
+    return {
+      id: uid('r'), label: autoLabel(i), auto: true,
+      amount: amount ? String(amount) : '',
+      ids: ids || [], alcoholOn: false, alcohol: '', drinkers: [],
+      discOn: false, discMode: 'pct', discValue: '',
+      weightOn: false, w: {}
+    };
+  }
+
+  /* ─────────────────────────────── 계산 ─────────────────────────────── */
+  function dec() { return CUR[S.currency].dec; }
+  function toMinor(v) {
+    var n = typeof v === 'number' ? v : num(v);
+    if (!isFinite(n)) n = 0;
+    return Math.round(n * Math.pow(10, dec()));
+  }
+  function fromMinor(m) { return m / Math.pow(10, dec()); }
+
+  function money(minor) {
+    var c = CUR[S.currency];
+    var v = fromMinor(minor);
+    var s = v.toLocaleString(S.lang === 'ko' ? 'ko-KR' : 'en-US', {
+      minimumFractionDigits: c.dec, maximumFractionDigits: c.dec
+    });
+    if (S.currency === 'KRW') return S.lang === 'ko' ? s + '원' : '₩' + s;
+    return c.sym + s;
+  }
+  /* 짧은 형태 (카드·문구용) */
+  function moneyShort(minor) { return money(minor); }
+
+  function roundTo(x) {
+    var u = S.unit > 0 ? S.unit : 1;
+    if (S.mode === 'down') return Math.floor(x / u + 1e-7) * u;
+    if (S.mode === 'up') return Math.ceil(x / u - 1e-7) * u;
+    return Math.round(x / u) * u;
+  }
+
+  function addSplit(acc, pool, ids, r) {
+    if (pool <= 0 || !ids.length) return;
+    var ws = ids.map(function (id) {
+      return r.weightOn ? (r.w[id] || 1) : 1;
+    });
+    var sum = 0, i;
+    for (i = 0; i < ws.length; i++) sum += ws[i];
+    if (sum <= 0) sum = ids.length;
+    var sumR = 0;
+    for (i = 0; i < ids.length; i++) {
+      var exact = pool * ws[i] / sum;
+      var v = roundTo(exact);
+      acc.shares[ids[i]] = (acc.shares[ids[i]] || 0) + v;
+      sumR += v;
+    }
+    acc.residual += (pool - sumR);
+  }
+
+  function maxIdOf(shares, ids) {
+    var best = ids[0], bv = -Infinity;
+    for (var i = 0; i < ids.length; i++) {
+      var v = shares[ids[i]] || 0;
+      if (v > bv) { bv = v; best = ids[i]; }
+    }
+    return best;
+  }
+
+  function compute() {
+    var R = { rounds: [], totals: {}, total: 0, alloc: 0, unalloc: 0, people: 0, warnings: [] };
+    var byId = {}, i;
+    for (i = 0; i < S.people.length; i++) {
+      byId[S.people[i].id] = S.people[i];
+      R.totals[S.people[i].id] = 0;
+    }
+    R.people = S.people.length;
+
+    for (i = 0; i < S.rounds.length; i++) {
+      var r = S.rounds[i];
+      var gross = toMinor(r.amount);
+      var disc = 0;
+      if (r.discOn) {
+        var dv = num(r.discValue);
+        disc = r.discMode === 'pct' ? Math.round(gross * clamp(dv, 0, 100) / 100) : toMinor(dv);
+      }
+      disc = clamp(disc, 0, gross);
+      var net = gross - disc;
+      var ids = r.ids.filter(function (id) { return !!byId[id]; });
+      var alco = 0;
+      if (r.alcoholOn && net > 0) alco = Math.min(toMinor(r.alcohol), net);
+      var drinkers = ids.filter(function (id) { return r.drinkers.indexOf(id) >= 0; });
+      var warn = '';
+      if (r.alcoholOn && alco > 0 && !drinkers.length) { alco = 0; warn = 'noDrinkers'; }
+      var row = {
+        id: r.id, label: r.label, tag: roundTag(i), idx: i, gross: gross, disc: disc, net: net,
+        alco: alco, food: net - alco, ids: ids, shares: {}, residual: 0,
+        unalloc: 0, absorb: null, warn: warn, count: ids.length,
+        min: 0, max: 0, weightOn: r.weightOn
+      };
+      if (ids.length) {
+        var acc = { shares: {}, residual: 0 };
+        addSplit(acc, row.food, ids, r);
+        if (alco > 0) addSplit(acc, alco, drinkers, r);
+        row.residual = acc.residual;
+        if (acc.residual !== 0) {
+          if (S.residual === 'treasurer') {
+            var who = ids.indexOf(S.treasurer) >= 0 ? S.treasurer : maxIdOf(acc.shares, ids);
+            acc.shares[who] = (acc.shares[who] || 0) + acc.residual;
+            row.absorb = { id: who, amount: acc.residual };
+            row.residual = 0;
+          } else {
+            row.unalloc = acc.residual;
+            R.unalloc += acc.residual;
+          }
+        }
+        row.shares = acc.shares;
+        var mn = Infinity, mx = -Infinity;
+        for (var k = 0; k < ids.length; k++) {
+          var v = acc.shares[ids[k]] || 0;
+          if (v < mn) mn = v;
+          if (v > mx) mx = v;
+          R.totals[ids[k]] = (R.totals[ids[k]] || 0) + v;
+        }
+        row.min = mn === Infinity ? 0 : mn;
+        row.max = mx === -Infinity ? 0 : mx;
+        row.one = ids.length ? Math.round(net / ids.length) : 0;
+      } else {
+        row.unalloc = net;
+        R.unalloc += net;
+      }
+      R.total += net;
+      R.rounds.push(row);
+    }
+    R.alloc = 0;
+    for (var id in R.totals) if (Object.prototype.hasOwnProperty.call(R.totals, id)) R.alloc += R.totals[id];
+    return R;
+  }
+
+  var LAST = null;
+
+  /* ─────────────────────────────── 서식 ─────────────────────────────── */
+  function dateParts() {
+    var p = String(S.date || '').split('-');
+    var y = parseInt(p[0], 10) || 0, m = parseInt(p[1], 10) || 1, d = parseInt(p[2], 10) || 1;
+    var dt = new Date(y, m - 1, d);
+    return { y: y, m: m, d: d, wd: dt.getDay() };
+  }
+  function dateLabel() {
+    var p = dateParts();
+    if (S.lang === 'ko') {
+      var wd = ['일', '월', '화', '수', '목', '금', '토'][p.wd] || '';
+      return p.m + '월 ' + p.d + '일' + (wd ? ' (' + wd + ')' : '');
+    }
+    var mo = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    var en = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    return mo[p.m - 1] + ' ' + p.d + ', ' + en[p.wd];
+  }
+  function pad2(n) { return n < 10 ? '0' + n : String(n); }
+
+  function personName(id) {
+    for (var i = 0; i < S.people.length; i++) if (S.people[i].id === id) return S.people[i].name || (S.lang === 'ko' ? '이름 없음' : 'Unnamed');
+    return '';
+  }
+  function pById(id) {
+    for (var i = 0; i < S.people.length; i++) if (S.people[i].id === id) return S.people[i];
+    return null;
+  }
+
+  function roundLine(row) {
+    if (!row.count) return t('roundNoPeople');
+    var per;
+    if (row.max > row.min) per = t('perHeadRange')(moneyShort(row.min), moneyShort(row.max));
+    else per = t('perHead')(moneyShort(row.max));
+    var bits = [t('headCount')(row.count), per];
+    if (row.disc > 0) bits.push(t('discountNote')(moneyShort(row.disc)));
+    if (row.alco > 0) bits.push(t('alcoholNote')(moneyShort(row.alco), countDrinkers(row)));
+    return bits.join(' · ');
+  }
+
+  function countDrinkers(row) {
+    var r = null;
+    for (var i = 0; i < S.rounds.length; i++) if (S.rounds[i].id === row.id) r = S.rounds[i];
+    if (!r) return 0;
+    return r.ids.filter(function (id) { return r.drinkers.indexOf(id) >= 0; }).length;
+  }
+
+  /* ─────────────────────────────── 렌더 · 사람 ─────────────────────────────── */
+  var peopleList, roundsList, toastEl, toastTimer;
+
+  function toast(msg) {
+    if (!msg) return;
+    toastEl.textContent = msg;
+    toastEl.classList.add('on');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('on'); }, 2200);
+  }
+
+  function renderPeople() {
+    var html = '';
+    for (var i = 0; i < S.people.length; i++) {
+      var p = S.people[i];
+      html += '<div class="prow" data-id="' + p.id + '">' +
+        '<span class="pidx">' + (i + 1) + '</span>' +
+        '<input class="pname" type="text" value="' + esc(p.name) + '" maxlength="14" ' +
+        'data-act="pn" data-id="' + p.id + '" aria-label="' + esc(t('nameAria')) + '" ' +
+        'placeholder="' + esc(t('nameAria')) + '" autocomplete="off" spellcheck="false">' +
+        '<button class="pdel" type="button" data-act="pd" data-id="' + p.id + '" ' +
+        'aria-label="' + esc(t('delPersonAria')) + '" title="' + esc(t('delPersonAria')) + '">✕</button>' +
+        '</div>';
+    }
+    peopleList.innerHTML = html;
+  }
+
+  function renderTreasurer() {
+    var sel = $('treasurerSel');
+    if (!S.people.length) { sel.innerHTML = '<option>' + esc(t('noOne')) + '</option>'; return; }
+    var html = '';
+    for (var i = 0; i < S.people.length; i++) {
+      var p = S.people[i];
+      html += '<option value="' + p.id + '"' + (p.id === S.treasurer ? ' selected' : '') + '>' +
+        esc(p.name || t('noOne')) + '</option>';
+    }
+    sel.innerHTML = html;
+  }
+
+  /* ─────────────────────────────── 렌더 · 차수 ─────────────────────────────── */
+  function chipHtml(r, id) {
+    var on = r.ids.indexOf(id) >= 0;
+    var wv = r.w[id] || 1;
+    var drank = r.drinkers.indexOf(id) >= 0;
+    return '<span class="pchip" role="button" tabindex="0" data-act="p" data-id="' + r.id + '" data-pid="' + id + '" ' +
+      'aria-pressed="' + (on ? 'true' : 'false') + '">' +
+      '<span class="nm">' + esc(personName(id)) + '</span>' +
+      '<span class="wx' + (r.weightOn && wv !== 1 ? ' w-on' : '') + '" role="button" tabindex="0" ' +
+      'data-act="w" data-id="' + r.id + '" data-pid="' + id + '" title="' + esc(t('weightHint')) + '">' +
+      '×' + fmtW(wv) + '</span></span>';
+  }
+  function fmtW(v) {
+    if (v === 1) return '1';
+    if (v % 1 === 0) return String(v);
+    return String(v);
+  }
+
+  function renderRounds() {
+    var html = '';
+    for (var i = 0; i < S.rounds.length; i++) {
+      var r = S.rounds[i];
+      var chips = '';
+      for (var j = 0; j < S.people.length; j++) chips += chipHtml(r, S.people[j].id);
+      var drankChips = '';
+      var sel = r.ids.filter(function (id) { return !!pById(id); });
+      for (var k = 0; k < sel.length; k++) {
+        var on = r.drinkers.indexOf(sel[k]) >= 0;
+        drankChips += '<span class="pchip" role="button" tabindex="0" data-act="d" data-id="' + r.id + '" data-pid="' + sel[k] + '" ' +
+          'aria-pressed="' + (on ? 'true' : 'false') + '"><span class="nm">' + esc(personName(sel[k])) + '</span></span>';
+      }
+      if (!drankChips) drankChips = '<span class="hint" style="margin:0">' + esc(t('roundNoPeople')) + '</span>';
+
+      html += '<div class="round" data-id="' + r.id + '">' +
+        '<div class="round-head">' +
+        '<span class="rno">' + esc(roundTag(i)) + '</span>' +
+        '<input class="rlabel" type="text" value="' + esc(r.label) + '" maxlength="26" data-act="rl" data-id="' + r.id + '" ' +
+        'aria-label="' + esc(t('roundNameAria')) + '" autocomplete="off" spellcheck="false">' +
+        '<button class="rdel" type="button" data-act="rd" data-id="' + r.id + '" aria-label="' + esc(t('delRoundAria')) + '" title="' + esc(t('delRoundAria')) + '">✕</button>' +
+        '</div>' +
+        '<div class="field amt-wrap">' +
+        '<label class="sr-only" for="amt_' + r.id + '">' + esc(t('amtAria')) + '</label>' +
+        '<input class="ramt" id="amt_' + r.id + '" type="text" inputmode="decimal" data-act="ra" data-id="' + r.id + '" ' +
+        'value="' + esc(fmtInput(r.amount)) + '" placeholder="0" autocomplete="off" spellcheck="false" aria-label="' + esc(t('amtAria')) + '">' +
+        '<span class="amt-unit">' + esc(CUR[S.currency].unit) + '</span>' +
+        '</div>' +
+        '<div class="tgs">' +
+        '<button class="tg" type="button" data-act="tg" data-id="' + r.id + '" data-tg="alcohol" aria-pressed="' + (r.alcoholOn ? 'true' : 'false') + '">' + esc(t('tgAlcohol')) + '</button>' +
+        '<button class="tg" type="button" data-act="tg" data-id="' + r.id + '" data-tg="discount" aria-pressed="' + (r.discOn ? 'true' : 'false') + '">' + esc(t('tgDiscount')) + '</button>' +
+        '<button class="tg" type="button" data-act="tg" data-id="' + r.id + '" data-tg="weight" aria-pressed="' + (r.weightOn ? 'true' : 'false') + '">' + esc(t('tgWeight')) + '<span class="tgx">0.5–3×</span></button>' +
+        '</div>' +
+        '<div class="sub" data-sub="alcohol"' + (r.alcoholOn ? '' : ' hidden') + '>' +
+        '<div class="field"><label>' + esc(t('alcoholAmount')) + '</label>' +
+        '<input class="alco" type="text" inputmode="decimal" data-act="alc" data-id="' + r.id + '" value="' + esc(fmtInput(r.alcohol)) + '" placeholder="0" autocomplete="off" aria-label="' + esc(t('alcoholAmount')) + '"></div>' +
+        '<div class="field"><label>' + esc(t('drinkersLabel')) + '</label><div class="chips">' + drankChips + '</div></div>' +
+        '</div>' +
+        '<div class="sub" data-sub="discount"' + (r.discOn ? '' : ' hidden') + '>' +
+        '<div class="field"><label>' + esc(t('discValue')) + '</label>' +
+        '<div class="seg seg2" style="margin-bottom:7px" role="group" aria-label="' + esc(t('discValue')) + '">' +
+        '<button class="seg-btn" type="button" data-act="dm" data-id="' + r.id + '" data-dm="pct" aria-pressed="' + (r.discMode === 'pct' ? 'true' : 'false') + '">' + esc(t('discModePct')) + '</button>' +
+        '<button class="seg-btn" type="button" data-act="dm" data-id="' + r.id + '" data-dm="amt" aria-pressed="' + (r.discMode === 'amt' ? 'true' : 'false') + '">' + esc(t('discModeAmt')) + '</button>' +
+        '</div>' +
+        '<input class="discv" type="text" inputmode="decimal" data-act="dv" data-id="' + r.id + '" value="' + esc(fmtInput(r.discValue)) + '" placeholder="' + (r.discMode === 'pct' ? '10' : '0') + '" autocomplete="off" aria-label="' + esc(t('discValue')) + '"></div>' +
+        '</div>' +
+        '<div class="chips">' + chips + '</div>' +
+        '<p class="rsum" data-sum="' + r.id + '"></p>' +
+        '</div>';
+    }
+    roundsList.innerHTML = html;
+  }
+
+  function fmtInput(v) {
+    var raw = String(v == null ? '' : v);
+    if (!raw) return '';
+    var n = parseFloat(raw.replace(/[^0-9.]/g, ''));
+    if (!isFinite(n)) return '';
+    var c = CUR[S.currency];
+    return n.toLocaleString(S.lang === 'ko' ? 'ko-KR' : 'en-US', {
+      minimumFractionDigits: 0, maximumFractionDigits: c.dec
+    });
+  }
+
+  /* ─────────────────────────────── 렌더 · 결과 ─────────────────────────────── */
+  function renderOutputs() {
+    LAST = compute();
+    var R = LAST;
+
+    $('peopleCount').textContent = t('peopleCount')(S.people.length);
+    $('roundsMeta').textContent = t('roundsMeta')(S.rounds.length, money(R.total));
+    $('sumMeta').textContent = t('sumMeta')(S.people.length, S.rounds.length);
+
+    $('totalValue').textContent = money(R.total);
+    var avg = S.people.length ? Math.round(R.total / S.people.length) : 0;
+    $('totalSub').textContent = t('totalSub')(S.rounds.length, S.people.length, money(avg));
+
+    /* 참여자별 */
+    var maxV = 0, i;
+    for (i = 0; i < S.people.length; i++) maxV = Math.max(maxV, R.totals[S.people[i].id] || 0);
+    var rows = '';
+    if (!S.people.length) {
+      rows = '<p class="hint">' + esc(t('emptyAll')) + '</p>';
+    } else {
+      for (i = 0; i < S.people.length; i++) {
+        var p = S.people[i];
+        var v = R.totals[p.id] || 0;
+        var n = R.rounds.filter(function (rr) { return rr.ids.indexOf(p.id) >= 0; }).length;
+        var w = maxV > 0 ? Math.max(2, Math.round(v / maxV * 100)) : 0;
+        rows += '<div class="srow' + (p.id === S.treasurer ? ' is-treasurer' : '') + '">' +
+          '<span class="nm"><span>' + esc(p.name || t('noOne')) + '</span>' +
+          (p.id === S.treasurer ? '<span class="t">' + esc(t('treasurerTag')) + '</span>' : '') +
+          '<em>' + esc(S.lang === 'ko' ? n + '차 참여' : n + ' rounds') + '</em></span>' +
+          '<span class="vv">' + esc(money(v)) + '</span>' +
+          '<span class="bar"><i style="width:' + w + '%"></i></span>' +
+          '</div>';
+      }
+    }
+    $('shareList').innerHTML = rows;
+
+    /* 정산 메모 */
+    var notes = [];
+    if (S.people.length && S.treasurer) {
+      var others = S.people.filter(function (p) { return p.id !== S.treasurer; });
+      var sum = 0;
+      others.forEach(function (p) { sum += (R.totals[p.id] || 0); });
+      if (others.length) notes.push('<b>' + esc(t('treasurerNote')(personName(S.treasurer), others.length, money(sum))) + '</b>');
+    }
+    var absorbed = R.rounds.filter(function (rr) { return rr.absorb; });
+    if (absorbed.length) {
+      var aSum = 0;
+      absorbed.forEach(function (rr) { aSum += rr.absorb.amount; });
+      var lastA = absorbed[absorbed.length - 1];
+      notes.push(esc(t('residualAbsorbed')(money(aSum), personName(lastA.absorb.id))));
+    }
+    if (R.unalloc !== 0) notes.push('<span class="warn">' + esc(t('unallocNote')(money(R.unalloc))) + '</span>');
+    var zeros = S.people.filter(function (p) { return !(R.totals[p.id] || 0); });
+    if (zeros.length && S.rounds.length) {
+      notes.push(esc(t('zeroNote')(zeros.map(function (p) { return p.name; }).join(S.lang === 'ko' ? ', ' : ', '))));
+    }
+    if (!S.people.length || !S.rounds.length) notes.push(esc(t('emptyAll')));
+    $('sumNote').innerHTML = notes.join('<br>');
+
+    /* 차수별 요약 */
+    for (i = 0; i < S.rounds.length; i++) {
+      var rr = R.rounds[i];
+      var node = document.querySelector('[data-sum="' + rr.id + '"]');
+      if (!node) continue;
+      var bits = '';
+      if (!rr.count) {
+        bits = '<span class="rs-warn">' + esc(t('roundNoPeople')) + '</span>';
+      } else if (rr.net <= 0) {
+        bits = esc(t('roundEmpty'));
+      } else {
+        bits = esc(roundLine(rr)) + ' <b>' + esc(money(rr.net)) + '</b>';
+        if (rr.absorb) bits += ' <span class="rs-mini">' + esc(t('residualAbsorbed')(money(rr.absorb.amount), personName(rr.absorb.id))) + '</span>';
+        if (rr.unalloc) bits += ' <span class="rs-mini rs-warn">' + esc(t('residualLeft')(money(rr.unalloc))) + '</span>';
+        if (rr.warn === 'noDrinkers') bits += ' <span class="rs-mini rs-warn">' + esc(t('noDrinkers')) + '</span>';
+      }
+      node.innerHTML = bits;
+    }
+
+    /* 카톡 문구 */
+    var text = kakaoText();
+    var out = $('kakaoOut');
+    if (!text) {
+      out.textContent = t('kakaoEmpty');
+      out.classList.add('is-empty');
+      $('kakaoMeta').textContent = '—';
+    } else {
+      out.textContent = text;
+      out.classList.remove('is-empty');
+      $('kakaoMeta').textContent = (S.lang === 'ko' ? text.split('\n').length + '줄' : text.split('\n').length + ' lines');
+    }
+    $('unitNote').textContent = unitWord();
+
+    drawCard();
+  }
+
+  function unitWord() {
+    if (S.currency === 'KRW') return S.lang === 'ko' ? S.unit + '원 단위' : S.unit + ' KRW';
+    var c = CUR[S.currency];
+    if (S.unit >= 100) return c.sym + '1';
+    return c.sym + (S.unit / 100).toFixed(2);
+  }
+
+  /* ─────────────────────────────── 카톡 문구 ─────────────────────────────── */
+  function accountLine() {
+    var a = S.account;
+    var num = String(a.num || '').trim();
+    if (!num) return '';
+    var bank = String(a.bank || '').trim();
+    var holder = String(a.holder || '').trim();
+    var s = (bank ? bank + ' ' : '') + num + (holder ? ' (' + holder + ')' : '');
+    return s;
+  }
+
+  function kakaoText() {
+    var R = LAST || compute();
+    if (!S.people.length || !S.rounds.length) return '';
+    var L = [];
+    L.push('🍻 ' + t('msgTitle') + ' · ' + dateLabel());
+    L.push('');
+    var has = false;
+    for (var i = 0; i < R.rounds.length; i++) {
+      var rr = R.rounds[i];
+      if (rr.net <= 0 && !rr.count) continue;
+      has = true;
+      L.push('▪ ' + rr.tag + ' · ' + rr.label + ' — ' + money(rr.net));
+      var line = t('headCount')(rr.count);
+      if (rr.count) {
+        if (rr.max > rr.min) line += ' · ' + t('perHeadRange')(money(rr.min), money(rr.max));
+        else line += ' · ' + t('perHead')(money(rr.max));
+      }
+      if (rr.disc > 0) line += ' · ' + t('discountNote')(money(rr.disc));
+      if (rr.alco > 0) line += ' · ' + t('alcoholNote')(money(rr.alco), countDrinkers(rr));
+      L.push('   ' + line);
+    }
+    if (!has) return '';
+    L.push('');
+    L.push('💰 ' + t('msgTotal') + ' ' + money(R.total) + ' · ' + t('headCount')(S.people.length));
+    L.push('');
+    L.push('· ' + t('msgEach'));
+    for (var j = 0; j < S.people.length; j++) {
+      var p = S.people[j];
+      var v = R.totals[p.id] || 0;
+      var tag = p.id === S.treasurer ? ' (' + t('treasurerTag') + ')' : '';
+      L.push('· ' + p.name + ' — ' + money(v) + tag);
+    }
+    var absorbed = R.rounds.filter(function (rr) { return rr.absorb; });
+    if (absorbed.length) {
+      var s = 0;
+      absorbed.forEach(function (rr) { s += rr.absorb.amount; });
+      if (s !== 0) {
+        L.push('');
+        L.push('· ' + t('residualAbsorbed')(money(s), personName(absorbed[absorbed.length - 1].absorb.id)));
+      }
+    }
+    if (S.treasurer) {
+      L.push('');
+      L.push('→ ' + t('msgSend')(personName(S.treasurer)));
+    }
+    var acct = accountLine();
+    if (acct) {
+      L.push('');
+      L.push('🏦 ' + acct);
+    }
+    return L.join('\n');
+  }
+
+  /* ─────────────────────────────── 영수증 카드 ─────────────────────────────── */
+  var MONO = 'ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace';
+  var SANS = '"Pretendard", -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif';
+  var PAPER = '#f8f3e7', INKC = '#1d1811', MUTEDC = '#8b8175', ACCC = '#b4551f', LINEC = 'rgba(29,24,17,.26)';
+
+  function spaced(ctx, text, x, y, gap) {
+    if (/[\u3131-\uD7A3]/.test(text)) { ctx.fillText(text, x, y); return x + ctx.measureText(text).width; }
+    var cx = x;
+    for (var i = 0; i < text.length; i++) {
+      ctx.fillText(text.charAt(i), cx, y);
+      cx += ctx.measureText(text.charAt(i)).width + gap;
+    }
+    return cx;
+  }
+  function fit(ctx, text, maxW) {
+    if (ctx.measureText(text).width <= maxW) return text;
+    var s = text;
+    while (s.length > 1 && ctx.measureText(s + '…').width > maxW) s = s.slice(0, -1);
+    return s + '…';
+  }
+
+  function drawCard() {
+    var cv = $('cardCanvas');
+    var ctx = cv.getContext('2d');
+    if (!ctx) return;
+    var R = LAST || compute();
+    var W = 1080, PAD = 84;
+    var nR = Math.max(1, R.rounds.length), nP = Math.max(1, S.people.length);
+    var acct = accountLine();
+    var H = 400 + nR * 78 + nP * 62 + 40 + ((acct || S.treasurer) ? 30 : 0) + 108;
+    H = Math.max(980, Math.round(H));
+    if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = PAPER;
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = ACCC;
+    ctx.fillRect(0, 0, W, 9);
+
+    var right = W - PAD;
+    var y = 0;
+
+    /* header */
+    y = 96;
+    ctx.fillStyle = MUTEDC;
+    ctx.font = '600 19px ' + MONO;
+    spaced(ctx, t('cardKicker'), PAD, y, 4.5);
+    ctx.textAlign = 'right';
+    ctx.font = '500 19px ' + MONO;
+    ctx.fillText(dateLabel(), right, y);
+    ctx.textAlign = 'left';
+
+    /* title + total */
+    y += 74;
+    ctx.fillStyle = INKC;
+    ctx.font = '700 48px ' + SANS;
+    ctx.fillText(fit(ctx, t('cardTitle'), right - PAD - 240), PAD, y);
+
+    y += 84;
+    var totalStr = money(R.total);
+    ctx.font = '700 66px ' + MONO;
+    ctx.fillStyle = INKC;
+    ctx.fillText(fit(ctx, totalStr, right - PAD - 150), PAD, y);
+    ctx.font = '600 26px ' + SANS;
+    ctx.fillStyle = MUTEDC;
+    var head = t('headCount')(S.people.length);
+    ctx.textAlign = 'right';
+    ctx.fillText(head, right, y - 6);
+    ctx.textAlign = 'left';
+
+    y += 34;
+    ctx.font = '400 21px ' + SANS;
+    ctx.fillStyle = MUTEDC;
+    var sub = t('totalSub')(S.rounds.length, S.people.length, money(S.people.length ? Math.round(R.total / S.people.length) : 0));
+    ctx.fillText(fit(ctx, sub, right - PAD), PAD, y);
+
+    /* round blocks */
+    y += 34;
+    dash(ctx, PAD, right, y);
+    y += 12;
+    if (!R.rounds.length) {
+      ctx.font = '400 26px ' + SANS;
+      ctx.fillStyle = MUTEDC;
+      y += 52;
+      ctx.fillText(t('cardEmpty'), PAD, y);
+    }
+    for (var i = 0; i < R.rounds.length; i++) {
+      var rr = R.rounds[i];
+      y += 46;
+      ctx.textAlign = 'left';
+      ctx.font = '600 29px ' + SANS;
+      ctx.fillStyle = INKC;
+      ctx.fillText(fit(ctx, (S.lang === 'ko' ? (rr.idx + 1) + '차 · ' : 'R' + (rr.idx + 1) + ' · ') + rr.label, right - PAD - 230), PAD, y);
+      ctx.textAlign = 'right';
+      ctx.font = '700 30px ' + MONO;
+      ctx.fillText(money(rr.net), right, y);
+      ctx.textAlign = 'left';
+      y += 32;
+      ctx.font = '400 21px ' + SANS;
+      ctx.fillStyle = MUTEDC;
+      var meta = '';
+      if (rr.count) {
+        meta = t('headCount')(rr.count);
+        meta += (rr.max > rr.min) ? ' · ' + t('perHeadRange')(money(rr.min), money(rr.max))
+                                  : ' · ' + t('perHead')(money(rr.max));
+        if (rr.alco > 0) meta += ' · ' + t('alcoholNote')(money(rr.alco), countDrinkers(rr));
+        if (rr.disc > 0) meta += ' · ' + t('discountNote')(money(rr.disc));
+      } else {
+        meta = t('roundNoPeople');
+      }
+      ctx.fillText(fit(ctx, meta, right - PAD), PAD, y);
+    }
+
+    /* people */
+    y += 30;
+    dash(ctx, PAD, right, y);
+    y += 36;
+    ctx.font = '600 20px ' + MONO;
+    ctx.fillStyle = MUTEDC;
+    spaced(ctx, (S.lang === 'ko' ? t('cardEach') : t('cardEach')).toUpperCase(), PAD, y, 2.6);
+
+    for (var j = 0; j < S.people.length; j++) {
+      var p = S.people[j];
+      var v = R.totals[p.id] || 0;
+      y += 62;
+      ctx.textAlign = 'left';
+      ctx.font = '600 30px ' + SANS;
+      ctx.fillStyle = INKC;
+      var nmW = Math.min(ctx.measureText(p.name).width, 420);
+      ctx.fillText(fit(ctx, p.name, 420), PAD, y);
+      if (p.id === S.treasurer) {
+        var tx = PAD + nmW + 14;
+        ctx.font = '600 18px ' + SANS;
+        var tag = t('treasurerTag');
+        var tw2 = ctx.measureText(tag).width + 18;
+        ctx.strokeStyle = 'rgba(180,85,31,.55)';
+        ctx.lineWidth = 1.6;
+        roundRect(ctx, tx, y - 21, tw2, 27, 6);
+        ctx.stroke();
+        ctx.fillStyle = ACCC;
+        ctx.fillText(tag, tx + 9, y - 2);
+      }
+      ctx.textAlign = 'right';
+      ctx.font = '700 32px ' + MONO;
+      ctx.fillStyle = INKC;
+      ctx.fillText(money(v), right, y);
+      ctx.textAlign = 'left';
+    }
+
+    /* account, or a line saying who to send it to */
+    y += 34;
+    dash(ctx, PAD, right, y);
+    y += 40;
+    var tail = 0;
+    if (acct) {
+      ctx.font = '500 25px ' + MONO;
+      ctx.fillStyle = INKC;
+      ctx.fillText(fit(ctx, acct, right - PAD), PAD, y);
+      tail = 30;
+      y += 30;
+    } else if (S.treasurer) {
+      ctx.font = '600 24px ' + SANS;
+      ctx.fillStyle = ACCC;
+      ctx.fillText(fit(ctx, '→ ' + (S.lang === 'ko'
+        ? personName(S.treasurer) + '에게 보내 주세요'
+        : 'Send it to ' + personName(S.treasurer)), right - PAD), PAD, y);
+      tail = 30;
+      y += 30;
+    }
+
+    /* footer */
+    var fy = H - 56;
+    dash(ctx, PAD, right, fy - 26);
+    ctx.font = '500 17px ' + MONO;
+    ctx.fillStyle = MUTEDC;
+    spaced(ctx, t('cardFooter').toUpperCase(), PAD, fy, 1.6);
+    ctx.textAlign = 'right';
+    ctx.font = '700 20px ' + MONO;
+    ctx.fillStyle = ACCC;
+    ctx.fillText((S.lang === 'ko' ? '차수별 정산' : 'SPLIT'), right, fy);
+    ctx.textAlign = 'left';
+  }
+
+  function dash(ctx, x1, x2, y) {
+    ctx.save();
+    ctx.strokeStyle = LINEC;
+    ctx.lineWidth = 1.4;
+    ctx.setLineDash([7, 7]);
+    ctx.beginPath();
+    ctx.moveTo(x1, y);
+    ctx.lineTo(x2, y);
+    ctx.stroke();
+    ctx.restore();
+  }
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+  }
+
+  /* ─────────────────────────────── PNG ─────────────────────────────── */
+  function pngBlob(cb) {
+    var cv = $('cardCanvas');
+    try {
+      if (cv.toBlob) {
+        cv.toBlob(function (b) {
+          if (b) { cb(b); return; }
+          cb(dataUrlBlob(cv));
+        }, 'image/png');
+        return;
+      }
+    } catch (e) { /* fall through */ }
+    setTimeout(function () { cb(dataUrlBlob(cv)); }, 0);
+  }
+  function dataUrlBlob(cv) {
+    try {
+      var url = cv.toDataURL('image/png');
+      var bin = atob(url.split(',')[1]);
+      var len = bin.length, u8 = new Uint8Array(len);
+      for (var i = 0; i < len; i++) u8[i] = bin.charCodeAt(i);
+      return new Blob([u8], { type: 'image/png' });
+    } catch (e) { return null; }
+  }
+  function fileName() {
+    return 'splitsnap-' + (S.date || todayISO()).replace(/-/g, '') + '.png';
+  }
+  function savePng() {
+    pngBlob(function (b) {
+      if (!b) { toast(t('tSaveFail')); return; }
+      try {
+        var url = URL.createObjectURL(b);
+        var a = document.createElement('a');
+        a.href = url; a.download = fileName();
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function () { document.body.removeChild(a); URL.revokeObjectURL(url); }, 1200);
+        toast(t('tSaved'));
+      } catch (e) { toast(t('tSaveFail')); }
+    });
+  }
+  function copyPng() {
+    pngBlob(function (b) {
+      if (!b) { toast(t('tImgFail')); return; }
+      try {
+        if (navigator.clipboard && navigator.clipboard.write && window.ClipboardItem) {
+          navigator.clipboard.write([new ClipboardItem({ 'image/png': b })]).then(function () {
+            toast(t('tImgCopied'));
+          }, function () { toast(t('tImgFail')); });
+        } else {
+          toast(t('tImgFail'));
+        }
+      } catch (e) { toast(t('tImgFail')); }
+    });
+  }
+
+  /* ─────────────────────────────── 클립보드 ─────────────────────────────── */
+  function legacyCopy(str) {
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = str;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.top = '-2000px';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, str.length);
+      var ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      return ok;
+    } catch (e) { return false; }
+  }
+  function copyString(str, okMsg, failMsg) {
+    if (!str) { toast(failMsg); return; }
+    function done() { toast(okMsg); }
+    function fallback() { toast(legacyCopy(str) ? okMsg : failMsg); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(str).then(done, fallback);
+    } else {
+      fallback();
+    }
+  }
+
+  /* ─────────────────────────────── 이벤트 ─────────────────────────────── */
+  function findRound(id) {
+    for (var i = 0; i < S.rounds.length; i++) if (S.rounds[i].id === id) return S.rounds[i];
+    return null;
+  }
+  function nextWeight(v) {
+    var i = W_CYCLE.indexOf(v);
+    if (i < 0) return 2;
+    return W_CYCLE[(i + 1) % W_CYCLE.length];
+  }
+
+  function bind() {
+    peopleList.addEventListener('input', function (e) {
+      var el = e.target;
+      if (!el || el.getAttribute('data-act') !== 'pn') return;
+      var p = pById(el.getAttribute('data-id'));
+      if (!p) return;
+      p.name = el.value;
+      renderTreasurer();
+      renderOutputs();
+      syncChipNames();
+    });
+    peopleList.addEventListener('click', function (e) {
+      var btn = e.target.closest && e.target.closest('[data-act="pd"]');
+      if (!btn) return;
+      var id = btn.getAttribute('data-id');
+      if (S.people.length <= 1) { return; }
+      S.people = S.people.filter(function (p) { return p.id !== id; });
+      S.rounds.forEach(function (r) {
+        r.ids = r.ids.filter(function (x) { return x !== id; });
+        r.drinkers = r.drinkers.filter(function (x) { return x !== id; });
+      });
+      if (S.treasurer === id) S.treasurer = S.people.length ? S.people[0].id : null;
+      renderPeople(); renderTreasurer(); renderRounds(); renderOutputs();
+    });
+
+    roundsList.addEventListener('input', function (e) {
+      var el = e.target;
+      var act = el && el.getAttribute('data-act');
+      if (!act) return;
+      var r = findRound(el.getAttribute('data-id'));
+      if (!r) return;
+      if (act === 'ra') { r.amount = el.value; renderOutputs(); }
+      else if (act === 'rl') { r.label = el.value; r.auto = false; renderOutputs(); }
+      else if (act === 'alc') { r.alcohol = el.value; renderOutputs(); }
+      else if (act === 'dv') { r.discValue = el.value; renderOutputs(); }
+    });
+    roundsList.addEventListener('blur', function (e) {
+      var el = e.target;
+      if (!el || !el.getAttribute) return;
+      var act = el.getAttribute('data-act');
+      if (act === 'ra' || act === 'alc' || act === 'dv') {
+        var r = findRound(el.getAttribute('data-id'));
+        if (!r) return;
+        if (act === 'ra') { el.value = fmtInput(r.amount); }
+        if (act === 'alc') { el.value = fmtInput(r.alcohol); }
+        if (act === 'dv') { el.value = fmtInput(r.discValue); }
+      }
+    }, true);
+
+    roundsList.addEventListener('click', function (e) {
+      var el = e.target.closest && e.target.closest('[data-act]');
+      if (!el) return;
+      var act = el.getAttribute('data-act');
+      var r = findRound(el.getAttribute('data-id'));
+      if (!r) return;
+      var pid = el.getAttribute('data-pid');
+
+      if (act === 'p') {
+        var at = r.ids.indexOf(pid);
+        if (at >= 0) {
+          r.ids.splice(at, 1);
+          r.drinkers = r.drinkers.filter(function (x) { return x !== pid; });
+        } else {
+          r.ids.push(pid);
+          if (r.alcoholOn) r.drinkers.push(pid);
+        }
+        renderRounds(); renderOutputs();
+      } else if (act === 'w') {
+        e.preventDefault();
+        e.stopPropagation();
+        r.weightOn = true;
+        var cur = r.w[pid] || 1;
+        r.w[pid] = nextWeight(cur);
+        renderRounds(); renderOutputs();
+      } else if (act === 'd') {
+        var di = r.drinkers.indexOf(pid);
+        if (di >= 0) r.drinkers.splice(di, 1);
+        else r.drinkers.push(pid);
+        renderRounds(); renderOutputs();
+      } else if (act === 'tg') {
+        var which = el.getAttribute('data-tg');
+        if (which === 'alcohol') {
+          r.alcoholOn = !r.alcoholOn;
+          if (r.alcoholOn && !r.drinkers.length) r.drinkers = r.ids.slice();
+        } else if (which === 'discount') {
+          r.discOn = !r.discOn;
+        } else if (which === 'weight') {
+          r.weightOn = !r.weightOn;
+        }
+        renderRounds(); renderOutputs();
+      } else if (act === 'dm') {
+        r.discMode = el.getAttribute('data-dm');
+        renderRounds(); renderOutputs();
+      } else if (act === 'rd') {
+        S.rounds = S.rounds.filter(function (x) { return x.id !== r.id; });
+        renderRounds(); renderOutputs();
+      }
+    });
+    roundsList.addEventListener('keydown', function (e) {
+      var el = e.target;
+      if (!el || !el.getAttribute) return;
+      var act = el.getAttribute('data-act');
+      if ((act === 'p' || act === 'd') && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault();
+        el.click();
+      } else if (act === 'w' && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault();
+        el.click();
+      }
+    });
+
+    $('addPerson').addEventListener('click', function () {
+      var n = S.people.length + 1;
+      var nm = (S.lang === 'ko' ? '이름' : 'Person') + ' ' + n;
+      var p = { id: uid('p'), name: nm };
+      S.people.push(p);
+      S.rounds.forEach(function (r) { r.ids.push(p.id); });
+      if (!S.treasurer) S.treasurer = p.id;
+      renderPeople(); renderTreasurer(); renderRounds(); renderOutputs();
+    });
+    $('addRound').addEventListener('click', function () {
+      var ids = S.people.map(function (p) { return p.id; });
+      var idx = S.rounds.length;
+      S.rounds.push(mkRound(idx, 0, ids));
+      renderRounds(); renderOutputs();
+    });
+    $('addFree').addEventListener('click', function () {
+      var ids = S.people.map(function (p) { return p.id; });
+      var r = mkRound(S.rounds.length, 0, ids);
+      r.label = S.lang === 'ko' ? '자유 항목' : 'Extra item';
+      r.auto = false;
+      S.rounds.push(r);
+      renderRounds(); renderOutputs();
+    });
+
+    /* 통화 · 단위 · 방식 · 차액 */
+    var segs = [
+      { id: 'unitSeg', attr: 'unit', set: function (v) { S.unit = parseInt(v, 10) || 1; } },
+      { id: 'modeSeg', attr: 'mode', set: function (v) { S.mode = v; } },
+      { id: 'resSeg', attr: 'res', set: function (v) { S.residual = v; } }
+    ];
+    segs.forEach(function (cfg) {
+      var box = $(cfg.id);
+      if (!box) return;
+      box.addEventListener('click', function (e) {
+        var b = e.target.closest && e.target.closest('button[data-' + cfg.attr + ']');
+        if (!b) return;
+        cfg.set(b.getAttribute('data-' + cfg.attr));
+        syncSegs();
+        renderOutputs();
+      });
+    });
+
+    var curSeg = document.querySelector('.seg--4');
+    curSeg.addEventListener('click', function (e) {
+      var b = e.target.closest && e.target.closest('button[data-cur]');
+      if (!b) return;
+      var next = b.getAttribute('data-cur');
+      if (next === S.currency) return;
+      S.currency = next;
+      if (S.unit > 100) S.unit = 100;
+      syncSegs();
+      renderRounds(); renderOutputs();
+    });
+
+    $('treasurerSel').addEventListener('change', function (e) {
+      S.treasurer = e.target.value;
+      renderOutputs();
+    });
+    $('dateInput').addEventListener('change', function (e) {
+      S.date = e.target.value || todayISO();
+      renderOutputs();
+    });
+
+    ['bankInput', 'acctInput', 'holderInput'].forEach(function (id) {
+      $(id).addEventListener('input', function (e) {
+        if (id === 'bankInput') S.account.bank = e.target.value;
+        if (id === 'acctInput') S.account.num = e.target.value;
+        if (id === 'holderInput') S.account.holder = e.target.value;
+        renderOutputs();
+      });
+    });
+
+    $('copyText').addEventListener('click', function () {
+      copyString(kakaoText(), t('tCopied'), t('tCopyFail'));
+    });
+    $('copyAcct').addEventListener('click', function () {
+      var a = accountLine();
+      if (!a) { toast(t('tAcctEmpty')); return; }
+      copyString(a, t('tAcctCopied'), t('tCopyFail'));
+    });
+    $('savePng').addEventListener('click', savePng);
+    $('copyPng').addEventListener('click', copyPng);
+
+    $('langToggle').addEventListener('click', function () {
+      applyLang(S.lang === 'ko' ? 'en' : 'ko');
+    });
+  }
+
+  function syncSegs() {
+    var map = [
+      ['#unitSeg', 'unit', String(S.unit)],
+      ['#modeSeg', 'mode', S.mode],
+      ['#resSeg', 'res', S.residual]
+    ];
+    map.forEach(function (m) {
+      var box = document.querySelector(m[0]);
+      if (!box) return;
+      var btns = box.querySelectorAll('button');
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].setAttribute('aria-pressed', String(btns[i].getAttribute('data-' + m[1]) === m[2]));
+      }
+    });
+    var cur = document.querySelectorAll('.seg--4 button[data-cur]');
+    for (var j = 0; j < cur.length; j++) {
+      cur[j].setAttribute('aria-pressed', String(cur[j].getAttribute('data-cur') === S.currency));
+    }
+    var units = document.querySelectorAll('#unitSeg button');
+    var labels = S.currency === 'KRW' ? ['1원', '10원', '100원'] : ['0.01', '0.10', '1'];
+    for (var k = 0; k < units.length; k++) {
+      if (labels[k] != null) units[k].textContent = labels[k];
+    }
+  }
+
+  function syncChipNames() {
+    var chips = roundsList.querySelectorAll('.pchip .nm');
+    for (var i = 0; i < chips.length; i++) {
+      var host = chips[i].parentNode;
+      chips[i].textContent = personName(host.getAttribute('data-pid'));
+    }
+    var opts = $('treasurerSel').options;
+    for (var j = 0; j < opts.length; j++) {
+      opts[j].textContent = personName(opts[j].value) || t('noOne');
+    }
+  }
+
+  /* ─────────────────────────────── 언어 적용 ─────────────────────────────── */
+  function applyLang(lang) {
+    var prev = S.lang;
+    S.lang = lang === 'en' ? 'en' : 'ko';
+    document.documentElement.setAttribute('lang', S.lang);
+    try { localStorage.setItem(LANG_KEY, S.lang); } catch (e) {}
+
+    document.title = t('docTitle');
+    var md = document.querySelector('meta[name="description"]'); if (md) md.setAttribute('content', t('metaDesc'));
+    var ot = document.querySelector('meta[property="og:title"]'); if (ot) ot.setAttribute('content', t('ogTitle'));
+    var od = document.querySelector('meta[property="og:description"]'); if (od) od.setAttribute('content', t('ogDesc'));
+    var tt = document.querySelector('meta[name="twitter:title"]'); if (tt) tt.setAttribute('content', t('ogTitle'));
+    var td = document.querySelector('meta[name="twitter:description"]'); if (td) td.setAttribute('content', t('ogDesc'));
+
+    var nodes = document.querySelectorAll('[data-i18n]'), i, v;
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-html'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-aria'));
+      if (v) nodes[i].setAttribute('aria-label', v);
+    }
+    nodes = document.querySelectorAll('[data-i18n-ph]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-ph'));
+      nodes[i].setAttribute('placeholder', v);
+    }
+
+    var spans = document.querySelectorAll('#langToggle [data-lt]');
+    for (i = 0; i < spans.length; i++) {
+      spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === S.lang);
+    }
+    var lt = $('langToggle');
+    lt.setAttribute('title', t('toggleTo'));
+    lt.setAttribute('aria-label', t('toggleTo'));
+
+    /* 아직 손대지 않은 기본값만 새 언어로 바꾼다 */
+    if (prev !== S.lang) {
+      var oldNames = NAMES[prev] || NAMES.ko;
+      var newNames = NAMES[S.lang] || NAMES.ko;
+      for (i = 0; i < S.people.length && i < oldNames.length; i++) {
+        if (S.people[i].name === oldNames[i]) S.people[i].name = newNames[i];
+      }
+      S.rounds.forEach(function (r, idx) {
+        if (r.auto) r.label = autoLabel(idx);
+      });
+    }
+
+    renderPeople();
+    renderTreasurer();
+    renderRounds();
+    renderOutputs();
+  }
+
+  function readLang() {
+    try {
+      var s = localStorage.getItem(LANG_KEY);
+      if (s === 'ko' || s === 'en') return s;
+    } catch (e) {}
+    var nav = (navigator.language || 'ko').toLowerCase();
+    return nav.indexOf('ko') === 0 ? 'ko' : 'en';
+  }
+
+  /* ─────────────────────────────── 시작 ─────────────────────────────── */
+  function init() {
+    peopleList = $('peopleList');
+    roundsList = $('roundsList');
+    toastEl = $('toast');
+
+    seed();
+    $('dateInput').value = S.date;
+    bind();
+    syncSegs();
+    applyLang(readLang());
+
+    /* network counter — 외부 요청만 센다 */
+    var ext = 0;
+    function note(list) {
+      for (var i = 0; i < list.length; i++) {
+        try {
+          var u = new URL(list[i].name, location.href);
+          if (u.origin !== location.origin) ext++;
+        } catch (e) { /* opaque entry */ }
+      }
+      var el = $('netCount');
+      if (el) el.textContent = String(ext);
+    }
+    if (window.PerformanceObserver) {
+      try {
+        new PerformanceObserver(function (l) { note(l.getEntries()); })
+          .observe({ entryTypes: ['resource'] });
+      } catch (e) {}
+    }
+    window.addEventListener('load', function () {
+      setTimeout(function () {
+        if (window.performance && performance.getEntriesByType) {
+          note(performance.getEntriesByType('resource'));
+        }
+      }, 350);
+    });
+
+    /* 테스트·확장용 읽기 전용 창구 (페이지 밖으로 나가는 값은 없다) */
+    window.SplitSnap = {
+      summary: function () {
+        var R = LAST || compute();
+        var out = { total: R.total, unalloc: R.unalloc, rounds: [], totals: {} };
+        R.rounds.forEach(function (rr) {
+          out.rounds.push({ label: rr.label, net: rr.net, count: rr.count, shares: rr.shares, absorb: rr.absorb });
+        });
+        S.people.forEach(function (p) { out.totals[p.name] = R.totals[p.id] || 0; });
+        return out;
+      },
+      kakaoText: function () { return kakaoText(); },
+      pngSize: function () {
+        return new Promise(function (res) {
+          pngBlob(function (b) { res(b ? b.size : 0); });
+        });
+      },
+      state: S
+    };
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>
