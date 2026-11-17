@@ -480,8 +480,8 @@
     margin: clamp(26px, 6vw, 44px) auto clamp(28px, 6vw, 46px);
     border: 0;
     border-radius: 20px;
-    background: url(../img/my_img-min.jpg) center center / cover no-repeat,
-      #1a1712;
+    /* 프로필 사진은 공개 저장소에 없다(제외) — 404 요청을 만들지 않도록 색만 남긴다 */
+    background: #1a1712;
     box-shadow: 0 28px 60px rgba(0, 0, 0, 0.55),
       0 0 0 1px rgba(244, 239, 228, 0.14);
     overflow: hidden;

@@ -151,9 +151,9 @@ header .header_nav a:focus-visible {
   justify-content: center;
 }
 #section1 .sec1_ani4 {
-  background: url(../img/my_img-min.jpg);
-  background-size: cover;
-  background-position: center center;
+  /* 프로필 사진은 공개 저장소에서 제외했다 — 없는 파일을 배경으로 두면
+     페이지마다 404 요청이 남는다. 자리 크기만 유지한다. */
+  background: none;
   width: 17vw;
   height: 22vw;
   transform: translate(-50%, -50%);
