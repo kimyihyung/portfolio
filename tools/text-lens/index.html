@@ -459,7 +459,10 @@ button { font-family: inherit; color: inherit; }
   .hero h1 { font-size: clamp(25px, 7.4vw, 34px); }
   .lede { font-size: 13.6px; }
   .brand-txt { display: none; }
-  #text { min-height: 300px; font-size: 15px; padding: 13px 14px 15px; }
+  /* 16px keeps iOS Safari from zooming the page when a field takes focus */
+  #text { min-height: 300px; font-size: 16px; padding: 13px 14px 15px; }
+  .goal-custom input[type="number"], .goal-basis select { font-size: 16px; height: 34px; }
+  .goal-custom input[type="number"] { width: 104px; }
   .stat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .tile--lead .val { font-size: 34px; }
   .issue-list { max-height: 240px; }
@@ -509,6 +512,10 @@ button { font-family: inherit; color: inherit; }
     <h1 data-i18n-html="h1">Count the characters.<br><span class="dim">Keep the words.</span></h1>
     <p class="lede" data-i18n-html="lede">Korean forms still cut people off by <b>characters with spaces</b> and <b>EUC-KR bytes</b>. Paste your text and both numbers appear at once, with how many characters are left before the limit. Blank lines, broken line breaks and Markdown marks clean up in one click, and sentences over 80 characters and clichés get marked. The draft never leaves this tab.</p>
   </section>
+
+  <noscript>
+    <p class="caveat" style="margin:0 0 16px">글자수·바이트 계산은 이 탭의 자바스크립트로만 돌아갑니다. JavaScript를 켜면 바로 세어지고, 원고는 어디로도 전송되지 않습니다.</p>
+  </noscript>
 
   <div class="work">
 
@@ -1126,7 +1133,6 @@ window.addEventListener('unhandledrejection', function (e) {
      pair once gives the exact set of characters CP949 can hold, so the count
      is measured instead of estimated from Unicode blocks. */
   var cp949 = null;
-  var cp949MissingThreshold = 0;
 
   function buildCp949() {
     if (cp949 !== null) return cp949;
