@@ -1,0 +1,1764 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0a0c">
+<title>RedacSnap — Blur Faces &amp; Strip EXIF, Nothing Uploaded | Kim Yihyung</title>
+<meta name="description" content="Hide a face, a number plate, an address or a screen with mosaic, blur or a solid black bar, then save the photo with every EXIF, GPS, IPTC and XMP field stripped — 100% in your browser, 0 bytes uploaded, 0 external requests.">
+<meta name="keywords" content="blur face online, mosaic photo, redact photo, hide personal information photo, remove exif, strip gps from photo, metadata remover, blur number plate, censor image, no upload photo editor, private image redaction, exif cleaner, client-side photo tool">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/redac-snap/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0a0c'/%3E%3Cg fill='%23ff7a5f'%3E%3Crect x='7' y='8' width='5' height='5' rx='1'/%3E%3Crect x='14' y='8' width='5' height='5' rx='1'/%3E%3Crect x='21' y='8' width='4' height='5' rx='1'/%3E%3Crect x='7' y='15' width='5' height='5' rx='1'/%3E%3Crect x='14' y='15' width='11' height='5' rx='1'/%3E%3Crect x='7' y='22' width='18' height='4' rx='1'/%3E%3C/g%3E%3C/svg%3E">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/redac-snap/">
+<meta property="og:title" content="RedacSnap — Blur It Out, Strip the Metadata">
+<meta property="og:description" content="Mosaic, blur or a black bar over anything private, with every EXIF, GPS, IPTC and XMP field gone from the saved file. 0 bytes uploaded, 0 external requests.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="RedacSnap — zero-upload photo redaction and EXIF stripping in the browser">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="RedacSnap — Blur It Out, Strip the Metadata">
+<meta name="twitter:description" content="Cover a face, plate or address, then save the photo with no EXIF, no GPS, no XMP — inside one tab, nothing uploaded.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta name="twitter:image:alt" content="RedacSnap — zero-upload photo redaction and EXIF stripping in the browser">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "RedacSnap — Zero-Upload Photo Redaction & EXIF Stripper",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/redac-snap/",
+      "description": "Covers faces, plates, addresses and screens with mosaic, gaussian blur or a solid black bar, and re-encodes the photo to JPEG, PNG or WebP so that every EXIF, GPS, IPTC and XMP field is gone — entirely in the browser with zero uploads and zero external requests.",
+      "featureList": [
+        "Pixelate, gaussian blur and solid black brushes",
+        "Rectangle drag selection for a single area at a time",
+        "Pointer, mouse and touch support with size and strength control",
+        "Undo, reset and press-and-hold before/after comparison",
+        "Automatic metadata strip by canvas re-encode, verified against the exported bytes",
+        "JPEG, PNG and WebP export with quality control, plus clipboard copy",
+        "100% client-side: no uploads, no accounts, no external requests"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "RedacSnap", "item": "https://kimyihyung.github.io/portfolio/tools/redac-snap/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does the photo get uploaded anywhere?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. The file is decoded with the browser's own image decoder and drawn into a canvas in this tab's memory. The counter in the header and footer shows bytes sent and external requests made by the page, and both stay at 0. There is no server endpoint in this tool at all." }
+        },
+        {
+          "@type": "Question",
+          "name": "How does the EXIF and GPS data actually disappear?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The export is not the original file with fields removed — it is a new file built from canvas pixels alone. EXIF, GPS, IPTC, XMP, maker notes and camera serial numbers live in header blocks outside the pixels, so a re-encode cannot carry them over. RedacSnap then reads the bytes it just produced and lists how many metadata fields it finds: zero." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is mosaic or blur safer for hiding a face?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Both are lossy, and a coarse mosaic can sometimes be attacked with machine learning when the same face appears elsewhere. For anything that must not be recovered — a document number, a screenshot of an address — use the solid black bar. Mosaic and blur are for photos where the object only needs to be unrecognisable at a glance." }
+        },
+        {
+          "@type": "Question",
+          "name": "Which format should I save in?",
+          "acceptedAnswer": { "@type": "Answer", "text": "JPEG at quality 0.9 is right for photos posted to social media or sent by message. PNG keeps text crisp and adds no compression artefacts, which suits screenshots and documents. WebP is the smallest of the three for the same visual quality. None of the three can carry the original metadata through this tool." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+:root {
+  --bg: #0b0a0c;
+  --bg2: #0e0d10;
+  --panel: #141216;
+  --panel2: #1a171c;
+  --line: rgba(255,255,255,.09);
+  --line2: rgba(255,255,255,.18);
+  --ink: #f6f1ec;
+  --muted: #a9a29c;
+  --muted2: #7b746e;
+  --accent: #ff7a5f;
+  --accent2: #ff9f7f;
+  --accent-dim: rgba(255,122,95,.12);
+  --on-accent: #1d0803;
+  --ok: #6fd6a2;
+  --warn: #ffc06b;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --shadow: 0 24px 70px rgba(0,0,0,.55);
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-family: var(--font);
+  color: var(--ink);
+  line-height: 1.6;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(110% 55% at 50% -18%, rgba(255,122,95,.13), transparent 62%),
+    radial-gradient(60% 40% at 100% 2%, rgba(255,122,95,.05), transparent 60%);
+  background-repeat: no-repeat;
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: var(--accent); color: var(--on-accent); }
+a { color: inherit; }
+button, input, select { font-family: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+.wrap { width: 100%; max-width: 1220px; margin: 0 auto; padding: 0 20px 48px; }
+
+/* ---------- topbar ---------- */
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0 12px; }
+.brand { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: var(--ink); }
+.mark {
+  min-width: 28px; height: 22px; padding: 0 6px; border-radius: 7px;
+  border: 1px solid rgba(255,122,95,.45); background: var(--accent-dim);
+  display: grid; place-items: center; font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: var(--accent);
+}
+.top-actions { display: inline-flex; align-items: center; gap: 9px; }
+.lang-toggle {
+  appearance: none; border: 1px solid var(--line); background: var(--panel); color: var(--muted2);
+  height: 34px; padding: 0 11px; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px;
+  cursor: pointer; font-size: 11px; font-weight: 700; letter-spacing: .06em; line-height: 1;
+  transition: color .2s, border-color .2s, transform .15s;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.94); }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; }
+.topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
+
+/* ---------- hero ---------- */
+.hero { padding: 22px 0 18px; max-width: 760px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; margin: 0 0 14px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--accent);
+  border: 1px solid rgba(255,122,95,.28); background: rgba(255,122,95,.06); padding: 6px 11px; border-radius: 999px;
+}
+.eyebrow .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+h1 { margin: 0 0 14px; font-size: clamp(29px, 4.6vw, 46px); line-height: 1.04; letter-spacing: -.02em; font-weight: 800; }
+h1 .soft { color: var(--muted); }
+h1 .gold { color: var(--accent); }
+.lede { margin: 0 0 16px; color: var(--muted); font-size: 15px; max-width: 680px; }
+.lede strong { color: var(--ink); font-weight: 600; }
+
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--panel); font-size: 11.5px; color: var(--muted);
+  font-family: var(--mono); letter-spacing: .02em;
+}
+.pill b { color: var(--ink); font-weight: 700; }
+.pill--live { border-color: rgba(111,214,162,.32); background: rgba(111,214,162,.07); color: #9fe3c1; }
+.pill--live b { color: #b9f0d5; }
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px rgba(111,214,162,.14); }
+
+/* ---------- layout ---------- */
+.work { display: grid; grid-template-columns: minmax(0,1fr) 336px; gap: 16px; align-items: start; margin-top: 6px; }
+@media (max-width: 1000px) {
+  .work { grid-template-columns: 1fr; }
+}
+
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); }
+
+/* ---------- dropzone ---------- */
+.drop {
+  position: relative; display: grid; place-items: center; text-align: center;
+  padding: 54px 22px; border-radius: var(--radius);
+  border: 1.5px dashed rgba(255,122,95,.34);
+  background: linear-gradient(180deg, rgba(255,122,95,.05), rgba(255,122,95,.01));
+  transition: border-color .2s, background .2s;
+}
+.drop.is-over { border-color: var(--accent); background: rgba(255,122,95,.10); }
+.drop h2 { margin: 14px 0 6px; font-size: 19px; font-weight: 700; letter-spacing: -.01em; }
+.drop p { margin: 0; color: var(--muted); font-size: 13px; }
+.drop-icon { width: 54px; height: 54px; border-radius: 15px; border: 1px solid rgba(255,122,95,.36); background: var(--accent-dim); display: grid; place-items: center; }
+.drop-icon svg { width: 26px; height: 26px; stroke: var(--accent); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.drop .hint { margin-top: 10px; font-family: var(--mono); font-size: 11px; color: var(--muted2); letter-spacing: .04em; }
+
+.btn {
+  appearance: none; cursor: pointer; border-radius: 11px; border: 1px solid var(--line2);
+  background: var(--panel2); color: var(--ink); font-size: 13px; font-weight: 650;
+  padding: 10px 16px; display: inline-flex; align-items: center; gap: 7px;
+  transition: transform .12s, border-color .2s, background .2s, opacity .2s;
+}
+.btn:hover { border-color: rgba(255,255,255,.3); }
+.btn:active { transform: scale(.98); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 750; }
+.btn--primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.btn--ghost { background: transparent; }
+.btn--sm { padding: 7px 11px; font-size: 12px; border-radius: 9px; }
+.btn--block { width: 100%; justify-content: center; }
+
+/* ---------- editor ---------- */
+.editor { display: grid; gap: 12px; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 12px; }
+.tg { display: inline-flex; padding: 3px; gap: 3px; background: var(--panel2); border: 1px solid var(--line); border-radius: 12px; }
+.tg button {
+  appearance: none; border: 0; background: transparent; color: var(--muted); cursor: pointer;
+  font-size: 12.5px; font-weight: 650; padding: 7px 11px; border-radius: 9px; line-height: 1;
+  display: inline-flex; align-items: center; gap: 6px; transition: color .18s, background .18s;
+}
+.tg button:hover { color: var(--ink); }
+.tg button[aria-pressed="true"] { background: var(--accent-dim); color: var(--accent); box-shadow: inset 0 0 0 1px rgba(255,122,95,.35); }
+.tg button .sw { width: 9px; height: 9px; border-radius: 3px; }
+
+.field {
+  display: grid; gap: 4px; min-width: 132px; flex: 0 1 152px;
+  padding: 6px 10px 4px; border: 1px solid var(--line); border-radius: 11px; background: var(--panel2);
+}
+.field label { display: flex; justify-content: space-between; gap: 8px; font-size: 11px; font-family: var(--mono); letter-spacing: .05em; text-transform: uppercase; color: var(--muted2); }
+.field label b { color: var(--accent); font-weight: 700; }
+input[type="range"] {
+  -webkit-appearance: none; appearance: none; width: 100%; height: 20px; background: transparent; cursor: pointer; margin: 0;
+}
+input[type="range"]::-webkit-slider-runnable-track { height: 4px; border-radius: 999px; background: rgba(255,255,255,.14); }
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none; width: 15px; height: 15px; border-radius: 50%;
+  background: var(--accent); border: 0; margin-top: -5.5px; box-shadow: 0 0 0 4px rgba(255,122,95,.16);
+}
+input[type="range"]::-moz-range-track { height: 4px; border-radius: 999px; background: rgba(255,255,255,.14); }
+input[type="range"]::-moz-range-thumb { width: 15px; height: 15px; border: 0; border-radius: 50%; background: var(--accent); }
+
+.stage-wrap { position: relative; padding: 10px; display: grid; place-items: center; background: var(--bg2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.stage { position: relative; display: inline-block; line-height: 0; max-width: 100%; }
+#cv { display: block; max-width: 100%; max-height: 60vh; width: auto; height: auto; touch-action: none; border-radius: 8px; background: #000; }
+#ov, #cmp { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; border-radius: 8px; }
+#cmp { opacity: 0; transition: opacity .12s; }
+.is-comparing #cmp { opacity: 1; }
+
+.stage-meta { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding: 9px 12px; font-family: var(--mono); font-size: 11px; color: var(--muted2); letter-spacing: .03em; }
+.stage-meta b { color: var(--muted); font-weight: 600; }
+
+.rail { display: flex; gap: 8px; padding: 10px 12px; overflow-x: auto; border-top: 1px solid var(--line); }
+.rail:empty { display: none; }
+.thumb { position: relative; flex: 0 0 auto; width: 62px; height: 62px; border-radius: 10px; overflow: hidden; border: 1.5px solid var(--line); background: #000; cursor: pointer; padding: 0; }
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.thumb[aria-current="true"] { border-color: var(--accent); }
+.thumb .x {
+  position: absolute; top: 2px; right: 2px; width: 17px; height: 17px; border-radius: 5px;
+  border: 0; background: rgba(0,0,0,.66); color: #fff; font-size: 11px; line-height: 17px; cursor: pointer; padding: 0;
+}
+
+/* ---------- side panel ---------- */
+.side { display: grid; gap: 12px; position: sticky; top: 14px; }
+@media (max-width: 1000px) { .side { position: static; } }
+.panel { padding: 14px; display: grid; gap: 11px; }
+.panel h3 { margin: 0; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted2); font-family: var(--mono); font-weight: 700; }
+.seg { display: flex; gap: 3px; padding: 3px; background: var(--panel2); border: 1px solid var(--line); border-radius: 11px; }
+.seg button { flex: 1; appearance: none; border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; font-weight: 650; padding: 7px 4px; border-radius: 8px; line-height: 1; }
+.seg button[aria-pressed="true"] { background: var(--accent-dim); color: var(--accent); box-shadow: inset 0 0 0 1px rgba(255,122,95,.35); }
+.panel .field { background: transparent; border: 0; padding: 0; flex: 1 1 auto; }
+.row { display: flex; gap: 8px; }
+.row > * { flex: 1; }
+
+.meta-list { display: grid; gap: 5px; margin: 0; padding: 0; list-style: none; }
+.meta-list li { display: flex; justify-content: space-between; gap: 10px; font-size: 12px; color: var(--muted); border-bottom: 1px dashed rgba(255,255,255,.07); padding-bottom: 4px; }
+.meta-list li:last-child { border-bottom: 0; padding-bottom: 0; }
+.meta-list li b { color: var(--ink); font-weight: 600; font-family: var(--mono); font-size: 11.5px; text-align: right; word-break: break-word; }
+.meta-stat { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: 12.5px; color: var(--muted); }
+.meta-stat b { font-family: var(--mono); font-size: 15px; color: var(--ink); }
+.meta-stat.is-zero b { color: var(--ok); }
+.meta-empty { margin: 0; font-size: 12px; color: var(--muted2); }
+.tagline { display: flex; flex-wrap: wrap; gap: 5px; }
+.tag { font-family: var(--mono); font-size: 10.5px; letter-spacing: .02em; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+.tag.is-gps { border-color: rgba(255,122,95,.4); color: var(--accent); }
+
+.status { min-height: 18px; margin: 0; font-size: 12.5px; color: var(--muted); }
+.status.is-ok { color: var(--ok); }
+.status.is-warn { color: var(--warn); }
+
+/* ---------- notes / faq ---------- */
+.section { margin-top: 40px; }
+.sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 16px; }
+.sec-head h2 { margin: 0; font-size: 17px; letter-spacing: -.01em; }
+.sec-head span { font-family: var(--mono); font-size: 11px; color: var(--muted2); letter-spacing: .08em; text-transform: uppercase; }
+.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(258px, 1fr)); gap: 12px; }
+.note { padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel); }
+.note h3 { margin: 0 0 8px; font-size: 14px; display: flex; gap: 8px; align-items: baseline; }
+.note h3 span { font-family: var(--mono); font-size: 10.5px; color: var(--accent); letter-spacing: .1em; }
+.note p { margin: 0; font-size: 12.8px; color: var(--muted); line-height: 1.62; }
+.note b { color: var(--ink); font-weight: 600; }
+
+.faq { display: grid; gap: 8px; }
+details.qa { border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); overflow: hidden; }
+details.qa summary { cursor: pointer; padding: 13px 44px 13px 15px; font-size: 13.5px; font-weight: 600; list-style: none; position: relative; }
+details.qa summary::-webkit-details-marker { display: none; }
+details.qa summary::after { content: "+"; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--accent); font-family: var(--mono); font-size: 15px; }
+details.qa[open] summary::after { content: "−"; }
+details.qa .a { padding: 0 15px 14px; font-size: 12.8px; color: var(--muted); line-height: 1.68; }
+details.qa .a b { color: var(--ink); font-weight: 600; }
+
+/* ---------- footer ---------- */
+.foot { margin-top: 34px; padding-top: 14px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--muted2); }
+.foot-links { display: inline-flex; flex-wrap: wrap; gap: 12px; }
+.foot-links a { text-decoration: none; color: var(--muted); border-bottom: 1px solid transparent; }
+.foot-links a:hover { color: var(--ink); border-bottom-color: var(--line2); }
+.foot .net { font-family: var(--mono); letter-spacing: .02em; }
+.foot .net b { color: var(--ok); }
+
+@media (max-width: 640px) {
+  .wrap { padding: 0 14px 36px; }
+  .topbar { padding: 14px 0 8px; }
+  .brand-txt { font-size: 12px; letter-spacing: .1em; }
+  .hero { padding: 16px 0 12px; }
+  .lede { font-size: 14px; }
+  .drop { padding: 38px 16px; }
+  .toolbar { padding: 10px; gap: 8px; }
+  .field { min-width: 100%; flex: 1 1 100%; }
+  .tg button { padding: 7px 9px; font-size: 12px; }
+  .stage-meta { font-size: 10.5px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="/portfolio/" aria-label="Kim Yihyung — portfolio" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="View in Korean" aria-label="View in Korean">
+        <span class="lt on" data-lt="en">EN</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="ko">KO</span>
+      </button>
+      <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← All tools</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="eyebrow">RedacSnap · zero upload</span></p>
+      <h1 data-i18n-html="h1">Blur it out.<br><span class="soft">Strip the metadata.</span><br><span class="gold">Nothing gets uploaded.</span></h1>
+      <p class="lede" data-i18n-html="lede">
+        Cover a face, a plate, an address or a screen with <strong>mosaic, blur or a solid black bar</strong> —
+        then save the photo with <strong>every EXIF, GPS, IPTC and XMP field gone</strong>.
+        The pixels are read into canvas memory in this tab, and there is no server to send them to.
+      </p>
+      <div class="badge-row">
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillUp">0 bytes uploaded</b></span>
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillNet">0 external requests</b></span>
+        <span class="pill">PNG · JPEG · WebP</span>
+      </div>
+    </section>
+
+    <section class="work" aria-label="Redaction workspace" data-i18n-aria="workAria">
+      <div>
+        <!-- drop zone -->
+        <div class="card drop" id="drop">
+          <div class="drop-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5"/><path d="M4 15v3a2 2 0 002 2h12a2 2 0 002-2v-3"/></svg>
+          </div>
+          <h2 data-i18n="dropTitle">Drop a photo here</h2>
+          <p data-i18n="dropSub">or pick a file — it never leaves this tab</p>
+          <div style="margin-top:16px">
+            <button class="btn btn--primary" id="pick" type="button" data-i18n="pick">Choose files</button>
+          </div>
+          <p class="hint" data-i18n="dropHint">PNG · JPEG · WebP · or paste with Ctrl/⌘ + V</p>
+          <input type="file" id="file" accept="image/png,image/jpeg,image/webp" multiple hidden>
+        </div>
+
+        <!-- editor -->
+        <div class="card editor" id="editor" hidden>
+          <div class="toolbar">
+            <div class="tg" role="group" aria-label="Redaction style" data-i18n-aria="modeAria">
+              <button type="button" data-mode="pixel" aria-pressed="true"><span class="sw" style="background:linear-gradient(135deg,#ff7a5f,#ff9f7f)"></span><span data-i18n="mPixel">Pixelate</span></button>
+              <button type="button" data-mode="blur" aria-pressed="false"><span class="sw" style="background:linear-gradient(135deg,#9fb3c8,#dfe8f0)"></span><span data-i18n="mBlur">Blur</span></button>
+              <button type="button" data-mode="black" aria-pressed="false"><span class="sw" style="background:#000;border:1px solid #444"></span><span data-i18n="mBlack">Black bar</span></button>
+            </div>
+            <div class="tg" role="group" aria-label="Shape" data-i18n-aria="shapeAria">
+              <button type="button" data-shape="brush" aria-pressed="true"><span data-i18n="sBrush">Brush</span></button>
+              <button type="button" data-shape="rect" aria-pressed="false"><span data-i18n="sRect">Rectangle</span></button>
+            </div>
+            <div class="field">
+              <label for="size"><span data-i18n="sizeLabel">Size</span><b id="sizeVal">6%</b></label>
+              <input type="range" id="size" min="2" max="24" step="1" value="6">
+            </div>
+            <div class="field">
+              <label for="strength"><span data-i18n="strengthLabel">Strength</span><b id="strengthVal">5</b></label>
+              <input type="range" id="strength" min="1" max="10" step="1" value="5">
+            </div>
+            <div class="tg" role="group" aria-label="History" data-i18n-aria="histAria">
+              <button type="button" id="undo" title="Undo (Ctrl+Z)"><span data-i18n="undo">Undo</span></button>
+              <button type="button" id="reset"><span data-i18n="reset">Reset</span></button>
+              <button type="button" id="compare"><span data-i18n="compare">Hold to compare</span></button>
+            </div>
+          </div>
+
+          <div class="stage-wrap">
+            <div class="stage" id="stage">
+              <canvas id="cv"></canvas>
+              <canvas id="ov" aria-hidden="true"></canvas>
+              <canvas id="cmp" aria-hidden="true"></canvas>
+            </div>
+          </div>
+          <div class="stage-meta">
+            <span id="imgInfo">—</span>
+            <span id="opInfo">—</span>
+          </div>
+          <div class="rail" id="rail" aria-label="Loaded photos" data-i18n-aria="railAria"></div>
+        </div>
+      </div>
+
+      <!-- side panel -->
+      <aside class="side">
+        <div class="card panel">
+          <h3 data-i18n="exportHead">Export</h3>
+          <div class="seg" id="fmt" role="group" aria-label="Output format" data-i18n-aria="fmtAria">
+            <button type="button" data-fmt="image/jpeg" aria-pressed="true">JPEG</button>
+            <button type="button" data-fmt="image/png" aria-pressed="false">PNG</button>
+            <button type="button" data-fmt="image/webp" aria-pressed="false">WebP</button>
+          </div>
+          <div class="field" id="qualityField">
+            <label for="quality"><span data-i18n="qualityLabel">Quality</span><b id="qualityVal">92</b></label>
+            <input type="range" id="quality" min="50" max="100" step="1" value="92">
+          </div>
+          <button class="btn btn--primary btn--block" id="download" type="button" data-i18n="download" disabled>Download</button>
+          <div class="row">
+            <button class="btn btn--ghost btn--sm" id="copy" type="button" data-i18n="copy" disabled>Copy image</button>
+            <button class="btn btn--ghost btn--sm" id="again" type="button" data-i18n="again">New photo</button>
+          </div>
+          <p class="status" id="status" role="status" aria-live="polite"></p>
+        </div>
+
+        <div class="card panel">
+          <h3 data-i18n="metaHead">Metadata</h3>
+          <div class="meta-stat" id="origStat"><span data-i18n="origLabel">In the original file</span><b id="origCount">—</b></div>
+          <ul class="meta-list" id="metaList"></ul>
+          <p class="meta-empty" id="metaEmpty" data-i18n="metaEmpty">No metadata found — this photo was already clean.</p>
+          <div class="meta-stat is-zero" id="outStat"><span data-i18n="outLabel">In the file you save</span><b id="outCount">0</b></div>
+          <p class="meta-empty" id="outNote" data-i18n="outNote">Measured on the exported bytes, not promised.</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" aria-labelledby="howTitle">
+      <div class="sec-head">
+        <h2 id="howTitle" data-i18n="howTitle">How it works</h2>
+        <span data-i18n="howNote">Three things worth knowing</span>
+      </div>
+      <div class="notes">
+        <div class="note">
+          <h3><span>01</span> <span class="t" data-i18n="n1h">The save is a new file, not an edit</span></h3>
+          <p data-i18n-html="n1p">EXIF, GPS, IPTC and XMP sit in header blocks beside the pixels. RedacSnap draws the <b>pixels</b> onto a canvas and encodes a brand-new file from them, so those blocks have nowhere to be copied from. The panel on the right shows what the original carried and what the saved bytes actually contain.</p>
+        </div>
+        <div class="note">
+          <h3><span>02</span> <span class="t" data-i18n="n2h">Blur is for looks, black is for keeps</span></h3>
+          <p data-i18n-html="n2p">A mosaic or blur makes a face unreadable at a glance, which is enough for a street photo. For a <b>card number, a document or an address</b>, use the black bar: a strong blur can sometimes be attacked statistically, a filled rectangle cannot.</p>
+        </div>
+        <div class="note">
+          <h3><span>03</span> <span class="t" data-i18n="n3h">Nothing is left behind</span></h3>
+          <p data-i18n-html="n3p">No upload, no account, no cookie, no external script. Close the tab and the pixels are gone from memory — the only copy is the file you chose to save. The counters in the header and footer read from the page's own network activity.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="faqTitle">
+      <div class="sec-head">
+        <h2 id="faqTitle" data-i18n="faqTitle">Questions</h2>
+        <span data-i18n="faqNote">Straight answers</span>
+      </div>
+      <div class="faq">
+        <details class="qa">
+          <summary data-i18n="q1">Does the photo get uploaded anywhere?</summary>
+          <div class="a" data-i18n-html="a1">No. The file is decoded by the browser's own image decoder and drawn into a canvas in this tab. The page has no endpoint to upload to — the counter in the header and the footer read the page's own network activity and stay at zero.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q2">How does the EXIF and GPS data actually disappear?</summary>
+          <div class="a" data-i18n-html="a2">The export is not the original with fields deleted — it is a new file built from canvas pixels alone. After you press Download, RedacSnap reads the bytes it just produced and counts the metadata fields it finds: <b>zero</b>, and that count is what the panel reports.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q3">Is mosaic or blur safe enough?</summary>
+          <div class="a" data-i18n-html="a3">For a face in a crowd, usually yes. For a passport, a bank card, a licence plate or a screen full of text, no — use the <b>black bar</b>. Compression artefacts and repeated content can sometimes let a blur be reconstructed, while a solid fill carries no information at all.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q4">Which format should I save in?</summary>
+          <div class="a" data-i18n-html="a4"><b>JPEG</b> at quality 0.9 for photos you post or send. <b>PNG</b> for screenshots and documents where text must stay sharp. <b>WebP</b> when you want the smallest file for the same quality. None of the three carries the original metadata through this tool.</div>
+        </details>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <span data-i18n="footCopy">© 2026 Kim Yihyung · Built in the browser, for the browser.</span>
+      <span class="foot-links">
+        <a href="/portfolio/" data-i18n="footP1">Portfolio</a>
+        <a href="/portfolio/tools/" data-i18n="footP2">All tools</a>
+      </span>
+      <span class="net"><span data-i18n="netLabel">external requests made by this page</span>: <b id="netCount">0</b></span>
+    </footer>
+  </main>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ─────────────────────────── 사전 ─────────────────────────── */
+  var I18N = {
+    en: {
+      docTitle: 'RedacSnap — Blur Faces & Strip EXIF, Nothing Uploaded | Kim Yihyung',
+      metaDesc: 'Hide a face, a number plate, an address or a screen with mosaic, blur or a solid black bar, then save the photo with every EXIF, GPS, IPTC and XMP field stripped — 100% in your browser, 0 bytes uploaded, 0 external requests.',
+      ogTitle: 'RedacSnap — Blur It Out, Strip the Metadata',
+      ogDesc: 'Mosaic, blur or a black bar over anything private, with every EXIF, GPS, IPTC and XMP field gone from the saved file. 0 bytes uploaded, 0 external requests.',
+      brandAria: 'Kim Yihyung — portfolio',
+      back: '← All tools',
+      eyebrow: 'RedacSnap · zero upload',
+      h1: 'Blur it out.<br><span class="soft">Strip the metadata.</span><br><span class="gold">Nothing gets uploaded.</span>',
+      lede: 'Cover a face, a plate, an address or a screen with <strong>mosaic, blur or a solid black bar</strong> — then save the photo with <strong>every EXIF, GPS, IPTC and XMP field gone</strong>. The pixels are read into canvas memory in this tab, and there is no server to send them to.',
+      pillUp: '0 bytes uploaded',
+      pillNet: '0 external requests',
+      workAria: 'Redaction workspace',
+      dropTitle: 'Drop a photo here',
+      dropSub: 'or pick a file — it never leaves this tab',
+      pick: 'Choose files',
+      dropHint: 'PNG · JPEG · WebP · or paste with Ctrl/⌘ + V',
+      modeAria: 'Redaction style',
+      shapeAria: 'Shape',
+      histAria: 'History',
+      mPixel: 'Pixelate', mBlur: 'Blur', mBlack: 'Black bar',
+      sBrush: 'Brush', sRect: 'Rectangle',
+      sizeLabel: 'Size', strengthLabel: 'Strength',
+      undo: 'Undo', reset: 'Reset', compare: 'Hold to compare',
+      railAria: 'Loaded photos',
+      exportHead: 'Export',
+      fmtAria: 'Output format',
+      qualityLabel: 'Quality',
+      download: 'Download',
+      copy: 'Copy image',
+      again: 'New photo',
+      metaHead: 'Metadata',
+      origLabel: 'In the original file',
+      outLabel: 'In the file you save',
+      metaEmpty: 'No metadata found — this photo was already clean.',
+      outNote: 'Measured on the exported bytes, not promised.',
+      howTitle: 'How it works',
+      howNote: 'Three things worth knowing',
+      n1h: 'The save is a new file, not an edit',
+      n1p: 'EXIF, GPS, IPTC and XMP sit in header blocks beside the pixels. RedacSnap draws the <b>pixels</b> onto a canvas and encodes a brand-new file from them, so those blocks have nowhere to be copied from. The panel shows what the original carried and what the saved bytes actually contain.',
+      n2h: 'Blur is for looks, black is for keeps',
+      n2p: 'A mosaic or blur makes a face unreadable at a glance, which is enough for a street photo. For a <b>card number, a document or an address</b>, use the black bar: a strong blur can sometimes be attacked statistically, a filled rectangle cannot.',
+      n3h: 'Nothing is left behind',
+      n3p: 'No upload, no account, no cookie, no external script. Close the tab and the pixels are gone from memory — the only copy is the file you chose to save. The counters read the page\'s own network activity.',
+      faqTitle: 'Questions',
+      faqNote: 'Straight answers',
+      q1: 'Does the photo get uploaded anywhere?',
+      a1: 'No. The file is decoded by the browser\'s own image decoder and drawn into a canvas in this tab. The page has no endpoint to upload to — the counter in the header and the footer read the page\'s own network activity and stay at zero.',
+      q2: 'How does the EXIF and GPS data actually disappear?',
+      a2: 'The export is not the original with fields deleted — it is a new file built from canvas pixels alone. After you press Download, RedacSnap reads the bytes it just produced and counts the metadata fields it finds: <b>zero</b>, and that count is what the panel reports.',
+      q3: 'Is mosaic or blur safe enough?',
+      a3: 'For a face in a crowd, usually yes. For a passport, a bank card, a licence plate or a screen full of text, no — use the <b>black bar</b>. Compression artefacts and repeated content can sometimes let a blur be reconstructed, while a solid fill carries no information at all.',
+      q4: 'Which format should I save in?',
+      a4: '<b>JPEG</b> at quality 0.9 for photos you post or send. <b>PNG</b> for screenshots and documents where text must stay sharp. <b>WebP</b> when you want the smallest file for the same quality. None of the three carries the original metadata through this tool.',
+      footCopy: '© 2026 Kim Yihyung · Built in the browser, for the browser.',
+      footP1: 'Portfolio', footP2: 'All tools',
+      netLabel: 'external requests made by this page',
+      toggleTo: 'View in Korean',
+      /* 동적 문구 */
+      stOpened: 'Photo opened in this tab. Nothing sent.',
+      stSaved: 'Saved {name} · {size} · metadata fields: {n}',
+      stCopied: 'Copied to the clipboard as PNG.',
+      stCopyFail: 'This browser refused the clipboard. Use Download instead.',
+      stUndo: 'Undone.',
+      stNothingUndo: 'Nothing to undo.',
+      stReset: 'Cleared back to the original pixels.',
+      stNotImage: 'That file is not a PNG, JPEG or WebP image.',
+      stTooBig: 'Very large image — scaled to {w}×{h} for memory.',
+      stBusy: 'Preparing…',
+      stLoadFail: 'This file could not be decoded.',
+      stVerify: 'Checked the saved bytes: {n} metadata field(s).',
+      stFormat: 'JPEG carries no transparency; PNG keeps text sharpest.',
+      fNone: 'none',
+      fFields: 'field(s)',
+      mGps: 'GPS', mMake: 'Camera make', mModel: 'Camera model', mDate: 'Shot at',
+      mLens: 'Lens', mSerial: 'Serial number', mSoftware: 'Software', mOrientation: 'Orientation',
+      mXmp: 'XMP block', mIptc: 'IPTC block', mComment: 'JPEG comment', mText: 'Text chunk', mOther: 'Other EXIF fields',
+      mExif: 'EXIF block', mTime: 'Write time', mIcc: 'Colour profile',
+      infoImg: '{w}×{h} · {type} · {size}',
+      infoOp: '{n} edit(s)',
+      gpsAt: 'GPS {lat}, {lon}'
+    },
+    ko: {
+      docTitle: 'RedacSnap — 사진 모자이크·EXIF 삭제, 업로드 0 | Kim Yihyung',
+      metaDesc: '얼굴·번호판·주소·화면을 모자이크·블러·검은 막대로 가리고, 저장 파일에서 EXIF·GPS·IPTC·XMP를 전부 지웁니다 — 100% 브라우저 안에서, 업로드 0바이트, 외부 요청 0건.',
+      ogTitle: 'RedacSnap — 가리고, 메타데이터까지 지우기',
+      ogDesc: '가릴 것은 모자이크·블러·검은 막대로 덮고, 저장 파일에는 EXIF·GPS·IPTC·XMP가 하나도 남지 않습니다. 업로드 0바이트, 외부 요청 0건.',
+      brandAria: 'Kim Yihyung — 포트폴리오',
+      back: '← 도구 전체',
+      eyebrow: 'RedacSnap · 업로드 0',
+      h1: '가릴 건 가리고.<br><span class="soft">메타데이터는 지우고.</span><br><span class="gold">업로드는 없습니다.</span>',
+      lede: '얼굴·번호판·주소·화면을 <strong>모자이크·블러·검은 막대</strong>로 덮고, 저장할 때 <strong>EXIF·GPS·IPTC·XMP를 전부 지웁니다</strong>. 사진 픽셀은 이 탭의 캔버스 메모리로만 읽히고, 보낼 서버가 아예 없습니다.',
+      pillUp: '업로드 0바이트',
+      pillNet: '외부 요청 0건',
+      workAria: '가리기 작업 공간',
+      dropTitle: '사진을 여기에 놓으세요',
+      dropSub: '또는 파일을 고르세요 — 탭 밖으로 나가지 않습니다',
+      pick: '파일 고르기',
+      dropHint: 'PNG · JPEG · WebP · Ctrl/⌘ + V 붙여넣기도 됩니다',
+      modeAria: '가리기 방식',
+      shapeAria: '모양',
+      histAria: '기록',
+      mPixel: '모자이크', mBlur: '블러', mBlack: '검은 막대',
+      sBrush: '브러시', sRect: '사각형',
+      sizeLabel: '크기', strengthLabel: '강도',
+      undo: '실행 취소', reset: '초기화', compare: '눌러서 비교',
+      railAria: '불러온 사진',
+      exportHead: '내보내기',
+      fmtAria: '출력 형식',
+      qualityLabel: '품질',
+      download: '내려받기',
+      copy: '이미지 복사',
+      again: '새 사진',
+      metaHead: '메타데이터',
+      origLabel: '원본 파일에 있던 것',
+      outLabel: '저장 파일에 남는 것',
+      metaEmpty: '메타데이터가 없습니다 — 이미 깨끗한 사진입니다.',
+      outNote: '약속이 아니라, 실제로 저장된 바이트를 세어 표시합니다.',
+      howTitle: '어떻게 동작하나',
+      howNote: '알아 둘 세 가지',
+      n1h: '저장은 편집이 아니라 새 파일',
+      n1p: 'EXIF·GPS·IPTC·XMP는 픽셀 옆 헤더 블록에 들어 있습니다. RedacSnap은 <b>픽셀만</b> 캔버스에 그려 새 파일을 인코딩하므로, 그 블록들이 따라올 통로가 없습니다. 오른쪽 패널은 원본이 무엇을 갖고 있었는지와 저장된 바이트에 실제로 무엇이 남았는지를 보여 줍니다.',
+      n2h: '블러는 보기용, 검은 막대는 확실용',
+      n2p: '모자이크나 블러는 얼굴을 한눈에 못 알아보게 만드는 것으로 거리 사진에는 충분합니다. <b>카드 번호, 서류, 주소</b>라면 검은 막대를 쓰세요. 강한 블러는 통계적으로 복원을 시도할 수 있지만, 단색으로 채운 사각형은 아무 정보도 담지 않습니다.',
+      n3h: '아무것도 남기지 않습니다',
+      n3p: '업로드도, 계정도, 쿠키도, 외부 스크립트도 없습니다. 탭을 닫으면 픽셀은 메모리에서 사라지고, 남는 것은 직접 저장한 파일 하나뿐입니다. 헤더와 하단의 카운터는 이 페이지 자신의 네트워크 활동을 읽습니다.',
+      faqTitle: '자주 묻는 것',
+      faqNote: '짧은 답',
+      q1: '사진이 어디론가 업로드되나요?',
+      a1: '아니요. 파일은 브라우저 자체 디코더로 읽혀 이 탭의 캔버스에 그려집니다. 업로드할 주소 자체가 없고, 헤더와 하단의 카운터는 페이지의 네트워크 활동을 그대로 읽어 0에서 움직이지 않습니다.',
+      q2: 'EXIF와 GPS는 어떻게 사라지나요?',
+      a2: '내보내기는 원본에서 항목만 지운 파일이 아니라, 캔버스 픽셀만으로 새로 만든 파일입니다. 내려받기를 누르면 RedacSnap이 방금 만든 바이트를 다시 읽어 남은 메타데이터 항목을 세고, 그 수치(<b>0</b>)를 패널에 표시합니다.',
+      q3: '모자이크나 블러로 충분한가요?',
+      a3: '여러 사람 속의 얼굴 정도라면 보통 충분합니다. 여권·카드·번호판·글자가 가득한 화면이라면 부족합니다 — <b>검은 막대</b>를 쓰세요. 압축 흔적과 반복되는 내용 때문에 블러는 복원을 시도할 수 있지만, 단색 채우기는 정보가 없습니다.',
+      q4: '어떤 형식으로 저장할까요?',
+      a4: '올리거나 보낼 사진은 <b>JPEG</b> 품질 0.9. 글자가 또렷해야 하는 스크린샷·서류는 <b>PNG</b>. 같은 품질에서 가장 작은 파일을 원하면 <b>WebP</b>. 세 형식 모두 이 도구를 거치면 원본 메타데이터를 갖지 못합니다.',
+      footCopy: '© 2026 Kim Yihyung · 브라우저에서, 브라우저를 위해 만들었습니다.',
+      footP1: '포트폴리오', footP2: '도구 전체',
+      netLabel: '이 페이지가 만든 외부 요청',
+      toggleTo: 'View in English',
+      stOpened: '사진을 이 탭에서 열었습니다. 전송된 것은 없습니다.',
+      stSaved: '{name} 저장 · {size} · 메타데이터 {n}건',
+      stCopied: 'PNG로 클립보드에 복사했습니다.',
+      stCopyFail: '이 브라우저가 클립보드를 거부했습니다. 내려받기를 사용하세요.',
+      stUndo: '되돌렸습니다.',
+      stNothingUndo: '되돌릴 작업이 없습니다.',
+      stReset: '원본 픽셀로 되돌렸습니다.',
+      stNotImage: 'PNG·JPEG·WebP 이미지가 아닙니다.',
+      stTooBig: '아주 큰 이미지라 메모리를 위해 {w}×{h}로 줄였습니다.',
+      stBusy: '준비 중…',
+      stLoadFail: '이 파일을 해독할 수 없습니다.',
+      stVerify: '저장된 바이트 확인: 메타데이터 {n}건.',
+      stFormat: 'JPEG는 투명도를 담지 못하고, PNG가 글자를 가장 또렷하게 남깁니다.',
+      fNone: '없음',
+      fFields: '건',
+      mGps: 'GPS', mMake: '카메라 제조사', mModel: '카메라 기종', mDate: '촬영 시각',
+      mLens: '렌즈', mSerial: '일련번호', mSoftware: '소프트웨어', mOrientation: '회전 정보',
+      mXmp: 'XMP 블록', mIptc: 'IPTC 블록', mComment: 'JPEG 주석', mText: '텍스트 청크', mOther: '기타 EXIF 항목',
+      mExif: 'EXIF 블록', mTime: '기록 시각', mIcc: '색상 프로필',
+      infoImg: '{w}×{h} · {type} · {size}',
+      infoOp: '편집 {n}회',
+      gpsAt: 'GPS {lat}, {lon}'
+    }
+  };
+
+  var LANG_KEY = 'redacsnap.lang';
+  var SHARED_KEY = 'kyh.lang';
+  var state = {
+    lang: 'en', mode: 'pixel', shape: 'brush',
+    size: 6, strength: 5, fmt: 'image/jpeg', quality: 0.92
+  };
+
+  function $(id) { return document.getElementById(id); }
+  function t(key) {
+    var d = I18N[state.lang] || I18N.en;
+    if (d[key] != null) return d[key];
+    return I18N.en[key] != null ? I18N.en[key] : '';
+  }
+  function fmt(str, vars) {
+    return String(str).replace(/\{(\w+)\}/g, function (m, k) {
+      return vars && vars[k] != null ? vars[k] : m;
+    });
+  }
+  function readLang(key) {
+    try { var v = localStorage.getItem(key); return v === 'ko' || v === 'en' ? v : ''; } catch (e) { return ''; }
+  }
+  function initialLang() {
+    var q = '';
+    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
+    if (q === 'ko' || q === 'en') return q;
+    return readLang(SHARED_KEY) || readLang(LANG_KEY) || 'en';
+  }
+
+  /* ─────────────────── 무업로드 계측 (실제 네트워크만) ─────────────────── */
+  var net = { ext: 0, bytes: 0 };
+  function isExternal(u) {
+    try {
+      var x = new URL(u, location.href);
+      if (x.protocol === 'blob:' || x.protocol === 'data:') return false;
+      return x.origin !== location.origin;
+    } catch (e) { return true; }
+  }
+  function paintNet() {
+    var n = $('netCount');
+    if (n) n.textContent = String(net.ext);
+    var p = document.querySelector('[data-i18n="pillUp"]');
+    if (p) p.textContent = fmt(t('pillUp'), { n: net.bytes });
+    var q = document.querySelector('[data-i18n="pillNet"]');
+    if (q) q.textContent = fmt(t('pillNet'), { n: net.ext });
+    if (p) p.innerHTML = state.lang === 'ko'
+      ? '업로드 ' + net.bytes + '바이트'
+      : net.bytes + ' bytes uploaded';
+    if (q) q.innerHTML = state.lang === 'ko'
+      ? '외부 요청 ' + net.ext + '건'
+      : net.ext + ' external requests';
+  }
+  try {
+    var origFetch = window.fetch;
+    if (origFetch) {
+      window.fetch = function (input, init) {
+        var url = typeof input === 'string' ? input : (input && input.url) || '';
+        var body = init && init.body;
+        if (isExternal(url)) {
+          net.ext++;
+          if (body && body.size) net.bytes += body.size;
+          else if (typeof body === 'string') net.bytes += body.length;
+          paintNet();
+        }
+        return origFetch.apply(this, arguments);
+      };
+    }
+    var openXHR = XMLHttpRequest.prototype.open;
+    XMLHttpRequest.prototype.open = function (method, url) {
+      this.__ext = isExternal(url);
+      if (this.__ext) { net.ext++; paintNet(); }
+      return openXHR.apply(this, arguments);
+    };
+    var sendXHR = XMLHttpRequest.prototype.send;
+    XMLHttpRequest.prototype.send = function (body) {
+      if (this.__ext && body) {
+        if (body.size) net.bytes += body.size;
+        else if (typeof body === 'string') net.bytes += body.length;
+        paintNet();
+      }
+      return sendXHR.apply(this, arguments);
+    };
+    if (navigator.sendBeacon) {
+      var beacon = navigator.sendBeacon.bind(navigator);
+      navigator.sendBeacon = function (url, data) {
+        if (isExternal(String(url))) {
+          net.ext++;
+          if (data && data.size) net.bytes += data.size;
+          paintNet();
+        }
+        return beacon(url, data);
+      };
+    }
+    if ('PerformanceObserver' in window) {
+      try {
+        new PerformanceObserver(function (list) {
+          var entries = list.getEntries();
+          for (var i = 0; i < entries.length; i++) {
+            if (isExternal(entries[i].name)) { net.ext++; }
+          }
+          paintNet();
+        }).observe({ type: 'resource', buffered: true });
+      } catch (e) { /* buffered 미지원 브라우저 */ }
+    }
+  } catch (e) { /* 계측 실패는 도구 동작에 영향 없음 */ }
+
+  /* ─────────────────── 메타데이터 스캐너 ─────────────────── */
+  function ascii(b, o, n) {
+    var s = '';
+    for (var i = 0; i < n && o + i < b.length; i++) s += String.fromCharCode(b[o + i]);
+    return s;
+  }
+  function tagSize(type) {
+    switch (type) {
+      case 1: case 2: case 6: case 7: return 1;
+      case 3: case 8: return 2;
+      case 4: case 9: case 11: case 13: return 4;
+      case 5: case 10: case 12: return 8;
+      default: return 1;
+    }
+  }
+
+  var TAG_LABEL = {
+    /* IFD0 */
+    0x010F: 'mMake', 0x0110: 'mModel', 0x0112: 'mOrientation',
+    0x0131: 'mSoftware', 0x0132: 'mDate', 0x010E: 'mComment',
+    0xA431: 'mSerial', 0xA435: 'mSerial',
+    /* Exif IFD */
+    0x9003: 'mDate', 0x9004: 'mDate', 0xA434: 'mLens', 0x920A: 'mLens',
+    /* GPS */
+    0x0000: 'mGps', 0x0001: 'mGps', 0x0002: 'mGps', 0x0003: 'mGps',
+    0x0004: 'mGps', 0x0005: 'mGps', 0x0006: 'mGps', 0x0007: 'mGps',
+    0x001D: 'mDate'
+  };
+
+  function readTagValue(dv, le, type, count, entryOff) {
+    var size = tagSize(type);
+    var total = size * count;
+    var off = total <= 4 ? entryOff : dv.getUint32(entryOff, le);
+    if (off < 0 || off + total > dv.byteLength) return '';
+    var i, s = '';
+    if (type === 2) {
+      for (i = 0; i < count; i++) {
+        var c = dv.getUint8(off + i);
+        if (c === 0) break;
+        s += String.fromCharCode(c);
+      }
+      return s.replace(/[\u0000-\u001f]+/g, ' ').trim();
+    }
+    if (type === 3) { return count === 1 ? dv.getUint16(off, le) : ''; }
+    if (type === 4) { return count === 1 ? dv.getUint32(off, le) : ''; }
+    if (type === 9) { return count === 1 ? dv.getInt32(off, le) : ''; }
+    if (type === 5 || type === 10) {
+      var arr = [];
+      for (i = 0; i < count && i < 4; i++) {
+        var num = dv.getUint32(off + i * 8, le);
+        var den = dv.getUint32(off + i * 8 + 4, le);
+        arr.push(den ? num / den : 0);
+      }
+      return count === 1 ? arr[0] : arr;
+    }
+    return '';
+  }
+
+  function readIFD(dv, le, offset, res, group, seen) {
+    if (offset <= 0 || offset + 2 > dv.byteLength) return 0;
+    if (seen[offset]) return 0;
+    seen[offset] = 1;
+    var count = dv.getUint16(offset, le);
+    var read = 0;
+    for (var i = 0; i < count; i++) {
+      var e = offset + 2 + i * 12;
+      if (e + 12 > dv.byteLength) break;
+      var tag = dv.getUint16(e, le);
+      var type = dv.getUint16(e + 2, le);
+      var n = dv.getUint32(e + 4, le);
+      var val = readTagValue(dv, le, type, n, e + 8);
+      /* 0x8769 / 0x8825 are pointers into sub-IFDs, not fields of their own */
+      if (tag === 0x8769 || tag === 0x8825) {
+        var ptr = typeof val === 'number' ? val : 0;
+        if (ptr) readIFD(dv, le, ptr, res, tag === 0x8769 ? 'exif' : 'gps', seen);
+        continue;
+      }
+      var key = TAG_LABEL[tag] || (group === 'gps' ? 'mGps' : 'mOther');
+      res.entries.push({ key: key, group: group, tag: tag, value: TAG_LABEL[tag] ? val : '' });
+      read++;
+    }
+    return read;
+  }
+
+  function parseTIFF(bytes, res) {
+    if (bytes.length < 8) return;
+    var dv = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    var head = ascii(bytes, 0, 2);
+    var le;
+    if (head === 'II') le = true;
+    else if (head === 'MM') le = false;
+    else return;
+    var magic = dv.getUint16(2, le);
+    if (magic !== 42) return;
+    var ifd0 = dv.getUint32(4, le);
+    readIFD(dv, le, ifd0, res, 'ifd0', {});
+  }
+
+  function scanMetadata(bytes) {
+    var res = { count: 0, entries: [], gps: null };
+    var b = bytes;
+    function push(key, group, value) {
+      if (key === 'mExif' && group === 'exif') return;
+      res.entries.push({ key: key, group: group, value: value });
+    }
+
+    if (b.length > 3 && b[0] === 0xFF && b[1] === 0xD8) {
+      /* JPEG 세그먼트 */
+      var i = 2;
+      while (i + 3 < b.length) {
+        if (b[i] !== 0xFF) { i++; continue; }
+        var m = b[i + 1];
+        if (m === 0xFF) { i++; continue; }
+        if (m === 0xD8 || m === 0x01 || (m >= 0xD0 && m <= 0xD7)) { i += 2; continue; }
+        if (m === 0xD9 || m === 0xDA) break;
+        var len = (b[i + 2] << 8) | b[i + 3];
+        if (len < 2) break;
+        var seg = b.subarray(i + 4, i + 2 + len);
+        if (m === 0xE1) {
+          if (ascii(seg, 0, 4) === 'Exif') {
+            var inner = { entries: [] };
+            parseTIFF(seg.subarray(6), inner);
+            for (var k = 0; k < inner.entries.length; k++) {
+              var en = inner.entries[k];
+              res.entries.push(en);
+              if (en.group === 'gps') res.gps = true;
+            }
+            if (!inner.entries.length) push('mExif', 'jpeg');
+          } else if (ascii(seg, 0, 28).indexOf('http://ns.adobe.com/xap') === 0) {
+            push('mXmp', 'jpeg');
+          }
+        } else if (m === 0xED) {
+          if (ascii(seg, 0, 13) === 'Photoshop 3.0') push('mIptc', 'jpeg');
+        } else if (m === 0xFE) {
+          push('mComment', 'jpeg');
+        }
+        i += 2 + len;
+      }
+    } else if (b.length > 8 && b[0] === 0x89 && ascii(b, 1, 3) === 'PNG') {
+      /* PNG 청크 */
+      var p = 8;
+      while (p + 8 <= b.length) {
+        var dlen = ((b[p] << 24) | (b[p + 1] << 16) | (b[p + 2] << 8) | b[p + 3]) >>> 0;
+        var type = ascii(b, p + 4, 4);
+        var data = b.subarray(p + 8, Math.min(b.length, p + 8 + dlen));
+        if (type === 'tEXt' || type === 'zTXt' || type === 'iTXt') push('mText', 'png');
+        else if (type === 'eXIf') {
+          var innerP = { entries: [] };
+          parseTIFF(data, innerP);
+          if (innerP.entries.length) {
+            for (var q = 0; q < innerP.entries.length; q++) {
+              res.entries.push(innerP.entries[q]);
+              if (innerP.entries[q].group === 'gps') res.gps = true;
+            }
+          } else push('mExif', 'png');
+        } else if (type === 'tIME') push('mTime', 'png');
+        /* iCCP is a colour profile, not personal data — not counted */
+        if (type === 'IEND') break;
+        p += 12 + dlen;
+      }
+    } else if (b.length > 16 && ascii(b, 0, 4) === 'RIFF' && ascii(b, 8, 4) === 'WEBP') {
+      var w = 12;
+      while (w + 8 <= b.length) {
+        var wtype = ascii(b, w, 4);
+        var wlen = (b[w + 4] | (b[w + 5] << 8) | (b[w + 6] << 16) | (b[w + 7] << 24)) >>> 0;
+        var wdata = b.subarray(w + 8, Math.min(b.length, w + 8 + wlen));
+        if (wtype === 'EXIF') {
+          if (ascii(wdata, 0, 4) === 'Exif') wdata = wdata.subarray(6);
+          var innerW = { entries: [] };
+          parseTIFF(wdata, innerW);
+          if (innerW.entries.length) {
+            for (var z = 0; z < innerW.entries.length; z++) {
+              res.entries.push(innerW.entries[z]);
+              if (innerW.entries[z].group === 'gps') res.gps = true;
+            }
+          } else push('mExif', 'webp');
+        } else if (wtype === 'XMP ') push('mXmp', 'webp');
+        /* ICCP is a colour profile, not personal data — not counted */
+        w += 8 + wlen + (wlen % 2);
+      }
+    }
+    res.count = res.entries.length;
+    return res;
+  }
+
+  function gpsText(entries) {
+    function pair(refTag, valTag) {
+      var ref = '', val = null;
+      for (var i = 0; i < entries.length; i++) {
+        if (entries[i].tag === refTag) ref = String(entries[i].value || '');
+        if (entries[i].tag === valTag) val = entries[i].value;
+      }
+      if (!val || !val.length) return '';
+      var d = val[0] || 0, m = val[1] || 0, s = val[2] || 0;
+      var dec = d + m / 60 + s / 3600;
+      if (ref === 'S' || ref === 'W') dec = -dec;
+      return dec.toFixed(5);
+    }
+    var lat = pair(1, 2), lon = pair(3, 4);
+    if (!lat || !lon) return '';
+    return fmt(I18N[state.lang].gpsAt, { lat: lat, lon: lon });
+  }
+
+  /* ─────────────────── 캔버스 유틸 ─────────────────── */
+  function newCanvas(w, h) {
+    var c = document.createElement('canvas');
+    c.width = Math.max(1, Math.round(w));
+    c.height = Math.max(1, Math.round(h));
+    return c;
+  }
+  function fmtBytes(n) {
+    if (n < 1024) return n + ' B';
+    if (n < 1048576) return (n / 1024).toFixed(1) + ' KB';
+    return (n / 1048576).toFixed(2) + ' MB';
+  }
+  var filterOK = (function () {
+    try {
+      var c = newCanvas(2, 2).getContext('2d');
+      c.filter = 'blur(1px)';
+      return c.filter === 'blur(1px)';
+    } catch (e) { return false; }
+  })();
+
+  function pixelate(ctx, canvas, x, y, w, h, bs) {
+    var W = canvas.width, H = canvas.height;
+    bs = Math.max(2, Math.round(bs));
+    var gx = Math.floor(x / bs) * bs, gy = Math.floor(y / bs) * bs;
+    var gw = Math.ceil((x + w - gx) / bs) * bs, gh = Math.ceil((y + h - gy) / bs) * bs;
+    if (gx < 0) { gw += gx; gx = 0; }
+    if (gy < 0) { gh += gy; gy = 0; }
+    gw = Math.min(gw, W - gx); gh = Math.min(gh, H - gy);
+    gw = Math.floor(gw / bs) * bs; gh = Math.floor(gh / bs) * bs;
+    if (gw < bs || gh < bs) return;
+    var img = ctx.getImageData(gx, gy, gw, gh);
+    var d = img.data, bx, by, xx, yy, i, n, r, g, b2, a, row;
+    for (by = 0; by < gh; by += bs) {
+      for (bx = 0; bx < gw; bx += bs) {
+        r = 0; g = 0; b2 = 0; a = 0; n = 0;
+        for (yy = by; yy < by + bs && yy < gh; yy++) {
+          row = yy * gw * 4;
+          for (xx = bx; xx < bx + bs && xx < gw; xx++) {
+            i = row + xx * 4;
+            r += d[i]; g += d[i + 1]; b2 += d[i + 2]; a += d[i + 3]; n++;
+          }
+        }
+        if (!n) continue;
+        r = r / n; g = g / n; b2 = b2 / n; a = a / n;
+        for (yy = by; yy < by + bs && yy < gh; yy++) {
+          row = yy * gw * 4;
+          for (xx = bx; xx < bx + bs && xx < gw; xx++) {
+            i = row + xx * 4;
+            d[i] = r; d[i + 1] = g; d[i + 2] = b2; d[i + 3] = a;
+          }
+        }
+      }
+    }
+    ctx.putImageData(img, gx, gy);
+  }
+
+  function blurArea(ctx, canvas, x, y, w, h, radius) {
+    var W = canvas.width, H = canvas.height;
+    if (radius < 0.6) return;
+    x = Math.max(0, Math.floor(x)); y = Math.max(0, Math.floor(y));
+    w = Math.min(w, W - x); h = Math.min(h, H - y);
+    if (w < 1 || h < 1) return;
+    var pad = Math.ceil(radius * 2) + 2;
+    var sx = Math.max(0, x - pad), sy = Math.max(0, y - pad);
+    var ex = Math.min(W, Math.ceil(x + w + pad)), ey = Math.min(H, Math.ceil(y + h + pad));
+    var sw = ex - sx, sh = ey - sy;
+    if (sw < 1 || sh < 1) return;
+    var tmp = newCanvas(sw, sh), tc = tmp.getContext('2d');
+    if (filterOK) {
+      tc.filter = 'blur(' + radius + 'px)';
+      tc.drawImage(canvas, sx, sy, sw, sh, 0, 0, sw, sh);
+    } else {
+      var f = Math.max(2, Math.round(radius / 2));
+      var dw = Math.max(1, Math.round(sw / f)), dh = Math.max(1, Math.round(sh / f));
+      var small = newCanvas(dw, dh);
+      small.getContext('2d').drawImage(canvas, sx, sy, sw, sh, 0, 0, dw, dh);
+      tc.imageSmoothingEnabled = true;
+      tc.imageSmoothingQuality = 'high';
+      tc.drawImage(small, 0, 0, dw, dh, 0, 0, sw, sh);
+    }
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(x, y, w, h);
+    ctx.clip();
+    ctx.drawImage(tmp, sx, sy);
+    ctx.restore();
+  }
+
+  /* ─────────────────── 항목(사진) 관리 ─────────────────── */
+  var items = [];
+  var active = null;
+  var seq = 0;
+  var MAX_ITEMS = 6;
+  var MAX_DIM = 3200;
+  var cv = $('cv'), ctx = cv.getContext('2d');
+  var ov = $('ov'), octx = ov.getContext('2d');
+  var cmp = $('cmp'), cctx = cmp.getContext('2d');
+  var stage = $('stage');
+
+  var lastStatus = { key: '', vars: null, kind: '' };
+  function status(key, vars, kind) {
+    lastStatus = { key: key || '', vars: vars || null, kind: kind || '' };
+    paintStatus();
+  }
+  function paintStatus() {
+    var el = $('status');
+    if (!el) return;
+    if (!lastStatus.key) {
+      el.textContent = '';
+      el.className = 'status';
+      return;
+    }
+    var dict = I18N[state.lang] || I18N.en;
+    var msg = dict[lastStatus.key] != null ? fmt(dict[lastStatus.key], lastStatus.vars) : lastStatus.key;
+    el.textContent = msg;
+    el.className = 'status' + (lastStatus.kind ? ' is-' + lastStatus.kind : '');
+  }
+
+  function baseRadius() {
+    var m = Math.min(cv.width, cv.height);
+    return Math.max(3, Math.round(m * state.size / 100));
+  }
+  function blockFor(size) {
+    return Math.max(4, Math.round(size * 0.55 * (0.45 + state.strength * 0.14)));
+  }
+  function blurFor(size) {
+    return Math.max(1, size * 0.22 * (0.45 + state.strength * 0.16));
+  }
+
+  function stamp(x, y, r) {
+    var bs = blockFor(r), bl = blurFor(r);
+    if (state.mode === 'pixel') pixelate(ctx, cv, x - r, y - r, r * 2, r * 2, bs);
+    else if (state.mode === 'blur') blurArea(ctx, cv, x - r, y - r, r * 2, r * 2, bl);
+    else {
+      ctx.fillStyle = '#000';
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  function applyOp(op) {
+    if (op.kind === 'rect') {
+      if (op.mode === 'pixel') pixelate(ctx, cv, op.x, op.y, op.w, op.h, op.bs);
+      else if (op.mode === 'blur') blurArea(ctx, cv, op.x, op.y, op.w, op.h, op.bl);
+      else { ctx.fillStyle = '#000'; ctx.fillRect(op.x, op.y, op.w, op.h); }
+    } else {
+      for (var i = 0; i < op.pts.length; i++) {
+        var p = op.pts[i];
+        var bs = blockFor(op.r), bl = blurFor(op.r);
+        if (op.mode === 'pixel') pixelate(ctx, cv, p.x - op.r, p.y - op.r, op.r * 2, op.r * 2, bs);
+        else if (op.mode === 'blur') blurArea(ctx, cv, p.x - op.r, p.y - op.r, op.r * 2, op.r * 2, bl);
+        else {
+          ctx.fillStyle = '#000';
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, op.r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+  }
+
+  function rebuild(item) {
+    cv.width = item.w;
+    cv.height = item.h;
+    ov.width = item.w; ov.height = item.h;
+    cmp.width = item.w; cmp.height = item.h;
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    ctx.drawImage(item.base, 0, 0);
+    for (var i = 0; i < item.ops.length; i++) applyOp(item.ops[i]);
+    cctx.clearRect(0, 0, cmp.width, cmp.height);
+    cctx.drawImage(item.base, 0, 0);
+    paintInfo();
+    paintOps();
+    syncOut();
+  }
+
+  function syncOut() {
+    if (!active) return;
+    active.out.width = active.w;
+    active.out.height = active.h;
+    var oc = active.out.getContext('2d');
+    oc.clearRect(0, 0, active.out.width, active.out.height);
+    oc.drawImage(cv, 0, 0);
+  }
+
+  function paintInfo() {
+    if (!active) return;
+    $('imgInfo').textContent = fmt(t('infoImg'), {
+      w: active.w, h: active.h,
+      type: (active.type || 'image').replace('image/', '').toUpperCase(),
+      size: fmtBytes(active.size)
+    });
+  }
+  function paintOps() {
+    if (!active) { $('opInfo').textContent = '—'; return; }
+    $('opInfo').textContent = fmt(t('infoOp'), { n: active.ops.length });
+    var has = active.ops.length > 0;
+    $('download').disabled = false;
+    $('copy').disabled = false;
+  }
+
+  /* ─────────────────── 불러오기 ─────────────────── */
+  function decode(file) {
+    if (window.createImageBitmap) {
+      return createImageBitmap(file, { imageOrientation: 'from-image' }).catch(function () {
+        return createImageBitmap(file);
+      });
+    }
+    return new Promise(function (resolve, reject) {
+      var img = new Image();
+      var url = URL.createObjectURL(file);
+      img.onload = function () { URL.revokeObjectURL(url); resolve(img); };
+      img.onerror = function () { URL.revokeObjectURL(url); reject(new Error('decode')); };
+      img.src = url;
+    });
+  }
+
+  function addFile(file) {
+    if (!file) return Promise.resolve();
+    if (!/^image\/(png|jpeg|webp)$/i.test(file.type) && !/\.(png|jpe?g|webp)$/i.test(file.name)) {
+      status('stNotImage', null, 'warn');
+      return Promise.resolve();
+    }
+    if (items.length >= MAX_ITEMS) {
+      var old = items.shift();
+      if (old && old.url) URL.revokeObjectURL(old.url);
+    }
+    status('stBusy');
+    return file.arrayBuffer().then(function (buf) {
+      var meta = scanMetadata(new Uint8Array(buf));
+      return decode(file).then(function (src) {
+        var w = src.width || src.naturalWidth;
+        var h = src.height || src.naturalHeight;
+        var scale = Math.min(1, MAX_DIM / Math.max(w, h));
+        var ow = Math.max(1, Math.round(w * scale));
+        var oh = Math.max(1, Math.round(h * scale));
+        var base = newCanvas(ow, oh);
+        var bctx = base.getContext('2d');
+        bctx.imageSmoothingQuality = 'high';
+        bctx.drawImage(src, 0, 0, ow, oh);
+        if (src.close) { try { src.close(); } catch (e) { /* noop */ } }
+        var item = {
+          id: ++seq,
+          name: file.name || ('photo-' + seq + '.jpg'),
+          type: file.type || 'image/jpeg',
+          size: file.size,
+          w: ow, h: oh,
+          base: base,
+          out: newCanvas(ow, oh),
+          ops: [],
+          meta: meta,
+          url: URL.createObjectURL(file)
+        };
+        item.out.getContext('2d').drawImage(base, 0, 0);
+        items.push(item);
+        activate(item);
+        if (scale < 1) status('stTooBig', { w: ow, h: oh }, 'warn');
+        else status('stOpened', null, 'ok');
+      });
+    }).catch(function () {
+      status('stLoadFail', null, 'warn');
+    });
+  }
+
+  function activate(item) {
+    if (active) syncOut();
+    active = item;
+    $('drop').hidden = true;
+    $('editor').hidden = false;
+    rebuild(item);
+    paintMeta(item);
+    paintRail();
+    $('download').disabled = false;
+    $('copy').disabled = false;
+    verifySoon(item);
+  }
+
+  function paintRail() {
+    var rail = $('rail');
+    rail.textContent = '';
+    items.forEach(function (it) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'thumb';
+      b.setAttribute('aria-current', it === active ? 'true' : 'false');
+      b.title = it.name;
+      var img = document.createElement('img');
+      img.src = it.url;
+      img.alt = it.name;
+      b.appendChild(img);
+      if (items.length > 1) {
+        var x = document.createElement('span');
+        x.className = 'x';
+        x.textContent = '×';
+        x.setAttribute('role', 'button');
+        x.setAttribute('aria-label', 'remove');
+        x.addEventListener('click', function (ev) {
+          ev.stopPropagation();
+          removeItem(it);
+        });
+        b.appendChild(x);
+      }
+      b.addEventListener('click', function () {
+        if (it !== active) activate(it);
+      });
+      rail.appendChild(b);
+    });
+  }
+
+  function removeItem(it) {
+    var i = items.indexOf(it);
+    if (i < 0) return;
+    items.splice(i, 1);
+    if (it.url) URL.revokeObjectURL(it.url);
+    if (it === active) {
+      active = null;
+      if (items.length) activate(items[items.length - 1]);
+      else {
+        $('editor').hidden = true;
+        $('drop').hidden = false;
+        $('download').disabled = true;
+        $('copy').disabled = true;
+      }
+    }
+    paintRail();
+  }
+
+  /* ─────────────────── 메타데이터 패널 ─────────────────── */
+  function paintMeta(item) {
+    var list = $('metaList');
+    list.textContent = '';
+    var entries = item.meta.entries || [];
+    var shown = {}, order = [];
+    entries.forEach(function (e) {
+      if (!e || !e.key) return;
+      if (!shown[e.key]) { shown[e.key] = { key: e.key, value: '' }; order.push(shown[e.key]); }
+      if (e.value !== '' && e.value != null && shown[e.key].value === '') {
+        if (Array.isArray(e.value)) shown[e.key].value = gpsText(entries) || '';
+        else shown[e.key].value = String(e.value).slice(0, 46);
+      }
+    });
+    var wantOrder = ['mGps', 'mMake', 'mModel', 'mDate', 'mLens', 'mSerial', 'mSoftware', 'mOrientation',
+      'mXmp', 'mIptc', 'mOther', 'mExif', 'mText', 'mComment', 'mTime'];
+    order.sort(function (a, b) {
+      return wantOrder.indexOf(a.key) - wantOrder.indexOf(b.key);
+    });
+    var gps = gpsText(entries);
+    if (gps) {
+      for (var gi = 0; gi < order.length; gi++) {
+        if (order[gi].key === 'mGps') { order[gi].value = gps.replace(/^GPS /, ''); break; }
+      }
+    }
+    order.forEach(function (o) {
+      var li = document.createElement('li');
+      var n = document.createElement('span');
+      n.textContent = t(o.key) || o.key;
+      li.appendChild(n);
+      if (o.value) {
+        var v = document.createElement('b');
+        v.textContent = o.value;
+        li.appendChild(v);
+      }
+      if (o.key === 'mOther') {
+        var cnt = document.createElement('b');
+        cnt.textContent = String(entries.filter(function (e) { return e && e.key === 'mOther'; }).length);
+        li.appendChild(cnt);
+      }
+      if (o.key === 'mGps') li.querySelector('span').classList.add('tag');
+      list.appendChild(li);
+    });
+    var count = entries.length;
+    $('origCount').textContent = count ? count + ' ' + t('fFields') : t('fNone');
+    $('metaEmpty').hidden = count > 0;
+    $('metaList').hidden = count === 0;
+    $('outCount').textContent = '—';
+    $('outNote').textContent = t('outNote');
+  }
+
+  function verifySoon(item) {
+    /* 열자마자 기본 형식으로 한 번 인코딩해 실제 바이트를 확인한다. */
+    encode(item, 'image/jpeg', 0.9).then(function (blob) {
+      return blob.arrayBuffer().then(function (buf) {
+        var out = scanMetadata(new Uint8Array(buf));
+        if (active !== item) return;
+        $('outCount').textContent = out.count + ' ' + t('fFields');
+        $('outStat').classList.toggle('is-zero', out.count === 0);
+        $('outNote').textContent = 'JPEG 0.9 · ' + fmtBytes(blob.size) + ' · ' + fmt(t('stVerify'), { n: out.count });
+      });
+    }).catch(function () { /* 표시 실패는 무해 */ });
+  }
+
+  /* ─────────────────── 인코딩 / 내보내기 ─────────────────── */
+  function encode(item, type, quality) {
+    var src = item === active ? cv : item.out;
+    return new Promise(function (resolve, reject) {
+      if (src.toBlob) {
+        src.toBlob(function (blob) {
+          if (blob) resolve(blob); else reject(new Error('encode'));
+        }, type, type === 'image/png' ? undefined : quality);
+      } else {
+        try {
+          var url = src.toDataURL(type, quality);
+          var bin = atob(url.split(',')[1]);
+          var arr = new Uint8Array(bin.length);
+          for (var i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+          resolve(new Blob([arr], { type: type }));
+        } catch (e) { reject(e); }
+      }
+    });
+  }
+
+  function extFor(type) {
+    return type === 'image/png' ? 'png' : (type === 'image/webp' ? 'webp' : 'jpg');
+  }
+
+  function saveName(item, type) {
+    var base = String(item.name || 'photo').replace(/\.[^.]+$/, '');
+    return base + '-redacted.' + extFor(type);
+  }
+
+  function reportBlob(item, blob) {
+    return blob.arrayBuffer().then(function (buf) {
+      var out = scanMetadata(new Uint8Array(buf));
+      $('outCount').textContent = out.count + ' ' + t('fFields');
+      $('outStat').classList.toggle('is-zero', out.count === 0);
+      $('outNote').textContent = (state.fmt === 'image/png' ? 'PNG' :
+        state.fmt === 'image/webp' ? 'WebP' : 'JPEG ' + Math.round(state.quality * 100))
+        + ' · ' + fmtBytes(blob.size) + ' · ' + fmt(t('stVerify'), { n: out.count });
+      return out;
+    });
+  }
+
+  $('download').addEventListener('click', function () {
+    if (!active) return;
+    syncOut();
+    var item = active;
+    var type = state.fmt;
+    encode(item, type, state.quality).then(function (blob) {
+      return reportBlob(item, blob).then(function (out) {
+        var a = document.createElement('a');
+        var url = URL.createObjectURL(blob);
+        a.href = url;
+        a.download = saveName(item, type);
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+        status('stSaved', { name: saveName(item, type), size: fmtBytes(blob.size), n: out.count }, 'ok');
+      });
+    }).catch(function () {
+      status('stLoadFail', null, 'warn');
+    });
+  });
+
+  $('copy').addEventListener('click', function () {
+    if (!active) return;
+    syncOut();
+    var item = active;
+    encode(item, 'image/png').then(function (blob) {
+      if (navigator.clipboard && window.ClipboardItem) {
+        var ci = new ClipboardItem({ 'image/png': blob });
+        navigator.clipboard.write([ci]).then(function () {
+          status('stCopied', null, 'ok');
+          reportBlob(item, blob);
+        }).catch(function () { status('stCopyFail', null, 'warn'); });
+      } else {
+        status('stCopyFail', null, 'warn');
+      }
+    }).catch(function () { status('stCopyFail', null, 'warn'); });
+  });
+
+  /* ─────────────────── 포인터 처리 ─────────────────── */
+  var drag = null;
+
+  function toImg(ev) {
+    var r = cv.getBoundingClientRect();
+    return {
+      x: (ev.clientX - r.left) / r.width * cv.width,
+      y: (ev.clientY - r.top) / r.height * cv.height
+    };
+  }
+
+  function clearOverlay() {
+    octx.clearRect(0, 0, ov.width, ov.height);
+  }
+
+  function drawCursor(p, r) {
+    clearOverlay();
+    octx.save();
+    octx.strokeStyle = 'rgba(255,122,95,.95)';
+    octx.lineWidth = Math.max(1.5, ov.width / 700);
+    octx.beginPath();
+    octx.arc(p.x, p.y, Math.max(3, r), 0, Math.PI * 2);
+    octx.stroke();
+    octx.restore();
+  }
+
+  function rectPreview(a, b) {
+    clearOverlay();
+    var x = Math.min(a.x, b.x), y = Math.min(a.y, b.y);
+    var w = Math.abs(a.x - b.x), h = Math.abs(a.y - b.y);
+    octx.save();
+    octx.fillStyle = 'rgba(255,122,95,.16)';
+    octx.fillRect(x, y, w, h);
+    octx.strokeStyle = 'rgba(255,122,95,.95)';
+    octx.lineWidth = Math.max(1.5, ov.width / 600);
+    octx.strokeRect(x, y, w, h);
+    octx.restore();
+  }
+
+  cv.addEventListener('pointerdown', function (ev) {
+    if (!active) return;
+    ev.preventDefault();
+    cv.setPointerCapture(ev.pointerId);
+    var p = toImg(ev);
+    if (state.shape === 'rect') {
+      drag = { kind: 'rect', start: p, last: p };
+      rectPreview(p, p);
+      return;
+    }
+    var r = baseRadius();
+    var op = { kind: 'brush', mode: state.mode, r: r, pts: [p] };
+    active.ops.push(op);
+    stamp(p.x, p.y, r);
+    drag = { kind: 'brush', op: op, last: p, r: r };
+    drawCursor(p, r);
+    paintOps();
+  });
+
+  cv.addEventListener('pointermove', function (ev) {
+    if (!active) return;
+    var p = toImg(ev);
+    if (!drag) {
+      if (state.shape === 'brush') drawCursor(p, baseRadius());
+      return;
+    }
+    if (drag.kind === 'rect') {
+      drag.last = p;
+      rectPreview(drag.start, p);
+      return;
+    }
+    var op = drag.op;
+    var dx = p.x - drag.last.x, dy = p.y - drag.last.y;
+    var dist = Math.sqrt(dx * dx + dy * dy);
+    var step = Math.max(1.5, drag.r * 0.35);
+    if (dist < step) return;
+    var n = Math.min(400, Math.floor(dist / step));
+    for (var i = 1; i <= n; i++) {
+      var q = { x: drag.last.x + dx * (i / n), y: drag.last.y + dy * (i / n) };
+      op.pts.push(q);
+      stamp(q.x, q.y, drag.r);
+    }
+    drag.last = p;
+    drawCursor(p, drag.r);
+  });
+
+  function endDrag(ev) {
+    if (!drag || !active) { drag = null; return; }
+    if (drag.kind === 'rect') {
+      var a = drag.start, b = drag.last;
+      var x = Math.min(a.x, b.x), y = Math.min(a.y, b.y);
+      var w = Math.abs(a.x - b.x), h = Math.abs(a.y - b.y);
+      if (w > 3 && h > 3) {
+        var box = Math.min(w, h);
+        var op = {
+          kind: 'rect', mode: state.mode, x: x, y: y, w: w, h: h,
+          bs: Math.max(4, Math.round(box * 0.06 * (0.5 + state.strength * 0.16))),
+          bl: Math.max(1, box * 0.02 * (0.5 + state.strength * 0.2))
+        };
+        active.ops.push(op);
+        applyOp(op);
+        paintOps();
+      }
+    }
+    clearOverlay();
+    syncOut();
+    drag = null;
+    if (ev && ev.pointerId != null && cv.hasPointerCapture && cv.hasPointerCapture(ev.pointerId)) {
+      try { cv.releasePointerCapture(ev.pointerId); } catch (e) { /* noop */ }
+    }
+  }
+  cv.addEventListener('pointerup', endDrag);
+  cv.addEventListener('pointercancel', endDrag);
+  cv.addEventListener('pointerleave', function () { if (!drag) clearOverlay(); });
+
+  /* ─────────────────── 도구 버튼 ─────────────────── */
+  function segInit(sel, attr, key, cast) {
+    var btns = Array.prototype.slice.call(document.querySelectorAll(sel));
+    btns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        btns.forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)); });
+        state[key] = cast ? cast(b.getAttribute(attr)) : b.getAttribute(attr);
+        if (key === 'fmt') {
+          $('qualityField').hidden = state.fmt === 'image/png';
+          $('qualityVal').textContent = String(Math.round(state.quality * 100));
+        }
+      });
+    });
+  }
+  segInit('[data-mode]', 'data-mode', 'mode');
+  segInit('[data-shape]', 'data-shape', 'shape');
+  segInit('[data-fmt]', 'data-fmt', 'fmt');
+
+  $('size').addEventListener('input', function (e) {
+    state.size = Number(e.target.value);
+    $('sizeVal').textContent = state.size + '%';
+  });
+  $('strength').addEventListener('input', function (e) {
+    state.strength = Number(e.target.value);
+    $('strengthVal').textContent = String(state.strength);
+  });
+  $('quality').addEventListener('input', function (e) {
+    state.quality = Number(e.target.value) / 100;
+    $('qualityVal').textContent = e.target.value;
+  });
+
+  $('undo').addEventListener('click', function () {
+    if (!active) return;
+    if (!active.ops.length) { status('stNothingUndo'); return; }
+    active.ops.pop();
+    rebuild(active);
+    status('stUndo');
+  });
+  $('reset').addEventListener('click', function () {
+    if (!active) return;
+    active.ops = [];
+    rebuild(active);
+    status('stReset');
+  });
+
+  var comparing = false;
+  function showCompare(on) {
+    comparing = on;
+    stage.classList.toggle('is-comparing', on);
+  }
+  var cmpBtn = $('compare');
+  cmpBtn.addEventListener('pointerdown', function (e) { e.preventDefault(); showCompare(true); });
+  cmpBtn.addEventListener('pointerup', function () { showCompare(false); });
+  cmpBtn.addEventListener('pointerleave', function () { showCompare(false); });
+  cmpBtn.addEventListener('pointercancel', function () { showCompare(false); });
+
+  document.addEventListener('keydown', function (e) {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z' && active) {
+      e.preventDefault();
+      $('undo').click();
+    }
+    if (e.key === 'Escape' && drag) { endDrag(null); }
+  });
+
+  /* ─────────────────── 파일 입력 / 드롭 / 붙여넣기 ─────────────────── */
+  $('pick').addEventListener('click', function () { $('file').click(); });
+  $('file').addEventListener('change', function (e) {
+    var files = Array.prototype.slice.call(e.target.files || []);
+    var chain = Promise.resolve();
+    files.forEach(function (f) { chain = chain.then(function () { return addFile(f); }); });
+    e.target.value = '';
+  });
+  $('again').addEventListener('click', function () { $('file').click(); });
+
+  var drop = $('drop');
+  ['dragenter', 'dragover'].forEach(function (ev) {
+    drop.addEventListener(ev, function (e) {
+      e.preventDefault();
+      drop.classList.add('is-over');
+    });
+  });
+  ['dragleave', 'dragend'].forEach(function (ev) {
+    drop.addEventListener(ev, function () { drop.classList.remove('is-over'); });
+  });
+  drop.addEventListener('drop', function (e) {
+    e.preventDefault();
+    drop.classList.remove('is-over');
+    var files = e.dataTransfer && e.dataTransfer.files ? Array.prototype.slice.call(e.dataTransfer.files) : [];
+    var chain = Promise.resolve();
+    files.forEach(function (f) { chain = chain.then(function () { return addFile(f); }); });
+  });
+
+  document.addEventListener('paste', function (e) {
+    var data = e.clipboardData;
+    if (!data) return;
+    var files = Array.prototype.slice.call(data.files || []);
+    if (!files.length) {
+      var it = Array.prototype.slice.call(data.items || []).filter(function (i) { return i.type.indexOf('image/') === 0; });
+      files = it.map(function (i) { return i.getAsFile(); }).filter(Boolean);
+    }
+    if (!files.length) return;
+    e.preventDefault();
+    var chain = Promise.resolve();
+    files.forEach(function (f) { chain = chain.then(function () { return addFile(f); }); });
+  });
+
+  /* ─────────────────── 언어 ─────────────────── */
+  function applyLang(lang) {
+    state.lang = lang === 'ko' ? 'ko' : 'en';
+    document.documentElement.setAttribute('lang', state.lang);
+    document.title = t('docTitle');
+    var d = document.querySelector('meta[name="description"]');
+    if (d) d.setAttribute('content', t('metaDesc'));
+    var ogt = document.querySelector('meta[property="og:title"]');
+    if (ogt) ogt.setAttribute('content', t('ogTitle'));
+    var ogd = document.querySelector('meta[property="og:description"]');
+    if (ogd) ogd.setAttribute('content', t('ogDesc'));
+    var tt = document.querySelector('meta[name="twitter:title"]');
+    if (tt) tt.setAttribute('content', t('ogTitle'));
+    var td = document.querySelector('meta[name="twitter:description"]');
+    if (td) td.setAttribute('content', t('ogDesc'));
+
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var k = nodes[i].getAttribute('data-i18n');
+      var v = t(k);
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < nodes.length; i++) {
+      var kh = nodes[i].getAttribute('data-i18n-html');
+      var vh = t(kh);
+      if (vh) nodes[i].innerHTML = vh;
+    }
+    nodes = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < nodes.length; i++) {
+      var va = t(nodes[i].getAttribute('data-i18n-aria'));
+      if (va) nodes[i].setAttribute('aria-label', va);
+    }
+
+    var lt = $('langToggle');
+    if (lt) {
+      var spans = lt.querySelectorAll('[data-lt]');
+      for (i = 0; i < spans.length; i++) {
+        spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
+      }
+      lt.setAttribute('aria-label', t('toggleTo'));
+      lt.setAttribute('title', t('toggleTo'));
+    }
+
+    $('sizeVal').textContent = state.size + '%';
+    $('strengthVal').textContent = String(state.strength);
+    $('qualityVal').textContent = String(Math.round(state.quality * 100));
+    paintNet();
+    if (active) { paintInfo(); paintOps(); paintMeta(active); verifySoon(active); }
+    paintStatus();
+
+    try {
+      localStorage.setItem(LANG_KEY, state.lang);
+      localStorage.setItem(SHARED_KEY, state.lang);
+    } catch (e) { /* 저장 실패는 무해 */ }
+  }
+
+  $('langToggle').addEventListener('click', function () {
+    applyLang(state.lang === 'ko' ? 'en' : 'ko');
+  });
+
+  applyLang(initialLang());
+  paintNet();
+})();
+</script>
+</body>
+</html>
