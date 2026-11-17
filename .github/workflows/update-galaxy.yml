@@ -1,0 +1,49 @@
+name: Update galaxy data
+
+# 3d/galaxy/data.json 을 GitHub Actions 안에서 직접 수집·갱신한다.
+# 피클/LLM 호출 없이 표준 파이썬만 쓰므로 비용은 0원(공개 저장소 무료 한도)이다.
+
+on:
+  schedule:
+    # GitHub 의 cron 은 UTC 기준이다 (KST = UTC+9).
+    - cron: '30 0 * * *' # KST 09:30 — 아침 발행(06:00 기록노트 · 07:00/08:00 EB_note) 이후
+    - cron: '30 12 * * *' # KST 21:30 — 저녁 발행(18:30)과 티스토리 야간 발행 이후
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-galaxy
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Collect RSS feeds and merge new posts
+        run: python3 scripts/galaxy_sync.py
+
+      - name: Commit data.json if changed
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- 3d/galaxy/data.json; then
+            echo "변경 없음 — 커밋하지 않습니다."
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add 3d/galaxy/data.json
+          git commit -m "chore(galaxy): 자동 수집 $(date -u '+%Y-%m-%d %H:%M') UTC"
+          git push
