@@ -1,0 +1,1703 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0b0d">
+<title>HashForge — SHA-256, SHA-512, HMAC checksum &amp; JWT / Base64 decoder | Kim Yihyung</title>
+<meta name="description" content="Hash a file or text with the browser's own Web Crypto — SHA-1, SHA-256, SHA-384, SHA-512 and HMAC-SHA256 — compare the checksum against an expected value, decode a JWT with exp and iat in KST and UTC, and encode or decode Base64, Base64url and URL with Korean text intact. Nothing is uploaded and no external request is made.">
+<meta name="keywords" content="sha256 checksum, sha512 hash online, hmac sha256, file checksum verify, jwt decoder, jwt exp iat, base64url encode decode, url encode, utf-8 base64 korean, web crypto subtle digest, client side hash, zero upload, hashforge">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/hash-forge/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b0d'/%3E%3Cpath d='M11 8v16M21 8v16M11 16h10' stroke='%23e5b45c' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/hash-forge/">
+<meta property="og:title" content="HashForge — checksums, JWTs and encoders in the tab">
+<meta property="og:description" content="SHA-1 · SHA-256 · SHA-384 · SHA-512 · HMAC-SHA256 over a file or text, an expected-checksum match badge, a JWT decoder with KST/UTC expiry, and Base64 · Base64url · URL that keep Korean intact. Zero uploads.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="HashForge — file checksums, JWT decoder and encoders">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="HashForge — checksums, JWTs and encoders in the tab">
+<meta name="twitter:description" content="Web Crypto does the hashing: SHA-1/256/384/512 and HMAC-SHA256, file or text, matched against the checksum you were given. JWT exp in KST and UTC. Zero uploads.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "HashForge — File Checksums, JWT Decoder & Encoders",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/hash-forge/",
+      "description": "Computes SHA-1, SHA-256, SHA-384, SHA-512 and HMAC-SHA256 digests of a local file or typed text with the browser's Web Crypto API, compares the result against an expected checksum with a match or mismatch badge, decodes a JWT into its header and payload with exp, iat and nbf shown in Korea Standard Time and UTC and an optional local HMAC signature check, and encodes or decodes Base64, Base64url and URL percent-encoding without breaking UTF-8 Korean. Nothing is uploaded and no external request is made.",
+      "featureList": [
+        "SHA-1, SHA-256, SHA-384, SHA-512 and HMAC-SHA256 via crypto.subtle",
+        "File drop or typed text — the file is read in this tab and never sent",
+        "Expected-checksum comparison with a match / mismatch badge",
+        "Digest time, byte count and throughput",
+        "JWT header and payload decode with syntax colouring",
+        "exp, iat and nbf in KST and UTC with an expired or valid badge",
+        "Local HS256 / HS384 / HS512 signature verification",
+        "Base64, Base64url and URL encode and decode with UTF-8 Korean intact",
+        "0 bytes uploaded · 0 external requests"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "HashForge", "item": "https://kimyihyung.github.io/portfolio/tools/hash-forge/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does the file get uploaded to check its checksum?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. The file is read with the File API into this tab's memory and handed to crypto.subtle.digest, which runs inside the browser. There is no server call, no analytics and no storage; the footer counts external requests and stays at 0. A hash tool that uploaded the file would defeat its own purpose, because the file is often exactly what you do not want to send anywhere." }
+        },
+        {
+          "@type": "Question",
+          "name": "What does a matching SHA-256 actually prove?",
+          "acceptedAnswer": { "@type": "Answer", "text": "That the bytes you have are the bytes whose hash you were given — nothing about who made the file, whether it is safe, or whether it is the latest version. A hash is a fingerprint, not a signature. If the expected value came over the same channel as the file, an attacker who altered the file could alter the value too, which is why downloads list hashes on a separate, trusted page." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I verify a JWT signature here?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes for HMAC tokens — HS256, HS384 and HS512 — if you paste the secret, because the check is the same HMAC the issuer computed and it runs locally. RS256, ES256 and PS256 need the issuer's public key, which this page does not ask for, so only the header and payload are decoded for those and the page says so rather than claiming a verification it did not perform." }
+        },
+        {
+          "@type": "Question",
+          "name": "Why does Base64 look corrupted with Korean text?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Because most tools call btoa on a JavaScript string, which is UTF-16, so any character above U+00FF throws or is mangled. This page encodes the string to UTF-8 bytes first with TextEncoder, then Base64-encodes those bytes, and decodes back through TextDecoder with fatal mode so an invalid sequence raises an error instead of silently producing replacement characters." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+:root {
+  --bg: #0b0b0d;
+  --bg2: #0e0e11;
+  --panel: #141311;
+  --panel2: #1b1917;
+  --line: rgba(255,255,255,.09);
+  --line2: rgba(255,255,255,.18);
+  --ink: #f7f2e9;
+  --muted: #a9a29a;
+  --muted2: #7d766e;
+  --accent: #e5b45c;
+  --accent2: #f3cf85;
+  --accent-dim: rgba(229,180,92,.12);
+  --on-accent: #1d1503;
+  --ok: #7fd6a0;
+  --warn: #ffa06b;
+  --bad: #ff7d7d;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  line-height: 1.6;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(110% 55% at 50% -18%, rgba(229,180,92,.13), transparent 62%),
+    radial-gradient(60% 40% at 100% 2%, rgba(229,180,92,.05), transparent 60%);
+  background-repeat: no-repeat;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: var(--accent); color: var(--on-accent); }
+a { color: inherit; }
+button, input, select, textarea { font-family: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+.wrap { width: 100%; max-width: 1220px; margin: 0 auto; padding: 0 20px 48px; }
+
+/* ---------- topbar ---------- */
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0 12px; }
+.brand { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: var(--ink); min-width: 0; }
+.mark {
+  min-width: 28px; height: 22px; padding: 0 6px; border-radius: 7px; flex: none;
+  border: 1px solid rgba(229,180,92,.45); background: var(--accent-dim);
+  display: grid; place-items: center; font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: var(--accent);
+}
+.brand-txt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.top-actions { display: inline-flex; align-items: center; gap: 9px; flex: none; }
+.lang-toggle {
+  appearance: none; border: 1px solid var(--line); background: var(--panel); color: var(--muted2);
+  height: 34px; padding: 0 11px; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px;
+  cursor: pointer; font-size: 11px; font-weight: 700; letter-spacing: .06em; line-height: 1;
+  transition: color .2s, border-color .2s, transform .15s;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.94); }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
+.topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
+
+/* ---------- hero ---------- */
+.hero { padding: 22px 0 18px; max-width: 880px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; margin: 0 0 14px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--accent);
+  border: 1px solid rgba(229,180,92,.28); background: rgba(229,180,92,.06); padding: 6px 11px; border-radius: 999px;
+}
+.eyebrow .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+h1 { margin: 0 0 14px; font-size: clamp(28px, 4.4vw, 44px); line-height: 1.12; letter-spacing: -.025em; font-weight: 800; }
+h1 .soft { color: var(--muted); }
+h1 .gold { color: var(--accent); }
+.lede { margin: 0 0 16px; color: var(--muted); font-size: 15px; max-width: 780px; }
+.lede strong { color: var(--ink); font-weight: 600; }
+.lede code { font-family: var(--mono); font-size: .92em; color: var(--accent); }
+
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--panel); font-size: 11.5px; color: var(--muted);
+  font-family: var(--mono); letter-spacing: .02em;
+}
+.pill b { color: var(--ink); font-weight: 700; }
+.pill--live { border-color: rgba(127,214,160,.32); background: rgba(127,214,160,.07); color: #a6e6c4; }
+.pill--live b { color: #bff3d8; }
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px rgba(127,214,160,.14); }
+
+/* ---------- layout ---------- */
+.work { display: grid; grid-template-columns: minmax(0,1fr) 340px; gap: 16px; align-items: start; margin-top: 6px; }
+@media (max-width: 1040px) { .work { grid-template-columns: minmax(0,1fr); } }
+
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); min-width: 0; }
+.panel { padding: 16px; display: grid; gap: 13px; min-width: 0; }
+.panel h3 { margin: 0; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted2); font-family: var(--mono); font-weight: 700; }
+.side { display: grid; gap: 12px; min-width: 0; }
+@media (min-width: 1041px) { .side { position: sticky; top: 14px; } }
+
+.btn {
+  appearance: none; cursor: pointer; border-radius: 11px; border: 1px solid var(--line2);
+  background: var(--panel2); color: var(--ink); font-size: 13px; font-weight: 650;
+  padding: 10px 16px; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  transition: transform .12s, border-color .2s, background .2s, opacity .2s; text-decoration: none;
+}
+.btn:hover { border-color: rgba(255,255,255,.3); }
+.btn:active { transform: scale(.98); }
+.btn:disabled { opacity: .42; cursor: not-allowed; }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 750; }
+.btn--primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.btn--ghost { background: transparent; }
+.btn--sm { padding: 7px 11px; font-size: 12px; border-radius: 9px; }
+.btn--block { width: 100%; }
+
+/* ---------- tabs ---------- */
+.tabs { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 6px; margin-bottom: 4px; }
+.tabs button {
+  appearance: none; cursor: pointer; text-align: left; min-width: 0;
+  display: grid; gap: 2px; padding: 10px 12px; border-radius: 12px;
+  border: 1px solid var(--line); background: var(--panel2); color: var(--muted);
+  transition: border-color .2s, background .2s, color .2s;
+}
+.tabs button:hover { border-color: var(--line2); }
+.tabs button b { font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; color: var(--muted2); font-weight: 700; }
+.tabs button span { font-size: 13px; font-weight: 700; color: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tabs button[aria-selected="true"] { border-color: rgba(229,180,92,.5); background: linear-gradient(180deg, rgba(229,180,92,.14), rgba(229,180,92,.03)); color: var(--ink); }
+.tabs button[aria-selected="true"] b { color: var(--accent); }
+@media (max-width: 560px) {
+  .tabs button { padding: 9px 10px; }
+  .tabs button span { font-size: 12.5px; }
+}
+
+.tabpanel { display: grid; gap: 14px; min-width: 0; }
+.calc-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.calc-head h2 { margin: 0; font-size: 16.5px; letter-spacing: -.01em; }
+.calc-head span { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted2); }
+
+/* ---------- inputs ---------- */
+.lbl { font-size: 10.5px; font-family: var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted2); display: block; margin-bottom: 6px; }
+.in {
+  display: grid; gap: 5px; padding: 9px 11px 8px; border: 1px solid var(--line);
+  border-radius: 11px; background: var(--panel2); min-width: 0;
+}
+.in label { font-size: 10.5px; font-family: var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted2); }
+.in input {
+  appearance: none; border: 0; background: transparent; color: var(--ink);
+  font-size: 14px; font-weight: 600; padding: 0; width: 100%; min-width: 0; line-height: 1.45;
+  font-family: var(--mono); letter-spacing: -.01em;
+}
+.in input:focus { outline: none; }
+.in:focus-within { border-color: rgba(229,180,92,.6); }
+.in .unit { font-size: 11px; color: var(--muted2); flex: none; font-family: var(--mono); }
+
+.ta {
+  width: 100%; min-height: 108px; resize: vertical; border: 1px solid var(--line);
+  background: var(--panel2); border-radius: 11px; padding: 11px 12px;
+  font-family: var(--mono); font-size: 13px; line-height: 1.6; color: var(--ink); min-width: 0;
+}
+.ta:focus { outline: none; border-color: rgba(229,180,92,.6); }
+.ta::placeholder { color: var(--muted2); }
+
+.seg { display: flex; gap: 3px; padding: 3px; background: var(--panel2); border: 1px solid var(--line); border-radius: 11px; min-width: 0; flex-wrap: wrap; }
+.seg button { flex: 1 1 auto; appearance: none; border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; font-weight: 650; padding: 7px 6px; border-radius: 8px; line-height: 1.25; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--accent-dim); color: var(--accent); box-shadow: inset 0 0 0 1px rgba(229,180,92,.35); }
+
+.chk-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 7px; min-width: 0; }
+.chk {
+  appearance: none; cursor: pointer; text-align: left; min-width: 0;
+  display: flex; align-items: center; gap: 8px; padding: 9px 11px; border-radius: 11px;
+  border: 1px solid var(--line); background: var(--panel2); color: var(--muted);
+  font-size: 12.5px; font-weight: 600; transition: border-color .18s, background .18s, color .18s;
+}
+.chk:hover { border-color: var(--line2); }
+.chk .box {
+  width: 15px; height: 15px; border-radius: 5px; flex: none; display: grid; place-items: center;
+  border: 1px solid rgba(255,255,255,.24); font-size: 10px; line-height: 1; color: transparent;
+}
+.chk[aria-pressed="true"] { color: var(--ink); border-color: rgba(229,180,92,.4); background: rgba(229,180,92,.08); }
+.chk[aria-pressed="true"] .box { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+
+/* ---------- drop zone ---------- */
+.drop {
+  display: grid; justify-items: center; gap: 6px; text-align: center;
+  padding: 24px 14px 20px; border: 1px dashed rgba(255,255,255,.22); border-radius: var(--radius-sm);
+  background: linear-gradient(180deg, rgba(229,180,92,.05), rgba(229,180,92,.01));
+  transition: border-color .2s, background .2s; min-width: 0;
+}
+.drop.is-over { border-color: var(--accent); background: rgba(229,180,92,.12); }
+.drop.is-busy { opacity: .72; }
+.drop-ic { color: var(--accent); opacity: .85; }
+.drop-t { margin: 0; font-size: 14.5px; font-weight: 700; letter-spacing: -.01em; }
+.drop-s { margin: 0; font-size: 12px; color: var(--muted2); }
+.drop-actions { display: flex; flex-wrap: wrap; gap: 7px; justify-content: center; margin-top: 3px; }
+.drop-meta { margin: 0; font-size: 11.5px; color: var(--muted2); font-family: var(--mono); letter-spacing: .01em; overflow-wrap: anywhere; }
+.drop-meta b { color: var(--muted); font-weight: 600; }
+
+/* ---------- output ---------- */
+.out { display: grid; gap: 8px; min-width: 0; }
+.out-row {
+  display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 8px;
+  padding: 12px 13px; border-radius: 11px; border: 1px solid var(--line2);
+  background: linear-gradient(180deg, rgba(229,180,92,.06), rgba(229,180,92,.01)); min-width: 0;
+}
+.out-val {
+  font-family: var(--mono); font-size: 13.5px; font-weight: 650; letter-spacing: .01em;
+  color: var(--ink); overflow-wrap: anywhere; word-break: break-all; line-height: 1.55; user-select: all;
+}
+.out-val.is-empty { color: var(--muted2); font-weight: 500; }
+.out-side { display: inline-flex; align-items: center; gap: 7px; flex: none; }
+.cpy { appearance: none; border: 1px solid var(--line); background: transparent; color: var(--muted2); cursor: pointer; border-radius: 7px; font-size: 9px; font-weight: 700; letter-spacing: .06em; padding: 4px 8px; flex: none; transition: color .18s, border-color .18s; }
+.cpy:hover { color: var(--accent); border-color: rgba(229,180,92,.45); }
+.empty { margin: 0; padding: 14px; border: 1px dashed rgba(255,255,255,.16); border-radius: 11px; font-size: 12.5px; color: var(--muted2); text-align: center; }
+
+.row-actions { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+.status { min-height: 16px; margin: 0; font-size: 12px; color: var(--muted); }
+.status.is-ok { color: var(--ok); }
+.status.is-warn { color: var(--warn); }
+.status.is-bad { color: var(--bad); }
+
+.badge { display: inline-flex; align-items: center; gap: 7px; padding: 8px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; letter-spacing: .01em; }
+.badge--ok { border: 1px solid rgba(127,214,160,.4); background: rgba(127,214,160,.1); color: #a6e6c4; }
+.badge--bad { border: 1px solid rgba(255,125,125,.4); background: rgba(255,125,125,.1); color: #ffb3b3; }
+.badge--warn { border: 1px solid rgba(255,160,107,.4); background: rgba(255,160,107,.08); color: #ffc2a3; }
+.badge--idle { border: 1px solid var(--line); background: var(--panel2); color: var(--muted2); font-weight: 600; }
+
+/* ---------- jwt ---------- */
+.code {
+  border: 1px solid var(--line); border-radius: 11px; background: #0c0c0e;
+  padding: 11px 12px; font-family: var(--mono); font-size: 12.2px; line-height: 1.66;
+  max-height: 250px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; margin: 0;
+  -webkit-overflow-scrolling: touch;
+}
+.j-key { color: #9fd7ff; }
+.j-str { color: #a8e6b8; }
+.j-num { color: #f3cf85; }
+.j-bool { color: #ffa06b; }
+.j-punct { color: #6f6a63; }
+
+.kv { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.kv li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 10px; font-size: 12.4px; color: var(--muted); }
+.kv li b { color: var(--ink); font-family: var(--mono); font-weight: 650; font-size: 12.5px; text-align: right; overflow-wrap: anywhere; }
+.kv li.is-key { border-top: 1px solid rgba(255,255,255,.1); padding-top: 6px; margin-top: 2px; }
+.kv li.is-key b { color: var(--accent); }
+.caveat { margin: 0; font-size: 11.6px; color: var(--muted2); line-height: 1.6; }
+.caveat b { color: var(--muted); }
+.caveat code { font-family: var(--mono); color: var(--accent); font-size: .95em; }
+
+.split { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 10px; min-width: 0; }
+@media (max-width: 720px) { .split { grid-template-columns: minmax(0,1fr); } }
+
+/* ---------- sections ---------- */
+.section { margin-top: 40px; scroll-margin-top: 18px; }
+.sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 12px; border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 16px; }
+.sec-head h2 { margin: 0; font-size: 17px; letter-spacing: -.01em; }
+.sec-head span { font-family: var(--mono); font-size: 11px; color: var(--muted2); letter-spacing: .08em; text-transform: uppercase; }
+
+.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+.note { padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel); min-width: 0; }
+.note h3 { margin: 0 0 8px; font-size: 14px; display: flex; gap: 8px; align-items: baseline; }
+.note h3 span { font-family: var(--mono); font-size: 10.5px; color: var(--accent); letter-spacing: .1em; }
+.note h3 em { font-style: normal; }
+.note p { margin: 0; font-size: 12.8px; color: var(--muted); line-height: 1.62; }
+.note b { color: var(--ink); font-weight: 600; }
+.note code { font-family: var(--mono); font-size: .94em; color: var(--accent); }
+
+.faq { display: grid; gap: 8px; }
+details.qa { border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); overflow: hidden; }
+details.qa summary { cursor: pointer; padding: 13px 44px 13px 15px; font-size: 13.5px; font-weight: 600; list-style: none; position: relative; }
+details.qa summary::-webkit-details-marker { display: none; }
+details.qa summary::after { content: "+"; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--accent); font-family: var(--mono); font-size: 15px; }
+details.qa[open] summary::after { content: "−"; }
+details.qa .a { padding: 0 15px 14px; font-size: 12.8px; color: var(--muted); line-height: 1.68; }
+details.qa .a b { color: var(--ink); font-weight: 600; }
+details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: .95em; }
+
+.foot { margin-top: 34px; padding-top: 14px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--muted2); }
+.foot-links { display: inline-flex; flex-wrap: wrap; gap: 12px; }
+.foot-links a { text-decoration: none; color: var(--muted); border-bottom: 1px solid transparent; }
+.foot-links a:hover { color: var(--ink); border-bottom-color: var(--line2); }
+.foot .net { font-family: var(--mono); letter-spacing: .02em; }
+.foot .net b { color: var(--ok); }
+
+@media (max-width: 640px) {
+  .wrap { padding: 0 14px 36px; }
+  .topbar { padding: 14px 0 8px; }
+  .brand-txt { font-size: 12px; letter-spacing: .1em; }
+  .hero { padding: 16px 0 12px; }
+  .lede { font-size: 14px; }
+  .panel { padding: 13px; }
+  .sec-head h2 { font-size: 16px; }
+  .out-row { padding: 10px 11px; }
+  .out-val { font-size: 12.5px; }
+  .btn { padding: 10px 13px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="/portfolio/" aria-label="Kim Yihyung — portfolio" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="한국어로 보기" aria-label="한국어로 보기">
+        <span class="lt on" data-lt="en">EN</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="ko">KO</span>
+      </button>
+      <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← All tools</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="eyebrow">HashForge · checksums &amp; tokens · zero upload</span></p>
+      <h1 data-i18n-html="h1">The checksum that never leaves the file.<br><span class="soft">SHA-1 to SHA-512, HMAC, JWTs.</span><br><span class="gold">Computed in this tab.</span></h1>
+      <p class="lede" data-i18n-html="lede">
+        A download page gives you a hash and you need to know whether the file matches. Drop it here: the browser's own
+        <code>crypto.subtle</code> reads it in memory, the digest appears with the time it took, and the checksum you were given
+        is compared character by character. The same tab opens a <strong>JWT</strong> and counts a token's expiry in KST and UTC,
+        and fixes <strong>Base64</strong> that broke your Korean.
+      </p>
+      <div class="badge-row">
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillUp">0 bytes uploaded</b></span>
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillNet">0 external requests</b></span>
+        <span class="pill" data-i18n="pillCrypto">crypto.subtle</span>
+        <span class="pill" data-i18n="pillLocal">signature checked locally</span>
+      </div>
+    </section>
+
+    <section class="work" aria-label="Hash tools" data-i18n-aria="forgeAria">
+      <div class="card panel" id="forgeCard">
+
+        <div class="tabs" role="tablist" aria-label="Tool" data-i18n-aria="tabAria">
+          <button type="button" role="tab" id="tab-hash" data-tab="hash" aria-selected="true" aria-controls="panel-hash">
+            <b>01</b><span data-i18n="tab1">Checksum</span>
+          </button>
+          <button type="button" role="tab" id="tab-jwt" data-tab="jwt" aria-selected="false" aria-controls="panel-jwt" tabindex="-1">
+            <b>02</b><span data-i18n="tab2">JWT decoder</span>
+          </button>
+          <button type="button" role="tab" id="tab-enc" data-tab="enc" aria-selected="false" aria-controls="panel-enc" tabindex="-1">
+            <b>03</b><span data-i18n="tab3">Base64 · URL</span>
+          </button>
+        </div>
+
+        <!-- ── 01 checksum ── -->
+        <section class="tabpanel" id="panel-hash" role="tabpanel" aria-labelledby="tab-hash">
+          <div class="calc-head">
+            <h2 data-i18n="hashTitle">Hash a file or some text</h2>
+            <span data-i18n="hashNote">read in memory · never sent</span>
+          </div>
+
+          <div class="seg" id="hashSrc" role="group" aria-label="Source" data-i18n-aria="srcAria">
+            <button type="button" data-src="file" aria-pressed="true" data-i18n="srcFile">File</button>
+            <button type="button" data-src="text" aria-pressed="false" data-i18n="srcText">Text</button>
+          </div>
+
+          <div id="fileMode">
+            <div class="drop" id="drop">
+              <span class="drop-ic" aria-hidden="true">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+              </span>
+              <p class="drop-t" data-i18n="dropTitle">Drop the file you want to check</p>
+              <p class="drop-s" data-i18n="dropSub">Any type, any size. Read into this tab's memory and hashed there.</p>
+              <div class="drop-actions">
+                <button class="btn btn--primary btn--sm" id="pickFile" type="button" data-i18n="chooseFile">Choose file</button>
+                <button class="btn btn--sm" id="pickSmall" type="button" data-i18n="sampleText">Try "hello"</button>
+              </div>
+              <p class="drop-meta" id="fileMeta">—</p>
+              <input type="file" id="fileInput" class="sr-only" aria-label="Choose a file to hash">
+            </div>
+          </div>
+
+          <div id="textMode" hidden>
+            <label class="sr-only" for="hashText" data-i18n="hashTextLabel">Text to hash</label>
+            <textarea class="ta" id="hashText" placeholder="Type or paste anything — a line of code, a licence key, a sentence." data-i18n-ph="hashTextPh"></textarea>
+            <p class="drop-meta" id="textMeta" style="margin-top:7px">0 bytes · UTF-8</p>
+          </div>
+
+          <div>
+            <span class="lbl" data-i18n="algLabel">Algorithm</span>
+            <div class="seg" id="algSel" role="group" aria-label="Algorithm" data-i18n-aria="algAria">
+              <button type="button" data-alg="SHA-256" aria-pressed="true">SHA-256</button>
+              <button type="button" data-alg="SHA-1" aria-pressed="false">SHA-1</button>
+              <button type="button" data-alg="SHA-384" aria-pressed="false">SHA-384</button>
+              <button type="button" data-alg="SHA-512" aria-pressed="false">SHA-512</button>
+              <button type="button" data-alg="HMAC-SHA256" aria-pressed="false">HMAC-SHA256</button>
+            </div>
+          </div>
+
+          <div class="in" id="hmacWrap" hidden>
+            <label for="hmacKey" data-i18n="hmacLabel">HMAC secret key</label>
+            <input type="text" id="hmacKey" autocomplete="off" spellcheck="false" placeholder="shared secret" data-i18n-ph="hmacPh">
+          </div>
+
+          <div class="out">
+            <span class="lbl" id="digestLabel">SHA-256</span>
+            <div class="out-row">
+              <div class="out-val is-empty" id="digestOut">—</div>
+              <div class="out-side">
+                <button class="cpy" id="copyDigest" type="button" data-i18n="copy">COPY</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="cmpLine"><span class="badge badge--idle" id="cmpBadge" data-i18n="cmpNone">No expected checksum entered</span></div>
+
+          <div class="in">
+            <label for="expect" data-i18n="expectedLabel">Expected checksum</label>
+            <input type="text" id="expect" autocomplete="off" spellcheck="false" placeholder="paste the hash you were given, e.g. 2cf24dba5f…" data-i18n-ph="expectedPh">
+          </div>
+
+          <div class="row-actions">
+            <button class="btn btn--sm" id="saveSha" type="button" data-i18n="saveSha">Save as .sha256</button>
+            <button class="btn btn--sm btn--ghost" id="resetHash" type="button" data-i18n="resetBtn">Clear</button>
+          </div>
+        </section>
+
+        <!-- ── 02 jwt ── -->
+        <section class="tabpanel" id="panel-jwt" role="tabpanel" aria-labelledby="tab-jwt" hidden>
+          <div class="calc-head">
+            <h2 data-i18n="jwtTitle">Decode a JWT</h2>
+            <span data-i18n="jwtNote">header · payload · expiry</span>
+          </div>
+
+          <div>
+            <label class="sr-only" for="jwtIn" data-i18n="jwtInLabel">Token</label>
+            <textarea class="ta" id="jwtIn" spellcheck="false" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.…" data-i18n-ph="jwtPh"></textarea>
+          </div>
+
+          <div class="row-actions">
+            <button class="btn btn--sm" id="jwtSample" type="button" data-i18n="jwtSample">Load a sample token</button>
+            <button class="btn btn--sm btn--ghost" id="jwtClear" type="button" data-i18n="resetBtn">Clear</button>
+            <span class="badge badge--idle" id="jwtBadge" data-i18n="jwtNoToken">No token</span>
+          </div>
+
+          <div id="jwtBody" hidden>
+            <div class="split">
+              <div>
+                <span class="lbl" data-i18n="jwtHeader">Header</span>
+                <pre class="code" id="jwtHeaderOut"></pre>
+              </div>
+              <div>
+                <span class="lbl" data-i18n="jwtPayload">Payload</span>
+                <pre class="code" id="jwtPayloadOut"></pre>
+              </div>
+            </div>
+
+            <div style="margin-top:12px">
+              <span class="lbl" data-i18n="jwtClaims">Claims · times in KST and UTC</span>
+              <ul class="kv" id="jwtClaimsOut"></ul>
+            </div>
+
+            <div class="in" style="margin-top:12px">
+              <label for="jwtSecret" data-i18n="jwtSecretLabel">Secret — for HS256 / HS384 / HS512 only</label>
+              <input type="text" id="jwtSecret" autocomplete="off" spellcheck="false" placeholder="paste the signing secret to check it here" data-i18n-ph="jwtSecretPh">
+            </div>
+            <div class="row-actions" style="margin-top:9px">
+              <button class="btn btn--sm" id="jwtVerify" type="button" data-i18n="jwtVerifyBtn">Verify signature locally</button>
+              <span class="badge badge--idle" id="sigBadge" data-i18n="sigIdle">Signature not checked</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── 03 encode ── -->
+        <section class="tabpanel" id="panel-enc" role="tabpanel" aria-labelledby="tab-enc" hidden>
+          <div class="calc-head">
+            <h2 data-i18n="encTitle">Base64 · Base64url · URL</h2>
+            <span data-i18n="encNote">UTF-8 safe · Korean intact</span>
+          </div>
+
+          <div>
+            <span class="lbl" data-i18n="encScheme">Scheme</span>
+            <div class="seg" id="encScheme" role="group" aria-label="Scheme" data-i18n-aria="encSchemeAria">
+              <button type="button" data-scheme="b64" aria-pressed="true">Base64</button>
+              <button type="button" data-scheme="b64url" aria-pressed="false">Base64url</button>
+              <button type="button" data-scheme="url" aria-pressed="false">URL</button>
+            </div>
+          </div>
+
+          <div>
+            <span class="lbl" data-i18n="encDir">Direction</span>
+            <div class="seg" id="encDir" role="group" aria-label="Direction" data-i18n-aria="encDirAria">
+              <button type="button" data-dir="enc" aria-pressed="true" data-i18n="encEncode">Encode</button>
+              <button type="button" data-dir="dec" aria-pressed="false" data-i18n="encDecode">Decode</button>
+            </div>
+          </div>
+
+          <div id="plusWrap" hidden>
+            <span class="lbl" data-i18n="encPlusLabel">Query string</span>
+            <div class="chk-row">
+              <button class="chk" type="button" id="plusChk" aria-pressed="true"><span class="box" aria-hidden="true">✓</span><span data-i18n="encPlus">Read + as a space</span></button>
+            </div>
+          </div>
+
+          <div>
+            <label class="sr-only" for="encIn" data-i18n="encInLabel">Input</label>
+            <textarea class="ta" id="encIn" spellcheck="false" placeholder="Type here — Korean, emoji and line breaks are all fine." data-i18n-ph="encInPh"></textarea>
+            <p class="drop-meta" id="encInMeta" style="margin-top:7px">0 bytes · UTF-8</p>
+          </div>
+
+          <div class="out">
+            <div class="out-row">
+              <div class="out-val is-empty" id="encOut">—</div>
+              <div class="out-side">
+                <button class="cpy" id="copyEnc" type="button" data-i18n="copy">COPY</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="row-actions">
+            <button class="btn btn--sm" id="encSwap" type="button" data-i18n="encSwap">Use the output as input</button>
+            <span class="badge badge--idle" id="encRound" data-i18n="encRoundIdle">Round trip not checked</span>
+          </div>
+          <p class="caveat" data-i18n-html="encCaveat">Base64 is an encoding, not encryption — anyone can reverse it, so it hides nothing. This page converts to UTF-8 bytes before encoding, which is why Korean survives; most in-browser <code>btoa</code> snippets mangle anything above U+00FF.</p>
+        </section>
+
+        <p class="status" id="status" aria-live="polite"></p>
+      </div>
+
+      <aside class="side">
+        <div class="card panel">
+          <h3 data-i18n="lastHead">Last digest</h3>
+          <div class="result" style="display:flex;flex-wrap:wrap;align-items:flex-end;gap:6px 12px;padding:14px 15px;border-radius:12px;border:1px solid rgba(229,180,92,.26);background:linear-gradient(180deg,rgba(229,180,92,.10),rgba(229,180,92,.02));min-width:0">
+            <b id="bigBits" style="font-family:var(--mono);font-size:clamp(24px,6vw,32px);line-height:1.05;font-weight:700;letter-spacing:-.03em;color:var(--accent)">—</b>
+            <span style="font-size:11.5px;color:var(--muted);font-family:var(--mono);letter-spacing:.04em" data-i18n="strBitsUnit">bits in the digest</span>
+          </div>
+          <ul class="kv" id="digestInfo"></ul>
+          <p class="caveat" data-i18n-html="dCaveat">A digest is a fixed 160, 256, 384 or 512-bit fingerprint of every byte. Change one byte and roughly half the bits change, which is what makes a checksum a useful comparison — and what makes the match badge below meaningful.</p>
+        </div>
+
+        <div class="card panel">
+          <h3 data-i18n="sizeHead">Sizes and encodings</h3>
+          <ul class="kv">
+            <li><span>SHA-1</span><b>160 bits · 40 hex</b></li>
+            <li><span>SHA-256</span><b>256 bits · 64 hex</b></li>
+            <li><span>SHA-384</span><b>384 bits · 96 hex</b></li>
+            <li><span>SHA-512</span><b>512 bits · 128 hex</b></li>
+            <li><span>HMAC-SHA256</span><b>256 bits · 64 hex</b></li>
+            <li class="is-key"><span data-i18n="kBlock">block size</span><b>512 / 1024 bit</b></li>
+          </ul>
+          <p class="caveat" data-i18n-html="sizeCaveat">Hex is the usual form for a checksum file; Base64 is shorter by a third and appears in Subresource Integrity and JWTs. The digest is the same either way.</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" aria-labelledby="howTitle">
+      <div class="sec-head">
+        <h2 id="howTitle" data-i18n="howTitle">What the number means</h2>
+        <span data-i18n="howNote">three things people conflate</span>
+      </div>
+      <div class="notes">
+        <div class="note">
+          <h3><span>01</span><em data-i18n="n1h">A hash is not encryption</em></h3>
+          <p data-i18n-html="n1p">A hash runs one way: there is no key and no undo, and the output is a fixed length whatever the input. <b>Encryption</b> is reversible with a key; <b>encoding</b> such as Base64 is not even secret. A checksum answers one question — are these the same bytes — and it is the right tool for that and the wrong tool for everything else.</p>
+        </div>
+        <div class="note">
+          <h3><span>02</span><em data-i18n="n2h">What a match proves</em></h3>
+          <p data-i18n-html="n2p">That the file arrived intact — no dropped packet, no partial download, no accidental edit. It does <b>not</b> prove who made it: anyone can compute a hash of anything. Certificates and signatures exist for that. If the checksum came down the same pipe as the file, treat it as a corruption check, not as authentication.</p>
+        </div>
+        <div class="note">
+          <h3><span>03</span><em data-i18n="n3h">Where HMAC fits</em></h3>
+          <p data-i18n-html="n3p">HMAC mixes a shared secret into the hash, so only someone holding the key can produce the value. That turns a checksum into a <b>proof of possession</b> — which is exactly what an HS256 JWT signature is: HMAC over the header and payload. The secret never travels with the token, so a token with a strong secret cannot be forged.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="faqTitle">
+      <div class="sec-head">
+        <h2 id="faqTitle" data-i18n="faqTitle">Questions</h2>
+        <span data-i18n="faqNote">checksums · tokens · privacy</span>
+      </div>
+      <div class="faq">
+        <details class="qa">
+          <summary data-i18n="q1">Is a SHA-1 checksum still worth using?</summary>
+          <div class="a" data-i18n-html="a1">For accidental corruption, yes — it still catches a changed byte. For anything an attacker controls, no: a chosen-prefix collision costs well under a hundred thousand dollars of GPU time, so two different files can share a SHA-1 value. Use <b>SHA-256</b> for anything you publish and keep SHA-1 only to read old manifests.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q2">The expected checksum has spaces or an asterisk — will it still compare?</summary>
+          <div class="a" data-i18n-html="a2">Yes. The field accepts the whole <code>sha256sum</code> line, so <code>2cf24dba… *file.zip</code> works: the page pulls out the run of hex characters that matches the algorithm's length and compares only that. Whitespace, uppercase and the leading backslash a Windows tool adds are all tolerated.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q3">Why is my JWT shown as expired when the app says I am signed in?</summary>
+          <div class="a" data-i18n-html="a3">Two usual reasons: the token in your clipboard was refreshed and the copy is old, or <code>exp</code> is in seconds and something converted it to milliseconds twice. The page reads <code>exp</code> and <code>iat</code> as Unix seconds, shows both in <b>KST and UTC</b>, and prints how long ago it expired — so you can see which one it is.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q4">Does the tool keep my file or my token?</summary>
+          <div class="a" data-i18n-html="a4">No. Nothing is written to storage, nothing is posted anywhere, and the page makes no request after it loads. Close the tab and the bytes are gone with it. The footer counts cross-origin requests with a <b>PerformanceObserver</b> and it stays at 0 — the one honest way to show that claim instead of just asserting it.</div>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span data-i18n="footCopy">© 2026 Kim Yihyung · Built in the browser, for the browser.</span>
+    <span class="net"><span data-i18n="footNet">external requests</span> <b id="netCount">0</b></span>
+    <span class="foot-links">
+      <a href="/portfolio/" data-i18n="footP1">Portfolio</a>
+      <a href="/portfolio/tools/" data-i18n="footP2">All tools</a>
+      <a href="https://github.com/kimyihyung/portfolio" target="_blank" rel="noopener" data-i18n="footP3">Source</a>
+    </span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ═════════════════════ language ═════════════════════ */
+  var I18N = {
+    en: {
+      docTitle: 'HashForge — SHA-256, SHA-512, HMAC checksum & JWT / Base64 decoder | Kim Yihyung',
+      brandAria: 'Kim Yihyung — portfolio',
+      back: '← All tools',
+      eyebrow: 'HashForge · checksums · zero upload',
+      h1: 'The checksum that never leaves the file.<br><span class="soft">SHA-1 to SHA-512, HMAC, JWTs.</span><br><span class="gold">Computed in this tab.</span>',
+      lede: 'A download page gives you a hash and you need to know whether the file matches. Drop it here: the browser\'s own <code>crypto.subtle</code> reads it in memory, the digest appears with the time it took, and the checksum you were given is compared character by character. The same tab opens a <strong>JWT</strong> and counts a token\'s expiry in KST and UTC, and fixes <strong>Base64</strong> that broke your Korean.',
+      pillUp: '0 bytes uploaded', pillNet: '0 external requests', pillCrypto: 'crypto.subtle', pillLocal: 'signature checked locally',
+      forgeAria: 'Hash tools', tabAria: 'Tool',
+      tab1: 'Checksum', tab2: 'JWT decoder', tab3: 'Base64 · URL',
+      hashTitle: 'Hash a file or some text', hashNote: 'read in memory · never sent',
+      srcAria: 'Source', srcFile: 'File', srcText: 'Text',
+      dropTitle: 'Drop the file you want to check', dropSub: 'Any type. It is read into this tab\'s memory; a file over 1 GB may take a while.',
+      chooseFile: 'Choose file', sampleText: 'Try "hello"',
+      hashTextLabel: 'Text to hash',
+      hashTextPh: 'Type or paste anything — a line of code, a licence key, a sentence.',
+      algLabel: 'Algorithm', algAria: 'Algorithm',
+      hmacLabel: 'HMAC secret key', hmacPh: 'shared secret',
+      copy: 'COPY',
+      cmpNone: 'No expected checksum entered',
+      cmpOk: 'Match — the checksum is identical',
+      cmpBad: 'Mismatch — the bytes are different',
+      cmpShort: 'That is {n} hex characters; {alg} needs {m}',
+      expectedLabel: 'Expected checksum', expectedPh: 'paste the hash you were given, e.g. 2cf24dba5f…',
+      saveSha: 'Save as .sha256', resetBtn: 'Clear',
+      jwtTitle: 'Decode a JWT', jwtNote: 'header · payload · expiry',
+      jwtInLabel: 'Token', jwtPh: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.…',
+      jwtSample: 'Load a sample token', jwtNoToken: 'No token',
+      jwtHeader: 'Header', jwtPayload: 'Payload', jwtClaims: 'Claims · times in KST and UTC',
+      jwtSecretLabel: 'Secret — for HS256 / HS384 / HS512 only', jwtSecretPh: 'paste the signing secret to check it here',
+      jwtVerifyBtn: 'Verify signature locally',
+      sigIdle: 'Signature not checked', sigOk: 'Signature verified — HMAC matches', sigBad: 'Signature does not match this secret',
+      sigNeed: 'Enter the secret to check the signature', sigOther: '{alg} needs the issuer\'s public key — decoded only',
+      jwtBad: 'Not a JWT — expected three dot-separated parts', jwtEnc: 'JWE — encrypted, only the header is readable',
+      expOk: 'Valid for another {d}', expBad: 'Expired {d} ago', noExp: 'No exp claim',
+      kAlg: 'algorithm', kTyp: 'type', kKid: 'key id', kSig: 'signature part', kParts: 'segments', kTokenLen: 'token length',
+      kIss: 'issuer', kSub: 'subject', kAud: 'audience', kIat: 'issued at', kExp: 'expires', kNbf: 'not before', kJti: 'token id',
+      kZoneKst: 'KST', kZoneUtc: 'UTC', kNoClaim: '—',
+      encTitle: 'Base64 · Base64url · URL', encNote: 'UTF-8 safe · Korean intact',
+      encScheme: 'Scheme', encSchemeAria: 'Scheme', encDir: 'Direction', encDirAria: 'Direction',
+      encEncode: 'Encode', encDecode: 'Decode', encPlusLabel: 'Query string', encPlus: 'Read + as a space',
+      encInLabel: 'Input', encInPh: 'Type here — Korean, emoji and line breaks are all fine.',
+      encSwap: 'Use the output as input', encRoundIdle: 'Round trip not checked',
+      encRoundOk: 'Round trip restores the input exactly',
+      encRoundBad: 'Round trip does not return the input',
+      encCaveat: 'Base64 is an encoding, not encryption — anyone can reverse it, so it hides nothing. This page converts to UTF-8 bytes before encoding, which is why Korean survives; most in-browser <code>btoa</code> snippets mangle anything above U+00FF.',
+      stReady: 'Ready — Web Crypto is available and nothing has been sent anywhere.',
+      stNoCrypto: 'Web Crypto is unavailable here — open this page over https or on localhost.',
+      stHashing: 'Hashing…',
+      stNoFile: 'Drop a file first.',
+      stHmacKey: 'Enter the HMAC secret first — a zero-length key is not allowed.',
+      stReadFail: 'This file could not be read into memory — it may be too large for the browser.',
+      stNoText: 'Type something to hash.',
+      stDone: '{alg} of {name} · {n} bytes in {ms} ms.',
+      stCopied: 'Copied — {v}',
+      stCopyFail: 'Copy failed — select the text and copy it by hand.',
+      stSaved: 'Checksum file saved.',
+      stNothing: 'Nothing to save yet.',
+      stSample: 'Sample token loaded — the secret field is filled so you can check the signature.',
+      stCleared: 'Cleared.',
+      stBadUtf8: 'Those bytes are not valid UTF-8 — check the input.',
+      stEmptyEnc: 'Type something to convert.',
+      stUrlPlus: '',
+      uBytes: 'bytes', uMs: 'ms', uThroughput: 'throughput',
+      strBitsUnit: 'bits in the digest',
+      lastHead: 'Last digest', sizeHead: 'Sizes and encodings', kBlock: 'block size',
+      dCaveat: 'A digest is a fixed 160, 256, 384 or 512-bit fingerprint of every byte. Change one byte and roughly half the bits change, which is what makes a checksum a useful comparison — and what makes the match badge below meaningful.',
+      sizeCaveat: 'Hex is the usual form for a checksum file; Base64 is shorter by a third and appears in Subresource Integrity and JWTs. The digest is the same either way.',
+      sAlg: 'algorithm', sBits: 'digest size', sHex: 'hex length', sLen: 'bytes hashed',
+      sTime: 'time', sSpeed: 'speed', sSrc: 'source', sCmp: 'expected value',
+      sSourceFile: 'file', sSourceText: 'text', sNone: '—',
+      howTitle: 'What the number means', howNote: 'three things people conflate',
+      n1h: 'A hash is not encryption',
+      n1p: 'A hash runs one way: there is no key and no undo, and the output is a fixed length whatever the input. <b>Encryption</b> is reversible with a key; <b>encoding</b> such as Base64 is not even secret. A checksum answers one question — are these the same bytes — and it is the right tool for that and the wrong tool for everything else.',
+      n2h: 'What a match proves',
+      n2p: 'That the file arrived intact — no dropped packet, no partial download, no accidental edit. It does <b>not</b> prove who made it: anyone can compute a hash of anything. Certificates and signatures exist for that. If the checksum came down the same pipe as the file, treat it as a corruption check, not as authentication.',
+      n3h: 'Where HMAC fits',
+      n3p: 'HMAC mixes a shared secret into the hash, so only someone holding the key can produce the value. That turns a checksum into a <b>proof of possession</b> — which is exactly what an HS256 JWT signature is: HMAC over the header and payload. The secret never travels with the token, so a token with a strong secret cannot be forged.',
+      faqTitle: 'Questions', faqNote: 'checksums · tokens · privacy',
+      q1: 'Is a SHA-1 checksum still worth using?',
+      a1: 'For accidental corruption, yes — it still catches a changed byte. For anything an attacker controls, no: a chosen-prefix collision costs well under a hundred thousand dollars of GPU time, so two different files can share a SHA-1 value. Use <b>SHA-256</b> for anything you publish and keep SHA-1 only to read old manifests.',
+      q2: 'The expected checksum has spaces or an asterisk — will it still compare?',
+      a2: 'Yes. The field accepts the whole <code>sha256sum</code> line, so <code>2cf24dba… *file.zip</code> works: the page pulls out the run of hex characters that matches the algorithm\'s length and compares only that. Whitespace, uppercase and the leading backslash a Windows tool adds are all tolerated.',
+      q3: 'Why is my JWT shown as expired when the app says I am signed in?',
+      a3: 'Two usual reasons: the token in your clipboard was refreshed and the copy is old, or <code>exp</code> is in seconds and something converted it to milliseconds twice. The page reads <code>exp</code> and <code>iat</code> as Unix seconds, shows both in <b>KST and UTC</b>, and prints how long ago it expired — so you can see which one it is.',
+      q4: 'Does the tool keep my file or my token?',
+      a4: 'No. Nothing is written to storage, nothing is posted anywhere, and the page makes no request after it loads. Close the tab and the bytes are gone with it. The footer counts cross-origin requests with a <b>PerformanceObserver</b> and it stays at 0 — the one honest way to show that claim instead of just asserting it.',
+      footCopy: '© 2026 Kim Yihyung · Built in the browser, for the browser.',
+      footNet: 'external requests', footP1: 'Portfolio', footP2: 'All tools', footP3: 'Source',
+      toggleTo: 'View in Korean'
+    },
+    ko: {
+      docTitle: 'HashForge — SHA-256·SHA-512·HMAC 체크섬과 JWT·Base64 해독 | Kim Yihyung',
+      brandAria: 'Kim Yihyung — 포트폴리오',
+      back: '← 도구 전체',
+      eyebrow: 'HashForge · 체크섬 · 업로드 0',
+      h1: '파일을 보내지 않는 체크섬.<br><span class="soft">SHA-1부터 SHA-512, HMAC, JWT까지.</span><br><span class="gold">이 탭 안에서 계산합니다.</span>',
+      lede: '받은 파일이 맞는지 확인하려면 해시가 필요합니다. 여기에 떨어뜨리면 브라우저 자체의 <code>crypto.subtle</code>이 메모리에서 읽어 다이제스트를 만들고, 걸린 시간과 함께 보여줍니다. 받은 체크섬은 글자 단위로 대조합니다. 같은 탭에서 <strong>JWT</strong>를 열어 만료 시각을 KST와 UTC로 계산하고, 한글이 깨진 <strong>Base64</strong>도 되돌립니다.',
+      pillUp: '업로드 0바이트', pillNet: '외부 요청 0건', pillCrypto: 'crypto.subtle', pillLocal: '서명은 로컬에서 확인',
+      forgeAria: '해시 도구', tabAria: '도구',
+      tab1: '체크섬', tab2: 'JWT 해독', tab3: 'Base64 · URL',
+      hashTitle: '파일 또는 텍스트 해시', hashNote: '메모리에서 읽음 · 전송 없음',
+      srcAria: '대상', srcFile: '파일', srcText: '텍스트',
+      dropTitle: '확인할 파일을 떨어뜨리세요', dropSub: '형식 제한 없음. 이 탭 메모리에서 읽으며, 1GB를 넘으면 시간이 걸립니다.',
+      chooseFile: '파일 선택', sampleText: '"hello" 넣어보기',
+      hashTextLabel: '해시할 텍스트',
+      hashTextPh: '코드 한 줄, 라이선스 키, 문장 무엇이든 붙여넣으세요.',
+      algLabel: '알고리즘', algAria: '알고리즘',
+      hmacLabel: 'HMAC 비밀 키', hmacPh: '공유 비밀값',
+      copy: '복사',
+      cmpNone: '예상 체크섬이 비어 있습니다',
+      cmpOk: '일치 — 체크섬이 같습니다',
+      cmpBad: '불일치 — 바이트가 다릅니다',
+      cmpShort: '{n}자만 입력됐습니다. {alg}은(는) {m}자가 필요합니다',
+      expectedLabel: '예상 체크섬', expectedPh: '받은 해시를 붙여넣으세요. 예: 2cf24dba5f…',
+      saveSha: '.sha256로 저장', resetBtn: '비우기',
+      jwtTitle: 'JWT 해독', jwtNote: '헤더 · 페이로드 · 만료',
+      jwtInLabel: '토큰', jwtPh: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.…',
+      jwtSample: '샘플 토큰 불러오기', jwtNoToken: '토큰 없음',
+      jwtHeader: '헤더', jwtPayload: '페이로드', jwtClaims: '클레임 · 시각은 KST와 UTC',
+      jwtSecretLabel: '비밀 키 — HS256·HS384·HS512 전용', jwtSecretPh: '서명 비밀값을 붙여넣으면 여기서 확인합니다',
+      jwtVerifyBtn: '서명을 로컬에서 확인',
+      sigIdle: '서명 미확인', sigOk: '서명 확인 — HMAC이 일치합니다', sigBad: '이 비밀값으로는 서명이 맞지 않습니다',
+      sigNeed: '서명을 확인하려면 비밀값을 입력하세요', sigOther: '{alg}은(는) 발급자 공개키가 필요합니다 — 해독만 했습니다',
+      jwtBad: 'JWT가 아닙니다 — 점으로 나뉜 세 부분이어야 합니다', jwtEnc: 'JWE — 암호화된 토큰이라 헤더만 읽을 수 있습니다',
+      expOk: '앞으로 {d} 더 유효', expBad: '{d} 전에 만료', noExp: 'exp 클레임 없음',
+      kAlg: '알고리즘', kTyp: '타입', kKid: '키 ID', kSig: '서명부', kParts: '구간 수', kTokenLen: '토큰 길이',
+      kIss: '발급자', kSub: '주체', kAud: '대상', kIat: '발급 시각', kExp: '만료 시각', kNbf: '유효 시작', kJti: '토큰 ID',
+      kZoneKst: 'KST', kZoneUtc: 'UTC', kNoClaim: '—',
+      encTitle: 'Base64 · Base64url · URL', encNote: 'UTF-8 안전 · 한글 보존',
+      encScheme: '방식', encSchemeAria: '방식', encDir: '방향', encDirAria: '방향',
+      encEncode: '인코딩', encDecode: '디코딩', encPlusLabel: '쿼리 문자열', encPlus: '+를 공백으로 읽기',
+      encInLabel: '입력', encInPh: '여기에 입력하세요. 한글·이모지·줄바꿈 모두 그대로 처리합니다.',
+      encSwap: '결과를 입력으로 쓰기', encRoundIdle: '왕복 확인 전',
+      encRoundOk: '왕복해도 입력이 그대로 돌아옵니다',
+      encRoundBad: '왕복 결과가 입력과 다릅니다',
+      encCaveat: 'Base64는 암호화가 아니라 인코딩입니다. 누구나 되돌릴 수 있어 아무것도 숨기지 못합니다. 이 페이지는 UTF-8 바이트로 바꾼 뒤 인코딩하므로 한글이 살아남습니다. 흔한 <code>btoa</code> 한 줄짜리 코드는 U+00FF 위 글자를 깨뜨립니다.',
+      stReady: '준비됨 — Web Crypto를 쓸 수 있고, 아직 아무것도 전송하지 않았습니다.',
+      stNoCrypto: 'Web Crypto를 쓸 수 없습니다 — https 또는 localhost에서 열어 주세요.',
+      stHashing: '계산 중…',
+      stNoFile: '먼저 파일을 떨어뜨리세요.',
+      stHmacKey: 'HMAC 비밀값을 먼저 입력하세요. 길이가 0인 키는 쓸 수 없습니다.',
+      stReadFail: '파일을 메모리로 읽지 못했습니다. 브라우저가 감당하기에 너무 클 수 있습니다.',
+      stNoText: '해시할 텍스트를 입력하세요.',
+      stDone: '{name}의 {alg} · {n}바이트 · {ms}ms.',
+      stCopied: '복사됨 — {v}',
+      stCopyFail: '복사 실패 — 직접 선택해 복사해 주세요.',
+      stSaved: '체크섬 파일을 저장했습니다.',
+      stNothing: '아직 저장할 값이 없습니다.',
+      stSample: '샘플 토큰을 불러왔습니다. 서명 확인이 되도록 비밀값도 채웠습니다.',
+      stCleared: '비웠습니다.',
+      stBadUtf8: 'UTF-8로 읽을 수 없는 바이트입니다. 입력을 확인하세요.',
+      stEmptyEnc: '변환할 내용을 입력하세요.',
+      stUrlPlus: '',
+      uBytes: '바이트', uMs: 'ms', uThroughput: '처리량',
+      strBitsUnit: '비트 다이제스트',
+      lastHead: '마지막 다이제스트', sizeHead: '크기와 표기', kBlock: '블록 크기',
+      dCaveat: '다이제스트는 모든 바이트를 160·256·384·512비트 지문 하나로 접은 값입니다. 한 바이트만 바뀌어도 비트의 절반가량이 바뀌기에 체크섬 대조가 의미를 갖습니다.',
+      sizeCaveat: '체크섬 파일은 보통 16진수로 적고, Base64는 3분의 1 짧아 SRI와 JWT에서 씁니다. 어느 쪽이든 다이제스트는 같습니다.',
+      sAlg: '알고리즘', sBits: '다이제스트', sHex: '16진수 길이', sLen: '계산한 바이트',
+      sTime: '걸린 시간', sSpeed: '속도', sSrc: '대상', sCmp: '예상값',
+      sSourceFile: '파일', sSourceText: '텍스트', sNone: '—',
+      howTitle: '이 숫자가 뜻하는 것', howNote: '자주 섞이는 세 가지',
+      n1h: '해시는 암호화가 아닙니다',
+      n1p: '해시는 한 방향입니다. 키도 없고 되돌릴 수도 없으며, 입력이 무엇이든 출력 길이는 고정입니다. <b>암호화</b>는 키로 되돌릴 수 있고, Base64 같은 <b>인코딩</b>은 비밀조차 아닙니다. 체크섬은 "이 바이트가 같은가" 한 가지에만 답하며, 그 질문에는 맞고 나머지에는 틀린 도구입니다.',
+      n2h: '일치가 증명하는 것',
+      n2p: '파일이 온전히 도착했다는 것 — 전송 누락도, 잘린 다운로드도, 실수로 고친 흔적도 없다는 뜻입니다. 누가 만들었는지는 <b>증명하지 않습니다</b>. 누구나 무엇이든 해시할 수 있기 때문입니다. 그건 인증서와 서명의 몫입니다. 체크섬이 파일과 같은 경로로 왔다면 무결성 확인일 뿐 인증으로 쓰면 안 됩니다.',
+      n3h: 'HMAC이 들어갈 자리',
+      n3p: 'HMAC은 공유 비밀값을 해시에 섞으므로 키를 가진 사람만 같은 값을 만들 수 있습니다. 그래서 체크섬이 <b>키 소유 증명</b>이 됩니다. HS256 JWT의 서명이 정확히 그것 — 헤더와 페이로드에 대한 HMAC입니다. 비밀값은 토큰과 함께 다니지 않으므로, 강한 비밀값을 쓴 토큰은 위조할 수 없습니다.',
+      faqTitle: '질문', faqNote: '체크섬 · 토큰 · 프라이버시',
+      q1: 'SHA-1 체크섬도 아직 쓸 만한가요?',
+      a1: '우연한 손상에는 충분합니다. 바뀐 바이트는 여전히 잡아냅니다. 공격자가 손댈 수 있는 대상에는 아닙니다. 선택 접두사 충돌은 GPU로 몇만 달러면 만들어지므로 서로 다른 두 파일이 같은 SHA-1 값을 가질 수 있습니다. 공개하는 것에는 <b>SHA-256</b>을 쓰고, SHA-1은 옛 목록을 읽을 때만 남기세요.',
+      q2: '예상 체크섬에 공백이나 별표가 붙어 있어도 대조되나요?',
+      a2: '됩니다. <code>sha256sum</code> 출력 줄 전체를 받으므로 <code>2cf24dba… *file.zip</code>도 그대로 넣으면 됩니다. 알고리즘 길이에 맞는 16진수 구간만 뽑아 비교하며, 공백·대문자·윈도 도구가 붙이는 역슬래시는 모두 무시합니다.',
+      q3: '앱은 로그인돼 있는데 JWT가 만료로 나오는 이유는?',
+      a3: '두 가지가 흔합니다. 클립보드의 토큰이 갱신 전 사본이거나, <code>exp</code>가 초 단위인데 어딘가에서 밀리초로 두 번 곱한 경우입니다. 이 페이지는 <code>exp</code>와 <code>iat</code>를 유닉스 초로 읽어 <b>KST와 UTC</b>로 함께 보여주고, 얼마나 지나 만료됐는지 계산하므로 어느 쪽인지 바로 보입니다.',
+      q4: '파일이나 토큰을 어디에 저장하나요?',
+      a4: '아무 데도 저장하지 않습니다. 스토리지에 쓰지 않고, 어디로도 전송하지 않으며, 페이지를 연 뒤에는 요청 자체가 없습니다. 탭을 닫으면 바이트도 함께 사라집니다. 바닥의 카운터는 <b>PerformanceObserver</b>로 다른 출처 요청을 세며 0을 유지합니다.',
+      footCopy: '© 2026 Kim Yihyung · 브라우저에서, 브라우저를 위해.',
+      footNet: '외부 요청', footP1: '포트폴리오', footP2: '도구 전체', footP3: '소스',
+      toggleTo: 'View in English'
+    }
+  };
+
+  var LANG_KEY = 'yihyung.lang';
+  var SHARED_KEY = 'yihyung:lang';
+
+  function $(id) { return document.getElementById(id); }
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function t(k) {
+    var d = I18N[state.lang] || I18N.en;
+    if (d[k] != null) return d[k];
+    return I18N.en[k] != null ? I18N.en[k] : '';
+  }
+  function fmt(s, o) {
+    return String(s).replace(/\{(\w+)\}/g, function (m, k) { return o[k] != null ? o[k] : m; });
+  }
+
+  var state = {
+    lang: 'en', tab: 'hash', src: 'file', alg: 'SHA-256',
+    file: null, hex: '', bits: 0, ms: 0, bytes: 0, digestFor: '',
+    expectOk: null, jwt: null,
+    enc: { scheme: 'b64', dir: 'enc', plus: true }
+  };
+
+  var ALGS = {
+    'SHA-1': { bits: 160, hmac: false, subtle: 'SHA-1' },
+    'SHA-256': { bits: 256, hmac: false, subtle: 'SHA-256' },
+    'SHA-384': { bits: 384, hmac: false, subtle: 'SHA-384' },
+    'SHA-512': { bits: 512, hmac: false, subtle: 'SHA-512' },
+    'HMAC-SHA256': { bits: 256, hmac: true, subtle: 'SHA-256' }
+  };
+
+  var enc = new TextEncoder();
+  var dec = new TextDecoder('utf-8', { fatal: true });
+
+  /* ═════════════════════ helpers ═════════════════════ */
+  function toHex(bytes) {
+    var s = '';
+    for (var i = 0; i < bytes.length; i++) s += (bytes[i] < 16 ? '0' : '') + bytes[i].toString(16);
+    return s;
+  }
+  function b64Of(bytes) {
+    var bin = '';
+    for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin);
+  }
+  function bytesOfB64(s) {
+    var b = String(s).replace(/\s+/g, '').replace(/-/g, '+').replace(/_/g, '/');
+    while (b.length % 4) b += '=';
+    var bin = atob(b);
+    var out = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+    return out;
+  }
+  function b64urlOf(bytes) { return b64Of(bytes).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+  function normB64(s) { return String(s).replace(/\s+/g, '').replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, ''); }
+  function fmtBytes(n) {
+    if (!n && n !== 0) return '—';
+    if (n < 1024) return n + ' B';
+    if (n < 1048576) return (n / 1024).toFixed(n < 10240 ? 1 : 0) + ' KB';
+    if (n < 1073741824) return (n / 1048576).toFixed(n < 10485760 ? 1 : 0) + ' MB';
+    return (n / 1073741824).toFixed(2) + ' GB';
+  }
+  function fmtSpeed(bytes, ms) {
+    if (!ms) return '—';
+    var bps = bytes / (ms / 1000);
+    return fmtBytes(Math.round(bps)) + '/s';
+  }
+  function status(msg, kind) {
+    var el = $('status');
+    el.className = 'status' + (kind === 'ok' ? ' is-ok' : kind === 'warn' ? ' is-warn' : kind === 'bad' ? ' is-bad' : '');
+    el.textContent = msg || '';
+  }
+  function copyText(v) {
+    if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(v);
+    return new Promise(function (res, rej) {
+      try {
+        var ta = document.createElement('textarea');
+        ta.value = v; ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed'; ta.style.top = '-1000px';
+        document.body.appendChild(ta); ta.select();
+        var ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        ok ? res() : rej(new Error('copy'));
+      } catch (e) { rej(e); }
+    });
+  }
+  function hasSubtle() { return !!(window.crypto && window.crypto.subtle && window.TextEncoder); }
+
+  /* ═════════════════════ hashing ═════════════════════ */
+  async function digestBytes(bytes, alg) {
+    var a = ALGS[alg];
+    if (!hasSubtle()) throw new Error('subtle');
+    if (a.hmac) {
+      var key = await crypto.subtle.importKey('raw', enc.encode(state.hmacKeyValue || ''), { name: 'HMAC', hash: { name: 'SHA-256' } }, false, ['sign']);
+      return new Uint8Array(await crypto.subtle.sign('HMAC', key, bytes));
+    }
+    return new Uint8Array(await crypto.subtle.digest(a.subtle, bytes));
+  }
+
+  var hashSeq = 0;
+  async function runHash(quiet) {
+    if (!hasSubtle()) { status(t('stNoCrypto'), 'bad'); return; }
+    var a = ALGS[state.alg];
+    var name = '', bytes = null;
+    if (a.hmac && !(state.hmacKeyValue || '').length) { status(t('stHmacKey'), 'warn'); return; }
+    if (state.src === 'file') {
+      if (!state.file) { if (!quiet) status(t('stNoFile'), 'warn'); return; }
+      name = state.file.name;
+      if (!quiet) status(t('stHashing'));
+      try {
+        bytes = new Uint8Array(await state.file.arrayBuffer());
+      } catch (e) {
+        status(t('stReadFail'), 'bad');
+        return;
+      }
+    } else {
+      var v = $('hashText').value;
+      if (!v) { resetDigest(); if (!quiet) status(t('stNoText'), 'warn'); return; }
+      bytes = enc.encode(v);
+      name = (state.lang === 'ko' ? '텍스트' : 'text');
+    }
+    var my = ++hashSeq;
+    var t0 = performance.now();
+    var dg;
+    try { dg = await digestBytes(bytes, state.alg); }
+    catch (e) { status(e.message === 'subtle' ? t('stNoCrypto') : String(e.message || e), 'bad'); return; }
+    var ms = performance.now() - t0;
+    if (my !== hashSeq) return;
+
+    state.hex = toHex(dg);
+    state.bits = a.bits;
+    state.ms = Math.max(1, Math.round(ms * 10) / 10);
+    state.bytes = bytes.length;
+    state.digestFor = state.alg + (a.hmac ? ':hmac' : '');
+
+    var out = $('digestOut');
+    out.textContent = state.hex;
+    out.classList.remove('is-empty');
+    $('digestLabel').textContent = state.alg + (a.hmac ? ' · HMAC' : '') + ' · ' + (a.bits / 4) + ' hex';
+    paintDigestInfo(name);
+    paintCompare();
+    if (!quiet) status(fmt(t('stDone'), { alg: state.alg, name: name, n: fmtBytes(bytes.length), ms: state.ms }), 'ok');
+  }
+
+  function resetDigest() {
+    state.hex = ''; state.bits = 0; state.bytes = 0; state.ms = 0;
+    var out = $('digestOut');
+    out.textContent = '—'; out.classList.add('is-empty');
+    $('digestLabel').textContent = state.alg;
+    $('bigBits').textContent = '—';
+    $('bigBits').style.fontSize = '20px';
+    $('bigBits').style.color = 'var(--muted2)';
+    $('digestInfo').innerHTML = '';
+    paintCompare();
+  }
+
+  function paintDigestInfo(name) {
+    var a = ALGS[state.alg];
+    $('bigBits').textContent = a.bits ? String(a.bits) : '—';
+    $('bigBits').style.fontSize = '';
+    $('bigBits').style.color = '';
+    var rows = [
+      ['sAlg', state.alg + (a.hmac ? ' · HMAC' : '')],
+      ['sBits', state.bits ? state.bits + ' bits' : t('sNone')],
+      ['sHex', state.hex ? state.hex.length + ' chars' : t('sNone')],
+      ['sLen', state.bytes ? fmtBytes(state.bytes) : t('sNone')],
+      ['sTime', state.ms ? state.ms + ' ms' : t('sNone')],
+      ['sSpeed', state.ms ? fmtSpeed(state.bytes, state.ms) : t('sNone')],
+      ['sSrc', state.src === 'file' ? t('sSourceFile') + (name ? ' · ' + name : '') : t('sSourceText')],
+      ['sCmp', compareText()]
+    ];
+    var h = '';
+    for (var i = 0; i < rows.length; i++) {
+      h += '<li' + (i === 7 ? ' class="is-key"' : '') + '><span>' + esc(t(rows[i][0])) + '</span><b>' + esc(rows[i][1]) + '</b></li>';
+    }
+    $('digestInfo').innerHTML = h;
+  }
+
+  function parseExpected(raw, hexLen) {
+    if (!raw) return null;
+    var s = String(raw).trim();
+    if (!s) return null;
+    var m = s.match(new RegExp('[0-9a-fA-F]{' + hexLen + '}'));
+    if (m) return { value: m[0], full: true };
+    var hex = s.replace(/[^0-9a-fA-F]/g, '');
+    if (!hex) return null;
+    return { value: hex, full: hex.length >= hexLen };
+  }
+
+  function paintCompare() {
+    var a = ALGS[state.alg];
+    var hexLen = a.bits / 4;
+    var ex = parseExpected($('expect').value, hexLen);
+    var el = $('cmpBadge');
+    if (!ex) {
+      el.className = 'badge badge--idle';
+      el.textContent = t('cmpNone');
+      state.expectOk = null;
+      return;
+    }
+    if (!state.hex) {
+      el.className = 'badge badge--idle';
+      el.textContent = t('cmpNone');
+      state.expectOk = null;
+      return;
+    }
+    if (!ex.full) {
+      el.className = 'badge badge--warn';
+      el.textContent = fmt(t('cmpShort'), { n: ex.value.length, alg: state.alg, m: hexLen });
+      state.expectOk = null;
+      return;
+    }
+    var ok = ex.value.toLowerCase() === state.hex.toLowerCase();
+    state.expectOk = ok;
+    el.className = 'badge ' + (ok ? 'badge--ok' : 'badge--bad');
+    el.textContent = ok ? t('cmpOk') : t('cmpBad');
+    if ($('digestInfo').children.length) paintDigestInfo(state.src === 'file' && state.file ? state.file.name : '');
+  }
+
+  function compareText() {
+    var el = $('cmpBadge');
+    if (!el) return t('sNone');
+    if (state.expectOk === true) return '✓ ' + t('cmpOk');
+    if (state.expectOk === false) return '✗ ' + t('cmpBad');
+    return t('sNone');
+  }
+
+  function paintFileMeta() {
+    var f = state.file;
+    var el = $('fileMeta');
+    if (!f) { el.textContent = '—'; return; }
+    el.innerHTML = '<b>' + esc(f.name) + '</b> · ' + fmtBytes(f.size) + (f.type ? ' · ' + esc(f.type) : '');
+  }
+
+  /* ═════════════════════ tabs ═════════════════════ */
+  function setTab(tab) {
+    state.tab = tab;
+    var tabs = document.querySelectorAll('.tabs button');
+    for (var i = 0; i < tabs.length; i++) {
+      var on = tabs[i].getAttribute('data-tab') === tab;
+      tabs[i].setAttribute('aria-selected', on ? 'true' : 'false');
+      tabs[i].tabIndex = on ? 0 : -1;
+    }
+    $('panel-hash').hidden = tab !== 'hash';
+    $('panel-jwt').hidden = tab !== 'jwt';
+    $('panel-enc').hidden = tab !== 'enc';
+    if (tab === 'enc') doEncode();
+    if (tab === 'jwt') renderJwt();
+  }
+
+  /* ═════════════════════ JWT ═════════════════════ */
+  function hlJson(obj) {
+    var s = JSON.stringify(obj, null, 2);
+    if (s == null) return '';
+    s = esc(s);
+    return s
+      .replace(/(&quot;(?:[^&]|&(?!quot;))*?&quot;)(\s*:)/g, '<span class="j-key">$1</span>$2')
+      .replace(/:\s*(&quot;(?:[^&]|&(?!quot;))*?&quot;)/g, ': <span class="j-str">$1</span>')
+      .replace(/:\s*(-?\d+(?:\.\d+)?)/g, ': <span class="j-num">$1</span>')
+      .replace(/:\s*(true|false|null)\b/g, ': <span class="j-bool">$1</span>');
+  }
+
+  function fmtTime(sec, zone) {
+    if (sec == null || !isFinite(sec)) return '—';
+    var d = new Date(sec * 1000);
+    if (isNaN(d.getTime())) return '—';
+    var opts = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: zone };
+    try {
+      return new Intl.DateTimeFormat(state.lang === 'ko' ? 'ko-KR' : 'en-GB', opts).format(d);
+    } catch (e) {
+      return d.toISOString();
+    }
+  }
+
+  function durText(sec) {
+    var s = Math.abs(sec);
+    var d = Math.floor(s / 86400), h = Math.floor((s % 86400) / 3600), m = Math.floor((s % 3600) / 60);
+    var ko = state.lang === 'ko';
+    if (d >= 1) return ko ? d + '일 ' + h + '시간' : d + 'd ' + h + 'h';
+    if (h >= 1) return ko ? h + '시간 ' + m + '분' : h + 'h ' + m + 'm';
+    if (m >= 1) return ko ? m + '분' : m + 'm';
+    return ko ? Math.max(1, Math.round(s)) + '초' : Math.max(1, Math.round(s)) + 's';
+  }
+
+  function b64urlDecodeText(s) {
+    var bytes = bytesOfB64(s);
+    return dec.decode(bytes);
+  }
+
+  function renderJwt() {
+    var raw = $('jwtIn').value.trim().replace(/^Bearer\s+/i, '');
+    var badge = $('jwtBadge');
+    if (!raw) {
+      state.jwt = null;
+      $('jwtBody').hidden = true;
+      badge.className = 'badge badge--idle';
+      badge.textContent = t('jwtNoToken');
+      return;
+    }
+    var parts = raw.split('.');
+    if (parts.length === 5) {
+      var hdrOnly = null;
+      try { hdrOnly = JSON.parse(b64urlDecodeText(parts[0])); } catch (e) { hdrOnly = null; }
+      state.jwt = { raw: raw, parts: parts, header: hdrOnly, payload: null, enc: true };
+      $('jwtBody').hidden = false;
+      $('jwtHeaderOut').innerHTML = hdrOnly ? hlJson(hdrOnly) : esc(t('jwtBad'));
+      $('jwtPayloadOut').innerHTML = '<span class="j-punct">' + esc(t('jwtEnc')) + '</span>';
+      $('jwtClaimsOut').innerHTML = '';
+      badge.className = 'badge badge--warn';
+      badge.textContent = t('jwtEnc');
+      return;
+    }
+    if (parts.length !== 3) {
+      state.jwt = null;
+      $('jwtBody').hidden = true;
+      badge.className = 'badge badge--bad';
+      badge.textContent = t('jwtBad');
+      return;
+    }
+    var header = null, payload = null, bad = false;
+    try { header = JSON.parse(b64urlDecodeText(parts[0])); } catch (e) { bad = true; }
+    try { payload = JSON.parse(b64urlDecodeText(parts[1])); } catch (e) { bad = true; }
+    if (bad || !header || typeof header !== 'object') {
+      state.jwt = null;
+      $('jwtBody').hidden = true;
+      badge.className = 'badge badge--bad';
+      badge.textContent = t('jwtBad');
+      return;
+    }
+
+    state.jwt = { raw: raw, parts: parts, header: header, payload: payload && typeof payload === 'object' ? payload : {} };
+    $('jwtBody').hidden = false;
+    $('jwtHeaderOut').innerHTML = hlJson(header);
+    $('jwtPayloadOut').innerHTML = hlJson(state.jwt.payload);
+
+    var now = Math.floor(Date.now() / 1000);
+    var exp = Number(state.jwt.payload.exp);
+    var iat = Number(state.jwt.payload.iat);
+    var nbf = Number(state.jwt.payload.nbf);
+    var rows = [];
+    if (iat) rows.push([t('kIat'), fmtTime(iat, 'Asia/Seoul') + ' KST', fmtTime(iat, 'UTC') + ' UTC']);
+    if (nbf) rows.push([t('kNbf'), fmtTime(nbf, 'Asia/Seoul') + ' KST', fmtTime(nbf, 'UTC') + ' UTC']);
+    if (exp) rows.push([t('kExp'), fmtTime(exp, 'Asia/Seoul') + ' KST', fmtTime(exp, 'UTC') + ' UTC', true]);
+    if (!exp && !iat && !nbf) {
+      var keys = Object.keys(state.jwt.payload).slice(0, 8);
+      for (var i = 0; i < keys.length; i++) {
+        var v = state.jwt.payload[keys[i]];
+        var sv = typeof v === 'object' ? JSON.stringify(v) : String(v);
+        rows.push([keys[i], sv.length > 46 ? sv.slice(0, 44) + '…' : sv, '']);
+      }
+    }
+    var h = '';
+    for (var j = 0; j < rows.length; j++) {
+      h += '<li' + (rows[j][3] ? ' class="is-key"' : '') + '><span>' + esc(rows[j][0]) + '</span><b>' + esc(rows[j][1]) + (rows[j][2] ? '  ·  ' + esc(rows[j][2]) : '') + '</b></li>';
+    }
+    $('jwtClaimsOut').innerHTML = h;
+
+    var sigRow = header.alg ? String(header.alg) : t('sNone');
+    if (parts[2]) sigRow += ' · ' + String(parts[2]).length + ' chars';
+    $('jwtClaimsOut').innerHTML += '<li><span>' + esc(t('kSig')) + '</span><b>' + esc(sigRow) + '</b></li>';
+
+    if (!exp) {
+      badge.className = 'badge badge--idle';
+      badge.textContent = t('noExp');
+    } else if (exp * 1000 <= Date.now()) {
+      badge.className = 'badge badge--bad';
+      badge.textContent = '✗ ' + fmt(t('expBad'), { d: durText(now - exp) });
+    } else {
+      badge.className = 'badge badge--ok';
+      badge.textContent = '✓ ' + fmt(t('expOk'), { d: durText(exp - now) });
+    }
+    var sb = $('sigBadge');
+    sb.className = 'badge badge--idle';
+    sb.textContent = t('sigIdle');
+    if ($('jwtSecret').value.trim()) verifySignature(true);
+  }
+
+  async function verifySignature(quiet) {
+    var sigBadge = $('sigBadge');
+    var secret = $('jwtSecret').value;
+    if (!state.jwt || !state.jwt.parts || state.jwt.parts.length !== 3) return;
+    if (!secret) {
+      sigBadge.className = 'badge badge--idle';
+      sigBadge.textContent = t('sigNeed');
+      return;
+    }
+    var alg = String((state.jwt.header && state.jwt.header.alg) || '').toUpperCase();
+    state.jwtSecretValue = secret;
+    if (!/^HS(256|384|512)$/.test(alg)) {
+      sigBadge.className = 'badge badge--warn';
+      sigBadge.textContent = fmt(t('sigOther'), { alg: alg || '?' });
+      return;
+    }
+    if (!hasSubtle()) { sigBadge.className = 'badge badge--warn'; sigBadge.textContent = t('stNoCrypto'); return; }
+    if (!quiet) { sigBadge.className = 'badge badge--idle'; sigBadge.textContent = '…'; }
+    try {
+      var key = await crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: { name: 'SHA-' + alg.slice(2) } }, false, ['sign']);
+      var sig = new Uint8Array(await crypto.subtle.sign('HMAC', key, enc.encode(state.jwt.parts[0] + '.' + state.jwt.parts[1])));
+      var got = b64urlOf(sig);
+      var want = String(state.jwt.parts[2] || '').replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
+      var ok = got === want;
+      sigBadge.className = 'badge ' + (ok ? 'badge--ok' : 'badge--bad');
+      sigBadge.textContent = ok ? '✓ ' + t('sigOk') : '✗ ' + t('sigBad');
+    } catch (e) {
+      sigBadge.className = 'badge badge--warn';
+      sigBadge.textContent = String(e.message || e);
+    }
+  }
+
+  function sampleToken() {
+    var header = { alg: 'HS256', typ: 'JWT' };
+    var nowSec = Math.floor(Date.now() / 1000);
+    var payload = {
+      sub: '1234567890',
+      name: 'Kim Yihyung',
+      iss: 'hashforge.local',
+      iat: nowSec,
+      exp: nowSec + 7200,
+      scope: 'tools.read tokens.verify'
+    };
+    var h = b64urlOf(enc.encode(JSON.stringify(header)));
+    var p = b64urlOf(enc.encode(JSON.stringify(payload)));
+    var secret = 'hashforge-demo';
+    return crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: { name: 'SHA-256' } }, false, ['sign'])
+      .then(function (k) { return crypto.subtle.sign('HMAC', k, enc.encode(h + '.' + p)); })
+      .then(function (sig) {
+        $('jwtIn').value = h + '.' + p + '.' + b64urlOf(new Uint8Array(sig));
+        $('jwtSecret').value = secret;
+        state.jwtSecretValue = secret;
+        renderJwt();
+        verifySignature();
+        status(t('stSample'), 'ok');
+      });
+  }
+
+  /* ═════════════════════ encode ═════════════════════ */
+  function doEncode() {
+    var v = $('encIn').value;
+    var out = '', err = '';
+    $('encInMeta').textContent = fmtBytes(enc.encode(v).length) + ' · UTF-8';
+    if (!v) {
+      $('encOut').textContent = '—';
+      $('encOut').classList.add('is-empty');
+      $('encRound').className = 'badge badge--idle';
+      $('encRound').textContent = t('encRoundIdle');
+      return;
+    }
+    try {
+      if (state.enc.dir === 'enc') {
+        if (state.enc.scheme === 'url') out = encodeURIComponent(v);
+        else {
+          var b = b64Of(enc.encode(v));
+          out = state.enc.scheme === 'b64url' ? b.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '') : b;
+        }
+      } else {
+        if (state.enc.scheme === 'url') {
+          out = decodeURIComponent(state.enc.plus ? v.replace(/\+/g, '%20') : v);
+        } else {
+          out = dec.decode(bytesOfB64(v));
+        }
+      }
+    } catch (e) {
+      err = e && /URI|malformed/i.test(String(e.message)) ? String(e.message) : t('stBadUtf8');
+    }
+    if (err) {
+      $('encOut').textContent = '—';
+      $('encOut').classList.add('is-empty');
+      $('encRound').className = 'badge badge--bad';
+      $('encRound').textContent = '✗ ' + err;
+      status(err, 'bad');
+      return;
+    }
+    $('encOut').textContent = out;
+    $('encOut').classList.remove('is-empty');
+    status('', null);
+
+    var roundBadge = $('encRound');
+    if (state.enc.scheme === 'url' && state.enc.dir === 'dec') {
+      roundBadge.className = 'badge badge--idle';
+      roundBadge.textContent = t('encRoundIdle');
+      return;
+    }
+    var back = null, ok = false;
+    try {
+      if (state.enc.dir === 'enc') {
+        back = state.enc.scheme === 'url' ? decodeURIComponent(out) : dec.decode(bytesOfB64(out));
+        ok = back === v;
+      } else {
+        var again = state.enc.scheme === 'b64url'
+          ? b64urlOf(enc.encode(out))
+          : b64Of(enc.encode(out));
+        back = again;
+        ok = normB64(again) === normB64(v);
+      }
+    } catch (e) { back = null; ok = false; }
+    roundBadge.className = 'badge ' + (ok ? 'badge--ok' : 'badge--bad');
+    roundBadge.textContent = (ok ? '✓ ' : '✗ ') + t(ok ? 'encRoundOk' : 'encRoundBad');
+  }
+
+  /* ═════════════════════ language ═════════════════════ */
+  function setMeta(sel, attr, val) {
+    var el = document.querySelector(sel);
+    if (el) el.setAttribute(attr, val);
+  }
+  function applyLang(lang) {
+    state.lang = lang === 'ko' ? 'ko' : 'en';
+    document.documentElement.setAttribute('lang', state.lang);
+    document.title = t('docTitle');
+    setMeta('meta[property="og:title"]', 'content', t('docTitle').split('—')[0].trim());
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var v = t(nodes[i].getAttribute('data-i18n'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-html'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-aria'));
+      if (v) nodes[i].setAttribute('aria-label', v);
+    }
+    nodes = document.querySelectorAll('[data-i18n-ph]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-ph'));
+      if (v) nodes[i].setAttribute('placeholder', v);
+    }
+    var lt = $('langToggle');
+    if (lt) {
+      var spans = lt.querySelectorAll('[data-lt]');
+      for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
+      lt.setAttribute('aria-label', t('toggleTo'));
+      lt.setAttribute('title', t('toggleTo'));
+    }
+    paintCompare();
+    if (state.hex) paintDigestInfo(state.src === 'file' && state.file ? state.file.name : '');
+    if (state.jwt) renderJwt();
+    doEncode();
+    try {
+      localStorage.setItem(LANG_KEY, state.lang);
+      localStorage.setItem(SHARED_KEY, state.lang);
+    } catch (e) { /* storage may be blocked */ }
+  }
+  function initialLang() {
+    var saved = null;
+    try { saved = localStorage.getItem(SHARED_KEY) || localStorage.getItem(LANG_KEY); } catch (e) { }
+    if (saved === 'ko' || saved === 'en') return saved;
+    var nav = (navigator.language || 'en').toLowerCase();
+    return nav.indexOf('ko') === 0 ? 'ko' : 'en';
+  }
+
+  /* ═════════════════════ events ═════════════════════ */
+  $('langToggle').addEventListener('click', function () { applyLang(state.lang === 'ko' ? 'en' : 'ko'); });
+
+  var tabEls = document.querySelectorAll('.tabs button');
+  for (var i = 0; i < tabEls.length; i++) {
+    tabEls[i].addEventListener('click', function () { setTab(this.getAttribute('data-tab')); });
+    tabEls[i].addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      var all = Array.prototype.slice.call(tabEls);
+      var idx = all.indexOf(this);
+      var next = all[(idx + (e.key === 'ArrowRight' ? 1 : all.length - 1)) % all.length];
+      next.focus(); setTab(next.getAttribute('data-tab'));
+    });
+  }
+
+  $('hashSrc').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-src]');
+    if (!b) return;
+    state.src = b.getAttribute('data-src');
+    var chips = this.querySelectorAll('button');
+    for (var i = 0; i < chips.length; i++) chips[i].setAttribute('aria-pressed', String(chips[i].getAttribute('data-src') === state.src));
+    $('fileMode').hidden = state.src !== 'file';
+    $('textMode').hidden = state.src !== 'text';
+    if (state.src === 'text') { $('hashText').focus({ preventScroll: true }); if ($('hashText').value) runHash(true); }
+    else if (state.file) runHash(true);
+  });
+
+  $('algSel').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-alg]');
+    if (!b) return;
+    state.alg = b.getAttribute('data-alg');
+    var chips = this.querySelectorAll('button');
+    for (var i = 0; i < chips.length; i++) chips[i].setAttribute('aria-pressed', String(chips[i].getAttribute('data-alg') === state.alg));
+    $('hmacWrap').hidden = !ALGS[state.alg].hmac;
+    $('digestLabel').textContent = state.alg + (ALGS[state.alg].hmac ? ' · HMAC' : '');
+    resetDigest();
+    if ((state.src === 'file' && state.file) || (state.src === 'text' && $('hashText').value)) runHash(true);
+  });
+
+  $('hmacKey').addEventListener('input', function () {
+    state.hmacKeyValue = this.value;
+    if (ALGS[state.alg].hmac && ((state.src === 'file' && state.file) || (state.src === 'text' && $('hashText').value))) runHash(true);
+  });
+
+  var drop = $('drop');
+  ['dragenter', 'dragover'].forEach(function (ev) {
+    drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add('is-over'); });
+  });
+  ['dragleave', 'drop'].forEach(function (ev) {
+    drop.addEventListener(ev, function (e) { e.preventDefault(); if (ev === 'dragleave' && e.relatedTarget && drop.contains(e.relatedTarget)) return; drop.classList.remove('is-over'); });
+  });
+  drop.addEventListener('drop', function (e) {
+    var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (f) takeFile(f);
+  });
+  drop.addEventListener('click', function (e) {
+    if (e.target.closest('button')) return;
+    $('fileInput').click();
+  });
+  $('pickFile').addEventListener('click', function () { $('fileInput').click(); });
+  $('fileInput').addEventListener('change', function () { if (this.files && this.files[0]) takeFile(this.files[0]); });
+  $('pickSmall').addEventListener('click', function () {
+    state.src = 'text';
+    var chips = document.querySelectorAll('#hashSrc button');
+    for (var i = 0; i < chips.length; i++) chips[i].setAttribute('aria-pressed', String(chips[i].getAttribute('data-src') === 'text'));
+    $('fileMode').hidden = true; $('textMode').hidden = false;
+    $('hashText').value = 'hello';
+    $('hashText').dispatchEvent(new Event('input'));
+    runHash();
+  });
+
+  function takeFile(f) {
+    state.file = f;
+    paintFileMeta();
+    $('drop').classList.add('is-busy');
+    status(t('stHashing'));
+    runHash().then(function () { $('drop').classList.remove('is-busy'); });
+  }
+
+  var textTimer = null;
+  $('hashText').addEventListener('input', function () {
+    $('textMeta').textContent = fmtBytes(enc.encode(this.value).length) + ' · UTF-8';
+    clearTimeout(textTimer);
+    textTimer = setTimeout(function () { runHash(true); }, 220);
+  });
+
+  $('expect').addEventListener('input', paintCompare);
+  $('copyDigest').addEventListener('click', function () {
+    if (!state.hex) return;
+    copyText(state.hex).then(function () { status(fmt(t('stCopied'), { v: state.hex.slice(0, 16) + '…' }), 'ok'); },
+      function () { status(t('stCopyFail'), 'bad'); });
+  });
+  $('resetHash').addEventListener('click', function () {
+    state.file = null; $('fileInput').value = '';
+    $('hashText').value = '';
+    $('expect').value = '';
+    $('textMeta').textContent = '0 bytes · UTF-8';
+    paintFileMeta(); resetDigest();
+    status(t('stCleared'));
+  });
+  $('saveSha').addEventListener('click', function () {
+    if (!state.hex) { status(t('stNothing'), 'warn'); return; }
+    var name = state.src === 'file' && state.file ? state.file.name : 'text';
+    var body = state.hex + '  ' + name + '\n';
+    var blob = new Blob([body], { type: 'text/plain' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = (name.replace(/\.[^./\\]*$/, '') || 'checksum') + '.' + (ALGS[state.alg].hmac ? 'hmac' : state.alg.toLowerCase().replace('-', '')) + '.txt';
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1200);
+    status(t('stSaved'), 'ok');
+  });
+
+  $('jwtIn').addEventListener('input', function () {
+    clearTimeout(state.jwtTimer);
+    state.jwtTimer = setTimeout(renderJwt, 140);
+  });
+  $('jwtSample').addEventListener('click', function () {
+    if (!hasSubtle()) { status(t('stNoCrypto'), 'bad'); return; }
+    sampleToken();
+  });
+  $('jwtClear').addEventListener('click', function () {
+    $('jwtIn').value = ''; $('jwtSecret').value = '';
+    $('sigBadge').className = 'badge badge--idle';
+    $('sigBadge').textContent = t('sigIdle');
+    renderJwt();
+  });
+  $('jwtVerify').addEventListener('click', function () { verifySignature(); });
+  $('jwtSecret').addEventListener('input', function () {
+    state.jwtSecretValue = this.value;
+    if (!this.value) {
+      $('sigBadge').className = 'badge badge--idle';
+      $('sigBadge').textContent = t('sigIdle');
+    }
+    clearTimeout(state.sigTimer);
+    state.sigTimer = setTimeout(function () { verifySignature(true); }, 220);
+  });
+
+  $('encScheme').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-scheme]');
+    if (!b) return;
+    state.enc.scheme = b.getAttribute('data-scheme');
+    var chips = this.querySelectorAll('button');
+    for (var i = 0; i < chips.length; i++) chips[i].setAttribute('aria-pressed', String(chips[i].getAttribute('data-scheme') === state.enc.scheme));
+    $('plusWrap').hidden = state.enc.scheme !== 'url';
+    doEncode();
+  });
+  $('encDir').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-dir]');
+    if (!b) return;
+    state.enc.dir = b.getAttribute('data-dir');
+    var chips = this.querySelectorAll('button');
+    for (var i = 0; i < chips.length; i++) chips[i].setAttribute('aria-pressed', String(chips[i].getAttribute('data-dir') === state.enc.dir));
+    $('plusWrap').hidden = state.enc.scheme !== 'url';
+    doEncode();
+  });
+  $('plusChk').addEventListener('click', function () {
+    state.enc.plus = this.getAttribute('aria-pressed') !== 'true';
+    this.setAttribute('aria-pressed', String(state.enc.plus));
+    doEncode();
+  });
+  $('encIn').addEventListener('input', doEncode);
+  $('copyEnc').addEventListener('click', function () {
+    var v = $('encOut').textContent;
+    if (!v || v === '—') return;
+    copyText(v).then(function () { status(fmt(t('stCopied'), { v: v.slice(0, 16) + (v.length > 16 ? '…' : '') }), 'ok'); },
+      function () { status(t('stCopyFail'), 'bad'); });
+  });
+  $('encSwap').addEventListener('click', function () {
+    var v = $('encOut').textContent;
+    if (!v || v === '—') return;
+    $('encIn').value = v;
+    state.enc.dir = state.enc.dir === 'enc' ? 'dec' : 'enc';
+    var chips = document.querySelectorAll('#encDir button');
+    for (var i = 0; i < chips.length; i++) chips[i].setAttribute('aria-pressed', String(chips[i].getAttribute('data-dir') === state.enc.dir));
+    doEncode();
+  });
+
+  /* paste a file straight onto the page */
+  document.addEventListener('paste', function (e) {
+    if (state.tab !== 'hash' || state.src !== 'file') return;
+    var items = (e.clipboardData && e.clipboardData.files) || [];
+    if (items.length) { takeFile(items[0]); }
+  });
+
+  /* ═════════════════════ external request counter ═════════════════════ */
+  var netCount = 0;
+  function netWatch() {
+    if (!('PerformanceObserver' in window)) return;
+    try {
+      var po = new PerformanceObserver(function (list) {
+        var es = list.getEntries();
+        for (var i = 0; i < es.length; i++) {
+          try {
+            var u = new URL(es[i].name, location.href);
+            if (u.origin !== location.origin) {
+              netCount++;
+              $('netCount').textContent = String(netCount);
+            }
+          } catch (e) { /* ignore */ }
+        }
+      });
+      po.observe({ type: 'resource', buffered: true });
+    } catch (e) { /* older engines */ }
+  }
+
+  /* ═════════════════════ boot ═════════════════════ */
+  state.hmacKeyValue = '';
+  state.jwtSecretValue = '';
+  paintFileMeta();
+  resetDigest();
+  applyLang(initialLang());
+  setTab('hash');
+  doEncode();
+  status(hasSubtle() ? t('stReady') : t('stNoCrypto'), hasSubtle() ? '' : 'bad');
+  netWatch();
+
+  /* read-only hook for tests and automation */
+  window.HashForge = {
+    version: '1.0',
+    lang: function () { return state.lang; },
+    setLang: function (l) { applyLang(l); },
+    net: function () { return netCount; },
+    sha: function (text, alg) { return digestBytes(enc.encode(text), alg || 'SHA-256').then(toHex); },
+    sha256: function (text) { return digestBytes(enc.encode(text), 'SHA-256').then(toHex); },
+    hmac: function (text, key, alg) {
+      var a = alg || 'SHA-256';
+      return crypto.subtle.importKey('raw', enc.encode(key), { name: 'HMAC', hash: { name: a } }, false, ['sign'])
+        .then(function (k) { return crypto.subtle.sign('HMAC', k, enc.encode(text)); })
+        .then(function (s) { return toHex(new Uint8Array(s)); });
+    },
+    decodeJwt: function (raw) {
+      var parts = String(raw).trim().replace(/^Bearer\s+/i, '').split('.');
+      if (parts.length !== 3) return null;
+      try {
+        return { header: JSON.parse(b64urlDecodeText(parts[0])), payload: JSON.parse(b64urlDecodeText(parts[1])), parts: parts };
+      } catch (e) { return null; }
+    },
+    b64: function (text) { return b64Of(enc.encode(text)); },
+    b64url: function (text) { return b64urlOf(enc.encode(text)); },
+    unb64: function (s) { return dec.decode(bytesOfB64(s)); },
+    url: function (text) { return encodeURIComponent(text); },
+    hex: function () { return state.hex; },
+    expectOk: function () { return state.expectOk; },
+    setExpect: function (v) { $('expect').value = v; paintCompare(); },
+    sampleToken: sampleToken,
+    encState: state.enc
+  };
+})();
+</script>
+</body>
+</html>

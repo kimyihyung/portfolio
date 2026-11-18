@@ -181,6 +181,18 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://kimyihyung.github.io/portfolio/tools/hash-forge/</loc>
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://kimyihyung.github.io/portfolio/tools/invoice-mint/</loc>
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://kimyihyung.github.io/portfolio/labs/liquid-shader/</loc>
     <lastmod>2026-11-15</lastmod>
     <changefreq>monthly</changefreq>
