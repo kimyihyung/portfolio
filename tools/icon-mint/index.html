@@ -1070,15 +1070,18 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
     var html = '';
     for (var i = 0; i < state.outputs.length; i++) {
       var o = state.outputs[i];
-      var prev = '';
-      if (o.preview) prev = renderIcon(o.at).toDataURL('image/png');
       html += '<li>' +
-        (prev ? '<img src="' + prev + '" alt="">' : '<span style="width:20px;height:20px;display:grid;place-items:center;font-family:var(--mono);font-size:8px;color:var(--muted2);border:1px solid var(--line);border-radius:3px">' + esc(o.kind.toUpperCase()) + '</span>') +
+        (o.preview ? '<img alt="" data-thumb="' + i + '">' : '<span style="width:20px;height:20px;display:grid;place-items:center;font-family:var(--mono);font-size:8px;color:var(--muted2);border:1px solid var(--line);border-radius:3px">' + esc(o.kind.toUpperCase()) + '</span>') +
         '<span><span class="nm">' + esc(o.name) + '</span><br><span class="mt">' + esc(o.size) + ' · ' + bytes(o.data.length) + '</span></span>' +
         '<button class="dl" type="button" data-dl="' + i + '" title="' + esc(fmt(t('dlTitle'), { name: o.name })) + '" aria-label="' + esc(fmt(t('dlTitle'), { name: o.name })) + '">↓</button>' +
         '</li>';
     }
     box.innerHTML = html;
+    var thumbs = box.querySelectorAll('img[data-thumb]');
+    for (var k = 0; k < thumbs.length; k++) {
+      var idx = +thumbs[k].getAttribute('data-thumb');
+      if (state.outputs[idx]) thumbs[k].src = renderIcon(state.outputs[idx].at).toDataURL('image/png');
+    }
     $('zipBtn').disabled = !state.zipBlob;
     $('snippet').textContent = headSnippet();
   }
