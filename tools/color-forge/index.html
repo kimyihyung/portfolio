@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0b0d">
+<title>ColorForge — Palette Extractor &amp; WCAG Contrast Checker | Kim Yihyung</title>
+<meta name="description" content="Drop a PNG, JPG, WebP or SVG and get its six main colours as HEX, RGB and HSL, a live WCAG AA/AAA contrast check for every pair, and export as CSS variables, Tailwind v4 @theme, JSON or a 1080×1080 palette card — entirely in your browser with zero uploads.">
+<meta name="keywords" content="color palette extractor, image to palette, dominant colors, hex color picker, rgb hsl converter, wcag contrast checker, contrast ratio, aa aaa, tailwind v4 theme, css variables, palette card png, colorforge, zero upload">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/color-forge/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b0d'/%3E%3Ccircle cx='12' cy='12' r='5' fill='%23e5b45c'/%3E%3Ccircle cx='21' cy='14' r='4' fill='%234f7cff'/%3E%3Ccircle cx='14' cy='21' r='4' fill='%23c2554b'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/color-forge/">
+<meta property="og:title" content="ColorForge — palette out of any image, contrast checked">
+<meta property="og:description" content="Six main colours from one image, HEX/RGB/HSL copy, live WCAG AA/AAA contrast, and CSS · Tailwind v4 · JSON · PNG export in the tab.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="ColorForge — palette extractor and WCAG contrast checker">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ColorForge — palette out of any image, contrast checked">
+<meta name="twitter:description" content="Six colours, HEX/RGB/HSL, WCAG AA/AAA ratios, CSS · Tailwind v4 · JSON · PNG — all in the browser, zero uploads.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "ColorForge — Palette Extractor & WCAG Contrast Checker",
+      "applicationCategory": "DesignApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/color-forge/",
+      "description": "Extracts the six main colours of a PNG, JPG, WebP or SVG by folding the pixels into a colour cube and keeping the heaviest, most distinct six, in the browser, lists each colour as HEX, RGB and HSL with one-click copy, measures the WCAG 2 contrast ratio of any foreground/background pair with AA and AAA verdicts, and exports CSS variables, a Tailwind v4 @theme block, JSON or a 1080×1080 PNG palette card. Nothing is uploaded and no external request is made.",
+      "featureList": [
+        "Drop, pick or paste a PNG, JPG, WebP or SVG",
+        "Median-cut quantisation to six main colours",
+        "Per-colour HEX, RGB and HSL with one-click copy",
+        "Live WCAG AA / AAA contrast ratio for any pair",
+        "Best text colour suggested for each swatch",
+        "Export CSS variables, Tailwind v4 @theme, JSON",
+        "1080×1080 PNG palette card drawn in the tab",
+        "100% client-side: 0 bytes uploaded, 0 external requests"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "ColorForge", "item": "https://kimyihyung.github.io/portfolio/tools/color-forge/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How are the six colours chosen?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The image is scaled to at most 200 pixels, transparent pixels and antialiased edges are dropped, and the flat pixels are folded into a 32x32x32 colour cube. The heaviest cube is taken first, then every cube within a minimum distance is skipped, so six picks are six distinct colours. The share is the percentage of sampled pixels that landed in each cube. It runs on a canvas in your tab, so the image never leaves the device." }
+        },
+        {
+          "@type": "Question",
+          "name": "What do the AA and AAA badges mean?",
+          "acceptedAnswer": { "@type": "Answer", "text": "WCAG 2 asks for a contrast ratio of at least 4.5:1 for normal text at AA, and 7:1 at AAA. Large text — 24px, or 18.66px bold — is allowed 3:1 at AA and 4.5:1 at AAA. The ratio is (L1 + 0.05) / (L2 + 0.05), where L is relative luminance after the sRGB gamma curve is removed." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is the exported Tailwind block v4 syntax?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Tailwind CSS v4 configures the theme in CSS with an @theme block, so the export writes --color-cf-1 through --color-cf-6 inside @theme, which generates bg-cf-1, text-cf-1 and border-cf-1 utilities." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does anything get uploaded or stored?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. There is no server call, no analytics and no storage of the image. Reading the pixels, measuring contrast, writing the CSS and drawing the PNG card all happen in this tab; the page reports its own count of external requests, which stays at zero." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+:root {
+  --bg: #0b0b0d;
+  --bg2: #0e0e11;
+  --panel: #141311;
+  --panel2: #1b1917;
+  --line: rgba(255,255,255,.09);
+  --line2: rgba(255,255,255,.18);
+  --ink: #f7f2e9;
+  --muted: #a9a29a;
+  --muted2: #7d766e;
+  --accent: #e5b45c;
+  --accent2: #f3cf85;
+  --accent-dim: rgba(229,180,92,.12);
+  --on-accent: #1d1503;
+  --ok: #7fd6a0;
+  --warn: #ffa06b;
+  --bad: #ff7d7d;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --shadow: 0 24px 70px rgba(0,0,0,.55);
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  line-height: 1.6;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(110% 55% at 50% -18%, rgba(229,180,92,.13), transparent 62%),
+    radial-gradient(60% 40% at 100% 2%, rgba(229,180,92,.05), transparent 60%);
+  background-repeat: no-repeat;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: var(--accent); color: var(--on-accent); }
+a { color: inherit; }
+button, input, select, textarea { font-family: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+.wrap { width: 100%; max-width: 1220px; margin: 0 auto; padding: 0 20px 48px; }
+
+/* ---------- topbar ---------- */
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0 12px; }
+.brand { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: var(--ink); min-width: 0; }
+.mark {
+  min-width: 28px; height: 22px; padding: 0 6px; border-radius: 7px; flex: none;
+  border: 1px solid rgba(229,180,92,.45); background: var(--accent-dim);
+  display: grid; place-items: center; font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: var(--accent);
+}
+.brand-txt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.top-actions { display: inline-flex; align-items: center; gap: 9px; flex: none; }
+.lang-toggle {
+  appearance: none; border: 1px solid var(--line); background: var(--panel); color: var(--muted2);
+  height: 34px; padding: 0 11px; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px;
+  cursor: pointer; font-size: 11px; font-weight: 700; letter-spacing: .06em; line-height: 1;
+  transition: color .2s, border-color .2s, transform .15s;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.94); }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
+.topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
+
+/* ---------- hero ---------- */
+.hero { padding: 22px 0 18px; max-width: 860px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; margin: 0 0 14px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--accent);
+  border: 1px solid rgba(229,180,92,.28); background: rgba(229,180,92,.06); padding: 6px 11px; border-radius: 999px;
+}
+.eyebrow .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+h1 { margin: 0 0 14px; font-size: clamp(28px, 4.4vw, 44px); line-height: 1.12; letter-spacing: -.025em; font-weight: 800; }
+h1 .soft { color: var(--muted); }
+h1 .gold { color: var(--accent); }
+.lede { margin: 0 0 16px; color: var(--muted); font-size: 15px; max-width: 760px; }
+.lede strong { color: var(--ink); font-weight: 600; }
+.lede code { font-family: var(--mono); font-size: .92em; color: var(--accent); }
+
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--panel); font-size: 11.5px; color: var(--muted);
+  font-family: var(--mono); letter-spacing: .02em;
+}
+.pill b { color: var(--ink); font-weight: 700; }
+.pill--live { border-color: rgba(127,214,160,.32); background: rgba(127,214,160,.07); color: #a6e6c4; }
+.pill--live b { color: #bff3d8; }
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px rgba(127,214,160,.14); }
+
+/* ---------- layout ---------- */
+.work { display: grid; grid-template-columns: minmax(0,1fr) 340px; gap: 16px; align-items: start; margin-top: 6px; }
+@media (max-width: 1040px) { .work { grid-template-columns: minmax(0,1fr); } }
+
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); min-width: 0; }
+.panel { padding: 16px; display: grid; gap: 13px; min-width: 0; }
+.panel h3 { margin: 0; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted2); font-family: var(--mono); font-weight: 700; }
+.side { display: grid; gap: 12px; min-width: 0; }
+@media (min-width: 1041px) { .side { position: sticky; top: 14px; } }
+
+.btn {
+  appearance: none; cursor: pointer; border-radius: 11px; border: 1px solid var(--line2);
+  background: var(--panel2); color: var(--ink); font-size: 13px; font-weight: 650;
+  padding: 10px 16px; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  transition: transform .12s, border-color .2s, background .2s, opacity .2s; text-decoration: none;
+}
+.btn:hover { border-color: rgba(255,255,255,.3); }
+.btn:active { transform: scale(.98); }
+.btn:disabled { opacity: .42; cursor: not-allowed; }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 750; }
+.btn--primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.btn--ghost { background: transparent; }
+.btn--sm { padding: 7px 11px; font-size: 12px; border-radius: 9px; }
+.btn--block { width: 100%; }
+
+/* ---------- drop zone ---------- */
+.drop {
+  display: grid; justify-items: center; gap: 6px; text-align: center;
+  padding: 26px 14px 22px; border: 1px dashed rgba(255,255,255,.22); border-radius: var(--radius-sm);
+  background: linear-gradient(180deg, rgba(229,180,92,.05), rgba(229,180,92,.01));
+  transition: border-color .2s, background .2s; min-width: 0;
+}
+.drop.is-over { border-color: var(--accent); background: rgba(229,180,92,.12); }
+.drop-ic { color: var(--accent); opacity: .85; }
+.drop-t { margin: 0; font-size: 14.5px; font-weight: 700; letter-spacing: -.01em; }
+.drop-s { margin: 0; font-size: 12px; color: var(--muted2); }
+.drop-actions { display: flex; flex-wrap: wrap; gap: 7px; justify-content: center; margin-top: 3px; }
+.drop-meta { margin: 2px 0 0; font-size: 11.5px; color: var(--muted2); font-family: var(--mono); letter-spacing: .01em; overflow-wrap: anywhere; }
+.drop-meta b { color: var(--muted); font-weight: 600; }
+
+/* ---------- image strip ---------- */
+.preview { display: grid; grid-template-columns: 96px minmax(0,1fr); gap: 12px; align-items: center; min-width: 0; }
+.preview img { width: 96px; height: 96px; object-fit: cover; border-radius: 12px; border: 1px solid var(--line); background: #0d0d10; }
+.preview-meta { display: grid; gap: 3px; min-width: 0; }
+.preview-meta b { font-size: 13px; overflow-wrap: anywhere; }
+.preview-meta span { font-size: 11.5px; color: var(--muted2); font-family: var(--mono); }
+
+/* ---------- palette ---------- */
+.pal-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; min-width: 0; }
+@media (max-width: 620px) { .pal-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+.sw { border: 1px solid var(--line); border-radius: var(--radius-sm); overflow: hidden; background: var(--panel2); min-width: 0; display: grid; }
+.sw-top { height: 74px; display: flex; align-items: flex-end; justify-content: space-between; gap: 6px; padding: 8px 10px; }
+.sw-top .aa { font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .04em; padding: 2px 6px; border-radius: 999px; }
+.sw-body { padding: 9px 10px 10px; display: grid; gap: 4px; min-width: 0; }
+.sw-hex { font-family: var(--mono); font-size: 14px; font-weight: 700; letter-spacing: -.02em; display: flex; align-items: baseline; justify-content: space-between; gap: 6px; }
+.sw-hex .share { font-family: var(--font); font-size: 10.5px; font-weight: 600; color: var(--muted2); }
+.sw-row { display: flex; align-items: center; justify-content: space-between; gap: 6px; font-size: 10.5px; color: var(--muted2); font-family: var(--mono); min-width: 0; }
+.sw-row span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cpy { appearance: none; border: 1px solid var(--line); background: transparent; color: var(--muted2); cursor: pointer; border-radius: 6px; font-size: 9px; font-weight: 700; letter-spacing: .06em; padding: 2px 5px; flex: none; transition: color .18s, border-color .18s; }
+.cpy:hover { color: var(--accent); border-color: rgba(229,180,92,.45); }
+.sw.is-picked { border-color: rgba(229,180,92,.55); box-shadow: inset 0 0 0 1px rgba(229,180,92,.25); }
+
+/* ---------- contrast ---------- */
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; min-width: 0; }
+@media (max-width: 520px) { .pair { grid-template-columns: minmax(0,1fr); } }
+.pair-side { display: grid; gap: 6px; min-width: 0; }
+.pair-side .lbl { font-size: 10px; font-family: var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted2); }
+.chips { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 4px; }
+.chips button { appearance: none; cursor: pointer; height: 26px; border-radius: 7px; border: 1px solid rgba(255,255,255,.16); padding: 0; }
+.chips button[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--accent); }
+.cust { display: flex; align-items: center; gap: 7px; }
+.cust input[type="color"] { width: 34px; height: 26px; padding: 0; border: 1px solid var(--line); border-radius: 7px; background: transparent; cursor: pointer; }
+.cust span { font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
+
+.ratio-box { display: flex; align-items: baseline; gap: 10px; padding: 13px 15px; border-radius: var(--radius-sm); border: 1px solid rgba(229,180,92,.26); background: linear-gradient(180deg, rgba(229,180,92,.10), rgba(229,180,92,.02)); min-width: 0; flex-wrap: wrap; }
+.ratio-box b { font-family: var(--mono); font-size: clamp(26px, 6vw, 36px); line-height: 1.05; font-weight: 700; letter-spacing: -.03em; color: var(--accent); }
+.ratio-box span { font-size: 11.5px; color: var(--muted); font-family: var(--mono); letter-spacing: .04em; }
+.ratio-box .verdict { margin-left: auto; font-family: var(--font); font-size: 12px; font-weight: 700; }
+.ratio-box.is-pass .verdict { color: var(--ok); }
+.ratio-box.is-fail .verdict { color: var(--warn); }
+
+.badges { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 6px; }
+.badge { display: grid; gap: 2px; padding: 7px 8px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel2); min-width: 0; }
+.badge b { font-family: var(--mono); font-size: 9px; letter-spacing: .02em; color: var(--muted2); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.badge em { font-style: normal; font-size: 11.5px; font-weight: 700; }
+.badge.is-pass em { color: var(--ok); }
+.badge.is-fail em { color: var(--bad); }
+@media (max-width: 420px) { .badges { grid-template-columns: 1fr; } }
+
+.sample-box { padding: 14px 15px; border-radius: var(--radius-sm); border: 1px solid var(--line); display: grid; gap: 4px; min-width: 0; }
+.sample-box .big { font-size: 23px; font-weight: 800; letter-spacing: -.02em; line-height: 1.15; }
+.sample-box .small { font-size: 12.5px; }
+
+.row-actions { display: flex; flex-wrap: wrap; gap: 7px; }
+
+/* ---------- export ---------- */
+.seg { display: flex; gap: 3px; padding: 3px; background: var(--panel2); border: 1px solid var(--line); border-radius: 11px; min-width: 0; }
+.seg button { flex: 1 1 auto; appearance: none; border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; font-weight: 650; padding: 7px 5px; border-radius: 8px; line-height: 1.25; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--accent-dim); color: var(--accent); box-shadow: inset 0 0 0 1px rgba(229,180,92,.35); }
+
+.code { margin: 0; padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: #0d0d10; color: #cfd6c9; font-family: var(--mono); font-size: 11px; line-height: 1.7; white-space: pre; overflow-x: auto; max-height: 260px; }
+.status { min-height: 16px; margin: 0; font-size: 12px; color: var(--muted); }
+.status.is-ok { color: var(--ok); }
+.status.is-warn { color: var(--warn); }
+
+.kv { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.kv li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 10px; font-size: 12.4px; color: var(--muted); }
+.kv li b { color: var(--ink); font-family: var(--mono); font-weight: 650; font-size: 12.5px; text-align: right; overflow-wrap: anywhere; }
+.caveat { margin: 0; font-size: 11.6px; color: var(--muted2); line-height: 1.6; }
+.caveat b { color: var(--muted); }
+
+.mini-list { display: grid; gap: 5px; margin: 0; padding: 0; list-style: none; }
+.mini-list li { display: flex; align-items: center; gap: 8px; font-size: 11.8px; color: var(--muted); font-family: var(--mono); }
+.mini-list i { width: 16px; height: 16px; border-radius: 5px; border: 1px solid rgba(255,255,255,.16); flex: none; }
+.mini-list b { color: var(--ink); font-weight: 650; }
+.mini-list span { margin-left: auto; color: var(--muted2); font-size: 10.5px; }
+
+/* ---------- sections ---------- */
+.section { margin-top: 40px; scroll-margin-top: 18px; }
+.sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 12px; border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 16px; }
+.sec-head h2 { margin: 0; font-size: 17px; letter-spacing: -.01em; }
+.sec-head span { font-family: var(--mono); font-size: 11px; color: var(--muted2); letter-spacing: .08em; text-transform: uppercase; }
+
+.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+.note { padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel); min-width: 0; }
+.note h3 { margin: 0 0 8px; font-size: 14px; display: flex; gap: 8px; align-items: baseline; }
+.note h3 span { font-family: var(--mono); font-size: 10.5px; color: var(--accent); letter-spacing: .1em; }
+.note p { margin: 0; font-size: 12.8px; color: var(--muted); line-height: 1.62; }
+.note b { color: var(--ink); font-weight: 600; }
+.note table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 11.6px; }
+.note table th, .note table td { padding: 4px 6px; border-bottom: 1px dashed rgba(255,255,255,.08); text-align: right; color: var(--ink); font-family: var(--mono); }
+.note table th:first-child, .note table td:first-child { text-align: left; font-family: var(--font); color: var(--muted); }
+.note table th { font-family: var(--mono); font-size: 9.5px; letter-spacing: .06em; color: var(--muted2); font-weight: 700; }
+
+.faq { display: grid; gap: 8px; }
+details.qa { border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); overflow: hidden; }
+details.qa summary { cursor: pointer; padding: 13px 44px 13px 15px; font-size: 13.5px; font-weight: 600; list-style: none; position: relative; }
+details.qa summary::-webkit-details-marker { display: none; }
+details.qa summary::after { content: "+"; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--accent); font-family: var(--mono); font-size: 15px; }
+details.qa[open] summary::after { content: "−"; }
+details.qa .a { padding: 0 15px 14px; font-size: 12.8px; color: var(--muted); line-height: 1.68; }
+details.qa .a b { color: var(--ink); font-weight: 600; }
+
+.foot { margin-top: 34px; padding-top: 14px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--muted2); }
+.foot-links { display: inline-flex; flex-wrap: wrap; gap: 12px; }
+.foot-links a { text-decoration: none; color: var(--muted); border-bottom: 1px solid transparent; }
+.foot-links a:hover { color: var(--ink); border-bottom-color: var(--line2); }
+.foot .net { font-family: var(--mono); letter-spacing: .02em; }
+.foot .net b { color: var(--ok); }
+
+@media (max-width: 640px) {
+  .wrap { padding: 0 14px 36px; }
+  .topbar { padding: 14px 0 8px; }
+  .brand-txt { font-size: 12px; letter-spacing: .1em; }
+  .hero { padding: 16px 0 12px; }
+  .lede { font-size: 14px; }
+  .panel { padding: 13px; }
+  .ratio-box { padding: 11px 12px; }
+  .sec-head h2 { font-size: 16px; }
+  .sw-top { height: 62px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="/portfolio/" aria-label="Kim Yihyung — portfolio" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="한국어로 보기" aria-label="한국어로 보기">
+        <span class="lt on" data-lt="en">EN</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="ko">KO</span>
+      </button>
+      <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← All tools</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="eyebrow">ColorForge · palette &amp; contrast · zero upload</span></p>
+      <h1 data-i18n-html="h1">Six colours out of any image.<br><span class="soft">Contrast measured, not guessed.</span><br><span class="gold">Nothing leaves the tab.</span></h1>
+      <p class="lede" data-i18n-html="lede">
+        Drop a screenshot, a photo or a logo and get its <strong>six main colours</strong> as HEX, RGB and HSL,
+        a live <strong>WCAG AA/AAA ratio</strong> for any pair, and the palette as <strong>CSS variables,
+        Tailwind v4 <code>@theme</code>, JSON or a 1080×1080 PNG card</strong> — read pixel by pixel on this device.
+      </p>
+      <div class="badge-row">
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillUp">0 bytes uploaded</b></span>
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillNet">0 external requests</b></span>
+        <span class="pill" data-i18n="pillWcag">WCAG AA · AAA</span>
+        <span class="pill" data-i18n="pillOut">CSS · Tailwind · JSON · PNG</span>
+      </div>
+    </section>
+
+    <!-- ══════════ forge ══════════ -->
+    <section class="work" aria-label="Palette extractor" data-i18n-aria="buildAria">
+      <div class="card panel" id="buildCard">
+
+        <div class="drop" id="drop">
+          <span class="drop-ic" aria-hidden="true">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="4"></rect>
+              <circle cx="8.6" cy="8.6" r="1.6"></circle>
+              <path d="M20.4 15.4l-4.2-4.2L6.6 20.8"></path>
+            </svg>
+          </span>
+          <p class="drop-t" data-i18n="dropTitle">Drop a PNG, JPG, WebP or SVG</p>
+          <p class="drop-s" data-i18n="dropSub">Any size, any shape. Ctrl+V pastes from the clipboard too.</p>
+          <div class="drop-actions">
+            <input type="file" id="file" accept="image/png,image/jpeg,image/webp,image/svg+xml,image/avif,image/gif" class="sr-only">
+            <button class="btn btn--primary" id="pick" type="button" data-i18n="pickBtn">Choose image</button>
+            <button class="btn btn--sm" id="sampleGeo" type="button" data-i18n="sampleGeo">Geometric sample</button>
+            <button class="btn btn--sm" id="sampleMono" type="button" data-i18n="sampleMono">Monogram sample</button>
+          </div>
+          <p class="drop-meta" id="fileMeta">—</p>
+        </div>
+
+        <div class="preview" id="preview" hidden>
+          <img id="pvImg" alt="Loaded image preview">
+          <div class="preview-meta">
+            <b id="pvName">—</b>
+            <span id="pvSize">—</span>
+            <span id="pvPixels">—</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="calc-head">
+            <h2 data-i18n="palTitle">Main palette</h2>
+            <span data-i18n="palNote">counted · spaced · 6 colours</span>
+          </div>
+          <div class="pal-grid" id="palGrid" style="margin-top:10px"></div>
+        </div>
+
+        <div class="row-actions">
+          <button class="btn btn--sm" id="autoPair" type="button" data-i18n="autoBtn">Best text on colour 1</button>
+          <button class="btn btn--sm" id="swapPair" type="button" data-i18n="swapBtn">Swap</button>
+          <button class="btn btn--ghost btn--sm" id="resetBtn" type="button" data-i18n="resetBtn">Reset</button>
+          <p class="status" id="status" aria-live="polite"></p>
+        </div>
+      </div>
+
+      <aside class="side">
+        <div class="card panel">
+          <h3 data-i18n="cHead">Contrast check</h3>
+          <div class="pair">
+            <div class="pair-side">
+              <span class="lbl" data-i18n="fgLabel">Foreground (text)</span>
+              <div class="chips" id="fgChips" role="group" aria-label="Foreground colour" data-i18n-aria="fgAria"></div>
+              <label class="cust">
+                <input type="color" id="fgColor" value="#0b0b0d" aria-label="Foreground colour picker">
+                <span id="fgHex">#0b0b0d</span>
+              </label>
+            </div>
+            <div class="pair-side">
+              <span class="lbl" data-i18n="bgLabel">Background</span>
+              <div class="chips" id="bgChips" role="group" aria-label="Background colour" data-i18n-aria="bgAria"></div>
+              <label class="cust">
+                <input type="color" id="bgColor" value="#e5b45c" aria-label="Background colour picker">
+                <span id="bgHex">#e5b45c</span>
+              </label>
+            </div>
+          </div>
+          <div class="ratio-box" id="ratioBox">
+            <b id="ratio">—</b>
+            <span data-i18n="ratioLabel">contrast ratio</span>
+            <span class="verdict" id="verdict"></span>
+          </div>
+          <div class="badges">
+            <span class="badge" id="bAA"><b data-i18n="lblAA">AA · normal</b><em>—</em></span>
+            <span class="badge" id="bAAA"><b data-i18n="lblAAA">AAA · normal</b><em>—</em></span>
+            <span class="badge" id="bAAL"><b data-i18n="lblAAL">AA · large</b><em>—</em></span>
+          </div>
+          <div class="sample-box" id="sampleBox">
+            <span class="big" id="sampleBig">Aa</span>
+            <span class="small" id="sampleSmall">The quick brown fox jumps over the lazy dog.</span>
+          </div>
+          <p class="caveat" data-i18n-html="cNote">Normal text needs <b>4.5:1</b> for AA and <b>7:1</b> for AAA; large text — 24px, or 18.66px bold — needs <b>3:1</b> and <b>4.5:1</b>. The ratio is <b>(L1 + 0.05) ÷ (L2 + 0.05)</b> on relative luminance.</p>
+        </div>
+
+        <div class="card panel">
+          <h3 data-i18n="sumHead">Palette at a glance</h3>
+          <ul class="mini-list" id="miniList"></ul>
+          <ul class="kv">
+            <li><span data-i18n="kImg">Image</span><b id="kImg">—</b></li>
+            <li><span data-i18n="kSampled">Pixels sampled</span><b id="kSampled">—</b></li>
+            <li><span data-i18n="kRatio">Best pair</span><b id="kBest">—</b></li>
+          </ul>
+        </div>
+      </aside>
+    </section>
+
+    <!-- ══════════ export ══════════ -->
+    <section class="section" aria-labelledby="exTitle">
+      <div class="sec-head">
+        <h2 id="exTitle" data-i18n="exHead">Take it with you</h2>
+        <span data-i18n="exNote">copy or download</span>
+      </div>
+      <div class="work" style="grid-template-columns:minmax(0,1fr) 340px">
+        <div class="card panel">
+          <div class="seg" id="modeSeg" role="group" aria-label="Export format" data-i18n-aria="exAria">
+            <button type="button" data-mode="css" aria-pressed="true">CSS</button>
+            <button type="button" data-mode="tailwind" aria-pressed="false">Tailwind v4</button>
+            <button type="button" data-mode="json" aria-pressed="false">JSON</button>
+          </div>
+          <pre class="code" id="codeOut" tabindex="0"></pre>
+          <div class="row-actions">
+            <button class="btn btn--primary" id="copyCode" type="button" data-i18n="copyCode">Copy code</button>
+            <button class="btn btn--sm" id="dlCode" type="button" data-i18n="dlCode">Download file</button>
+            <button class="btn btn--sm" id="showCard" type="button" data-i18n="cardBtn">1080×1080 card</button>
+          </div>
+          <p class="caveat" data-i18n-html="exFoot">The card is drawn at <b>1080×1080</b> on a canvas in this tab and saved as PNG — the same colours and the pair you chose, with the ratio printed on it.</p>
+        </div>
+        <div class="card panel">
+          <h3 data-i18n="cardHead">Palette card</h3>
+          <canvas id="cardCanvas" width="1080" height="1080" style="width:100%;height:auto;border-radius:12px;border:1px solid var(--line);display:block;background:#0b0b0d"></canvas>
+          <button class="btn btn--block" id="dlCard" type="button" data-i18n="dlCard">Download PNG</button>
+          <p class="caveat" id="cardMeta">—</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ notes ══════════ -->
+    <section class="section" aria-labelledby="wcTitle">
+      <div class="sec-head">
+        <h2 id="wcTitle" data-i18n="wcTitle">How the numbers are made</h2>
+        <span data-i18n="wcNote">measured, not promised</span>
+      </div>
+      <div class="notes">
+        <div class="note">
+          <h3><span>01</span><span data-i18n="n1h">Six colours, counted then spaced</span></h3>
+          <p data-i18n-html="n1p">The image is scaled to 200 px on its long edge, then transparent pixels and <b>antialiased edges are dropped</b> so a blended rim never becomes a palette entry. What is left is folded into a <b>32×32×32 colour cube</b>; the heaviest cube is taken first, and every cube within a minimum distance of it is skipped before the next pick. Six picks, six colours that are actually different — and a flat background keeps one slot instead of eating three.</p>
+        </div>
+        <div class="note">
+          <h3><span>02</span><span data-i18n="n2h">Contrast, WCAG 2</span></h3>
+          <p data-i18n-html="n2p">Relative luminance linearises each channel, then weights it <b>0.2126 R + 0.7152 G + 0.0722 B</b>. The ratio is <b>(L1 + 0.05) ÷ (L2 + 0.05)</b>, with the lighter colour on top, so it runs from 1:1 to 21:1. Nothing here is a judgement call — the badge is the comparison against the number.</p>
+          <table>
+            <thead><tr><th data-i18n="tLvl">Level</th><th data-i18n="tNorm">Normal</th><th data-i18n="tLarge">Large</th></tr></thead>
+            <tbody>
+              <tr><td>AA</td><td>4.5:1</td><td>3:1</td></tr>
+              <tr><td>AAA</td><td>7:1</td><td>4.5:1</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="note">
+          <h3><span>03</span><span data-i18n="n3h">Using the palette</span></h3>
+          <p data-i18n-html="n3p">Colour 1 is the most common pixel, which is usually the surface you build on; colours 5 and 6 are the accents that made the image interesting. Check every pair you actually ship — a ratio that passes on a swatch can fail once opacity, a gradient or a photo sits behind the text.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="faqTitle">
+      <div class="sec-head">
+        <h2 id="faqTitle" data-i18n="faqTitle">Questions</h2>
+        <span data-i18n="faqNote">palette · contrast · export</span>
+      </div>
+      <div class="faq">
+        <details class="qa">
+          <summary data-i18n="q1">Why does a photo give muddy colours?</summary>
+          <div class="a" data-i18n-html="a1">Photographs contain thousands of near-neighbours per region, so each of the six boxes averages a wide spread and lands near grey. It is honest to the image: that <b>is</b> the dominant colour. For a brand palette, feed a flat logo or a screenshot instead of a photo, and the six boxes separate cleanly.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q2">What if the image has fewer than six colours?</summary>
+          <div class="a" data-i18n-html="a2">A flat logo can produce two or three boxes only. The remaining slots are filled with <b>tints and shades derived from the dominant colour</b>, so a monogram still gives a usable six-step scale instead of empty squares. Derived shades carry a 0% share, because no pixel landed on them.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q3">Is the Tailwind export v4 or v3?</summary>
+          <div class="a" data-i18n-html="a3">v4. It writes an <b>@theme</b> block with <b>--color-cf-1</b> to <b>--color-cf-6</b>, which is how v4 declares theme colours; <b>bg-cf-1</b>, <b>text-cf-1</b> and <b>border-cf-1</b> then exist without a config file. A v3 project can paste the CSS variables into <b>:root</b> instead — the first tab is exactly that.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q4">Does the tool keep my image?</summary>
+          <div class="a" data-i18n-html="a4">No. There is no upload endpoint, no analytics and no local storage of pixels. The file is read into an <b>&lt;img&gt;</b>, painted onto a canvas, measured, and dropped when you close the tab. The footer counts external requests and it stays at <b>0</b>.</div>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span data-i18n="footCopy">© 2026 Kim Yihyung · Built in the browser, for the browser.</span>
+    <span class="net"><span data-i18n="footNet">external requests</span> <b id="netCount">0</b></span>
+    <span class="foot-links">
+      <a href="/portfolio/" data-i18n="footP1">Portfolio</a>
+      <a href="/portfolio/tools/" data-i18n="footP2">All tools</a>
+      <a href="https://github.com/kimyihyung/portfolio" target="_blank" rel="noopener" data-i18n="footP3">Source</a>
+    </span>
+    <span class="mono" data-i18n="mono">NO UPLOADS · NO TRACKING</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ═════════════════════ language ═════════════════════ */
+  var I18N = {
+    en: {
+      docTitle: 'ColorForge — Palette Extractor & WCAG Contrast Checker | Kim Yihyung',
+      brandAria: 'Kim Yihyung — portfolio',
+      back: '← All tools',
+      eyebrow: 'ColorForge · palette & contrast · zero upload',
+      h1: 'Six colours out of any image.<br><span class="soft">Contrast measured, not guessed.</span><br><span class="gold">Nothing leaves the tab.</span>',
+      lede: 'Drop a screenshot, a photo or a logo and get its <strong>six main colours</strong> as HEX, RGB and HSL, a live <strong>WCAG AA/AAA ratio</strong> for any pair, and the palette as <strong>CSS variables, Tailwind v4 <code>@theme</code>, JSON or a 1080×1080 PNG card</strong> — read pixel by pixel on this device.',
+      pillUp: '0 bytes uploaded', pillNet: '0 external requests', pillWcag: 'WCAG AA · AAA', pillOut: 'CSS · Tailwind · JSON · PNG',
+      buildAria: 'Palette extractor',
+      dropTitle: 'Drop a PNG, JPG, WebP or SVG',
+      dropSub: 'Any size, any shape. Ctrl+V pastes from the clipboard too.',
+      pickBtn: 'Choose image',
+      sampleGeo: 'Geometric sample',
+      sampleMono: 'Monogram sample',
+      dropMeta: 'Nothing loaded yet — pick a file or try a sample.',
+      palTitle: 'Main palette',
+      palNote: 'counted · spaced · 6 colours',
+      autoBtn: 'Best text on colour 1',
+      swapBtn: 'Swap',
+      resetBtn: 'Reset',
+      cHead: 'Contrast check',
+      fgLabel: 'Foreground (text)',
+      bgLabel: 'Background',
+      fgAria: 'Foreground colour',
+      bgAria: 'Background colour',
+      ratioLabel: 'contrast ratio',
+      lblAA: 'AA · normal', lblAAA: 'AAA · normal', lblAAL: 'AA · large',
+      cNote: 'Normal text needs <b>4.5:1</b> for AA and <b>7:1</b> for AAA; large text — 24px, or 18.66px bold — needs <b>3:1</b> and <b>4.5:1</b>. The ratio is <b>(L1 + 0.05) ÷ (L2 + 0.05)</b> on relative luminance.',
+      sumHead: 'Palette at a glance',
+      kImg: 'Image', kSampled: 'Pixels sampled', kBest: 'Best pair',
+      exHead: 'Take it with you', exNote: 'copy or download', exAria: 'Export format',
+      copyCode: 'Copy code', dlCode: 'Download file', cardBtn: '1080×1080 card',
+      exFoot: 'The card is drawn at <b>1080×1080</b> on a canvas in this tab and saved as PNG — the same colours and the pair you chose, with the ratio printed on it.',
+      cardHead: 'Palette card', dlCard: 'Download PNG',
+      wcTitle: 'How the numbers are made', wcNote: 'measured, not promised',
+      n1h: 'Six colours, counted then spaced',
+      n1p: 'The image is scaled to 200 px on its long edge, then transparent pixels and <b>antialiased edges are dropped</b> so a blended rim never becomes a palette entry. What is left is folded into a <b>32×32×32 colour cube</b>; the heaviest cube is taken first, and every cube within a minimum distance of it is skipped before the next pick. Six picks, six colours that are actually different — and a flat background keeps one slot instead of eating three.',
+      n2h: 'Contrast, WCAG 2',
+      n2p: 'Relative luminance linearises each channel, then weights it <b>0.2126 R + 0.7152 G + 0.0722 B</b>. The ratio is <b>(L1 + 0.05) ÷ (L2 + 0.05)</b>, with the lighter colour on top, so it runs from 1:1 to 21:1. Nothing here is a judgement call — the badge is the comparison against the number.',
+      tLvl: 'Level', tNorm: 'Normal', tLarge: 'Large',
+      n3h: 'Using the palette',
+      n3p: 'Colour 1 is the most common pixel, which is usually the surface you build on; colours 5 and 6 are the accents that made the image interesting. Check every pair you actually ship — a ratio that passes on a swatch can fail once opacity, a gradient or a photo sits behind the text.',
+      faqTitle: 'Questions', faqNote: 'palette · contrast · export',
+      q1: 'Why does a photo give muddy colours?',
+      a1: 'Photographs contain thousands of near-neighbours per region, so each of the six boxes averages a wide spread and lands near grey. It is honest to the image: that <b>is</b> the dominant colour. For a brand palette, feed a flat logo or a screenshot instead of a photo, and the six boxes separate cleanly.',
+      q2: 'What if the image has fewer than six colours?',
+      a2: 'A flat logo can produce two or three boxes only. The remaining slots are filled with <b>tints and shades derived from the dominant colour</b>, so a monogram still gives a usable six-step scale instead of empty squares. Derived shades carry a 0% share, because no pixel landed on them.',
+      q3: 'Is the Tailwind export v4 or v3?',
+      a3: 'v4. It writes an <b>@theme</b> block with <b>--color-cf-1</b> to <b>--color-cf-6</b>, which is how v4 declares theme colours; <b>bg-cf-1</b>, <b>text-cf-1</b> and <b>border-cf-1</b> then exist without a config file. A v3 project can paste the CSS variables into <b>:root</b> instead — the first tab is exactly that.',
+      q4: 'Does the tool keep my image?',
+      a4: 'No. There is no upload endpoint, no analytics and no local storage of pixels. The file is read into an <b>&lt;img&gt;</b>, painted onto a canvas, measured, and dropped when you close the tab. The footer counts external requests and it stays at <b>0</b>.',
+      footCopy: '© 2026 Kim Yihyung · Built in the browser, for the browser.',
+      footNet: 'external requests', footP1: 'Portfolio', footP2: 'All tools', footP3: 'Source',
+      mono: 'NO UPLOADS · NO TRACKING', toggleTo: 'View in Korean',
+      /* dynamic */
+      copyHex: 'HEX', copyRgb: 'RGB', copyHsl: 'HSL',
+      share: 'share', pass: 'PASS', fail: 'FAIL', passLarge: 'large only',
+      stReady: 'Ready — drop an image to forge a palette.',
+      stLoaded: 'Palette forged from {n} colours in {ms} ms.',
+      stReal: '{n} colours found; {d} extra steps derived from the main one.',
+      stNoImg: 'That file did not open as an image.',
+      stEmpty: 'This image has no opaque pixels.',
+      stCopied: 'Copied {v}.',
+      stCopyFail: 'Copy failed — select the text and copy it by hand.',
+      stDownloaded: 'Saved {name}.',
+      stCard: 'Card ready · {w}×{h} · {kb} KB.',
+      stBig: 'Picked the darker of black and white for {c} — {r}:1.',
+      unsaved: 'No palette yet — load an image first.',
+      cardLabel: 'PALETTE', cardPair: 'TEXT ON BACKGROUND',
+      cardSource: 'source', cardFoot: 'ColorForge · zero uploads · in-browser',
+      bestPair: '{a} on {b} · {r}:1',
+      imgNone: '—',
+      modeHint: 'Every line is generated from the palette above, so it changes the moment a new image lands.'
+    },
+    ko: {
+      docTitle: 'ColorForge — 이미지 팔레트 추출·WCAG 명도 대비 검사기 | Kim Yihyung',
+      brandAria: 'Kim Yihyung — 포트폴리오',
+      back: '← 도구 전체',
+      eyebrow: 'ColorForge · 팔레트·대비 · 업로드 0',
+      h1: '이미지 한 장에서 색 여섯 개.<br><span class="soft">대비는 짐작이 아니라 실측.</span><br><span class="gold">탭 밖으로는 아무것도 안 나갑니다.</span>',
+      lede: '스크린샷·사진·로고를 떨어뜨리면 <strong>주요 색 6개</strong>가 HEX·RGB·HSL로 나오고, 어떤 조합이든 <strong>WCAG AA/AAA 명도 대비</strong>를 실시간으로 재며, 팔레트를 <strong>CSS 변수, Tailwind v4 <code>@theme</code>, JSON, 1080×1080 PNG 카드</strong>로 내보냅니다. 픽셀은 이 기기에서만 읽습니다.',
+      pillUp: '업로드 0바이트', pillNet: '외부 요청 0건', pillWcag: 'WCAG AA · AAA', pillOut: 'CSS · Tailwind · JSON · PNG',
+      buildAria: '팔레트 추출기',
+      dropTitle: 'PNG·JPG·WebP·SVG를 떨어뜨리세요',
+      dropSub: '크기·비율 상관없습니다. Ctrl+V 붙여넣기도 됩니다.',
+      pickBtn: '이미지 선택',
+      sampleGeo: '기하 예시',
+      sampleMono: '모노그램 예시',
+      dropMeta: '아직 불러온 이미지가 없습니다 — 파일을 고르거나 예시를 눌러 보세요.',
+      palTitle: '주요 팔레트',
+      palNote: '색 큐브 집계 · 6색',
+      autoBtn: '1번 색에 가장 잘 읽히는 글자',
+      swapBtn: '서로 바꾸기',
+      resetBtn: '초기화',
+      cHead: '명도 대비 검사',
+      fgLabel: '전경(글자)',
+      bgLabel: '배경',
+      fgAria: '전경 색',
+      bgAria: '배경 색',
+      ratioLabel: '명도 대비',
+      lblAA: 'AA · 본문', lblAAA: 'AAA · 본문', lblAAL: 'AA · 큰 글자',
+      cNote: '본문 글자는 AA <b>4.5:1</b>, AAA <b>7:1</b>이 필요하고, 큰 글자(24px 또는 굵은 18.66px)는 <b>3:1</b>·<b>4.5:1</b>입니다. 비율은 상대 휘도로 <b>(L1 + 0.05) ÷ (L2 + 0.05)</b>입니다.',
+      sumHead: '팔레트 한눈에',
+      kImg: '이미지', kSampled: '표본 픽셀', kBest: '최고 조합',
+      exHead: '가져가기', exNote: '복사 또는 내려받기', exAria: '내보내기 형식',
+      copyCode: '코드 복사', dlCode: '파일로 저장', cardBtn: '1080×1080 카드',
+      exFoot: '카드는 이 탭의 캔버스에서 <b>1080×1080</b>으로 그려 PNG로 저장합니다. 지금 팔레트와 고른 조합, 그리고 대비율이 함께 찍힙니다.',
+      cardHead: '팔레트 카드', dlCard: 'PNG 내려받기',
+      wcTitle: '숫자는 이렇게 나옵니다', wcNote: '약속이 아니라 실측',
+      n1h: '여섯 색, 세고 나서 띄우기',
+      n1p: '이미지를 긴 변 200px로 줄이고 투명 픽셀과 <b>가장자리 안티에일리어싱 픽셀을 뺍니다</b> — 섞인 경계색이 팔레트에 끼지 않게 하려는 것입니다. 남은 픽셀을 <b>32×32×32 색 큐브</b>에 접어 넣고, 픽셀이 가장 많은 큐브부터 고른 뒤 그 큐브와 일정 거리 안의 큐브는 건너뜁니다. 여섯 번 고르면 서로 실제로 다른 여섯 색이 나오고, 단색 배경은 세 칸을 차지하지 않고 한 색으로 남습니다.',
+      n2h: '명도 대비, WCAG 2',
+      n2p: '상대 휘도는 각 채널을 선형화한 뒤 <b>0.2126 R + 0.7152 G + 0.0722 B</b>로 더합니다. 비율은 <b>(L1 + 0.05) ÷ (L2 + 0.05)</b>이고 밝은 쪽이 위로 가므로 1:1에서 21:1 사이입니다. 판정은 해석이 아니라 숫자와의 비교입니다.',
+      tLvl: '등급', tNorm: '본문', tLarge: '큰 글자',
+      n3h: '팔레트 쓰는 법',
+      n3p: '1번 색은 가장 많은 픽셀이라 보통 바탕이 되고, 5·6번은 이미지를 흥미롭게 만든 악센트입니다. 실제로 화면에 올릴 조합은 전부 재 보세요 — 견본에서 통과한 비율도 투명도·그라데이션·사진이 뒤에 깔리면 떨어집니다.',
+      faqTitle: '자주 묻는 질문', faqNote: '팔레트 · 대비 · 내보내기',
+      q1: '사진에서는 왜 색이 흐릿하게 나오나요?',
+      a1: '사진은 영역마다 수천 개의 비슷한 색이 있어 여섯 상자 모두 넓은 범위를 평균 내며 회색 쪽으로 갑니다. 이미지에 충실한 결과이고, 그 색이 실제로 <b>주요 색</b>입니다. 브랜드 팔레트가 필요하면 사진 대신 단색 로고나 스크린샷을 넣으세요. 여섯 상자가 또렷하게 갈라집니다.',
+      q2: '색이 여섯 개보다 적으면 어떻게 되나요?',
+      a2: '단색 로고는 상자가 두세 개만 나옵니다. 남는 칸은 <b>주요 색에서 파생한 밝기 단계</b>로 채우므로 모노그램도 빈칸 없이 쓸 만한 6단계가 됩니다. 파생 색의 비중은 픽셀이 닿지 않았으므로 0%로 표시합니다.',
+      q3: 'Tailwind 내보내기는 v4인가요, v3인가요?',
+      a3: 'v4입니다. <b>@theme</b> 블록에 <b>--color-cf-1</b>부터 <b>--color-cf-6</b>까지 쓰는 방식이 v4의 테마 선언이고, 설정 파일 없이 <b>bg-cf-1</b>·<b>text-cf-1</b>·<b>border-cf-1</b>이 생깁니다. v3 프로젝트라면 첫 탭의 CSS 변수를 <b>:root</b>에 그대로 붙이면 됩니다.',
+      q4: '이미지가 어딘가에 저장되나요?',
+      a4: '아니요. 업로드 주소도, 분석 도구도, 픽셀 저장도 없습니다. 파일은 <b>&lt;img&gt;</b>로 읽혀 캔버스에 그려지고 측정된 뒤 탭을 닫으면 사라집니다. 아래 외부 요청 수는 <b>0</b>에서 움직이지 않습니다.',
+      footCopy: '© 2026 Kim Yihyung · 브라우저에서, 브라우저를 위해 만들었습니다.',
+      footNet: '외부 요청', footP1: '포트폴리오', footP2: '도구 전체', footP3: '소스',
+      mono: '업로드 없음 · 추적 없음', toggleTo: 'View in English',
+      copyHex: 'HEX', copyRgb: 'RGB', copyHsl: 'HSL',
+      share: '비중', pass: '통과', fail: '미달', passLarge: '큰 글자만',
+      stReady: '준비됨 — 이미지를 떨어뜨리면 팔레트가 나옵니다.',
+      stLoaded: '{ms}ms 만에 {n}색 팔레트를 만들었습니다.',
+      stReal: '{n}색을 찾았고, 주요 색에서 {d}단계를 더 만들었습니다.',
+      stNoImg: '이 파일은 이미지로 열리지 않았습니다.',
+      stEmpty: '이 이미지에는 불투명한 픽셀이 없습니다.',
+      stCopied: '{v} 복사했습니다.',
+      stCopyFail: '복사에 실패했습니다 — 글자를 선택해 직접 복사해 주세요.',
+      stDownloaded: '{name} 저장했습니다.',
+      stCard: '카드 준비됨 · {w}×{h} · {kb} KB.',
+      stBig: '{c}에 검정·흰색 중 더 잘 읽히는 쪽을 골랐습니다 — {r}:1.',
+      unsaved: '아직 팔레트가 없습니다 — 먼저 이미지를 불러오세요.',
+      cardLabel: 'PALETTE', cardPair: '배경 위의 글자',
+      cardSource: '원본', cardFoot: 'ColorForge · 업로드 없음 · 브라우저 안에서',
+      bestPair: '{b} 위의 {a} · {r}:1',
+      imgNone: '—',
+      modeHint: '모든 줄은 위 팔레트에서 생성되므로 새 이미지를 넣으면 바로 바뀝니다.'
+    }
+  };
+
+  var state = { lang: 'en', palette: [], fg: '#0b0b0d', bg: '#e5b45c', mode: 'css', imgW: 0, imgH: 0, imgName: '', sampled: 0, cardBlob: null };
+  var LANG_KEY = 'colorforge.lang';
+  var SHARED_KEY = 'kyh.lang';
+  var N = 6;
+
+  function $(id) { return document.getElementById(id); }
+  function t(key) {
+    var d = I18N[state.lang] || I18N.en;
+    if (d[key] != null) return d[key];
+    return I18N.en[key] != null ? I18N.en[key] : '';
+  }
+  function fmt(s, o) {
+    return String(s).replace(/\{(\w+)\}/g, function (m, k) { return o[k] != null ? o[k] : m; });
+  }
+  function readLang(k) {
+    try { var v = localStorage.getItem(k); return v === 'ko' || v === 'en' ? v : ''; } catch (e) { return ''; }
+  }
+  function initialLang() {
+    var q = '';
+    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
+    if (q === 'ko' || q === 'en') return q;
+    return readLang(SHARED_KEY) || readLang(LANG_KEY) || 'en';
+  }
+
+  /* ═════════════════════ colour maths ═════════════════════ */
+  function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
+  function hex2rgb(h) {
+    h = String(h).replace('#', '');
+    if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+    var n = parseInt(h, 16);
+    if (isNaN(n)) return [0, 0, 0];
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+  function rgb2hex(r, g, b) {
+    function p(v) { var s = clamp(Math.round(v), 0, 255).toString(16); return s.length < 2 ? '0' + s : s; }
+    return '#' + p(r) + p(g) + p(b);
+  }
+  function rgb2hsl(r, g, b) {
+    r /= 255; g /= 255; b /= 255;
+    var mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn;
+    var h = 0, s = 0, l = (mx + mn) / 2;
+    if (d) {
+      s = l > .5 ? d / (2 - mx - mn) : d / (mx + mn);
+      if (mx === r) h = ((g - b) / d) % 6;
+      else if (mx === g) h = (b - r) / d + 2;
+      else h = (r - g) / d + 4;
+      h *= 60; if (h < 0) h += 360;
+    }
+    return { h: Math.round(h), s: Math.round(s * 100), l: Math.round(l * 100) };
+  }
+  function lum(rgb) {
+    var a = [rgb[0], rgb[1], rgb[2]].map(function (v) {
+      v /= 255;
+      return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * a[0] + 0.7152 * a[1] + 0.0722 * a[2];
+  }
+  function contrast(a, b) {
+    var la = lum(hex2rgb(a)), lb = lum(hex2rgb(b));
+    var hi = Math.max(la, lb), lo = Math.min(la, lb);
+    return (hi + 0.05) / (lo + 0.05);
+  }
+  function bestOn(hex) {
+    var c1 = contrast('#000000', hex), c2 = contrast('#ffffff', hex);
+    return c1 >= c2 ? { hex: '#000000', r: c1 } : { hex: '#ffffff', r: c2 };
+  }
+  function dist(a, b) {
+    var d0 = a[0] - b[0], d1 = a[1] - b[1], d2 = a[2] - b[2];
+    return Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
+  }
+  function mix(rgb, target, amount) {
+    return [
+      rgb[0] + (target[0] - rgb[0]) * amount,
+      rgb[1] + (target[1] - rgb[1]) * amount,
+      rgb[2] + (target[2] - rgb[2]) * amount
+    ];
+  }
+
+  /* ═════════════════════ colour counting ═════════════════════ */
+  /* Pixels are folded into a 32×32×32 colour cube (5 bits per channel). The cube
+     that holds the most flat pixels is taken first, then every cube within a
+     minimum distance is skipped, so the next pick is actually a different colour
+     rather than a neighbour of the same shape. Flat interiors outvote the
+     antialiased edges around them, which is what keeps a gold disc gold. */
+  var FALLBACK_DIST = [56, 40, 24, 12, 4];
+  function popularColors(pixels, n) {
+    if (!pixels.length) return [];
+    var map = {}, list = [], i, c, key;
+    for (i = 0; i < pixels.length; i++) {
+      c = pixels[i];
+      key = ((c[0] >> 3) << 10) | ((c[1] >> 3) << 5) | (c[2] >> 3);
+      var b = map[key];
+      if (!b) { map[key] = { r: c[0], g: c[1], b: c[2], n: 1 }; }
+      else { b.r += c[0]; b.g += c[1]; b.b += c[2]; b.n++; }
+    }
+    for (key in map) {
+      if (!Object.prototype.hasOwnProperty.call(map, key)) continue;
+      b = map[key];
+      list.push({ rgb: [Math.round(b.r / b.n), Math.round(b.g / b.n), Math.round(b.b / b.n)], count: b.n });
+    }
+    list.sort(function (a, b) { return b.count - a.count; });
+    var total = pixels.length;
+    var picked = [];
+    for (var d = 0; d < FALLBACK_DIST.length && picked.length < n; d++) {
+      var minDist = FALLBACK_DIST[d];
+      for (i = 0; i < list.length && picked.length < n; i++) {
+        var cand = list[i];
+        var clash = false;
+        for (var j = 0; j < picked.length; j++) {
+          if (dist(cand.rgb, picked[j].rgb) < minDist) { clash = true; break; }
+        }
+        if (clash) continue;
+        picked.push(cand);
+      }
+    }
+    return picked.map(function (p) {
+      return {
+        rgb: p.rgb,
+        hex: rgb2hex(p.rgb[0], p.rgb[1], p.rgb[2]),
+        share: p.count / total * 100,
+        derived: false
+      };
+    });
+  }
+  function derive(list) {
+    var base = list[0].rgb;
+    var steps = [
+      mix(base, [255, 255, 255], .2), mix(base, [255, 255, 255], .42),
+      mix(base, [0, 0, 0], .2), mix(base, [0, 0, 0], .42),
+      mix(base, [255, 255, 255], .62), mix(base, [0, 0, 0], .62)
+    ];
+    while (list.length < N) {
+      var next = null;
+      for (var i = 0; i < steps.length; i++) {
+        var rgb = steps[i].map(function (v) { return Math.round(v); });
+        var far = true;
+        for (var j = 0; j < list.length; j++) if (dist(rgb, list[j].rgb) < 26) { far = false; break; }
+        if (far) { next = rgb; steps.splice(i, 1); break; }
+      }
+      if (!next) break;
+      list.push({ rgb: next, hex: rgb2hex(next[0], next[1], next[2]), share: 0, derived: true });
+    }
+    return list;
+  }
+
+  /* ═════════════════════ image loading ═════════════════════ */
+  function loadBlob(blob, name) {
+    return new Promise(function (resolve, reject) {
+      var url = URL.createObjectURL(blob);
+      var img = new Image();
+      img.onload = function () { resolve(img); };
+      img.onerror = function () { URL.revokeObjectURL(url); reject(new Error('image')); };
+      img.src = url;
+    });
+  }
+
+  var GEO_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="640" height="640" viewBox="0 0 640 640">' +
+    '<rect width="640" height="640" fill="#12141a"/>' +
+    '<circle cx="196" cy="214" r="146" fill="#e5b45c"/>' +
+    '<circle cx="452" cy="292" r="112" fill="#4f7cff"/>' +
+    '<rect x="118" y="420" width="404" height="118" rx="22" fill="#ece7db"/>' +
+    '<path d="M318 62 L466 182 L170 182 Z" fill="#c2554b"/>' +
+    '<rect x="424" y="452" width="120" height="54" rx="10" fill="#3f7d58"/>' +
+    '</svg>';
+  var MONO_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="640" height="640" viewBox="0 0 640 640">' +
+    '<rect width="640" height="640" fill="#0f1115"/>' +
+    '<rect x="72" y="72" width="496" height="496" rx="40" fill="#161a21"/>' +
+    '<text x="320" y="424" font-family="Georgia, serif" font-size="290" font-weight="700" text-anchor="middle" fill="#e5b45c">CF</text>' +
+    '<rect x="176" y="470" width="288" height="10" rx="5" fill="#4f7cff"/>' +
+    '</svg>';
+
+  function sample(which) {
+    var svg = which === 'mono' ? MONO_SVG : GEO_SVG;
+    var blob = new Blob([svg], { type: 'image/svg+xml' });
+    return loadBlob(blob).then(function (img) {
+      return ingest(img, which === 'mono' ? 'monogram-sample.svg' : 'geometric-sample.svg', true);
+    });
+  }
+
+  function ingest(img, name, isSample) {
+    var w = img.naturalWidth || img.width || 512;
+    var h = img.naturalHeight || img.height || 512;
+    var MAXP = 200;
+    var scale = Math.min(1, MAXP / Math.max(w, h));
+    var cw = Math.max(1, Math.round(w * scale));
+    var ch = Math.max(1, Math.round(h * scale));
+    var cv = document.createElement('canvas');
+    cv.width = cw; cv.height = ch;
+    var cx = cv.getContext('2d', { willReadFrequently: true });
+    cx.clearRect(0, 0, cw, ch);
+    cx.drawImage(img, 0, 0, cw, ch);
+    var data;
+    try { data = cx.getImageData(0, 0, cw, ch).data; } catch (e) { status(t('stNoImg'), true); return; }
+    var px = [], edgePx = [];
+    for (var y = 0; y < ch; y++) {
+      for (var x = 0; x < cw; x++) {
+        var i = (y * cw + x) * 4;
+        if (data[i + 3] < 125) continue;
+        var r = data[i], g = data[i + 1], b = data[i + 2];
+        edgePx.push([r, g, b]);
+        /* Skip antialiased edges: a pixel that jumps against its right or lower
+           neighbour is a transition, and averaging those is what turns a flat
+           gold disc into a muddy #db9a57. Only the flat interior votes. */
+        var edge = false;
+        if (x + 1 < cw) {
+          var j = i + 4;
+          if (Math.abs(r - data[j]) > 30 || Math.abs(g - data[j + 1]) > 30 || Math.abs(b - data[j + 2]) > 30) edge = true;
+        }
+        if (!edge && y + 1 < ch) {
+          var k = i + cw * 4;
+          if (Math.abs(r - data[k]) > 30 || Math.abs(g - data[k + 1]) > 30 || Math.abs(b - data[k + 2]) > 30) edge = true;
+        }
+        if (!edge) px.push([r, g, b]);
+      }
+    }
+    if (px.length < 300) px = edgePx;
+    if (!px.length) { status(t('stEmpty'), true); return; }
+    var t0 = (window.performance && performance.now) ? performance.now() : Date.now();
+    var found = popularColors(px, N);
+    if (!found.length) return;
+    var foundCount = found.length;
+    state.palette = derive(found);
+    var t1 = (window.performance && performance.now) ? performance.now() : Date.now();
+
+    state.imgW = w; state.imgH = h; state.imgName = name; state.sampled = px.length;
+    state.fg = bestOn(state.palette[0].hex).hex;
+    state.bg = state.palette[0].hex;
+
+    $('preview').hidden = false;
+    var pv = $('pvImg');
+    if (state.imgUrl && state.imgUrl !== img.src) URL.revokeObjectURL(state.imgUrl);
+    state.imgUrl = img.src;
+    pv.src = img.src;
+    pv.alt = name;
+    $('pvName').textContent = name;
+    $('pvSize').textContent = w + ' × ' + h + ' px';
+    $('pvPixels').textContent = px.length.toLocaleString(state.lang === 'ko' ? 'ko-KR' : 'en-US') + ' sampled';
+    $('fileMeta').innerHTML = '<b>' + esc(name) + '</b> · ' + w + '×' + h + ' · ' + px.length.toLocaleString() + ' px';
+
+    paintAll();
+    var msg = fmt(t('stLoaded'), { n: foundCount, ms: Math.max(1, Math.round(t1 - t0)) });
+    if (foundCount < N) msg += ' ' + fmt(t('stReal'), { n: foundCount, d: state.palette.length - foundCount });
+    status(msg, false);
+    return state.palette;
+  }
+
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  /* ═════════════════════ painting ═════════════════════ */
+  function paintPalette() {
+    var grid = $('palGrid');
+    if (!state.palette.length) {
+      grid.innerHTML = '<p class="caveat" style="grid-column:1/-1">' + esc(t('unsaved')) + '</p>';
+      return;
+    }
+    var html = '';
+    state.palette.forEach(function (c, i) {
+      var hsl = rgb2hsl(c.rgb[0], c.rgb[1], c.rgb[2]);
+      var on = bestOn(c.hex);
+      var pick = (state.fg === c.hex || state.bg === c.hex);
+      html += '<div class="sw' + (pick ? ' is-picked' : '') + '">' +
+        '<div class="sw-top" style="background:' + c.hex + '">' +
+          '<span class="aa" style="background:' + on.hex + ';color:' + c.hex + '">' + (on.r >= 4.5 ? 'AA' : on.r.toFixed(1)) + '</span>' +
+        '</div>' +
+        '<div class="sw-body">' +
+          '<div class="sw-hex"><span>' + c.hex.toUpperCase() + '</span><span class="share">' + (c.derived ? '±' : c.share.toFixed(1) + '%') + '</span></div>' +
+          '<div class="sw-row"><span>RGB ' + c.rgb.join(' ') + '</span><button class="cpy" type="button" data-copy="' + i + '" data-kind="hex">' + esc(t('copyHex')) + '</button></div>' +
+          '<div class="sw-row"><span>HSL ' + hsl.h + ' ' + hsl.s + '% ' + hsl.l + '%</span><button class="cpy" type="button" data-copy="' + i + '" data-kind="hsl">' + esc(t('copyHsl')) + '</button></div>' +
+          '<div class="sw-row"><span>' + (i + 1) + ' / ' + state.palette.length + '</span><button class="cpy" type="button" data-copy="' + i + '" data-kind="rgb">' + esc(t('copyRgb')) + '</button></div>' +
+        '</div>' +
+      '</div>';
+    });
+    grid.innerHTML = html;
+  }
+
+  function paintChips() {
+    ['fgChips', 'bgChips'].forEach(function (id, which) {
+      var host = $(id);
+      var html = '';
+      state.palette.forEach(function (c) {
+        var on = (which === 0 ? state.fg : state.bg) === c.hex;
+        html += '<button type="button" data-hex="' + c.hex + '" aria-pressed="' + on + '" title="' + c.hex + '" aria-label="' + c.hex + '" style="background:' + c.hex + '"></button>';
+      });
+      host.innerHTML = html;
+    });
+  }
+
+  function paintContrast() {
+    var r = contrast(state.fg, state.bg);
+    var rr = Math.round(r * 100) / 100;
+    $('ratio').textContent = rr.toFixed(2) + ':1';
+    $('fgHex').textContent = state.fg;
+    $('bgHex').textContent = state.bg;
+    $('fgColor').value = state.fg;
+    $('bgColor').value = state.bg;
+    var aa = r >= 4.5, aaa = r >= 7, aal = r >= 3;
+    $('ratioBox').className = 'ratio-box ' + (aa ? 'is-pass' : 'is-fail');
+    $('verdict').textContent = aa ? t('pass') : (aal ? t('passLarge') : t('fail'));
+    [['bAA', aa], ['bAAA', aaa], ['bAAL', aal]].forEach(function (p) {
+      var el = $(p[0]);
+      el.className = 'badge ' + (p[1] ? 'is-pass' : 'is-fail');
+      el.querySelector('em').textContent = p[1] ? t('pass') : t('fail');
+    });
+    $('sampleBox').style.background = state.bg;
+    $('sampleBox').style.color = state.fg;
+    $('sampleBig').textContent = 'Aa ' + rr.toFixed(2);
+    var best = state.palette.length ? bestOn(state.palette[0].hex) : null;
+    $('kImg').textContent = state.palette.length ? state.imgW + '×' + state.imgH : t('imgNone');
+    $('kSampled').textContent = state.palette.length ? state.sampled.toLocaleString() : '—';
+    $('kBest').textContent = state.palette.length && best ? fmt(t('bestPair'), { a: best.hex, b: state.palette[0].hex, r: best.r.toFixed(2) }) : '—';
+    paintMini();
+    paintCard();
+  }
+
+  function paintMini() {
+    var host = $('miniList');
+    if (!state.palette.length) { host.innerHTML = ''; return; }
+    host.innerHTML = state.palette.map(function (c) {
+      return '<li><i style="background:' + c.hex + '"></i><b>' + c.hex.toUpperCase() + '</b><span>' + (c.derived ? '±' : c.share.toFixed(1) + '%') + '</span></li>';
+    }).join('');
+  }
+
+  function cssText() {
+    var lines = ['/* ColorForge palette — ' + (state.imgName || 'no image') + ' */', ':root {'];
+    state.palette.forEach(function (c, i) {
+      lines.push('  --cf-' + (i + 1) + ': ' + c.hex + ';' + (c.derived ? '' : ' /* ' + c.share.toFixed(1) + '% */'));
+    });
+    lines.push('}');
+    return lines.join('\n');
+  }
+  function twText() {
+    var lines = ['@import "tailwindcss";', '', '/* ColorForge palette — ' + (state.imgName || 'no image') + ' */', '@theme {'];
+    state.palette.forEach(function (c, i) {
+      lines.push('  --color-cf-' + (i + 1) + ': ' + c.hex + ';');
+    });
+    lines.push('}');
+    return lines.join('\n');
+  }
+  function jsonText() {
+    var r = Math.round(contrast(state.fg, state.bg) * 100) / 100;
+    var body = {
+      source: state.imgName || null,
+      size: state.palette.length ? [state.imgW, state.imgH] : null,
+      palette: state.palette.map(function (c) {
+        var hsl = rgb2hsl(c.rgb[0], c.rgb[1], c.rgb[2]);
+        return {
+          hex: c.hex,
+          rgb: { r: c.rgb[0], g: c.rgb[1], b: c.rgb[2] },
+          hsl: hsl,
+          share: Math.round(c.share * 10) / 10,
+          derived: !!c.derived
+        };
+      }),
+      contrast: {
+        foreground: state.fg,
+        background: state.bg,
+        ratio: r,
+        aa: r >= 4.5,
+        aaa: r >= 7,
+        aaLarge: r >= 3
+      }
+    };
+    return JSON.stringify(body, null, 2);
+  }
+  function codeText() {
+    if (!state.palette.length) return t('unsaved') + '\n';
+    if (state.mode === 'tailwind') return twText();
+    if (state.mode === 'json') return jsonText();
+    return cssText();
+  }
+  function paintCode() { $('codeOut').textContent = codeText(); }
+
+  function paintCard() {
+    var cv = $('cardCanvas');
+    var cx = cv.getContext('2d');
+    var W = 1080, H = 1080;
+    cx.clearRect(0, 0, W, H);
+    cx.fillStyle = '#0b0b0d';
+    cx.fillRect(0, 0, W, H);
+    var grad = cx.createLinearGradient(0, 0, W, H);
+    grad.addColorStop(0, 'rgba(229,180,92,.14)');
+    grad.addColorStop(.55, 'rgba(229,180,92,0)');
+    cx.fillStyle = grad;
+    cx.fillRect(0, 0, W, 520);
+
+    cx.fillStyle = '#e5b45c';
+    cx.font = '700 30px ui-monospace, Menlo, Consolas, monospace';
+    cx.fillText('COLORFORGE', 64, 96);
+    cx.fillStyle = '#7d766e';
+    cx.font = '600 20px ui-monospace, Menlo, Consolas, monospace';
+    cx.fillText((state.imgName || 'no image').slice(0, 44), 64, 132);
+
+    /* brand mark */
+    cx.strokeStyle = 'rgba(229,180,92,.45)';
+    cx.lineWidth = 2;
+    cx.beginPath();
+    if (cx.roundRect) cx.roundRect(W - 132, 62, 68, 40, 12); else cx.rect(W - 132, 62, 68, 40);
+    cx.stroke();
+    cx.fillStyle = '#e5b45c';
+    cx.font = '700 20px ui-monospace, Menlo, Consolas, monospace';
+    cx.fillText('YH', W - 112, 89);
+
+    var pal = state.palette.length ? state.palette : [{ hex: '#161616', share: 0, derived: true }];
+    while (pal.length < N) pal = pal.concat(pal);
+    pal = pal.slice(0, N);
+    var x0 = 64, y0 = 180, bw = (W - 128) / N, bh = 500;
+    pal.forEach(function (c, i) {
+      cx.fillStyle = c.hex;
+      cx.fillRect(x0 + i * bw, y0, bw - 6, bh);
+      var on = bestOn(c.hex);
+      cx.fillStyle = on.hex;
+      cx.font = '700 22px ui-monospace, Menlo, Consolas, monospace';
+      cx.fillText(c.hex.toUpperCase(), x0 + i * bw + 14, y0 + bh - 46);
+      cx.globalAlpha = .7;
+      cx.font = '600 17px ui-monospace, Menlo, Consolas, monospace';
+      cx.fillText(c.derived ? '±' : c.share.toFixed(1) + '%', x0 + i * bw + 14, y0 + bh - 20);
+      cx.globalAlpha = 1;
+    });
+
+    /* contrast sample */
+    var r = Math.round(contrast(state.fg, state.bg) * 100) / 100;
+    var py = 720, ph = 220;
+    cx.fillStyle = state.bg;
+    if (cx.roundRect) { cx.beginPath(); cx.roundRect(64, py, W - 128, ph, 22); cx.fill(); }
+    else { cx.fillRect(64, py, W - 128, ph); }
+    cx.fillStyle = state.fg;
+    cx.font = '800 92px "Helvetica Neue", Arial, sans-serif';
+    cx.fillText('Aa', 100, py + 118);
+    cx.font = '600 26px "Helvetica Neue", Arial, sans-serif';
+    cx.fillText(r.toFixed(2) + ':1  ' + (r >= 7 ? 'AAA' : r >= 4.5 ? 'AA' : r >= 3 ? 'AA LARGE' : 'FAIL'), 100, py + 168);
+
+    cx.fillStyle = '#7d766e';
+    cx.font = '600 18px ui-monospace, Menlo, Consolas, monospace';
+    cx.fillText(t('cardFoot'), 64, 1010);
+    cx.textAlign = 'right';
+    cx.fillText(state.palette.length ? state.imgW + ' × ' + state.imgH : '—', W - 64, 1010);
+    cx.textAlign = 'left';
+
+    var info = $('cardMeta');
+    if (state.palette.length) {
+      cv.toBlob(function (b) {
+        state.cardBlob = b;
+        if (info) info.textContent = fmt(t('stCard'), { w: 1080, h: 1080, kb: Math.round((b ? b.size : 0) / 102.4) / 10 });
+      }, 'image/png');
+    } else if (info) {
+      info.textContent = t('unsaved');
+    }
+  }
+
+  function paintAll() {
+    paintPalette();
+    paintChips();
+    paintContrast();
+    paintCode();
+  }
+
+  function status(msg, isError) {
+    var el = $('status');
+    el.textContent = msg;
+    el.className = 'status ' + (isError ? 'is-warn' : 'is-ok');
+  }
+
+  /* ═════════════════════ clipboard / download ═════════════════════ */
+  function copyText(text) {
+    return new Promise(function (resolve, reject) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(resolve, function () { fallback(); });
+      } else fallback();
+      function fallback() {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.setAttribute('readonly', '');
+          ta.style.cssText = 'position:fixed;top:-1000px;left:-1000px;opacity:0';
+          document.body.appendChild(ta);
+          ta.select();
+          var ok = document.execCommand('copy');
+          document.body.removeChild(ta);
+          ok ? resolve() : reject(new Error('copy'));
+        } catch (e) { reject(e); }
+      }
+    });
+  }
+  function downloadBlob(blob, name) {
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+  }
+
+  /* ═════════════════════ events ═════════════════════ */
+  var netCount = 0;
+  function countNet() { netCount++; $('netCount').textContent = String(netCount); }
+
+  $('pick').addEventListener('click', function () { $('file').click(); });
+  $('file').addEventListener('change', function (e) {
+    var f = e.target.files && e.target.files[0];
+    if (!f) return;
+    loadBlob(f, f.name).then(function (img) { ingest(img, f.name, false); })
+      .catch(function () { status(t('stNoImg'), true); });
+    e.target.value = '';
+  });
+  $('sampleGeo').addEventListener('click', function () { sample('geo').catch(function () { status(t('stNoImg'), true); }); });
+  $('sampleMono').addEventListener('click', function () { sample('mono').catch(function () { status(t('stNoImg'), true); }); });
+
+  var drop = $('drop');
+  ['dragenter', 'dragover'].forEach(function (ev) {
+    drop.addEventListener(ev, function (e) { e.preventDefault(); e.stopPropagation(); drop.classList.add('is-over'); });
+  });
+  ['dragleave', 'dragend'].forEach(function (ev) {
+    drop.addEventListener(ev, function (e) { e.preventDefault(); e.stopPropagation(); drop.classList.remove('is-over'); });
+  });
+  drop.addEventListener('drop', function (e) {
+    e.preventDefault(); e.stopPropagation();
+    drop.classList.remove('is-over');
+    var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (!f) return;
+    loadBlob(f, f.name).then(function (img) { ingest(img, f.name, false); })
+      .catch(function () { status(t('stNoImg'), true); });
+  });
+  window.addEventListener('dragover', function (e) { e.preventDefault(); });
+  window.addEventListener('drop', function (e) { e.preventDefault(); });
+
+  document.addEventListener('paste', function (e) {
+    var items = (e.clipboardData && e.clipboardData.items) || [];
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].type && items[i].type.indexOf('image') === 0) {
+        var f = items[i].getAsFile();
+        if (f) {
+          loadBlob(f, 'pasted-image.' + (f.type.split('/')[1] || 'png')).then(function (img) {
+            ingest(img, 'pasted image', false);
+          }).catch(function () { status(t('stNoImg'), true); });
+          e.preventDefault();
+          return;
+        }
+      }
+    }
+  });
+
+  $('palGrid').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-copy]');
+    if (!b) return;
+    var c = state.palette[+b.getAttribute('data-copy')];
+    if (!c) return;
+    var kind = b.getAttribute('data-kind');
+    var hsl = rgb2hsl(c.rgb[0], c.rgb[1], c.rgb[2]);
+    var text = kind === 'rgb' ? 'rgb(' + c.rgb.join(', ') + ')' : kind === 'hsl' ? 'hsl(' + hsl.h + ' ' + hsl.s + '% ' + hsl.l + '%)' : c.hex.toUpperCase();
+    copyText(text).then(function () { status(fmt(t('stCopied'), { v: text }), false); },
+      function () { status(t('stCopyFail'), true); });
+  });
+
+  $('fgChips').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-hex]');
+    if (!b) return;
+    state.fg = b.getAttribute('data-hex');
+    paintAll();
+  });
+  $('bgChips').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-hex]');
+    if (!b) return;
+    state.bg = b.getAttribute('data-hex');
+    paintAll();
+  });
+  $('fgColor').addEventListener('input', function (e) { state.fg = e.target.value; paintAll(); });
+  $('bgColor').addEventListener('input', function (e) { state.bg = e.target.value; paintAll(); });
+
+  $('autoPair').addEventListener('click', function () {
+    if (!state.palette.length) { status(t('unsaved'), true); return; }
+    var base = state.palette[0].hex;
+    var on = bestOn(base);
+    state.bg = base;
+    state.fg = on.hex;
+    paintAll();
+    status(fmt(t('stBig'), { c: base.toUpperCase(), r: on.r.toFixed(2) }), false);
+  });
+  $('swapPair').addEventListener('click', function () {
+    var a = state.fg;
+    state.fg = state.bg;
+    state.bg = a;
+    paintAll();
+  });
+  $('resetBtn').addEventListener('click', function () {
+    state.palette = [];
+    state.imgName = ''; state.imgW = 0; state.imgH = 0; state.sampled = 0;
+    if (state.imgUrl) { URL.revokeObjectURL(state.imgUrl); state.imgUrl = ''; }
+    $('pvImg').removeAttribute('src');
+    $('preview').hidden = true;
+    $('fileMeta').textContent = '—';
+    paintAll();
+    paintCard();
+    status(t('stReady'), false);
+  });
+
+  $('modeSeg').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-mode]');
+    if (!b) return;
+    state.mode = b.getAttribute('data-mode');
+    var bs = $('modeSeg').querySelectorAll('button');
+    for (var i = 0; i < bs.length; i++) bs[i].setAttribute('aria-pressed', String(bs[i] === b));
+    paintCode();
+  });
+  $('copyCode').addEventListener('click', function () {
+    if (!state.palette.length) { status(t('unsaved'), true); return; }
+    copyText(codeText()).then(function () { status(fmt(t('stCopied'), { v: state.mode.toUpperCase() }), false); },
+      function () { status(t('stCopyFail'), true); });
+  });
+  $('dlCode').addEventListener('click', function () {
+    if (!state.palette.length) { status(t('unsaved'), true); return; }
+    var ext = state.mode === 'json' ? 'json' : state.mode === 'tailwind' ? 'css' : 'css';
+    var name = 'colorforge-palette.' + ext;
+    downloadBlob(new Blob([codeText()], { type: state.mode === 'json' ? 'application/json' : 'text/css' }), name);
+    status(fmt(t('stDownloaded'), { name: name }), false);
+  });
+  $('showCard').addEventListener('click', function () {
+    if (!state.palette.length) { status(t('unsaved'), true); return; }
+    var cv = $('cardCanvas');
+    cv.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    status(fmt(t('stCard'), { w: 1080, h: 1080, kb: state.cardBlob ? Math.round(state.cardBlob.size / 102.4) / 10 : 0 }), false);
+  });
+  $('dlCard').addEventListener('click', function () {
+    if (!state.palette.length) { status(t('unsaved'), true); return; }
+    function save() {
+      var name = 'colorforge-palette-card.png';
+      downloadBlob(state.cardBlob, name);
+      status(fmt(t('stDownloaded'), { name: name }), false);
+    }
+    if (state.cardBlob) save();
+    else $('cardCanvas').toBlob(function (b) { state.cardBlob = b; save(); }, 'image/png');
+  });
+
+  /* ═════════════════════ language ═════════════════════ */
+  function setMeta(sel, attr, val) {
+    var el = document.querySelector(sel);
+    if (el) el.setAttribute(attr, val);
+  }
+  function applyLang(lang) {
+    state.lang = lang === 'ko' ? 'ko' : 'en';
+    document.documentElement.setAttribute('lang', state.lang);
+    document.title = t('docTitle');
+    setMeta('meta[property="og:title"]', 'content', t('docTitle').split('|')[0].trim());
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var v = t(nodes[i].getAttribute('data-i18n'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-html'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-aria'));
+      if (v) nodes[i].setAttribute('aria-label', v);
+    }
+    var lt = $('langToggle');
+    if (lt) {
+      var spans = lt.querySelectorAll('[data-lt]');
+      for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
+      lt.setAttribute('aria-label', t('toggleTo'));
+      lt.setAttribute('title', t('toggleTo'));
+    }
+    paintAll();
+    paintCard();
+    try {
+      localStorage.setItem(LANG_KEY, state.lang);
+      localStorage.setItem(SHARED_KEY, state.lang);
+    } catch (e) { /* storage may be blocked */ }
+  }
+
+  $('langToggle').addEventListener('click', function () {
+    applyLang(state.lang === 'ko' ? 'en' : 'ko');
+  });
+
+  /* ═════════════════════ boot ═════════════════════ */
+  paintAll();
+  paintCard();
+  status(t('stReady'), false);
+  applyLang(initialLang());
+
+  /* read-only hook for tests and automation */
+  window.ColorForge = {
+    version: '1.0',
+    sample: function (which) { return sample(which || 'geo').then(function (p) { return p.map(function (c) { return c.hex; }); }); },
+    palette: function () { return state.palette.map(function (c) { return { hex: c.hex, rgb: c.rgb, share: Math.round(c.share * 10) / 10, derived: c.derived }; }); },
+    contrast: function () { return Math.round(contrast(state.fg, state.bg) * 100) / 100; },
+    pair: function (fg, bg) { state.fg = fg; state.bg = bg; paintAll(); return Math.round(contrast(fg, bg) * 100) / 100; },
+    css: cssText,
+    tailwind: twText,
+    json: jsonText,
+    cardBytes: function () { return state.cardBlob ? state.cardBlob.size : 0; },
+    sampled: function () { return state.sampled; },
+    lang: function () { return state.lang; },
+    setLang: function (l) { applyLang(l); },
+    ingestFile: function (file) { return loadBlob(file, file.name).then(function (img) { return ingest(img, file.name, false); }); }
+  };
+  void countNet;
+})();
+</script>
+</body>
+</html>

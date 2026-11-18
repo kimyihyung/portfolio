@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0b0d">
+<title>PaySnap — 연봉 실수령액 · 3.3% 원천징수 · 시급 주휴수당 계산기 | Kim Yihyung</title>
+<meta name="description" content="2026년 4대보험 요율과 비과세 식대를 반영한 연봉·월급 실수령액, 프리랜서 3.3%와 기타소득 8.8% 원천징수 정산·역산, 시급과 주휴수당 주간·월간 실수령을 한 페이지에서. 모두 브라우저 안에서 계산하고 업로드 0바이트.">
+<meta name="keywords" content="연봉 실수령액 계산기, 월급 실수령액, 2026 4대보험 요율, 국민연금 4.75%, 건강보험 3.595%, 장기요양보험, 고용보험, 비과세 식대 20만원, 프리랜서 3.3%, 사업소득 원천징수, 기타소득 8.8%, 필요경비 60%, 시급 계산기, 주휴수당, 최저임금 10320원, paysnap">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/pay-snap/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b0d'/%3E%3Cpath d='M8 10h16v3H8zM8 15h10v3H8zM8 20h7v3H8z' fill='%23e5b45c'/%3E%3Ccircle cx='23' cy='21.5' r='3.5' fill='none' stroke='%23e5b45c' stroke-width='2'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/pay-snap/">
+<meta property="og:title" content="PaySnap — 연봉 실수령 · 3.3% 정산 · 시급 주휴수당">
+<meta property="og:description" content="2026년 요율로 연봉 실수령액, 프리랜서 3.3%·기타소득 8.8% 원천징수와 역산, 시급·주휴수당 주간·월간 실수령을 한 화면에서. 브라우저 안에서만 계산합니다.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="PaySnap — 연봉·프리랜서·시급 실수령 계산기">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PaySnap — 연봉 실수령 · 3.3% 정산 · 시급 주휴수당">
+<meta name="twitter:description" content="연봉 실수령액, 3.3%·8.8% 원천징수 정산과 역산, 시급·주휴수당 월간 실수령 — 전부 브라우저 안에서, 업로드 0바이트.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "PaySnap — 연봉 실수령액 · 원천징수 · 시급 계산기",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/pay-snap/",
+      "description": "한국 급여 3종 계산기. 2026년 4대보험 요율(국민연금 4.75%·건강보험 3.595%·장기요양 13.14%·고용보험 0.9%)과 월 20만원 비과세 식대를 반영한 연봉·월급 실수령액, 프리랜서 사업소득 3.3%와 기타소득 8.8%(필요경비 60%) 원천징수 정산 및 목표 실수령액에서 계약금액 역산, 시급·주휴수당 주간·월간 실수령액을 한 페이지에서 계산한다. 모두 브라우저 안에서 계산하며 업로드와 외부 요청이 없다.",
+      "featureList": [
+        "2026년 4대보험 요율 반영 연봉·월급 실수령액",
+        "월 20만원 비과세 식대와 부양가족·자녀 수 반영",
+        "프리랜서 사업소득 3.3% 원천징수 정산",
+        "기타소득 8.8%와 필요경비 60% 반영",
+        "목표 실수령액에서 계약금액 역산",
+        "시급·주휴수당 주간·월간 실수령액",
+        "2026년 최저임금 10,320원 대비 점검",
+        "카톡 요약 1클릭 복사, 100% 클라이언트 계산"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "KRW" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "PaySnap", "item": "https://kimyihyung.github.io/portfolio/tools/pay-snap/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "2026년 4대보험 근로자 부담률은 얼마인가요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "국민연금 4.75%(전체 9.5%의 절반), 건강보험 3.595%(전체 7.19%의 절반), 장기요양보험은 건강보험료의 13.14%(보수 대비 0.9448%의 절반), 고용보험 실업급여분 0.9%입니다. 산재보험은 사업주가 전액 부담하므로 월급에서 빠지지 않습니다. 2026년 국민연금은 9%에서 9.5%로, 건강보험은 7.09%에서 7.19%로 올랐습니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "비과세 식대는 얼마까지인가요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "소득세법 제12조 제3호 러목에 따라 월 20만원까지 비과세입니다. 이 금액은 4대보험 보수월액과 소득세 과세표준 양쪽에서 빠지므로, 같은 연봉이라도 식대가 비과세로 잡혀 있으면 실수령액이 늘어납니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "3.3%와 8.8%는 어떻게 다른가요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "3.3%는 사업소득(프리랜서·인적용역) 원천징수로 소득세 3%와 지방소득세 0.3%입니다. 8.8%는 기타소득 원천징수로 소득세 8%와 지방소득세 0.8%인데, 기타소득은 필요경비 60%를 인정받아 실제로는 수입의 40%에만 세율이 붙습니다. 그래서 8.8%로 떼도 실효 부담은 3.52%입니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "주휴수당은 언제 얼마나 붙나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "1주 소정근로시간이 15시간 이상이면 주휴수당이 발생합니다. 주 40시간 미만이면 (주 근로시간 ÷ 40) × 8시간분의 임금이 주휴수당이고, 주 40시간 이상이면 8시간분입니다. 2026년 최저임금 10,320원으로 주 40시간이면 주휴 8시간 82,560원이 더해집니다." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+:root {
+  --bg: #0b0b0d;
+  --bg2: #0e0e11;
+  --panel: #141311;
+  --panel2: #1b1917;
+  --line: rgba(255,255,255,.09);
+  --line2: rgba(255,255,255,.18);
+  --ink: #f7f2e9;
+  --muted: #a9a29a;
+  --muted2: #7d766e;
+  --accent: #e5b45c;
+  --accent2: #f3cf85;
+  --accent-dim: rgba(229,180,92,.12);
+  --on-accent: #1d1503;
+  --ok: #7fd6a0;
+  --warn: #ffa06b;
+  --bad: #ff7d7d;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --shadow: 0 24px 70px rgba(0,0,0,.55);
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  line-height: 1.6;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(110% 55% at 50% -18%, rgba(229,180,92,.13), transparent 62%),
+    radial-gradient(60% 40% at 100% 2%, rgba(229,180,92,.05), transparent 60%);
+  background-repeat: no-repeat;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: var(--accent); color: var(--on-accent); }
+a { color: inherit; }
+button, input, select, textarea { font-family: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+.wrap { width: 100%; max-width: 1220px; margin: 0 auto; padding: 0 20px 48px; }
+
+/* ---------- topbar ---------- */
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0 12px; }
+.brand { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: var(--ink); min-width: 0; }
+.mark {
+  min-width: 28px; height: 22px; padding: 0 6px; border-radius: 7px; flex: none;
+  border: 1px solid rgba(229,180,92,.45); background: var(--accent-dim);
+  display: grid; place-items: center; font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: var(--accent);
+}
+.brand-txt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.top-actions { display: inline-flex; align-items: center; gap: 9px; flex: none; }
+.lang-toggle {
+  appearance: none; border: 1px solid var(--line); background: var(--panel); color: var(--muted2);
+  height: 34px; padding: 0 11px; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px;
+  cursor: pointer; font-size: 11px; font-weight: 700; letter-spacing: .06em; line-height: 1;
+  transition: color .2s, border-color .2s, transform .15s;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.94); }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
+.topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
+
+/* ---------- hero ---------- */
+.hero { padding: 22px 0 18px; max-width: 860px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; margin: 0 0 14px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--accent);
+  border: 1px solid rgba(229,180,92,.28); background: rgba(229,180,92,.06); padding: 6px 11px; border-radius: 999px;
+}
+.eyebrow .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+h1 { margin: 0 0 14px; font-size: clamp(27px, 4.4vw, 44px); line-height: 1.14; letter-spacing: -.03em; font-weight: 800; }
+h1 .soft { color: var(--muted); }
+h1 .gold { color: var(--accent); }
+.lede { margin: 0 0 16px; color: var(--muted); font-size: 15px; max-width: 760px; }
+.lede strong { color: var(--ink); font-weight: 600; }
+.lede code { font-family: var(--mono); font-size: .92em; color: var(--accent); }
+
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--panel); font-size: 11.5px; color: var(--muted);
+  font-family: var(--mono); letter-spacing: .02em;
+}
+.pill b { color: var(--ink); font-weight: 700; }
+.pill--live { border-color: rgba(127,214,160,.32); background: rgba(127,214,160,.07); color: #a6e6c4; }
+.pill--live b { color: #bff3d8; }
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px rgba(127,214,160,.14); }
+
+/* ---------- layout ---------- */
+.work { display: grid; grid-template-columns: minmax(0,1fr) 340px; gap: 16px; align-items: start; margin-top: 6px; }
+@media (max-width: 1040px) { .work { grid-template-columns: minmax(0,1fr); } }
+
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); min-width: 0; }
+.panel { padding: 16px; display: grid; gap: 13px; min-width: 0; }
+.panel h3 { margin: 0; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted2); font-family: var(--mono); font-weight: 700; }
+.side { display: grid; gap: 12px; min-width: 0; }
+@media (min-width: 1041px) { .side { position: sticky; top: 14px; } }
+
+.btn {
+  appearance: none; cursor: pointer; border-radius: 11px; border: 1px solid var(--line2);
+  background: var(--panel2); color: var(--ink); font-size: 13px; font-weight: 650;
+  padding: 10px 16px; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  transition: transform .12s, border-color .2s, background .2s, opacity .2s; text-decoration: none;
+}
+.btn:hover { border-color: rgba(255,255,255,.3); }
+.btn:active { transform: scale(.98); }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 750; }
+.btn--primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.btn--ghost { background: transparent; }
+.btn--sm { padding: 7px 11px; font-size: 12px; border-radius: 9px; }
+.btn--block { width: 100%; }
+
+/* ---------- tabs ---------- */
+.tabs { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 6px; margin-bottom: 4px; }
+.tabs button {
+  appearance: none; cursor: pointer; text-align: left; min-width: 0;
+  display: grid; gap: 2px; padding: 10px 12px; border-radius: 12px;
+  border: 1px solid var(--line); background: var(--panel2); color: var(--muted);
+  transition: border-color .2s, background .2s, color .2s;
+}
+.tabs button:hover { border-color: var(--line2); }
+.tabs button b { font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; color: var(--muted2); font-weight: 700; }
+.tabs button span { font-size: 13px; font-weight: 700; color: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tabs button[aria-selected="true"] { border-color: rgba(229,180,92,.5); background: linear-gradient(180deg, rgba(229,180,92,.14), rgba(229,180,92,.03)); color: var(--ink); }
+.tabs button[aria-selected="true"] b { color: var(--accent); }
+@media (max-width: 560px) {
+  .tabs { grid-template-columns: 1fr 1fr; }
+  .tabs button:last-child { grid-column: 1 / -1; }
+  .tabs button { padding: 9px 10px; }
+  .tabs button span { font-size: 12.5px; }
+}
+
+.tabpanel { display: grid; gap: 14px; min-width: 0; }
+.calc-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.calc-head h2 { margin: 0; font-size: 16.5px; letter-spacing: -.01em; }
+.calc-head span { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted2); }
+
+/* ---------- inputs ---------- */
+.in-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; min-width: 0; }
+.in {
+  display: grid; gap: 5px; padding: 9px 11px 7px; border: 1px solid var(--line);
+  border-radius: 11px; background: var(--panel2); min-width: 0;
+}
+.in label, .in .lbl { font-size: 10.5px; font-family: var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted2); }
+.in .val { display: flex; align-items: baseline; gap: 5px; min-width: 0; }
+.in input {
+  appearance: none; border: 0; background: transparent; color: var(--ink);
+  font-size: 15px; font-weight: 650; padding: 0; width: 100%; min-width: 0; line-height: 1.4;
+  font-family: var(--mono); letter-spacing: -.02em;
+}
+.in input:focus { outline: none; }
+.in:focus-within { border-color: rgba(229,180,92,.6); }
+.in .unit { font-size: 11px; color: var(--muted2); flex: none; font-family: var(--mono); }
+.in select {
+  appearance: none; border: 0; background: transparent; color: var(--ink);
+  font-size: 14.5px; font-weight: 650; padding: 0; width: 100%; line-height: 1.4; cursor: pointer;
+}
+.in select:focus { outline: none; }
+.in select option { background: #141311; color: var(--ink); }
+
+.seg { display: flex; gap: 3px; padding: 3px; background: var(--panel2); border: 1px solid var(--line); border-radius: 11px; min-width: 0; }
+.seg button { flex: 1 1 auto; appearance: none; border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; font-weight: 650; padding: 7px 5px; border-radius: 8px; line-height: 1.25; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--accent-dim); color: var(--accent); box-shadow: inset 0 0 0 1px rgba(229,180,92,.35); }
+
+/* ---------- result ---------- */
+.result { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px 18px; padding: 16px; border-radius: var(--radius-sm); border: 1px solid rgba(229,180,92,.26); background: linear-gradient(180deg, rgba(229,180,92,.10), rgba(229,180,92,.02)); min-width: 0; }
+.result .num { font-family: var(--mono); font-size: clamp(25px, 6vw, 36px); line-height: 1.1; font-weight: 700; letter-spacing: -.03em; color: var(--accent); overflow-wrap: anywhere; }
+.result .num small { font-size: 12.5px; letter-spacing: .02em; color: var(--muted); margin-left: 5px; font-weight: 600; font-family: var(--font); }
+.result .meta { display: grid; gap: 2px; font-size: 12px; color: var(--muted); min-width: 0; }
+.result .meta b { color: var(--ink); font-weight: 650; }
+
+/* ---------- bar ---------- */
+.bar { display: flex; height: 12px; border-radius: 999px; overflow: hidden; border: 1px solid var(--line); background: var(--panel2); }
+.bar i { display: block; height: 100%; }
+.bar .b-net { background: linear-gradient(90deg, #7fd6a0, #59b98a); }
+.bar .b-ins { background: rgba(229,180,92,.75); }
+.bar .b-tax { background: rgba(226,110,110,.8); }
+.bar-legend { display: flex; flex-wrap: wrap; gap: 10px 14px; font-size: 11px; color: var(--muted2); font-family: var(--mono); }
+.bar-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.bar-legend i { width: 9px; height: 9px; border-radius: 3px; display: inline-block; }
+
+.kv { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.kv li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 10px; font-size: 12.4px; color: var(--muted); }
+.kv li b { color: var(--ink); font-family: var(--mono); font-weight: 650; font-size: 12.5px; text-align: right; overflow-wrap: anywhere; }
+.kv li.is-key { border-top: 1px solid rgba(255,255,255,.1); padding-top: 6px; margin-top: 2px; }
+.kv li.is-key b { color: var(--accent); }
+.kv li.is-sub b { color: var(--muted); font-weight: 500; }
+.caveat { margin: 0; font-size: 11.6px; color: var(--muted2); line-height: 1.6; }
+.caveat b { color: var(--muted); }
+.status { min-height: 16px; margin: 0; font-size: 12px; color: var(--muted); }
+.status.is-ok { color: var(--ok); }
+.status.is-warn { color: var(--warn); }
+
+.cmp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; min-width: 0; }
+@media (max-width: 620px) { .cmp-grid { grid-template-columns: minmax(0,1fr); } }
+.cmp-card { padding: 13px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel2); min-width: 0; }
+.cmp-card h4 { margin: 0 0 8px; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted2); font-family: var(--mono); font-weight: 700; }
+.cmp-card.is-after { border-color: rgba(229,180,92,.34); background: rgba(229,180,92,.05); }
+.cmp-card.is-after h4 { color: var(--accent); }
+
+.sum { margin: 0; padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: #0d0d10; color: #cfd6c9; font-family: var(--mono); font-size: 11px; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 300px; overflow-y: auto; }
+
+/* ---------- sections ---------- */
+.section { margin-top: 40px; scroll-margin-top: 18px; }
+.sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 12px; border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 16px; }
+.sec-head h2 { margin: 0; font-size: 17px; letter-spacing: -.01em; }
+.sec-head span { font-family: var(--mono); font-size: 11px; color: var(--muted2); letter-spacing: .08em; text-transform: uppercase; }
+
+.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+.note { padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel); min-width: 0; }
+.note h3 { margin: 0 0 8px; font-size: 14px; display: flex; gap: 8px; align-items: baseline; }
+.note h3 span { font-family: var(--mono); font-size: 10.5px; color: var(--accent); letter-spacing: .1em; }
+.note p { margin: 0; font-size: 12.8px; color: var(--muted); line-height: 1.62; }
+.note b { color: var(--ink); font-weight: 600; }
+.note table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 11.6px; }
+.note table th, .note table td { padding: 4px 6px; border-bottom: 1px dashed rgba(255,255,255,.08); text-align: right; color: var(--ink); font-family: var(--mono); }
+.note table th:first-child, .note table td:first-child { text-align: left; font-family: var(--font); color: var(--muted); }
+.note table th { font-family: var(--mono); font-size: 9.5px; letter-spacing: .06em; color: var(--muted2); font-weight: 700; }
+
+.faq { display: grid; gap: 8px; }
+details.qa { border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); overflow: hidden; }
+details.qa summary { cursor: pointer; padding: 13px 44px 13px 15px; font-size: 13.5px; font-weight: 600; list-style: none; position: relative; }
+details.qa summary::-webkit-details-marker { display: none; }
+details.qa summary::after { content: "+"; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--accent); font-family: var(--mono); font-size: 15px; }
+details.qa[open] summary::after { content: "−"; }
+details.qa .a { padding: 0 15px 14px; font-size: 12.8px; color: var(--muted); line-height: 1.68; }
+details.qa .a b { color: var(--ink); font-weight: 600; }
+
+.foot { margin-top: 34px; padding-top: 14px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--muted2); }
+.foot-links { display: inline-flex; flex-wrap: wrap; gap: 12px; }
+.foot-links a { text-decoration: none; color: var(--muted); border-bottom: 1px solid transparent; }
+.foot-links a:hover { color: var(--ink); border-bottom-color: var(--line2); }
+.foot .net { font-family: var(--mono); letter-spacing: .02em; }
+.foot .net b { color: var(--ok); }
+
+@media (max-width: 640px) {
+  .wrap { padding: 0 14px 36px; }
+  .topbar { padding: 14px 0 8px; }
+  .brand-txt { font-size: 12px; letter-spacing: .1em; }
+  .hero { padding: 16px 0 12px; }
+  .lede { font-size: 14px; }
+  .panel { padding: 13px; }
+  .result { padding: 13px; }
+  .sec-head h2 { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="/portfolio/" aria-label="Kim Yihyung — 포트폴리오" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="View in English" aria-label="View in English">
+        <span class="lt on" data-lt="ko">KO</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="en">EN</span>
+      </button>
+      <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← 도구 전체</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="eyebrow">PaySnap · 연봉·3.3%·시급 · 업로드 0</span></p>
+      <h1 data-i18n-html="h1">받는 돈이 궁금할 때,<br><span class="soft">세 갈래로 한 번에.</span><br><span class="gold">이 탭 밖으로는 안 나갑니다.</span></h1>
+      <p class="lede" data-i18n-html="lede">
+        2026년 4대보험 요율과 <strong>비과세 식대 20만원</strong>을 반영한 <strong>연봉·월급 실수령액</strong>,
+        프리랜서 <strong>3.3%</strong>와 기타소득 <strong>8.8%</strong>의 원천징수 정산과 <strong>목표 실수령액 역산</strong>,
+        시급과 <strong>주휴수당</strong>의 주간·월간 실수령까지. 입력한 금액은 어디에도 저장되지 않습니다.
+      </p>
+      <div class="badge-row">
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillUp">업로드 0바이트</b></span>
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillNet">외부 요청 0건</b></span>
+        <span class="pill" data-i18n="pill2026">2026년 요율 기준</span>
+        <span class="pill" data-i18n="pillCopy">카톡 요약 복사</span>
+      </div>
+    </section>
+
+    <!-- ══════════ calculators ══════════ -->
+    <section class="work" aria-label="급여 계산기" data-i18n-aria="calcAria">
+      <div class="card panel" id="calcCard">
+
+        <div class="tabs" role="tablist" aria-label="계산 종류" data-i18n-aria="tabAria">
+          <button type="button" role="tab" id="tab-salary" data-tab="salary" aria-selected="true" aria-controls="panel-salary">
+            <b>01</b><span data-i18n="tab1">연봉 실수령</span>
+          </button>
+          <button type="button" role="tab" id="tab-free" data-tab="free" aria-selected="false" aria-controls="panel-free" tabindex="-1">
+            <b>02</b><span data-i18n="tab2">3.3% · 8.8%</span>
+          </button>
+          <button type="button" role="tab" id="tab-hourly" data-tab="hourly" aria-selected="false" aria-controls="panel-hourly" tabindex="-1">
+            <b>03</b><span data-i18n="tab3">시급 · 주휴</span>
+          </button>
+        </div>
+
+        <!-- ── 01 연봉 실수령 ── -->
+        <section class="tabpanel" id="panel-salary" role="tabpanel" aria-labelledby="tab-salary">
+          <div class="calc-head">
+            <h2 data-i18n="sTitle">연봉·월급 실수령액</h2>
+            <span data-i18n="sNote">2026 4대보험 · 비과세 식대</span>
+          </div>
+
+          <div class="in-row">
+            <div class="in">
+              <label for="sSalary" data-i18n="sSalary">세전 연봉</label>
+              <div class="val"><input type="number" id="sSalary" value="4000" min="0" step="100" inputmode="numeric"><span class="unit" data-i18n="unitMan">만원</span></div>
+            </div>
+            <div class="in">
+              <label for="sMeal" data-i18n="sMeal">비과세 식대 (월)</label>
+              <div class="val"><input type="number" id="sMeal" value="20" min="0" max="20" step="1" inputmode="numeric"><span class="unit" data-i18n="unitMan">만원</span></div>
+            </div>
+            <div class="in">
+              <label for="sFamily" data-i18n="sFamily">부양가족 (본인 포함)</label>
+              <select id="sFamily">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+              </select>
+            </div>
+            <div class="in">
+              <label for="sChild" data-i18n="sChild">8~20세 자녀</label>
+              <select id="sChild">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="result">
+            <div class="num" id="sOut">—</div>
+            <div class="meta" id="sMeta"></div>
+          </div>
+
+          <div class="bar" id="sBar" aria-hidden="true">
+            <i class="b-net" style="width:86%"></i><i class="b-ins" style="width:10%"></i><i class="b-tax" style="width:4%"></i>
+          </div>
+          <div class="bar-legend">
+            <span><i style="background:#7fd6a0"></i><span data-i18n="lgNet">실수령</span></span>
+            <span><i style="background:rgba(229,180,92,.75)"></i><span data-i18n="lgIns">4대보험</span></span>
+            <span><i style="background:rgba(226,110,110,.8)"></i><span data-i18n="lgTax">소득세·지방세</span></span>
+          </div>
+
+          <ul class="kv" id="sRows"></ul>
+
+          <p class="caveat" data-i18n-html="sCaveat">4대보험은 <b>비과세 식대를 뺀 월급</b>에 요율을 곱합니다. 국민연금은 기준소득월액 상한 <b>659만원</b>·하한 <b>41만원</b>(2026년 7월~2027년 6월)이 적용됩니다. 소득세는 국세청 간이세액표를 그대로 옮기지 않고 같은 산식(근로소득공제·기본공제·연금보험료공제·특별소득공제 어림값·근로소득세액공제)으로 계산한 <b>예상치</b>이며, 실제 원천징수액과 월 3만원 안팎 차이가 날 수 있습니다. 연말정산에서 정산됩니다.</p>
+        </section>
+
+        <!-- ── 02 3.3% · 8.8% ── -->
+        <section class="tabpanel" id="panel-free" role="tabpanel" aria-labelledby="tab-free" hidden>
+          <div class="calc-head">
+            <h2 data-i18n="fTitle">프리랜서 원천징수 정산</h2>
+            <span data-i18n="fNote">3.3% · 8.8%</span>
+          </div>
+
+          <div class="seg" id="fType" role="group" aria-label="소득 유형" data-i18n-aria="fTypeAria">
+            <button type="button" data-type="biz" aria-pressed="true" data-i18n="fBiz">프리랜서 3.3%</button>
+            <button type="button" data-type="gipo" aria-pressed="false" data-i18n="fGipo">기타소득 8.8%</button>
+          </div>
+
+          <div class="in-row">
+            <div class="in">
+              <label for="fAmount" data-i18n="fAmount">계약금액 (세전)</label>
+              <div class="val"><input type="number" id="fAmount" value="3000000" min="0" step="10000" inputmode="numeric"><span class="unit" data-i18n="unitWon">원</span></div>
+            </div>
+            <div class="in">
+              <label for="fTarget" data-i18n="fTarget">목표 실수령액</label>
+              <div class="val"><input type="number" id="fTarget" value="2000000" min="0" step="10000" inputmode="numeric"><span class="unit" data-i18n="unitWon">원</span></div>
+            </div>
+          </div>
+
+          <div class="cmp-grid">
+            <div class="cmp-card">
+              <h4 data-i18n="fHead1">계약금액 기준</h4>
+              <ul class="kv" id="fRows"></ul>
+            </div>
+            <div class="cmp-card is-after">
+              <h4 data-i18n="fHead2">목표액에 필요한 계약금액</h4>
+              <ul class="kv" id="fRevRows"></ul>
+            </div>
+          </div>
+
+          <div class="result">
+            <div class="num" id="fOut">—</div>
+            <div class="meta" id="fMeta"></div>
+          </div>
+
+          <p class="status" id="fStatus"></p>
+          <p class="caveat" data-i18n-html="fCaveat"><b>3.3%</b>는 사업소득 원천징수(소득세 3% + 지방소득세 0.3%)이고, <b>8.8%</b>는 기타소득 원천징수(소득세 8% + 지방 0.8%)입니다. 기타소득은 필요경비 <b>60%</b>를 인정받아 실제로는 수입의 40%에만 세율이 붙으므로, 8.8%로 떼도 실효 부담은 <b>3.52%</b>입니다. 어느 쪽이든 원천징수는 <b>미리 내는 세금</b>이라 다음 해 5월 종합소득세 신고에서 다시 정산됩니다.</p>
+        </section>
+
+        <!-- ── 03 시급 · 주휴 ── -->
+        <section class="tabpanel" id="panel-hourly" role="tabpanel" aria-labelledby="tab-hourly" hidden>
+          <div class="calc-head">
+            <h2 data-i18n="hTitle">시급·주휴수당 실수령</h2>
+            <span data-i18n="hNote">주간 · 월간</span>
+          </div>
+
+          <div class="in-row">
+            <div class="in">
+              <label for="hWage" data-i18n="hWage">시급</label>
+              <div class="val"><input type="number" id="hWage" value="10320" min="0" step="10" inputmode="numeric"><span class="unit" data-i18n="unitWon">원</span></div>
+            </div>
+            <div class="in">
+              <label for="hHours" data-i18n="hHours">주 소정근로시간</label>
+              <div class="val"><input type="number" id="hHours" value="40" min="0" max="68" step="0.5" inputmode="decimal"><span class="unit" data-i18n="unitHour">시간</span></div>
+            </div>
+            <div class="in">
+              <label for="hDays" data-i18n="hDays">주 근무일수</label>
+              <div class="val"><input type="number" id="hDays" value="5" min="1" max="7" step="1" inputmode="numeric"><span class="unit" data-i18n="unitDay">일</span></div>
+            </div>
+          </div>
+
+          <div class="result">
+            <div class="num" id="hOut">—</div>
+            <div class="meta" id="hMeta"></div>
+          </div>
+
+          <div class="cmp-grid">
+            <div class="cmp-card">
+              <h4 data-i18n="hHead1">주간</h4>
+              <ul class="kv" id="hWeek"></ul>
+            </div>
+            <div class="cmp-card is-after">
+              <h4 data-i18n="hHead2">월간 (주휴 포함)</h4>
+              <ul class="kv" id="hMonth"></ul>
+            </div>
+          </div>
+
+          <p class="status" id="hStatus"></p>
+          <div class="row-actions" style="display:flex;gap:7px;flex-wrap:wrap">
+            <button class="btn btn--primary btn--sm" id="hCopy" type="button" data-i18n="hCopy">이 계산 카톡으로 복사</button>
+          </div>
+          <p class="caveat" data-i18n-html="hCaveat">주 15시간 이상이면 주휴수당이 생깁니다. 주 40시간 미만은 <b>(주 근로시간 ÷ 40) × 8시간</b>분, 40시간 이상은 8시간분입니다. 월 환산은 <b>(주 근무 + 주휴) × 4.345주</b>로 계산합니다. 2026년 최저임금은 시간급 <b>10,320원</b>(주 40시간 월 2,156,880원, 209시간 기준)입니다. 여기 금액은 4대보험과 소득세를 뺀 <b>참고용</b>이며, 사업장의 급여 체계와 정산에 따라 달라집니다.</p>
+        </section>
+
+        <p class="status" id="status" aria-live="polite"></p>
+      </div>
+
+      <aside class="side">
+        <div class="card panel">
+          <h3><span data-i18n="sumHead">요약 — 카톡에 붙여넣기</span></h3>
+          <pre class="sum" id="sumText" tabindex="0"></pre>
+          <button class="btn btn--primary btn--block" id="copyBtn" type="button" data-i18n="copyBtn">요약 복사</button>
+          <p class="caveat" id="sumStatus"></p>
+        </div>
+        <div class="card panel">
+          <h3 data-i18n="rateHead">2026년 근로자 부담</h3>
+          <ul class="kv">
+            <li><span data-i18n="r1k">국민연금</span><b>4.75%</b></li>
+            <li><span data-i18n="r2k">건강보험</span><b>3.595%</b></li>
+            <li><span data-i18n="r3k">장기요양</span><b data-i18n="r3v">건강보험료 × 13.14%</b></li>
+            <li><span data-i18n="r4k">고용보험</span><b>0.9%</b></li>
+            <li><span data-i18n="r5k">비과세 식대</span><b data-i18n="r5v">월 20만원</b></li>
+            <li><span data-i18n="r6k">최저임금</span><b data-i18n="r6v">10,320원 / 시간</b></li>
+          </ul>
+          <p class="caveat" data-i18n-html="rateNote">산재보험은 사업주가 전액 부담하므로 월급에서 빠지지 않습니다. 국민연금은 기준소득월액 <b>41만~659만원</b> 범위에서만 매겨집니다.</p>
+        </div>
+      </aside>
+    </section>
+
+    <!-- ══════════ notes ══════════ -->
+    <section class="section" aria-labelledby="rateTitle">
+      <div class="sec-head">
+        <h2 id="rateTitle" data-i18n="rateTitle">2026년 4대보험 요율표</h2>
+        <span data-i18n="rateNote2">근로자 부담분</span>
+      </div>
+      <div class="notes">
+        <div class="note">
+          <h3><span>01</span><span data-i18n="t1h">직장가입자</span></h3>
+          <table>
+            <thead><tr><th data-i18n="tItem">항목</th><th data-i18n="tTotal">전체</th><th data-i18n="tMine">근로자</th></tr></thead>
+            <tbody>
+              <tr><td data-i18n="tNps">국민연금</td><td>9.5%</td><td>4.75%</td></tr>
+              <tr><td data-i18n="tHealth">건강보험</td><td>7.19%</td><td>3.595%</td></tr>
+              <tr><td data-i18n="tLtc">장기요양</td><td colspan="2">건강보험료 × 13.14%</td></tr>
+              <tr><td data-i18n="tEmp">고용보험</td><td>1.8%</td><td>0.9%</td></tr>
+              <tr><td data-i18n="tSang">산재보험</td><td colspan="2" data-i18n="tSangV">사업주 전액 (업종별)</td></tr>
+            </tbody>
+          </table>
+          <p style="margin-top:8px" data-i18n-html="tNote">2026년 국민연금은 1998년 이후 처음으로 <b>9% → 9.5%</b>, 건강보험은 <b>7.09% → 7.19%</b>로 올랐습니다.</p>
+        </div>
+        <div class="note">
+          <h3><span>02</span><span data-i18n="t2h">순서</span></h3>
+          <p data-i18n-html="t2p">① 비과세 식대를 뺀 <b>과세 급여</b>를 구하고 ② 국민연금·건강보험·장기요양·고용보험을 각각 <b>10원 미만 버림</b>으로 떼고 ③ 12개월치로 환산해 <b>근로소득공제·기본공제·연금보험료공제</b>를 빼고 기본세율을 적용한 뒤 ④ <b>근로소득세액공제</b>와 자녀세액공제를 빼고 ⑤ 12로 나눠 매달 소득세를 정하고 ⑥ 그 10%를 <b>지방소득세</b>로 더합니다.</p>
+        </div>
+        <div class="note">
+          <h3><span>03</span><span data-i18n="t3h">원천징수는 선납</span></h3>
+          <p data-i18n-html="t3p">매달 떼는 소득세는 확정된 세금이 아니라 <b>미리 내는 돈</b>입니다. 카드·의료비·교육비·연금저축 공제는 간이세액표에 들어 있지 않아 다음 해 2월 연말정산에서 다시 계산하고, 더 냈으면 돌려받고 덜 냈으면 더 냅니다. 프리랜서는 5월 종합소득세 신고에서 정산됩니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="faqTitle">
+      <div class="sec-head">
+        <h2 id="faqTitle" data-i18n="faqTitle">자주 묻는 질문</h2>
+        <span data-i18n="faqNote">요율 · 3.3% · 주휴</span>
+      </div>
+      <div class="faq">
+        <details class="qa">
+          <summary data-i18n="q1">식대 20만원을 비과세로 받으면 얼마나 늘어나나요?</summary>
+          <div class="a" data-i18n-html="a1">세전 연봉이 같아도 식대가 <b>비과세</b>로 잡혀 있으면 4대보험료와 소득세가 모두 그만큼 줄어 실수령액이 늘어납니다. 연봉 4,500만원·1인 가구 기준으로 월 <b>4만원 안팎</b>, 1년이면 50만원 가까이 차이가 납니다. 위 계산기의 식대 칸을 0과 20으로 바꿔 직접 비교해 보세요.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q2">3.3%를 떼면 끝인가요?</summary>
+          <div class="a" data-i18n-html="a2">아니요. 3.3%는 <b>원천징수</b>일 뿐이고, 프리랜서는 다음 해 5월 <b>종합소득세</b>로 다시 정산합니다. 연 소득이 1,400만원 이하면 대개 환급이고, 소득이 커지면 3.3%보다 더 낼 수 있습니다. 3.3%는 사업소득이므로 <b>노란우산공제·연금저축</b> 같은 소득공제를 활용하면 실제 부담이 줄어듭니다.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q3">8.8%는 왜 3.3%보다 실효 부담이 낮나요?</summary>
+          <div class="a" data-i18n-html="a3">기타소득은 <b>필요경비 60%</b>를 인정합니다. 100만원을 받으면 소득금액은 40만원이고, 여기에 8%를 매기면 소득세 3만2천원, 지방소득세 3,200원으로 총 <b>3만5,200원(3.52%)</b>입니다. 다만 기타소득은 사업소득처럼 비용을 따로 인정받지 못하니, 계속 반복되는 용역이라면 사업소득으로 처리하는 편이 유리할 수 있습니다.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q4">주휴수당은 못 받는 경우도 있나요?</summary>
+          <div class="a" data-i18n-html="a4">주 소정근로시간이 <b>15시간 미만</b>이면 주휴수당이 발생하지 않습니다. 또 그 주에 <b>개근</b>해야 하므로 결근이 있으면 그 주의 주휴수당은 없습니다. 지각·조퇴는 개근을 깨지 않지만, 무단결근은 깨집니다. 지급 시점은 보통 다음 급여일에 함께 지급합니다.</div>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span data-i18n="footCopy">© 2026 Kim Yihyung · 브라우저에서, 브라우저를 위해 만들었습니다.</span>
+    <span class="net"><span data-i18n="footNet">외부 요청</span> <b id="netCount">0</b></span>
+    <span class="foot-links">
+      <a href="/portfolio/" data-i18n="footP1">포트폴리오</a>
+      <a href="/portfolio/tools/" data-i18n="footP2">도구 전체</a>
+      <a href="https://github.com/kimyihyung/portfolio" target="_blank" rel="noopener" data-i18n="footP3">소스</a>
+    </span>
+    <span class="mono" data-i18n="mono">업로드 없음 · 추적 없음</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ═════════════════════ 언어 사전 ═════════════════════ */
+  var I18N = {
+    ko: {
+      docTitle: 'PaySnap — 연봉 실수령액 · 3.3% 원천징수 · 시급 주휴수당 계산기 | Kim Yihyung',
+      metaDesc: '2026년 4대보험 요율과 비과세 식대를 반영한 연봉·월급 실수령액, 프리랜서 3.3%와 기타소득 8.8% 원천징수 정산·역산, 시급과 주휴수당 주간·월간 실수령을 한 페이지에서. 모두 브라우저 안에서 계산하고 업로드 0바이트.',
+      ogTitle: 'PaySnap — 연봉 실수령 · 3.3% 정산 · 시급 주휴수당',
+      ogDesc: '2026년 요율로 연봉 실수령액, 프리랜서 3.3%·기타소득 8.8% 원천징수와 역산, 시급·주휴수당 주간·월간 실수령을 한 화면에서. 브라우저 안에서만 계산합니다.',
+      brandAria: 'Kim Yihyung — 포트폴리오',
+      back: '← 도구 전체',
+      eyebrow: 'PaySnap · 연봉·3.3%·시급 · 업로드 0',
+      h1: '받는 돈이 궁금할 때,<br><span class="soft">세 갈래로 한 번에.</span><br><span class="gold">이 탭 밖으로는 안 나갑니다.</span>',
+      lede: '2026년 4대보험 요율과 <strong>비과세 식대 20만원</strong>을 반영한 <strong>연봉·월급 실수령액</strong>, 프리랜서 <strong>3.3%</strong>와 기타소득 <strong>8.8%</strong>의 원천징수 정산과 <strong>목표 실수령액 역산</strong>, 시급과 <strong>주휴수당</strong>의 주간·월간 실수령까지. 입력한 금액은 어디에도 저장되지 않습니다.',
+      pillUp: '업로드 0바이트', pillNet: '외부 요청 0건', pill2026: '2026년 요율 기준', pillCopy: '카톡 요약 복사',
+      calcAria: '급여 계산기', tabAria: '계산 종류',
+      tab1: '연봉 실수령', tab2: '3.3% · 8.8%', tab3: '시급 · 주휴',
+      sTitle: '연봉·월급 실수령액', sNote: '2026 4대보험 · 비과세 식대',
+      sSalary: '세전 연봉', unitMan: '만원', sMeal: '비과세 식대 (월)', sFamily: '부양가족 (본인 포함)', sChild: '8~20세 자녀',
+      lgNet: '실수령', lgIns: '4대보험', lgTax: '소득세·지방세',
+      sCaveat: '4대보험은 <b>비과세 식대를 뺀 월급</b>에 요율을 곱합니다. 국민연금은 기준소득월액 상한 <b>659만원</b>·하한 <b>41만원</b>(2026년 7월~2027년 6월)이 적용됩니다. 소득세는 국세청 간이세액표를 그대로 옮기지 않고 같은 산식(근로소득공제·기본공제·연금보험료공제·특별소득공제 어림값·근로소득세액공제)으로 계산한 <b>예상치</b>이며, 실제 원천징수액과 월 3만원 안팎 차이가 날 수 있습니다. 연말정산에서 정산됩니다.',
+      fTitle: '프리랜서 원천징수 정산', fNote: '3.3% · 8.8%',
+      fTypeAria: '소득 유형', fBiz: '프리랜서 3.3%', fGipo: '기타소득 8.8%',
+      fAmount: '계약금액 (세전)', unitWon: '원', fTarget: '목표 실수령액',
+      fHead1: '계약금액 기준', fHead2: '목표액에 필요한 계약금액',
+      fCaveat: '<b>3.3%</b>는 사업소득 원천징수(소득세 3% + 지방소득세 0.3%)이고, <b>8.8%</b>는 기타소득 원천징수(소득세 8% + 지방 0.8%)입니다. 기타소득은 필요경비 <b>60%</b>를 인정받아 실제로는 수입의 40%에만 세율이 붙으므로, 8.8%로 떼도 실효 부담은 <b>3.52%</b>입니다. 어느 쪽이든 원천징수는 <b>미리 내는 세금</b>이라 다음 해 5월 종합소득세 신고에서 다시 정산됩니다.',
+      hTitle: '시급·주휴수당 실수령', hNote: '주간 · 월간',
+      hWage: '시급', unitHour: '시간', hHours: '주 소정근로시간', hDays: '주 근무일수', unitDay: '일',
+      hHead1: '주간', hHead2: '월간 (주휴 포함)', hCopy: '이 계산 카톡으로 복사',
+      hCaveat: '주 15시간 이상이면 주휴수당이 생깁니다. 주 40시간 미만은 <b>(주 근로시간 ÷ 40) × 8시간</b>분, 40시간 이상은 8시간분입니다. 월 환산은 <b>(주 근무 + 주휴) × 4.345주</b>로 계산합니다. 2026년 최저임금은 시간급 <b>10,320원</b>(주 40시간 월 2,156,880원, 209시간 기준)입니다. 여기 금액은 4대보험과 소득세를 뺀 <b>참고용</b>이며, 사업장의 급여 체계와 정산에 따라 달라집니다.',
+      sumHead: '요약 — 카톡에 붙여넣기', copyBtn: '요약 복사',
+      rateHead: '2026년 근로자 부담',
+      r1k: '국민연금', r2k: '건강보험', r3k: '장기요양', r3v: '건강보험료 × 13.14%', r4k: '고용보험', r5k: '비과세 식대', r5v: '월 20만원', r6k: '최저임금', r6v: '10,320원 / 시간',
+      rateNote: '산재보험은 사업주가 전액 부담하므로 월급에서 빠지지 않습니다. 국민연금은 기준소득월액 <b>41만~659만원</b> 범위에서만 매겨집니다.',
+      rateTitle: '2026년 4대보험 요율표', rateNote2: '근로자 부담분',
+      t1h: '직장가입자', tItem: '항목', tTotal: '전체', tMine: '근로자',
+      tNps: '국민연금', tHealth: '건강보험', tLtc: '장기요양', tEmp: '고용보험', tSang: '산재보험', tSangV: '사업주 전액 (업종별)',
+      tNote: '2026년 국민연금은 1998년 이후 처음으로 <b>9% → 9.5%</b>, 건강보험은 <b>7.09% → 7.19%</b>로 올랐습니다.',
+      t2h: '순서',
+      t2p: '① 비과세 식대를 뺀 <b>과세 급여</b>를 구하고 ② 국민연금·건강보험·장기요양·고용보험을 각각 <b>10원 미만 버림</b>으로 떼고 ③ 12개월치로 환산해 <b>근로소득공제·기본공제·연금보험료공제</b>를 빼고 기본세율을 적용한 뒤 ④ <b>근로소득세액공제</b>와 자녀세액공제를 빼고 ⑤ 12로 나눠 매달 소득세를 정하고 ⑥ 그 10%를 <b>지방소득세</b>로 더합니다.',
+      t3h: '원천징수는 선납',
+      t3p: '매달 떼는 소득세는 확정된 세금이 아니라 <b>미리 내는 돈</b>입니다. 카드·의료비·교육비·연금저축 공제는 간이세액표에 들어 있지 않아 다음 해 2월 연말정산에서 다시 계산하고, 더 냈으면 돌려받고 덜 냈으면 더 냅니다. 프리랜서는 5월 종합소득세 신고에서 정산됩니다.',
+      faqTitle: '자주 묻는 질문', faqNote: '요율 · 3.3% · 주휴',
+      q1: '식대 20만원을 비과세로 받으면 얼마나 늘어나나요?',
+      a1: '세전 연봉이 같아도 식대가 <b>비과세</b>로 잡혀 있으면 4대보험료와 소득세가 모두 그만큼 줄어 실수령액이 늘어납니다. 연봉 4,500만원·1인 가구 기준으로 월 <b>4만원 안팎</b>, 1년이면 50만원 가까이 차이가 납니다. 위 계산기의 식대 칸을 0과 20으로 바꿔 직접 비교해 보세요.',
+      q2: '3.3%를 떼면 끝인가요?',
+      a2: '아니요. 3.3%는 <b>원천징수</b>일 뿐이고, 프리랜서는 다음 해 5월 <b>종합소득세</b>로 다시 정산합니다. 연 소득이 1,400만원 이하면 대개 환급이고, 소득이 커지면 3.3%보다 더 낼 수 있습니다. 3.3%는 사업소득이므로 <b>노란우산공제·연금저축</b> 같은 소득공제를 활용하면 실제 부담이 줄어듭니다.',
+      q3: '8.8%는 왜 3.3%보다 실효 부담이 낮나요?',
+      a3: '기타소득은 <b>필요경비 60%</b>를 인정합니다. 100만원을 받으면 소득금액은 40만원이고, 여기에 8%를 매기면 소득세 3만2천원, 지방소득세 3,200원으로 총 <b>3만5,200원(3.52%)</b>입니다. 다만 기타소득은 사업소득처럼 비용을 따로 인정받지 못하니, 계속 반복되는 용역이라면 사업소득으로 처리하는 편이 유리할 수 있습니다.',
+      q4: '주휴수당은 못 받는 경우도 있나요?',
+      a4: '주 소정근로시간이 <b>15시간 미만</b>이면 주휴수당이 발생하지 않습니다. 또 그 주에 <b>개근</b>해야 하므로 결근이 있으면 그 주의 주휴수당은 없습니다. 지각·조퇴는 개근을 깨지 않지만, 무단결근은 깨집니다. 지급 시점은 보통 다음 급여일에 함께 지급합니다.',
+      footCopy: '© 2026 Kim Yihyung · 브라우저에서, 브라우저를 위해 만들었습니다.',
+      footNet: '외부 요청', footP1: '포트폴리오', footP2: '도구 전체', footP3: '소스',
+      mono: '업로드 없음 · 추적 없음', toggleTo: 'View in English',
+      /* dynamic */
+      perMonth: '/ 월', perDeal: '/ 건',
+      lblAnnualNet: '연 실수령', lblGrossMonth: '세전 월급', lblDeduct: '월 공제 합계',
+      rMonthlyGross: '세전 월급여', rMeal: '비과세 식대', rTaxable: '과세 급여',
+      rNps: '국민연금 (4.75%)', rHealth: '건강보험 (3.595%)', rLtc: '장기요양', rEmp: '고용보험 (0.9%)',
+      rIncome: '소득세', rLocal: '지방소득세', rInsTotal: '4대보험 합계', rTaxBase: '연간 과세표준',
+      rNetMonth: '월 실수령액',
+      lblWithheld: '원천징수 합계', lblRate: '실효 세율', lblType: '유형',
+      fGipoShort: '기타소득 8.8%', fBizShort: '사업소득 3.3%',
+      rGross: '계약금액', rExpense: '필요경비 60%', rTaxableGipo: '소득금액 (40%)',
+      rWithheld: '원천징수 합계', rNet: '실수령액',
+      rTarget: '목표 실수령액', rNeed: '필요한 계약금액', rTaxableGipo2: '과세 기준',
+      fGipoNote: '기타소득은 필요경비 60%가 인정되어 실효 세율이 {r}%입니다.',
+      fBizNote: '사업소득 3.3%는 다음 해 5월 종합소득세에서 다시 정산됩니다.',
+      lblWeeklyNet: '주 실수령', lblHoliday: '주휴수당', lblMonthGross: '월 환산 세전',
+      rWage: '시급', rHours: '주 소정근로', rHolidayHours: '주휴 시간', rHolidayPay: '주휴수당',
+      rWeeklyGross: '주급 합계', rMonthGross2: '월 환산 세전 급여',
+      hShort: '주 15시간 미만이라 4대보험 공제를 빼지 않았습니다(사업장에 따라 다름).',
+      hBelow: '2026년 최저임금 {w}원보다 낮습니다.',
+      hMinOk: '2026년 최저임금 {w}원 · 주 40시간 월 {m}원(209시간 기준)',
+      sumSalaryHead: '연봉 실수령액', sumFreeHead: '원천징수 정산', sumHourlyHead: '시급·주휴 실수령',
+      sumGross: '세전', sumNet: '실수령', sumYear: '연', sumMetaMeal: '식대', sumMetaFamily: '부양가족',
+      sumBizHead: '프리랜서 3.3% 정산', sumGipoHead: '기타소득 8.8% 정산',
+      sumNeed: '목표액에 필요한 계약금액', sumDays: '주', sumWeek: '주', sumMonth: '월', sumWeeklyNet: '주 실수령',
+      sumFoot: '※ 2026년 요율 기준 참고용. 실제 명세서와 연말정산·종합소득세 신고에서 정산됩니다.',
+      copied: '클립보드에 복사했습니다.', copyFail: '복사에 실패했습니다 — 요약을 선택해 직접 복사해 주세요.'
+    },
+    en: {
+      docTitle: 'PaySnap — Korean Take-Home Pay, 3.3% Withholding & Hourly Pay | Kim Yihyung',
+      metaDesc: 'Korean take-home pay from an annual salary with the 2026 four-insurance rates and the tax-free meal allowance, freelance 3.3% and other-income 8.8% withholding with a reverse calculation, and hourly pay with weekly holiday allowance — all computed in your browser with zero uploads.',
+      ogTitle: 'PaySnap — take-home pay, 3.3% withholding, hourly pay',
+      ogDesc: 'Annual take-home pay on 2026 rates, freelance 3.3% and other-income 8.8% withholding with reverse calculation, and hourly pay with the weekly holiday allowance — in the tab.',
+      brandAria: 'Kim Yihyung — portfolio',
+      back: '← All tools',
+      eyebrow: 'PaySnap · salary · 3.3% · hourly · zero upload',
+      h1: 'What actually lands in your account.<br><span class="soft">Three ways to check it.</span><br><span class="gold">Nothing leaves the tab.</span>',
+      lede: 'Korean <strong>take-home pay</strong> from an annual salary with the 2026 four-insurance rates and the <strong>₩200,000 tax-free meal allowance</strong>, freelance <strong>3.3%</strong> and other-income <strong>8.8%</strong> withholding with a <strong>reverse calculation from a target</strong>, and hourly pay with the <strong>weekly holiday allowance</strong>. Nothing you type is stored anywhere.',
+      pillUp: '0 bytes uploaded', pillNet: '0 external requests', pill2026: '2026 rates', pillCopy: 'Copy a KakaoTalk summary',
+      calcAria: 'Pay calculator', tabAria: 'Calculator type',
+      tab1: 'Take-home pay', tab2: '3.3% · 8.8%', tab3: 'Hourly · holiday',
+      sTitle: 'Take-home pay', sNote: '2026 insurances · meal allowance',
+      sSalary: 'Gross annual salary', unitMan: '만원', sMeal: 'Tax-free meal (month)', sFamily: 'Dependants (incl. you)', sChild: 'Children 8–20',
+      lgNet: 'take-home', lgIns: 'insurances', lgTax: 'income tax',
+      sCaveat: 'The four insurances are charged on <b>monthly pay minus the tax-free meal allowance</b>. The national pension uses a base income of <b>₩410,000 to ₩6,590,000</b> (July 2026 – June 2027). Income tax here is an <b>estimate</b> built from the same formula the withholding table uses (earned-income deduction, basic deduction, pension deduction, an approximation of the special deductions, earned-income tax credit), not the table itself, so it can differ from the payslip by up to about ₩30,000 a month. It is settled at year-end.',
+      fTitle: 'Freelance withholding', fNote: '3.3% · 8.8%',
+      fTypeAria: 'Income type', fBiz: 'Freelance 3.3%', fGipo: 'Other income 8.8%',
+      fAmount: 'Contract amount (gross)', unitWon: ' KRW', fTarget: 'Target take-home',
+      fHead1: 'From the contract amount', fHead2: 'Contract needed for the target',
+      fCaveat: '<b>3.3%</b> is business-income withholding (3% income tax + 0.3% local). <b>8.8%</b> is other-income withholding (8% + 0.8%), but other income gets a <b>60% expense allowance</b>, so the rate only applies to 40% of the money: the effective cost is <b>3.52%</b>. Either way this is a <b>prepayment</b>, reconciled in the May comprehensive income tax filing.',
+      hTitle: 'Hourly pay & holiday allowance', hNote: 'weekly · monthly',
+      hWage: 'Hourly wage', unitHour: 'h', hHours: 'Contracted hours / week', hDays: 'Days / week', unitDay: 'd',
+      hHead1: 'Weekly', hHead2: 'Monthly (holiday included)', hCopy: 'Copy this as a KakaoTalk message',
+      hCaveat: 'The weekly holiday allowance starts at <b>15 contracted hours</b> a week: below 40 hours it is <b>(weekly hours ÷ 40) × 8 hours</b> of pay, at 40 or more it is 8 hours. The monthly figure is <b>(worked + holiday hours) × 4.345 weeks</b>. The 2026 minimum wage is <b>₩10,320</b> an hour (₩2,156,880 a month at 40 hours, on a 209-hour basis). These numbers subtract the insurances and income tax and are a <b>reference</b>; your workplace may settle differently.',
+      sumHead: 'Summary — paste into KakaoTalk', copyBtn: 'Copy summary',
+      rateHead: '2026 employee share',
+      r1k: 'National pension', r2k: 'Health insurance', r3k: 'Long-term care', r3v: '13.14% of health premium', r4k: 'Employment insurance', r5k: 'Tax-free meal', r5v: '₩200,000 / month', r6k: 'Minimum wage', r6v: '₩10,320 / hour',
+      rateNote: 'Industrial accident insurance is paid entirely by the employer, so it never leaves your pay. The national pension is charged only between <b>₩410,000 and ₩6,590,000</b> a month.',
+      rateTitle: '2026 insurance rates', rateNote2: 'employee share',
+      t1h: 'Employee', tItem: 'Item', tTotal: 'Total', tMine: 'Employee',
+      tNps: 'National pension', tHealth: 'Health', tLtc: 'Long-term care', tEmp: 'Employment', tSang: 'Industrial accident', tSangV: 'Employer, by industry',
+      tNote: 'In 2026 the national pension rose from <b>9% to 9.5%</b> — its first rise since 1998 — and health insurance from <b>7.09% to 7.19%</b>.',
+      t2h: 'The order',
+      t2p: '① take monthly pay minus the tax-free meal allowance ② charge pension, health, long-term care and employment insurance, each floored to ₩10 ③ annualise, subtract the earned-income, basic and pension deductions, apply the rate table ④ subtract the earned-income and child tax credits ⑤ divide by twelve for the monthly tax ⑥ add 10% local income tax.',
+      t3h: 'Withholding is a prepayment',
+      t3p: 'The tax taken each month is not final. Card, medical, education and pension-savings credits are not in the withholding table, so the year-end settlement in February recalculates the whole year and refunds or collects the difference. Freelancers settle in the May filing.',
+      faqTitle: 'Questions', faqNote: 'rates · 3.3% · holiday pay',
+      q1: 'How much does the ₩200,000 tax-free meal add?',
+      a1: 'With the same gross salary, a meal allowance marked <b>tax-free</b> lowers both the insurance base and the income tax, so take-home rises — roughly <b>₩40,000 a month</b>, close to ₩500,000 a year, on a ₩45,000,000 salary for a single person. Change the meal field above between 0 and 20 to see it.',
+      q2: 'Is 3.3% the end of it?',
+      a2: 'No. 3.3% is <b>withholding</b>; freelancers reconcile through the <b>comprehensive income tax</b> the following May. Below about ₩14,000,000 of annual income it is usually a refund, and above that you can owe more than 3.3%. Because it is business income, deductions such as the <b>Yellow Umbrella</b> mutual aid or a pension savings account reduce the real bill.',
+      q3: 'Why is 8.8% cheaper than 3.3% in practice?',
+      a3: 'Other income gets a <b>60% expense allowance</b>. On ₩1,000,000 the taxable amount is ₩400,000, so 8% gives ₩32,000 plus ₩3,200 local — <b>₩35,200, or 3.52%</b>. The catch is that other income cannot claim actual expenses, so recurring work is usually better treated as business income.',
+      q4: 'Can the weekly holiday allowance be withheld?',
+      a4: 'It does not exist below <b>15 contracted hours</b> a week, and it requires <b>full attendance</b> that week — an absence forfeits that week, while being late or leaving early does not. It is normally paid with the next payroll.',
+      footCopy: '© 2026 Kim Yihyung · Built in the browser, for the browser.',
+      footNet: 'external requests', footP1: 'Portfolio', footP2: 'All tools', footP3: 'Source',
+      mono: 'NO UPLOADS · NO TRACKING', toggleTo: '한국어로 보기',
+      perMonth: '/ mo', perDeal: '/ job',
+      lblAnnualNet: 'Yearly take-home', lblGrossMonth: 'Monthly gross', lblDeduct: 'Monthly deductions',
+      rMonthlyGross: 'Monthly gross', rMeal: 'Tax-free meal', rTaxable: 'Taxable pay',
+      rNps: 'National pension (4.75%)', rHealth: 'Health (3.595%)', rLtc: 'Long-term care', rEmp: 'Employment (0.9%)',
+      rIncome: 'Income tax', rLocal: 'Local income tax', rInsTotal: 'Insurance total', rTaxBase: 'Yearly tax base',
+      rNetMonth: 'Monthly take-home',
+      lblWithheld: 'Withheld', lblRate: 'Effective rate', lblType: 'Type',
+      fGipoShort: 'other income 8.8%', fBizShort: 'business income 3.3%',
+      rGross: 'Contract amount', rExpense: 'Expense allowance 60%', rTaxableGipo: 'Taxable income (40%)',
+      rWithheld: 'Withheld', rNet: 'Take-home',
+      rTarget: 'Target', rNeed: 'Contract needed', rTaxableGipo2: 'Taxable base',
+      fGipoNote: 'Other income allows 60% expenses, so the effective rate is {r}%.',
+      fBizNote: 'The 3.3% is reconciled in the May comprehensive income tax filing.',
+      lblWeeklyNet: 'Weekly take-home', lblHoliday: 'Holiday allowance', lblMonthGross: 'Monthly gross',
+      rWage: 'Hourly wage', rHours: 'Weekly hours', rHolidayHours: 'Holiday hours', rHolidayPay: 'Holiday pay',
+      rWeeklyGross: 'Weekly total', rMonthGross2: 'Monthly gross',
+      hShort: 'Under 15 hours a week, so the four insurances were not deducted (your workplace may differ).',
+      hBelow: 'Below the 2026 minimum wage of ₩{w}.',
+      hMinOk: '2026 minimum wage ₩{w} · ₩{m} a month at 40 hours (209-hour basis)',
+      sumSalaryHead: 'Take-home pay', sumFreeHead: 'Withholding', sumHourlyHead: 'Hourly pay',
+      sumGross: 'Gross', sumNet: 'Take-home', sumYear: 'yr', sumMetaMeal: 'meal', sumMetaFamily: 'dependants',
+      sumBizHead: 'Freelance 3.3%', sumGipoHead: 'Other income 8.8%',
+      sumNeed: 'Contract needed for the target', sumDays: 'days', sumWeek: 'week', sumMonth: 'month', sumWeeklyNet: 'Weekly take-home',
+      sumFoot: 'Reference only, 2026 rates. Your payslip, the year-end settlement and the May filing decide the final numbers.',
+      copied: 'Copied to the clipboard.', copyFail: 'Copy failed — select the summary and copy it by hand.'
+    }
+  };
+
+  /* ═════════════════════ 2026 기준값 ═════════════════════ */
+  var R = {
+    nps: 0.0475,            /* 국민연금 근로자 4.75% */
+    health: 0.03595,        /* 건강보험 근로자 3.595% */
+    ltc: 0.9448 / 7.19,     /* 장기요양 = 건강보험료 × 13.14% */
+    emp: 0.009,             /* 고용보험 실업급여 0.9% */
+    npsMin: 410000,         /* 기준소득월액 하한 */
+    npsMax: 6590000,        /* 기준소득월액 상한 */
+    mealCap: 200000,        /* 비과세 식대 월 20만원 */
+    minWage: 10320,         /* 2026 최저임금 */
+    biz: 0.033,             /* 사업소득 3.3% */
+    gipo: 0.088,            /* 기타소득 8.8% */
+    gipoExpense: 0.6        /* 기타소득 필요경비 60% */
+  };
+  var BRACKETS = [
+    { limit: 14000000, rate: 0.06, cut: 0 },
+    { limit: 50000000, rate: 0.15, cut: 1260000 },
+    { limit: 88000000, rate: 0.24, cut: 5760000 },
+    { limit: 150000000, rate: 0.35, cut: 15440000 },
+    { limit: 300000000, rate: 0.38, cut: 19940000 },
+    { limit: 500000000, rate: 0.40, cut: 25940000 },
+    { limit: 1000000000, rate: 0.42, cut: 35940000 },
+    { limit: Infinity, rate: 0.45, cut: 65940000 }
+  ];
+
+  var state = { lang: 'ko', tab: 'salary', fType: 'biz' };
+  var LANG_KEY = 'paysnap.lang';
+  var SHARED_KEY = 'kyh.lang';
+
+  function $(id) { return document.getElementById(id); }
+  function floor10(v) { return Math.floor(v / 10) * 10; }
+  function num(id) { var v = parseFloat($(id).value); return isNaN(v) ? 0 : v; }
+  function won(v) { return Math.round(v).toLocaleString(state.lang === 'ko' ? 'ko-KR' : 'en-US'); }
+  function wonW(v) { return won(v) + (state.lang === 'ko' ? '원' : ' KRW'); }
+  function t(key) {
+    var d = I18N[state.lang] || I18N.ko;
+    if (d[key] != null) return d[key];
+    return I18N.ko[key] != null ? I18N.ko[key] : '';
+  }
+  function fmt(s, o) {
+    return String(s).replace(/\{(\w+)\}/g, function (m, k) { return o[k] != null ? o[k] : m; });
+  }
+  function readLang(k) {
+    try { var v = localStorage.getItem(k); return v === 'ko' || v === 'en' ? v : ''; } catch (e) { return ''; }
+  }
+  function initialLang() {
+    var q = '';
+    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
+    if (q === 'ko' || q === 'en') return q;
+    return readLang(SHARED_KEY) || readLang(LANG_KEY) || 'ko';
+  }
+
+  /* ═════════════════════ 4대보험·소득세 ═════════════════════ */
+  function insurance(monthlyTaxable) {
+    var base = Math.min(Math.max(monthlyTaxable, R.npsMin), R.npsMax);
+    var nps = floor10(base * R.nps);
+    var health = floor10(monthlyTaxable * R.health);
+    var ltc = floor10(health * R.ltc);
+    var emp = floor10(monthlyTaxable * R.emp);
+    return { nps: nps, health: health, ltc: ltc, emp: emp, total: nps + health + ltc + emp };
+  }
+  function laborDeduction(gross) {
+    if (gross <= 5000000) return gross * 0.7;
+    if (gross <= 15000000) return 3500000 + (gross - 5000000) * 0.4;
+    if (gross <= 45000000) return 7500000 + (gross - 15000000) * 0.15;
+    if (gross <= 100000000) return 12000000 + (gross - 45000000) * 0.05;
+    return Math.min(20000000, 14750000 + (gross - 100000000) * 0.02);
+  }
+  /* 국세청 간이세액표가 반영하는 특별소득공제·특별세액공제 어림값의 근사식
+     (총급여 구간과 공제대상가족 수에 따라 기본액 + 총급여의 일정 비율) */
+  function specialDeduction(gross, family) {
+    var base = family >= 3 ? 5000000 : family === 2 ? 3600000 : 3100000;
+    var r1 = family >= 3 ? 0.07 : 0.04;
+    var r2 = family >= 3 ? 0.05 : family === 2 ? 0.02 : 0.015;
+    var r3 = family >= 3 ? 0.01 : 0.005;
+    if (gross <= 30000000) return base + gross * r1;
+    if (gross <= 45000000) return base + gross * r1 - (gross - 30000000) * 0.05;
+    if (gross <= 70000000) return base + gross * r2;
+    if (gross <= 120000000) return base + gross * r3;
+    return base + 120000000 * r3;
+  }
+  function bracketTax(base) {
+    for (var i = 0; i < BRACKETS.length; i++) {
+      if (base <= BRACKETS[i].limit) return Math.max(0, base * BRACKETS[i].rate - BRACKETS[i].cut);
+    }
+    return 0;
+  }
+  function earnedCredit(tax, gross) {
+    var c = tax <= 1300000 ? tax * 0.55 : 715000 + (tax - 1300000) * 0.30;
+    var cap = gross <= 33000000 ? 740000 : gross <= 70000000 ? 660000 : gross <= 120000000 ? 500000 : 200000;
+    return Math.min(c, cap);
+  }
+  function childCredit(n) {
+    if (n <= 0) return 0;
+    if (n === 1) return 150000;
+    if (n === 2) return 300000;
+    return 300000 + (n - 2) * 300000;
+  }
+  function incomeTax(monthlyTaxable, family, child) {
+    var annual = monthlyTaxable * 12;
+    var ins = insurance(monthlyTaxable);
+    var ded = laborDeduction(annual) + 1500000 * family + ins.nps * 12 + specialDeduction(annual, family);
+    var base = Math.max(0, Math.floor((annual - ded) / 1000) * 1000);
+    var computed = bracketTax(base);
+    var credit = earnedCredit(computed, annual) + childCredit(child);
+    var decided = Math.max(0, computed - credit);
+    var monthly = floor10(decided / 12);
+    var local = floor10(monthly * 0.1);
+    return { base: base, computed: computed, credit: credit, decided: decided, monthly: monthly, local: local, annual: annual };
+  }
+
+  /* ═════════════════════ 01 연봉 ═════════════════════ */
+  function salaryCalc() {
+    var annual = num('sSalary') * 10000;
+    var meal = Math.min(num('sMeal') * 10000, R.mealCap);
+    var family = Math.max(1, parseInt($('sFamily').value, 10) || 1);
+    var child = parseInt($('sChild').value, 10) || 0;
+    var monthlyGross = annual / 12;
+    var taxable = Math.max(0, monthlyGross - meal);
+    var ins = insurance(taxable);
+    var tax = incomeTax(taxable, family, child);
+    var net = monthlyGross - ins.total - tax.monthly - tax.local;
+    return {
+      annual: annual, meal: meal, monthlyGross: monthlyGross, taxable: taxable,
+      ins: ins, tax: tax, monthlyNet: net, annualNet: net * 12,
+      dedTotal: ins.total + tax.monthly + tax.local, family: family, child: child
+    };
+  }
+
+  /* ═════════════════════ 02 3.3% · 8.8% ═════════════════════ */
+  function freeCalc(gross, type) {
+    var income, local, taxable;
+    if (type === 'gipo') {
+      taxable = gross * (1 - R.gipoExpense);
+      income = floor10(taxable * 0.08);
+    } else {
+      taxable = gross;
+      income = floor10(gross * 0.03);
+    }
+    local = floor10(income * 0.1);
+    var total = income + local;
+    return {
+      gross: gross, taxable: taxable, income: income, local: local, total: total,
+      net: gross - total, rate: gross > 0 ? total / gross * 100 : 0,
+      type: type
+    };
+  }
+  function freeReverse(target, type) {
+    if (target <= 0) return 0;
+    var guess = type === 'gipo' ? target / (1 - 0.0352) : target / (1 - R.biz);
+    guess = Math.ceil(guess / 10) * 10;
+    var guard = 0;
+    while (freeCalc(guess, type).net < target && guard++ < 200) guess += 10;
+    while (guess > 10 && freeCalc(guess - 10, type).net >= target) guess -= 10;
+    return guess;
+  }
+
+  /* ═════════════════════ 03 시급 ═════════════════════ */
+  function hourlyCalc() {
+    var wage = num('hWage');
+    var hours = num('hHours');
+    var days = Math.max(1, num('hDays'));
+    var holidayHours = hours >= 15 ? (Math.min(hours, 40) / 40) * 8 : 0;
+    var weeklyGross = (hours + holidayHours) * wage;
+    var monthlyGross = (hours + holidayHours) * (365 / 7 / 12) * wage;
+    var insured = hours >= 15;
+    var ins = insured ? insurance(monthlyGross) : { nps: 0, health: 0, ltc: 0, emp: 0, total: 0 };
+    var tax = incomeTax(monthlyGross, 1, 0);
+    if (!insured) { tax.monthly = 0; tax.local = 0; }
+    var monthlyNet = monthlyGross - ins.total - tax.monthly - tax.local;
+    return {
+      wage: wage, hours: hours, days: days, holidayHours: holidayHours,
+      weeklyGross: weeklyGross, monthlyGross: monthlyGross, insured: insured,
+      ins: ins, tax: tax, monthlyNet: monthlyNet,
+      weeklyNet: monthlyNet / (365 / 7 / 12),
+      holidayPay: holidayHours * wage,
+      belowMin: wage > 0 && wage < R.minWage
+    };
+  }
+
+  /* ═════════════════════ 그리기 ═════════════════════ */
+  function row(label, value, cls) {
+    return '<li' + (cls ? ' class="' + cls + '"' : '') + '><span>' + label + '</span><b>' + value + '</b></li>';
+  }
+  function paintSalary() {
+    var r = salaryCalc();
+    $('sOut').innerHTML = wonW(r.monthlyNet) + '<small>' + t('perMonth') + '</small>';
+    $('sMeta').innerHTML =
+      '<span>' + t('lblAnnualNet') + ' <b>' + wonW(r.annualNet) + '</b></span>' +
+      '<span>' + t('lblGrossMonth') + ' <b>' + wonW(r.monthlyGross) + '</b></span>' +
+      '<span>' + t('lblDeduct') + ' <b>' + wonW(r.dedTotal) + '</b></span>';
+    var rows = '';
+    rows += row(t('rMonthlyGross'), wonW(r.monthlyGross));
+    rows += row(t('rMeal'), '−' + wonW(r.meal), 'is-sub');
+    rows += row(t('rTaxable'), wonW(r.taxable));
+    rows += row(t('rNps'), '−' + wonW(r.ins.nps));
+    rows += row(t('rHealth'), '−' + wonW(r.ins.health));
+    rows += row(t('rLtc'), '−' + wonW(r.ins.ltc));
+    rows += row(t('rEmp'), '−' + wonW(r.ins.emp));
+    rows += row(t('rIncome'), '−' + wonW(r.tax.monthly));
+    rows += row(t('rLocal'), '−' + wonW(r.tax.local));
+    rows += row(t('rInsTotal'), wonW(r.ins.total), 'is-sub');
+    rows += row(t('rTaxBase'), wonW(r.tax.base), 'is-sub');
+    rows += row(t('rNetMonth'), wonW(r.monthlyNet), 'is-key');
+    $('sRows').innerHTML = rows;
+    var total = Math.max(1, r.monthlyGross);
+    $('sBar').innerHTML =
+      '<i class="b-net" style="width:' + (r.monthlyNet / total * 100).toFixed(2) + '%"></i>' +
+      '<i class="b-ins" style="width:' + (r.ins.total / total * 100).toFixed(2) + '%"></i>' +
+      '<i class="b-tax" style="width:' + ((r.tax.monthly + r.tax.local) / total * 100).toFixed(2) + '%"></i>';
+  }
+
+  function paintFree() {
+    var type = state.fType;
+    var gross = num('fAmount');
+    var f = freeCalc(gross, type);
+    $('fOut').innerHTML = wonW(f.net) + '<small>' + t('perDeal') + '</small>';
+    $('fMeta').innerHTML =
+      '<span>' + t('lblWithheld') + ' <b>' + wonW(f.total) + '</b></span>' +
+      '<span>' + t('lblRate') + ' <b>' + f.rate.toFixed(2) + '%</b></span>' +
+      '<span>' + t('lblType') + ' <b>' + (type === 'gipo' ? t('fGipoShort') : t('fBizShort')) + '</b></span>';
+    var rows = '';
+    rows += row(t('rGross'), wonW(f.gross));
+    if (type === 'gipo') {
+      rows += row(t('rExpense'), '−' + wonW(f.gross * R.gipoExpense), 'is-sub');
+      rows += row(t('rTaxableGipo'), wonW(f.taxable));
+    }
+    rows += row(t('rIncome'), '−' + wonW(f.income));
+    rows += row(t('rLocal'), '−' + wonW(f.local));
+    rows += row(t('rWithheld'), wonW(f.total), 'is-sub');
+    rows += row(t('rNet'), wonW(f.net), 'is-key');
+    $('fRows').innerHTML = rows;
+
+    var target = num('fTarget');
+    var need = freeReverse(target, type);
+    var nf = freeCalc(need, type);
+    var rev = '';
+    rev += row(t('rTarget'), wonW(target));
+    rev += row(t('rNeed'), wonW(need), 'is-key');
+    if (type === 'gipo') rev += row(t('rTaxableGipo'), wonW(nf.taxable), 'is-sub');
+    rev += row(t('rWithheld'), '−' + wonW(nf.total));
+    rev += row(t('rNet'), wonW(nf.net));
+    $('fRevRows').innerHTML = rev;
+
+    $('fStatus').textContent = type === 'gipo'
+      ? fmt(t('fGipoNote'), { r: (R.gipo * (1 - R.gipoExpense)).toFixed(2) })
+      : t('fBizNote');
+    $('fStatus').className = 'status';
+  }
+
+  function paintHourly() {
+    var h = hourlyCalc();
+    $('hOut').innerHTML = wonW(h.monthlyNet) + '<small>' + t('perMonth') + '</small>';
+    $('hMeta').innerHTML =
+      '<span>' + t('lblWeeklyNet') + ' <b>' + wonW(h.weeklyNet) + '</b></span>' +
+      '<span>' + t('lblHoliday') + ' <b>' + wonW(h.holidayPay) + '</b></span>' +
+      '<span>' + t('lblMonthGross') + ' <b>' + wonW(h.monthlyGross) + '</b></span>';
+    var wk = '';
+    wk += row(t('rWage'), wonW(h.wage));
+    wk += row(t('rHours'), h.hours + ' ' + t('unitHour'));
+    wk += row(t('rHolidayHours'), h.holidayHours.toFixed(1) + ' ' + t('unitHour'), 'is-sub');
+    wk += row(t('rHolidayPay'), wonW(h.holidayPay));
+    wk += row(t('rWeeklyGross'), wonW(h.weeklyGross), 'is-key');
+    $('hWeek').innerHTML = wk;
+    var mo = '';
+    mo += row(t('rMonthGross2'), wonW(h.monthlyGross));
+    mo += row(t('rNps'), '−' + wonW(h.ins.nps));
+    mo += row(t('rHealth'), '−' + wonW(h.ins.health));
+    mo += row(t('rLtc'), '−' + wonW(h.ins.ltc));
+    mo += row(t('rEmp'), '−' + wonW(h.ins.emp));
+    mo += row(t('rIncome'), '−' + wonW(h.tax.monthly));
+    mo += row(t('rLocal'), '−' + wonW(h.tax.local));
+    mo += row(t('rNetMonth'), wonW(h.monthlyNet), 'is-key');
+    $('hMonth').innerHTML = mo;
+
+    var notes = [];
+    if (h.hours < 15) notes.push(t('hShort'));
+    if (h.belowMin) notes.push(fmt(t('hBelow'), { w: won(R.minWage) }));
+    notes.push(fmt(t('hMinOk'), { w: won(R.minWage), m: won(R.minWage * 209) }));
+    $('hStatus').textContent = notes.join(' · ');
+    $('hStatus').className = 'status ' + (h.belowMin || h.hours < 15 ? 'is-warn' : 'is-ok');
+  }
+
+  function summaryText() {
+    var l = [];
+    if (state.tab === 'salary') {
+      var r = salaryCalc();
+      l.push('[PaySnap] ' + t('sumSalaryHead'));
+      l.push(t('sumGross') + ' ' + wonW(r.monthlyGross));
+      l.push(t('rNps') + ' ' + wonW(r.ins.nps));
+      l.push(t('rHealth') + ' ' + wonW(r.ins.health));
+      l.push(t('rLtc') + ' ' + wonW(r.ins.ltc));
+      l.push(t('rEmp') + ' ' + wonW(r.ins.emp));
+      l.push(t('rIncome') + ' ' + wonW(r.tax.monthly) + ' · ' + t('rLocal') + ' ' + wonW(r.tax.local));
+      l.push(t('sumNet') + ' ' + wonW(r.monthlyNet) + ' / ' + t('sumYear') + ' ' + wonW(r.annualNet));
+      l.push('(' + t('sumMetaMeal') + ' ' + wonW(r.meal) + ', ' + t('sumMetaFamily') + ' ' + r.family + ')');
+    } else if (state.tab === 'free') {
+      var f = freeCalc(num('fAmount'), state.fType);
+      l.push('[PaySnap] ' + (state.fType === 'gipo' ? t('sumGipoHead') : t('sumBizHead')));
+      l.push(t('sumGross') + ' ' + wonW(f.gross));
+      l.push(t('rIncome') + ' ' + wonW(f.income) + ' · ' + t('rLocal') + ' ' + wonW(f.local));
+      l.push(t('sumNet') + ' ' + wonW(f.net) + ' (' + t('lblRate') + ' ' + f.rate.toFixed(2) + '%)');
+      l.push(t('sumNeed') + ' ' + wonW(freeReverse(num('fTarget'), state.fType)));
+    } else {
+      var h = hourlyCalc();
+      l.push('[PaySnap] ' + t('sumHourlyHead'));
+      l.push(t('rWage') + ' ' + wonW(h.wage) + ' × ' + h.hours + t('unitHour') + ' (' + t('sumDays') + ' ' + h.days + ')');
+      l.push(t('rHolidayPay') + ' ' + wonW(h.holidayPay) + ' / ' + t('sumWeek'));
+      l.push(t('sumGross') + ' ' + wonW(h.monthlyGross) + ' / ' + t('sumMonth'));
+      l.push(t('sumNet') + ' ' + wonW(h.monthlyNet));
+      l.push(t('sumWeeklyNet') + ' ' + wonW(h.weeklyNet));
+    }
+    l.push(t('sumFoot'));
+    return l.join('\n');
+  }
+  function paintSummary() {
+    $('sumText').textContent = summaryText();
+    var head = { salary: t('sumSalaryHead'), free: t('sumFreeHead'), hourly: t('sumHourlyHead') };
+    $('sumStatus').textContent = head[state.tab];
+  }
+
+  function paintAll() {
+    paintSalary();
+    paintFree();
+    paintHourly();
+    paintSummary();
+  }
+
+  function setStatus(msg, isError) {
+    var el = $('status');
+    el.textContent = msg || '';
+    el.className = 'status ' + (msg ? (isError ? 'is-warn' : 'is-ok') : '');
+  }
+
+  /* ═════════════════════ 탭 ═════════════════════ */
+  function selectTab(tab) {
+    state.tab = tab;
+    var btns = document.querySelectorAll('.tabs button');
+    for (var i = 0; i < btns.length; i++) {
+      var on = btns[i].getAttribute('data-tab') === tab;
+      btns[i].setAttribute('aria-selected', String(on));
+      btns[i].tabIndex = on ? 0 : -1;
+      var panel = $(btns[i].getAttribute('aria-controls'));
+      if (panel) panel.hidden = !on;
+    }
+    paintSummary();
+  }
+
+  document.querySelector('.tabs').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-tab]');
+    if (b) selectTab(b.getAttribute('data-tab'));
+  });
+  document.querySelector('.tabs').addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    var order = ['salary', 'free', 'hourly'];
+    var i = order.indexOf(state.tab);
+    var next = order[(i + (e.key === 'ArrowRight' ? 1 : order.length - 1)) % order.length];
+    e.preventDefault();
+    selectTab(next);
+    $('tab-' + next).focus();
+  });
+
+  $('fType').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-type]');
+    if (!b) return;
+    state.fType = b.getAttribute('data-type');
+    var bs = $('fType').querySelectorAll('button');
+    for (var i = 0; i < bs.length; i++) bs[i].setAttribute('aria-pressed', String(bs[i] === b));
+    paintAll();
+  });
+
+  ['sSalary', 'sMeal'].forEach(function (id) {
+    $(id).addEventListener('input', paintAll);
+    $(id).addEventListener('change', paintAll);
+  });
+  ['sFamily', 'sChild'].forEach(function (id) {
+    $(id).addEventListener('change', paintAll);
+  });
+  ['fAmount', 'fTarget', 'hWage', 'hHours', 'hDays'].forEach(function (id) {
+    $(id).addEventListener('input', paintAll);
+    $(id).addEventListener('change', paintAll);
+  });
+
+  /* ═════════════════════ 복사 ═════════════════════ */
+  function copyText(text) {
+    return new Promise(function (resolve, reject) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(resolve, function () { fallback(); });
+      } else fallback();
+      function fallback() {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.setAttribute('readonly', '');
+          ta.style.cssText = 'position:fixed;top:-1000px;left:-1000px;opacity:0';
+          document.body.appendChild(ta);
+          ta.select();
+          var ok = document.execCommand('copy');
+          document.body.removeChild(ta);
+          ok ? resolve() : reject(new Error('copy'));
+        } catch (e) { reject(e); }
+      }
+    });
+  }
+  function doCopy() {
+    copyText(summaryText()).then(function () {
+      $('sumStatus').textContent = t('copied');
+      $('sumStatus').style.color = 'var(--ok)';
+      setStatus(t('copied'), false);
+    }, function () {
+      $('sumStatus').textContent = t('copyFail');
+      $('sumStatus').style.color = 'var(--warn)';
+      setStatus(t('copyFail'), true);
+    });
+  }
+  $('copyBtn').addEventListener('click', doCopy);
+  $('hCopy').addEventListener('click', doCopy);
+
+  /* ═════════════════════ 언어 ═════════════════════ */
+  function setMeta(sel, attr, val) {
+    var el = document.querySelector(sel);
+    if (el) el.setAttribute(attr, val);
+  }
+  function applyLang(lang) {
+    state.lang = lang === 'en' ? 'en' : 'ko';
+    document.documentElement.setAttribute('lang', state.lang);
+    document.title = t('docTitle');
+    setMeta('meta[name="description"]', 'content', t('metaDesc'));
+    setMeta('meta[property="og:title"]', 'content', t('ogTitle'));
+    setMeta('meta[property="og:description"]', 'content', t('ogDesc'));
+    setMeta('meta[name="twitter:title"]', 'content', t('ogTitle'));
+    setMeta('meta[name="twitter:description"]', 'content', t('ogDesc'));
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var v = t(nodes[i].getAttribute('data-i18n'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-html'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-aria'));
+      if (v) nodes[i].setAttribute('aria-label', v);
+    }
+    var lt = $('langToggle');
+    if (lt) {
+      var spans = lt.querySelectorAll('[data-lt]');
+      for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
+      lt.setAttribute('aria-label', t('toggleTo'));
+      lt.setAttribute('title', t('toggleTo'));
+    }
+    paintAll();
+    try {
+      localStorage.setItem(LANG_KEY, state.lang);
+      localStorage.setItem(SHARED_KEY, state.lang);
+    } catch (e) { /* 저장 실패는 무해 */ }
+  }
+
+  $('langToggle').addEventListener('click', function () {
+    applyLang(state.lang === 'ko' ? 'en' : 'ko');
+  });
+
+  /* ═════════════════════ 시작 ═════════════════════ */
+  applyLang(initialLang());
+  selectTab('salary');
+
+  /* 테스트·자동화용 읽기 전용 창구 */
+  window.PaySnap = {
+    version: '1.0',
+    rates: R,
+    salary: function () {
+      var r = salaryCalc();
+      return {
+        monthlyGross: Math.round(r.monthlyGross), taxable: Math.round(r.taxable),
+        meal: r.meal, nps: r.ins.nps, health: r.ins.health, ltc: r.ins.ltc, emp: r.ins.emp,
+        insTotal: r.ins.total, incomeTax: r.tax.monthly, localTax: r.tax.local,
+        monthlyNet: Math.round(r.monthlyNet), annualNet: Math.round(r.annualNet)
+      };
+    },
+    freelance: function () {
+      var f = freeCalc(num('fAmount'), state.fType);
+      return {
+        type: state.fType, gross: Math.round(f.gross), taxable: Math.round(f.taxable),
+        income: f.income, local: f.local, total: f.total, net: Math.round(f.net),
+        rate: Math.round(f.rate * 100) / 100,
+        reverse: freeReverse(num('fTarget'), state.fType)
+      };
+    },
+    hourly: function () {
+      var h = hourlyCalc();
+      return {
+        wage: h.wage, hours: h.hours, holidayHours: Math.round(h.holidayHours * 10) / 10,
+        holidayPay: Math.round(h.holidayPay), weeklyGross: Math.round(h.weeklyGross),
+        monthlyGross: Math.round(h.monthlyGross), insTotal: h.ins.total,
+        incomeTax: h.tax.monthly, monthlyNet: Math.round(h.monthlyNet),
+        weeklyNet: Math.round(h.weeklyNet), insured: h.insured
+      };
+    },
+    summary: summaryText,
+    tab: selectTab,
+    set: function (id, value) { $(id).value = String(value); paintAll(); },
+    setType: function (type) { state.fType = type; paintAll(); },
+    lang: function () { return state.lang; },
+    setLang: function (l) { applyLang(l); }
+  };
+})();
+</script>
+</body>
+</html>
