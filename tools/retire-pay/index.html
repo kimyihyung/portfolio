@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0b0d">
+<title>RetirePay — 퇴직금·연차수당·실업급여 계산기 (2026년 기준) | Kim Yihyung</title>
+<meta name="description" content="입사일·퇴사일과 퇴직 전 3개월 급여로 퇴직금을 계산하고(상여금·연차수당 3/12 반영, 평균임금과 통상임금 중 큰 금액 적용), 월 통상임금 ÷ 209 × 8로 미사용 연차수당을, 2026년 최저임금 10,320원과 구직급여 상한 68,100원·하한 66,048원으로 실업급여 소정급여일수와 예상 수령액을 계산합니다. 기준 시점과 법 조항을 화면에 명시하고, 모든 계산은 브라우저 안에서만.">
+<meta name="keywords" content="퇴직금 계산기, 퇴직금 계산 방법, 평균임금 통상임금, 연차수당 계산기, 미사용 연차수당, 실업급여 계산기, 구직급여 소정급여일수, 2026 최저임금 10320원, 구직급여 상한액 68100원, 하한액 66048원, 퇴직금 상여금 3/12, retirepay, 업로드 없음">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/retire-pay/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b0d'/%3E%3Cpath d='M9 22V11m0 5h7.5a3 3 0 0 1 0 6H9m12 0V11' stroke='%23e5b45c' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/retire-pay/">
+<meta property="og:title" content="RetirePay — 퇴직금·연차수당·실업급여 계산 (2026 기준)">
+<meta property="og:description" content="평균임금과 통상임금을 비교해 퇴직금을 계산하고, 209시간 기준 연차수당과 2026년 상한 68,100원·하한 66,048원으로 실업급여를 계산합니다. 기준일과 근거를 화면에 적었습니다.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="RetirePay — 퇴직금·연차수당·실업급여 계산기">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="RetirePay — 퇴직금·연차수당·실업급여 계산">
+<meta name="twitter:description" content="퇴직 전 3개월 임금과 상여금·연차수당 3/12, 평균임금과 통상임금 비교. 연차수당은 209시간 기준. 실업급여는 2026년 상·하한 적용. 업로드 0바이트.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "RetirePay — 퇴직금·연차수당·실업급여 계산기",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/retire-pay/",
+      "description": "입사일과 퇴사일로 계속근로일수를 세고, 퇴직 전 3개월 임금총액에 연간 상여금과 미사용 연차수당의 3/12을 더해 1일 평균임금을 구한 뒤 1일 통상임금과 비교해 큰 금액으로 예상 퇴직금을 계산한다. 미사용 연차수당은 월 통상임금을 209시간으로 나눠 8시간을 곱한 1일 통상임금에 미사용 일수를 곱해 계산하고, 실업급여는 2026년 최저임금 시간급 10,320원과 구직급여 1일 상한 68,100원(기초일액 상한 113,500원의 60%)·하한 66,048원(8시간 기준 최저임금의 80%)을 적용해 연령과 피보험기간별 소정급여일수(120~270일)와 예상 수령액을 계산한다. 모든 계산은 브라우저 안에서만 이루어지고 업로드와 외부 요청은 없다.",
+      "featureList": [
+        "퇴직금 — 계속근로일수, 3개월 총일수, 1일 평균임금",
+        "상여금·연차수당 3/12 반영 (고용노동부 예규 제96호)",
+        "1일 평균임금과 1일 통상임금 비교, 큰 금액 적용",
+        "미사용 연차수당 — 월 통상임금 ÷ 209 × 8",
+        "실업급여 — 연령·피보험기간별 소정급여일수 120~270일",
+        "2026년 구직급여 상한 68,100원·하한 66,048원",
+        "카톡·메모용 결과 요약 복사",
+        "기준 시점과 법 조항 화면 표기",
+        "0 bytes uploaded · 0 external requests"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "KRW" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "RetirePay", "item": "https://kimyihyung.github.io/portfolio/tools/retire-pay/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "퇴직금은 어떻게 계산되나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "계속근로 1년에 대하여 30일분 이상의 평균임금을 지급하도록 정해져 있습니다(근로자퇴직급여보장법 제4조). 1일 평균임금은 퇴직일 이전 3개월 임금총액에 연간 상여금과 이미 지급된 미사용 연차수당의 3/12을 더한 금액을, 그 3개월의 달력 총일수(89~92일)로 나눈 값입니다(근로기준법 제2조, 고용노동부예규 제96호). 그 값이 1일 통상임금보다 적으면 통상임금을 평균임금으로 봅니다. 퇴직금은 1일 평균임금 × 30 × (계속근로일수 ÷ 365)입니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "미사용 연차수당은 왜 209시간으로 나누나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "주 40시간 근로자의 월 통상임금 산정 기준시간 수가 209시간이기 때문입니다. 주 40시간에 유급주휴 8시간을 더해 한 주가 48시간이 되고, 여기에 1년 365일을 7로 나눈 52.14주를 곱해 250.3시간, 월평균으로 나누면 약 209시간이 됩니다. 여기서 1일 통상임금은 월 통상임금 ÷ 209 × 8이고, 연차수당은 그 값에 미사용 일수를 곱한 금액입니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "2026년 실업급여는 하루 얼마인가요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "2026년 1월 1일 이후 이직자부터 1일 구직급여 상한액이 68,100원, 하한액이 66,048원(1일 8시간 기준)입니다. 하한액은 2026년 최저임금 시급 10,320원 × 8시간 × 80% = 66,048원이고, 상한액은 기초 임금일액 상한 113,500원의 60%입니다. 구직급여일액은 이직 전 평균임금의 60%를 상·하한 사이로 맞춘 금액이며, 2025년 12월 31일 이전 이직자는 종전 상한 66,000원이 적용됩니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "계산 결과가 회사나 고용센터 금액과 다르면 무엇을 확인해야 하나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "여기 계산은 입력한 금액과 기간만으로 낸 추정치입니다. 실제 금액은 어떤 수당이 임금에 포함되는지, 평균임금 산정에서 제외되는 기간(육아휴직·병가·쟁의기간 등)이 있었는지, 통상임금에 어떤 수당이 들어가는지로 달라집니다. 고용노동부 퇴직금 계산기와 대조해 보고, 차이가 크면 관할 고용노동관서나 고용센터(1350)에서 확인하는 것이 정확합니다." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+:root {
+  --bg: #0b0b0d;
+  --bg2: #0e0e11;
+  --panel: #141311;
+  --panel2: #1b1917;
+  --line: rgba(255,255,255,.09);
+  --line2: rgba(255,255,255,.18);
+  --ink: #f7f2e9;
+  --muted: #a9a29a;
+  --muted2: #7d766e;
+  --accent: #e5b45c;
+  --accent2: #f3cf85;
+  --accent-dim: rgba(229,180,92,.12);
+  --on-accent: #1d1503;
+  --ok: #7fd6a0;
+  --warn: #ffa06b;
+  --bad: #ff7d7d;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  line-height: 1.6;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(110% 55% at 50% -18%, rgba(229,180,92,.13), transparent 62%),
+    radial-gradient(60% 40% at 100% 2%, rgba(229,180,92,.05), transparent 60%);
+  background-repeat: no-repeat;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: var(--accent); color: var(--on-accent); }
+a { color: inherit; }
+button, input, select, textarea { font-family: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+.wrap { width: 100%; max-width: 1220px; margin: 0 auto; padding: 0 20px 48px; }
+
+/* ---------- topbar ---------- */
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0 12px; }
+.brand { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: var(--ink); min-width: 0; }
+.mark {
+  min-width: 28px; height: 22px; padding: 0 6px; border-radius: 7px; flex: none;
+  border: 1px solid rgba(229,180,92,.45); background: var(--accent-dim);
+  display: grid; place-items: center; font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: var(--accent);
+}
+.brand-txt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.top-actions { display: inline-flex; align-items: center; gap: 9px; flex: none; }
+.lang-toggle {
+  appearance: none; border: 1px solid var(--line); background: var(--panel); color: var(--muted2);
+  height: 34px; padding: 0 11px; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px;
+  cursor: pointer; font-size: 11px; font-weight: 700; letter-spacing: .06em; line-height: 1;
+  transition: color .2s, border-color .2s, transform .15s;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.94); }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
+.topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
+
+/* ---------- hero ---------- */
+.hero { padding: 22px 0 18px; max-width: 900px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; margin: 0 0 14px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--accent);
+  border: 1px solid rgba(229,180,92,.28); background: rgba(229,180,92,.06); padding: 6px 11px; border-radius: 999px;
+}
+.eyebrow .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+h1 { margin: 0 0 14px; font-size: clamp(27px, 4.2vw, 42px); line-height: 1.14; letter-spacing: -.028em; font-weight: 800; }
+h1 .soft { color: var(--muted); }
+h1 .gold { color: var(--accent); }
+.lede { margin: 0 0 16px; color: var(--muted); font-size: 15px; max-width: 830px; }
+.lede strong { color: var(--ink); font-weight: 600; }
+.lede code { font-family: var(--mono); font-size: .92em; color: var(--accent); }
+
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--panel); font-size: 11.5px; color: var(--muted);
+  font-family: var(--mono); letter-spacing: .02em;
+}
+.pill b { color: var(--ink); font-weight: 700; }
+.pill--live { border-color: rgba(127,214,160,.32); background: rgba(127,214,160,.07); color: #a6e6c4; }
+.pill--live b { color: #bff3d8; }
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px rgba(127,214,160,.14); }
+
+/* ---------- layout ---------- */
+.work { display: grid; grid-template-columns: minmax(0,1fr) 344px; gap: 16px; align-items: start; margin-top: 6px; }
+.work > .main { grid-column: 1; grid-row: 1; }
+.work > .side { grid-column: 2; grid-row: 1 / span 2; }
+.work > .bandsec { grid-column: 1; grid-row: 2; margin-top: 0; }
+@media (max-width: 1040px) {
+  .work { grid-template-columns: minmax(0,1fr); }
+  .work > .main, .work > .side, .work > .bandsec { grid-column: auto; grid-row: auto; }
+  .work > .bandsec { margin-top: 8px; }
+}
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); min-width: 0; }
+.panel { padding: 16px; display: grid; gap: 13px; min-width: 0; }
+.panel h3 { margin: 0; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted2); font-family: var(--mono); font-weight: 700; }
+.side { display: grid; gap: 12px; min-width: 0; align-content: start; }
+@media (min-width: 1041px) { .side { position: sticky; top: 14px; } }
+
+.btn {
+  appearance: none; cursor: pointer; border-radius: 11px; border: 1px solid var(--line2);
+  background: var(--panel2); color: var(--ink); font-size: 13px; font-weight: 650;
+  padding: 10px 16px; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  transition: transform .12s, border-color .2s, background .2s, opacity .2s; text-decoration: none;
+}
+.btn:hover { border-color: rgba(255,255,255,.3); }
+.btn:active { transform: scale(.98); }
+.btn:disabled { opacity: .42; cursor: not-allowed; }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 750; }
+.btn--primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.btn--ghost { background: transparent; }
+.btn--sm { padding: 7px 11px; font-size: 12px; border-radius: 9px; }
+.btn--block { width: 100%; }
+
+/* ---------- tabs ---------- */
+.tabs { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 6px; margin-bottom: 4px; }
+.tabs button {
+  appearance: none; cursor: pointer; text-align: left; min-width: 0;
+  display: grid; gap: 2px; padding: 10px 12px; border-radius: 12px;
+  border: 1px solid var(--line); background: var(--panel2); color: var(--muted);
+  transition: border-color .2s, background .2s, color .2s;
+}
+.tabs button:hover { border-color: var(--line2); }
+.tabs button b { font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; color: var(--muted2); font-weight: 700; }
+.tabs button span { font-size: 13px; font-weight: 700; color: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tabs button[aria-selected="true"] { border-color: rgba(229,180,92,.5); background: linear-gradient(180deg, rgba(229,180,92,.14), rgba(229,180,92,.03)); color: var(--ink); }
+.tabs button[aria-selected="true"] b { color: var(--accent); }
+@media (max-width: 560px) {
+  .tabs button { padding: 9px 10px; }
+  .tabs button span { font-size: 12.5px; }
+}
+
+.tabpanel { display: grid; gap: 13px; min-width: 0; }
+.calc-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.calc-head h2 { margin: 0; font-size: 16.5px; letter-spacing: -.01em; }
+.calc-head span { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted2); }
+
+/* ---------- inputs ---------- */
+.lbl { font-size: 10.5px; font-family: var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted2); display: block; margin-bottom: 6px; }
+.grid2 { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 9px; min-width: 0; }
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 9px; min-width: 0; }
+@media (max-width: 560px) { .grid3 { grid-template-columns: minmax(0,1fr); } .grid2 { grid-template-columns: minmax(0,1fr); } }
+@media (min-width: 561px) and (max-width: 1040px) { .grid3 { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+
+.in {
+  display: grid; gap: 5px; padding: 9px 11px 8px; border: 1px solid var(--line);
+  border-radius: 11px; background: var(--panel2); min-width: 0;
+}
+.in label { font-size: 10.5px; font-family: var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted2); }
+.in .row { display: flex; align-items: baseline; gap: 6px; min-width: 0; }
+.in input {
+  appearance: none; border: 0; background: transparent; color: var(--ink);
+  font-size: 14.5px; font-weight: 650; padding: 0; width: 100%; min-width: 0; line-height: 1.45;
+  font-family: var(--mono); letter-spacing: -.01em;
+}
+.in input[type="date"] { font-size: 13.5px; }
+.in input[type="number"]::-webkit-outer-spin-button,
+.in input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.in input[type="number"] { -moz-appearance: textfield; }
+.in input:focus { outline: none; }
+.in:focus-within { border-color: rgba(229,180,92,.6); }
+.in .unit { font-size: 11px; color: var(--muted2); flex: none; font-family: var(--mono); }
+.in .help { font-size: 10.5px; color: var(--muted2); }
+
+.hint { margin: 0; font-size: 11.5px; color: var(--muted2); line-height: 1.6; }
+.hint b { color: var(--muted); }
+.chk {
+  appearance: none; cursor: pointer; text-align: left; min-width: 0;
+  display: flex; align-items: center; gap: 8px; padding: 9px 11px; border-radius: 11px;
+  border: 1px solid var(--line); background: var(--panel2); color: var(--muted);
+  font-size: 12.5px; font-weight: 600; transition: border-color .18s, background .18s, color .18s;
+}
+.chk .box { width: 15px; height: 15px; border-radius: 5px; flex: none; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.24); font-size: 10px; color: transparent; }
+.chk[aria-pressed="true"] { color: var(--ink); border-color: rgba(229,180,92,.4); background: rgba(229,180,92,.08); }
+.chk[aria-pressed="true"] .box { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+
+.seg { display: flex; gap: 3px; padding: 3px; background: var(--panel2); border: 1px solid var(--line); border-radius: 11px; min-width: 0; flex-wrap: wrap; }
+.seg button { flex: 1 1 auto; appearance: none; border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; font-weight: 650; padding: 7px 6px; border-radius: 8px; line-height: 1.25; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--accent-dim); color: var(--accent); box-shadow: inset 0 0 0 1px rgba(229,180,92,.35); }
+
+/* ---------- result ---------- */
+.result { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px 18px; padding: 16px; border-radius: var(--radius-sm); border: 1px solid rgba(229,180,92,.26); background: linear-gradient(180deg, rgba(229,180,92,.10), rgba(229,180,92,.02)); min-width: 0; }
+.result .num { font-family: var(--mono); font-size: clamp(24px, 5.6vw, 34px); line-height: 1.1; font-weight: 700; letter-spacing: -.03em; color: var(--accent); overflow-wrap: anywhere; }
+.result .num small { font-size: 12.5px; letter-spacing: .02em; color: var(--muted); margin-left: 5px; font-weight: 600; font-family: var(--font); }
+.result .meta { display: grid; gap: 2px; font-size: 12px; color: var(--muted); min-width: 0; }
+.result .meta b { color: var(--ink); font-weight: 650; }
+
+.kv { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.kv li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 10px; font-size: 12.4px; color: var(--muted); }
+.kv li b { color: var(--ink); font-family: var(--mono); font-weight: 650; font-size: 12.5px; text-align: right; overflow-wrap: anywhere; }
+.kv li.is-key { border-top: 1px solid rgba(255,255,255,.1); padding-top: 6px; margin-top: 2px; }
+.kv li.is-key b { color: var(--accent); }
+
+.badge { display: inline-flex; align-items: center; gap: 7px; padding: 7px 11px; border-radius: 999px; font-size: 11.5px; font-weight: 700; letter-spacing: .01em; }
+.badge--ok { border: 1px solid rgba(127,214,160,.4); background: rgba(127,214,160,.1); color: #a6e6c4; }
+.badge--warn { border: 1px solid rgba(255,160,107,.4); background: rgba(255,160,107,.08); color: #ffc2a3; }
+.badge--bad { border: 1px solid rgba(255,125,125,.4); background: rgba(255,125,125,.1); color: #ffb3b3; }
+.badge--idle { border: 1px solid var(--line); background: var(--panel2); color: var(--muted2); font-weight: 600; }
+
+.status { min-height: 16px; margin: 0; font-size: 12px; color: var(--muted); }
+.status.is-ok { color: var(--ok); }
+.status.is-warn { color: var(--warn); }
+.status.is-bad { color: var(--bad); }
+.caveat { margin: 0; font-size: 11.6px; color: var(--muted2); line-height: 1.62; }
+.caveat b { color: var(--muted); }
+.caveat code { font-family: var(--mono); color: var(--accent); font-size: .95em; }
+.row-actions { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+
+.sum { margin: 0; padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: #0d0d10; color: #d6dbcf; font-family: var(--mono); font-size: 11px; line-height: 1.75; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 260px; overflow-y: auto; }
+
+/* ---------- reference table ---------- */
+.tblwrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-sm); -webkit-overflow-scrolling: touch; }
+table.ref { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 420px; font-size: 12.4px; }
+table.ref th, table.ref td { padding: 8px 11px; text-align: left; border-bottom: 1px solid rgba(255,255,255,.07); }
+table.ref th { background: #171614; color: var(--muted); font-weight: 700; font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; }
+table.ref td { color: var(--ink); font-family: var(--mono); }
+table.ref tr.is-on td { background: rgba(229,180,92,.1); color: var(--accent); font-weight: 700; }
+table.ref tr:last-child td { border-bottom: 0; }
+
+/* ---------- sections ---------- */
+.section { margin-top: 40px; scroll-margin-top: 18px; }
+.sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 12px; border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 16px; }
+.sec-head h2 { margin: 0; font-size: 17px; letter-spacing: -.01em; }
+.sec-head span { font-family: var(--mono); font-size: 11px; color: var(--muted2); letter-spacing: .08em; text-transform: uppercase; }
+.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+.note { padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel); min-width: 0; }
+.note h3 { margin: 0 0 8px; font-size: 14px; display: flex; gap: 8px; align-items: baseline; }
+.note h3 span { font-family: var(--mono); font-size: 10.5px; color: var(--accent); letter-spacing: .1em; }
+.note p { margin: 0; font-size: 12.8px; color: var(--muted); line-height: 1.66; }
+.note b { color: var(--ink); font-weight: 600; }
+.note code { font-family: var(--mono); font-size: .94em; color: var(--accent); }
+.faq { display: grid; gap: 8px; }
+details.qa { border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); overflow: hidden; }
+details.qa summary { cursor: pointer; padding: 13px 44px 13px 15px; font-size: 13.5px; font-weight: 600; list-style: none; position: relative; }
+details.qa summary::-webkit-details-marker { display: none; }
+details.qa summary::after { content: "+"; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--accent); font-family: var(--mono); font-size: 15px; }
+details.qa[open] summary::after { content: "−"; }
+details.qa .a { padding: 0 15px 14px; font-size: 12.8px; color: var(--muted); line-height: 1.7; }
+details.qa .a b { color: var(--ink); font-weight: 600; }
+details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: .95em; }
+
+.foot { margin-top: 34px; padding-top: 14px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--muted2); }
+.foot-links { display: inline-flex; flex-wrap: wrap; gap: 12px; }
+.foot-links a { text-decoration: none; color: var(--muted); border-bottom: 1px solid transparent; }
+.foot-links a:hover { color: var(--ink); border-bottom-color: var(--line2); }
+.foot .net { font-family: var(--mono); letter-spacing: .02em; }
+.foot .net b { color: var(--ok); }
+
+@media (max-width: 640px) {
+  .wrap { padding: 0 14px 36px; }
+  .topbar { padding: 14px 0 8px; }
+  .brand-txt { font-size: 12px; letter-spacing: .1em; }
+  .hero { padding: 16px 0 12px; }
+  .lede { font-size: 14px; }
+  .panel { padding: 13px; }
+  .sec-head h2 { font-size: 16px; }
+  .btn { padding: 10px 13px; }
+  .result { padding: 13px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<noscript>
+  <div style="max-width:1220px;margin:18px auto 0;padding:13px 17px;border:1px solid rgba(229,180,92,.35);border-radius:12px;background:#141311;color:#f7f2e9;font-family:system-ui,sans-serif;font-size:14px;line-height:1.6">
+    RetirePay는 브라우저 안에서 자바스크립트로 계산합니다. 업로드되는 값은 없지만, 계산기를 쓰려면 스크립트를 켜야 합니다.
+  </div>
+</noscript>
+
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="/portfolio/" aria-label="김의형 — 포트폴리오" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="View in English" aria-label="View in English">
+        <span class="lt on" data-lt="ko">KO</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="en">EN</span>
+      </button>
+      <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← 모든 툴</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="eyebrow">RetirePay · 퇴직금 · 연차수당 · 실업급여 · 2026 기준</span></p>
+      <h1 data-i18n-html="h1">받을 돈은 <span class="gold">법이 정한 순서</span>대로.<br><span class="soft">평균임금과 통상임금, 3/12, 소정급여일수.</span></h1>
+      <p class="lede" data-i18n-html="lede">
+        퇴직금은 <strong>1일 평균임금</strong>에서 시작합니다. 3개월 임금총액에 상여금과 이미 지급된 연차수당의
+        <code>3/12</code>을 더하고, 그 금액이 <strong>1일 통상임금</strong>보다 적으면 통상임금을 씁니다. 연차수당은
+        <code>월 통상임금 ÷ 209 × 8</code>, 실업급여는 2026년 최저임금 <strong>10,320원</strong>과 상한
+        <strong>68,100원</strong>·하한 <strong>66,048원</strong>으로 계산합니다. 기준일과 근거 조항은 화면에 적어 두었습니다.
+      </p>
+      <div class="badge-row">
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillUp">업로드 0바이트</b></span>
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillNet">외부 요청 0건</b></span>
+        <span class="pill" data-i18n="pillBase">2026년 기준 · 2026-11-18 확인</span>
+        <span class="pill" data-i18n="pillLaw">근로기준법 · 근로자퇴직급여보장법 · 고용보험법</span>
+      </div>
+    </section>
+
+    <section class="work" aria-label="퇴직 계산" data-i18n-aria="workAria">
+      <div class="card main">
+        <div class="panel">
+          <div class="tabs" role="tablist" aria-label="계산기" data-i18n-aria="tabAria">
+            <button type="button" role="tab" id="tab-sever" data-tab="sever" aria-selected="true" aria-controls="panel-sever">
+              <b>01</b><span data-i18n="tab1">퇴직금</span>
+            </button>
+            <button type="button" role="tab" id="tab-leave" data-tab="leave" aria-selected="false" aria-controls="panel-leave" tabindex="-1">
+              <b>02</b><span data-i18n="tab2">연차수당</span>
+            </button>
+            <button type="button" role="tab" id="tab-unemp" data-tab="unemp" aria-selected="false" aria-controls="panel-unemp" tabindex="-1">
+              <b>03</b><span data-i18n="tab3">실업급여</span>
+            </button>
+          </div>
+
+          <!-- ─────────── 01 퇴직금 ─────────── -->
+          <div class="tabpanel" id="panel-sever" role="tabpanel" aria-labelledby="tab-sever">
+            <div class="calc-head">
+              <h2 data-i18n="sevTitle">퇴직금 모의 계산</h2>
+              <span data-i18n="sevNote">세전 · 3개월 총일수 기준</span>
+            </div>
+            <div class="grid2">
+              <div class="in">
+                <label for="hireDate" data-i18n="hireLabel">입사일</label>
+                <input type="date" id="hireDate" value="2019-03-04">
+              </div>
+              <div class="in">
+                <label for="leaveDate" data-i18n="leaveLabel">퇴사일 (마지막 근무일)</label>
+                <input type="date" id="leaveDate" value="2026-09-30">
+              </div>
+            </div>
+            <div class="grid2">
+              <div class="in">
+                <label for="monthlyPay" data-i18n="monthlyLabel">월 세전 급여 (기본급+수당)</label>
+                <div class="row"><input type="number" id="monthlyPay" inputmode="numeric" min="0" step="10000" value="3000000"><span class="unit" data-i18n="uWon">원</span></div>
+                <span class="help" data-i18n="monthlyHelp">× 3으로 아래 3개월 총액을 채웁니다</span>
+              </div>
+              <div class="in">
+                <label for="total3m" data-i18n="total3mLabel">퇴직 전 3개월 임금 총액 (세전)</label>
+                <div class="row"><input type="number" id="total3m" inputmode="numeric" min="0" step="10000" value="9000000"><span class="unit" data-i18n="uWon">원</span></div>
+                <span class="help" data-i18n="total3mHelp">실제 지급액이 다르면 직접 고치세요</span>
+              </div>
+            </div>
+            <div class="grid2">
+              <div class="in">
+                <label for="bonusYear" data-i18n="bonusLabel">연간 상여금 총액</label>
+                <div class="row"><input type="number" id="bonusYear" inputmode="numeric" min="0" step="100000" value="4000000"><span class="unit" data-i18n="uWon">원</span></div>
+                <span class="help" data-i18n="bonusHelp">3/12만 반영됩니다</span>
+              </div>
+              <div class="in">
+                <label for="leavePay" data-i18n="leavePayLabel">지급된 미사용 연차수당 총액</label>
+                <div class="row"><input type="number" id="leavePay" inputmode="numeric" min="0" step="10000" value="600000"><span class="unit" data-i18n="uWon">원</span></div>
+                <span class="help" data-i18n="leavePayHelp">퇴직 전에 이미 지급된 분 · 3/12</span>
+              </div>
+            </div>
+            <div class="in">
+              <label for="ordMonthly" data-i18n="ordLabel">월 통상임금 (기본급 등 통상임금)</label>
+              <div class="row"><input type="number" id="ordMonthly" inputmode="numeric" min="0" step="10000" value="2800000"><span class="unit" data-i18n="uWon">원</span></div>
+              <span class="help" data-i18n="ordHelp">1일 통상임금 = 월 통상임금 ÷ 209 × 8</span>
+            </div>
+            <div class="row-actions">
+              <button class="btn btn--sm btn--ghost" id="sevReset" type="button" data-i18n="resetBtn">예시값으로 되돌리기</button>
+            </div>
+            <p class="hint" data-i18n-html="seveHint">계속근로 1년 미만이면 퇴직금 지급 대상이 아닙니다(근로자퇴직급여보장법 제4조). 4주 평균 1주 소정근로시간이 15시간 미만인 근로자도 대상이 아닙니다.</p>
+          </div>
+
+          <!-- ─────────── 02 연차수당 ─────────── -->
+          <div class="tabpanel" id="panel-leave" role="tabpanel" aria-labelledby="tab-leave" hidden>
+            <div class="calc-head">
+              <h2 data-i18n="leaveTitle">미사용 연차수당</h2>
+              <span data-i18n="leaveNote">209시간 기준</span>
+            </div>
+            <div class="grid2">
+              <div class="in">
+                <label for="ordMonthly2" data-i18n="ordLabel">월 통상임금</label>
+                <div class="row"><input type="number" id="ordMonthly2" inputmode="numeric" min="0" step="10000" value="2800000"><span class="unit" data-i18n="uWon">원</span></div>
+              </div>
+              <div class="in">
+                <label for="leaveDays" data-i18n="daysLabel">미사용 연차 일수</label>
+                <div class="row"><input type="number" id="leaveDays" inputmode="decimal" min="0" step="0.5" value="5"><span class="unit" data-i18n="uDay">일</span></div>
+              </div>
+            </div>
+            <p class="hint" data-i18n-html="leaveHint">1일 통상임금 = 월 통상임금 ÷ <b>209시간</b> × 8시간. 209시간은 주 40시간에 유급주휴 8시간을 더한 주 48시간을 1년 평균 주 수(365÷7≈52.14)로 환산해 12개월로 나눈 값입니다. 연차는 5인 이상 사업장에 적용되고, 미사용 수당의 소멸시효는 3년입니다.</p>
+            <div class="row-actions">
+              <button class="btn btn--sm btn--ghost" id="leaveFromSev" type="button" data-i18n="useOrdBtn">퇴직금 탭의 통상임금 쓰기</button>
+            </div>
+          </div>
+
+          <!-- ─────────── 03 실업급여 ─────────── -->
+          <div class="tabpanel" id="panel-unemp" role="tabpanel" aria-labelledby="tab-unemp" hidden>
+            <div class="calc-head">
+              <h2 data-i18n="unempTitle">실업급여(구직급여) 모의 계산</h2>
+              <span data-i18n="unempNote">2026-01-01 이후 이직자 기준</span>
+            </div>
+            <div class="grid3">
+              <div class="in">
+                <label for="insYear" data-i18n="insYearLabel">피보험기간 (년)</label>
+                <div class="row"><input type="number" id="insYear" inputmode="numeric" min="0" max="50" step="1" value="7"><span class="unit" data-i18n="uYear">년</span></div>
+              </div>
+              <div class="in">
+                <label for="insMonth" data-i18n="insMonthLabel">피보험기간 (개월)</label>
+                <div class="row"><input type="number" id="insMonth" inputmode="numeric" min="0" max="11" step="1" value="0"><span class="unit" data-i18n="uMonth">개월</span></div>
+              </div>
+              <div class="in">
+                <label for="age" data-i18n="ageLabel">이직일 당시 만 나이</label>
+                <div class="row"><input type="number" id="age" inputmode="numeric" min="15" max="99" step="1" value="47"><span class="unit" data-i18n="uAge">세</span></div>
+              </div>
+            </div>
+            <div class="grid2">
+              <div class="in">
+                <label for="avgDaily" data-i18n="avgDailyLabel">이직 전 1일 평균임금</label>
+                <div class="row"><input type="number" id="avgDaily" inputmode="numeric" min="0" step="1000" value="98000"><span class="unit" data-i18n="uWon">원</span></div>
+              </div>
+              <div class="in">
+                <label for="workHours" data-i18n="hoursLabel">1일 소정근로시간</label>
+                <div class="row"><input type="number" id="workHours" inputmode="numeric" min="1" max="12" step="1" value="8"><span class="unit" data-i18n="uHour">시간</span></div>
+                <span class="help" data-i18n="hoursHelp">하한액을 정할 때만 씁니다</span>
+              </div>
+            </div>
+            <div class="row-actions">
+              <button class="btn btn--sm btn--ghost" id="avgFromSev" type="button" data-i18n="useAvgBtn">퇴직금 탭의 1일 평균임금 쓰기</button>
+              <button class="chk" id="disChk" type="button" aria-pressed="false"><span class="box" aria-hidden="true">✓</span><span data-i18n="disLabel">장애인</span></button>
+            </div>
+            <p class="hint" data-i18n-html="unempHint">수급 요건은 이직 전 18개월 중 피보험 단위기간 180일 이상과 비자발적 이직입니다. 수급기간은 이직일 다음 날부터 12개월이고, 그 안에 남은 일수를 다 쓰지 못하면 소멸합니다.</p>
+          </div>
+
+          <p class="status" id="status" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+
+      <div class="side">
+        <div class="card">
+          <div class="panel">
+            <h3 data-i18n="resHead">예상 결과</h3>
+            <div class="result">
+              <div class="num"><span id="bigVal">—</span><small id="bigUnit"></small></div>
+              <div class="meta" id="bigMeta"></div>
+            </div>
+            <ul class="kv" id="resList"></ul>
+            <button class="btn btn--primary btn--block" id="copySum" type="button" data-i18n="copyBtn">카톡·메모용 요약 복사</button>
+            <p class="caveat" data-i18n-html="calcCaveat">세전 추정치입니다. 퇴직소득세는 별도이고, 실제 금액은 회사 규정과 고용센터 산정에 따릅니다.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="panel">
+            <h3 data-i18n="basisHead">기준 시점</h3>
+            <ul class="kv">
+              <li><span data-i18n="bMin">최저임금 (2026)</span><b data-i18n="bMinV">10,320원</b></li>
+              <li><span data-i18n="bHi">구직급여 상한</span><b data-i18n="bHiV">68,100원</b></li>
+              <li><span data-i18n="bLo">구직급여 하한</span><b data-i18n="bLoV">66,048원</b></li>
+              <li><span data-i18n="bCap">기초일액 상한</span><b data-i18n="bCapV">113,500원</b></li>
+              <li><span data-i18n="bCheck">확인일</span><b data-i18n="bCheckV">2026-11-18</b></li>
+            </ul>
+            <p class="caveat" data-i18n-html="basisCaveat">최저임금은 고용노동부고시 제2025-47호(2025-08-05), 구직급여 상·하한은 고용보험법 시행령 제68조 개정(2026-01-01 시행)에 따른 값입니다. 2025-12-31 이전 이직자는 상한 66,000원이 적용됩니다.</p>
+          </div>
+        </div>
+      </div>
+
+    <section class="section bandsec" aria-labelledby="bandHead">
+      <div class="sec-head">
+        <h2 id="bandHead" data-i18n="bandHead">소정급여일수 — 나이와 피보험기간</h2>
+        <span data-i18n="bandNote">고용보험법 별표 1</span>
+      </div>
+      <div class="card">
+        <div class="panel">
+          <div class="tblwrap">
+            <table class="ref" id="bandTbl">
+              <thead>
+                <tr>
+                  <th scope="col" data-i18n="thBand">피보험기간</th>
+                  <th scope="col" data-i18n="thUnder50">50세 미만</th>
+                  <th scope="col" data-i18n="thOver50">50세 이상 · 장애인</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-band="lt1"><td data-i18n="b1">1년 미만</td><td>120</td><td>120</td></tr>
+                <tr data-band="1to3"><td data-i18n="b2">1년 이상 ~ 3년 미만</td><td>150</td><td>180</td></tr>
+                <tr data-band="3to5"><td data-i18n="b3">3년 이상 ~ 5년 미만</td><td>180</td><td>210</td></tr>
+                <tr data-band="5to10"><td data-i18n="b4">5년 이상 ~ 10년 미만</td><td>210</td><td>240</td></tr>
+                <tr data-band="gte10"><td data-i18n="b5">10년 이상</td><td>240</td><td>270</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="caveat" data-i18n-html="bandCaveat">현재 입력하신 조건의 칸이 강조됩니다. 피보험기간은 고용보험 가입기간을 말하며, 이직 전 18개월 중 180일 이상이 수급의 기본 조건입니다.</p>
+        </div>
+      </div>
+    </section>
+    </section>
+
+    <section class="section" aria-labelledby="howHead">
+      <div class="sec-head">
+        <h2 id="howHead" data-i18n="howHead">계산이 이렇게 되는 이유</h2>
+        <span data-i18n="howNote">세 가지 순서</span>
+      </div>
+      <div class="notes">
+        <div class="note">
+          <h3><span>01</span><em data-i18n="n1t">나누는 수는 90일이 아니라 달력 일수</em></h3>
+          <p data-i18n-html="n1b">평균임금은 퇴직일 이전 <b>3개월의 달력 총일수</b>(89~92일)로 나눕니다. 같은 900만원이라도 89일로 나누면 101,124원, 92일로 나누면 97,826원이 되어 퇴직금이 3% 넘게 벌어집니다. 이 계산기는 퇴사일을 기준으로 실제 총일수를 세어 보여줍니다.</p>
+        </div>
+        <div class="note">
+          <h3><span>02</span><em data-i18n="n2t">상여금과 연차수당은 3/12만</em></h3>
+          <p data-i18n-html="n2b">연간 상여금 400만원은 3개월 임금에 400만원으로 들어가지 않고 <code>× 3/12</code>한 100만원만 들어갑니다. 지난 3개월에 상여금을 못 받았다고 0원도 아닙니다 — 12개월치를 3개월분으로 잘라 넣는 것이 고용노동부 예규(제96호)의 방식입니다.</p>
+        </div>
+        <div class="note">
+          <h3><span>03</span><em data-i18n="n3t">평균임금이 통상임금보다 적으면 통상임금</em></h3>
+          <p data-i18n-html="n3b">무급결근이 많았다면 1일 평균임금이 1일 통상임금보다 낮아질 수 있습니다. 근로기준법 제2조 제2항은 그때 통상임금을 평균임금으로 보도록 정합니다. 결과 카드에 어느 쪽이 적용됐는지 표시합니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="faqHead">
+      <div class="sec-head">
+        <h2 id="faqHead" data-i18n="faqHead">자주 걸리는 곳</h2>
+        <span data-i18n="faqNote">퇴직금 · 209시간 · 실업급여</span>
+      </div>
+      <div class="faq">
+        <details class="qa">
+          <summary data-i18n="q1">퇴직금은 어떤 순서로 계산되나요?</summary>
+          <div class="a" data-i18n-html="a1">① 퇴직 전 3개월 임금총액에 연간 상여금과 이미 지급된 연차수당의 3/12을 더합니다. ② 그 합계를 3개월의 달력 총일수로 나눠 <b>1일 평균임금</b>을 구합니다. ③ 1일 통상임금과 비교해 큰 쪽을 씁니다(근로기준법 제2조). ④ <code>1일 평균임금 × 30 × (계속근로일수 ÷ 365)</code>. 계속근로 1년에 30일분 이상이 법이 정한 최소값입니다(근로자퇴직급여보장법 제4조).</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q2">209시간은 어디서 나온 숫자인가요?</summary>
+          <div class="a" data-i18n-html="a2">주 40시간 근로에 유급주휴 8시간을 더하면 한 주가 48시간이고, 1년은 365÷7≈52.14주이므로 연 2,502시간, 월평균으로 나누면 약 <b>209시간</b>입니다. 그래서 월 통상임금을 209로 나눈 뒤 8을 곱해 1일 통상임금을 구합니다. 단시간 근로자는 주 소정근로시간에 맞춘 기준시간 수를 써야 하므로 이 값이 달라집니다.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q3">2026년 실업급여 상한과 하한은?</summary>
+          <div class="a" data-i18n-html="a3">2026-01-01 이후 이직자부터 1일 상한 <b>68,100원</b>, 하한 <b>66,048원</b>(1일 8시간 기준)입니다. 하한은 2026년 최저임금 10,320원 × 8시간 × 80%, 상한은 기초 임금일액 상한 113,500원의 60%입니다. 2026년에는 하한이 오르면서 종전 상한 66,000원을 넘게 되어 상한이 함께 인상된 해입니다 — 2025-12-31 이전 이직자는 종전 기준(상한 66,000원)이 적용됩니다.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q4">결과가 회사나 고용센터 금액과 다르면?</summary>
+          <div class="a" data-i18n-html="a4">여기 값은 입력한 금액과 기간만으로 낸 추정치입니다. 어떤 수당이 임금에 포함되는지, 평균임금 산정에서 제외되는 기간(육아휴직·병가·쟁의기간 등)이 있었는지, 통상임금에 어떤 수당이 들어가는지에 따라 실제 금액이 달라집니다. 고용노동부 퇴직금 계산기와 대조해 보고 차이가 크면 고용노동관서나 고용센터(1350)에 확인하는 편이 정확합니다.</div>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span data-i18n="footCopy">© 2026 김의형 · 브라우저에서, 브라우저를 위해.</span>
+    <span class="net"><span data-i18n="footNet">외부 요청</span> <b id="netCount">0</b></span>
+    <span class="foot-links">
+      <a href="/portfolio/" data-i18n="footP1">포트폴리오</a>
+      <a href="/portfolio/tools/" data-i18n="footP2">모든 툴</a>
+      <a href="https://github.com/kimyihyung/portfolio" target="_blank" rel="noopener" data-i18n="footP3">소스</a>
+    </span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var MIN_WAGE = { 2026: 10320, 2025: 10030 };
+  var CAP_DAILY = { 2026: 68100, 2025: 66000 };
+  var CAP_BASE = { 2026: 113500, 2025: 110000 };
+  var MONTH_HOURS = 209;
+
+  /* ═════════════════════ language ═════════════════════ */
+  var I18N = {
+    ko: {
+      docTitle: 'RetirePay — 퇴직금·연차수당·실업급여 계산기 (2026년 기준) | Kim Yihyung',
+      brandAria: '김의형 — 포트폴리오', back: '← 모든 툴',
+      eyebrow: 'RetirePay · 퇴직금 · 연차수당 · 실업급여 · 2026 기준',
+      h1: '받을 돈은 <span class="gold">법이 정한 순서</span>대로.<br><span class="soft">평균임금과 통상임금, 3/12, 소정급여일수.</span>',
+      lede: '퇴직금은 <strong>1일 평균임금</strong>에서 시작합니다. 3개월 임금총액에 상여금과 이미 지급된 연차수당의 <code>3/12</code>을 더하고, 그 금액이 <strong>1일 통상임금</strong>보다 적으면 통상임금을 씁니다. 연차수당은 <code>월 통상임금 ÷ 209 × 8</code>, 실업급여는 2026년 최저임금 <strong>10,320원</strong>과 상한 <strong>68,100원</strong>·하한 <strong>66,048원</strong>으로 계산합니다. 기준일과 근거 조항은 화면에 적어 두었습니다.',
+      pillUp: '업로드 0바이트', pillNet: '외부 요청 0건', pillBase: '2026년 기준 · 2026-11-18 확인', pillLaw: '근로기준법 · 근로자퇴직급여보장법 · 고용보험법',
+      workAria: '퇴직 계산', tabAria: '계산기',
+      tab1: '퇴직금', tab2: '연차수당', tab3: '실업급여',
+      sevTitle: '퇴직금 모의 계산', sevNote: '세전 · 3개월 총일수 기준',
+      hireLabel: '입사일', leaveLabel: '퇴사일 (마지막 근무일)',
+      monthlyLabel: '월 세전 급여 (기본급+수당)', monthlyHelp: '× 3으로 아래 3개월 총액을 채웁니다',
+      total3mLabel: '퇴직 전 3개월 임금 총액 (세전)', total3mHelp: '실제 지급액이 다르면 직접 고치세요',
+      bonusLabel: '연간 상여금 총액', bonusHelp: '3/12만 반영됩니다',
+      leavePayLabel: '지급된 미사용 연차수당 총액', leavePayHelp: '퇴직 전에 이미 지급된 분 · 3/12',
+      ordLabel: '월 통상임금 (기본급 등 통상임금)', ordHelp: '1일 통상임금 = 월 통상임금 ÷ 209 × 8',
+      resetBtn: '예시값으로 되돌리기',
+      seveHint: '계속근로 1년 미만이면 퇴직금 지급 대상이 아닙니다(근로자퇴직급여보장법 제4조). 4주 평균 1주 소정근로시간이 15시간 미만인 근로자도 대상이 아닙니다. 퇴직으로 비로소 지급사유가 생긴 연차수당은 평균임금에 넣지 않고 별도로 지급받습니다.',
+      leaveTitle: '미사용 연차수당', leaveNote: '209시간 기준', daysLabel: '미사용 연차 일수',
+      leaveHint: '1일 통상임금 = 월 통상임금 ÷ <b>209시간</b> × 8시간. 209시간은 주 40시간에 유급주휴 8시간을 더한 주 48시간을 1년 평균 주 수(365÷7≈52.14)로 환산해 12개월로 나눈 값입니다. 연차는 5인 이상 사업장에 적용되고, 미사용 수당의 소멸시효는 3년입니다.',
+      useOrdBtn: '퇴직금 탭의 통상임금 쓰기',
+      unempTitle: '실업급여(구직급여) 모의 계산', unempNote: '2026-01-01 이후 이직자 기준',
+      insYearLabel: '피보험기간 (년)', insMonthLabel: '피보험기간 (개월)', ageLabel: '이직일 당시 만 나이',
+      avgDailyLabel: '이직 전 1일 평균임금', hoursLabel: '1일 소정근로시간', hoursHelp: '하한액을 정할 때만 씁니다',
+      useAvgBtn: '퇴직금 탭의 1일 평균임금 쓰기', disLabel: '장애인',
+      unempHint: '수급 요건은 이직 전 18개월 중 피보험 단위기간 180일 이상과 비자발적 이직입니다. 수급기간은 이직일 다음 날부터 12개월이고, 그 안에 남은 일수를 다 쓰지 못하면 소멸합니다.',
+      resHead: '예상 결과', copyBtn: '카톡·메모용 요약 복사',
+      calcCaveat: '세전 추정치입니다. 퇴직소득세는 별도이고, 실제 금액은 회사 규정과 고용센터 산정에 따릅니다.',
+      basisHead: '기준 시점', bMin: '최저임금 (2026)', bHi: '구직급여 상한', bLo: '구직급여 하한', bCap: '기초일액 상한', bCheck: '확인일',
+      bMinV: '10,320원', bHiV: '68,100원', bLoV: '66,048원', bCapV: '113,500원', bCheckV: '2026-11-18',
+      basisCaveat: '최저임금은 고용노동부고시 제2025-47호(2025-08-05), 구직급여 상·하한은 고용보험법 시행령 제68조 개정(2026-01-01 시행)에 따른 값입니다. 2025-12-31 이전 이직자는 상한 66,000원이 적용됩니다.',
+      bandHead: '소정급여일수 — 나이와 피보험기간', bandNote: '고용보험법 별표 1',
+      thBand: '피보험기간', thUnder50: '50세 미만', thOver50: '50세 이상 · 장애인',
+      b1: '1년 미만', b2: '1년 이상 ~ 3년 미만', b3: '3년 이상 ~ 5년 미만', b4: '5년 이상 ~ 10년 미만', b5: '10년 이상',
+      bandCaveat: '현재 입력하신 조건의 칸이 강조됩니다. 피보험기간은 고용보험 가입기간을 말하며, 이직 전 18개월 중 180일 이상이 수급의 기본 조건입니다.',
+      howHead: '계산이 이렇게 되는 이유', howNote: '세 가지 순서',
+      n1t: '나누는 수는 90일이 아니라 달력 일수',
+      n1b: '평균임금은 퇴직일 이전 <b>3개월의 달력 총일수</b>(89~92일)로 나눕니다. 같은 900만원이라도 89일로 나누면 101,124원, 92일로 나누면 97,826원이 되어 퇴직금이 3% 넘게 벌어집니다. 이 계산기는 퇴사일을 기준으로 실제 총일수를 세어 보여줍니다.',
+      n2t: '상여금과 연차수당은 3/12만',
+      n2b: '연간 상여금 400만원은 3개월 임금에 400만원으로 들어가지 않고 <code>× 3/12</code>한 100만원만 들어갑니다. 지난 3개월에 상여금을 못 받았다고 0원도 아닙니다 — 12개월치를 3개월분으로 잘라 넣는 것이 고용노동부 예규(제96호)의 방식입니다.',
+      n3t: '평균임금이 통상임금보다 적으면 통상임금',
+      n3b: '무급결근이 많았다면 1일 평균임금이 1일 통상임금보다 낮아질 수 있습니다. 근로기준법 제2조 제2항은 그때 통상임금을 평균임금으로 보도록 정합니다. 결과 카드에 어느 쪽이 적용됐는지 표시합니다.',
+      faqHead: '자주 걸리는 곳', faqNote: '퇴직금 · 209시간 · 실업급여',
+      q1: '퇴직금은 어떤 순서로 계산되나요?',
+      a1: '① 퇴직 전 3개월 임금총액에 연간 상여금과 이미 지급된 연차수당의 3/12을 더합니다. ② 그 합계를 3개월의 달력 총일수로 나눠 <b>1일 평균임금</b>을 구합니다. ③ 1일 통상임금과 비교해 큰 쪽을 씁니다(근로기준법 제2조). ④ <code>1일 평균임금 × 30 × (계속근로일수 ÷ 365)</code>. 계속근로 1년에 30일분 이상이 법이 정한 최소값입니다(근로자퇴직급여보장법 제4조).',
+      q2: '209시간은 어디서 나온 숫자인가요?',
+      a2: '주 40시간 근로에 유급주휴 8시간을 더하면 한 주가 48시간이고, 1년은 365÷7≈52.14주이므로 연 2,502시간, 월평균으로 나누면 약 <b>209시간</b>입니다. 그래서 월 통상임금을 209로 나눈 뒤 8을 곱해 1일 통상임금을 구합니다. 단시간 근로자는 주 소정근로시간에 맞춘 기준시간 수를 써야 하므로 이 값이 달라집니다.',
+      q3: '2026년 실업급여 상한과 하한은?',
+      a3: '2026-01-01 이후 이직자부터 1일 상한 <b>68,100원</b>, 하한 <b>66,048원</b>(1일 8시간 기준)입니다. 하한은 2026년 최저임금 10,320원 × 8시간 × 80%, 상한은 기초 임금일액 상한 113,500원의 60%입니다. 2026년에는 하한이 오르면서 종전 상한 66,000원을 넘게 되어 상한이 함께 인상된 해입니다 — 2025-12-31 이전 이직자는 종전 기준(상한 66,000원)이 적용됩니다.',
+      q4: '결과가 회사나 고용센터 금액과 다르면?',
+      a4: '여기 값은 입력한 금액과 기간만으로 낸 추정치입니다. 어떤 수당이 임금에 포함되는지, 평균임금 산정에서 제외되는 기간(육아휴직·병가·쟁의기간 등)이 있었는지, 통상임금에 어떤 수당이 들어가는지에 따라 실제 금액이 달라집니다. 고용노동부 퇴직금 계산기와 대조해 보고 차이가 크면 고용노동관서나 고용센터(1350)에 확인하는 편이 정확합니다.',
+      footCopy: '© 2026 김의형 · 브라우저에서, 브라우저를 위해.', footNet: '외부 요청',
+      footP1: '포트폴리오', footP2: '모든 툴', footP3: '소스',
+      uWon: '원', uDay: '일', uYear: '년', uMonth: '개월', uAge: '세', uHour: '시간',
+      won: '{n}원', wonShort: '{n}원', days: '{n}일',
+      stReady: '입력값을 바꾸면 바로 다시 계산합니다. 이 탭을 벗어나는 것은 없습니다.',
+      stNoDates: '입사일과 퇴사일을 넣어 주세요.',
+      stBadOrder: '퇴사일이 입사일보다 앞입니다.',
+      stUnder1y: '계속근로 1년 미만 — 퇴직금 지급 대상이 아닙니다.',
+      stSeverOk: '재직 {d}일 · 1일 평균임금 {a} · {w} 적용.',
+      stAvgUsed: '1일 평균임금이 통상임금보다 적어 통상임금을 적용했습니다.',
+      stOrdUsed: '평균임금이 더 커서 평균임금을 적용했습니다.',
+      stCopied: '요약을 복사했습니다 — 카톡이나 메모에 붙여 넣으세요.',
+      stCopyFail: '복사에 실패했습니다 — 아래 요약을 직접 선택해 복사하세요.',
+      stLeaveOk: '1일 통상임금 {a} × {d}일.',
+      stUnempOk: '1일 {a} × {d}일.',
+      stNoBenefit: '피보험기간 1년 미만은 120일입니다(수급 요건 180일은 별도).',
+      rSever: '예상 퇴직금', rSeverRaw: '세전', rDays: '계속근로일수', rSpan: '근속',
+      r3days: '3개월 총일수', rAvg: '1일 평균임금', rOrd: '1일 통상임금', rApplied: '적용 기준',
+      rBonus: '상여금 산입 (3/12)', rLeaveIn: '연차수당 산입 (3/12)', rTotal: '3개월 임금총액',
+      appliedAvg: '평균임금', appliedOrd: '통상임금', rFormula: '30일 × 재직일수/365',
+      rLeave: '예상 연차수당', rDaily: '1일 통상임금', rHourly: '시급 환산', rHours209: '월 기준시간',
+      rUnemp: '예상 실업급여 총액', rDailyBenefit: '1일 구직급여', rBenefitDays: '소정급여일수',
+      rCapApplied: '상한 적용', rLowApplied: '하한 적용', rNone: '상·하한 사이', rBand: '구간',
+      rMonthly: '월 환산 (30일)', sumTitle: '요약', sumFoot: '추정치 · 기준 2026년',
+      y: '년', m: '개월', d: '일', and: ' '
+    },
+    en: {
+      docTitle: 'RetirePay — severance, unused leave pay & unemployment benefit calculator (2026 Korea) | Kim Yihyung',
+      brandAria: 'Kim Yihyung — portfolio', back: '← All tools',
+      eyebrow: 'RetirePay · severance · leave pay · job-seeker benefit · 2026 rules',
+      h1: 'Korea\'s severance arithmetic, <span class="gold">in the order the law sets</span>.<br><span class="soft">Average wage, ordinary wage, 3/12, benefit days.</span>',
+      lede: 'Severance starts from the <strong>average daily wage</strong>. Three months of pay plus <code>3/12</code> of the annual bonus and of leave pay already paid, divided by the calendar days in those three months — and if that falls below the <strong>ordinary daily wage</strong>, the ordinary wage is used. Unused leave pay is <code>monthly ordinary wage ÷ 209 × 8</code>; the job-seeker benefit uses Korea\'s 2026 minimum wage of <strong>10,320 won</strong> with a <strong>68,100</strong> cap and a <strong>66,048</strong> floor. The basis date and the article behind each number are on the page.',
+      pillUp: '0 bytes uploaded', pillNet: '0 external requests', pillBase: '2026 rules · checked 2026-11-18', pillLaw: 'Labour Standards Act · Guarantee of Workers\' Retirement Benefits Act · Employment Insurance Act',
+      workAria: 'Retirement calculators', tabAria: 'Calculator',
+      tab1: 'Severance', tab2: 'Leave pay', tab3: 'Benefit',
+      sevTitle: 'Severance estimate', sevNote: 'gross · calendar days',
+      hireLabel: 'Start date', leaveLabel: 'Leaving date (last day worked)',
+      monthlyLabel: 'Monthly gross pay (base + allowances)', monthlyHelp: 'fills the 3-month total × 3',
+      total3mLabel: 'Pay for the last 3 months (gross)', total3mHelp: 'overtype it if the actual figure differs',
+      bonusLabel: 'Annual bonus total', bonusHelp: 'only 3/12 is counted',
+      leavePayLabel: 'Unused leave pay already paid', leavePayHelp: 'paid before leaving · 3/12',
+      ordLabel: 'Monthly ordinary wage', ordHelp: 'ordinary daily = monthly ÷ 209 × 8',
+      resetBtn: 'Back to the example numbers',
+      seveHint: 'Under one year of continuous service there is no severance obligation (Act on the Guarantee of Workers\' Retirement Benefits, art. 4). The same applies below 15 contractual hours a week on average. Leave pay that only becomes payable because of the retirement itself is not part of the average wage — it is paid separately.',
+      leaveTitle: 'Unused leave pay', leaveNote: '209-hour basis', daysLabel: 'Unused leave days',
+      leaveHint: 'Ordinary daily wage = monthly ordinary wage ÷ <b>209 hours</b> × 8 hours. 209 is 48 hours a week (40 + 8 paid weekly rest) averaged over 52.14 weeks and spread across 12 months. Paid leave applies to workplaces with five or more employees, and the claim lapses after three years.',
+      useOrdBtn: 'Use the ordinary wage from the severance tab',
+      unempTitle: 'Job-seeker benefit (구직급여) estimate', unempNote: 'for job loss on or after 2026-01-01',
+      insYearLabel: 'Insured period (years)', insMonthLabel: 'Insured period (months)', ageLabel: 'Age at the time of leaving',
+      avgDailyLabel: 'Average daily wage before leaving', hoursLabel: 'Contract hours per day', hoursHelp: 'used only for the floor',
+      useAvgBtn: 'Use the average daily wage from the severance tab', disLabel: 'Registered disabled',
+      unempHint: 'The basic conditions are 180 insured days within the 18 months before leaving and a non-voluntary separation. The benefit period runs 12 months from the day after leaving, and days not used in that window are lost.',
+      resHead: 'Estimate', copyBtn: 'Copy a KakaoTalk-ready summary',
+      calcCaveat: 'A gross estimate. Retirement income tax is separate, and the actual amount follows the employer\'s rules and the employment centre\'s calculation.',
+      basisHead: 'Basis', bMin: 'Minimum wage (2026)', bHi: 'Benefit cap', bLo: 'Benefit floor', bCap: 'Base daily cap', bCheck: 'Checked',
+      bMinV: 'KRW 10,320', bHiV: 'KRW 68,100', bLoV: 'KRW 66,048', bCapV: 'KRW 113,500', bCheckV: '2026-11-18',
+      basisCaveat: 'The minimum wage is MOEL Notice 2025-47 (2025-08-05); the benefit cap and floor come from the amended Enforcement Decree of the Employment Insurance Act, art. 68, in force 2026-01-01. A separation before 2026-01-01 keeps the old 66,000 won cap.',
+      bandHead: 'Benefit days — age and insured period', bandNote: 'Employment Insurance Act, table 1',
+      thBand: 'Insured period', thUnder50: 'Under 50', thOver50: '50+ · disabled',
+      b1: 'Under 1 year', b2: '1 to under 3 years', b3: '3 to under 5 years', b4: '5 to under 10 years', b5: '10 years or more',
+      bandCaveat: 'The row matching your inputs is highlighted. The insured period is time covered by employment insurance; 180 days within the previous 18 months is the basic condition.',
+      howHead: 'Why the arithmetic is this way', howNote: 'three steps',
+      n1t: 'The divisor is calendar days, not 90',
+      n1b: 'The average wage divides by the <b>calendar days</b> in the three months before leaving — 89 to 92 of them. The same 9,000,000 won gives 101,124 won over 89 days and 97,826 won over 92, so the severance differs by more than 3%. This page counts the real days from your leaving date.',
+      n2t: 'Bonus and leave pay count only 3/12',
+      n2b: 'A 4,000,000 won annual bonus enters as <code>× 3/12</code> — 1,000,000 won — not the full amount, and not zero just because no bonus landed in those three months. Cutting twelve months down to three is how MOEL directive 96 handles it.',
+      n3t: 'Below the ordinary wage, the ordinary wage wins',
+      n3b: 'Heavy unpaid absence can push the average daily wage below the ordinary daily wage. Article 2(2) of the Labour Standards Act then treats the ordinary wage as the average. The result card says which one was applied.',
+      faqHead: 'Where this usually goes wrong', faqNote: 'severance · 209 · benefit',
+      q1: 'In what order is severance calculated?',
+      a1: '① Three months of pay plus 3/12 of the annual bonus and of leave pay already paid. ② Divide by the calendar days in those three months for the <b>average daily wage</b>. ③ Compare it with the ordinary daily wage and use the larger (Labour Standards Act, art. 2). ④ <code>average daily wage × 30 × (days of continuous service ÷ 365)</code>. Thirty days per year is the legal minimum (Act on the Guarantee of Workers\' Retirement Benefits, art. 4).',
+      q2: 'Where does 209 hours come from?',
+      a2: '40 contractual hours plus 8 paid weekly-rest hours make a 48-hour week; a year is 365÷7≈52.14 weeks, so 2,502 hours, and a twelfth of that is about <b>209 hours</b> a month. Dividing the monthly ordinary wage by 209 and multiplying by 8 gives the ordinary daily wage. Part-time staff use a different base hour count, which changes the result.',
+      q3: 'What are the 2026 cap and floor?',
+      a3: 'From 2026-01-01 the daily cap is <b>68,100 won</b> and the floor <b>66,048 won</b> (8 hours a day). The floor is the 2026 minimum wage of 10,320 won × 8 × 80%; the cap is 60% of the 113,500 won base cap. 2026 is the year the rising floor passed the old 66,000 won cap, so the cap was lifted with it — a separation before 2026-01-01 keeps the old cap.',
+      q4: 'What if this differs from my employer or the employment centre?',
+      a4: 'These are estimates from the figures you typed. The real amount depends on which allowances count as wage, whether any excluded period (parental leave, sick leave, a labour dispute) falls in the three months, and which allowances belong in the ordinary wage. Compare with MOEL\'s own severance calculator, and if the gap is large, ask the local labour office or the employment centre (1350).',
+      footCopy: '© 2026 Kim Yihyung · Built in the browser, for the browser.', footNet: 'external requests',
+      footP1: 'Portfolio', footP2: 'All tools', footP3: 'Source',
+      uWon: 'KRW', uDay: 'days', uYear: 'y', uMonth: 'mo', uAge: 'yrs', uHour: 'h',
+      won: 'KRW {n}', wonShort: 'KRW {n}', days: '{n} days',
+      stReady: 'Change a value and the estimate updates. Nothing leaves this tab.',
+      stNoDates: 'Enter a start date and a leaving date.',
+      stBadOrder: 'The leaving date is before the start date.',
+      stUnder1y: 'Under one year of continuous service — no severance is owed.',
+      stSeverOk: '{d} days of service · average daily wage {a} · {w} applied.',
+      stAvgUsed: 'The average daily wage fell below the ordinary wage, so the ordinary wage is applied.',
+      stOrdUsed: 'The average wage is higher, so it is applied.',
+      stCopied: 'Summary copied — paste it into KakaoTalk or a note.',
+      stCopyFail: 'Copy failed — select the summary below and copy it by hand.',
+      stLeaveOk: '{a} a day × {d} days.',
+      stUnempOk: '{a} a day × {d} days.',
+      stNoBenefit: 'Under one insured year the table gives 120 days (the 180-day qualifying rule is separate).',
+      rSever: 'Estimated severance', rSeverRaw: 'gross', rDays: 'Days of service', rSpan: 'Length of service',
+      r3days: 'Calendar days in 3 months', rAvg: 'Average daily wage', rOrd: 'Ordinary daily wage', rApplied: 'Applied basis',
+      rBonus: 'Bonus included (3/12)', rLeaveIn: 'Leave pay included (3/12)', rTotal: '3-month pay total',
+      appliedAvg: 'average wage', appliedOrd: 'ordinary wage', rFormula: '30 days × service/365',
+      rLeave: 'Estimated leave pay', rDaily: 'Ordinary daily wage', rHourly: 'Hourly equivalent', rHours209: 'Monthly base hours',
+      rUnemp: 'Estimated benefit total', rDailyBenefit: 'Daily benefit', rBenefitDays: 'Benefit days',
+      rCapApplied: 'cap applied', rLowApplied: 'floor applied', rNone: 'between cap and floor', rBand: 'Band',
+      rMonthly: 'Monthly equivalent (30 days)', sumTitle: 'Summary', sumFoot: 'estimate · 2026 rules',
+      y: 'y', m: 'mo', d: 'd', and: ' '
+    }
+  };
+
+  var LANG_KEY = 'retirepay.lang';
+  var SHARED_KEY = 'kyh.lang';
+  var state = {
+    lang: 'ko', tab: 'sever', disabled: false,
+    sev: { hire: '2019-03-04', leave: '2026-09-30', monthly: 3000000, total3m: 9000000, bonus: 4000000, leavePay: 600000, ord: 2800000 },
+    lv: { ord: 2800000, days: 5 },
+    un: { years: 7, months: 0, age: 47, avg: 98000, hours: 8 },
+    res: null
+  };
+  var $ = function (id) { return document.getElementById(id); };
+  function t(key) {
+    var d = I18N[state.lang] || I18N.ko;
+    return (key in d) ? d[key] : (I18N.ko[key] || '');
+  }
+  function fill(str, map) {
+    return String(str).replace(/\{(\w+)\}/g, function (m, k) { return (map && k in map) ? map[k] : m; });
+  }
+  function nf(n) {
+    if (n === null || n === undefined || !isFinite(n)) return '—';
+    return Math.round(n).toLocaleString(state.lang === 'ko' ? 'ko-KR' : 'en-US');
+  }
+  function nf2(n) {
+    if (n === null || !isFinite(n)) return '—';
+    return (Math.round(n * 100) / 100).toLocaleString(state.lang === 'ko' ? 'ko-KR' : 'en-US', { maximumFractionDigits: 2 });
+  }
+  function money(n) { return state.lang === 'ko' ? nf(n) + '원' : 'KRW ' + nf(n); }
+  function money2(n) { return state.lang === 'ko' ? nf2(n) + '원' : 'KRW ' + nf2(n); }
+
+  /* ═════════════════════ date maths ═════════════════════ */
+  function toDate(iso) {
+    if (!iso) return null;
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+    if (!m) return null;
+    var d = new Date(Date.UTC(+m[1], +m[2] - 1, +m[3]));
+    return isNaN(d.getTime()) ? null : d;
+  }
+  function toISO(d) {
+    return d.getUTCFullYear() + '-' + String(d.getUTCMonth() + 1).padStart(2, '0') + '-' + String(d.getUTCDate()).padStart(2, '0');
+  }
+  function diffDays(a, b) { return Math.round((b.getTime() - a.getTime()) / 86400000); }
+  function addDays(d, n) { return new Date(d.getTime() + n * 86400000); }
+  function addMonths(d, n) {
+    var y = d.getUTCFullYear(), m = d.getUTCMonth() + n, day = d.getUTCDate();
+    var target = new Date(Date.UTC(y, m, 1));
+    var last = new Date(Date.UTC(target.getUTCFullYear(), target.getUTCMonth() + 1, 0)).getUTCDate();
+    return new Date(Date.UTC(target.getUTCFullYear(), target.getUTCMonth(), Math.min(day, last)));
+  }
+  function spanText(days) {
+    var y = Math.floor(days / 365), rem = days - y * 365;
+    var m = Math.floor(rem / 30), d = rem - m * 30;
+    var parts = [];
+    if (y) parts.push(y + t('y'));
+    if (m) parts.push(m + t('m'));
+    if (!y && d) parts.push(d + t('d'));
+    return parts.join(' ') || ('0' + t('d'));
+  }
+
+  /* ═════════════════════ severance ═════════════════════ */
+  function severance(o) {
+    var hire = toDate(o.hire), leave = toDate(o.leave);
+    if (!hire || !leave) return { ok: false, reason: 'noDates' };
+    var days = diffDays(hire, leave) + 1;
+    if (days <= 0) return { ok: false, reason: 'badOrder' };
+    var retire = addDays(leave, 1);                 /* 퇴직일 = 마지막 근무일 다음 날 */
+    var start = addMonths(retire, -3);
+    var span = diffDays(start, retire);             /* 3개월 달력 총일수 (89~92) */
+    var total = +o.total3m || 0;
+    var bonus = +o.bonus || 0, leavePay = +o.leavePay || 0;
+    var bonusIn = bonus * 3 / 12, leaveIn = leavePay * 3 / 12;
+    var wageSum = total + bonusIn + leaveIn;
+    var avg = span > 0 ? wageSum / span : 0;
+    var ord = (+o.ord || 0) / MONTH_HOURS * 8;
+    var applied = Math.max(avg, ord);
+    var which = (ord > avg) ? 'ord' : 'avg';
+    var severancePay = Math.round(applied * 30 * (days / 365));
+    return {
+      ok: true, days: days, span: span, total: wageSum, total3m: total,
+      bonusIn: bonusIn, leaveIn: leaveIn, avg: avg, ord: ord, applied: applied, which: which,
+      pay: days >= 365 ? severancePay : 0, eligible: days >= 365,
+      spanStart: toISO(start), spanEnd: toISO(addDays(retire, -1)), retire: toISO(retire)
+    };
+  }
+
+  /* ═════════════════════ leave pay ═════════════════════ */
+  function leavePayCalc(o) {
+    var ord = +o.ord || 0, days = +o.days || 0;
+    var daily = ord / MONTH_HOURS * 8;
+    var hourly = ord / MONTH_HOURS;
+    return { ok: true, ord: ord, daily: daily, hourly: hourly, days: days, pay: Math.round(daily * days) };
+  }
+
+  /* ═════════════════════ job-seeker benefit ═════════════════════ */
+  function bandOf(months) {
+    if (months < 12) return 'lt1';
+    if (months < 36) return '1to3';
+    if (months < 60) return '3to5';
+    if (months < 120) return '5to10';
+    return 'gte10';
+  }
+  function benefitDays(months, over50) {
+    var band = bandOf(months);
+    var table = { lt1: [120, 120], '1to3': [150, 180], '3to5': [180, 210], '5to10': [210, 240], gte10: [240, 270] };
+    var row = table[band];
+    return { band: band, days: over50 ? row[1] : row[0] };
+  }
+  function unemployment(o) {
+    var years = +o.years || 0, months = +o.months || 0;
+    var totalMonths = years * 12 + months;
+    var over50 = (+o.age >= 50) || !!o.disabled;
+    var b = benefitDays(totalMonths, over50);
+    var year = (o.year === 2025) ? 2025 : 2026;
+    var minWage = MIN_WAGE[year], cap = CAP_DAILY[year], capBase = CAP_BASE[year];
+    var hours = Math.min(12, Math.max(1, +o.hours || 8));
+    var avg = +o.avg || 0;
+    var candidate = Math.min(avg, capBase) * 0.6;
+    var floor = minWage * hours * 0.8;
+    var daily, applied;
+    if (avg >= capBase || candidate >= cap) { daily = Math.min(candidate, cap); applied = 'cap'; }
+    else if (candidate < floor) { daily = floor; applied = 'low'; }
+    else { daily = candidate; applied = 'mid'; }
+    if (floor > cap && candidate <= cap) { daily = floor; applied = 'low'; }
+    daily = Math.floor(daily);
+    return {
+      ok: true, months: totalMonths, band: b.band, days: b.days, over50: over50,
+      daily: daily, applied: applied, candidate: candidate, floor: floor, cap: cap,
+      capBase: capBase, minWage: minWage, year: year, hours: hours,
+      total: daily * b.days
+    };
+  }
+
+  /* ═════════════════════ compose + paint ═════════════════════ */
+  function computeAll() {
+    var s = severance(state.sev);
+    var l = leavePayCalc(state.lv);
+    var u = unemployment({
+      years: state.un.years, months: state.un.months, age: state.un.age,
+      avg: state.un.avg, hours: state.un.hours, disabled: state.disabled,
+      year: 2026
+    });
+    state.res = { s: s, l: l, u: u };
+    return state.res;
+  }
+
+  function paintResult() {
+    var r = computeAll(), tab = state.tab;
+    var bigVal = '—', bigSuffix = '', metaHtml = '', html = '';
+
+    if (tab === 'sever') {
+      if (!r.s.ok) {
+        metaHtml = '<b>' + (r.s.reason === 'badOrder' ? t('stBadOrder') : t('stNoDates')) + '</b>';
+      } else if (!r.s.eligible) {
+        bigVal = '0'; bigSuffix = state.lang === 'ko' ? '원' : 'KRW';
+        metaHtml = '<b>' + t('stUnder1y') + '</b><span>' + nf(r.s.days) + (state.lang === 'ko' ? '일' : ' days') + '</span>';
+      } else {
+        bigVal = nf(r.s.pay); bigSuffix = state.lang === 'ko' ? '원' : 'KRW';
+        metaHtml = '<b>' + t('rSeverRaw') + '</b><span>' + nf(r.s.days) + (state.lang === 'ko' ? '일 재직' : ' days of service') + '</span>';
+      }
+      if (r.s.ok) {
+        html += li(t('rDays'), nf(r.s.days) + (state.lang === 'ko' ? '일' : ' days'));
+        html += li(t('rSpan'), spanText(r.s.days));
+        html += li(t('r3days'), nf(r.s.span) + (state.lang === 'ko' ? '일' : ' days') + ' · ' + r.s.spanStart + ' ~ ' + r.s.spanEnd);
+        html += li(t('rTotal'), money(r.s.total3m));
+        html += li(t('rBonus'), money(r.s.bonusIn));
+        html += li(t('rLeaveIn'), money(r.s.leaveIn));
+        html += li(t('rAvg'), money2(r.s.avg), true);
+        html += li(t('rOrd'), money2(r.s.ord));
+        html += li(t('rApplied'), r.s.which === 'ord' ? t('appliedOrd') : t('appliedAvg'), true);
+        html += li('× 30 × ' + nf(r.s.days) + '/365', money(r.s.pay), true);
+      }
+    } else if (tab === 'leave') {
+      bigVal = nf(r.l.pay); bigSuffix = state.lang === 'ko' ? '원' : 'KRW';
+      metaHtml = '<b>' + nf2(r.l.days) + (state.lang === 'ko' ? '일' : ' days') + '</b><span>' + money2(r.l.daily) + ' / ' + (state.lang === 'ko' ? '일' : 'day') + '</span>';
+      html += li(t('rDaily'), money2(r.l.daily), true);
+      html += li(t('rHours209'), '209' + (state.lang === 'ko' ? '시간' : ' h'));
+      html += li(t('rHourly'), money2(r.l.hourly));
+      html += li(t('daysLabel'), nf2(r.l.days) + (state.lang === 'ko' ? '일' : ' days'));
+      html += li(t('rLeave'), money(r.l.pay), true);
+    } else {
+      bigVal = nf(r.u.total); bigSuffix = state.lang === 'ko' ? '원' : 'KRW';
+      metaHtml = '<b>' + nf(r.u.daily) + (state.lang === 'ko' ? '원' : ' KRW') + ' × ' + nf(r.u.days) + (state.lang === 'ko' ? '일' : ' days') + '</b><span>' +
+        (r.u.applied === 'cap' ? t('rCapApplied') : r.u.applied === 'low' ? t('rLowApplied') : t('rNone')) + '</span>';
+      html += li(t('rBenefitDays'), nf(r.u.days) + (state.lang === 'ko' ? '일' : ' days'), true);
+      html += li(t('rDailyBenefit'), nf(r.u.daily) + (state.lang === 'ko' ? '원' : ' KRW'), true);
+      html += li(t('rMonthly'), money(r.u.daily * 30));
+      html += li(t('rUnemp'), money(r.u.total));
+      html += li(t('bHi'), nf(r.u.cap) + (state.lang === 'ko' ? '원' : ' KRW'));
+      html += li(t('bLo'), nf(Math.floor(r.u.floor)) + (state.lang === 'ko' ? '원' : ' KRW'));
+      html += li(t('avgDailyLabel'), nf(state.un.avg) + (state.lang === 'ko' ? '원' : ' KRW'));
+    }
+
+    $('bigVal').textContent = bigVal;
+    $('bigUnit').textContent = bigSuffix;
+    $('bigMeta').innerHTML = metaHtml;
+    $('resList').innerHTML = html;
+    paintBand();
+    paintStatus();
+  }
+  function li(k, v, key) { return '<li' + (key ? ' class="is-key"' : '') + '><span>' + k + '</span><b>' + v + '</b></li>'; }
+
+  function paintStatus() {
+    var r = state.res, msg = t('stReady'), kind = '';
+    if (state.tab === 'sever') {
+      if (!r.s.ok) { msg = r.s.reason === 'badOrder' ? t('stBadOrder') : t('stNoDates'); kind = 'bad'; }
+      else if (!r.s.eligible) { msg = t('stUnder1y'); kind = 'warn'; }
+      else {
+        msg = fill(t('stSeverOk'), { d: nf(r.s.days), a: money2(r.s.avg), w: r.s.which === 'ord' ? t('appliedOrd') : t('appliedAvg') });
+        kind = 'ok';
+      }
+    } else if (state.tab === 'leave') {
+      msg = fill(t('stLeaveOk'), { a: money2(r.l.daily), d: nf2(r.l.days) }); kind = 'ok';
+    } else {
+      msg = fill(t('stUnempOk'), { a: nf(r.u.daily) + (state.lang === 'ko' ? '원' : ' KRW'), d: nf(r.u.days) });
+      if (r.u.months < 12) { msg += ' — ' + t('stNoBenefit'); kind = 'warn'; } else kind = 'ok';
+    }
+    var el = $('status');
+    el.textContent = msg;
+    el.className = 'status' + (kind ? ' is-' + kind : '');
+  }
+
+  function paintBand() {
+    var rows = document.querySelectorAll('#bandTbl tbody tr'), band = state.res ? state.res.u.band : '';
+    for (var i = 0; i < rows.length; i++) rows[i].classList.toggle('is-on', rows[i].getAttribute('data-band') === band);
+  }
+
+  function summaryText() {
+    var r = state.res, lines = [];
+    var head = state.lang === 'ko' ? '[RetirePay] 2026년 기준 추정' : '[RetirePay] 2026 estimate';
+    lines.push(head);
+    if (r.s.ok && r.s.eligible) {
+      lines.push((state.lang === 'ko' ? '· 퇴직금(세전): ' : '· Severance (gross): ') + money(r.s.pay) +
+        (state.lang === 'ko' ? ' (재직 ' + nf(r.s.days) + '일 · 1일 평균임금 ' + money2(r.s.avg) + ')' : ' (' + nf(r.s.days) + ' days · average ' + money2(r.s.avg) + ')'));
+    } else if (r.s.ok) {
+      lines.push((state.lang === 'ko' ? '· 퇴직금: 대상 아님 (계속근로 ' + nf(r.s.days) + '일)' : '· Severance: not owed (' + nf(r.s.days) + ' days)'));
+    }
+    lines.push((state.lang === 'ko' ? '· 연차수당: ' : '· Unused leave pay: ') + money(r.l.pay) +
+      (state.lang === 'ko' ? ' (' + nf2(r.l.days) + '일 × ' + money2(r.l.daily) + ')' : ' (' + nf2(r.l.days) + ' days × ' + money2(r.l.daily) + ')'));
+    lines.push((state.lang === 'ko' ? '· 실업급여: 1일 ' + nf(r.u.daily) + '원 × ' + nf(r.u.days) + '일 = ' : '· Job-seeker benefit: ' + nf(r.u.daily) + ' KRW × ' + nf(r.u.days) + ' days = ') + money(r.u.total));
+    lines.push(state.lang === 'ko'
+      ? '※ 추정치입니다. 실제 금액은 회사·고용센터 산정에 따릅니다. (기준 2026년, 확인 2026-11-18)'
+      : '※ An estimate. The actual amount follows the employer and the employment centre. (2026 rules, checked 2026-11-18)');
+    return lines.join('\n');
+  }
+
+  /* ═════════════════════ inputs ═════════════════════ */
+  function num(el, fallback) { var v = parseFloat(el.value); return isFinite(v) ? v : (fallback || 0); }
+
+  function readInputs() {
+    state.sev.hire = $('hireDate').value;
+    state.sev.leave = $('leaveDate').value;
+    state.sev.monthly = num($('monthlyPay'), 0);
+    state.sev.total3m = num($('total3m'), 0);
+    state.sev.bonus = num($('bonusYear'), 0);
+    state.sev.leavePay = num($('leavePay'), 0);
+    state.sev.ord = num($('ordMonthly'), 0);
+    state.lv.ord = num($('ordMonthly2'), 0);
+    state.lv.days = num($('leaveDays'), 0);
+    state.un.years = num($('insYear'), 0);
+    state.un.months = num($('insMonth'), 0);
+    state.un.age = num($('age'), 0);
+    state.un.avg = num($('avgDaily'), 0);
+    state.un.hours = num($('workHours'), 8);
+  }
+
+  function bindInput(el, after) {
+    el.addEventListener('input', function () { readInputs(); if (after) after(); paintResult(); });
+    el.addEventListener('change', function () { readInputs(); if (after) after(); paintResult(); });
+  }
+  ['hireDate', 'leaveDate', 'total3m', 'bonusYear', 'leavePay', 'leaveDays', 'insYear', 'insMonth', 'age', 'avgDaily', 'workHours'].forEach(function (id) {
+    bindInput($(id));
+  });
+  $('monthlyPay').addEventListener('input', function () {
+    var m = num(this, 0);
+    if (m > 0) $('total3m').value = String(m * 3);
+    readInputs(); paintResult();
+  });
+  $('ordMonthly').addEventListener('input', function () {
+    $('ordMonthly2').value = this.value; readInputs(); paintResult();
+  });
+  $('ordMonthly2').addEventListener('input', function () {
+    $('ordMonthly').value = this.value; readInputs(); paintResult();
+  });
+
+  $('disChk').addEventListener('click', function () {
+    state.disabled = !state.disabled;
+    this.setAttribute('aria-pressed', String(state.disabled));
+    paintResult();
+  });
+
+  $('leaveFromSev').addEventListener('click', function () {
+    $('ordMonthly2').value = $('ordMonthly').value;
+    $('ordMonthly').value = $('ordMonthly2').value;
+    readInputs(); paintResult();
+  });
+  $('avgFromSev').addEventListener('click', function () {
+    var s = severance(state.sev);
+    if (s.ok && s.eligible) { $('avgDaily').value = String(Math.round(s.avg)); readInputs(); paintResult(); }
+  });
+
+  $('sevReset').addEventListener('click', function () {
+    $('hireDate').value = '2019-03-04'; $('leaveDate').value = '2026-09-30';
+    $('monthlyPay').value = '3000000'; $('total3m').value = '9000000';
+    $('bonusYear').value = '4000000'; $('leavePay').value = '600000';
+    $('ordMonthly').value = '2800000'; $('ordMonthly2').value = '2800000';
+    readInputs(); paintResult();
+  });
+
+  $('copySum').addEventListener('click', function () {
+    var txt = summaryText();
+    var done = function () { setStatus(t('stCopied'), 'ok'); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(done, function () { setStatus(t('stCopyFail'), 'bad'); });
+    } else { setStatus(t('stCopyFail'), 'bad'); }
+  });
+  function setStatus(msg, kind) {
+    var el = $('status'); el.textContent = msg; el.className = 'status' + (kind ? ' is-' + kind : '');
+  }
+
+  /* ═════════════════════ tabs ═════════════════════ */
+  function setTab(id) {
+    state.tab = id;
+    var btns = document.querySelectorAll('.tabs button');
+    for (var i = 0; i < btns.length; i++) {
+      var on = btns[i].getAttribute('data-tab') === id;
+      btns[i].setAttribute('aria-selected', String(on));
+      btns[i].setAttribute('tabindex', on ? '0' : '-1');
+      var panel = $('panel-' + btns[i].getAttribute('data-tab'));
+      if (panel) panel.hidden = !on;
+    }
+    paintResult();
+  }
+  var tabEls = document.querySelectorAll('.tabs button');
+  for (var ti = 0; ti < tabEls.length; ti++) {
+    tabEls[ti].addEventListener('click', function () { setTab(this.getAttribute('data-tab')); });
+    tabEls[ti].addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      var all = Array.prototype.slice.call(tabEls);
+      var idx = all.indexOf(this);
+      var next = all[(idx + (e.key === 'ArrowRight' ? 1 : all.length - 1)) % all.length];
+      next.focus(); setTab(next.getAttribute('data-tab'));
+    });
+  }
+
+  /* ═════════════════════ language ═════════════════════ */
+  function setMeta(sel, attr, val) { var el = document.querySelector(sel); if (el) el.setAttribute(attr, val); }
+  function applyLang(lang) {
+    state.lang = lang === 'en' ? 'en' : 'ko';
+    document.documentElement.setAttribute('lang', state.lang);
+    document.title = t('docTitle');
+    setMeta('meta[property="og:title"]', 'content', state.lang === 'ko' ? 'RetirePay — 퇴직금·연차수당·실업급여 계산 (2026 기준)' : 'RetirePay — severance, leave pay & benefit calculator');
+    var nodes = document.querySelectorAll('[data-i18n]'), i, v;
+    for (i = 0; i < nodes.length; i++) { v = t(nodes[i].getAttribute('data-i18n')); if (v) nodes[i].innerHTML = v; }
+    nodes = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < nodes.length; i++) { v = t(nodes[i].getAttribute('data-i18n-html')); if (v) nodes[i].innerHTML = v; }
+    nodes = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < nodes.length; i++) { v = t(nodes[i].getAttribute('data-i18n-aria')); if (v) nodes[i].setAttribute('aria-label', v); }
+    nodes = document.querySelectorAll('[data-i18n-ph]');
+    for (i = 0; i < nodes.length; i++) { v = t(nodes[i].getAttribute('data-i18n-ph')); if (v) nodes[i].setAttribute('placeholder', v); }
+    var lt = $('langToggle');
+    if (lt) {
+      var spans = lt.querySelectorAll('[data-lt]');
+      for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
+      lt.setAttribute('aria-label', state.lang === 'ko' ? 'View in English' : '한국어로 보기');
+      lt.setAttribute('title', state.lang === 'ko' ? 'View in English' : '한국어로 보기');
+    }
+    paintResult();
+    try { localStorage.setItem(LANG_KEY, state.lang); localStorage.setItem(SHARED_KEY, state.lang); } catch (e) { }
+  }
+  function initialLang() {
+    var saved = null;
+    try { saved = localStorage.getItem(SHARED_KEY) || localStorage.getItem(LANG_KEY); } catch (e) { }
+    if (saved === 'ko' || saved === 'en') return saved;
+    return 'ko';
+  }
+
+  $('langToggle').addEventListener('click', function () { applyLang(state.lang === 'ko' ? 'en' : 'ko'); });
+
+  /* ═════════════════════ external request counter ═════════════════════ */
+  var netCount = 0;
+  function netWatch() {
+    if (!('PerformanceObserver' in window)) return;
+    try {
+      var po = new PerformanceObserver(function (list) {
+        var es = list.getEntries();
+        for (var i = 0; i < es.length; i++) {
+          try {
+            var u = new URL(es[i].name, location.href);
+            if (u.origin !== location.origin) { netCount++; $('netCount').textContent = String(netCount); }
+          } catch (e) { }
+        }
+      });
+      po.observe({ type: 'resource', buffered: true });
+    } catch (e) { }
+  }
+
+  /* ═════════════════════ boot ═════════════════════ */
+  readInputs();
+  applyLang(initialLang());
+  setTab('sever');
+  netWatch();
+
+  /* read-only hook for tests and automation */
+  window.RetirePay = {
+    version: '1.0',
+    lang: function () { return state.lang; },
+    setLang: function (l) { applyLang(l); },
+    tab: function () { return state.tab; },
+    setTab: setTab,
+    net: function () { return netCount; },
+    severance: severance,
+    leave: leavePayCalc,
+    unemployment: unemployment,
+    benefitDays: benefitDays,
+    span: function (a, b) { var x = toDate(a), y = toDate(b); return (x && y) ? diffDays(x, y) + 1 : null; },
+    window3m: function (leaveISO) {
+      var d = toDate(leaveISO); if (!d) return null;
+      var retire = addDays(d, 1), start = addMonths(retire, -3);
+      return { start: toISO(start), end: toISO(addDays(retire, -1)), days: diffDays(start, retire) };
+    },
+    result: function () { return computeAll(); },
+    summary: summaryText,
+    set: function (obj) {
+      if (obj.hire) $('hireDate').value = obj.hire;
+      if (obj.leave) $('leaveDate').value = obj.leave;
+      if (obj.monthly != null) { $('monthlyPay').value = obj.monthly; $('total3m').value = String(obj.monthly * 3); }
+      if (obj.total3m != null) $('total3m').value = obj.total3m;
+      if (obj.bonus != null) $('bonusYear').value = obj.bonus;
+      if (obj.leavePay != null) $('leavePay').value = obj.leavePay;
+      if (obj.ord != null) { $('ordMonthly').value = obj.ord; $('ordMonthly2').value = obj.ord; }
+      if (obj.days != null) $('leaveDays').value = obj.days;
+      if (obj.years != null) $('insYear').value = obj.years;
+      if (obj.months != null) $('insMonth').value = obj.months;
+      if (obj.age != null) $('age').value = obj.age;
+      if (obj.avg != null) $('avgDaily').value = obj.avg;
+      if (obj.hours != null) $('workHours').value = obj.hours;
+      if (obj.disabled != null) { state.disabled = !!obj.disabled; $('disChk').setAttribute('aria-pressed', String(state.disabled)); }
+      readInputs(); paintResult(); return computeAll();
+    },
+    big: function () { return $('bigVal').textContent + $('bigUnit').textContent; }
+  };
+})();
+</script>
+</body>
+</html>
