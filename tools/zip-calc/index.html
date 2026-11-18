@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0b0d">
+<title>ZipCalc — 전월세 전환·중개보수·대출이자 통합 계산기 | Kim Yihyung</title>
+<meta name="description" content="보증금과 월세를 법정 전환율로 서로 바꾸고, 매매·전세·월세 중개보수 상한과 부가세를 계산하고, 원리금균등·원금균등·만기일시 대출 이자를 한 표에서 비교합니다. 모두 브라우저 안에서 계산하고 업로드 0바이트.">
+<meta name="keywords" content="전월세 전환 계산기, 전월세전환율, 월세 계산기, 부동산 중개보수, 복비 계산기, 중개수수료, 법정 전환율, 대출 이자 계산기, 원리금균등, 원금균등, 만기일시, 주택임대차보호법, 전세 보증금 월세, zipcalc">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/zip-calc/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b0d'/%3E%3Crect x='7' y='5' width='18' height='22' rx='3' fill='none' stroke='%23e5b45c' stroke-width='2'/%3E%3Cpath d='M11 12h10M11 17h4M11 22h4M19 17v5' stroke='%23e5b45c' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/zip-calc/">
+<meta property="og:title" content="ZipCalc — 전월세 전환 · 중개보수 · 대출이자 한 장에">
+<meta property="og:description" content="보증금↔월세 전환, 매매·전세·월세 중개보수 상한, 세 가지 상환방식의 대출 이자를 한 화면에서. 브라우저 안에서만 계산합니다.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="ZipCalc — 전월세·중개보수·대출이자 통합 계산기">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ZipCalc — 전월세 전환 · 중개보수 · 대출이자 한 장에">
+<meta name="twitter:description" content="보증금↔월세 전환, 중개보수 상한과 부가세, 원리금균등·원금균등·만기일시 비교 — 전부 브라우저 안에서, 업로드 0바이트.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "ZipCalc — 전월세 전환 · 중개보수 · 대출이자 통합 계산기",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/zip-calc/",
+      "description": "한국 부동산 실수요자용 3-in-1 계산기. 보증금과 월세를 법정 전환율(기준금리+2%p)로 서로 바꾸고 월 주거비·연간 총비용을 비교하며, 매매·전세·월세 중개보수의 상한요율과 한도액, 부가세를 계산하고, 원리금균등·원금균등·만기일시 세 방식의 대출 이자를 한 표에서 비교한다. 모두 브라우저 안에서 계산하며 업로드와 외부 요청이 없다.",
+      "featureList": [
+        "보증금↔월세 상호 전환과 법정 전환율(기준금리+2%p) 안내",
+        "월 주거비와 연간 총비용 비교",
+        "매매·전세·월세 중개보수 상한요율과 한도액",
+        "월세 거래금액 5천만원 미만 70% 특례",
+        "일반과세 10% / 간이과세 0% 부가세 토글",
+        "원리금균등·원금균등·만기일시 3방식 동시 비교",
+        "카톡·메모장용 결과 요약 1클릭 복사",
+        "100% 클라이언트 계산: 업로드 0바이트, 외부 요청 0건"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "KRW" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "ZipCalc", "item": "https://kimyihyung.github.io/portfolio/tools/zip-calc/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "전월세 전환율은 얼마로 넣어야 하나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "주택임대차보호법 시행령 제9조의 법정 전환율은 한국은행 기준금리에 연 2%를 더한 값이고, 10%를 넘을 수 없습니다. 기준금리는 바뀌므로 이 도구의 기준금리 칸에 지금 시행 중인 값을 직접 넣으세요. 그 아래 '법정 전환율 적용' 버튼이 기준금리+2%p를 전환율 칸에 넣어 줍니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "중개보수는 상한요율대로만 내면 되나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "상한요율은 최대치입니다. 개업공인중개사와 협의해 그보다 낮게 정할 수 있지만, 이 금액을 넘겨 받을 수는 없습니다. 이 도구는 거래금액 구간별 상한요율과 한도액, 일반과세 10% 또는 간이과세 0% 부가세를 반영한 실지급액을 보여 줍니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "월세 계약의 거래금액은 어떻게 계산하나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "보증금에 월세의 100배를 더한 금액이 중개보수 산정 기준이 되는 거래금액입니다. 이 금액이 5천만원 미만이면 상한요율 0.5%에 70%를 적용한 0.35%를 쓰고 한도는 20만원입니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "대출 이자는 왜 방식마다 다른가요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "같은 금리·기간이라도 원금이 줄어드는 속도가 다르기 때문입니다. 원금균등은 초반 상환액이 크지만 총이자가 가장 적고, 만기일시는 매달 이자만 내다가 마지막에 원금을 갚아 초반 부담이 가장 작은 대신 총이자가 가장 큽니다. 원리금균등은 매달 같은 금액을 냅니다." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+:root {
+  --bg: #0b0b0d;
+  --bg2: #0e0e11;
+  --panel: #141311;
+  --panel2: #1b1917;
+  --line: rgba(255,255,255,.09);
+  --line2: rgba(255,255,255,.18);
+  --ink: #f7f2e9;
+  --muted: #a9a29a;
+  --muted2: #7d766e;
+  --accent: #e5b45c;
+  --accent2: #f3cf85;
+  --accent-dim: rgba(229,180,92,.12);
+  --on-accent: #1d1503;
+  --ok: #7fd6a0;
+  --warn: #ffa06b;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --shadow: 0 24px 70px rgba(0,0,0,.55);
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  line-height: 1.6;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(110% 55% at 50% -18%, rgba(229,180,92,.13), transparent 62%),
+    radial-gradient(60% 40% at 100% 2%, rgba(229,180,92,.05), transparent 60%);
+  background-repeat: no-repeat;
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: var(--accent); color: var(--on-accent); }
+a { color: inherit; }
+button, input, select, textarea { font-family: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+.wrap { width: 100%; max-width: 1220px; margin: 0 auto; padding: 0 20px 48px; }
+
+/* ---------- topbar ---------- */
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0 12px; }
+.brand { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: var(--ink); min-width: 0; }
+.mark {
+  min-width: 28px; height: 22px; padding: 0 6px; border-radius: 7px; flex: none;
+  border: 1px solid rgba(229,180,92,.45); background: var(--accent-dim);
+  display: grid; place-items: center; font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: var(--accent);
+}
+.brand-txt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.top-actions { display: inline-flex; align-items: center; gap: 9px; flex: none; }
+.lang-toggle {
+  appearance: none; border: 1px solid var(--line); background: var(--panel); color: var(--muted2);
+  height: 34px; padding: 0 11px; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px;
+  cursor: pointer; font-size: 11px; font-weight: 700; letter-spacing: .06em; line-height: 1;
+  transition: color .2s, border-color .2s, transform .15s;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.94); }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
+.topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
+
+/* ---------- hero ---------- */
+.hero { padding: 22px 0 18px; max-width: 820px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; margin: 0 0 14px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--accent);
+  border: 1px solid rgba(229,180,92,.28); background: rgba(229,180,92,.06); padding: 6px 11px; border-radius: 999px;
+}
+.eyebrow .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+h1 { margin: 0 0 14px; font-size: clamp(28px, 4.4vw, 44px); line-height: 1.12; letter-spacing: -.025em; font-weight: 800; }
+h1 .soft { color: var(--muted); }
+h1 .gold { color: var(--accent); }
+.lede { margin: 0 0 16px; color: var(--muted); font-size: 15px; max-width: 740px; }
+.lede strong { color: var(--ink); font-weight: 600; }
+
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--panel); font-size: 11.5px; color: var(--muted);
+  font-family: var(--mono); letter-spacing: .02em;
+}
+.pill b { color: var(--ink); font-weight: 700; }
+.pill--live { border-color: rgba(127,214,160,.32); background: rgba(127,214,160,.07); color: #a6e6c4; }
+.pill--live b { color: #bff3d8; }
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px rgba(127,214,160,.14); }
+
+/* ---------- layout ---------- */
+.work { display: grid; grid-template-columns: minmax(0,1fr) 330px; gap: 16px; align-items: start; margin-top: 6px; }
+@media (max-width: 1040px) { .work { grid-template-columns: minmax(0,1fr); } }
+
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); min-width: 0; }
+.panel { padding: 16px; display: grid; gap: 13px; min-width: 0; }
+.panel h3 { margin: 0; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted2); font-family: var(--mono); font-weight: 700; }
+.side { display: grid; gap: 12px; position: sticky; top: 14px; min-width: 0; }
+@media (max-width: 1040px) { .side { position: static; } }
+
+.btn {
+  appearance: none; cursor: pointer; border-radius: 11px; border: 1px solid var(--line2);
+  background: var(--panel2); color: var(--ink); font-size: 13px; font-weight: 650;
+  padding: 10px 16px; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  transition: transform .12s, border-color .2s, background .2s, opacity .2s; text-decoration: none;
+}
+.btn:hover { border-color: rgba(255,255,255,.3); }
+.btn:active { transform: scale(.98); }
+.btn:disabled { opacity: .42; cursor: not-allowed; }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 750; }
+.btn--primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.btn--ghost { background: transparent; }
+.btn--sm { padding: 7px 11px; font-size: 12px; border-radius: 9px; }
+.btn--block { width: 100%; }
+
+/* ---------- tabs ---------- */
+.tabs { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 6px; margin-bottom: 4px; }
+.tabs button {
+  appearance: none; cursor: pointer; text-align: left; min-width: 0;
+  display: grid; gap: 2px; padding: 10px 12px; border-radius: 12px;
+  border: 1px solid var(--line); background: var(--panel2); color: var(--muted);
+  transition: border-color .2s, background .2s, color .2s;
+}
+.tabs button:hover { border-color: var(--line2); }
+.tabs button b { font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; color: var(--muted2); font-weight: 700; }
+.tabs button span { font-size: 13px; font-weight: 700; color: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tabs button[aria-selected="true"] { border-color: rgba(229,180,92,.5); background: linear-gradient(180deg, rgba(229,180,92,.14), rgba(229,180,92,.03)); color: var(--ink); }
+.tabs button[aria-selected="true"] b { color: var(--accent); }
+@media (max-width: 560px) {
+  .tabs { grid-template-columns: 1fr 1fr; }
+  .tabs button:last-child { grid-column: 1 / -1; }
+  .tabs button { padding: 9px 10px; }
+  .tabs button span { font-size: 12.5px; }
+}
+
+.tabpanel { display: grid; gap: 14px; min-width: 0; }
+.calc-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.calc-head h2 { margin: 0; font-size: 16.5px; letter-spacing: -.01em; }
+.calc-head span { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted2); }
+
+/* ---------- inputs ---------- */
+.in-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; min-width: 0; }
+.in {
+  display: grid; gap: 5px; padding: 9px 11px 7px; border: 1px solid var(--line);
+  border-radius: 11px; background: var(--panel2); min-width: 0;
+}
+.in label, .in .lbl { font-size: 10.5px; font-family: var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted2); }
+.in .val { display: flex; align-items: baseline; gap: 5px; min-width: 0; }
+.in input {
+  appearance: none; border: 0; background: transparent; color: var(--ink);
+  font-size: 15px; font-weight: 650; padding: 0; width: 100%; min-width: 0; line-height: 1.4;
+  font-family: var(--mono); letter-spacing: -.02em;
+}
+.in input:focus { outline: none; }
+.in:focus-within { border-color: rgba(229,180,92,.6); }
+.in .unit { font-size: 11px; color: var(--muted2); flex: none; font-family: var(--mono); }
+.in.is-off { opacity: .4; }
+
+.seg { display: flex; gap: 3px; padding: 3px; background: var(--panel2); border: 1px solid var(--line); border-radius: 11px; min-width: 0; }
+.seg button { flex: 1 1 auto; appearance: none; border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; font-weight: 650; padding: 7px 5px; border-radius: 8px; line-height: 1.25; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--accent-dim); color: var(--accent); box-shadow: inset 0 0 0 1px rgba(229,180,92,.35); }
+
+.rate-note {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px;
+  padding: 10px 12px; border-radius: 11px; border: 1px solid rgba(229,180,92,.24);
+  background: rgba(229,180,92,.06); font-size: 12.2px; color: var(--muted);
+}
+.rate-note b { color: var(--accent); font-family: var(--mono); font-weight: 700; }
+.rate-note .btn { margin-left: auto; }
+.rate-note.is-over { border-color: rgba(255,160,107,.4); background: rgba(255,160,107,.08); }
+.rate-note.is-over b { color: var(--warn); }
+
+/* ---------- result ---------- */
+.result { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px 18px; padding: 16px; border-radius: var(--radius-sm); border: 1px solid rgba(229,180,92,.26); background: linear-gradient(180deg, rgba(229,180,92,.10), rgba(229,180,92,.02)); min-width: 0; }
+.result .num { font-family: var(--mono); font-size: clamp(26px, 6vw, 38px); line-height: 1.1; font-weight: 700; letter-spacing: -.03em; color: var(--accent); overflow-wrap: anywhere; }
+.result .num small { font-size: 13px; letter-spacing: .02em; color: var(--muted); margin-left: 6px; font-weight: 600; font-family: var(--font); }
+.result .meta { display: grid; gap: 2px; font-size: 12px; color: var(--muted); min-width: 0; }
+.result .meta b { color: var(--ink); font-weight: 650; }
+
+.cmp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; min-width: 0; }
+@media (max-width: 620px) { .cmp-grid { grid-template-columns: minmax(0,1fr); } }
+.cmp-card { padding: 13px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel2); min-width: 0; }
+.cmp-card h4 { margin: 0 0 8px; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted2); font-family: var(--mono); font-weight: 700; }
+.cmp-card.is-after { border-color: rgba(229,180,92,.34); background: rgba(229,180,92,.05); }
+.cmp-card.is-after h4 { color: var(--accent); }
+.kv { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.kv li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 10px; font-size: 12.4px; color: var(--muted); }
+.kv li b { color: var(--ink); font-family: var(--mono); font-weight: 650; font-size: 12.5px; text-align: right; overflow-wrap: anywhere; }
+.kv li.is-key { border-top: 1px solid rgba(255,255,255,.1); padding-top: 6px; margin-top: 2px; }
+.kv li.is-key b { color: var(--accent); }
+.diff { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; font-size: 12.4px; color: var(--muted); }
+.diff b { font-family: var(--mono); font-weight: 700; color: var(--ink); }
+.diff.is-up b { color: var(--warn); }
+.diff.is-down b { color: var(--ok); }
+.caveat { margin: 0; font-size: 11.6px; color: var(--muted2); line-height: 1.6; }
+.caveat b { color: var(--muted); }
+
+/* ---------- loan table ---------- */
+.table-wrap { min-width: 0; overflow-x: auto; }
+table.loan { width: 100%; border-collapse: collapse; font-size: 12.4px; min-width: 0; }
+table.loan th, table.loan td { padding: 9px 8px; border-bottom: 1px dashed rgba(255,255,255,.08); text-align: right; white-space: nowrap; }
+table.loan th:first-child, table.loan td:first-child { text-align: left; white-space: normal; }
+table.loan thead th { font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted2); font-weight: 700; border-bottom: 1px solid var(--line); }
+table.loan tbody tr:last-child td { border-bottom: 0; }
+table.loan td { color: var(--ink); font-family: var(--mono); font-size: 12px; }
+table.loan td small { display: block; font-family: var(--font); font-size: 10.5px; color: var(--muted2); font-weight: 500; }
+table.loan tr.is-best td { background: rgba(229,180,92,.06); }
+table.loan tr.is-best td:first-child { color: var(--accent); font-weight: 700; }
+.badge-min { display: inline-block; margin-left: 5px; padding: 1px 6px; border-radius: 999px; border: 1px solid rgba(229,180,92,.4); color: var(--accent); font-family: var(--mono); font-size: 8.5px; letter-spacing: .06em; vertical-align: middle; }
+@media (max-width: 680px) {
+  table.loan thead { display: none; }
+  table.loan, table.loan tbody, table.loan tr, table.loan td { display: block; width: 100%; }
+  table.loan tr { border: 1px solid var(--line); border-radius: 12px; padding: 11px 13px; margin-bottom: 8px; background: var(--panel2); }
+  table.loan tr.is-best { border-color: rgba(229,180,92,.4); background: rgba(229,180,92,.06); }
+  table.loan td { display: flex; justify-content: space-between; gap: 12px; border: 0; padding: 3px 0; text-align: right; }
+  table.loan td::before { content: attr(data-l); color: var(--muted2); font-family: var(--mono); font-size: 10px; letter-spacing: .04em; text-align: left; flex: none; }
+  table.loan td:first-child { font-family: var(--font); font-weight: 700; font-size: 13.5px; color: var(--ink); justify-content: flex-start; border-bottom: 1px solid var(--line); padding-bottom: 7px; margin-bottom: 5px; }
+  table.loan td:first-child::before { content: none; }
+}
+
+/* ---------- summary ---------- */
+.sum { margin: 0; padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: #0d0d10; color: #cfd6c9; font-family: var(--mono); font-size: 11px; line-height: 1.65; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 320px; overflow-y: auto; }
+.status { min-height: 16px; margin: 0; font-size: 12px; color: var(--muted); }
+.status.is-ok { color: var(--ok); }
+.status.is-warn { color: var(--warn); }
+
+/* ---------- sections ---------- */
+.section { margin-top: 40px; scroll-margin-top: 18px; }
+.sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 12px; border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 16px; }
+.sec-head h2 { margin: 0; font-size: 17px; letter-spacing: -.01em; }
+.sec-head span { font-family: var(--mono); font-size: 11px; color: var(--muted2); letter-spacing: .08em; text-transform: uppercase; }
+
+.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+.note { padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel); min-width: 0; }
+.note h3 { margin: 0 0 8px; font-size: 14px; display: flex; gap: 8px; align-items: baseline; }
+.note h3 span { font-family: var(--mono); font-size: 10.5px; color: var(--accent); letter-spacing: .1em; }
+.note p { margin: 0; font-size: 12.8px; color: var(--muted); line-height: 1.62; }
+.note b { color: var(--ink); font-weight: 600; }
+.note table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 11.6px; }
+.note table th, .note table td { padding: 4px 6px; border-bottom: 1px dashed rgba(255,255,255,.08); text-align: right; color: var(--ink); font-family: var(--mono); }
+.note table th:first-child, .note table td:first-child { text-align: left; font-family: var(--font); color: var(--muted); }
+.note table th { font-family: var(--mono); font-size: 9.5px; letter-spacing: .06em; color: var(--muted2); font-weight: 700; }
+
+.faq { display: grid; gap: 8px; }
+details.qa { border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); overflow: hidden; }
+details.qa summary { cursor: pointer; padding: 13px 44px 13px 15px; font-size: 13.5px; font-weight: 600; list-style: none; position: relative; }
+details.qa summary::-webkit-details-marker { display: none; }
+details.qa summary::after { content: "+"; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--accent); font-family: var(--mono); font-size: 15px; }
+details.qa[open] summary::after { content: "−"; }
+details.qa .a { padding: 0 15px 14px; font-size: 12.8px; color: var(--muted); line-height: 1.68; }
+details.qa .a b { color: var(--ink); font-weight: 600; }
+
+.foot { margin-top: 34px; padding-top: 14px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--muted2); }
+.foot-links { display: inline-flex; flex-wrap: wrap; gap: 12px; }
+.foot-links a { text-decoration: none; color: var(--muted); border-bottom: 1px solid transparent; }
+.foot-links a:hover { color: var(--ink); border-bottom-color: var(--line2); }
+.foot .net { font-family: var(--mono); letter-spacing: .02em; }
+.foot .net b { color: var(--ok); }
+
+@media (max-width: 640px) {
+  .wrap { padding: 0 14px 36px; }
+  .topbar { padding: 14px 0 8px; }
+  .brand-txt { font-size: 12px; letter-spacing: .1em; }
+  .hero { padding: 16px 0 12px; }
+  .lede { font-size: 14px; }
+  .panel { padding: 13px; }
+  .result { padding: 13px; }
+  .sec-head h2 { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="/portfolio/" aria-label="Kim Yihyung — 포트폴리오" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="View in English" aria-label="View in English">
+        <span class="lt on" data-lt="ko">KO</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="en">EN</span>
+      </button>
+      <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← 도구 전체</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="eyebrow">ZipCalc · 전월세·중개보수·대출 · 업로드 0</span></p>
+      <h1 data-i18n-html="h1">집 구할 때 필요한 계산 셋.<br><span class="soft">한 화면에서, 같은 숫자로.</span><br><span class="gold">이 탭 밖으로는 안 나갑니다.</span></h1>
+      <p class="lede" data-i18n-html="lede">
+        보증금과 월세를 <strong>법정 전환율</strong>로 서로 바꾸고, 중개보수의 <strong>상한요율과 부가세</strong>를 확인하고,
+        <strong>세 가지 상환방식</strong>의 대출 이자를 나란히 놓고 봅니다. 입력한 금액은 어디에도 저장되지 않습니다.
+      </p>
+      <div class="badge-row">
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillUp">업로드 0바이트</b></span>
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillNet">외부 요청 0건</b></span>
+        <span class="pill" data-i18n="pillLaw">법정 요율 기준</span>
+        <span class="pill" data-i18n="pillCopy">카톡 요약 복사</span>
+      </div>
+    </section>
+
+    <!-- ══════════ calculator ══════════ -->
+    <section class="work" aria-label="계산기" data-i18n-aria="calcAria">
+      <div class="card panel" id="calcCard">
+
+        <div class="tabs" role="tablist" aria-label="계산 종류" data-i18n-aria="tabAria">
+          <button type="button" role="tab" id="tab-conv" data-tab="conv" aria-selected="true" aria-controls="panel-conv">
+            <b>01</b><span data-i18n="tab1">전월세 전환</span>
+          </button>
+          <button type="button" role="tab" id="tab-fee" data-tab="fee" aria-selected="false" aria-controls="panel-fee">
+            <b>02</b><span data-i18n="tab2">중개보수</span>
+          </button>
+          <button type="button" role="tab" id="tab-loan" data-tab="loan" aria-selected="false" aria-controls="panel-loan">
+            <b>03</b><span data-i18n="tab3">대출 이자</span>
+          </button>
+        </div>
+
+        <!-- ── 01 전월세 전환 ── -->
+        <section class="tabpanel" id="panel-conv" role="tabpanel" aria-labelledby="tab-conv">
+          <div class="calc-head">
+            <h2 data-i18n="c1title">전월세 전환 계산기</h2>
+            <span data-i18n="c1note">보증금 ↔ 월세</span>
+          </div>
+
+          <div class="in-row">
+            <div class="in">
+              <label for="cDep" data-i18n="cDep">현재 보증금</label>
+              <div class="val"><input type="number" id="cDep" value="20000" min="0" step="100" inputmode="numeric"><span class="unit" data-i18n="unitMan">만원</span></div>
+            </div>
+            <div class="in">
+              <label for="cRent" data-i18n="cRent">현재 월세</label>
+              <div class="val"><input type="number" id="cRent" value="60" min="0" step="1" inputmode="numeric"><span class="unit" data-i18n="unitMan">만원</span></div>
+            </div>
+            <div class="in">
+              <label for="cBase" data-i18n="cBase">기준금리</label>
+              <div class="val"><input type="number" id="cBase" value="2.5" min="0" max="20" step="0.25" inputmode="decimal"><span class="unit">%</span></div>
+            </div>
+            <div class="in">
+              <label for="cRate" data-i18n="cRate">적용 전환율</label>
+              <div class="val"><input type="number" id="cRate" value="4.5" min="0.1" max="30" step="0.1" inputmode="decimal"><span class="unit">%</span></div>
+            </div>
+          </div>
+
+          <div class="rate-note" id="legalNote">
+            <span data-i18n="legalLead">법정 전환율 = 기준금리 + 2%p</span>
+            <b id="legalRate">4.5%</b>
+            <span data-i18n="legalCap">(최대 10%)</span>
+            <button class="btn btn--sm" id="applyLegal" type="button" data-i18n="legalApply">법정 전환율 적용</button>
+          </div>
+
+          <div class="seg" id="convMode" role="group" aria-label="전환 방향" data-i18n-aria="convModeAria">
+            <button type="button" data-mode="dep" aria-pressed="true" data-i18n="modeDep">보증금 낮추기 → 월세</button>
+            <button type="button" data-mode="rent" aria-pressed="false" data-i18n="modeRent">월세 낮추기 → 보증금</button>
+          </div>
+
+          <div class="in-row">
+            <div class="in">
+              <label for="cTarget" id="cTargetLabel">조정 후 보증금</label>
+              <div class="val"><input type="number" id="cTarget" value="10000" min="0" step="100" inputmode="numeric"><span class="unit" data-i18n="unitMan">만원</span></div>
+            </div>
+            <div class="in">
+              <label for="cOpp" data-i18n="cOpp">보증금 기회비용 금리</label>
+              <div class="val"><input type="number" id="cOpp" value="3.5" min="0" max="30" step="0.1" inputmode="decimal"><span class="unit">%</span></div>
+            </div>
+          </div>
+
+          <div class="result">
+            <div class="num" id="cOut">—</div>
+            <div class="meta" id="cMeta"></div>
+          </div>
+
+          <div class="cmp-grid">
+            <div class="cmp-card">
+              <h4 data-i18n="nowHead">지금 조건</h4>
+              <ul class="kv" id="cNow"></ul>
+            </div>
+            <div class="cmp-card is-after">
+              <h4 data-i18n="afterHead">조정 후</h4>
+              <ul class="kv" id="cAfter"></ul>
+            </div>
+          </div>
+          <p class="diff" id="cDiff"></p>
+          <p class="caveat" data-i18n-html="cCaveat">월 주거비는 <b>월세 + 보증금 × 기회비용 금리 ÷ 12</b>, 연간 총비용은 <b>월세 × 12 + 보증금 × 기회비용 금리</b>로 계산합니다. 보증금을 묶어 두는 비용까지 넣어야 조건을 실제로 비교할 수 있습니다. 법정 전환율을 넘는 전환은 임차인에게 불리할 수 있습니다.</p>
+        </section>
+
+        <!-- ── 02 중개보수 ── -->
+        <section class="tabpanel" id="panel-fee" role="tabpanel" aria-labelledby="tab-fee" hidden>
+          <div class="calc-head">
+            <h2 data-i18n="c2title">부동산 중개보수 계산기</h2>
+            <span data-i18n="c2note">상한요율 · 부가세</span>
+          </div>
+
+          <div class="in-row">
+            <div class="in" style="grid-column:span 2; min-width:0">
+              <span class="lbl" data-i18n="feeType">거래 유형</span>
+              <div class="seg" id="feeType" role="group" aria-label="거래 유형">
+                <button type="button" data-type="sale" aria-pressed="true" data-i18n="ftSale">매매</button>
+                <button type="button" data-type="jeonse" aria-pressed="false" data-i18n="ftJeonse">전세</button>
+                <button type="button" data-type="rent" aria-pressed="false" data-i18n="ftRent">월세</button>
+              </div>
+            </div>
+            <div class="in">
+              <label for="bAmount" data-i18n="feeAmount">거래금액 (매매·전세)</label>
+              <div class="val"><input type="number" id="bAmount" value="50000" min="0" step="100" inputmode="numeric"><span class="unit" data-i18n="unitMan">만원</span></div>
+            </div>
+            <div class="in">
+              <label for="bDep" data-i18n="feeDep">보증금 (월세)</label>
+              <div class="val"><input type="number" id="bDep" value="10000" min="0" step="100" inputmode="numeric"><span class="unit" data-i18n="unitMan">만원</span></div>
+            </div>
+            <div class="in">
+              <label for="bRent" data-i18n="feeRent">월세</label>
+              <div class="val"><input type="number" id="bRent" value="70" min="0" step="1" inputmode="numeric"><span class="unit" data-i18n="unitMan">만원</span></div>
+            </div>
+            <div class="in">
+              <span class="lbl" data-i18n="feeVat">부가세</span>
+              <div class="seg" id="feeVat" role="group" aria-label="부가세">
+                <button type="button" data-vat="gen" aria-pressed="true" data-i18n="vatGen">일반 10%</button>
+                <button type="button" data-vat="simple" aria-pressed="false" data-i18n="vatSimple">간이 0%</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="result">
+            <div class="num" id="bOut">—</div>
+            <div class="meta" id="bMeta"></div>
+          </div>
+
+          <ul class="kv" id="bBreak"></ul>
+          <p class="caveat" data-i18n-html="bCaveat">상한요율은 <b>최대치</b>입니다. 협의로 낮출 수는 있어도 이 금액을 넘겨 받을 수 없습니다. 월세 계약의 거래금액은 <b>보증금 + 월세 × 100</b>이고, 그 금액이 5천만원 미만이면 상한요율의 70%를 적용합니다. 부가세는 일반과세 10%, 간이과세 0%입니다.</p>
+        </section>
+
+        <!-- ── 03 대출 이자 ── -->
+        <section class="tabpanel" id="panel-loan" role="tabpanel" aria-labelledby="tab-loan" hidden>
+          <div class="calc-head">
+            <h2 data-i18n="c3title">대출 이자·원리금 비교</h2>
+            <span data-i18n="c3note">3가지 상환방식</span>
+          </div>
+
+          <div class="in-row">
+            <div class="in">
+              <label for="lAmount" data-i18n="loanAmount">대출금액</label>
+              <div class="val"><input type="number" id="lAmount" value="30000" min="0" step="100" inputmode="numeric"><span class="unit" data-i18n="unitMan">만원</span></div>
+            </div>
+            <div class="in">
+              <label for="lRate" data-i18n="loanRate">연이율</label>
+              <div class="val"><input type="number" id="lRate" value="4.5" min="0" max="40" step="0.1" inputmode="decimal"><span class="unit">%</span></div>
+            </div>
+            <div class="in">
+              <label for="lTerm" data-i18n="loanTerm">기간</label>
+              <div class="val"><input type="number" id="lTerm" value="36" min="1" max="480" step="1" inputmode="numeric"><span class="unit" data-i18n="unitMonth">개월</span></div>
+            </div>
+            <div class="in">
+              <span class="lbl" data-i18n="loanKind">상환</span>
+              <div class="val" style="padding:2px 0"><span style="font-size:12.5px;color:var(--muted)" data-i18n="loanKindVal">세 방식을 동시에</span></div>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="loan" id="loanTable">
+              <thead>
+                <tr>
+                  <th data-i18n="thMethod">방식</th>
+                  <th data-i18n="thFirst">1회차</th>
+                  <th data-i18n="thLast">마지막 회차</th>
+                  <th data-i18n="thInterest">총이자</th>
+                  <th data-i18n="thTotal">총상환액</th>
+                </tr>
+              </thead>
+              <tbody id="loanBody"></tbody>
+            </table>
+          </div>
+
+          <p class="diff" id="lDiff"></p>
+          <p class="caveat" data-i18n-html="lCaveat">원리금균등은 매달 같은 금액, 원금균등은 원금을 똑같이 나눠 내며 이자가 줄어드는 방식, 만기일시는 만기까지 이자만 내다가 원금을 한 번에 갚는 방식입니다. 실제 대출은 인지세·중도상환수수료·거치기간·변동금리로 달라질 수 있어 <b>참고용</b>입니다.</p>
+        </section>
+
+        <span class="status" id="status" aria-live="polite"></span>
+      </div>
+
+      <aside class="side">
+        <div class="card panel">
+          <h3><span data-i18n="sumHead">결과 요약</span></h3>
+          <pre class="sum" id="sumText" tabindex="0"></pre>
+          <button class="btn btn--primary btn--block" id="copyBtn" type="button" data-i18n="copyBtn">요약 복사</button>
+          <p class="caveat" id="sumStatus"></p>
+        </div>
+        <div class="card panel">
+          <h3 data-i18n="factHead">기준</h3>
+          <ul class="kv">
+            <li><span data-i18n="f1k">전환율</span><b data-i18n="f1v">기준금리 + 2%p (최대 10%)</b></li>
+            <li><span data-i18n="f2k">중개보수</span><b data-i18n="f2v">거래금액 구간별 상한요율</b></li>
+            <li><span data-i18n="f3k">월세 거래금액</span><b data-i18n="f3v">보증금 + 월세 × 100</b></li>
+            <li><span data-i18n="f4k">부가세</span><b data-i18n="f4v">일반 10% · 간이 0%</b></li>
+          </ul>
+          <p class="caveat" data-i18n-html="factNote">요율·한도는 공인중개사법 시행규칙의 구간표를 따릅니다. 지자체 조례나 개업공인중개사와의 협의로 달라질 수 있으니 계약 전에 한 번 더 확인하세요.</p>
+        </div>
+      </aside>
+    </section>
+
+    <!-- ══════════ notes ══════════ -->
+    <section class="section" aria-labelledby="rateTitle">
+      <div class="sec-head">
+        <h2 id="rateTitle" data-i18n="rateTitle">중개보수 상한요율표</h2>
+        <span data-i18n="rateNote">2021 개정 이후</span>
+      </div>
+      <div class="notes">
+        <div class="note">
+          <h3><span>매매</span></h3>
+          <table>
+            <thead><tr><th data-i18n="tBand">거래금액</th><th data-i18n="tRate">상한요율</th><th data-i18n="tCap">한도</th></tr></thead>
+            <tbody>
+              <tr><td data-i18n="b1">5천만원 미만</td><td>0.6%</td><td>25만원</td></tr>
+              <tr><td data-i18n="b2">5천만 ~ 2억</td><td>0.5%</td><td>80만원</td></tr>
+              <tr><td data-i18n="b3">2억 ~ 9억</td><td>0.4%</td><td>—</td></tr>
+              <tr><td data-i18n="b4">9억 ~ 12억</td><td>0.5%</td><td>—</td></tr>
+              <tr><td data-i18n="b5">12억 ~ 15억</td><td>0.6%</td><td>—</td></tr>
+              <tr><td data-i18n="b6">15억 이상</td><td>0.7%</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="note">
+          <h3><span data-i18n="rentHead">전세 · 월세</span></h3>
+          <table>
+            <thead><tr><th data-i18n="tBand">거래금액</th><th data-i18n="tRate">상한요율</th><th data-i18n="tCap">한도</th></tr></thead>
+            <tbody>
+              <tr><td data-i18n="b1">5천만원 미만</td><td>0.5%</td><td>20만원</td></tr>
+              <tr><td data-i18n="b2">5천만 ~ 2억</td><td>0.4%</td><td>30만원</td></tr>
+              <tr><td data-i18n="b3">2억 ~ 9억</td><td>0.3%</td><td>—</td></tr>
+              <tr><td data-i18n="b4">9억 ~ 12억</td><td>0.4%</td><td>—</td></tr>
+              <tr><td data-i18n="b5">12억 ~ 15억</td><td>0.5%</td><td>—</td></tr>
+              <tr><td data-i18n="b6">15억 이상</td><td>0.6%</td><td>—</td></tr>
+            </tbody>
+          </table>
+          <p style="margin-top:8px" data-i18n-html="rentSpecial">월세 거래금액이 5천만원 미만이면 상한요율 0.5%의 <b>70%인 0.35%</b>를 적용합니다.</p>
+        </div>
+        <div class="note">
+          <h3><span data-i18n="tipHead">계산 전에</span></h3>
+          <p data-i18n-html="tipBody">중개보수는 <b>부가세 포함 여부</b>로 체감이 달라집니다. 일반과세 사업자는 10%를 더 받고, 간이과세자는 받지 않습니다. 현금영수증이나 세금계산서를 요청하면 지출 증빙도 남습니다. 이 계산기의 금액은 <b>상한</b>이므로, 실제 지급액은 협의 결과에 따라 이보다 낮을 수 있습니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="faqTitle">
+      <div class="sec-head">
+        <h2 id="faqTitle" data-i18n="faqTitle">자주 묻는 질문</h2>
+        <span data-i18n="faqNote">전환 · 복비 · 대출</span>
+      </div>
+      <div class="faq">
+        <details class="qa">
+          <summary data-i18n="q1">전월세 전환율은 얼마로 넣어야 하나요?</summary>
+          <div class="a" data-i18n-html="a1">주택임대차보호법 시행령 제9조의 법정 전환율은 <b>한국은행 기준금리 + 연 2%</b>이고 10%를 넘을 수 없습니다. 기준금리는 바뀌므로 이 도구의 기준금리 칸에 지금 시행 중인 값을 직접 넣으세요. <b>법정 전환율 적용</b> 버튼이 기준금리+2%p를 전환율 칸에 넣습니다.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q2">중개보수는 상한요율대로 내면 되나요?</summary>
+          <div class="a" data-i18n-html="a2">상한요율은 최대치입니다. 개업공인중개사와 협의해 낮출 수 있지만 넘겨 받을 수는 없습니다. 이 계산기는 거래금액 구간의 상한요율과 한도액, 부가세를 반영한 금액을 보여 줍니다.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q3">월세 계약의 거래금액은 어떻게 계산하나요?</summary>
+          <div class="a" data-i18n-html="a3"><b>보증금 + 월세 × 100</b>이 중개보수 산정 기준입니다. 이 금액이 5천만원 미만이면 상한요율 0.35%, 한도 20만원이 적용됩니다.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q4">대출 이자는 왜 방식마다 다른가요?</summary>
+          <div class="a" data-i18n-html="a4">같은 금리·기간이라도 원금이 줄어드는 속도가 다르기 때문입니다. <b>원금균등</b>은 초반 상환액이 크지만 총이자가 가장 적고, <b>만기일시</b>는 초반 부담이 가장 작은 대신 총이자가 가장 큽니다. <b>원리금균등</b>은 매달 같은 금액을 냅니다.</div>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span data-i18n="footCopy">© 2026 Kim Yihyung · 브라우저에서, 브라우저를 위해 만들었습니다.</span>
+    <span class="net"><span data-i18n="footNet">외부 요청</span> <b id="netCount">0</b></span>
+    <span class="foot-links">
+      <a href="/portfolio/" data-i18n="footP1">포트폴리오</a>
+      <a href="/portfolio/tools/" data-i18n="footP2">도구 전체</a>
+      <a href="https://github.com/kimyihyung/portfolio" target="_blank" rel="noopener" data-i18n="footP3">소스</a>
+    </span>
+    <span class="mono" data-i18n="mono">업로드 없음 · 추적 없음</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ═════════════════════ 언어 사전 ═════════════════════ */
+  var I18N = {
+    ko: {
+      docTitle: 'ZipCalc — 전월세 전환·중개보수·대출이자 통합 계산기 | Kim Yihyung',
+      brandAria: 'Kim Yihyung — 포트폴리오',
+      back: '← 도구 전체',
+      eyebrow: 'ZipCalc · 전월세·중개보수·대출 · 업로드 0',
+      h1: '집 구할 때 필요한 계산 셋.<br><span class="soft">한 화면에서, 같은 숫자로.</span><br><span class="gold">이 탭 밖으로는 안 나갑니다.</span>',
+      lede: '보증금과 월세를 <strong>법정 전환율</strong>로 서로 바꾸고, 중개보수의 <strong>상한요율과 부가세</strong>를 확인하고, <strong>세 가지 상환방식</strong>의 대출 이자를 나란히 놓고 봅니다. 입력한 금액은 어디에도 저장되지 않습니다.',
+      pillUp: '업로드 0바이트', pillNet: '외부 요청 0건', pillLaw: '법정 요율 기준', pillCopy: '카톡 요약 복사',
+      calcAria: '계산기', tabAria: '계산 종류',
+      tab1: '전월세 전환', tab2: '중개보수', tab3: '대출 이자',
+      c1title: '전월세 전환 계산기', c1note: '보증금 ↔ 월세',
+      cDep: '현재 보증금', cRent: '현재 월세', cBase: '기준금리', cRate: '적용 전환율',
+      legalLead: '법정 전환율 = 기준금리 + 2%p', legalCap: '(최대 10%)', legalApply: '법정 전환율 적용',
+      convModeAria: '전환 방향',
+      modeDep: '보증금 낮추기 → 월세', modeRent: '월세 낮추기 → 보증금',
+      cTargetDep: '조정 후 보증금', cTargetRent: '조정 후 월세', cOpp: '보증금 기회비용 금리',
+      nowHead: '지금 조건', afterHead: '조정 후',
+      cCaveat: '월 주거비는 <b>월세 + 보증금 × 기회비용 금리 ÷ 12</b>, 연간 총비용은 <b>월세 × 12 + 보증금 × 기회비용 금리</b>로 계산합니다. 보증금을 묶어 두는 비용까지 넣어야 조건을 실제로 비교할 수 있습니다. 법정 전환율을 넘는 전환은 임차인에게 불리할 수 있습니다.',
+      c2title: '부동산 중개보수 계산기', c2note: '상한요율 · 부가세',
+      feeType: '거래 유형', ftSale: '매매', ftJeonse: '전세', ftRent: '월세',
+      feeAmount: '거래금액 (매매·전세)', feeDep: '보증금 (월세)', feeRent: '월세', feeVat: '부가세',
+      vatGen: '일반 10%', vatSimple: '간이 0%',
+      bCaveat: '상한요율은 <b>최대치</b>입니다. 협의로 낮출 수는 있어도 이 금액을 넘겨 받을 수 없습니다. 월세 계약의 거래금액은 <b>보증금 + 월세 × 100</b>이고, 그 금액이 5천만원 미만이면 상한요율의 70%를 적용합니다. 부가세는 일반과세 10%, 간이과세 0%입니다.',
+      c3title: '대출 이자·원리금 비교', c3note: '3가지 상환방식',
+      loanAmount: '대출금액', loanRate: '연이율', loanTerm: '기간', unitMonth: '개월',
+      loanKind: '상환', loanKindVal: '세 방식을 동시에',
+      thMethod: '방식', thFirst: '1회차', thLast: '마지막 회차', thInterest: '총이자', thTotal: '총상환액',
+      lCaveat: '원리금균등은 매달 같은 금액, 원금균등은 원금을 똑같이 나눠 내며 이자가 줄어드는 방식, 만기일시는 만기까지 이자만 내다가 원금을 한 번에 갚는 방식입니다. 실제 대출은 인지세·중도상환수수료·거치기간·변동금리로 달라질 수 있어 <b>참고용</b>입니다.',
+      sumHead: '결과 요약', copyBtn: '요약 복사',
+      factHead: '기준',
+      f1k: '전환율', f1v: '기준금리 + 2%p (최대 10%)',
+      f2k: '중개보수', f2v: '거래금액 구간별 상한요율',
+      f3k: '월세 거래금액', f3v: '보증금 + 월세 × 100',
+      f4k: '부가세', f4v: '일반 10% · 간이 0%',
+      factNote: '요율·한도는 공인중개사법 시행규칙의 구간표를 따릅니다. 지자체 조례나 개업공인중개사와의 협의로 달라질 수 있으니 계약 전에 한 번 더 확인하세요.',
+      rateTitle: '중개보수 상한요율표', rateNote: '2021 개정 이후',
+      tBand: '거래금액', tRate: '상한요율', tCap: '한도',
+      b1: '5천만원 미만', b2: '5천만 ~ 2억', b3: '2억 ~ 9억', b4: '9억 ~ 12억', b5: '12억 ~ 15억', b6: '15억 이상',
+      rentHead: '전세 · 월세',
+      rentSpecial: '월세 거래금액이 5천만원 미만이면 상한요율 0.5%의 <b>70%인 0.35%</b>를 적용합니다.',
+      tipHead: '계산 전에',
+      tipBody: '중개보수는 <b>부가세 포함 여부</b>로 체감이 달라집니다. 일반과세 사업자는 10%를 더 받고, 간이과세자는 받지 않습니다. 현금영수증이나 세금계산서를 요청하면 지출 증빙도 남습니다. 이 계산기의 금액은 <b>상한</b>이므로, 실제 지급액은 협의 결과에 따라 이보다 낮을 수 있습니다.',
+      faqTitle: '자주 묻는 질문', faqNote: '전환 · 복비 · 대출',
+      q1: '전월세 전환율은 얼마로 넣어야 하나요?',
+      a1: '주택임대차보호법 시행령 제9조의 법정 전환율은 <b>한국은행 기준금리 + 연 2%</b>이고 10%를 넘을 수 없습니다. 기준금리는 바뀌므로 이 도구의 기준금리 칸에 지금 시행 중인 값을 직접 넣으세요. <b>법정 전환율 적용</b> 버튼이 기준금리+2%p를 전환율 칸에 넣습니다.',
+      q2: '중개보수는 상한요율대로 내면 되나요?',
+      a2: '상한요율은 최대치입니다. 개업공인중개사와 협의해 낮출 수 있지만 넘겨 받을 수는 없습니다. 이 계산기는 거래금액 구간의 상한요율과 한도액, 부가세를 반영한 금액을 보여 줍니다.',
+      q3: '월세 계약의 거래금액은 어떻게 계산하나요?',
+      a3: '<b>보증금 + 월세 × 100</b>이 중개보수 산정 기준입니다. 이 금액이 5천만원 미만이면 상한요율 0.35%, 한도 20만원이 적용됩니다.',
+      q4: '대출 이자는 왜 방식마다 다른가요?',
+      a4: '같은 금리·기간이라도 원금이 줄어드는 속도가 다르기 때문입니다. <b>원금균등</b>은 초반 상환액이 크지만 총이자가 가장 적고, <b>만기일시</b>는 초반 부담이 가장 작은 대신 총이자가 가장 큽니다. <b>원리금균등</b>은 매달 같은 금액을 냅니다.',
+      footCopy: '© 2026 Kim Yihyung · 브라우저에서, 브라우저를 위해 만들었습니다.',
+      footNet: '외부 요청', footP1: '포트폴리오', footP2: '도구 전체', footP3: '소스',
+      mono: '업로드 없음 · 추적 없음', toggleTo: 'View in English',
+      unitMan: '만원',
+      /* dynamic */
+      perMonth: '/ 월', perYear: '연간', won: '원',
+      rDep: '보증금', rRent: '월세', rMonthly: '월 주거비', rYearly: '연간 총비용',
+      cOutRent: '예상 월세', cOutDep: '필요 보증금',
+      cMetaRent: '보증금 {d} 기준으로 월세는 {r}입니다.',
+      cMetaDep: '월세 {r} 기준으로 보증금은 {d}입니다.',
+      cMetaBad: '금액과 전환율을 확인하세요.',
+      legalNow: '법정 상한 {v} · 적용 {u}',
+      legalOver: '법정 전환율 {v}를 넘습니다',
+      diffUp: '연간 {v} 더 나갑니다', diffDown: '연간 {v} 줄어듭니다', diffSame: '연간 비용이 같습니다',
+      monthlyUp: '월 {v} 더', monthlyDown: '월 {v} 덜',
+      feeOut: '중개보수 합계', feeBand: '구간', feeRate: '상한요율', feeRaw: '요율 계산액',
+      feeCap: '한도', feeCapNone: '한도 없음', feeCapApplied: '한도 적용됨', feeBase: '기준금액',
+      feeVat: '부가세', feeTotal: '총 지급액', feeSpecial: '월세 5천만원 미만 70% 특례 적용',
+      feeMeta: '{t} · 거래금액 {a} · 상한요율 {r}',
+      ftSaleS: '매매', ftJeonseS: '전세', ftRentS: '월세',
+      best: '최소 이자', thName: { pay: '원리금균등', pr: '원금균등', bullet: '만기일시' },
+      lDiffBest: '가장 적은 이자는 {m} {v}입니다.', lDiffGap: '{a}보다 {b}원 적습니다.', lDiffNone: '금액과 기간을 확인하세요.',
+      lAmountWord: '대출금액',
+      sumTitle: 'ZipCalc', sumFoot: '※ 참고용 계산입니다. 실제 조건은 계약서와 금융사 안내를 확인하세요.',
+      copied: '클립보드에 복사했습니다.', copyFail: '복사에 실패했습니다 — 요약을 선택해 직접 복사해 주세요.',
+      sumConvHead: '전월세 전환', sumFeeHead: '중개보수', sumLoanHead: '대출 이자',
+      sumNow: '지금', sumAfter: '조정 후', sumLegal: '법정 전환율'
+    },
+    en: {
+      docTitle: 'ZipCalc — Rent Conversion, Brokerage Fee & Loan Interest | Kim Yihyung',
+      brandAria: 'Kim Yihyung — portfolio',
+      back: '← All tools',
+      eyebrow: 'ZipCalc · rent · fee · loan · zero upload',
+      h1: 'The three sums a Korean move needs.<br><span class="soft">One screen, the same numbers.</span><br><span class="gold">Nothing leaves the tab.</span>',
+      lede: 'Convert a deposit and monthly rent with the <strong>statutory rate</strong>, check a broker\'s <strong>maximum fee and VAT</strong>, and put the <strong>three repayment methods</strong> of a loan side by side. Nothing you type is stored anywhere.',
+      pillUp: '0 bytes uploaded', pillNet: '0 external requests', pillLaw: 'Statutory rates', pillCopy: 'Copy a KakaoTalk summary',
+      calcAria: 'Calculator', tabAria: 'Calculator type',
+      tab1: 'Rent conversion', tab2: 'Brokerage fee', tab3: 'Loan interest',
+      c1title: 'Deposit ↔ monthly rent', c1note: 'both directions',
+      cDep: 'Deposit now', cRent: 'Monthly rent now', cBase: 'Base rate', cRate: 'Conversion rate',
+      legalLead: 'Statutory rate = base rate + 2%p', legalCap: '(max 10%)', legalApply: 'Use statutory rate',
+      convModeAria: 'Conversion direction',
+      modeDep: 'Lower the deposit → rent', modeRent: 'Lower the rent → deposit',
+      cTargetDep: 'Deposit after', cTargetRent: 'Rent after', cOpp: 'Opportunity cost of the deposit',
+      nowHead: 'Now', afterHead: 'After',
+      cCaveat: 'Monthly housing cost is <b>rent + deposit × opportunity rate ÷ 12</b>; the yearly total is <b>rent × 12 + deposit × opportunity rate</b>. Money tied up in the deposit is a real cost, so leaving it out makes two offers incomparable. A conversion above the statutory rate can work against the tenant.',
+      c2title: 'Brokerage fee calculator', c2note: 'caps · VAT',
+      feeType: 'Deal type', ftSale: 'Sale', ftJeonse: 'Jeonse', ftRent: 'Monthly rent',
+      feeAmount: 'Deal amount (sale · jeonse)', feeDep: 'Deposit (monthly)', feeRent: 'Monthly rent', feeVat: 'VAT',
+      vatGen: 'Standard 10%', vatSimple: 'Simplified 0%',
+      bCaveat: 'The cap is a <b>maximum</b>. You can negotiate lower, never higher. For a monthly-rent lease the deal amount is <b>deposit + rent × 100</b>, and below ₩50 million the cap drops to 70% of the listed rate. VAT is 10% for standard taxpayers, 0% for simplified ones.',
+      c3title: 'Loan interest comparison', c3note: 'three methods',
+      loanAmount: 'Loan amount', loanRate: 'Annual rate', loanTerm: 'Term', unitMonth: 'months',
+      loanKind: 'Repayment', loanKindVal: 'All three at once',
+      thMethod: 'Method', thFirst: '1st payment', thLast: 'Last payment', thInterest: 'Total interest', thTotal: 'Total repaid',
+      lCaveat: 'Equal payment pays the same amount every month, equal principal divides the principal evenly so interest falls, and bullet repays interest only until the principal is due. Real loans differ with stamp duty, prepayment penalties, grace periods and floating rates — <b>for reference only</b>.',
+      sumHead: 'Summary', copyBtn: 'Copy summary',
+      factHead: 'Basis',
+      f1k: 'Conversion rate', f1v: 'base rate + 2%p (max 10%)',
+      f2k: 'Brokerage fee', f2v: 'capped rate by deal amount',
+      f3k: 'Monthly deal amount', f3v: 'deposit + rent × 100',
+      f4k: 'VAT', f4v: 'standard 10% · simplified 0%',
+      factNote: 'Rates and caps follow the bracket table in the Enforcement Rule of the Certified Broker Act. Local ordinances or the broker\'s own agreement can change the figure, so check once more before signing.',
+      rateTitle: 'Brokerage fee caps', rateNote: 'since the 2021 revision',
+      tBand: 'Deal amount', tRate: 'Cap', tCap: 'Limit',
+      b1: 'under ₩50M', b2: '₩50M – ₩200M', b3: '₩200M – ₩900M', b4: '₩900M – ₩1.2B', b5: '₩1.2B – ₩1.5B', b6: 'over ₩1.5B',
+      rentHead: 'Jeonse · monthly',
+      rentSpecial: 'Below a ₩50 million monthly-rent deal amount the cap is <b>0.35%</b>, 70% of the 0.5% rate.',
+      tipHead: 'Before you pay',
+      tipBody: 'VAT changes what a fee feels like: a standard taxpayer adds 10%, a simplified one adds nothing. Ask for a cash receipt or tax invoice and the payment is on record. The numbers here are <b>caps</b>, so the amount you actually agree can be lower.',
+      faqTitle: 'Questions', faqNote: 'rent · fee · loan',
+      q1: 'Which conversion rate should I type in?',
+      a1: 'The statutory rate under Article 9 of the Enforcement Decree of the Housing Lease Protection Act is <b>the Bank of Korea base rate + 2%p</b>, and it cannot exceed 10%. The base rate moves, so enter the one in force in the base-rate field — the <b>Use statutory rate</b> button fills the conversion field with base + 2%p.',
+      q2: 'Do I just pay the cap?',
+      a2: 'The cap is a ceiling. You can agree lower with the broker, never higher. This calculator shows the bracket cap, the limit for low-value deals, and the amount with VAT.',
+      q3: 'How is the deal amount for a monthly lease computed?',
+      a3: '<b>Deposit + rent × 100</b> is the amount the fee is based on. Below ₩50 million the cap is 0.35% with a ₩200,000 limit.',
+      q4: 'Why does the same loan cost different amounts?',
+      a4: 'Because the principal falls at different speeds. <b>Equal principal</b> costs more early and the least interest overall; <b>bullet</b> is cheapest early and the most expensive overall; <b>equal payment</b> keeps every month the same.',
+      footCopy: '© 2026 Kim Yihyung · Built in the browser, for the browser.',
+      footNet: 'external requests', footP1: 'Portfolio', footP2: 'All tools', footP3: 'Source',
+      mono: 'NO UPLOADS · NO TRACKING', toggleTo: '한국어로 보기',
+      unitMan: '만원',
+      perMonth: '/ month', perYear: 'year', won: 'KRW',
+      rDep: 'Deposit', rRent: 'Monthly rent', rMonthly: 'Monthly cost', rYearly: 'Yearly cost',
+      cOutRent: 'Rent after', cOutDep: 'Deposit needed',
+      cMetaRent: 'With a deposit of {d} the rent becomes {r}.',
+      cMetaDep: 'At {r} a month the deposit becomes {d}.',
+      cMetaBad: 'Check the amount and the rate.',
+      legalNow: 'statutory cap {v} · applied {u}',
+      legalOver: 'above the statutory {v}',
+      diffUp: '{v} more a year', diffDown: '{v} less a year', diffSame: 'the same yearly cost',
+      monthlyUp: '{v} more a month', monthlyDown: '{v} less a month',
+      feeOut: 'Fee total', feeBand: 'Bracket', feeRate: 'Cap rate', feeRaw: 'Rate × amount',
+      feeCap: 'Limit', feeCapNone: 'no limit', feeCapApplied: 'limit applied', feeBase: 'Basis amount',
+      feeVat: 'VAT', feeTotal: 'Total payable', feeSpecial: 'monthly lease under ₩50M · 70% rule',
+      feeMeta: '{t} · deal amount {a} · cap {r}',
+      ftSaleS: 'Sale', ftJeonseS: 'Jeonse', ftRentS: 'Monthly rent',
+      best: 'least interest', thName: { pay: 'Equal payment', pr: 'Equal principal', bullet: 'Bullet' },
+      lDiffBest: 'Least interest: {m} at {v}.', lDiffGap: 'That is {b} less than {a}.', lDiffNone: 'Check the amount and the term.',
+      lAmountWord: 'Loan',
+      sumTitle: 'ZipCalc', sumFoot: '※ For reference only. Check the contract and your lender for the real terms.',
+      copied: 'Copied to the clipboard.', copyFail: 'Copy failed — select the summary and copy it by hand.',
+      sumConvHead: 'Rent conversion', sumFeeHead: 'Brokerage fee', sumLoanHead: 'Loan interest',
+      sumNow: 'now', sumAfter: 'after', sumLegal: 'statutory rate'
+    }
+  };
+
+  var LANG_KEY = 'zipcalc.lang';
+  var SHARED_KEY = 'kyh.lang';
+
+  var state = {
+    lang: 'ko',
+    tab: 'conv',
+    convMode: 'dep',
+    feeType: 'sale',
+    feeVat: 'gen'
+  };
+
+  function $(id) { return document.getElementById(id); }
+  function t(key) {
+    var d = I18N[state.lang] || I18N.ko;
+    if (d[key] != null) return d[key];
+    return I18N.ko[key] != null ? I18N.ko[key] : '';
+  }
+  function fmt(str, vars) {
+    return String(str).replace(/\{(\w+)\}/g, function (m, k) {
+      return vars && vars[k] != null ? vars[k] : m;
+    });
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+  function readLang(key) {
+    try { var v = localStorage.getItem(key); return v === 'ko' || v === 'en' ? v : ''; } catch (e) { return ''; }
+  }
+  function initialLang() {
+    var q = '';
+    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
+    if (q === 'ko' || q === 'en') return q;
+    if (readLang(SHARED_KEY)) return readLang(SHARED_KEY);
+    if (readLang(LANG_KEY)) return readLang(LANG_KEY);
+    return 'ko';
+  }
+  function num(id) {
+    var v = parseFloat(($(id) || {}).value);
+    return isFinite(v) ? v : 0;
+  }
+
+  /* ═════════════════════ 금액 표기 ═════════════════════ */
+  function gruoped(n) {
+    return Math.round(n).toLocaleString('en-US');
+  }
+  function krw(man) {
+    var w = Math.round(man * 10000);
+    if (state.lang !== 'ko') return '₩' + gruoped(w);
+    return gruoped(w) + '원';
+  }
+  /* 만원 단위 → "2억 3,000만원" (ko) / "₩230,000,000" (en) */
+  function short(man) {
+    var w = Math.round(man * 10000);
+    if (state.lang !== 'ko') return '₩' + gruoped(w);
+    var neg = w < 0;
+    w = Math.abs(w);
+    var eok = Math.floor(w / 100000000);
+    var rest = w % 100000000;
+    var m = Math.floor(rest / 10000);
+    var r = rest % 10000;
+    var s = '';
+    if (eok) s += gruoped(eok) + '억';
+    if (m) s += (s ? ' ' : '') + gruoped(m) + '만';
+    if (r) s += (s ? ' ' : '') + gruoped(r);
+    if (!s) s = '0';
+    return (neg ? '-' : '') + s + '원';
+  }
+  function ratePct(v) {
+    var r = Math.round(v * 100) / 100;
+    return (r === Math.floor(r) ? String(r) : r.toFixed(2).replace(/0$/, '')) + '%';
+  }
+
+  /* ═════════════════════ 네트워크 계측 ═════════════════════ */
+  var net = { ext: 0, bytes: 0 };
+  function isExternal(u) {
+    try {
+      var x = new URL(u, location.href);
+      if (x.protocol === 'blob:' || x.protocol === 'data:') return false;
+      return x.origin !== location.origin;
+    } catch (e) { return true; }
+  }
+  function paintNet() {
+    var n = $('netCount');
+    if (n) n.textContent = String(net.ext);
+    var p = document.querySelector('[data-i18n="pillUp"]');
+    var q = document.querySelector('[data-i18n="pillNet"]');
+    if (p) p.textContent = state.lang === 'ko' ? '업로드 ' + net.bytes + '바이트' : net.bytes + ' bytes uploaded';
+    if (q) q.textContent = state.lang === 'ko' ? '외부 요청 ' + net.ext + '건' : net.ext + ' external requests';
+  }
+  try {
+    var origFetch = window.fetch;
+    if (origFetch) {
+      window.fetch = function (input, init) {
+        var url = typeof input === 'string' ? input : (input && input.url) || '';
+        var body = init && init.body;
+        if (isExternal(url)) {
+          net.ext++;
+          if (body && body.size) net.bytes += body.size;
+          else if (typeof body === 'string') net.bytes += body.length;
+          paintNet();
+        }
+        return origFetch.apply(this, arguments);
+      };
+    }
+    var openXHR = XMLHttpRequest.prototype.open;
+    XMLHttpRequest.prototype.open = function (method, url) {
+      this.__ext = isExternal(url);
+      if (this.__ext) { net.ext++; paintNet(); }
+      return openXHR.apply(this, arguments);
+    };
+    var sendXHR = XMLHttpRequest.prototype.send;
+    XMLHttpRequest.prototype.send = function (body) {
+      if (this.__ext && body) {
+        if (body.size) net.bytes += body.size;
+        else if (typeof body === 'string') net.bytes += body.length;
+        paintNet();
+      }
+      return sendXHR.apply(this, arguments);
+    };
+    if ('PerformanceObserver' in window) {
+      try {
+        new PerformanceObserver(function (list) {
+          var entries = list.getEntries();
+          for (var i = 0; i < entries.length; i++) if (isExternal(entries[i].name)) net.ext++;
+          paintNet();
+        }).observe({ type: 'resource', buffered: true });
+      } catch (e) { /* buffered 미지원 */ }
+    }
+  } catch (e) { /* 계측 실패는 동작에 영향 없음 */ }
+
+  /* ═════════════════════ 01 전월세 전환 ═════════════════════ */
+  function convCalc() {
+    var dep = num('cDep'), rent = num('cRent'), rate = num('cRate');
+    var base = num('cBase'), opp = num('cOpp'), target = num('cTarget');
+    var legal = Math.min(10, base + 2);
+    var out = { dep: dep, rent: rent, rate: rate, base: base, opp: opp, legal: legal, mode: state.convMode };
+
+    if (state.convMode === 'dep') {
+      out.afterDep = target;
+      out.afterRent = rent + (dep - target) * rate / 100 / 12;
+      out.ok = dep >= 0 && rate > 0 && target >= 0;
+    } else {
+      out.afterRent = target;
+      out.afterDep = rate > 0 ? dep - (target - rent) * 12 / (rate / 100) : 0;
+      out.ok = dep >= 0 && rate > 0 && target >= 0;
+    }
+    out.nowMonthly = rent + dep * opp / 100 / 12;
+    out.nowYearly = rent * 12 + dep * opp / 100;
+    out.afterMonthly = out.afterRent + out.afterDep * opp / 100 / 12;
+    out.afterYearly = out.afterRent * 12 + out.afterDep * opp / 100;
+    out.diffYearly = out.afterYearly - out.nowYearly;
+    out.diffMonthly = out.afterMonthly - out.nowMonthly;
+    out.over = rate > legal + 0.001;
+    return out;
+  }
+
+  function paintConv() {
+    var c = convCalc();
+    $('legalRate').textContent = ratePct(c.legal);
+    var note = $('legalNote');
+    note.classList.toggle('is-over', c.over);
+    var lab = $('cTargetLabel');
+    lab.textContent = state.convMode === 'dep' ? t('cTargetDep') : t('cTargetRent');
+
+    var out = $('cOut'), meta = $('cMeta');
+    if (!c.ok) {
+      out.innerHTML = '—';
+      meta.textContent = t('cMetaBad');
+      $('cNow').innerHTML = '';
+      $('cAfter').innerHTML = '';
+      $('cDiff').textContent = '';
+      paintSummary();
+      return;
+    }
+    out.innerHTML = esc(short(state.convMode === 'dep' ? c.afterRent : c.afterDep)) +
+      '<small>' + esc(t('perMonth')) + '</small>';
+    meta.innerHTML = '<span>' + esc(fmt(t(state.convMode === 'dep' ? 'cMetaRent' : 'cMetaDep'), {
+      d: short(state.convMode === 'dep' ? c.afterDep : c.afterDep),
+      r: short(state.convMode === 'dep' ? c.afterRent : c.afterRent)
+    })) + '</span>' +
+      '<span>' + esc(fmt(c.over ? t('legalOver') : t('legalNow'), { v: ratePct(c.legal), u: ratePct(c.rate) })) + '</span>';
+
+    function rows(x) {
+      return '<li><span>' + esc(t('rDep')) + '</span><b>' + esc(short(x.dep)) + '</b></li>' +
+        '<li><span>' + esc(t('rRent')) + '</span><b>' + esc(short(x.rent)) + '</b></li>' +
+        '<li><span>' + esc(t('rMonthly')) + '</span><b>' + esc(short(x.monthly)) + '</b></li>' +
+        '<li class="is-key"><span>' + esc(t('rYearly')) + '</span><b>' + esc(short(x.yearly)) + '</b></li>';
+    }
+    $('cNow').innerHTML = rows({ dep: c.dep, rent: c.rent, monthly: c.nowMonthly, yearly: c.nowYearly });
+    $('cAfter').innerHTML = rows({ dep: c.afterDep, rent: c.afterRent, monthly: c.afterMonthly, yearly: c.afterYearly });
+
+    var d = $('cDiff');
+    d.className = 'diff';
+    if (Math.abs(c.diffYearly) < 0.5) {
+      d.textContent = t('diffSame');
+    } else {
+      var up = c.diffYearly > 0;
+      d.classList.add(up ? 'is-up' : 'is-down');
+      d.innerHTML = (up ? '▲ ' : '▼ ') + esc(fmt(up ? t('diffUp') : t('diffDown'), { v: short(Math.abs(c.diffYearly)) })) +
+        ' <b>' + esc(fmt(up ? t('monthlyUp') : t('monthlyDown'), { v: short(Math.abs(c.diffMonthly)) })) + '</b>';
+    }
+    paintSummary();
+  }
+
+  /* ═════════════════════ 02 중개보수 ═════════════════════ */
+  var SALE = [[5000, 0.006, 250000], [20000, 0.005, 800000], [90000, 0.004, 0], [120000, 0.005, 0], [150000, 0.006, 0], [Infinity, 0.007, 0]];
+  var RENT = [[5000, 0.005, 200000], [20000, 0.004, 300000], [90000, 0.003, 0], [120000, 0.004, 0], [150000, 0.005, 0], [Infinity, 0.006, 0]];
+
+  function feeCalc() {
+    var type = state.feeType;
+    var amount;
+    if (type === 'rent') amount = num('bDep') + num('bRent') * 100;
+    else amount = num('bAmount');
+    var table = type === 'sale' ? SALE : RENT;
+    var row = table[table.length - 1];
+    for (var i = 0; i < table.length; i++) { if (amount < table[i][0]) { row = table[i]; break; } }
+    var rate = row[1], cap = row[2], special = false;
+    if (type === 'rent' && amount < 5000) { rate = 0.005 * 0.7; special = true; }
+    var raw = amount * 10000 * rate;
+    var fee = cap ? Math.min(raw, cap) : raw;
+    var vat = state.feeVat === 'gen' ? fee * 0.1 : 0;
+    return {
+      type: type, amount: amount, rate: rate, cap: cap, raw: raw, fee: fee, vat: vat,
+      total: fee + vat, special: special, capped: !!(cap && raw > cap), ok: amount > 0
+    };
+  }
+
+  function bandLabel(amount) {
+    if (amount < 5000) return t('b1');
+    if (amount < 20000) return t('b2');
+    if (amount < 90000) return t('b3');
+    if (amount < 120000) return t('b4');
+    if (amount < 150000) return t('b5');
+    return t('b6');
+  }
+
+  function paintFee() {
+    var isRent = state.feeType === 'rent';
+    $('bAmount').closest('.in').classList.toggle('is-off', isRent);
+    $('bDep').closest('.in').classList.toggle('is-off', !isRent);
+    $('bRent').closest('.in').classList.toggle('is-off', !isRent);
+
+    var c = feeCalc();
+    var out = $('bOut'), meta = $('bMeta');
+    if (!c.ok) {
+      out.innerHTML = '—';
+      meta.textContent = t('cMetaBad');
+      $('bBreak').innerHTML = '';
+      paintSummary();
+      return;
+    }
+    out.innerHTML = esc(short(c.total / 10000)) + '<small>' + esc(t('feeOut')) + '</small>';
+    meta.innerHTML = '<span>' + esc(fmt(t('feeMeta'), {
+      t: t(c.type === 'sale' ? 'ftSaleS' : (c.type === 'jeonse' ? 'ftJeonseS' : 'ftRentS')),
+      a: short(c.amount), r: ratePct(c.rate * 100)
+    })) + '</span>' + (c.special ? '<span>' + esc(t('feeSpecial')) + '</span>' : '');
+
+    $('bBreak').innerHTML =
+      '<li><span>' + esc(t('feeBase')) + '</span><b>' + esc(short(c.amount)) + '</b></li>' +
+      '<li><span>' + esc(t('feeBand')) + '</span><b>' + esc(bandLabel(c.amount)) + '</b></li>' +
+      '<li><span>' + esc(t('feeRate')) + '</span><b>' + esc(ratePct(c.rate * 100)) + '</b></li>' +
+      '<li><span>' + esc(t('feeRaw')) + '</span><b>' + esc(krw(c.raw / 10000)) + '</b></li>' +
+      '<li><span>' + esc(t('feeCap')) + '</span><b>' + esc(c.cap ? (c.capped ? t('feeCapApplied') + ' · ' + krw(c.cap / 10000) : krw(c.cap / 10000)) : t('feeCapNone')) + '</b></li>' +
+      '<li><span>' + esc(t('feeOut')) + '</span><b>' + esc(krw(c.fee / 10000)) + '</b></li>' +
+      '<li><span>' + esc(t('feeVat')) + '</span><b>' + esc(c.vat ? krw(c.vat / 10000) : '—') + '</b></li>' +
+      '<li class="is-key"><span>' + esc(t('feeTotal')) + '</span><b>' + esc(krw(c.total / 10000)) + '</b></li>';
+    paintSummary();
+  }
+
+  /* ═════════════════════ 03 대출 ═════════════════════ */
+  function loanCalc() {
+    var P = num('lAmount') * 10000;
+    var rate = num('lRate');
+    var n = Math.round(num('lTerm'));
+    var i = rate / 100 / 12;
+    var ok = P > 0 && n >= 1 && rate >= 0;
+    var rows = [];
+    if (!ok) return { ok: false, rows: rows, P: P, rate: rate, n: n };
+
+    var pay = i === 0 ? P / n : P * i / (1 - Math.pow(1 + i, -n));
+    rows.push({ key: 'pay', first: pay, last: pay, interest: pay * n - P, total: pay * n });
+
+    var pr = P / n;
+    rows.push({ key: 'pr', first: pr + P * i, last: pr + pr * i, interest: P * i * (n + 1) / 2, total: P + P * i * (n + 1) / 2 });
+
+    rows.push({ key: 'bullet', first: P * i, last: P + P * i, interest: P * i * n, total: P + P * i * n });
+
+    var best = rows[0];
+    for (var k = 1; k < rows.length; k++) if (rows[k].interest < best.interest) best = rows[k];
+    return { ok: true, rows: rows, best: best, P: P, rate: rate, n: n };
+  }
+
+  function paintLoan() {
+    var c = loanCalc();
+    var body = $('loanBody');
+    var diff = $('lDiff');
+    if (!c.ok) {
+      body.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted2)">' + esc(t('lDiffNone')) + '</td></tr>';
+      diff.textContent = '';
+      paintSummary();
+      return;
+    }
+    var html = '';
+    for (var i = 0; i < c.rows.length; i++) {
+      var r = c.rows[i];
+      var isBest = c.rows.length > 1 && r.interest === c.best.interest && r.key === c.best.key;
+      html += '<tr' + (isBest ? ' class="is-best"' : '') + '>' +
+        '<td data-l="' + esc(t('thMethod')) + '">' + esc(t('thName')[r.key]) +
+        (isBest ? '<span class="badge-min">' + esc(t('best')) + '</span>' : '') + '</td>' +
+        '<td data-l="' + esc(t('thFirst')) + '">' + esc(krw(r.first / 10000)) + '</td>' +
+        '<td data-l="' + esc(t('thLast')) + '">' + esc(krw(r.last / 10000)) + '</td>' +
+        '<td data-l="' + esc(t('thInterest')) + '">' + esc(krw(r.interest / 10000)) + '</td>' +
+        '<td data-l="' + esc(t('thTotal')) + '">' + esc(krw(r.total / 10000)) + '</td>' +
+        '</tr>';
+    }
+    body.innerHTML = html;
+
+    var max = c.rows[0], min = c.rows[0];
+    for (i = 1; i < c.rows.length; i++) {
+      if (c.rows[i].interest > max.interest) max = c.rows[i];
+      if (c.rows[i].interest < min.interest) min = c.rows[i];
+    }
+    var gap = max.interest - min.interest;
+    diff.className = 'diff is-down';
+    diff.innerHTML = esc(fmt(t('lDiffBest'), { m: t('thName')[min.key], v: krw(min.interest / 10000) })) +
+      (gap > 0.5 ? ' <b>' + esc(fmt(t('lDiffGap'), { a: t('thName')[max.key], b: gruoped(gap) })) + '</b>' : '');
+    paintSummary();
+  }
+
+  /* ═════════════════════ 요약 ═════════════════════ */
+  function summaryText() {
+    var L = [];
+    L.push(t('sumTitle') + ' — ' + t('sumHead'));
+    if (state.tab === 'conv') {
+      var c = convCalc();
+      L.push(t('sumConvHead'));
+      if (!c.ok) { L.push(t('cMetaBad')); }
+      else {
+        L.push(t('sumNow') + ': ' + t('rDep') + ' ' + short(c.dep) + ' · ' + t('rRent') + ' ' + short(c.rent));
+        L.push(t('sumAfter') + ': ' + t('rDep') + ' ' + short(c.afterDep) + ' · ' + t('rRent') + ' ' + short(c.afterRent));
+        L.push(t('rMonthly') + ': ' + short(c.nowMonthly) + ' → ' + short(c.afterMonthly));
+        L.push(t('rYearly') + ': ' + short(c.nowYearly) + ' → ' + short(c.afterYearly) +
+          ' (' + (c.diffYearly >= 0 ? '+' : '') + short(c.diffYearly) + ')');
+        L.push(t('sumLegal') + ' ' + ratePct(c.legal) + ' (' + t('cBase') + ' ' + ratePct(c.base) + ') · ' + t('cRate') + ' ' + ratePct(c.rate));
+      }
+    } else if (state.tab === 'fee') {
+      var f = feeCalc();
+      L.push(t('sumFeeHead'));
+      if (!f.ok) { L.push(t('cMetaBad')); }
+      else {
+        L.push(t(f.type === 'sale' ? 'ftSaleS' : (f.type === 'jeonse' ? 'ftJeonseS' : 'ftRentS')) +
+          ' · ' + t('feeBase') + ' ' + short(f.amount) + ' (' + bandLabel(f.amount) + ')');
+        L.push(t('feeRate') + ' ' + ratePct(f.rate * 100) + ' → ' + t('feeOut') + ' ' + krw(f.fee / 10000));
+        L.push(t('feeVat') + ' ' + (f.vat ? krw(f.vat / 10000) : '—') + ' · ' + t('feeTotal') + ' ' + krw(f.total / 10000));
+      }
+    } else {
+      var l = loanCalc();
+      L.push(t('sumLoanHead'));
+      if (!l.ok) { L.push(t('lDiffNone')); }
+      else {
+        L.push(t('lAmountWord') + ' ' + short(l.P / 10000) + ' · ' + t('loanRate') + ' ' + ratePct(l.rate) + ' · ' + l.n + t('unitMonth'));
+        for (var i = 0; i < l.rows.length; i++) {
+          var r = l.rows[i];
+          L.push('· ' + t('thName')[r.key] + ': ' + t('thFirst') + ' ' + krw(r.first / 10000) +
+            ' / ' + t('thInterest') + ' ' + krw(r.interest / 10000) + ' / ' + t('thTotal') + ' ' + krw(r.total / 10000));
+        }
+        L.push(fmt(t('lDiffBest'), { m: t('thName')[l.best.key], v: krw(l.best.interest / 10000) }));
+      }
+    }
+    L.push('');
+    L.push(t('sumFoot'));
+    return L.join('\n');
+  }
+
+  function paintSummary() {
+    $('sumText').textContent = summaryText();
+  }
+
+  function copySummary() {
+    var text = summaryText();
+    function ok() { $('sumStatus').textContent = t('copied'); $('sumStatus').style.color = 'var(--ok)'; }
+    function fail() { legacyCopy(text) ? ok() : ($('sumStatus').textContent = t('copyFail'), $('sumStatus').style.color = 'var(--warn)'); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(ok, fail);
+    } else { fail(); }
+  }
+  function legacyCopy(text) {
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.top = '-1000px';
+      document.body.appendChild(ta);
+      ta.select();
+      var r = document.execCommand('copy');
+      document.body.removeChild(ta);
+      return r;
+    } catch (e) { return false; }
+  }
+
+  /* ═════════════════════ 언어 ═════════════════════ */
+  function applyLang(lang) {
+    state.lang = lang === 'ko' ? 'ko' : 'en';
+    document.documentElement.setAttribute('lang', state.lang);
+    document.title = t('docTitle');
+
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var v = t(nodes[i].getAttribute('data-i18n'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < nodes.length; i++) {
+      var vh = t(nodes[i].getAttribute('data-i18n-html'));
+      if (vh) nodes[i].innerHTML = vh;
+    }
+    nodes = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < nodes.length; i++) {
+      var va = t(nodes[i].getAttribute('data-i18n-aria'));
+      if (va) nodes[i].setAttribute('aria-label', va);
+    }
+
+    var lt = $('langToggle');
+    if (lt) {
+      var spans = lt.querySelectorAll('[data-lt]');
+      for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
+      lt.setAttribute('aria-label', t('toggleTo'));
+      lt.setAttribute('title', t('toggleTo'));
+    }
+    paintNet();
+    paintConv();
+    paintFee();
+    paintLoan();
+    try {
+      localStorage.setItem(LANG_KEY, state.lang);
+      localStorage.setItem(SHARED_KEY, state.lang);
+    } catch (e) { /* 저장 실패 무해 */ }
+  }
+
+  /* ═════════════════════ 탭 ═════════════════════ */
+  function selectTab(tab) {
+    state.tab = tab;
+    var btns = document.querySelectorAll('.tabs button');
+    for (var i = 0; i < btns.length; i++) {
+      var on = btns[i].getAttribute('data-tab') === tab;
+      btns[i].setAttribute('aria-selected', String(on));
+      btns[i].tabIndex = on ? 0 : -1;
+      var panel = $(btns[i].getAttribute('aria-controls'));
+      if (panel) panel.hidden = !on;
+    }
+    paintSummary();
+  }
+
+  /* ═════════════════════ 이벤트 ═════════════════════ */
+  document.querySelector('.tabs').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-tab]');
+    if (b) selectTab(b.getAttribute('data-tab'));
+  });
+  document.querySelector('.tabs').addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    var tabs = ['conv', 'fee', 'loan'];
+    var i = tabs.indexOf(state.tab);
+    var next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+    e.preventDefault();
+    selectTab(next);
+    $('tab-' + next).focus();
+  });
+
+  $('convMode').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-mode]');
+    if (!b) return;
+    state.convMode = b.getAttribute('data-mode');
+    var bs = $('convMode').querySelectorAll('button');
+    for (var i = 0; i < bs.length; i++) bs[i].setAttribute('aria-pressed', String(bs[i] === b));
+    paintConv();
+  });
+
+  $('feeType').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-type]');
+    if (!b) return;
+    state.feeType = b.getAttribute('data-type');
+    var bs = $('feeType').querySelectorAll('button');
+    for (var i = 0; i < bs.length; i++) bs[i].setAttribute('aria-pressed', String(bs[i] === b));
+    paintFee();
+  });
+
+  $('feeVat').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-vat]');
+    if (!b) return;
+    state.feeVat = b.getAttribute('data-vat');
+    var bs = $('feeVat').querySelectorAll('button');
+    for (var i = 0; i < bs.length; i++) bs[i].setAttribute('aria-pressed', String(bs[i] === b));
+    paintFee();
+  });
+
+  ['cDep', 'cRent', 'cRate', 'cBase', 'cOpp', 'cTarget'].forEach(function (id) {
+    $(id).addEventListener('input', paintConv);
+    $(id).addEventListener('change', paintConv);
+  });
+  $('applyLegal').addEventListener('click', function () {
+    $('cRate').value = String(Math.round(Math.min(10, num('cBase') + 2) * 100) / 100);
+    paintConv();
+  });
+
+  ['bAmount', 'bDep', 'bRent'].forEach(function (id) {
+    $(id).addEventListener('input', paintFee);
+    $(id).addEventListener('change', paintFee);
+  });
+  ['lAmount', 'lRate', 'lTerm'].forEach(function (id) {
+    $(id).addEventListener('input', paintLoan);
+    $(id).addEventListener('change', paintLoan);
+  });
+
+  $('copyBtn').addEventListener('click', copySummary);
+
+  $('langToggle').addEventListener('click', function () {
+    applyLang(state.lang === 'ko' ? 'en' : 'ko');
+  });
+
+  /* ═════════════════════ 시작 ═════════════════════ */
+  applyLang(initialLang());
+  selectTab('conv');
+
+  /* 테스트·자동화용 읽기 전용 창구 */
+  window.ZipCalc = {
+    conv: convCalc,
+    fee: feeCalc,
+    loan: loanCalc,
+    summary: function () {
+      return {
+        lang: state.lang, tab: state.tab,
+        text: summaryText(),
+        conv: (function () { var c = convCalc(); return { afterDep: c.afterDep, afterRent: c.afterRent, nowYearly: c.nowYearly, afterYearly: c.afterYearly, legal: c.legal }; })(),
+        fee: (function () { var f = feeCalc(); return { amount: f.amount, rate: f.rate, fee: f.fee, vat: f.vat, total: f.total }; })(),
+        loan: (function () {
+          var l = loanCalc();
+          return { ok: l.ok, rows: (l.rows || []).map(function (r) { return { key: r.key, interest: Math.round(r.interest) }; }), best: l.best ? l.best.key : null };
+        })()
+      };
+    },
+    tab: selectTab,
+    feeType: function (type) { state.feeType = type; paintFee(); },
+    convMode: function (mode) { state.convMode = mode; paintConv(); },
+    set: function (id, value) { $(id).value = String(value); paintConv(); paintFee(); paintLoan(); },
+    version: '1.0'
+  };
+})();
+</script>
+</body>
+</html>

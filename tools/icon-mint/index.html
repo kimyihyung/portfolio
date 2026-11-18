@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0b0d">
+<title>IconMint — Favicon &amp; PWA Icon Generator, Zero Upload | Kim Yihyung</title>
+<meta name="description" content="Drop one logo and get the whole icon pack: a multi-size favicon.ico, 16/32/180/192/512 PNGs, site.webmanifest and the <head> tags to paste — rendered in this tab, zipped in this tab, 0 bytes uploaded, 0 external requests.">
+<meta name="keywords" content="favicon generator, favicon.ico, pwa icon generator, apple touch icon, web app manifest, icon resizer, site icons, favicon maker, maskable icon, 파비콘 만들기, 파비콘 생성기, 앱 아이콘 만들기, PWA 아이콘, 사이트 아이콘">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/icon-mint/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b0d'/%3E%3Cpath d='M16 6l7 5.2v9.6L16 26l-7-5.2v-9.6z' fill='none' stroke='%23e5b45c' stroke-width='2' stroke-linejoin='round'/%3E%3Ccircle cx='16' cy='16' r='2.6' fill='%23e5b45c'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/icon-mint/">
+<meta property="og:title" content="IconMint — One Image In, the Whole Icon Pack Out">
+<meta property="og:description" content="Favicon.ico, every PNG size, a web manifest and the head tags, generated in your browser and zipped there. 0 bytes uploaded.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="IconMint — favicon and PWA icon generator running in the browser">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="IconMint — One Image In, the Whole Icon Pack Out">
+<meta name="twitter:description" content="Favicon.ico, 16–512 PNGs, web manifest and head tags from one image — in the browser, 0 uploads.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "IconMint — Favicon & PWA Icon Generator",
+      "applicationCategory": "DesignApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/icon-mint/",
+      "description": "Generates a complete favicon and PWA icon pack from one image — a 16/32/48 multi-size PNG-in-ICO favicon.ico, favicon-16x16.png, favicon-32x32.png, apple-touch-icon.png at 180×180, icon-192.png, icon-512.png, site.webmanifest and a copy-ready head snippet — with padding, corner radius, background and dark-mode preview, all rendered on canvas in the browser and zipped by a pure-JavaScript store-only ZIP writer.",
+      "featureList": [
+        "One image in: PNG, JPG, WebP or SVG",
+        "Padding, corner radius, background colour or transparency",
+        "Multi-size favicon.ico written as PNG-in-ICO by hand",
+        "16, 32, 180, 192 and 512 pixel PNGs",
+        "site.webmanifest and a copy-ready head snippet",
+        "ZIP built in the tab with a store-only ZIP writer and CRC32",
+        "100% client-side: no uploads, no accounts, no external requests"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "IconMint", "item": "https://kimyihyung.github.io/portfolio/tools/icon-mint/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Which files do I actually need?",
+          "acceptedAnswer": { "@type": "Answer", "text": "For a normal website: favicon.ico at the root, favicon-32x32.png and favicon-16x16.png beside it, apple-touch-icon.png for iOS home screens, and the head snippet. Add site.webmanifest with the 192 and 512 PNGs when the site should install as a PWA. All eight files the pack contains can sit together in the site root." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is the image uploaded anywhere?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. The file is read with the browser's File API, drawn on a canvas in this tab, and the PNG, ICO and ZIP bytes are assembled in memory. The counters in the header read this page's own network activity, and there is no endpoint to send an image to." }
+        },
+        {
+          "@type": "Question",
+          "name": "Why is my SVG or transparent PNG looking flat?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A transparent logo on a transparent icon disappears into dark browser tabs. Set a background colour, or keep transparency and add 10–20% padding so the mark survives at 16 pixels. Apple touch icons are composited on black by iOS when they have no background, so pick a colour that reads on both." }
+        },
+        {
+          "@type": "Question",
+          "name": "What makes an icon acceptable for an installable PWA?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The manifest needs a 192×192 and a 512×512 PNG. For a maskable icon the artwork must sit inside the central safe zone, so keep padding at 20% or more if the 512 PNG is also declared maskable. The pack ships a 512 PNG with the padding you chose — raise it before downloading if you plan to use purpose: maskable." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+:root {
+  --bg: #0b0b0d;
+  --bg2: #0e0e11;
+  --panel: #141311;
+  --panel2: #1b1917;
+  --line: rgba(255,255,255,.09);
+  --line2: rgba(255,255,255,.18);
+  --ink: #f7f2e9;
+  --muted: #a9a29a;
+  --muted2: #7d766e;
+  --accent: #e5b45c;
+  --accent2: #f3cf85;
+  --accent-dim: rgba(229,180,92,.12);
+  --on-accent: #1d1503;
+  --ok: #7fd6a0;
+  --warn: #ffa06b;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --shadow: 0 24px 70px rgba(0,0,0,.55);
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  line-height: 1.6;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(110% 55% at 50% -18%, rgba(229,180,92,.13), transparent 62%),
+    radial-gradient(60% 40% at 100% 2%, rgba(229,180,92,.05), transparent 60%);
+  background-repeat: no-repeat;
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: var(--accent); color: var(--on-accent); }
+a { color: inherit; }
+button, input, select, textarea { font-family: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+.wrap { width: 100%; max-width: 1220px; margin: 0 auto; padding: 0 20px 48px; }
+
+/* ---------- topbar ---------- */
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0 12px; }
+.brand { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: var(--ink); min-width: 0; }
+.mark {
+  min-width: 28px; height: 22px; padding: 0 6px; border-radius: 7px; flex: none;
+  border: 1px solid rgba(229,180,92,.45); background: var(--accent-dim);
+  display: grid; place-items: center; font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: var(--accent);
+}
+.brand-txt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.top-actions { display: inline-flex; align-items: center; gap: 9px; flex: none; }
+.lang-toggle {
+  appearance: none; border: 1px solid var(--line); background: var(--panel); color: var(--muted2);
+  height: 34px; padding: 0 11px; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px;
+  cursor: pointer; font-size: 11px; font-weight: 700; letter-spacing: .06em; line-height: 1;
+  transition: color .2s, border-color .2s, transform .15s;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.94); }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
+.topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
+
+/* ---------- hero ---------- */
+.hero { padding: 22px 0 18px; max-width: 800px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; margin: 0 0 14px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--accent);
+  border: 1px solid rgba(229,180,92,.28); background: rgba(229,180,92,.06); padding: 6px 11px; border-radius: 999px;
+}
+.eyebrow .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+h1 { margin: 0 0 14px; font-size: clamp(29px, 4.6vw, 46px); line-height: 1.06; letter-spacing: -.02em; font-weight: 800; }
+h1 .soft { color: var(--muted); }
+h1 .gold { color: var(--accent); }
+.lede { margin: 0 0 16px; color: var(--muted); font-size: 15px; max-width: 720px; }
+.lede strong { color: var(--ink); font-weight: 600; }
+.lede code { font-family: var(--mono); font-size: .9em; color: var(--accent); }
+
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--panel); font-size: 11.5px; color: var(--muted);
+  font-family: var(--mono); letter-spacing: .02em;
+}
+.pill b { color: var(--ink); font-weight: 700; }
+.pill--live { border-color: rgba(127,214,160,.32); background: rgba(127,214,160,.07); color: #a6e6c4; }
+.pill--live b { color: #bff3d8; }
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px rgba(127,214,160,.14); }
+
+/* ---------- layout ---------- */
+.work { display: grid; grid-template-columns: minmax(0,1fr) 348px; gap: 16px; align-items: start; margin-top: 6px; }
+@media (max-width: 1040px) { .work { grid-template-columns: minmax(0,1fr); } }
+
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); min-width: 0; }
+.panel { padding: 16px; display: grid; gap: 13px; min-width: 0; }
+.panel h3 { margin: 0; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted2); font-family: var(--mono); font-weight: 700; }
+.side { display: grid; gap: 12px; position: sticky; top: 14px; min-width: 0; }
+@media (max-width: 1040px) { .side { position: static; } }
+
+.btn {
+  appearance: none; cursor: pointer; border-radius: 11px; border: 1px solid var(--line2);
+  background: var(--panel2); color: var(--ink); font-size: 13px; font-weight: 650;
+  padding: 10px 16px; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  transition: transform .12s, border-color .2s, background .2s, opacity .2s; text-decoration: none;
+}
+.btn:hover { border-color: rgba(255,255,255,.3); }
+.btn:active { transform: scale(.98); }
+.btn:disabled { opacity: .42; cursor: not-allowed; }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 750; }
+.btn--primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.btn--ghost { background: transparent; }
+.btn--sm { padding: 7px 11px; font-size: 12px; border-radius: 9px; }
+.btn--block { width: 100%; }
+
+/* ---------- drop zone ---------- */
+.drop {
+  display: grid; gap: 9px; justify-items: center; text-align: center;
+  padding: 26px 16px 22px; border: 1.5px dashed rgba(229,180,92,.32); border-radius: var(--radius-sm);
+  background: linear-gradient(180deg, rgba(229,180,92,.05), rgba(229,180,92,.01));
+  transition: border-color .2s, background .2s;
+}
+.drop.is-over { border-color: var(--accent); background: rgba(229,180,92,.12); }
+.drop-ic { color: var(--accent); opacity: .85; }
+.drop-t { margin: 0; font-size: 14.5px; font-weight: 700; letter-spacing: -.01em; }
+.drop-s { margin: 0; font-size: 12px; color: var(--muted2); }
+.drop-actions { display: flex; flex-wrap: wrap; gap: 7px; justify-content: center; margin-top: 3px; }
+.drop-meta { margin: 2px 0 0; font-size: 11.5px; color: var(--muted2); font-family: var(--mono); letter-spacing: .01em; overflow-wrap: anywhere; }
+.drop-meta b { color: var(--muted); font-weight: 600; }
+
+/* ---------- option inputs ---------- */
+.opt-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(158px, 1fr)); gap: 10px; }
+.in {
+  display: grid; gap: 5px; padding: 9px 11px 8px; border: 1px solid var(--line);
+  border-radius: 11px; background: var(--panel2); min-width: 0;
+}
+.in > label, .in .lbl { font-size: 10.5px; font-family: var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted2); }
+.in input[type="text"], .in input[type="number"] {
+  appearance: none; border: 0; background: transparent; color: var(--ink);
+  font-size: 14px; font-weight: 600; padding: 0; width: 100%; min-width: 0; line-height: 1.4;
+}
+.in input:focus { outline: none; }
+.in:focus-within { border-color: rgba(229,180,92,.6); }
+.range-row { display: flex; align-items: center; gap: 9px; min-width: 0; }
+.range-row input[type="range"] { flex: 1 1 auto; min-width: 0; }
+.out-val { font-family: var(--mono); font-size: 11.5px; color: var(--accent); min-width: 38px; text-align: right; flex: none; }
+input[type="range"] { -webkit-appearance: none; appearance: none; background: transparent; width: 100%; height: 22px; margin: 0; cursor: pointer; }
+input[type="range"]::-webkit-slider-runnable-track { height: 4px; border-radius: 999px; background: rgba(255,255,255,.16); }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 0; margin-top: -6px; box-shadow: 0 0 0 3px rgba(229,180,92,.18); }
+input[type="range"]::-moz-range-track { height: 4px; border-radius: 999px; background: rgba(255,255,255,.16); }
+input[type="range"]::-moz-range-thumb { width: 15px; height: 15px; border-radius: 50%; background: var(--accent); border: 0; }
+.color-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-width: 0; }
+.color-row .btn--sm { padding: 6px 9px; font-size: 11.5px; flex: none; }
+input[type="color"] { -webkit-appearance: none; appearance: none; border: 0; background: transparent; width: 36px; height: 26px; padding: 0; cursor: pointer; flex: none; }
+input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+input[type="color"]::-webkit-color-swatch { border: 1px solid var(--line2); border-radius: 7px; }
+input[type="color"]::-moz-color-swatch { border: 1px solid var(--line2); border-radius: 7px; }
+.hex { font-family: var(--mono); font-size: 11.5px; color: var(--muted); letter-spacing: .02em; }
+
+.seg { display: flex; gap: 3px; padding: 3px; background: var(--panel2); border: 1px solid var(--line); border-radius: 11px; }
+.seg button { flex: 1; appearance: none; border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; font-weight: 650; padding: 7px 4px; border-radius: 8px; line-height: 1.2; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--accent-dim); color: var(--accent); box-shadow: inset 0 0 0 1px rgba(229,180,92,.35); }
+
+/* ---------- preview ---------- */
+.pv-wrap {
+  display: grid; grid-template-columns: auto minmax(0,1fr); gap: 14px; align-items: center;
+  padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: #f4f1ea; color: #17140f;
+  transition: background .2s, color .2s;
+}
+.pv-wrap.is-dark { background: #101014; color: #f2efe8; }
+.pv-big { display: grid; justify-items: center; gap: 6px; }
+.pv-big img { width: 112px; height: 112px; border-radius: 8px; display: block; }
+.pv-big span { font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; opacity: .55; }
+.pv-right { display: grid; gap: 10px; min-width: 0; }
+.pv-sizes { display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+.pv-sizes figure { margin: 0; display: grid; justify-items: center; gap: 5px; }
+.pv-sizes img { display: block; image-rendering: auto; }
+.pv-sizes figcaption { font-family: var(--mono); font-size: 9.5px; letter-spacing: .06em; opacity: .55; }
+.tabmock { border: 1px solid rgba(0,0,0,.14); border-radius: 10px 10px 4px 4px; overflow: hidden; background: rgba(255,255,255,.72); max-width: 100%; }
+.is-dark .tabmock { border-color: rgba(255,255,255,.14); background: rgba(255,255,255,.06); }
+.tabmock-bar { display: flex; align-items: center; gap: 7px; padding: 7px 9px 0; border-bottom: 1px solid rgba(0,0,0,.1); }
+.is-dark .tabmock-bar { border-bottom-color: rgba(255,255,255,.1); }
+.tabmock-tab { display: inline-flex; align-items: center; gap: 6px; min-width: 0; padding: 5px 10px 6px; border-radius: 8px 8px 0 0; background: rgba(255,255,255,.92); box-shadow: 0 -1px 0 rgba(0,0,0,.06), 1px 0 0 rgba(0,0,0,.06), -1px 0 0 rgba(0,0,0,.06); }
+.is-dark .tabmock-tab { background: #23232a; box-shadow: none; }
+.tabmock-tab img { width: 16px; height: 16px; display: block; flex: none; }
+.tabmock-tab b { font-size: 11.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 20ch; }
+.tabmock-bar span.tabmock-other { font-family: var(--mono); font-size: 9.5px; opacity: .4; padding-bottom: 6px; }
+@media (max-width: 620px) {
+  .pv-wrap { grid-template-columns: minmax(0,1fr); }
+  .pv-big { justify-items: start; }
+  .pv-big img { width: 88px; height: 88px; }
+}
+
+/* ---------- actions ---------- */
+.act-row { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; }
+.status { min-height: 16px; margin: 0; font-size: 12px; color: var(--muted); flex: 1 1 160px; }
+.status.is-ok { color: var(--ok); }
+.status.is-warn { color: var(--warn); }
+
+/* ---------- outputs ---------- */
+.out-list { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+.out-list li {
+  display: grid; grid-template-columns: 22px minmax(0,1fr) auto; gap: 9px; align-items: center;
+  padding: 7px 0; border-bottom: 1px dashed rgba(255,255,255,.07);
+}
+.out-list li:last-child { border-bottom: 0; padding-bottom: 0; }
+.out-list img { width: 20px; height: 20px; display: block; border-radius: 3px; background: rgba(255,255,255,.06); }
+.out-list .nm { font-family: var(--mono); font-size: 11.5px; color: var(--ink); overflow-wrap: anywhere; line-height: 1.35; }
+.out-list .mt { font-family: var(--mono); font-size: 10px; color: var(--muted2); letter-spacing: .02em; }
+.out-list .dl { appearance: none; border: 1px solid var(--line); background: var(--panel2); color: var(--muted); cursor: pointer; width: 26px; height: 26px; border-radius: 8px; font-size: 12px; line-height: 1; display: grid; place-items: center; padding: 0; flex: none; }
+.out-list .dl:hover { color: var(--accent); border-color: rgba(229,180,92,.4); }
+.out-list .dl:disabled { opacity: .35; cursor: not-allowed; }
+
+.snippet {
+  margin: 0; padding: 11px; border-radius: var(--radius-sm); border: 1px solid var(--line);
+  background: #0d0d10; color: #cfd6c9; font-family: var(--mono); font-size: 10.5px; line-height: 1.6;
+  white-space: pre; overflow-x: auto; tab-size: 2;
+}
+.caveat { margin: 0; font-size: 11.6px; color: var(--muted2); line-height: 1.6; }
+.caveat b { color: var(--muted); }
+
+/* ---------- sections ---------- */
+.section { margin-top: 40px; scroll-margin-top: 18px; }
+.sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 12px; border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 16px; }
+.sec-head h2 { margin: 0; font-size: 17px; letter-spacing: -.01em; }
+.sec-head span { font-family: var(--mono); font-size: 11px; color: var(--muted2); letter-spacing: .08em; text-transform: uppercase; }
+
+.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+.note { padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel); min-width: 0; }
+.note h3 { margin: 0 0 8px; font-size: 14px; display: flex; gap: 8px; align-items: baseline; }
+.note h3 span { font-family: var(--mono); font-size: 10.5px; color: var(--accent); letter-spacing: .1em; }
+.note p { margin: 0; font-size: 12.8px; color: var(--muted); line-height: 1.62; }
+.note b { color: var(--ink); font-weight: 600; }
+.note code { font-family: var(--mono); font-size: 11.5px; color: var(--accent); }
+
+.faq { display: grid; gap: 8px; }
+details.qa { border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); overflow: hidden; }
+details.qa summary { cursor: pointer; padding: 13px 44px 13px 15px; font-size: 13.5px; font-weight: 600; list-style: none; position: relative; }
+details.qa summary::-webkit-details-marker { display: none; }
+details.qa summary::after { content: "+"; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--accent); font-family: var(--mono); font-size: 15px; }
+details.qa[open] summary::after { content: "−"; }
+details.qa .a { padding: 0 15px 14px; font-size: 12.8px; color: var(--muted); line-height: 1.68; }
+details.qa .a b { color: var(--ink); font-weight: 600; }
+
+.foot { margin-top: 34px; padding-top: 14px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--muted2); }
+.foot-links { display: inline-flex; flex-wrap: wrap; gap: 12px; }
+.foot-links a { text-decoration: none; color: var(--muted); border-bottom: 1px solid transparent; }
+.foot-links a:hover { color: var(--ink); border-bottom-color: var(--line2); }
+.foot .net { font-family: var(--mono); letter-spacing: .02em; }
+.foot .net b { color: var(--ok); }
+
+@media (max-width: 640px) {
+  .wrap { padding: 0 14px 36px; }
+  .topbar { padding: 14px 0 8px; }
+  .brand-txt { font-size: 12px; letter-spacing: .1em; }
+  .hero { padding: 16px 0 12px; }
+  .lede { font-size: 14px; }
+  .panel { padding: 13px; }
+  .drop { padding: 20px 12px 18px; }
+  .sec-head h2 { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="/portfolio/" aria-label="Kim Yihyung — portfolio" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="한국어로 보기" aria-label="한국어로 보기">
+        <span class="lt on" data-lt="en">EN</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="ko">KO</span>
+      </button>
+      <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← All tools</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="eyebrow">IconMint · favicon &amp; PWA icons · zero upload</span></p>
+      <h1 data-i18n-html="h1">One image in.<br><span class="soft">The whole icon pack out.</span><br><span class="gold">Nothing leaves the tab.</span></h1>
+      <p class="lede" data-i18n-html="lede">
+        Drop a logo and get <strong>favicon.ico, five PNG sizes, a web manifest and the <code>&lt;head&gt;</code> tags</strong>
+        to paste — drawn on a canvas in this tab, zipped by hand in this tab, uploaded nowhere.
+      </p>
+      <div class="badge-row">
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillUp">0 bytes uploaded</b></span>
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillNet">0 external requests</b></span>
+        <span class="pill" data-i18n="pillPack">8 files in one ZIP</span>
+        <span class="pill" data-i18n="pillSizes">16 – 512 px</span>
+      </div>
+    </section>
+
+    <!-- ══════════ builder ══════════ -->
+    <section class="work" aria-label="Icon builder" data-i18n-aria="buildAria">
+      <div class="card panel" id="buildCard">
+
+        <div class="drop" id="drop">
+          <span class="drop-ic" aria-hidden="true">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="4"></rect>
+              <circle cx="8.6" cy="8.6" r="1.6"></circle>
+              <path d="M20.4 15.4l-4.2-4.2L6.6 20.8"></path>
+            </svg>
+          </span>
+          <p class="drop-t" data-i18n="dropTitle">Drop a PNG, JPG, WebP or SVG</p>
+          <p class="drop-s" data-i18n="dropSub">Square artwork works best — 512 px or larger. Ctrl+V pastes too.</p>
+          <div class="drop-actions">
+            <input type="file" id="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" class="sr-only">
+            <button class="btn btn--primary" id="pick" type="button" data-i18n="pickBtn">Choose image</button>
+            <button class="btn btn--sm" id="sampleGeo" type="button" data-i18n="sampleGeo">Geometric sample</button>
+            <button class="btn btn--sm" id="sampleMono" type="button" data-i18n="sampleMono">Monogram sample</button>
+          </div>
+          <p class="drop-meta" id="fileMeta">—</p>
+        </div>
+
+        <div class="opt-grid">
+          <div class="in">
+            <label for="pad" data-i18n="padLabel">Padding</label>
+            <div class="range-row">
+              <input type="range" id="pad" min="0" max="30" step="1" value="8" aria-describedby="padOut">
+              <output class="out-val" id="padOut" for="pad">8%</output>
+            </div>
+          </div>
+          <div class="in">
+            <label for="rad" data-i18n="radLabel">Corner radius</label>
+            <div class="range-row">
+              <input type="range" id="rad" min="0" max="50" step="1" value="22">
+              <output class="out-val" id="radOut" for="rad">22%</output>
+            </div>
+          </div>
+          <div class="in">
+            <span class="lbl" data-i18n="bgLabel">Background</span>
+            <div class="color-row">
+              <input type="color" id="bg" value="#f7f2e9" aria-label="Background colour">
+              <span class="hex" id="bgHex">#f7f2e9</span>
+              <button class="btn btn--sm" id="bgToggle" type="button" aria-pressed="false" data-i18n="bgTrans">Transparent</button>
+            </div>
+          </div>
+          <div class="in">
+            <label for="app" data-i18n="appLabel">App name (manifest)</label>
+            <input type="text" id="app" value="My App" maxlength="45" autocomplete="off" spellcheck="false">
+          </div>
+          <div class="in">
+            <span class="lbl" data-i18n="themeLabel">Theme colour</span>
+            <div class="color-row">
+              <input type="color" id="theme" value="#0b0b0d" aria-label="Theme colour">
+              <span class="hex" id="themeHex">#0b0b0d</span>
+            </div>
+          </div>
+          <div class="in">
+            <span class="lbl" data-i18n="surfaceLabel">Preview surface</span>
+            <div class="seg" id="surface" role="group" aria-label="Preview surface">
+              <button type="button" data-surface="light" aria-pressed="false" data-i18n="surfLight">Light</button>
+              <button type="button" data-surface="dark" aria-pressed="true" data-i18n="surfDark">Dark</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="pv-wrap is-dark" id="pvWrap">
+          <div class="pv-big">
+            <img id="pvBig" width="112" height="112" alt="Icon preview at 112 px">
+            <span data-i18n="pvBigCap">512 → 112</span>
+          </div>
+          <div class="pv-right">
+            <div class="pv-sizes">
+              <figure><img id="pv48" width="48" height="48" alt="48 px preview"><figcaption>48</figcaption></figure>
+              <figure><img id="pv32" width="32" height="32" alt="32 px preview"><figcaption>32</figcaption></figure>
+              <figure><img id="pv16" width="16" height="16" alt="16 px preview"><figcaption>16</figcaption></figure>
+            </div>
+            <div class="tabmock">
+              <div class="tabmock-bar">
+                <span class="tabmock-tab"><img id="pvTab" width="16" height="16" alt=""><b id="pvName">My App</b></span>
+                <span class="tabmock-other">+</span>
+              </div>
+            </div>
+            <span class="sr-only" data-i18n="pvNote">Browser tab at 16 pixels, next to the icon at 48, 32 and 16.</span>
+          </div>
+        </div>
+
+        <div class="act-row">
+          <button class="btn btn--primary" id="zipBtn" type="button" disabled data-i18n="zipBtn">Download all (.zip)</button>
+          <button class="btn btn--ghost btn--sm" id="resetBtn" type="button" data-i18n="resetBtn">Reset</button>
+          <p class="status" id="status" aria-live="polite"></p>
+        </div>
+      </div>
+
+      <aside class="side">
+        <div class="card panel">
+          <h3><span data-i18n="filesHead">Files in the pack</span> <span id="fileCount" style="color:var(--muted2);font-weight:500">(0)</span></h3>
+          <ul class="out-list" id="outList"></ul>
+          <p class="caveat" data-i18n-html="filesNote">Sizes are measured after generation, not promised. <b>favicon.ico</b> holds 16, 32 and 48 px as PNG-in-ICO; every modern browser reads it.</p>
+        </div>
+        <div class="card panel">
+          <h3 data-i18n="headHead">Paste into &lt;head&gt;</h3>
+          <pre class="snippet" id="snippet" tabindex="0"></pre>
+          <button class="btn btn--sm btn--block" id="copyHead" type="button" data-i18n="copyHead">Copy snippet</button>
+        </div>
+      </aside>
+    </section>
+
+    <!-- ══════════ notes ══════════ -->
+    <section class="section" aria-labelledby="whereTitle">
+      <div class="sec-head">
+        <h2 id="whereTitle" data-i18n="whereTitle">Where each file goes</h2>
+        <span data-i18n="whereNote">site root, all of them</span>
+      </div>
+      <div class="notes">
+        <div class="note">
+          <h3><span>01</span><span data-i18n="n1t">favicon.ico</span></h3>
+          <p data-i18n-html="n1p">Put it at the <code>/favicon.ico</code> root. Browsers and RSS readers still ask for that exact path even when the head links a PNG.</p>
+        </div>
+        <div class="note">
+          <h3><span>02</span><span data-i18n="n2t">PNGs and manifest</span></h3>
+          <p data-i18n-html="n2p">Keep <code>favicon-16x16.png</code>, <code>favicon-32x32.png</code>, <code>apple-touch-icon.png</code>, <code>icon-192.png</code>, <code>icon-512.png</code> and <code>site.webmanifest</code> beside the HTML, then paste the snippet.</p>
+        </div>
+        <div class="note">
+          <h3><span>03</span><span data-i18n="n3t">Installable PWA</span></h3>
+          <p data-i18n-html="n3p">A manifest with 192 and 512 px icons makes the site installable. For <b>maskable</b> icons keep the artwork inside the centre 80% — set padding to <b>20% or more</b> before you download.</p>
+        </div>
+        <div class="note">
+          <h3><span>04</span><span data-i18n="n4t">Readability at 16 px</span></h3>
+          <p data-i18n-html="n4p">Check the 16 px preview before shipping. Fine strokes and text below ~120 px of source artwork disappear — a bolder mark or more padding usually survives better.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="faqTitle">
+      <div class="sec-head">
+        <h2 id="faqTitle" data-i18n="faqTitle">Questions</h2>
+        <span data-i18n="faqNote">favicon · PWA</span>
+      </div>
+      <div class="faq">
+        <details class="qa">
+          <summary data-i18n="q1">Which files do I actually need?</summary>
+          <div class="a" data-i18n-html="a1">For a normal website: <b>favicon.ico</b> at the root, <b>favicon-32x32.png</b> and <b>favicon-16x16.png</b> beside it, <b>apple-touch-icon.png</b> for iOS home screens, and the head snippet. Add <b>site.webmanifest</b> with the 192 and 512 PNGs when the site should install as a PWA. All eight files can sit together in the site root.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q2">Is the image uploaded anywhere?</summary>
+          <div class="a" data-i18n-html="a2">No. The file is read with the browser's File API, drawn on a canvas in this tab, and the PNG, ICO and ZIP bytes are assembled in memory. The counters on this page read its own network activity — and there is no endpoint to send an image to.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q3">Why does my transparent logo look flat?</summary>
+          <div class="a" data-i18n-html="a3">A transparent logo on a transparent icon disappears into dark browser tabs. Set a background colour, or keep transparency and add 10–20% padding so the mark survives at 16 pixels. iOS composites apple-touch-icons on black when they have no background, so pick a colour that reads on both.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q4">What makes an icon acceptable for an installable PWA?</summary>
+          <div class="a" data-i18n-html="a4">The manifest needs a 192×192 and a 512×512 PNG. For a <b>maskable</b> icon the artwork must sit inside the central safe zone, so keep padding at 20% or more if the 512 PNG is also declared maskable. This pack ships the 512 PNG with the padding you chose — raise it before downloading if you plan to use <b>purpose: maskable</b>.</div>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span data-i18n="footCopy">© 2026 Kim Yihyung · Built in the browser, for the browser.</span>
+    <span class="net"><span data-i18n="footNet">external requests</span> <b id="netCount">0</b></span>
+    <span class="foot-links">
+      <a href="/portfolio/" data-i18n="footP1">Portfolio</a>
+      <a href="/portfolio/tools/" data-i18n="footP2">All tools</a>
+      <a href="https://github.com/kimyihyung/portfolio" target="_blank" rel="noopener" data-i18n="footP3">Source</a>
+    </span>
+    <span class="mono" data-i18n="mono">NO UPLOADS · NO TRACKING</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ═════════════════════ 언어 사전 ═════════════════════ */
+  var I18N = {
+    en: {
+      docTitle: 'IconMint — Favicon & PWA Icon Generator, Zero Upload | Kim Yihyung',
+      brandAria: 'Kim Yihyung — portfolio',
+      back: '← All tools',
+      eyebrow: 'IconMint · favicon & PWA icons · zero upload',
+      h1: 'One image in.<br><span class="soft">The whole icon pack out.</span><br><span class="gold">Nothing leaves the tab.</span>',
+      lede: 'Drop a logo and get <strong>favicon.ico, five PNG sizes, a web manifest and the <code>&lt;head&gt;</code> tags</strong> to paste — drawn on a canvas in this tab, zipped by hand in this tab, uploaded nowhere.',
+      pillUp: '0 bytes uploaded', pillNet: '0 external requests',
+      pillPack: '8 files in one ZIP', pillSizes: '16 – 512 px',
+      buildAria: 'Icon builder',
+      dropTitle: 'Drop a PNG, JPG, WebP or SVG',
+      dropSub: 'Square artwork works best — 512 px or larger. Ctrl+V pastes too.',
+      pickBtn: 'Choose image', sampleGeo: 'Geometric sample', sampleMono: 'Monogram sample',
+      dropMeta: 'Nothing loaded yet — pick a file or try a sample.',
+      padLabel: 'Padding', radLabel: 'Corner radius', bgLabel: 'Background',
+      bgTrans: 'Transparent', appLabel: 'App name (manifest)', themeLabel: 'Theme colour', surfaceLabel: 'Preview surface',
+      surfLight: 'Light', surfDark: 'Dark',
+      pvBigCap: '512 → 112', pvNote: 'Browser tab at 16 pixels, next to the icon at 48, 32 and 16.',
+      zipBtn: 'Download all (.zip)', resetBtn: 'Reset',
+      filesHead: 'Files in the pack',
+      filesNote: 'Sizes are measured after generation, not promised. <b>favicon.ico</b> holds 16, 32 and 48 px as PNG-in-ICO; every modern browser reads it.',
+      headHead: 'Paste into &lt;head&gt;', copyHead: 'Copy snippet',
+      whereTitle: 'Where each file goes', whereNote: 'site root, all of them',
+      n1t: 'favicon.ico', n1p: 'Put it at the <code>/favicon.ico</code> root. Browsers and RSS readers still ask for that exact path even when the head links a PNG.',
+      n2t: 'PNGs and manifest', n2p: 'Keep <code>favicon-16x16.png</code>, <code>favicon-32x32.png</code>, <code>apple-touch-icon.png</code>, <code>icon-192.png</code>, <code>icon-512.png</code> and <code>site.webmanifest</code> beside the HTML, then paste the snippet.',
+      n3t: 'Installable PWA', n3p: 'A manifest with 192 and 512 px icons makes the site installable. For <b>maskable</b> icons keep the artwork inside the centre 80% — set padding to <b>20% or more</b> before you download.',
+      n4t: 'Readability at 16 px', n4p: 'Check the 16 px preview before shipping. Fine strokes and text below ~120 px of source artwork disappear — a bolder mark or more padding usually survives better.',
+      faqTitle: 'Questions', faqNote: 'favicon · PWA',
+      q1: 'Which files do I actually need?',
+      a1: 'For a normal website: <b>favicon.ico</b> at the root, <b>favicon-32x32.png</b> and <b>favicon-16x16.png</b> beside it, <b>apple-touch-icon.png</b> for iOS home screens, and the head snippet. Add <b>site.webmanifest</b> with the 192 and 512 PNGs when the site should install as a PWA. All eight files can sit together in the site root.',
+      q2: 'Is the image uploaded anywhere?',
+      a2: 'No. The file is read with the browser\'s File API, drawn on a canvas in this tab, and the PNG, ICO and ZIP bytes are assembled in memory. The counters on this page read its own network activity — and there is no endpoint to send an image to.',
+      q3: 'Why does my transparent logo look flat?',
+      a3: 'A transparent logo on a transparent icon disappears into dark browser tabs. Set a background colour, or keep transparency and add 10–20% padding so the mark survives at 16 pixels. iOS composites apple-touch-icons on black when they have no background, so pick a colour that reads on both.',
+      q4: 'What makes an icon acceptable for an installable PWA?',
+      a4: 'The manifest needs a 192×192 and a 512×512 PNG. For a <b>maskable</b> icon the artwork must sit inside the central safe zone, so keep padding at 20% or more if the 512 PNG is also declared maskable. This pack ships the 512 PNG with the padding you chose — raise it before downloading if you plan to use <b>purpose: maskable</b>.',
+      footCopy: '© 2026 Kim Yihyung · Built in the browser, for the browser.',
+      footNet: 'external requests', footP1: 'Portfolio', footP2: 'All tools', footP3: 'Source',
+      mono: 'NO UPLOADS · NO TRACKING', toggleTo: 'View in Korean',
+      /* dynamic */
+      stReady: 'Ready — drop an image to build the pack.',
+      stLoaded: '{w}×{h} · {type} · {size}',
+      stBuilt: '{n} files · {size} ready to download.',
+      stZipping: 'Packing the ZIP…',
+      stZipOk: 'ZIP ready — {size}.',
+      stErrType: 'That file is not an image this browser can read.',
+      stErrBig: 'That file is over 24 MB. Try a smaller original.',
+      stErrLoad: 'The image could not be decoded.',
+      stCopied: 'Snippet copied.',
+      stCopyFail: 'Copy failed — select the snippet and copy it by hand.',
+      stReset: 'Cleared.',
+      metaNone: 'Nothing loaded yet — pick a file or try a sample.',
+      sampleName: 'sample-{k}.svg',
+      dlTitle: 'Download {name}',
+      kb: 'KB', b: 'B',
+      kindPng: 'PNG', kindIco: 'ICO', kindJson: 'JSON', kindHtml: 'HTML'
+    },
+    ko: {
+      docTitle: 'IconMint — 파비콘·PWA 아이콘 생성기, 업로드 0 | Kim Yihyung',
+      brandAria: 'Kim Yihyung — 포트폴리오',
+      back: '← 도구 전체',
+      eyebrow: 'IconMint · 파비콘·PWA 아이콘 · 업로드 0',
+      h1: '이미지 하나 넣으면.<br><span class="soft">아이콘 세트가 통째로 나옵니다.</span><br><span class="gold">탭 밖으로는 아무것도 안 나갑니다.</span>',
+      lede: '로고를 떨어뜨리면 <strong>favicon.ico, PNG 5종, 웹 매니페스트, 붙여넣을 <code>&lt;head&gt;</code> 태그</strong>까지 한 번에 나옵니다. 이 탭의 캔버스에서 그리고, 이 탭에서 직접 ZIP으로 묶으며, 어디에도 올리지 않습니다.',
+      pillUp: '업로드 0바이트', pillNet: '외부 요청 0건',
+      pillPack: 'ZIP 한 개에 8개 파일', pillSizes: '16 – 512 px',
+      buildAria: '아이콘 만들기',
+      dropTitle: 'PNG·JPG·WebP·SVG를 떨어뜨리세요',
+      dropSub: '정사각 원본이 가장 좋습니다 — 512px 이상. Ctrl+V 붙여넣기도 됩니다.',
+      pickBtn: '이미지 선택', sampleGeo: '기하 도형 예시', sampleMono: '모노그램 예시',
+      dropMeta: '아직 불러온 이미지가 없습니다 — 파일을 고르거나 예시를 눌러 보세요.',
+      padLabel: '여백', radLabel: '모서리 둥글기', bgLabel: '배경색',
+      bgTrans: '투명', appLabel: '앱 이름(매니페스트)', themeLabel: '테마 색', surfaceLabel: '미리보기 배경',
+      surfLight: '밝게', surfDark: '어둡게',
+      pvBigCap: '512 → 112', pvNote: '16px 브라우저 탭과 48·32·16px 아이콘 미리보기.',
+      zipBtn: '전체 내려받기 (.zip)', resetBtn: '초기화',
+      filesHead: '패키지에 들어가는 파일',
+      filesNote: '용량은 만들어 본 뒤 잰 값입니다. <b>favicon.ico</b>에는 16·32·48px이 PNG-in-ICO로 들어가고, 요즘 브라우저는 모두 읽습니다.',
+      headHead: '&lt;head&gt;에 붙여넣기', copyHead: '스니펫 복사',
+      whereTitle: '각 파일이 들어갈 자리', whereNote: '모두 사이트 루트',
+      n1t: 'favicon.ico', n1p: '<code>/favicon.ico</code> 루트에 두세요. head에서 PNG를 가리켜도 브라우저와 RSS 리더는 이 경로를 직접 요청합니다.',
+      n2t: 'PNG와 매니페스트', n2p: '<code>favicon-16x16.png</code>·<code>favicon-32x32.png</code>·<code>apple-touch-icon.png</code>·<code>icon-192.png</code>·<code>icon-512.png</code>·<code>site.webmanifest</code>를 HTML 옆에 두고 스니펫을 붙여넣으세요.',
+      n3t: '설치형 PWA', n3p: '192·512px 아이콘이 있는 매니페스트가 있으면 사이트를 설치할 수 있습니다. <b>마스커블</b> 아이콘은 그림이 가운데 80% 안에 있어야 하므로, 내려받기 전에 여백을 <b>20% 이상</b>으로 올리세요.',
+      n4t: '16px 가독성', n4p: '배포 전에 16px 미리보기를 꼭 보세요. 원본에서 120px 이하로 줄면 가는 선과 글자는 사라집니다 — 굵은 표식이나 넉넉한 여백이 더 오래 살아남습니다.',
+      faqTitle: '자주 묻는 질문', faqNote: '파비콘 · PWA',
+      q1: '실제로 어떤 파일이 필요하죠?',
+      a1: '일반 웹사이트라면 루트의 <b>favicon.ico</b>, 그 옆의 <b>favicon-32x32.png</b>·<b>favicon-16x16.png</b>, iOS 홈 화면용 <b>apple-touch-icon.png</b>, 그리고 head 스니펫이면 충분합니다. 설치형 PWA로 만들 때만 <b>site.webmanifest</b>와 192·512 PNG를 더하세요. 여덟 파일 모두 사이트 루트에 같이 두면 됩니다.',
+      q2: '이미지가 어디로 업로드되나요?',
+      a2: '아니요. 파일은 브라우저 File API로 읽어 이 탭의 캔버스에 그리고, PNG·ICO·ZIP 바이트는 메모리에서 조립합니다. 이 페이지의 카운터는 페이지 자신의 네트워크 활동을 세는 것이고, 이미지를 보낼 엔드포인트 자체가 없습니다.',
+      q3: '투명 로고가 왜 밋밋해 보이죠?',
+      a3: '투명 배경 아이콘은 어두운 브라우저 탭에서 사라집니다. 배경색을 넣거나, 투명을 유지하려면 여백을 10~20% 줘서 16px에서도 형태가 남게 하세요. iOS는 배경이 없는 apple-touch-icon을 검정 위에 합성하므로 밝은 곳과 어두운 곳 모두에서 읽히는 색을 고르세요.',
+      q4: '설치형 PWA 아이콘 조건은 무엇인가요?',
+      a4: '매니페스트에 192×192와 512×512 PNG가 있어야 합니다. <b>마스커블</b>로도 선언하려면 그림이 가운데 안전 영역 안에 있어야 하므로 512 PNG의 여백을 20% 이상으로 두세요. 이 패키지는 고른 여백 그대로 512 PNG를 만들기 때문에, <b>purpose: maskable</b>을 쓸 계획이면 내려받기 전에 여백을 올리면 됩니다.',
+      footCopy: '© 2026 Kim Yihyung · 브라우저에서, 브라우저를 위해 만들었습니다.',
+      footNet: '외부 요청', footP1: '포트폴리오', footP2: '도구 전체', footP3: '소스',
+      mono: '업로드 없음 · 추적 없음', toggleTo: 'View in English',
+      /* dynamic */
+      stReady: '준비됨 — 이미지를 떨어뜨리면 세트를 만듭니다.',
+      stLoaded: '{w}×{h} · {type} · {size}',
+      stBuilt: '{n}개 파일 · {size} 준비됨.',
+      stZipping: 'ZIP으로 묶는 중…',
+      stZipOk: 'ZIP 준비됨 — {size}.',
+      stErrType: '이 브라우저가 읽을 수 있는 이미지가 아닙니다.',
+      stErrBig: '24MB를 넘는 파일입니다. 더 작은 원본을 써 보세요.',
+      stErrLoad: '이미지를 해독하지 못했습니다.',
+      stCopied: '스니펫을 복사했습니다.',
+      stCopyFail: '복사에 실패했습니다 — 스니펫을 선택해 직접 복사해 주세요.',
+      stReset: '비웠습니다.',
+      metaNone: '아직 불러온 이미지가 없습니다 — 파일을 고르거나 예시를 눌러 보세요.',
+      sampleName: 'sample-{k}.svg',
+      dlTitle: '{name} 내려받기',
+      kb: 'KB', b: 'B',
+      kindPng: 'PNG', kindIco: 'ICO', kindJson: 'JSON', kindHtml: 'HTML'
+    }
+  };
+
+  var LANG_KEY = 'iconmint.lang';
+  var SHARED_KEY = 'kyh.lang';
+
+  var state = {
+    lang: 'en',
+    img: null,
+    imgName: '',
+    imgType: '',
+    naturalW: 0,
+    naturalH: 0,
+    pad: 8,
+    rad: 22,
+    bg: '#f7f2e9',
+    transparent: false,
+    theme: '#0b0b0d',
+    app: 'My App',
+    surface: 'dark',
+    outputs: [],
+    zipBlob: null,
+    dirty: true,
+    building: false
+  };
+
+  function $(id) { return document.getElementById(id); }
+  function t(key) {
+    var d = I18N[state.lang] || I18N.en;
+    if (d[key] != null) return d[key];
+    return I18N.en[key] != null ? I18N.en[key] : '';
+  }
+  function fmt(str, vars) {
+    return String(str).replace(/\{(\w+)\}/g, function (m, k) {
+      return vars && vars[k] != null ? vars[k] : m;
+    });
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+  function readLang(key) {
+    try { var v = localStorage.getItem(key); return v === 'ko' || v === 'en' ? v : ''; } catch (e) { return ''; }
+  }
+  function initialLang() {
+    var q = '';
+    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
+    if (q === 'ko' || q === 'en') return q;
+    if (readLang(SHARED_KEY)) return readLang(SHARED_KEY);
+    if (readLang(LANG_KEY)) return readLang(LANG_KEY);
+    var nav = (navigator.language || '').toLowerCase();
+    return nav.indexOf('ko') === 0 ? 'ko' : 'en';
+  }
+  function bytes(n) {
+    if (n == null) return '—';
+    if (n < 1024) return n + ' B';
+    return (n / 1024).toFixed(n < 10240 ? 1 : 0) + ' KB';
+  }
+
+  /* ═════════════════════ 네트워크 계측 ═════════════════════ */
+  var net = { ext: 0, bytes: 0 };
+  function isExternal(u) {
+    try {
+      var x = new URL(u, location.href);
+      if (x.protocol === 'blob:' || x.protocol === 'data:') return false;
+      return x.origin !== location.origin;
+    } catch (e) { return true; }
+  }
+  function paintNet() {
+    var n = $('netCount');
+    if (n) n.textContent = String(net.ext);
+    var p = document.querySelector('[data-i18n="pillUp"]');
+    var q = document.querySelector('[data-i18n="pillNet"]');
+    if (p) p.textContent = state.lang === 'ko' ? '업로드 ' + net.bytes + '바이트' : net.bytes + ' bytes uploaded';
+    if (q) q.textContent = state.lang === 'ko' ? '외부 요청 ' + net.ext + '건' : net.ext + ' external requests';
+  }
+  try {
+    var origFetch = window.fetch;
+    if (origFetch) {
+      window.fetch = function (input, init) {
+        var url = typeof input === 'string' ? input : (input && input.url) || '';
+        var body = init && init.body;
+        if (isExternal(url)) {
+          net.ext++;
+          if (body && body.size) net.bytes += body.size;
+          else if (typeof body === 'string') net.bytes += body.length;
+          paintNet();
+        }
+        return origFetch.apply(this, arguments);
+      };
+    }
+    var openXHR = XMLHttpRequest.prototype.open;
+    XMLHttpRequest.prototype.open = function (method, url) {
+      this.__ext = isExternal(url);
+      if (this.__ext) { net.ext++; paintNet(); }
+      return openXHR.apply(this, arguments);
+    };
+    var sendXHR = XMLHttpRequest.prototype.send;
+    XMLHttpRequest.prototype.send = function (body) {
+      if (this.__ext && body) {
+        if (body.size) net.bytes += body.size;
+        else if (typeof body === 'string') net.bytes += body.length;
+        paintNet();
+      }
+      return sendXHR.apply(this, arguments);
+    };
+    if ('PerformanceObserver' in window) {
+      try {
+        new PerformanceObserver(function (list) {
+          var entries = list.getEntries();
+          for (var i = 0; i < entries.length; i++) if (isExternal(entries[i].name)) net.ext++;
+          paintNet();
+        }).observe({ type: 'resource', buffered: true });
+      } catch (e) { /* buffered 미지원 */ }
+    }
+  } catch (e) { /* 계측 실패는 동작에 영향 없음 */ }
+
+  /* ═════════════════════ 캔버스 렌더 ═════════════════════ */
+  function roundRect(ctx, x, y, w, h, r) {
+    var rr = Math.max(0, Math.min(r, Math.min(w, h) / 2));
+    ctx.beginPath();
+    ctx.moveTo(x + rr, y);
+    ctx.lineTo(x + w - rr, y);
+    ctx.arcTo(x + w, y, x + w, y + rr, rr);
+    ctx.lineTo(x + w, y + h - rr);
+    ctx.arcTo(x + w, y + h, x + w - rr, y + h, rr);
+    ctx.lineTo(x + rr, y + h);
+    ctx.arcTo(x, y + h, x, y + h - rr, rr);
+    ctx.lineTo(x, y + rr);
+    ctx.arcTo(x, y, x + rr, y, rr);
+    ctx.closePath();
+  }
+
+  function renderIcon(size) {
+    var c = document.createElement('canvas');
+    c.width = size; c.height = size;
+    var ctx = c.getContext('2d');
+    if (!ctx || !state.img) return c;
+    var r = size * state.rad / 100;
+    if (!state.transparent) {
+      ctx.fillStyle = state.bg;
+      roundRect(ctx, 0, 0, size, size, r);
+      ctx.fill();
+    }
+    ctx.save();
+    roundRect(ctx, 0, 0, size, size, r);
+    ctx.clip();
+    var pad = size * state.pad / 100;
+    var box = Math.max(1, size - pad * 2);
+    var iw = state.naturalW || state.img.width || 1;
+    var ih = state.naturalH || state.img.height || 1;
+    var s = Math.min(box / iw, box / ih);
+    var w = Math.max(1, iw * s), h = Math.max(1, ih * s);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    try { ctx.drawImage(state.img, (size - w) / 2, (size - h) / 2, w, h); } catch (e) { /* 해독 실패 */ }
+    ctx.restore();
+    return c;
+  }
+
+  function canvasPNG(canvas) {
+    return new Promise(function (res) {
+      canvas.toBlob(function (b) {
+        if (!b) { res(new Uint8Array(0)); return; }
+        b.arrayBuffer().then(function (buf) { res(new Uint8Array(buf)); });
+      }, 'image/png');
+    });
+  }
+
+  /* ═════════════════════ ICO (PNG-in-ICO) ═════════════════════ */
+  function buildIco(entries) {
+    var count = entries.length;
+    var head = 6 + count * 16;
+    var total = head;
+    var i;
+    for (i = 0; i < count; i++) total += entries[i].data.length;
+    var out = new Uint8Array(total);
+    var dv = new DataView(out.buffer);
+    dv.setUint16(0, 0, true);        /* reserved */
+    dv.setUint16(2, 1, true);        /* type: icon */
+    dv.setUint16(4, count, true);
+    var offset = head;
+    for (i = 0; i < count; i++) {
+      var e = entries[i];
+      var p = 6 + i * 16;
+      out[p] = e.size >= 256 ? 0 : e.size;      /* width */
+      out[p + 1] = e.size >= 256 ? 0 : e.size;  /* height */
+      out[p + 2] = 0;                            /* colours */
+      out[p + 3] = 0;                            /* reserved */
+      dv.setUint16(p + 4, 1, true);              /* planes */
+      dv.setUint16(p + 6, 32, true);             /* bit count */
+      dv.setUint32(p + 8, e.data.length, true);
+      dv.setUint32(p + 12, offset, true);
+      out.set(e.data, offset);
+      offset += e.data.length;
+    }
+    return out;
+  }
+
+  /* ═════════════════════ CRC32 + 무압축 ZIP ═════════════════════ */
+  var CRC_TABLE = (function () {
+    var tab = new Uint32Array(256), c, n, k;
+    for (n = 0; n < 256; n++) {
+      c = n;
+      for (k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      tab[n] = c >>> 0;
+    }
+    return tab;
+  })();
+
+  function crc32(u8) {
+    var c = 0xFFFFFFFF;
+    for (var i = 0; i < u8.length; i++) c = CRC_TABLE[(c ^ u8[i]) & 0xFF] ^ (c >>> 8);
+    return (c ^ 0xFFFFFFFF) >>> 0;
+  }
+
+  var DOS_TIME = (9 << 11);                       /* 09:00:00 */
+  var DOS_DATE = ((2026 - 1980) << 9) | (11 << 5) | 18;  /* 2026-11-18 */
+
+  function zipStore(files) {
+    var enc = new TextEncoder();
+    var parts = [], central = [], offset = 0, i;
+    for (i = 0; i < files.length; i++) {
+      var f = files[i];
+      var nameB = enc.encode(f.name);
+      var data = f.data;
+      var crc = crc32(data);
+      var lh = new Uint8Array(30 + nameB.length);
+      var dv = new DataView(lh.buffer);
+      dv.setUint32(0, 0x04034b50, true);
+      dv.setUint16(4, 20, true);            /* version needed */
+      dv.setUint16(6, 0x0800, true);        /* UTF-8 name */
+      dv.setUint16(8, 0, true);             /* store */
+      dv.setUint16(10, DOS_TIME, true);
+      dv.setUint16(12, DOS_DATE, true);
+      dv.setUint32(14, crc, true);
+      dv.setUint32(18, data.length, true);
+      dv.setUint32(22, data.length, true);
+      dv.setUint16(26, nameB.length, true);
+      dv.setUint16(28, 0, true);
+      lh.set(nameB, 30);
+      parts.push(lh, data);
+
+      var ch = new Uint8Array(46 + nameB.length);
+      var cv = new DataView(ch.buffer);
+      cv.setUint32(0, 0x02014b50, true);
+      cv.setUint16(4, 20, true);            /* made by */
+      cv.setUint16(6, 20, true);            /* needed */
+      cv.setUint16(8, 0x0800, true);
+      cv.setUint16(10, 0, true);
+      cv.setUint16(12, DOS_TIME, true);
+      cv.setUint16(14, DOS_DATE, true);
+      cv.setUint32(16, crc, true);
+      cv.setUint32(20, data.length, true);
+      cv.setUint32(24, data.length, true);
+      cv.setUint16(28, nameB.length, true);
+      cv.setUint16(30, 0, true);            /* extra */
+      cv.setUint16(32, 0, true);            /* comment */
+      cv.setUint16(34, 0, true);            /* disk */
+      cv.setUint16(36, 0, true);            /* internal attrs */
+      cv.setUint32(38, 0, true);            /* external attrs */
+      cv.setUint32(42, offset, true);
+      ch.set(nameB, 46);
+      central.push(ch);
+
+      offset += lh.length + data.length;
+    }
+    var cenSize = 0;
+    for (i = 0; i < central.length; i++) cenSize += central[i].length;
+    var end = new Uint8Array(22);
+    var ev = new DataView(end.buffer);
+    ev.setUint32(0, 0x06054b50, true);
+    ev.setUint16(4, 0, true);
+    ev.setUint16(6, 0, true);
+    ev.setUint16(8, files.length, true);
+    ev.setUint16(10, files.length, true);
+    ev.setUint32(12, cenSize, true);
+    ev.setUint32(16, offset, true);
+    ev.setUint16(20, 0, true);
+    return new Blob(parts.concat(central, [end]), { type: 'application/zip' });
+  }
+
+  /* ═════════════════════ 산출물 ═════════════════════ */
+  function headSnippet() {
+    return [
+      '<link rel="icon" href="/favicon.ico" sizes="any">',
+      '<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">',
+      '<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">',
+      '<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">',
+      '<link rel="manifest" href="/site.webmanifest">',
+      '<meta name="theme-color" content="' + state.theme + '">'
+    ].join('\n');
+  }
+
+  function manifestText() {
+    var name = (state.app || 'My App').trim() || 'My App';
+    return JSON.stringify({
+      name: name,
+      short_name: name.length > 12 ? name.slice(0, 12) : name,
+      description: '',
+      start_url: '/',
+      scope: '/',
+      display: 'standalone',
+      background_color: state.transparent ? '#ffffff' : state.bg,
+      theme_color: state.theme,
+      icons: [
+        { src: '/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+        { src: '/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' }
+      ]
+    }, null, 2) + '\n';
+  }
+
+  var enc = new TextEncoder();
+
+  function build() {
+    if (!state.img) return Promise.resolve([]);
+    state.building = true;
+    var sizes = [16, 32, 48, 180, 192, 512];
+    return Promise.all(sizes.map(function (s) { return canvasPNG(renderIcon(s)); }))
+      .then(function (pngs) {
+        var bySize = {};
+        for (var i = 0; i < sizes.length; i++) bySize[sizes[i]] = pngs[i];
+        var ico = buildIco([
+          { size: 16, data: bySize[16] },
+          { size: 32, data: bySize[32] },
+          { size: 48, data: bySize[48] }
+        ]);
+        var els = [
+          { name: 'favicon.ico', kind: 'ico', size: '16·32·48', data: ico, mime: 'image/x-icon', preview: true, at: 16 },
+          { name: 'favicon-16x16.png', kind: 'png', size: '16×16', data: bySize[16], mime: 'image/png', preview: true, at: 16 },
+          { name: 'favicon-32x32.png', kind: 'png', size: '32×32', data: bySize[32], mime: 'image/png', preview: true, at: 16 },
+          { name: 'apple-touch-icon.png', kind: 'png', size: '180×180', data: bySize[180], mime: 'image/png', preview: true, at: 16 },
+          { name: 'icon-192.png', kind: 'png', size: '192×192', data: bySize[192], mime: 'image/png', preview: true, at: 16 },
+          { name: 'icon-512.png', kind: 'png', size: '512×512', data: bySize[512], mime: 'image/png', preview: true, at: 16 },
+          { name: 'site.webmanifest', kind: 'json', size: 'JSON', data: enc.encode(manifestText()), mime: 'application/manifest+json' },
+          { name: 'head.html', kind: 'html', size: 'HTML', data: enc.encode(headSnippet() + '\n'), mime: 'text/html' }
+        ];
+        state.outputs = els;
+        state.zipBlob = zipStore(els.map(function (e) { return { name: e.name, data: e.data }; }));
+        state.building = false;
+        state.dirty = false;
+        paintOutputs();
+        paintPreview();
+        status(fmt(t('stBuilt'), { n: els.length, size: bytes(state.zipBlob.size) }), 'ok');
+        return els;
+      });
+  }
+
+  /* ═════════════════════ 그리기 ═════════════════════ */
+  function status(msg, kind) {
+    var el = $('status');
+    el.textContent = msg || '';
+    el.className = 'status' + (kind ? ' is-' + kind : '');
+  }
+
+  function paintPreview() {
+    var big = $('pvBig'), s48 = $('pv48'), s32 = $('pv32'), s16 = $('pv16'), tab = $('pvTab');
+    var name = $('pvName');
+    if (name) name.textContent = (state.app || 'My App').trim() || 'My App';
+    if (!state.img) {
+      [big, s48, s32, s16, tab].forEach(function (img) {
+        if (img) img.removeAttribute('src');
+      });
+      return;
+    }
+    var b = renderIcon(112).toDataURL('image/png');
+    big.src = b;
+    s48.src = renderIcon(48).toDataURL('image/png');
+    s32.src = renderIcon(32).toDataURL('image/png');
+    var t16 = renderIcon(16).toDataURL('image/png');
+    s16.src = t16;
+    tab.src = t16;
+  }
+
+  function paintOutputs() {
+    var box = $('outList');
+    $('fileCount').textContent = '(' + state.outputs.length + ')';
+    if (!state.outputs.length) {
+      box.innerHTML = '<li><span style="grid-column:1/-1;color:var(--muted2);font-size:12px" data-i18n="filesEmpty">' +
+        esc(t('metaNone')) + '</span></li>';
+      $('zipBtn').disabled = true;
+      $('snippet').textContent = headSnippet();
+      return;
+    }
+    var html = '';
+    for (var i = 0; i < state.outputs.length; i++) {
+      var o = state.outputs[i];
+      var prev = '';
+      if (o.preview) prev = renderIcon(o.at).toDataURL('image/png');
+      html += '<li>' +
+        (prev ? '<img src="' + prev + '" alt="">' : '<span style="width:20px;height:20px;display:grid;place-items:center;font-family:var(--mono);font-size:8px;color:var(--muted2);border:1px solid var(--line);border-radius:3px">' + esc(o.kind.toUpperCase()) + '</span>') +
+        '<span><span class="nm">' + esc(o.name) + '</span><br><span class="mt">' + esc(o.size) + ' · ' + bytes(o.data.length) + '</span></span>' +
+        '<button class="dl" type="button" data-dl="' + i + '" title="' + esc(fmt(t('dlTitle'), { name: o.name })) + '" aria-label="' + esc(fmt(t('dlTitle'), { name: o.name })) + '">↓</button>' +
+        '</li>';
+    }
+    box.innerHTML = html;
+    $('zipBtn').disabled = !state.zipBlob;
+    $('snippet').textContent = headSnippet();
+  }
+
+  /* ═════════════════════ 입력 ═════════════════════ */
+  /* SVG는 width/height가 없으면 브라우저가 300×150으로 읽는다 — viewBox 비율을 먼저 뽑는다 */
+  function svgSize(blob) {
+    if (typeof blob.text !== 'function') return Promise.resolve(null);
+    return blob.text().then(function (txt) {
+      var m = /viewBox\s*=\s*["']\s*[-\d.]+[\s,]+[-\d.]+[\s,]+([\d.]+)[\s,]+([\d.]+)/i.exec(txt);
+      if (m) return { w: parseFloat(m[1]), h: parseFloat(m[2]) };
+      var w = /<svg[^>]*\swidth\s*=\s*["']([\d.]+)/i.exec(txt);
+      var h = /<svg[^>]*\sheight\s*=\s*["']([\d.]+)/i.exec(txt);
+      if (w && h) return { w: parseFloat(w[1]), h: parseFloat(h[1]) };
+      return null;
+    }).catch(function () { return null; });
+  }
+
+  function loadBlob(blob, name, type) {
+    var mime = type || blob.type || 'image';
+    var isSvg = mime.indexOf('svg') >= 0 || /\.svg$/i.test(name || '');
+    var dims = isSvg ? svgSize(blob) : Promise.resolve(null);
+    var url = URL.createObjectURL(blob);
+    dims.then(function (dim) {
+      var img = new Image();
+      img.onload = function () {
+        state.img = img;
+        state.imgName = name;
+        state.imgType = mime;
+        state.naturalW = (dim && dim.w) || img.naturalWidth || img.width || 512;
+        state.naturalH = (dim && dim.h) || img.naturalHeight || img.height || 512;
+        $('fileMeta').innerHTML = '<b>' + esc(name) + '</b> · ' + state.naturalW + '×' + state.naturalH +
+          ' · ' + esc(shortType(state.imgType)) + ' · ' + bytes(blob.size);
+        status(t('stReady'));
+        build();
+        URL.revokeObjectURL(url);
+      };
+      img.onerror = function () {
+        URL.revokeObjectURL(url);
+        status(t('stErrLoad'), 'warn');
+      };
+      img.src = url;
+    });
+  }
+
+  function shortType(type) {
+    var m = String(type || '').split('/').pop().toUpperCase();
+    if (m === 'SVG+XML') return 'SVG';
+    if (m === 'JPEG') return 'JPG';
+    return m || 'IMG';
+  }
+
+  function handleFile(file) {
+    if (!file) return;
+    var ok = /^image\//.test(file.type) || /\.(png|jpe?g|webp|svg|gif|avif)$/i.test(file.name || '');
+    if (!ok) { status(t('stErrType'), 'warn'); return; }
+    if (file.size > 24 * 1024 * 1024) { status(t('stErrBig'), 'warn'); return; }
+    loadBlob(file, file.name || 'image', file.type);
+  }
+
+  function sampleSVG(kind) {
+    var g1 = kind === 'mono' ? '#e5b45c' : '#7ed0b0';
+    var g2 = kind === 'mono' ? '#b0752a' : '#3a8fbf';
+    var svg;
+    if (kind === 'mono') {
+      svg = '<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">' +
+        '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">' +
+        '<stop offset="0" stop-color="' + g1 + '"/><stop offset="1" stop-color="' + g2 + '"/></linearGradient></defs>' +
+        '<rect width="512" height="512" rx="96" fill="#14110c"/>' +
+        '<path d="M256 104 L392 352 H120 Z" fill="none" stroke="url(#g)" stroke-width="34" stroke-linejoin="round"/>' +
+        '<path d="M196 352 L256 244 L316 352" fill="none" stroke="url(#g)" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '</svg>';
+    } else {
+      svg = '<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">' +
+        '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">' +
+        '<stop offset="0" stop-color="' + g1 + '"/><stop offset="1" stop-color="' + g2 + '"/></linearGradient></defs>' +
+        '<rect width="512" height="512" rx="96" fill="#0f1512"/>' +
+        '<path d="M256 88 L384 162 V310 L256 384 L128 310 V162 Z" fill="none" stroke="url(#g)" stroke-width="26" stroke-linejoin="round"/>' +
+        '<circle cx="256" cy="236" r="52" fill="url(#g)"/>' +
+        '<circle cx="256" cy="140" r="18" fill="' + g2 + '"/>' +
+        '<circle cx="256" cy="332" r="18" fill="' + g1 + '"/>' +
+        '</svg>';
+    }
+    return new Blob([svg], { type: 'image/svg+xml' });
+  }
+
+  /* ═════════════════════ 다운로드 ═════════════════════ */
+  function download(blob, name) {
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+  }
+
+  /* ═════════════════════ 언어 ═════════════════════ */
+  function applyLang(lang) {
+    state.lang = lang === 'ko' ? 'ko' : 'en';
+    document.documentElement.setAttribute('lang', state.lang);
+    document.title = t('docTitle');
+
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var v = t(nodes[i].getAttribute('data-i18n'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < nodes.length; i++) {
+      var vh = t(nodes[i].getAttribute('data-i18n-html'));
+      if (vh) nodes[i].innerHTML = vh;
+    }
+    nodes = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < nodes.length; i++) {
+      var va = t(nodes[i].getAttribute('data-i18n-aria'));
+      if (va) nodes[i].setAttribute('aria-label', va);
+    }
+
+    var lt = $('langToggle');
+    if (lt) {
+      var spans = lt.querySelectorAll('[data-lt]');
+      for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
+      lt.setAttribute('aria-label', t('toggleTo'));
+      lt.setAttribute('title', t('toggleTo'));
+    }
+    paintNet();
+    paintPreview();
+    paintOutputs();
+    if (state.img) {
+      $('fileMeta').innerHTML = '<b>' + esc(state.imgName) + '</b> · ' + state.naturalW + '×' + state.naturalH +
+        ' · ' + esc(shortType(state.imgType));
+    } else {
+      $('fileMeta').textContent = t('metaNone');
+    }
+    try {
+      localStorage.setItem(LANG_KEY, state.lang);
+      localStorage.setItem(SHARED_KEY, state.lang);
+    } catch (e) { /* 저장 실패 무해 */ }
+  }
+
+  /* ═════════════════════ 이벤트 ═════════════════════ */
+  var rebuildTimer = null;
+  function scheduleBuild() {
+    state.dirty = true;
+    clearTimeout(rebuildTimer);
+    rebuildTimer = setTimeout(function () { build(); }, 140);
+  }
+
+  $('pick').addEventListener('click', function () { $('file').click(); });
+  $('file').addEventListener('change', function (e) {
+    if (e.target.files && e.target.files[0]) handleFile(e.target.files[0]);
+    e.target.value = '';
+  });
+
+  $('sampleGeo').addEventListener('click', function () {
+    loadBlob(sampleSVG('geo'), 'sample-geometric.svg', 'image/svg+xml');
+  });
+  $('sampleMono').addEventListener('click', function () {
+    loadBlob(sampleSVG('mono'), 'sample-monogram.svg', 'image/svg+xml');
+  });
+
+  var drop = $('drop');
+  ['dragenter', 'dragover'].forEach(function (ev) {
+    drop.addEventListener(ev, function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      drop.classList.add('is-over');
+    });
+  });
+  ['dragleave', 'dragend'].forEach(function (ev) {
+    drop.addEventListener(ev, function (e) {
+      e.preventDefault();
+      if (e.target === drop) drop.classList.remove('is-over');
+    });
+  });
+  drop.addEventListener('drop', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    drop.classList.remove('is-over');
+    var dt = e.dataTransfer;
+    if (dt && dt.files && dt.files[0]) handleFile(dt.files[0]);
+  });
+  drop.addEventListener('click', function (e) {
+    if (e.target.closest('button') || e.target.closest('input')) return;
+    $('file').click();
+  });
+
+  window.addEventListener('paste', function (e) {
+    var items = e.clipboardData && e.clipboardData.items;
+    if (!items) return;
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].type && items[i].type.indexOf('image/') === 0) {
+        var f = items[i].getAsFile();
+        if (f) { handleFile(f); e.preventDefault(); return; }
+      }
+    }
+  });
+
+  $('pad').addEventListener('input', function (e) {
+    state.pad = +e.target.value;
+    $('padOut').textContent = state.pad + '%';
+    paintPreview();
+    scheduleBuild();
+  });
+  $('rad').addEventListener('input', function (e) {
+    state.rad = +e.target.value;
+    $('radOut').textContent = state.rad + '%';
+    paintPreview();
+    scheduleBuild();
+  });
+  $('bg').addEventListener('input', function (e) {
+    state.bg = e.target.value;
+    $('bgHex').textContent = state.bg;
+    if (state.transparent) toggleTransparent(false);
+    paintPreview();
+    scheduleBuild();
+  });
+  function toggleTransparent(on) {
+    state.transparent = !!on;
+    $('bgToggle').setAttribute('aria-pressed', String(state.transparent));
+    $('bg').disabled = state.transparent;
+    $('bg').style.opacity = state.transparent ? '.35' : '1';
+  }
+  $('bgToggle').addEventListener('click', function () {
+    toggleTransparent(!state.transparent);
+    paintPreview();
+    scheduleBuild();
+  });
+  $('theme').addEventListener('input', function (e) {
+    state.theme = e.target.value;
+    $('themeHex').textContent = state.theme;
+    scheduleBuild();
+  });
+  $('app').addEventListener('input', function (e) {
+    state.app = e.target.value;
+    $('pvName').textContent = (state.app || 'My App').trim() || 'My App';
+    scheduleBuild();
+  });
+  $('surface').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-surface]');
+    if (!b) return;
+    state.surface = b.getAttribute('data-surface');
+    var bs = $('surface').querySelectorAll('button');
+    for (var i = 0; i < bs.length; i++) bs[i].setAttribute('aria-pressed', String(bs[i] === b));
+    $('pvWrap').classList.toggle('is-dark', state.surface === 'dark');
+  });
+
+  $('zipBtn').addEventListener('click', function () {
+    if (!state.zipBlob) return;
+    download(state.zipBlob, 'icon-pack.zip');
+    status(fmt(t('stZipOk'), { size: bytes(state.zipBlob.size) }), 'ok');
+  });
+
+  $('outList').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-dl]');
+    if (!b) return;
+    var o = state.outputs[+b.getAttribute('data-dl')];
+    if (!o) return;
+    download(new Blob([o.data], { type: o.mime }), o.name);
+  });
+
+  function legacyCopy(text) {
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.top = '-1000px';
+      document.body.appendChild(ta);
+      ta.select();
+      var r = document.execCommand('copy');
+      document.body.removeChild(ta);
+      return r;
+    } catch (e) { return false; }
+  }
+  $('copyHead').addEventListener('click', function () {
+    var text = headSnippet();
+    function ok() { status(t('stCopied'), 'ok'); }
+    function fail() { legacyCopy(text) ? ok() : status(t('stCopyFail'), 'warn'); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(ok, fail);
+    } else { fail(); }
+  });
+
+  $('resetBtn').addEventListener('click', function () {
+    state.img = null;
+    state.imgName = '';
+    state.imgType = '';
+    state.outputs = [];
+    state.zipBlob = null;
+    $('fileMeta').textContent = t('metaNone');
+    paintPreview();
+    paintOutputs();
+    status(t('stReset'));
+  });
+
+  $('langToggle').addEventListener('click', function () {
+    applyLang(state.lang === 'ko' ? 'en' : 'ko');
+  });
+
+  /* ═════════════════════ 시작 ═════════════════════ */
+  $('snippet').textContent = headSnippet();
+  applyLang(initialLang());
+  status(t('stReady'));
+
+  /* 테스트·자동화용 읽기 전용 창구 */
+  window.IconMint = {
+    sample: function (kind) { loadBlob(sampleSVG(kind === 'mono' ? 'mono' : 'geo'), 'sample.svg', 'image/svg+xml'); },
+    build: build,
+    files: function () { return state.outputs.map(function (o) { return { name: o.name, bytes: o.data.length }; }); },
+    zipSize: function () { return state.zipBlob ? state.zipBlob.size : 0; },
+    zipBytes: function () {
+      return state.zipBlob ? state.zipBlob.arrayBuffer().then(function (b) { return b.byteLength; }) : Promise.resolve(0);
+    },
+    set: function (opts) {
+      if (opts.pad != null) { state.pad = opts.pad; $('pad').value = opts.pad; $('padOut').textContent = opts.pad + '%'; }
+      if (opts.rad != null) { state.rad = opts.rad; $('rad').value = opts.rad; $('radOut').textContent = opts.rad + '%'; }
+      if (opts.app != null) { state.app = opts.app; $('app').value = opts.app; }
+      paintPreview();
+      return build();
+    },
+    state: function () {
+      return {
+        lang: state.lang, pad: state.pad, rad: state.rad, bg: state.bg, transparent: state.transparent,
+        app: state.app, files: state.outputs.length, zipBytes: state.zipBlob ? state.zipBlob.size : 0,
+        loaded: !!state.img, w: state.naturalW, h: state.naturalH
+      };
+    },
+    snippet: headSnippet,
+    version: '1.0'
+  };
+})();
+</script>
+</body>
+</html>
