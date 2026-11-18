@@ -733,8 +733,7 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
     if (q === 'ko' || q === 'en') return q;
     if (readLang(SHARED_KEY)) return readLang(SHARED_KEY);
     if (readLang(LANG_KEY)) return readLang(LANG_KEY);
-    var nav = (navigator.language || '').toLowerCase();
-    return nav.indexOf('ko') === 0 ? 'ko' : 'en';
+    return 'en';
   }
   function bytes(n) {
     if (n == null) return '—';
