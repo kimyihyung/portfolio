@@ -348,6 +348,7 @@ tr.is-on td { background: rgba(229,180,92,.07); }
 .qa .a { margin-top: 9px; padding-left: 16px; font-size: 12.5px; color: var(--muted); }
 
 .caveat { margin: 10px 0 0; font-size: 11.5px; color: var(--muted2); line-height: 1.65; }
+.sum { margin: 0; padding: 12px 13px; border-radius: 10px; border: 1px solid var(--line); background: rgba(0,0,0,.28); font-family: var(--mono); font-size: 11.5px; line-height: 1.75; color: var(--muted); white-space: pre-wrap; word-break: break-all; }
 .caveat b { color: var(--muted); }
 .mono { font-family: var(--mono); }
 
@@ -541,6 +542,15 @@ tr.is-on td { background: rgba(229,180,92,.07); }
           </div>
 
           <p class="caveat" data-i18n-html="scoreCaveat">가점제는 <b>민영주택 일반공급</b> 기준입니다. 공공주택·특별공급은 다른 기준을 쓰고, 노부모부양 특별공급에는 배우자 통장 기간이 더해지지 않습니다.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h2 data-i18n="sumHead">복사될 요약</h2>
+            <span class="k" data-i18n="sumK">카톡용</span>
+          </div>
+          <pre class="sum" id="sumBox" aria-live="polite"></pre>
+          <p class="caveat" data-i18n="sumHint">위 버튼은 이 글자를 그대로 복사합니다. 날짜나 인원을 바꾸면 함께 바뀝니다.</p>
         </div>
       </div>
     </section>
@@ -749,6 +759,7 @@ tr.is-on td { background: rgba(229,180,92,.07); }
       gaugeAria: '청약가점 게이지', gaugeNote: '날짜를 넣으면 바로 계산됩니다', ptUnit: '점',
       bNoHome: '무주택 기간', bFamily: '부양가족 수', bAccount: '청약통장 가입기간',
       totalLabel: '합계', copyKakao: '카톡 요약 복사', resetScore: '초기화',
+      sumHead: '복사될 요약', sumK: '카톡용', sumHint: '위 버튼은 이 글자를 그대로 복사합니다. 날짜나 인원을 바꾸면 함께 바뀝니다.',
       scoreCaveat: '가점제는 <b>민영주택 일반공급</b> 기준입니다. 공공주택·특별공급은 다른 기준을 쓰고, 노부모부양 특별공급에는 배우자 통장 기간이 더해지지 않습니다.',
       subNoHomeNone: '유주택 또는 만 30세 미만 미혼 → 0점',
       subNoHomeYears: '{y}년 {m}개월 · 다음 {p}점까지 {n}개월',
@@ -838,6 +849,7 @@ tr.is-on td { background: rgba(229,180,92,.07); }
       gaugeAria: 'Housing points gauge', gaugeNote: 'Enter a date and the score follows', ptUnit: 'pts',
       bNoHome: 'Years without a home', bFamily: 'Dependants', bAccount: 'Account period',
       totalLabel: 'Total', copyKakao: 'Copy summary', resetScore: 'Reset',
+      sumHead: 'The summary that gets copied', sumK: 'for KakaoTalk', sumHint: 'The button above copies exactly this text. Change a date or a headcount and it changes with them.',
       scoreCaveat: 'This is the <b>private-housing general supply</b> score. Public housing and special supply use different rules, and the elderly-parent special supply does not add a spouse\'s account.',
       subNoHomeNone: 'Owns a home, or under 30 and unmarried → 0',
       subNoHomeYears: '{y}y {m}m · {n} months to {p} points',
@@ -1119,7 +1131,7 @@ tr.is-on td { background: rgba(229,180,92,.07); }
     $('gaugeNote').textContent = total >= 60 ? t('gaugeTop') : total >= 40 ? t('gaugeMid') : (total > 0 ? t('gaugeLow') : t('gaugeEmpty'));
     $('gauge').setAttribute('aria-label', t('gaugeAria') + ' ' + total + ' / 84');
 
-    state.summary = summarize({
+    $('sumBox').textContent = state.summary = summarize({
       total: total, noHomePts: noHomePts, baseMonths: baseMonths, family: family, familyPts: familyPts,
       acctPts: acctPts, spousePts: spousePts, acctTotal: acctTotal, acctMonths: acctMonths, ref: ref
     });
