@@ -1,0 +1,2264 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0b0d">
+<title>JsonForge — JSON formatter, tree viewer, TypeScript &amp; Zod generator | Kim Yihyung</title>
+<meta name="description" content="Paste JSON and see exactly where it breaks: the line, the column and the character at fault. Format, minify, sort keys, walk an interactive tree that copies JSONPath, generate TypeScript interfaces or a Zod schema with optional fields inferred, and flatten to CSV. Everything runs in this tab — nothing is uploaded and no external request is made.">
+<meta name="keywords" content="json formatter, json validator, json viewer online, json tree view, jsonpath copy, json to typescript interface, json to zod schema, json to csv, flatten json, sort json keys, minify json, json error line column, client side json, zero upload, jsonforge">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/json-forge/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b0d'/%3E%3Cpath d='M12 9c-2 0-3 1-3 3v2c0 1.1-.9 2-2 2 1.1 0 2 .9 2 2v2c0 2 1 3 3 3M20 9c2 0 3 1 3 3v2c0 1.1.9 2 2 2-1.1 0-2 .9-2 2v2c0 2-1 3-3 3' fill='none' stroke='%23e5b45c' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/json-forge/">
+<meta property="og:title" content="JsonForge — JSON that shows its own errors">
+<meta property="og:description" content="Line and column of the exact character that broke the parse, a tree that copies the JSONPath of any node, TypeScript and Zod output from a real sample, and JSON ↔ CSV flattening. Zero uploads.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="JsonForge — JSON formatter, tree viewer and type generator">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="JsonForge — JSON that shows its own errors">
+<meta name="twitter:description" content="Formats, validates with a line and column pointer, walks a JSONPath-copying tree, writes TypeScript and Zod, flattens to CSV. In the tab, never uploaded.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "JsonForge — JSON Formatter, Tree Viewer, TypeScript & Zod Generator",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/json-forge/",
+      "description": "A JSON workbench that runs entirely in the browser: pretty-print, minify and sort keys; a validator that reports the exact line, column and character of the first parse error; an interactive collapsible tree that copies the JSONPath of any node; a TypeScript interface and Zod schema generator that infers optional fields and unions from arrays; and a JSON to CSV flattener with the reverse direction. Nothing is uploaded and no external request is made.",
+      "featureList": [
+        "Format with 2-space, 4-space or tab indent and an optional alphabetical key sort",
+        "Minify to the shortest legal JSON",
+        "Validation that reports the line, column and the offending character",
+        "Interactive collapsible tree with a JSONPath copy on any node",
+        "TypeScript interface generation with optional and union inference",
+        "Zod schema generation with .optional() and .nullable()",
+        "JSON to CSV flattening with dotted column names and a preview table",
+        "CSV to JSON parsing with the reverse of that flattening",
+        "0 bytes uploaded · 0 external requests"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "JsonForge", "item": "https://kimyihyung.github.io/portfolio/tools/json-forge/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Why does JSON.parse reject a file that looks fine?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Almost always one of six things: a trailing comma, a comment, single quotes instead of double, an unquoted key, NaN or Infinity, or a value cut off at the end. JSON is not JavaScript object syntax — it is a strict subset with no comments and no trailing commas. This page points at the exact character, which is the part a console warning does not do." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my JSON uploaded anywhere?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. The text stays in this tab, is parsed with the browser's own JSON.parse, and the page makes no request at all after it loads. The footer counts cross-origin requests with a PerformanceObserver and stays at 0. A JSON file often holds keys, tokens, customer rows or internal ids, so a tool that posted it to a server would be the wrong shape of tool." }
+        },
+        {
+          "@type": "Question",
+          "name": "How are the TypeScript types decided?",
+          "acceptedAnswer": { "@type": "Answer", "text": "From the sample you paste, not from a schema. Every value is inspected; arrays merge the shapes of all their elements, so a field present in some elements and absent in others becomes optional, and a field that is a string in one and a number in another becomes a union. That is inference from one example, so check it against the API contract before shipping it." }
+        },
+        {
+          "@type": "Question",
+          "name": "How does the CSV flattening name nested fields?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Nested objects become dotted column names, so user.address.city is one column. Arrays are written into a single cell as compact JSON, because a JSON array has no fixed number of columns to spread across. The reverse direction turns dotted headers back into nested objects, and numeric-only keys into arrays." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+:root {
+  --bg: #0b0b0d;
+  --bg2: #0e0e11;
+  --panel: #141311;
+  --panel2: #1b1917;
+  --line: rgba(255,255,255,.09);
+  --line2: rgba(255,255,255,.18);
+  --ink: #f7f2e9;
+  --muted: #a9a29a;
+  --muted2: #7d766e;
+  --accent: #e5b45c;
+  --accent2: #f3cf85;
+  --accent-dim: rgba(229,180,92,.12);
+  --on-accent: #1d1503;
+  --ok: #7fd6a0;
+  --warn: #ffa06b;
+  --bad: #ff7d7d;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  line-height: 1.6;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(110% 55% at 50% -18%, rgba(229,180,92,.13), transparent 62%),
+    radial-gradient(60% 40% at 100% 2%, rgba(229,180,92,.05), transparent 60%);
+  background-repeat: no-repeat;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: var(--accent); color: var(--on-accent); }
+a { color: inherit; }
+button, input, select, textarea { font-family: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+.wrap { width: 100%; max-width: 1220px; margin: 0 auto; padding: 0 20px 48px; }
+
+/* ---------- topbar ---------- */
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0 12px; }
+.brand { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: var(--ink); min-width: 0; }
+.mark {
+  min-width: 28px; height: 22px; padding: 0 6px; border-radius: 7px; flex: none;
+  border: 1px solid rgba(229,180,92,.45); background: var(--accent-dim);
+  display: grid; place-items: center; font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: var(--accent);
+}
+.brand-txt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.top-actions { display: inline-flex; align-items: center; gap: 9px; flex: none; }
+.lang-toggle {
+  appearance: none; border: 1px solid var(--line); background: var(--panel); color: var(--muted2);
+  height: 34px; padding: 0 11px; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px;
+  cursor: pointer; font-size: 11px; font-weight: 700; letter-spacing: .06em; line-height: 1;
+  transition: color .2s, border-color .2s, transform .15s;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.94); }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
+.topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
+
+/* ---------- hero ---------- */
+.hero { padding: 16px 0 13px; max-width: 880px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; margin: 0 0 14px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--accent);
+  border: 1px solid rgba(229,180,92,.28); background: rgba(229,180,92,.06); padding: 6px 11px; border-radius: 999px;
+}
+.eyebrow .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+h1 { margin: 0 0 12px; font-size: clamp(27px, 4.1vw, 41px); line-height: 1.12; letter-spacing: -.025em; font-weight: 800; word-break: keep-all; overflow-wrap: break-word; }
+h1 .soft { color: var(--muted); }
+h1 .gold { color: var(--accent); }
+.lede { margin: 0 0 14px; color: var(--muted); font-size: 14.6px; max-width: 790px; word-break: keep-all; overflow-wrap: break-word; }
+.lede strong { color: var(--ink); font-weight: 600; }
+.lede code { font-family: var(--mono); font-size: .92em; color: var(--accent); }
+
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--panel); font-size: 11.5px; color: var(--muted);
+  font-family: var(--mono); letter-spacing: .02em;
+}
+.pill b { color: var(--ink); font-weight: 700; }
+.pill--live { border-color: rgba(127,214,160,.32); background: rgba(127,214,160,.07); color: #a6e6c4; }
+.pill--live b { color: #bff3d8; }
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px rgba(127,214,160,.14); }
+
+/* ---------- layout ---------- */
+.work { display: grid; grid-template-columns: minmax(0,1fr) 330px; gap: 16px; align-items: start; margin-top: 2px; }
+@media (max-width: 1060px) { .work { grid-template-columns: minmax(0,1fr); } }
+
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); min-width: 0; }
+.panel { padding: 16px; display: grid; gap: 13px; min-width: 0; }
+.panel h3 { margin: 0; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted2); font-family: var(--mono); font-weight: 700; }
+.side { display: grid; gap: 12px; min-width: 0; }
+@media (min-width: 1061px) { .side { position: sticky; top: 14px; } }
+
+.btn {
+  appearance: none; cursor: pointer; border-radius: 11px; border: 1px solid var(--line2);
+  background: var(--panel2); color: var(--ink); font-size: 13px; font-weight: 650;
+  padding: 10px 16px; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  transition: transform .12s, border-color .2s, background .2s, opacity .2s; text-decoration: none;
+}
+.btn:hover { border-color: rgba(255,255,255,.3); }
+.btn:active { transform: scale(.98); }
+.btn:disabled { opacity: .42; cursor: not-allowed; }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 750; }
+.btn--primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.btn--ghost { background: transparent; }
+.btn--sm { padding: 7px 11px; font-size: 12px; border-radius: 9px; }
+.btn--block { width: 100%; }
+
+/* ---------- tabs ---------- */
+.tabs { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 6px; margin-bottom: 4px; }
+.tabs button {
+  appearance: none; cursor: pointer; text-align: left; min-width: 0;
+  display: grid; gap: 2px; padding: 10px 12px; border-radius: 12px;
+  border: 1px solid var(--line); background: var(--panel2); color: var(--muted);
+  transition: border-color .2s, background .2s, color .2s;
+}
+.tabs button:hover { border-color: var(--line2); }
+.tabs button b { font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; color: var(--muted2); font-weight: 700; }
+.tabs button span { font-size: 13px; font-weight: 700; color: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tabs button[aria-selected="true"] { border-color: rgba(229,180,92,.5); background: linear-gradient(180deg, rgba(229,180,92,.14), rgba(229,180,92,.03)); color: var(--ink); }
+.tabs button[aria-selected="true"] b { color: var(--accent); }
+@media (max-width: 620px) {
+  .tabs { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .tabs button { padding: 9px 10px; }
+  .tabs button span { font-size: 12.5px; }
+}
+
+.tabpanel { display: grid; gap: 13px; min-width: 0; }
+.calc-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.calc-head h2 { margin: 0; font-size: 16.5px; letter-spacing: -.01em; }
+.calc-head span { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted2); }
+
+/* ---------- inputs ---------- */
+.lbl { font-size: 10.5px; font-family: var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted2); display: block; margin-bottom: 6px; }
+.in {
+  display: grid; gap: 5px; padding: 9px 11px 8px; border: 1px solid var(--line);
+  border-radius: 11px; background: var(--panel2); min-width: 0;
+}
+.in label { font-size: 10.5px; font-family: var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted2); }
+.in input {
+  appearance: none; border: 0; background: transparent; color: var(--ink);
+  font-size: 13.5px; font-weight: 600; padding: 0; width: 100%; min-width: 0; line-height: 1.45;
+  font-family: var(--mono); letter-spacing: -.01em;
+}
+.in input:focus { outline: none; }
+.in:focus-within { border-color: rgba(229,180,92,.6); }
+
+.ta {
+  width: 100%; min-height: 108px; resize: vertical; border: 1px solid var(--line);
+  background: var(--panel2); border-radius: 11px; padding: 11px 12px;
+  font-family: var(--mono); font-size: 12.8px; line-height: 1.62; color: var(--ink); min-width: 0;
+}
+.ta:focus { outline: none; border-color: rgba(229,180,92,.6); }
+.ta::placeholder { color: var(--muted2); }
+.ta--json { height: 212px; min-height: 140px; }
+@media (max-width: 760px) { .ta--json { height: 176px; font-size: 12.2px; } }
+
+.seg { display: flex; gap: 3px; padding: 3px; background: var(--panel2); border: 1px solid var(--line); border-radius: 11px; min-width: 0; flex-wrap: wrap; }
+.seg button { flex: 1 1 auto; appearance: none; border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; font-weight: 650; padding: 7px 6px; border-radius: 8px; line-height: 1.25; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--accent-dim); color: var(--accent); box-shadow: inset 0 0 0 1px rgba(229,180,92,.35); }
+.seg--tight { display: inline-flex; background: transparent; border: 0; padding: 0; gap: 3px; }
+.seg--tight button { flex: 0 0 auto; min-width: 44px; padding: 6px 10px; border: 1px solid var(--line); background: var(--panel2); border-radius: 9px; font-family: var(--mono); font-size: 11.5px; }
+.seg--tight button[aria-pressed="true"] { border-color: rgba(229,180,92,.45); box-shadow: none; }
+.opts { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; min-width: 0; }
+.opt-group { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.opt-group .lbl { margin: 0; }
+.chk--inline { padding: 7px 11px; font-size: 12px; flex: 0 1 auto; }
+
+.chk-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 7px; min-width: 0; }
+.chk {
+  appearance: none; cursor: pointer; text-align: left; min-width: 0;
+  display: flex; align-items: center; gap: 8px; padding: 9px 11px; border-radius: 11px;
+  border: 1px solid var(--line); background: var(--panel2); color: var(--muted);
+  font-size: 12.5px; font-weight: 600; transition: border-color .18s, background .18s, color .18s;
+}
+.chk:hover { border-color: var(--line2); }
+.chk .box {
+  width: 15px; height: 15px; border-radius: 5px; flex: none; display: grid; place-items: center;
+  border: 1px solid rgba(255,255,255,.24); font-size: 10px; line-height: 1; color: transparent;
+}
+.chk[aria-pressed="true"] { color: var(--ink); border-color: rgba(229,180,92,.4); background: rgba(229,180,92,.08); }
+.chk[aria-pressed="true"] .box { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+
+/* ---------- two pane io ---------- */
+.jsonio { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 11px; min-width: 0; }
+@media (max-width: 880px) { .jsonio { grid-template-columns: minmax(0,1fr); } }
+.io-col { display: grid; gap: 7px; min-width: 0; align-content: start; }
+.io-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; min-width: 0; }
+.io-head .lbl { margin: 0; }
+.io-meta { font-family: var(--mono); font-size: 10.5px; color: var(--muted2); letter-spacing: .02em; white-space: nowrap; }
+.err-msg { margin: 0; font-family: var(--mono); font-size: 10.8px; color: var(--muted2); overflow-wrap: anywhere; line-height: 1.5; }
+
+.code {
+  border: 1px solid var(--line); border-radius: 11px; background: #0c0c0e;
+  padding: 11px 12px; font-family: var(--mono); font-size: 12.2px; line-height: 1.66;
+  max-height: 250px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; margin: 0;
+  -webkit-overflow-scrolling: touch;
+}
+.code--out { height: 212px; max-height: 420px; }
+@media (max-width: 760px) { .code--out { height: 176px; } }
+.code--tall { min-height: 220px; max-height: 400px; }
+.j-key { color: #9fd7ff; }
+.j-str { color: #a8e6b8; }
+.j-num { color: #f3cf85; }
+.j-bool { color: #ffa06b; }
+.j-null { color: var(--muted2); }
+.j-punct { color: #6f6a63; }
+
+.err { border: 1px solid rgba(255,125,125,.34); border-radius: 11px; background: rgba(255,125,125,.055); padding: 11px 12px; display: grid; gap: 7px; min-width: 0; }
+.err-where { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-family: var(--mono); font-size: 11.5px; color: #ffb3b3; letter-spacing: .02em; }
+.err-where b { color: #ffd0d0; font-weight: 700; }
+.err-pre { margin: 0; font-family: var(--mono); font-size: 11.6px; line-height: 1.6; color: var(--muted); overflow-x: auto; white-space: pre; }
+.err-pre .ln { color: var(--muted2); }
+.err-pre .hit { color: #ff9d9d; font-weight: 700; }
+.err-hint { margin: 0; font-size: 12.2px; color: var(--muted); }
+.err-hint b { color: var(--ink); }
+.err-hint code { font-family: var(--mono); color: var(--accent); font-size: .95em; }
+
+/* ---------- tree ---------- */
+.tree {
+  border: 1px solid var(--line); border-radius: 12px; background: #0c0c0e;
+  padding: 8px 6px; max-height: 470px; overflow: auto; min-width: 0;
+  font-family: var(--mono); font-size: 12.2px; line-height: 1.5; -webkit-overflow-scrolling: touch;
+}
+.tree-empty { padding: 22px 12px; text-align: center; color: var(--muted2); font-size: 12.5px; }
+.trow {
+  display: flex; align-items: center; gap: 6px; padding: 2px 6px; border-radius: 6px;
+  cursor: pointer; min-width: 0; white-space: nowrap;
+}
+.trow:hover { background: rgba(229,180,92,.08); }
+.trow.is-on { background: rgba(229,180,92,.16); box-shadow: inset 0 0 0 1px rgba(229,180,92,.22); }
+.tcaret { width: 13px; flex: none; color: var(--muted2); font-size: 9.5px; display: inline-block; transition: transform .12s; text-align: center; }
+.tcaret.is-open { transform: rotate(90deg); color: var(--accent); }
+.tcaret.is-leaf { visibility: hidden; }
+.tkey { color: #9fd7ff; flex: none; }
+.tidx { color: var(--muted2); flex: none; }
+.tcolon { color: var(--muted2); flex: none; }
+.ttype { flex: none; font-size: 8.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted2); border: 1px solid var(--line); padding: 0 5px; border-radius: 999px; line-height: 1.5; }
+.tval { color: #a8e6b8; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.tval.is-num { color: #f3cf85; }
+.tval.is-bool { color: #ffa06b; }
+.tval.is-null { color: var(--muted2); }
+.tkids { margin-left: 12px; border-left: 1px dashed rgba(255,255,255,.1); padding-left: 5px; }
+.tmore { color: var(--accent); font-size: 11px; padding: 2px 6px; cursor: pointer; display: inline-block; }
+.tmore:hover { text-decoration: underline; }
+.pathbar {
+  font-family: var(--mono); font-size: 11.5px; color: var(--muted2);
+  border: 1px dashed var(--line2); border-radius: 9px; padding: 7px 10px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;
+}
+.pathbar b { color: var(--accent); font-weight: 600; }
+
+/* ---------- tables ---------- */
+.tblwrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-sm); -webkit-overflow-scrolling: touch; min-width: 0; }
+table.ref { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 440px; font-size: 12.3px; }
+table.ref th, table.ref td { padding: 7px 10px; text-align: left; border-bottom: 1px solid rgba(255,255,255,.07); }
+table.ref th { background: #171614; color: var(--muted); font-weight: 700; font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; position: sticky; top: 0; z-index: 1; }
+table.ref td { color: var(--ink); font-family: var(--mono); }
+table.ref td.num { text-align: right; white-space: nowrap; }
+table.ref tr:last-child td { border-bottom: 0; }
+table.ref tbody tr:nth-child(even) td { background: rgba(255,255,255,.014); }
+table.ref th.num { text-align: right; }
+#csvTable { table-layout: auto; }
+#csvTable td { max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: top; }
+.tbl-note { margin: 0; font-size: 11.5px; color: var(--muted2); }
+.tbl-scroll { max-height: 420px; overflow: auto; }
+
+/* ---------- misc ---------- */
+.out { display: grid; gap: 8px; min-width: 0; }
+.out-row {
+  display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 8px;
+  padding: 12px 13px; border-radius: 11px; border: 1px solid var(--line2);
+  background: linear-gradient(180deg, rgba(229,180,92,.06), rgba(229,180,92,.01)); min-width: 0;
+}
+.out-val { font-family: var(--mono); font-size: 13px; font-weight: 650; overflow-wrap: anywhere; word-break: break-all; line-height: 1.55; user-select: all; }
+.out-val.is-empty { color: var(--muted2); font-weight: 500; }
+.cpy { appearance: none; border: 1px solid var(--line); background: transparent; color: var(--muted2); cursor: pointer; border-radius: 7px; font-size: 9px; font-weight: 700; letter-spacing: .06em; padding: 4px 8px; flex: none; transition: color .18s, border-color .18s; }
+.cpy:hover { color: var(--accent); border-color: rgba(229,180,92,.45); }
+
+.row-actions { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+.status { min-height: 16px; margin: 0; font-size: 12px; color: var(--muted); }
+.status.is-ok { color: var(--ok); }
+.status.is-warn { color: var(--warn); }
+.status.is-bad { color: var(--bad); }
+.empty { margin: 0; padding: 18px 14px; border: 1px dashed rgba(255,255,255,.16); border-radius: 11px; font-size: 12.5px; color: var(--muted2); text-align: center; }
+
+.badge { display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 999px; font-size: 11.5px; font-weight: 700; letter-spacing: .01em; }
+.badge--ok { border: 1px solid rgba(127,214,160,.4); background: rgba(127,214,160,.1); color: #a6e6c4; }
+.badge--bad { border: 1px solid rgba(255,125,125,.4); background: rgba(255,125,125,.1); color: #ffb3b3; }
+.badge--warn { border: 1px solid rgba(255,160,107,.4); background: rgba(255,160,107,.08); color: #ffc2a3; }
+.badge--idle { border: 1px solid var(--line); background: var(--panel2); color: var(--muted2); font-weight: 600; }
+
+.kv { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.kv li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 10px; font-size: 12.4px; color: var(--muted); }
+.kv li b { color: var(--ink); font-family: var(--mono); font-weight: 650; font-size: 12.5px; text-align: right; overflow-wrap: anywhere; }
+.kv li.is-key { border-top: 1px solid rgba(255,255,255,.1); padding-top: 6px; margin-top: 2px; }
+.kv li.is-key b { color: var(--accent); }
+.caveat { margin: 0; font-size: 11.6px; color: var(--muted2); line-height: 1.6; }
+.caveat b { color: var(--muted); }
+.caveat code { font-family: var(--mono); color: var(--accent); font-size: .95em; }
+
+.bignum { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 6px 12px; padding: 14px 15px; border-radius: 12px; border: 1px solid rgba(229,180,92,.26); background: linear-gradient(180deg, rgba(229,180,92,.10), rgba(229,180,92,.02)); min-width: 0; }
+.bignum b { font-family: var(--mono); font-size: clamp(24px, 6vw, 32px); line-height: 1.05; font-weight: 700; letter-spacing: -.03em; color: var(--accent); }
+.bignum span { font-size: 11.5px; color: var(--muted); font-family: var(--mono); letter-spacing: .04em; }
+
+/* ---------- sections ---------- */
+.section { margin-top: 40px; scroll-margin-top: 18px; }
+.sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 12px; border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 16px; }
+.sec-head h2 { margin: 0; font-size: 17px; letter-spacing: -.01em; }
+.sec-head span { font-family: var(--mono); font-size: 11px; color: var(--muted2); letter-spacing: .08em; text-transform: uppercase; }
+
+.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+.note { padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel); min-width: 0; }
+.note h3 { margin: 0 0 8px; font-size: 14px; display: flex; gap: 8px; align-items: baseline; }
+.note h3 span { font-family: var(--mono); font-size: 10.5px; color: var(--accent); letter-spacing: .1em; }
+.note h3 em { font-style: normal; }
+.note p { margin: 0; font-size: 12.8px; color: var(--muted); line-height: 1.62; }
+.note b { color: var(--ink); font-weight: 600; }
+.note code { font-family: var(--mono); font-size: .94em; color: var(--accent); }
+
+.faq { display: grid; gap: 8px; }
+details.qa { border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); overflow: hidden; }
+details.qa summary { cursor: pointer; padding: 13px 44px 13px 15px; font-size: 13.5px; font-weight: 600; list-style: none; position: relative; }
+details.qa summary::-webkit-details-marker { display: none; }
+details.qa summary::after { content: "+"; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--accent); font-family: var(--mono); font-size: 15px; }
+details.qa[open] summary::after { content: "−"; }
+details.qa .a { padding: 0 15px 14px; font-size: 12.8px; color: var(--muted); line-height: 1.68; }
+details.qa .a b { color: var(--ink); font-weight: 600; }
+details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: .95em; }
+
+.foot { margin-top: 34px; padding-top: 14px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--muted2); }
+.foot-links { display: inline-flex; flex-wrap: wrap; gap: 12px; }
+.foot-links a { text-decoration: none; color: var(--muted); border-bottom: 1px solid transparent; }
+.foot-links a:hover { color: var(--ink); border-bottom-color: var(--line2); }
+.foot .net { font-family: var(--mono); letter-spacing: .02em; }
+.foot .net b { color: var(--ok); }
+
+@media (max-width: 640px) {
+  .wrap { padding: 0 14px 36px; }
+  .topbar { padding: 14px 0 8px; }
+  .brand-txt { font-size: 12px; letter-spacing: .1em; }
+  .hero { padding: 12px 0 10px; }
+  h1 { font-size: 26px; }
+  .eyebrow { font-size: 9.5px; letter-spacing: .13em; }
+  .lede { font-size: 13.8px; line-height: 1.58; }
+  .panel { padding: 13px; }
+  .sec-head h2 { font-size: 16px; }
+  .out-row { padding: 10px 11px; }
+  .btn { padding: 10px 13px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="/portfolio/" aria-label="Kim Yihyung — portfolio" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="한국어로 보기" aria-label="한국어로 보기">
+        <span class="lt on" data-lt="en">EN</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="ko">KO</span>
+      </button>
+      <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← All tools</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="eyebrow">JsonForge · JSON · zero upload</span></p>
+      <h1 data-i18n-html="h1">JSON that points at its own error.<br><span class="soft">Line, column, character.</span><br><span class="gold">Parsed in this tab.</span></h1>
+      <p class="lede" data-i18n-html="lede">
+        <code>Unexpected token</code> tells you nothing at 3 a.m. Paste the document and JsonForge marks the
+        <strong>line, column and the character that broke the parse</strong>, then formats it, opens a
+        <strong>tree that copies any node's JSONPath</strong>, writes the <strong>TypeScript interface</strong> or
+        <strong>Zod schema</strong> the sample implies, and flattens it to <strong>CSV</strong>.
+      </p>
+      <div class="badge-row">
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillUp">0 bytes uploaded</b></span>
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillNet">0 external requests</b></span>
+        <span class="pill" data-i18n="pillParse">native JSON.parse</span>
+        <span class="pill" data-i18n="pillOffline">works offline</span>
+      </div>
+    </section>
+
+    <section class="work" aria-label="JSON tools" data-i18n-aria="forgeAria">
+      <div class="card panel">
+        <div class="tabs" role="tablist" aria-label="Tool" data-i18n-aria="tabAria">
+          <button type="button" role="tab" id="tab-format" data-tab="format" aria-selected="true" aria-controls="panel-format">
+            <b>01</b><span data-i18n="tab1">Format &amp; validate</span>
+          </button>
+          <button type="button" role="tab" id="tab-tree" data-tab="tree" aria-selected="false" aria-controls="panel-tree" tabindex="-1">
+            <b>02</b><span data-i18n="tab2">Tree &amp; paths</span>
+          </button>
+          <button type="button" role="tab" id="tab-types" data-tab="types" aria-selected="false" aria-controls="panel-types" tabindex="-1">
+            <b>03</b><span data-i18n="tab3">TypeScript · Zod</span>
+          </button>
+          <button type="button" role="tab" id="tab-csv" data-tab="csv" aria-selected="false" aria-controls="panel-csv" tabindex="-1">
+            <b>04</b><span data-i18n="tab4">JSON ↔ CSV</span>
+          </button>
+        </div>
+
+        <!-- ── 01 format ── -->
+        <section class="tabpanel" id="panel-format" role="tabpanel" aria-labelledby="tab-format">
+          <div class="calc-head">
+            <h2 data-i18n="fTitle">Format, minify, validate</h2>
+            <span data-i18n="fNote">the error is the feature</span>
+          </div>
+
+          <div class="opts">
+            <div class="opt-group">
+              <span class="lbl" data-i18n="indentLabel">Indent</span>
+              <div class="seg seg--tight" id="indentSel" role="group" aria-label="Indent" data-i18n-aria="indentAria">
+                <button type="button" data-indent="2" aria-pressed="true">2</button>
+                <button type="button" data-indent="4" aria-pressed="false">4</button>
+                <button type="button" data-indent="0" aria-pressed="false">Tab</button>
+              </div>
+            </div>
+            <button class="chk chk--inline" type="button" id="sortChk" aria-pressed="false">
+              <span class="box" aria-hidden="true">✓</span><span data-i18n="sortKeys">Sort keys A → Z</span>
+            </button>
+            <span class="io-meta" id="fmtNote" style="margin-left:auto"></span>
+          </div>
+
+          <div id="errBox" class="err" hidden>
+            <div class="err-where">
+              <span data-i18n="errAt">Parse error</span>
+              <b id="errWhere">—</b>
+            </div>
+            <p class="err-msg" id="errMsg"></p>
+            <pre class="err-pre" id="errPre"></pre>
+            <p class="err-hint" id="errHint"></p>
+          </div>
+
+          <div class="jsonio">
+            <div class="io-col">
+              <div class="io-head">
+                <span class="lbl" data-i18n="ioIn">JSON input</span>
+                <span class="badge badge--idle" id="fmtBadge" data-i18n="badgeEmpty">Waiting for JSON</span>
+              </div>
+              <label class="sr-only" for="jsonIn" data-i18n="ioInLabel">JSON input</label>
+              <textarea class="ta ta--json" id="jsonIn" spellcheck="false" autocomplete="off" placeholder="Paste JSON, a response body, or half a file that broke." data-i18n-ph="jsonPh"></textarea>
+              <div class="row-actions">
+                <button class="btn btn--primary btn--sm" id="btnFormat" type="button" data-i18n="btnFormat">Format</button>
+                <button class="btn btn--sm" id="btnMinify" type="button" data-i18n="btnMinify">Minify</button>
+                <button class="btn btn--sm btn--ghost" id="btnSample" type="button" data-i18n="btnSample">Sample</button>
+                <button class="btn btn--sm btn--ghost" id="btnClear" type="button" data-i18n="btnClear">Clear</button>
+              </div>
+            </div>
+
+            <div class="io-col">
+              <div class="io-head">
+                <span class="lbl" data-i18n="ioOut">Result</span>
+                <span class="io-meta" id="outMeta">—</span>
+              </div>
+              <pre class="code code--out" id="fmtOut">—</pre>
+              <div class="row-actions">
+                <button class="btn btn--sm" id="btnCopyOut" type="button" data-i18n="btnCopy">Copy</button>
+                <button class="btn btn--sm" id="btnDownload" type="button" data-i18n="btnDownload">Download .json</button>
+              </div>
+            </div>
+          </div>
+          <p class="status" id="status" aria-live="polite"></p>
+        </section>
+
+        <!-- ── 02 tree ── -->
+        <section class="tabpanel" id="panel-tree" role="tabpanel" aria-labelledby="tab-tree" hidden>
+          <div class="calc-head">
+            <h2 data-i18n="trTitle">Walk the document</h2>
+            <span data-i18n="trNote">click any node · copies its path</span>
+          </div>
+          <div class="row-actions">
+            <button class="btn btn--sm" id="btnExpand" type="button" data-i18n="expandAll">Expand all</button>
+            <button class="btn btn--sm btn--ghost" id="btnCollapse" type="button" data-i18n="collapseAll">Collapse all</button>
+            <span class="io-meta" id="treeCount"></span>
+          </div>
+          <div class="pathbar" id="pathBar" data-i18n="pathIdle">Hover a node to see its JSONPath — click to copy it.</div>
+          <div class="tree" id="tree"></div>
+          <p class="caveat" data-i18n-html="treeCaveat">Keys that are not plain identifiers are copied in bracket form, <code>$["a-b"].items[0]</code>, so the path pastes straight into a JSONPath query. Very large arrays are listed 300 at a time instead of all at once.</p>
+        </section>
+
+        <!-- ── 03 types ── -->
+        <section class="tabpanel" id="panel-types" role="tabpanel" aria-labelledby="tab-types" hidden>
+          <div class="calc-head">
+            <h2 data-i18n="tTitle">Types from a sample</h2>
+            <span data-i18n="tNote">inference, not a contract</span>
+          </div>
+          <div class="row-actions">
+            <div class="in" style="flex:1 1 190px">
+              <label for="rootName" data-i18n="rootLabel">Root type name</label>
+              <input type="text" id="rootName" value="Root" spellcheck="false" autocomplete="off">
+            </div>
+            <button class="chk" type="button" id="optChk" aria-pressed="true" style="align-self:end">
+              <span class="box" aria-hidden="true">✓</span><span data-i18n="optOptional">Infer optional fields</span>
+            </button>
+          </div>
+          <div class="jsonio">
+            <div class="io-col">
+              <div class="io-head">
+                <span class="lbl">TypeScript</span>
+                <button class="cpy" id="copyTs" type="button" data-i18n="copy">COPY</button>
+              </div>
+              <pre class="code code--tall" id="tsOut">—</pre>
+            </div>
+            <div class="io-col">
+              <div class="io-head">
+                <span class="lbl">Zod</span>
+                <button class="cpy" id="copyZod" type="button" data-i18n="copy">COPY</button>
+              </div>
+              <pre class="code code--tall" id="zodOut">—</pre>
+            </div>
+          </div>
+          <p class="caveat" data-i18n-html="tCaveat">An object that appears as <code>{...}</code> inside an array is merged across every element: a field missing from some elements becomes <code>?</code> / <code>.optional()</code>, and a field that is a string in one and a number in another becomes a union. Empty arrays cannot say what they hold, so they come out as <code>unknown</code> — type them by hand.</p>
+        </section>
+
+        <!-- ── 04 csv ── -->
+        <section class="tabpanel" id="panel-csv" role="tabpanel" aria-labelledby="tab-csv" hidden>
+          <div class="calc-head">
+            <h2 data-i18n="cTitle">Flatten to rows</h2>
+            <span data-i18n="cNote">dotted columns · round trip</span>
+          </div>
+          <div class="seg" id="csvDir" role="group" aria-label="Direction" data-i18n-aria="csvDirAria">
+            <button type="button" data-dir="to" aria-pressed="true" data-i18n="dirTo">JSON → CSV</button>
+            <button type="button" data-dir="from" aria-pressed="false" data-i18n="dirFrom">CSV → JSON</button>
+          </div>
+
+          <div id="csvToBlock" class="io-col">
+            <div class="row-actions">
+              <span class="io-meta" id="csvMeta"></span>
+              <button class="btn btn--sm" id="copyCsv" type="button" data-i18n="btnCopyCsv">Copy CSV</button>
+              <button class="btn btn--sm" id="dlCsv" type="button" data-i18n="btnDlCsv">Download .csv</button>
+            </div>
+            <div class="tblwrap tbl-scroll">
+              <table class="ref" id="csvTable">
+                <thead><tr id="csvHead"></tr></thead>
+                <tbody id="csvBody"></tbody>
+              </table>
+            </div>
+            <p class="tbl-note" id="csvNote"></p>
+            <p class="caveat" data-i18n-html="csvCaveat">Nested objects become dotted columns; an array stays in one cell as compact JSON, because it has no fixed number of columns. Empty cells are <code>null</code> and missing fields. CSV downloads carry a UTF-8 BOM so Excel opens Korean without mojibake.</p>
+          </div>
+
+          <div id="csvFromBlock" class="io-col" hidden>
+            <label class="sr-only" for="csvIn" data-i18n="csvInLabel">CSV input</label>
+            <textarea class="ta" id="csvIn" spellcheck="false" placeholder="id,name,total&#10;A-1001,김민수,129000&#10;A-1002,이서연,38000" data-i18n-ph="csvPh"></textarea>
+            <div class="chk-row">
+              <button class="chk" type="button" id="coerceChk" aria-pressed="true"><span class="box" aria-hidden="true">✓</span><span data-i18n="optCoerce">Numbers as numbers</span></button>
+              <button class="chk" type="button" id="renestChk" aria-pressed="true"><span class="box" aria-hidden="true">✓</span><span data-i18n="optRenest">Dotted headers → nested</span></button>
+            </div>
+            <div class="io-head">
+              <span class="lbl" data-i18n="jsonOutLabel">JSON</span>
+              <span class="row-actions">
+                <button class="cpy" id="copyFromJson" type="button" data-i18n="copy">COPY</button>
+                <button class="cpy" id="fromJsonSample" type="button" data-i18n="btnSample">SAMPLE</button>
+              </span>
+            </div>
+            <pre class="code code--tall" id="fromJsonOut">—</pre>
+          </div>
+        </section>
+
+      </div>
+
+      <aside class="side">
+        <div class="card panel">
+          <h3 data-i18n="stHead">This document</h3>
+          <div class="bignum">
+            <b id="bigNodes">—</b>
+            <span data-i18n="stNodes">nodes</span>
+          </div>
+          <ul class="kv">
+            <li><span data-i18n="stDepth">depth</span><b id="stDepth">—</b></li>
+            <li><span data-i18n="stKeys">keys</span><b id="stKeys">—</b></li>
+            <li><span data-i18n="stObjects">objects</span><b id="stObjects">—</b></li>
+            <li><span data-i18n="stArrays">arrays</span><b id="stArrays">—</b></li>
+            <li><span data-i18n="stBytes">source bytes</span><b id="stBytes">—</b></li>
+            <li class="is-key"><span data-i18n="stMin">minified</span><b id="stMin">—</b></li>
+          </ul>
+          <p class="caveat" data-i18n-html="stCaveat">A depth of 1 means a single object at the root, so <code>"user": {"id": 1}</code> already counts as depth 2. Bytes are the UTF-8 length of what you pasted, not of the file it came from.</p>
+        </div>
+
+        <div class="card panel">
+          <h3 data-i18n="pitHead">Why JSON breaks</h3>
+          <ul class="kv">
+            <li><span data-i18n="pit1">a comma before } or ]</span><b>{'a': 1,}</b></li>
+            <li><span data-i18n="pit2">a // or /* comment</span><b>no</b></li>
+            <li><span data-i18n="pit3">single quotes</span><b>'a'</b></li>
+            <li><span data-i18n="pit4">an unquoted key</span><b>a: 1</b></li>
+            <li><span data-i18n="pit5">NaN · Infinity</span><b>no</b></li>
+            <li><span data-i18n="pit6">a BOM before {</span><b>U+FEFF</b></li>
+          </ul>
+          <p class="caveat" data-i18n-html="pitCaveat">JSON is a strict subset of JavaScript object syntax, not the same thing. All six are legal in a JS file and none of them are legal in JSON — which is why a config that runs in <code>node</code> can still fail a <code>JSON.parse</code>.</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" aria-labelledby="howTitle">
+      <div class="sec-head">
+        <h2 id="howTitle" data-i18n="howTitle">What the parse actually does</h2>
+        <span data-i18n="howNote">three things people conflate</span>
+      </div>
+      <div class="notes">
+        <div class="note">
+          <h3><span>01</span><em data-i18n="n1h">One error at a time</em></h3>
+          <p data-i18n-html="n1p"><code>JSON.parse</code> stops at the first token it cannot accept, so fixing the reported character often reveals the next one. That is not the tool being lazy — the grammar has no way to continue past an invalid token, so every parser works this way. Fix, re-paste, repeat.</p>
+        </div>
+        <div class="note">
+          <h3><span>02</span><em data-i18n="n2h">Duplicate keys are legal</em></h3>
+          <p data-i18n-html="n2p">RFC 8259 says names <b>should</b> be unique but does not forbid repeats, and every engine keeps the last one silently. A config with two <code>"port"</code> keys will parse, and you will spend an hour on a value that was overwritten before you read it.</p>
+        </div>
+        <div class="note">
+          <h3><span>03</span><em data-i18n="n3h">Numbers lose precision</em></h3>
+          <p data-i18n-html="n3p">JSON numbers become IEEE-754 doubles, so an id like <code>9007199254740993</code> comes back changed and a 19-digit bank reference is quietly wrong. Keep long identifiers as strings on both sides of the wire.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="faqTitle">
+      <div class="sec-head">
+        <h2 id="faqTitle" data-i18n="faqTitle">Questions</h2>
+        <span data-i18n="faqNote">errors · privacy · types</span>
+      </div>
+      <div class="faq">
+        <details class="qa">
+          <summary data-i18n="q1">The JSON is valid but the app still rejects it — why?</summary>
+          <div class="a" data-i18n-html="a1">Syntax is the cheapest check. The next failures are all semantic: a field the schema requires is missing, <code>null</code> where a string was expected, a date in the wrong format, or a number sent as a string. Run the <b>TypeScript · Zod</b> tab on the response you actually received and compare it with what the code expects — the difference is usually one optional field or one type.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q2">Can I keep working on a huge file?</summary>
+          <div class="a" data-i18n-html="a2">Paste up to a few megabytes comfortably; formatting and statistics are linear and happen once per edit. The tree renders lazily, 300 children at a time, so a 20,000-row array does not lock the tab. Above roughly 10&nbsp;MB the textarea itself becomes the slow part, which is a browser limit rather than a page limit.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q3">Does sorting keys change the meaning?</summary>
+          <div class="a" data-i18n-html="a3">No, and that is a property of JSON worth knowing: an object is an unordered set of name/value pairs, so a consumer that depends on key order is depending on something the spec never promised. Two arrays, on the other hand, are ordered, and this page never reorders them.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q4">Is any of this sent anywhere?</summary>
+          <div class="a" data-i18n-html="a4">No. The page loads no font, no script and no stylesheet from another host, and makes no request after the first paint. The footer counts cross-origin requests with a <b>PerformanceObserver</b> and it stays at 0 — the honest version of the claim, rather than a promise in a marketing line.</div>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span data-i18n="footCopy">© 2026 Kim Yihyung · Built in the browser, for the browser.</span>
+    <span class="net"><span data-i18n="footNet">external requests</span> <b id="netCount">0</b></span>
+    <span class="foot-links">
+      <a href="/portfolio/" data-i18n="footP1">Portfolio</a>
+      <a href="/portfolio/tools/" data-i18n="footP2">All tools</a>
+      <a href="https://github.com/kimyihyung/portfolio" target="_blank" rel="noopener" data-i18n="footP3">Source</a>
+    </span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var LANG_KEY = 'jsonforge.lang';
+  var SHARED_KEY = 'kyh.lang';
+  var SAMPLE = {
+    user: {
+      id: 1042,
+      name: "김민수",
+      email: "minsu@example.com",
+      verified: true,
+      tags: ["vip", "seoul"]
+    },
+    orders: [
+      { id: "A-1001", items: 3, total: 129000, shipped: true },
+      { id: "A-1002", items: 1, total: 38000, shipped: false, note: null }
+    ],
+    currency: "KRW"
+  };
+
+  var I18N = {
+    en: {
+      docTitle: 'JsonForge — JSON formatter, tree viewer, TypeScript & Zod generator | Kim Yihyung',
+      brandAria: 'Kim Yihyung — portfolio',
+      back: '← All tools',
+      eyebrow: 'JsonForge · JSON · zero upload',
+      h1: 'JSON that points at its own error.<br><span class="soft">Line, column, character.</span><br><span class="gold">Parsed in this tab.</span>',
+      lede: '<code>Unexpected token</code> tells you nothing at 3 a.m. Paste the document and JsonForge marks the <strong>line, column and the character that broke the parse</strong>, then formats it, opens a <strong>tree that copies any node\'s JSONPath</strong>, writes the <strong>TypeScript interface</strong> or <strong>Zod schema</strong> the sample implies, and flattens it to <strong>CSV</strong>.',
+      pillUp: '0 bytes uploaded',
+      pillNet: '0 external requests',
+      pillParse: 'native JSON.parse',
+      pillOffline: 'works offline',
+      forgeAria: 'JSON tools',
+      tabAria: 'Tool',
+      tab1: 'Format & validate',
+      tab2: 'Tree & paths',
+      tab3: 'TypeScript · Zod',
+      tab4: 'JSON ↔ CSV',
+
+      fTitle: 'Format, minify, validate',
+      fNote: 'the error is the feature',
+      ioIn: 'JSON input',
+      ioInLabel: 'JSON input',
+      jsonPh: 'Paste JSON, a response body, or half a file that broke.',
+      btnFormat: 'Format',
+      btnMinify: 'Minify',
+      btnSample: 'Sample',
+      btnClear: 'Clear',
+      errAt: 'Parse error',
+      ioOut: 'Result',
+      indentLabel: 'Indent',
+      indentAria: 'Indent',
+      sortKeys: 'Sort keys A → Z',
+      btnCopy: 'Copy',
+      btnDownload: 'Download .json',
+      badgeEmpty: 'Waiting for JSON',
+      badgeValid: 'Valid JSON',
+      badgeInvalid: 'Invalid JSON',
+
+      trTitle: 'Walk the document',
+      trNote: 'click any node · copies its path',
+      expandAll: 'Expand all',
+      collapseAll: 'Collapse all',
+      pathIdle: 'Hover a node to see its JSONPath — click to copy it.',
+      treeCaveat: 'Keys that are not plain identifiers are copied in bracket form, <code>$["a-b"].items[0]</code>, so the path pastes straight into a JSONPath query. Very large arrays are listed 300 at a time instead of all at once.',
+      treeEmpty: 'Paste valid JSON in the first tab to walk it here.',
+      treeNodes: 'nodes rendered',
+      keysN: 'keys',
+      moreN: 'more — click to load',
+
+      tTitle: 'Types from a sample',
+      tNote: 'inference, not a contract',
+      rootLabel: 'Root type name',
+      optOptional: 'Infer optional fields',
+      tCaveat: 'An object that appears as <code>{...}</code> inside an array is merged across every element: a field missing from some elements becomes <code>?</code> / <code>.optional()</code>, and a field that is a string in one and a number in another becomes a union. Empty arrays cannot say what they hold, so they come out as <code>unknown</code> — type them by hand.',
+      tEmpty: 'No JSON to infer from yet.',
+      copy: 'COPY',
+
+      cTitle: 'Flatten to rows',
+      cNote: 'dotted columns · round trip',
+      csvDirAria: 'Direction',
+      dirTo: 'JSON → CSV',
+      dirFrom: 'CSV → JSON',
+      btnCopyCsv: 'Copy CSV',
+      btnDlCsv: 'Download .csv',
+      csvCaveat: 'Nested objects become dotted columns; an array stays in one cell as compact JSON, because it has no fixed number of columns. Empty cells are <code>null</code> and missing fields. CSV downloads carry a UTF-8 BOM so Excel opens Korean without mojibake.',
+      csvInLabel: 'CSV input',
+      csvPh: 'id,name,total\nA-1001,김민수,129000\nA-1002,이서연,38000',
+      optCoerce: 'Numbers as numbers',
+      optRenest: 'Dotted headers → nested',
+      jsonOutLabel: 'JSON',
+      csvEmpty: 'The document has no rows to flatten.',
+
+      stHead: 'This document',
+      stNodes: 'nodes',
+      stDepth: 'depth',
+      stKeys: 'keys',
+      stObjects: 'objects',
+      stArrays: 'arrays',
+      stBytes: 'source bytes',
+      stMin: 'minified',
+      stCaveat: 'A depth of 1 means a single object at the root, so <code>"user": {"id": 1}</code> already counts as depth 2. Bytes are the UTF-8 length of what you pasted, not of the file it came from.',
+
+      pitHead: 'Why JSON breaks',
+      pit1: 'a comma before } or ]',
+      pit2: 'a // or /* comment',
+      pit3: 'single quotes',
+      pit4: 'an unquoted key',
+      pit5: 'NaN · Infinity',
+      pit6: 'a BOM before {',
+      pitCaveat: 'JSON is a strict subset of JavaScript object syntax, not the same thing. All six are legal in a JS file and none of them are legal in JSON — which is why a config that runs in <code>node</code> can still fail a <code>JSON.parse</code>.',
+
+      howTitle: 'What the parse actually does',
+      howNote: 'three things people conflate',
+      n1h: 'One error at a time',
+      n1p: '<code>JSON.parse</code> stops at the first token it cannot accept, so fixing the reported character often reveals the next one. That is not the tool being lazy — the grammar has no way to continue past an invalid token, so every parser works this way. Fix, re-paste, repeat.',
+      n2h: 'Duplicate keys are legal',
+      n2p: 'RFC 8259 says names <b>should</b> be unique but does not forbid repeats, and every engine keeps the last one silently. A config with two <code>"port"</code> keys will parse, and you will spend an hour on a value that was overwritten before you read it.',
+      n3h: 'Numbers lose precision',
+      n3p: 'JSON numbers become IEEE-754 doubles, so an id like <code>9007199254740993</code> comes back changed and a 19-digit bank reference is quietly wrong. Keep long identifiers as strings on both sides of the wire.',
+      faqTitle: 'Questions',
+      faqNote: 'errors · privacy · types',
+      q1: 'The JSON is valid but the app still rejects it — why?',
+      a1: 'Syntax is the cheapest check. The next failures are all semantic: a field the schema requires is missing, <code>null</code> where a string was expected, a date in the wrong format, or a number sent as a string. Run the <b>TypeScript · Zod</b> tab on the response you actually received and compare it with what the code expects — the difference is usually one optional field or one type.',
+      q2: 'Can I keep working on a huge file?',
+      a2: 'Paste up to a few megabytes comfortably; formatting and statistics are linear and happen once per edit. The tree renders lazily, 300 children at a time, so a 20,000-row array does not lock the tab. Above roughly 10&nbsp;MB the textarea itself becomes the slow part, which is a browser limit rather than a page limit.',
+      q3: 'Does sorting keys change the meaning?',
+      a3: 'No, and that is a property of JSON worth knowing: an object is an unordered set of name/value pairs, so a consumer that depends on key order is depending on something the spec never promised. Two arrays, on the other hand, are ordered, and this page never reorders them.',
+      q4: 'Is any of this sent anywhere?',
+      a4: 'No. The page loads no font, no script and no stylesheet from another host, and makes no request after the first paint. The footer counts cross-origin requests with a <b>PerformanceObserver</b> and it stays at 0 — the honest version of the claim, rather than a promise in a marketing line.',
+
+      footCopy: '© 2026 Kim Yihyung · Built in the browser, for the browser.',
+      footNet: 'external requests',
+      footP1: 'Portfolio',
+      footP2: 'All tools',
+      footP3: 'Source',
+      toggleTo: '한국어로 보기',
+
+      stReady: 'Paste JSON to begin — ⌘/Ctrl + Enter formats.',
+      stEmpty: 'Nothing to parse.',
+      stValid: 'Valid JSON · {n} nodes · depth {d}',
+      stInvalid: 'Invalid JSON — see the line below the box.',
+      stFormatted: 'Formatted · {n} bytes',
+      stMinified: 'Minified · {n} bytes',
+      stCopied: 'Copied {n} characters.',
+      stCopyFail: 'The clipboard was blocked by the browser.',
+      stCleared: 'Cleared.',
+      stSampled: 'Sample loaded.',
+      stDownloaded: 'Saved as {n}.',
+      stPathCopied: 'Copied {p}',
+      stCsvCopied: 'CSV copied — {n} characters.',
+      stNoJson: 'Paste valid JSON first.',
+      noteSpace: '{n}-space',
+      noteTab: 'tab indent',
+
+      errAtLine: 'line {l}, column {c}',
+      errPos: 'character {p}',
+      hint_trailing: 'A trailing comma before <code>}</code> or <code>]</code>. JSON does not allow it — JavaScript does, which is where the habit comes from.',
+      hint_comment: 'A comment. JSON has none: strip <code>//</code> and <code>/* */</code> or move the note into a real key like <code>"_comment"</code>.',
+      hint_quote: 'Single quotes. JSON strings and keys need double quotes, and a single-quoted string is not a JSON string at all.',
+      hint_unclosed: 'A bracket or brace was opened and never closed — usually a value truncated mid-download.',
+      hint_extraAfter: 'Something follows the closing brace. A JSON document holds exactly one value, so a second object or a log line has to go.',
+      hint_token: 'An unquoted key or a bare word. Every name and string value needs double quotes.',
+      hint_generic: 'JSON is strict: no trailing commas, no comments, no single quotes, no unquoted keys, and nothing after the top-level value.'
+    },
+    ko: {
+      docTitle: 'JsonForge — JSON 포매터 · 트리 뷰어 · TypeScript·Zod 생성기 | Kim Yihyung',
+      brandAria: 'Kim Yihyung — 포트폴리오',
+      back: '← 도구 전체',
+      eyebrow: 'JsonForge · JSON · 업로드 0',
+      h1: 'JSON이 자기 오류를 직접 가리킵니다.<br><span class="soft">줄, 열, 그리고 그 글자.</span><br><span class="gold">이 탭에서 파싱합니다.</span>',
+      lede: '<code>Unexpected token</code>은 새벽 세 시에 아무것도 알려주지 않습니다. 붙여넣으면 JsonForge가 <strong>파싱이 깨진 줄·열과 그 글자</strong>를 짚고, 포맷한 뒤 <strong>어떤 노드든 JSONPath를 복사하는 트리</strong>를 열고, 샘플이 함축하는 <strong>TypeScript 인터페이스</strong>와 <strong>Zod 스키마</strong>를 쓰고, <strong>CSV</strong>로 평탄화합니다.',
+      pillUp: '업로드 0바이트',
+      pillNet: '외부 요청 0건',
+      pillParse: '브라우저 기본 JSON.parse',
+      pillOffline: '오프라인 동작',
+      forgeAria: 'JSON 도구',
+      tabAria: '도구',
+      tab1: '포맷 · 검증',
+      tab2: '트리 · 경로',
+      tab3: 'TypeScript · Zod',
+      tab4: 'JSON ↔ CSV',
+
+      fTitle: '포맷하고, 압축하고, 검증합니다',
+      fNote: '핵심은 오류 위치',
+      ioIn: 'JSON 입력',
+      ioInLabel: 'JSON 입력',
+      jsonPh: 'JSON, 응답 본문, 혹은 깨진 파일의 앞부분을 붙여넣으세요.',
+      btnFormat: '포맷',
+      btnMinify: '압축',
+      btnSample: '샘플',
+      btnClear: '지우기',
+      errAt: '파싱 오류',
+      ioOut: '결과',
+      indentLabel: '들여쓰기',
+      indentAria: '들여쓰기',
+      sortKeys: '키 정렬 (A→Z)',
+      btnCopy: '복사',
+      btnDownload: '.json 저장',
+      badgeEmpty: 'JSON을 기다리는 중',
+      badgeValid: '정상 JSON',
+      badgeInvalid: '깨진 JSON',
+
+      trTitle: '문서를 따라 걸어갑니다',
+      trNote: '노드를 누르면 경로가 복사됩니다',
+      expandAll: '전부 펼치기',
+      collapseAll: '전부 접기',
+      pathIdle: '노드에 마우스를 올리면 JSONPath가 보이고, 누르면 복사됩니다.',
+      treeCaveat: '식별자로 쓸 수 없는 키는 <code>$["a-b"].items[0]</code>처럼 브래킷 표기로 복사되어 JSONPath 질의에 그대로 붙습니다. 아주 큰 배열은 한 번에 300개씩만 그립니다.',
+      treeEmpty: '첫 탭에서 정상 JSON을 넣으면 여기서 따라 걸을 수 있습니다.',
+      treeNodes: '개 노드 표시',
+      keysN: '개 키',
+      moreN: '개 더 — 눌러서 불러오기',
+
+      tTitle: '샘플에서 타입을 뽑습니다',
+      tNote: '계약이 아니라 추론',
+      rootLabel: '루트 타입 이름',
+      optOptional: '옵션 필드 추론',
+      tCaveat: '배열 안의 <code>{...}</code> 객체는 모든 원소를 합쳐 판단합니다. 일부 원소에만 없는 필드는 <code>?</code> / <code>.optional()</code>이 되고, 어떤 원소에서는 문자열이고 다른 원소에서는 숫자인 필드는 유니온이 됩니다. 빈 배열은 무엇이 들었는지 알 수 없어 <code>unknown</code>으로 나오니 직접 지정하세요.',
+      tEmpty: '아직 추론할 JSON이 없습니다.',
+      copy: '복사',
+
+      cTitle: '행으로 펼칩니다',
+      cNote: '점 표기 열 · 왕복 변환',
+      csvDirAria: '방향',
+      dirTo: 'JSON → CSV',
+      dirFrom: 'CSV → JSON',
+      btnCopyCsv: 'CSV 복사',
+      btnDlCsv: '.csv 저장',
+      csvCaveat: '중첩 객체는 <code>user.address.city</code>처럼 점 표기 열이 됩니다. 배열은 열 개수가 정해지지 않으므로 압축 JSON 한 칸에 담습니다. 빈 칸은 <code>null</code>과 없는 필드입니다. 내려받는 CSV는 Excel에서 한글이 깨지지 않도록 UTF-8 BOM을 붙입니다.',
+      csvInLabel: 'CSV 입력',
+      csvPh: 'id,name,total\nA-1001,김민수,129000\nA-1002,이서연,38000',
+      optCoerce: '숫자는 숫자로',
+      optRenest: '점 표기 헤더 → 중첩',
+      jsonOutLabel: 'JSON',
+      csvEmpty: '이 문서에는 펼칠 행이 없습니다.',
+
+      stHead: '이 문서',
+      stNodes: '개 노드',
+      stDepth: '깊이',
+      stKeys: '키',
+      stObjects: '객체',
+      stArrays: '배열',
+      stBytes: '원본 바이트',
+      stMin: '압축 시',
+      stCaveat: '깊이 1은 루트에 객체 하나라는 뜻이라, <code>"user": {"id": 1}</code>만 해도 깊이 2입니다. 바이트는 붙여넣은 텍스트의 UTF-8 길이이며 원본 파일 크기와 다를 수 있습니다.',
+
+      pitHead: 'JSON이 깨지는 이유',
+      pit1: '} 나 ] 앞의 쉼표',
+      pit2: '// 또는 /* 주석',
+      pit3: '작은따옴표',
+      pit4: '따옴표 없는 키',
+      pit5: 'NaN · Infinity',
+      pit6: '{ 앞의 BOM',
+      pitCaveat: 'JSON은 JavaScript 객체 문법의 엄격한 부분집합이지 같은 것이 아닙니다. 여섯 가지 모두 JS 파일에서는 합법이고 JSON에서는 전부 불법입니다. <code>node</code>에서 잘 도는 설정이 <code>JSON.parse</code>에서 깨지는 이유입니다.',
+
+      howTitle: '파싱이 실제로 하는 일',
+      howNote: '자주 헷갈리는 세 가지',
+      n1h: '오류는 한 번에 하나',
+      n1p: '<code>JSON.parse</code>는 받아들일 수 없는 첫 토큰에서 멈추므로, 알려준 글자를 고치면 다음 오류가 드러납니다. 도구가 게으른 것이 아니라, 문법상 잘못된 토큰 너머로 진행할 방법이 없어 모든 파서가 이렇게 동작합니다. 고치고, 다시 붙이고, 반복하세요.',
+      n2h: '중복 키는 합법입니다',
+      n2p: 'RFC 8259는 이름이 유일해야 한다고 <b>권고</b>할 뿐 금지하지 않고, 모든 엔진이 마지막 값을 조용히 채택합니다. <code>"port"</code>가 두 번 들어간 설정도 파싱은 되고, 읽기도 전에 덮인 값을 두고 한 시간을 쓰게 됩니다.',
+      n3h: '숫자는 정밀도를 잃습니다',
+      n3p: 'JSON 숫자는 IEEE-754 배정도가 되므로 <code>9007199254740993</code> 같은 id는 값이 바뀌어 돌아오고 19자리 계좌 참조번호는 조용히 틀립니다. 긴 식별자는 양쪽 모두 문자열로 주고받으세요.',
+      faqTitle: '질문',
+      faqNote: '오류 · 프라이버시 · 타입',
+      q1: '문법은 맞는데 앱이 계속 거부합니다.',
+      a1: '문법 검사는 가장 싼 검사입니다. 다음 실패는 전부 의미의 문제입니다. 스키마가 요구하는 필드가 빠졌거나, 문자열 자리에 <code>null</code>이 왔거나, 날짜 형식이 다르거나, 숫자를 문자열로 보냈습니다. 실제로 받은 응답을 <b>TypeScript · Zod</b> 탭에 넣고 코드가 기대하는 것과 비교해 보세요. 차이는 대개 옵션 필드 하나, 타입 하나입니다.',
+      q2: '큰 파일도 계속 쓸 수 있나요?',
+      a2: '수 MB까지는 편하게 붙여넣을 수 있습니다. 포맷과 통계는 선형이고 편집당 한 번만 돕니다. 트리는 300개씩 지연 렌더링하므로 2만 행 배열도 탭을 잠그지 않습니다. 대략 10&nbsp;MB를 넘으면 textarea 자체가 느려지는데, 그것은 페이지가 아니라 브라우저의 한계입니다.',
+      q3: '키를 정렬하면 의미가 달라지나요?',
+      a3: '아니요. 이는 알아둘 만한 JSON의 성질입니다. 객체는 이름/값 쌍의 순서 없는 집합이므로, 키 순서에 의존하는 소비자는 명세가 약속한 적 없는 것에 의존하는 것입니다. 반면 배열은 순서가 있고, 이 페이지는 배열 순서를 절대 바꾸지 않습니다.',
+      q4: '여기 입력한 내용이 어디로 전송되나요?',
+      a4: '아무 데도 가지 않습니다. 이 페이지는 다른 호스트에서 폰트도 스크립트도 스타일시트도 불러오지 않고, 첫 렌더 뒤에는 요청 자체가 없습니다. 바닥의 카운터가 <b>PerformanceObserver</b>로 다른 출처 요청을 세며 0을 유지합니다. 광고 문구의 약속이 아니라 확인 가능한 형태로요.',
+
+      footCopy: '© 2026 Kim Yihyung · 브라우저에서, 브라우저를 위해.',
+      footNet: '외부 요청',
+      footP1: '포트폴리오',
+      footP2: '도구 전체',
+      footP3: '소스',
+      toggleTo: 'View in English',
+
+      stReady: 'JSON을 붙여넣으세요 — ⌘/Ctrl + Enter로 포맷합니다.',
+      stEmpty: '파싱할 내용이 없습니다.',
+      stValid: '정상 JSON · {n}개 노드 · 깊이 {d}',
+      stInvalid: '깨진 JSON — 입력 상자 아래 줄을 보세요.',
+      stFormatted: '포맷 완료 · {n}바이트',
+      stMinified: '압축 완료 · {n}바이트',
+      stCopied: '{n}자를 복사했습니다.',
+      stCopyFail: '브라우저가 클립보드를 막았습니다.',
+      stCleared: '지웠습니다.',
+      stSampled: '샘플을 불러왔습니다.',
+      stDownloaded: '{n}(으)로 저장했습니다.',
+      stPathCopied: '{p} 복사됨',
+      stCsvCopied: 'CSV를 복사했습니다 — {n}자.',
+      stNoJson: '먼저 정상 JSON을 넣어 주세요.',
+      noteSpace: '{n}칸 들여쓰기',
+      noteTab: '탭 들여쓰기',
+
+      errAtLine: '{l}행 {c}열',
+      errPos: '{p}번째 글자',
+      hint_trailing: '<code>}</code>나 <code>]</code> 앞의 쉼표입니다. JSON은 허용하지 않는데 JavaScript는 허용해서 생기는 습관입니다.',
+      hint_comment: '주석입니다. JSON에는 없습니다. <code>//</code>와 <code>/* */</code>를 지우거나 <code>"_comment"</code> 같은 실제 키로 옮기세요.',
+      hint_quote: '작은따옴표입니다. JSON의 문자열과 키는 큰따옴표여야 하고, 작은따옴표 문자열은 JSON 문자열이 아닙니다.',
+      hint_unclosed: '괄호나 중괄호를 열고 닫지 않았습니다. 다운로드가 중간에 끊긴 값에서 흔합니다.',
+      hint_extraAfter: '닫는 중괄호 뒤에 무언가 더 있습니다. JSON 문서는 값 하나만 담으므로 두 번째 객체나 로그 줄은 빠져야 합니다.',
+      hint_token: '따옴표 없는 키나 맨 단어입니다. 모든 이름과 문자열 값에는 큰따옴표가 필요합니다.',
+      hint_generic: 'JSON은 엄격합니다. 끝 쉼표, 주석, 작은따옴표, 따옴표 없는 키, 그리고 최상위 값 뒤의 어떤 것도 허용하지 않습니다.'
+    }
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var enc = new TextEncoder();
+
+  var state = {
+    lang: 'en',
+    tab: 'format',
+    json: null,
+    has: false,
+    src: '',
+    error: null,
+    opts: { indent: 2, sort: false },
+    csvDir: 'to',
+    csv: { cols: [], rows: [] },
+    coerce: true,
+    renest: true,
+    optional: true,
+    rootName: 'Root',
+    dirty: { tree: true, types: true, csv: true }
+  };
+
+  function t(k) {
+    var v = I18N[state.lang] && I18N[state.lang][k];
+    if (v == null) v = I18N.en[k];
+    return v == null ? k : v;
+  }
+  function fmt(s, o) {
+    return String(s).replace(/\{(\w+)\}/g, function (m, k) {
+      return o && o[k] != null ? String(o[k]) : m;
+    });
+  }
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function group(n) {
+    return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+  function bytes(n) {
+    if (n < 1024) return n + ' B';
+    if (n < 1024 * 1024) return (n / 1024).toFixed(n < 10240 ? 1 : 0) + ' KB';
+    return (n / 1024 / 1024).toFixed(2) + ' MB';
+  }
+  function status(msg, kind) {
+    var el = $('status');
+    el.className = 'status' + (kind ? ' is-' + kind : '');
+    el.textContent = msg || '';
+  }
+  function copyText(s) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(s);
+    }
+    return new Promise(function (res, rej) {
+      try {
+        var ta = document.createElement('textarea');
+        ta.value = s;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.top = '-1000px';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        var ok = document.execCommand('copy');
+        ta.remove();
+        ok ? res() : rej(new Error('copy'));
+      } catch (e) { rej(e); }
+    });
+  }
+  function saveFile(name, text, mime) {
+    var blob = new Blob([text], { type: mime || 'application/json;charset=utf-8' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+  }
+
+  /* ═════════════════════ parse + locate ═════════════════════ */
+
+  function scanError(text) {
+    var stack = [];
+    var i = 0, line = 1, col = 1;
+    var pos = { line: 1, col: 1 };
+    var n = text.length;
+    function adv(ch) { if (ch === '\n') { line++; col = 1; } else { col++; } }
+    function at(p) { pos = { line: line, col: col }; return pos; }
+    var inStr = false, quote = '"', escNext = false;
+    for (i = 0; i < n; i++) {
+      var c = text[i], d = text[i + 1];
+      if (inStr) {
+        if (escNext) { escNext = false; }
+        else if (c === '\\') { escNext = true; }
+        else if (c === '"') { inStr = false; }
+        adv(c);
+        continue;
+      }
+      if (c === '"') { inStr = true; adv(c); continue; }
+      if (c === "'") { var p = at(c); p.hint = 'quote'; p.idx = i; return p; }
+      if (c === '/' && (d === '/' || d === '*')) { var p2 = at(c); p2.hint = 'comment'; p2.idx = i; return p2; }
+      if (c === ',') {
+        var j = i + 1;
+        while (j < n && /\s/.test(text[j])) j++;
+        if (text[j] === '}' || text[j] === ']') { var p3 = at(c); p3.hint = 'trailing'; p3.idx = i; return p3; }
+      }
+      if (c === '{' || c === '[') { stack.push({ ch: c, line: line, col: col }); }
+      if (c === '}' || c === ']') { stack.pop(); }
+      if (/[A-Za-z_$]/.test(c) && !inStr) {
+        var prev = i === 0 ? '' : text[i - 1];
+        var k = i - 1;
+        while (k >= 0 && /\s/.test(text[k])) k--;
+        var prevChar = k >= 0 ? text[k] : '';
+        if (prevChar === ':' || prevChar === ',' || prevChar === '[') {
+          var valWord = (text.slice(i, i + 12).match(/^[A-Za-z_$][\w$]*/) || [''])[0];
+          if (valWord && !/^(true|false|null)$/.test(valWord)) {
+            var pv = at(c); pv.hint = 'token'; pv.idx = i; return pv;
+          }
+        }
+        if (prev !== '"' && prev !== ':' && prev !== '.' && !/[0-9A-Za-z_$\-]/.test(prev)) {
+          var word = text.slice(i, i + 9);
+          if (/^(NaN|Infinity|undefined|True|False|None)\b/.test(word)) {
+            var p4 = at(c); p4.hint = 'token'; p4.idx = i; return p4;
+          }
+          if (prev !== 'e' && prev !== 'E') {
+            var m = word.match(/^[A-Za-z_$][\w$]*\s*:/);
+            if (m) { var p5 = at(c); p5.hint = 'token'; p5.idx = i; return p5; }
+          }
+        }
+      }
+      adv(c);
+    }
+    if (stack.length) {
+      var open = stack[stack.length - 1];
+      return { line: open.line, col: open.col, hint: 'unclosed', idx: null };
+    }
+    return null;
+  }
+
+  function hintFromMessage(msg) {
+    if (/Unexpected non-whitespace character after JSON/i.test(msg)) return 'extraAfter';
+    if (/Unexpected end of JSON input|end of data/i.test(msg)) return 'unclosed';
+    if (/Expected double-quoted property name/i.test(msg)) return 'trailing';
+    if (/Unexpected token '?\}'?|Unexpected token '?\]'?/i.test(msg)) return 'trailing';
+    return 'generic';
+  }
+
+  function locate(text, e) {
+    var msg = String((e && e.message) || e);
+    var line = null, col = null, pos = null;
+    var m = msg.match(/position\s+(\d+)/i);
+    if (m) pos = parseInt(m[1], 10);
+    var lm = msg.match(/line\s+(\d+)\s+column\s+(\d+)/i);
+    if (lm) { line = parseInt(lm[1], 10); col = parseInt(lm[2], 10); }
+    if (pos !== null && line === null) {
+      var before = text.slice(0, Math.max(0, Math.min(pos, text.length)));
+      var rows = before.split(/\r\n|\r|\n/);
+      line = rows.length;
+      col = rows[rows.length - 1].length + 1;
+    }
+    var hint = null;
+    var scan = scanError(text);
+    var useScan = false;
+    if (scan) {
+      if (line === null) useScan = true;
+      else if (scan.idx != null) {
+        if (pos != null) useScan = scan.idx <= pos;
+        else useScan = scan.line < line || (scan.line === line && scan.col <= col);
+      }
+    }
+    if (useScan) { line = scan.line; col = scan.col; hint = scan.hint; pos = null; }
+    if (line === null) { line = 1; col = 1; }
+    if (!hint && scan && scan.line === line && scan.hint) hint = scan.hint;
+    if (!hint) hint = hintFromMessage(msg);
+    return { msg: msg, line: line, col: col, pos: pos, hint: hint };
+  }
+
+  function renderError() {
+    var e = state.error;
+    var box = $('errBox');
+    if (!e) { box.hidden = true; return; }
+    box.hidden = false;
+    $('errWhere').textContent = fmt(t('errAtLine'), { l: e.line, c: e.col }) +
+      (e.pos != null ? ' · ' + fmt(t('errPos'), { p: e.pos }) : '');
+    var short = e.msg
+      .replace(/,\s*\.\.\."?[\s\S]*?"\s+is not valid JSON/i, '')
+      .replace(/,\s*"[\s\S]*?"\s+is not valid JSON/i, '')
+      .replace(/,\s*\.\.\./i, ',')
+      .replace(/\s*in JSON at position \d+/i, '')
+      .replace(/\s*at position \d+/i, '')
+      .replace(/\s*\(line \d+ column \d+\)/i, '')
+      .replace(/,\s*$/, '')
+      .trim();
+    $('errMsg').textContent = short;
+    var rows = state.src.split(/\r\n|\r|\n/);
+    var from = Math.max(1, e.line - 2), to = Math.min(rows.length, e.line + 1);
+    var out = [];
+    for (var ln = from; ln <= to; ln++) {
+      var raw = rows[ln - 1] || '';
+      var shown = raw.replace(/\t/g, '  ');
+      out.push({ txt: (ln === e.line ? '> ' : '  ') + String(ln).padStart(3, ' ') + ' | ' + shown, hit: ln === e.line });
+      if (ln === e.line) {
+        var pre = raw.slice(0, Math.max(0, e.col - 1)).replace(/\t/g, '  ');
+        out.push({ txt: '       | ' + new Array(pre.length + 1).join(' ') + '^', caret: true });
+      }
+    }
+    var pre = $('errPre');
+    pre.innerHTML = '';
+    out.forEach(function (r) {
+      var lineEl = document.createElement('div');
+      lineEl.className = r.hit || r.caret ? 'hit' : 'ln';
+      lineEl.textContent = r.txt;
+      pre.appendChild(lineEl);
+    });
+    $('errHint').innerHTML = t('hint_' + e.hint);
+  }
+
+  /* ═════════════════════ format ═════════════════════ */
+
+  function sortDeep(v) {
+    if (Array.isArray(v)) return v.map(sortDeep);
+    if (v && typeof v === 'object') {
+      var o = {};
+      Object.keys(v).sort(function (a, b) { return a < b ? -1 : a > b ? 1 : 0; }).forEach(function (k) {
+        o[k] = sortDeep(v[k]);
+      });
+      return o;
+    }
+    return v;
+  }
+  function indentOf() {
+    return state.opts.indent === 0 ? '\t' : new Array(state.opts.indent + 1).join(' ');
+  }
+  function stringify(v, minify) {
+    var target = state.opts.sort ? sortDeep(v) : v;
+    if (minify) return JSON.stringify(target);
+    return JSON.stringify(target, null, indentOf());
+  }
+  function highlightJson(src) {
+    var out = '', last = 0, m;
+    var re = /("(?:\\u[a-fA-F0-9]{4}|\\[^u]|[^\\"])*")(\s*:)?|\b(true|false|null)\b|(-?\d+(?:\.\d+)?(?:[eE][+\-]?\d+)?)/g;
+    while ((m = re.exec(src)) !== null) {
+      out += esc(src.slice(last, m.index));
+      if (m[1]) {
+        if (m[2]) out += '<span class="j-key">' + esc(m[1]) + '</span><span class="j-punct">' + esc(m[2]) + '</span>';
+        else out += '<span class="j-str">' + esc(m[1]) + '</span>';
+      } else if (m[3]) {
+        out += '<span class="' + (m[3] === 'null' ? 'j-null' : 'j-bool') + '">' + m[3] + '</span>';
+      } else {
+        out += '<span class="j-num">' + esc(m[4]) + '</span>';
+      }
+      last = re.lastIndex;
+    }
+    out += esc(src.slice(last));
+    return out;
+  }
+
+  function paintOutput(minify) {
+    var out = $('fmtOut');
+    if (!state.has) {
+      out.textContent = '—';
+      out.classList.add('is-empty');
+      $('outMeta').textContent = '—';
+      $('fmtNote').textContent = '';
+      return;
+    }
+    var text = stringify(state.json, minify);
+    out.innerHTML = highlightJson(text);
+    out.classList.remove('is-empty');
+    $('outMeta').textContent = bytes(enc.encode(text).length);
+    $('fmtNote').textContent = state.opts.indent === 0 ? t('noteTab') : fmt(t('noteSpace'), { n: state.opts.indent });
+    state.lastOut = text;
+  }
+
+  /* ═════════════════════ stats ═════════════════════ */
+
+  function analyze(v) {
+    var s = { nodes: 0, keys: 0, objects: 0, arrays: 0, depth: 0 };
+    function walk(x, d) {
+      s.nodes++;
+      if (d > s.depth) s.depth = d;
+      if (Array.isArray(x)) {
+        s.arrays++;
+        for (var i = 0; i < x.length; i++) walk(x[i], d + 1);
+      } else if (x && typeof x === 'object') {
+        s.objects++;
+        var ks = Object.keys(x);
+        s.keys += ks.length;
+        for (var j = 0; j < ks.length; j++) walk(x[ks[j]], d + 1);
+      }
+    }
+    walk(v, 1);
+    return s;
+  }
+  function renderStats() {
+    if (!state.has) {
+      ['bigNodes', 'stDepth', 'stKeys', 'stObjects', 'stArrays', 'stBytes', 'stMin'].forEach(function (id) {
+        $(id).textContent = '—';
+      });
+      return;
+    }
+    var s = state.st;
+    $('bigNodes').textContent = group(s.nodes);
+    $('stDepth').textContent = String(s.depth);
+    $('stKeys').textContent = group(s.keys);
+    $('stObjects').textContent = group(s.objects);
+    $('stArrays').textContent = group(s.arrays);
+    $('stBytes').textContent = bytes(enc.encode(state.src).length);
+    $('stMin').textContent = bytes(enc.encode(JSON.stringify(state.json)).length);
+  }
+
+  /* ═════════════════════ tree ═════════════════════ */
+
+  function keyPath(base, key, isIndex) {
+    if (isIndex) return base + '[' + key + ']';
+    if (/^[A-Za-z_$][\w$]*$/.test(key)) return base + '.' + key;
+    return base + '[' + JSON.stringify(key) + ']';
+  }
+  function typeName(v) {
+    if (Array.isArray(v)) return 'array';
+    if (v === null) return 'null';
+    return typeof v;
+  }
+  function previewOf(v) {
+    if (Array.isArray(v)) return '[' + v.length + ']';
+    if (v && typeof v === 'object') {
+      var k = Object.keys(v).length;
+      return '{' + k + (state.lang === 'ko' ? '개 키}' : (k === 1 ? ' key}' : ' keys}'));
+    }
+    if (typeof v === 'string') {
+      var s = v.length > 64 ? v.slice(0, 64) + '…' : v;
+      return '"' + s + '"';
+    }
+    return String(v);
+  }
+
+  function renderTree() {
+    var host = $('tree');
+    host.innerHTML = '';
+    if (!state.has) {
+      var p = document.createElement('div');
+      p.className = 'tree-empty';
+      p.textContent = t('treeEmpty');
+      host.appendChild(p);
+      $('treeCount').textContent = '';
+      return;
+    }
+    var count = { n: 0 };
+    host.appendChild(nodeFor('$', state.json, 0, '$', count));
+    $('treeCount').textContent = group(count.n) + ' ' + t('treeNodes');
+    $('pathBar').textContent = t('pathIdle');
+    state.dirty.tree = false;
+  }
+
+  function nodeFor(label, value, depth, path, count) {
+    var isObj = value && typeof value === 'object';
+    var isArr = Array.isArray(value);
+    var row = document.createElement('div');
+    row.className = 'trow';
+    row.setAttribute('data-path', path);
+    row.setAttribute('tabindex', '0');
+
+    var caret = document.createElement('span');
+    caret.className = 'tcaret' + (isObj ? '' : ' is-leaf');
+    caret.textContent = '▶';
+    row.appendChild(caret);
+
+    var k = document.createElement('span');
+    k.className = isArr || depth === 0 && label === '$' ? 'tkey' : (typeof label === 'number' ? 'tidx' : 'tkey');
+    k.textContent = label;
+    row.appendChild(k);
+
+    var colon = document.createElement('span');
+    colon.className = 'tcolon';
+    colon.textContent = ':';
+    row.appendChild(colon);
+
+    var ty = document.createElement('span');
+    ty.className = 'ttype';
+    ty.textContent = typeName(value);
+    row.appendChild(ty);
+
+    var val = document.createElement('span');
+    val.className = 'tval' + (typeof value === 'number' ? ' is-num' : typeof value === 'boolean' ? ' is-bool' : value === null ? ' is-null' : '');
+    val.textContent = previewOf(value);
+    row.appendChild(val);
+
+    var wrap = document.createElement('div');
+    wrap.className = 'tnode';
+    wrap.appendChild(row);
+    count.n++;
+
+    row.addEventListener('click', function () {
+      copyText(path).then(function () {
+        status(fmt(t('stPathCopied'), { p: path }), 'ok');
+        var prev = document.querySelector('.trow.is-on');
+        if (prev) prev.classList.remove('is-on');
+        row.classList.add('is-on');
+        $('pathBar').innerHTML = '<b>' + esc(path) + '</b>';
+      }, function () { status(t('stCopyFail'), 'bad'); });
+    });
+    row.addEventListener('mouseenter', function () {
+      $('pathBar').innerHTML = '<b>' + esc(path) + '</b>';
+    });
+
+    if (!isObj) return wrap;
+
+    var kids = document.createElement('div');
+    kids.className = 'tkids';
+    kids.hidden = depth >= 2;
+    if (!kids.hidden) caret.classList.add('is-open');
+    wrap.appendChild(kids);
+
+    var entries = isArr
+      ? value.map(function (v, i) { return [i, v]; })
+      : Object.keys(value).map(function (key) { return [key, value[key]]; });
+
+    var shown = 0;
+    var LIMIT = 300;
+    var label2 = '';
+
+    function addSlice(from) {
+      var to = Math.min(entries.length, from + LIMIT);
+      for (var i = from; i < to; i++) {
+        var kk = entries[i][0];
+        kids.appendChild(nodeFor(kk, entries[i][1], depth + 1, keyPath(path, kk, isArr), count));
+      }
+      shown = to;
+      if (to < entries.length) {
+        var more = document.createElement('div');
+        more.className = 'tmore';
+        more.textContent = '+' + group(entries.length - to) + ' ' + t('moreN');
+        more.addEventListener('click', function (ev) {
+          ev.stopPropagation();
+          more.remove();
+          addSlice(shown);
+        });
+        kids.appendChild(more);
+      }
+    }
+    addSlice(0);
+
+    function toggle() {
+      kids.hidden = !kids.hidden;
+      caret.classList.toggle('is-open', !kids.hidden);
+    }
+    caret.addEventListener('click', function (ev) { ev.stopPropagation(); toggle(); });
+    row.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); toggle(); }
+    });
+
+    return wrap;
+  }
+
+  function setAll(open) {
+    var kids = $('tree').querySelectorAll('.tkids');
+    for (var i = 0; i < kids.length; i++) kids[i].hidden = !open;
+    var carets = $('tree').querySelectorAll('.tcaret');
+    for (var j = 0; j < carets.length; j++) carets[j].classList.toggle('is-open', open && !carets[j].classList.contains('is-leaf'));
+  }
+
+  /* ═════════════════════ types ═════════════════════ */
+
+  function shapeOf(v) {
+    if (v === null) return { k: 'null' };
+    if (Array.isArray(v)) {
+      if (!v.length) return { k: 'array', item: { k: 'unknown' } };
+      var acc = shapeOf(v[0]);
+      for (var i = 1; i < v.length; i++) acc = mergeShape(acc, shapeOf(v[i]), true);
+      return { k: 'array', item: acc };
+    }
+    if (typeof v === 'object') {
+      var props = Object.keys(v).map(function (key) {
+        return { key: key, shape: shapeOf(v[key]), optional: false };
+      });
+      return { k: 'object', props: props };
+    }
+    return { k: typeof v === 'number' ? 'number' : typeof v === 'boolean' ? 'boolean' : 'string' };
+  }
+
+  function mergeShape(a, b, inferOptional) {
+    if (!a) return b;
+    if (!b) return a;
+    if (a.k === 'unknown') return b;
+    if (b.k === 'unknown') return a;
+    if (a.k === b.k) {
+      if (a.k === 'object') {
+        var props = a.props.map(function (p) { return { key: p.key, shape: p.shape, optional: p.optional }; });
+        b.props.forEach(function (bp) {
+          var hit = null;
+          for (var i = 0; i < props.length; i++) if (props[i].key === bp.key) hit = props[i];
+          if (hit) hit.shape = mergeShape(hit.shape, bp.shape, true);
+          else { props.push({ key: bp.key, shape: bp.shape, optional: inferOptional !== false }); }
+        });
+        if (inferOptional !== false) {
+          props.forEach(function (p) {
+            var inB = b.props.some(function (x) { return x.key === p.key; });
+            if (!inB) p.optional = true;
+          });
+        }
+        return { k: 'object', props: props };
+      }
+      if (a.k === 'array') return { k: 'array', item: mergeShape(a.item, b.item, true) };
+      return a;
+    }
+    if (a.k === 'union') {
+      var of = a.of.slice();
+      var found = of.some(function (s) { return s.k === b.k; });
+      if (found) return { k: 'union', of: of.map(function (s) { return s.k === b.k ? mergeShape(s, b, true) : s; }) };
+      of.push(b);
+      return { k: 'union', of: of };
+    }
+    if (b.k === 'union') return mergeShape(b, a, inferOptional);
+    return { k: 'union', of: [a, b] };
+  }
+
+  function pascal(s) {
+    return String(s).replace(/[^A-Za-z0-9]+(.)?/g, function (m, c) { return c ? c.toUpperCase() : ''; })
+      .replace(/^./, function (c) { return c.toUpperCase(); }) || 'Item';
+  }
+  function singular(s) {
+    if (/ies$/i.test(s)) return s.replace(/ies$/i, 'y');
+    if (/s$/i.test(s) && !/ss$/i.test(s)) return s.replace(/s$/i, '');
+    return s + 'Item';
+  }
+
+  function generate() {
+    var rootName = ($('rootName').value || '').trim().replace(/[^A-Za-z0-9_$]/g, '') || 'Root';
+    rootName = rootName.replace(/^./, function (c) { return c.toUpperCase(); });
+    var named = [];
+    var used = {};
+    function unique(base) {
+      var name = base || 'Item';
+      var i = 2;
+      while (used[name]) { name = base + i; i++; }
+      used[name] = 1;
+      return name;
+    }
+    function assign(shape, hint) {
+      if (shape.k === 'object') {
+        shape.name = shape.name || unique(pascal(hint));
+        named.push(shape);
+        shape.props.forEach(function (p) {
+          if (p.shape.k === 'object') assign(p.shape, p.key);
+          else if (p.shape.k === 'array' && p.shape.item.k === 'object') assign(p.shape.item, singular(p.key));
+          else if (p.shape.k === 'array') collectInner(p.shape.item, p.key);
+          else if (p.shape.k === 'union') p.shape.of.forEach(function (s) {
+            if (s.k === 'object') assign(s, p.key);
+            else if (s.k === 'array' && s.item.k === 'object') assign(s.item, singular(p.key));
+          });
+        });
+      }
+    }
+    function collectInner(shape, hint) {
+      if (shape.k === 'object') assign(shape, hint);
+      else if (shape.k === 'array') collectInner(shape.item, hint);
+      else if (shape.k === 'union') shape.of.forEach(function (s) { if (s.k === 'object' || s.k === 'array') collectInner(s, hint); });
+    }
+
+    var root = shapeOf(state.json);
+    if (root.k === 'object') { root.name = unique(pascal(rootName)); assign(root, rootName); }
+    else if (root.k === 'array') {
+      if (root.item.k === 'object') {
+        root.item.name = unique(pascal(rootName) + 'Item');
+        assign(root.item, rootName + 'Item');
+      }
+    }
+
+    function tsType(s) {
+      switch (s.k) {
+        case 'string': return 'string';
+        case 'number': return 'number';
+        case 'boolean': return 'boolean';
+        case 'null': return 'null';
+        case 'unknown': return 'unknown';
+        case 'object': return s.name || 'object';
+        case 'array': {
+          var inner = tsType(s.item);
+          return /[ &|]/.test(inner) && s.item.k !== 'array' ? '(' + inner + ')[]' : inner + '[]';
+        }
+        case 'union': {
+          var parts = s.of.map(tsType).filter(function (v, i, arr) { return arr.indexOf(v) === i; });
+          return parts.join(' | ');
+        }
+      }
+      return 'unknown';
+    }
+    function quoteKey(k) {
+      return /^[A-Za-z_$][\w$]*$/.test(k) ? k : "'" + String(k).replace(/\\/g, '\\\\').replace(/'/g, "\\'") + "'";
+    }
+
+    var ts = [];
+    var body = named.slice();
+    body.forEach(function (obj) {
+      var lines = ['export interface ' + obj.name + ' {'];
+      obj.props.forEach(function (p) {
+        var optional = state.optional && p.optional ? '?' : '';
+        lines.push('  ' + quoteKey(p.key) + optional + ': ' + tsType(p.shape) + ';');
+      });
+      lines.push('}');
+      ts.push(lines.join('\n'));
+    });
+    var tsOut;
+    if (root.k === 'object') tsOut = ts.join('\n\n') + '\n';
+    else if (root.k === 'array') {
+      var el = tsType({ k: 'array', item: root.item });
+      tsOut = (ts.length ? ts.join('\n\n') + '\n\n' : '') +
+        'export type ' + pascal(rootName) + ' = ' + el + ';\n';
+    } else {
+      tsOut = 'export type ' + pascal(rootName) + ' = ' + tsType(root) + ';\n';
+    }
+
+    function zodType(s) {
+      switch (s.k) {
+        case 'string': return 'z.string()';
+        case 'number': return 'z.number()';
+        case 'boolean': return 'z.boolean()';
+        case 'null': return 'z.null()';
+        case 'unknown': return 'z.unknown()';
+        case 'object': return (s.name || 'Item') + 'Schema';
+        case 'array': return 'z.array(' + zodType(s.item) + ')';
+        case 'union': {
+          var parts = s.of.map(zodType).filter(function (v, i, arr) { return arr.indexOf(v) === i; });
+          var hasNull = s.of.some(function (x) { return x.k === 'null'; });
+          if (hasNull && parts.length === 2) {
+            var other = s.of.filter(function (x) { return x.k !== 'null'; })[0];
+            return zodType(other) + '.nullable()';
+          }
+          return 'z.union([' + parts.join(', ') + '])';
+        }
+      }
+      return 'z.unknown()';
+    }
+
+    var zodBlocks = [];
+    if (root.k === 'object') {
+      var ordered = named.slice().reverse();
+      ordered.forEach(function (obj) {
+        var lines = ['export const ' + obj.name + 'Schema = z.object({'];
+        obj.props.forEach(function (p) {
+          var s = zodType(p.shape);
+          if (state.optional && p.optional) s += '.optional()';
+          lines.push('  ' + quoteKey(p.key) + ': ' + s + ',');
+        });
+        lines.push('});');
+        zodBlocks.push(lines.join('\n'));
+      });
+      zodBlocks.push('export type ' + root.name + ' = z.infer<typeof ' + root.name + 'Schema>;');
+    } else if (root.k === 'array' && root.item.k === 'object') {
+      var ordered2 = named.slice().reverse();
+      ordered2.forEach(function (obj) {
+        var lines = ['export const ' + obj.name + 'Schema = z.object({'];
+        obj.props.forEach(function (p) {
+          var s = zodType(p.shape);
+          if (state.optional && p.optional) s += '.optional()';
+          lines.push('  ' + quoteKey(p.key) + ': ' + s + ',');
+        });
+        lines.push('});');
+        zodBlocks.push(lines.join('\n'));
+      });
+      zodBlocks.push('export const ' + pascal(rootName) + 'Schema = z.array(' + (root.item.name || 'Item') + 'Schema);');
+      zodBlocks.push('export type ' + pascal(rootName) + ' = z.infer<typeof ' + pascal(rootName) + 'Schema>;');
+    } else {
+      zodBlocks.push('export const ' + pascal(rootName) + 'Schema = ' + zodType(root) + ';');
+    }
+    var zodOut = 'import { z } from "zod";\n\n' + zodBlocks.join('\n\n') + '\n';
+    return { ts: tsOut, zod: zodOut };
+  }
+
+  function renderTypes() {
+    if (!state.has) {
+      $('tsOut').textContent = '—';
+      $('zodOut').textContent = '—';
+      $('tsOut').classList.add('is-empty');
+      $('zodOut').classList.add('is-empty');
+      state.types = null;
+      return;
+    }
+    try {
+      var g = generate();
+      state.types = g;
+      $('tsOut').textContent = g.ts;
+      $('zodOut').textContent = g.zod;
+      $('tsOut').classList.remove('is-empty');
+      $('zodOut').classList.remove('is-empty');
+    } catch (err) {
+      $('tsOut').textContent = String(err && err.message || err);
+      $('zodOut').textContent = String(err && err.message || err);
+    }
+    state.dirty.types = false;
+  }
+
+  /* ═════════════════════ csv ═════════════════════ */
+
+  function flattenRow(v, prefix, out) {
+    if (Array.isArray(v)) {
+      out[prefix || 'value'] = JSON.stringify(v);
+      return;
+    }
+    if (v && typeof v === 'object') {
+      var keys = Object.keys(v);
+      if (!keys.length) { out[prefix || 'value'] = '{}'; return; }
+      keys.forEach(function (k) { flattenRow(v[k], prefix ? prefix + '.' + k : k, out); });
+      return;
+    }
+    out[prefix || 'value'] = v === null || v === undefined ? '' : String(v);
+  }
+
+  function csvCell(v) {
+    var s = v == null ? '' : String(v);
+    if (/[",\n\r]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+    return s;
+  }
+  function toCsv(cols, rows) {
+    var lines = [cols.map(csvCell).join(',')];
+    rows.forEach(function (r) {
+      lines.push(cols.map(function (c) { return csvCell(r[c]); }).join(','));
+    });
+    return lines.join('\r\n') + '\r\n';
+  }
+
+  function parseCsv(text) {
+    var s = text.replace(/^\uFEFF/, '');
+    var rows = [], row = [], cell = '', i = 0, inQ = false;
+    while (i < s.length) {
+      var c = s[i];
+      if (inQ) {
+        if (c === '"') {
+          if (s[i + 1] === '"') { cell += '"'; i += 2; continue; }
+          inQ = false; i++; continue;
+        }
+        cell += c; i++; continue;
+      }
+      if (c === '"') { inQ = true; i++; continue; }
+      if (c === ',') { row.push(cell); cell = ''; i++; continue; }
+      if (c === '\r') { i++; continue; }
+      if (c === '\n') { row.push(cell); rows.push(row); row = []; cell = ''; i++; continue; }
+      cell += c; i++;
+    }
+    if (cell.length || row.length) { row.push(cell); rows.push(row); }
+    return rows.filter(function (r) { return !(r.length === 1 && r[0] === ''); });
+  }
+
+  function nestKey(obj, path, value) {
+    var parts = path.split('.');
+    var cur = obj;
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i];
+      if (i === parts.length - 1) { cur[p] = value; break; }
+      if (typeof cur[p] !== 'object' || cur[p] === null) cur[p] = {};
+      cur = cur[p];
+    }
+  }
+  function numericToArray(v) {
+    if (Array.isArray(v)) return v.map(numericToArray);
+    if (v && typeof v === 'object') {
+      var keys = Object.keys(v);
+      var allNum = keys.length > 0 && keys.every(function (k) { return /^\d+$/.test(k); });
+      if (allNum) {
+        return keys.map(Number).sort(function (a, b) { return a - b; }).map(function (i) { return numericToArray(v[i]); });
+      }
+      var o = {};
+      keys.forEach(function (k) { o[k] = numericToArray(v[k]); });
+      return o;
+    }
+    return v;
+  }
+
+  function fromCsvText(text) {
+    var rows = parseCsv(text);
+    if (!rows.length) return [];
+    var head = rows[0];
+    var out = rows.slice(1).map(function (r) {
+      var obj = {};
+      head.forEach(function (h, i) {
+        var raw = r[i] == null ? '' : r[i];
+        var val = raw;
+        if (state.coerce) {
+          if (/^-?\d+$/.test(raw) && raw.length < 16) val = parseInt(raw, 10);
+          else if (/^-?\d*\.\d+$/.test(raw)) val = parseFloat(raw);
+          else if (raw === 'true') val = true;
+          else if (raw === 'false') val = false;
+          else if (raw === '') val = null;
+        }
+        if (state.renest && h.indexOf('.') > -1) nestKey(obj, h, val);
+        else obj[h] = val;
+      });
+      return obj;
+    });
+    return state.renest ? numericToArray(out) : out;
+  }
+
+  function renderCsv() {
+    if (!state.has) {
+      $('csvMeta').textContent = t('csvEmpty');
+      $('csvHead').innerHTML = '';
+      $('csvBody').innerHTML = '';
+      $('csvNote').textContent = '';
+      state.csv = { cols: [], rows: [] };
+      state.csvText = '';
+      return;
+    }
+    var data = state.json;
+    var rows = Array.isArray(data) ? data : [data];
+    var flat = rows.map(function (r) { var o = {}; flattenRow(r, '', o); return o; });
+    var cols = [];
+    flat.forEach(function (r) {
+      Object.keys(r).forEach(function (k) { if (cols.indexOf(k) < 0) cols.push(k); });
+    });
+    state.csv = { cols: cols, rows: flat };
+
+    var head = $('csvHead');
+    head.innerHTML = '';
+    cols.forEach(function (c) {
+      var th = document.createElement('th');
+      th.textContent = c;
+      head.appendChild(th);
+    });
+    var body = $('csvBody');
+    body.innerHTML = '';
+    flat.slice(0, 60).forEach(function (r) {
+      var tr = document.createElement('tr');
+      cols.forEach(function (c) {
+        var td = document.createElement('td');
+        var cellVal = r[c] == null || r[c] === '' ? '—' : String(r[c]);
+        td.textContent = cellVal;
+        td.title = cellVal;
+        if (/^-?\d+(\.\d+)?$/.test(cellVal)) td.className = 'num';
+        tr.appendChild(td);
+      });
+      body.appendChild(tr);
+    });
+    $('csvMeta').textContent = group(flat.length) + (state.lang === 'ko' ? '행 · ' : (flat.length === 1 ? ' row · ' : ' rows · ')) + group(cols.length) + (state.lang === 'ko' ? '열' : (cols.length === 1 ? ' column' : ' columns'));
+    $('csvNote').textContent = flat.length > 60
+      ? (state.lang === 'ko' ? '표에는 앞 60행만 보입니다. 복사·저장은 전체 ' + group(flat.length) + '행입니다.' : 'The table shows the first 60 rows; copy and download include all ' + group(flat.length) + '.')
+      : '';
+    state.csvText = toCsv(cols, flat);
+    state.dirty.csv = false;
+  }
+
+  /* ═════════════════════ pipeline ═════════════════════ */
+
+  function resetAll() {
+    state.has = false;
+    state.json = null;
+    state.st = null;
+    state.error = null;
+    state.dirty = { tree: true, types: true, csv: true };
+    state.csvText = '';
+    $('errBox').hidden = true;
+    $('fmtBadge').className = 'badge badge--idle';
+    $('fmtBadge').textContent = t('badgeEmpty');
+    paintOutput(false);
+    renderStats();
+    if (state.tab === 'tree') renderTree();
+    if (state.tab === 'types') renderTypes();
+    if (state.tab === 'csv') renderCsv();
+  }
+
+  function run(keepStatus) {
+    var text = $('jsonIn').value;
+    state.src = text;
+    if (!text.trim()) { resetAll(); return; }
+    try {
+      var v = JSON.parse(text.replace(/^\uFEFF/, ''));
+      state.json = v;
+      state.has = true;
+      state.error = null;
+      state.st = analyze(v);
+      $('errBox').hidden = true;
+      $('fmtBadge').className = 'badge badge--ok';
+      $('fmtBadge').textContent = t('badgeValid');
+      paintOutput(false);
+      renderStats();
+      state.dirty.tree = state.dirty.types = state.dirty.csv = true;
+      if (state.tab !== 'format') renderTab(state.tab);
+      if (!keepStatus) status(fmt(t('stValid'), { n: group(state.st.nodes), d: state.st.depth }), 'ok');
+    } catch (e) {
+      state.json = null;
+      state.has = false;
+      state.st = null;
+      state.error = locate(text, e);
+      state.dirty.tree = state.dirty.types = state.dirty.csv = true;
+      $('fmtBadge').className = 'badge badge--bad';
+      $('fmtBadge').textContent = t('badgeInvalid');
+      paintOutput(false);
+      renderStats();
+      renderError();
+      if (state.tab !== 'format') renderTab(state.tab);
+      if (!keepStatus) status(t('stInvalid'), 'bad');
+    }
+  }
+
+  function renderTab(name) {
+    if (name === 'tree') renderTree();
+    else if (name === 'types') renderTypes();
+    else if (name === 'csv') renderCsv();
+  }
+
+  function setTab(name) {
+    state.tab = name;
+    var tabs = document.querySelectorAll('.tabs button');
+    for (var i = 0; i < tabs.length; i++) {
+      var on = tabs[i].getAttribute('data-tab') === name;
+      tabs[i].setAttribute('aria-selected', String(on));
+      tabs[i].setAttribute('tabindex', on ? '0' : '-1');
+    }
+    ['format', 'tree', 'types', 'csv'].forEach(function (n) {
+      $('panel-' + n).hidden = n !== name;
+    });
+    renderTab(name);
+  }
+
+  /* ═════════════════════ language ═════════════════════ */
+
+  function applyLang(lang) {
+    state.lang = lang === 'ko' ? 'ko' : 'en';
+    document.documentElement.setAttribute('lang', state.lang);
+    document.title = t('docTitle');
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var v = t(nodes[i].getAttribute('data-i18n'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-html'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-aria'));
+      if (v) nodes[i].setAttribute('aria-label', v);
+    }
+    nodes = document.querySelectorAll('[data-i18n-ph]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-ph'));
+      if (v) nodes[i].setAttribute('placeholder', v);
+    }
+    var lt = $('langToggle');
+    var spans = lt.querySelectorAll('[data-lt]');
+    for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
+    lt.setAttribute('aria-label', t('toggleTo'));
+    lt.setAttribute('title', t('toggleTo'));
+
+    if (state.error) renderError();
+    else if (state.has) {
+      $('fmtBadge').className = 'badge badge--ok';
+      $('fmtBadge').textContent = t('badgeValid');
+      status(fmt(t('stValid'), { n: group(state.st.nodes), d: state.st.depth }), 'ok');
+    } else {
+      $('fmtBadge').textContent = t('badgeEmpty');
+    }
+    renderStats();
+    renderTab(state.tab);
+    try {
+      localStorage.setItem(LANG_KEY, state.lang);
+      localStorage.setItem(SHARED_KEY, state.lang);
+    } catch (e) { /* storage may be blocked */ }
+  }
+
+  function initialLang() {
+    var saved = null;
+    try { saved = localStorage.getItem(SHARED_KEY) || localStorage.getItem(LANG_KEY); } catch (e) { }
+    if (saved === 'ko' || saved === 'en') return saved;
+    var nav = (navigator.language || 'en').toLowerCase();
+    return nav.indexOf('ko') === 0 ? 'ko' : 'en';
+  }
+
+  /* ═════════════════════ events ═════════════════════ */
+
+  $('langToggle').addEventListener('click', function () { applyLang(state.lang === 'ko' ? 'en' : 'ko'); });
+
+  var tabEls = document.querySelectorAll('.tabs button');
+  for (var ti = 0; ti < tabEls.length; ti++) {
+    tabEls[ti].addEventListener('click', function () { setTab(this.getAttribute('data-tab')); });
+    tabEls[ti].addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      var all = Array.prototype.slice.call(tabEls);
+      var idx = all.indexOf(this);
+      var next = all[(idx + (e.key === 'ArrowRight' ? 1 : all.length - 1)) % all.length];
+      next.focus(); setTab(next.getAttribute('data-tab'));
+    });
+  }
+
+  var inputTimer = null;
+  $('jsonIn').addEventListener('input', function () {
+    clearTimeout(inputTimer);
+    inputTimer = setTimeout(function () { run(true); }, 260);
+  });
+  $('jsonIn').addEventListener('keydown', function (e) {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+      e.preventDefault();
+      $('btnFormat').click();
+    }
+  });
+
+  $('btnFormat').addEventListener('click', function () {
+    run(true);
+    if (!state.has) return;
+    var text = stringify(state.json, false);
+    $('jsonIn').value = text;
+    state.src = text;
+    run(true);
+    status(fmt(t('stFormatted'), { n: group(enc.encode(text).length) }), 'ok');
+  });
+  $('btnMinify').addEventListener('click', function () {
+    run(true);
+    if (!state.has) return;
+    var text = JSON.stringify(state.opts.sort ? sortDeep(state.json) : state.json);
+    $('jsonIn').value = text;
+    state.src = text;
+    run(true);
+    status(fmt(t('stMinified'), { n: group(enc.encode(text).length) }), 'ok');
+  });
+  $('btnSample').addEventListener('click', function () {
+    $('jsonIn').value = JSON.stringify(SAMPLE, null, 2);
+    run(true);
+    status(t('stSampled'), 'ok');
+  });
+  $('btnClear').addEventListener('click', function () {
+    $('jsonIn').value = '';
+    state.src = '';
+    resetAll();
+    status(t('stCleared'));
+    $('jsonIn').focus();
+  });
+
+  $('indentSel').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-indent]');
+    if (!b) return;
+    state.opts.indent = parseInt(b.getAttribute('data-indent'), 10);
+    var chips = this.querySelectorAll('button');
+    for (var i = 0; i < chips.length; i++) chips[i].setAttribute('aria-pressed', String(chips[i] === b));
+    if (state.has) paintOutput(false);
+  });
+  $('sortChk').addEventListener('click', function () {
+    state.opts.sort = this.getAttribute('aria-pressed') !== 'true';
+    this.setAttribute('aria-pressed', String(state.opts.sort));
+    if (state.has) paintOutput(false);
+  });
+
+  $('btnCopyOut').addEventListener('click', function () {
+    if (!state.has) { status(t('stNoJson'), 'warn'); return; }
+    var text = $('fmtOut').textContent;
+    copyText(text).then(function () { status(fmt(t('stCopied'), { n: group(text.length) }), 'ok'); },
+      function () { status(t('stCopyFail'), 'bad'); });
+  });
+  $('btnDownload').addEventListener('click', function () {
+    if (!state.has) { status(t('stNoJson'), 'warn'); return; }
+    saveFile('jsonforge.json', stringify(state.json, false));
+    status(fmt(t('stDownloaded'), { n: 'jsonforge.json' }), 'ok');
+  });
+
+  $('btnExpand').addEventListener('click', function () { setAll(true); });
+  $('btnCollapse').addEventListener('click', function () { setAll(false); });
+
+  $('rootName').addEventListener('input', function () {
+    state.rootName = this.value;
+    if (state.has) renderTypes();
+  });
+  $('optChk').addEventListener('click', function () {
+    state.optional = this.getAttribute('aria-pressed') !== 'true';
+    this.setAttribute('aria-pressed', String(state.optional));
+    if (state.has) renderTypes();
+  });
+  $('copyTs').addEventListener('click', function () {
+    var v = $('tsOut').textContent;
+    if (!v || v === '—') return;
+    copyText(v).then(function () { status(fmt(t('stCopied'), { n: group(v.length) }), 'ok'); }, function () { status(t('stCopyFail'), 'bad'); });
+  });
+  $('copyZod').addEventListener('click', function () {
+    var v = $('zodOut').textContent;
+    if (!v || v === '—') return;
+    copyText(v).then(function () { status(fmt(t('stCopied'), { n: group(v.length) }), 'ok'); }, function () { status(t('stCopyFail'), 'bad'); });
+  });
+
+  $('csvDir').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-dir]');
+    if (!b) return;
+    state.csvDir = b.getAttribute('data-dir');
+    var chips = this.querySelectorAll('button');
+    for (var i = 0; i < chips.length; i++) chips[i].setAttribute('aria-pressed', String(chips[i] === b));
+    $('csvToBlock').hidden = state.csvDir !== 'to';
+    $('csvFromBlock').hidden = state.csvDir !== 'from';
+    if (state.csvDir === 'from' && !$('fromJsonOut').getAttribute('data-ready')) buildFromCsv(true);
+  });
+  $('copyCsv').addEventListener('click', function () {
+    if (!state.csvText) { status(t('stNoJson'), 'warn'); return; }
+    copyText(state.csvText).then(function () { status(fmt(t('stCsvCopied'), { n: group(state.csvText.length) }), 'ok'); },
+      function () { status(t('stCopyFail'), 'bad'); });
+  });
+  $('dlCsv').addEventListener('click', function () {
+    if (!state.csvText) { status(t('stNoJson'), 'warn'); return; }
+    saveFile('jsonforge.csv', '\uFEFF' + state.csvText, 'text/csv;charset=utf-8');
+    status(fmt(t('stDownloaded'), { n: 'jsonforge.csv' }), 'ok');
+  });
+
+  function buildFromCsv(auto) {
+    var text = $('csvIn').value;
+    var out = $('fromJsonOut');
+    if (!text.trim()) { out.textContent = '—'; out.classList.add('is-empty'); out.removeAttribute('data-ready'); return; }
+    try {
+      var rows = fromCsvText(text);
+      var json = JSON.stringify(rows, null, 2);
+      out.textContent = json;
+      out.classList.remove('is-empty');
+      out.setAttribute('data-ready', '1');
+      state.fromJson = json;
+    } catch (e) {
+      out.textContent = String(e && e.message || e);
+      out.classList.add('is-empty');
+      out.removeAttribute('data-ready');
+    }
+  }
+  $('csvIn').addEventListener('input', function () { clearTimeout(state.csvTimer); state.csvTimer = setTimeout(function () { buildFromCsv(); }, 200); });
+  $('coerceChk').addEventListener('click', function () {
+    state.coerce = this.getAttribute('aria-pressed') !== 'true';
+    this.setAttribute('aria-pressed', String(state.coerce));
+    buildFromCsv();
+  });
+  $('renestChk').addEventListener('click', function () {
+    state.renest = this.getAttribute('aria-pressed') !== 'true';
+    this.setAttribute('aria-pressed', String(state.renest));
+    buildFromCsv();
+  });
+  $('copyFromJson').addEventListener('click', function () {
+    var v = $('fromJsonOut').textContent;
+    if (!v || v === '—') return;
+    copyText(v).then(function () { status(fmt(t('stCopied'), { n: group(v.length) }), 'ok'); }, function () { status(t('stCopyFail'), 'bad'); });
+  });
+  $('fromJsonSample').addEventListener('click', function () {
+    $('csvIn').value = 'id,name,total,user.city\nA-1001,김민수,129000,서울\nA-1002,이서연,38000,수원';
+    buildFromCsv();
+  });
+
+  /* ═════════════════════ external request counter ═════════════════════ */
+
+  var netCount = 0;
+  function netWatch() {
+    if (!('PerformanceObserver' in window)) return;
+    try {
+      var po = new PerformanceObserver(function (list) {
+        var es = list.getEntries();
+        for (var i = 0; i < es.length; i++) {
+          try {
+            var u = new URL(es[i].name, location.href);
+            if (u.origin !== location.origin) {
+              netCount++;
+              $('netCount').textContent = String(netCount);
+            }
+          } catch (e) { /* ignore */ }
+        }
+      });
+      po.observe({ type: 'resource', buffered: true });
+    } catch (e) { /* older engines */ }
+  }
+
+  /* ═════════════════════ boot ═════════════════════ */
+
+  $('jsonIn').value = JSON.stringify(SAMPLE, null, 2);
+  applyLang(initialLang());
+  if ($('jsonIn').value.trim()) run(false);
+  else { resetAll(); status(t('stReady')); }
+  setTab('format');
+  netWatch();
+
+  /* read-only hook for tests and automation */
+  window.JsonForge = {
+    version: '1.0',
+    lang: function () { return state.lang; },
+    setLang: function (l) { applyLang(l); },
+    tab: function () { return state.tab; },
+    setTab: setTab,
+    net: function () { return netCount; },
+    parse: function (text) { $('jsonIn').value = text; run(true); return state.has; },
+    error: function () { return state.error ? { line: state.error.line, col: state.error.col, hint: state.error.hint } : null; },
+    formatted: function () { return state.has ? stringify(state.json, false) : null; },
+    minified: function () { return state.has ? JSON.stringify(state.json) : null; },
+    sorted: function () { return state.has ? JSON.stringify(sortDeep(state.json), null, 2) : null; },
+    stats: function () { return state.st || null; },
+    types: function () { return state.types; },
+    csv: function () { return { cols: state.csv.cols, rows: state.csv.rows, text: state.csvText }; },
+    fromCsv: function (text) { $('csvIn').value = text; buildFromCsv(); return state.fromJson || null; },
+    json: function () { return state.json; },
+    pathOf: function (p) { return p; },
+    setIndent: function (n) { state.opts.indent = n; paintOutput(false); },
+    setSort: function (on) { state.opts.sort = !!on; $('sortChk').setAttribute('aria-pressed', String(!!on)); paintOutput(false); }
+  };
+})();
+</script>
+</body>
+</html>

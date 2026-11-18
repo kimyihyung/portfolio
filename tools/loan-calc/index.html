@@ -1,0 +1,1764 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0b0d">
+<title>LoanCalc — 원리금균등·원금균등·만기일시 비교, 스트레스 DSR, 상환 스케줄 | Kim Yihyung</title>
+<meta name="description" content="대출원금·금리·기간·거치기간을 넣으면 원리금균등·원금균등·만기일시 세 방식의 첫 달 납입금과 총 이자를 나란히 비교합니다. 연소득과 기존 대출로 스트레스 DSR과 최대 가능 원금을 추정하고, 회차별 상환 스케줄을 엑셀에서 바로 열리는 UTF-8 BOM CSV로 내려받습니다. 중도상환 시 단축 개월과 절감 이자까지. 모든 계산은 브라우저 안에서만.">
+<meta name="keywords" content="대출 계산기, 원리금균등 계산기, 원금균등 계산기, 만기일시상환, 거치기간 이자, 대출 이자 계산, 스트레스 DSR 계산, DSR 40%, 최대 대출 한도, 중도상환 시뮬레이션, 상환 스케줄 엑셀, 대출 원금 계산, 2026 대출, loancalc, 업로드 없음">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/loan-calc/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b0d'/%3E%3Cpath d='M8 19l5-6 4 4 7-8' fill='none' stroke='%23e5b45c' stroke-width='2.3' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M8 24h16' stroke='%23e5b45c' stroke-width='2.3' stroke-linecap='round' opacity='.45'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/loan-calc/">
+<meta property="og:title" content="LoanCalc — 세 가지 상환방식 · 스트레스 DSR · 상환 스케줄">
+<meta property="og:description" content="같은 3억·4.2%·30년이라도 방식에 따라 첫 달 납입금과 총 이자가 이만큼 다릅니다. DSR 한도와 회차별 스케줄까지 한 화면에서, 브라우저 안에서만 계산합니다.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LoanCalc — 대출 상환 방식 비교와 스트레스 DSR">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="LoanCalc — 세 가지 상환방식 · 스트레스 DSR">
+<meta name="twitter:description" content="원리금균등·원금균등·만기일시를 나란히, 스트레스 DSR 한도와 회차별 상환 스케줄을 CSV로. 업로드 0바이트.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "LoanCalc — 대출 상환방식 비교 · 스트레스 DSR · 상환 스케줄",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/loan-calc/",
+      "description": "대출원금, 연이자율, 기간, 거치기간을 입력하면 원리금균등분할상환·원금균등분할상환·만기일시상환 세 방식의 첫 달 납입금, 월 최고 납입금, 총 이자, 총 상환액을 나란히 비교한다. 연소득과 기존 대출 연 원리금, 스트레스 가산금리로 예상 DSR과 최대 가능 원금을 추정하고, 회차별 상환 스케줄을 표와 UTF-8 BOM CSV로 제공하며 월 추가상환 시 단축 개월과 절감 이자를 계산한다. 모든 계산은 브라우저 안에서만 이루어진다.",
+      "featureList": [
+        "원리금균등 · 원금균등 · 만기일시 3방식 동시 비교",
+        "거치기간 중 이자만 납입 반영",
+        "스트레스 DSR 추정과 최대 가능 원금 역산",
+        "회차별 상환 스케줄 표",
+        "중도상환(월 추가상환) 단축 개월·절감 이자",
+        "UTF-8 BOM CSV 다운로드",
+        "0 bytes uploaded · 0 external requests"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "KRW" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "LoanCalc", "item": "https://kimyihyung.github.io/portfolio/tools/loan-calc/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "원리금균등과 원금균등은 총액이 얼마나 차이 나나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "원금균등은 갚는 원금이 매달 같아 잔액이 빨리 줄고, 그만큼 이자가 적게 붙습니다. 3억원·연 4.2%·30년이면 원리금균등의 총 이자는 약 2억 2,814만원, 원금균등은 약 1억 8,953만원으로 3,800만원 넘게 차이 납니다. 대신 원금균등의 첫 달 납입금은 188만원대로 원리금균등(147만원)보다 40만원 이상 많습니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "거치기간에는 이자를 얼마나 내나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "거치기간에는 원금을 갚지 않고 남은 원금에 대한 이자만 냅니다. 3억원·연 4.2%라면 월 105만원이고, 그 기간이 끝난 뒤 남은 개월 수로 원금을 나눠 갚기 시작하므로 총 이자는 늘고 월 납입금은 거치가 없을 때보다 높아집니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "스트레스 DSR은 실제로 내는 이자인가요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "아닙니다. 스트레스 DSR은 금리가 올랐을 때를 가정해 한도를 계산하는 심사 기준이고, 실제 대출금리에 가산되는 것이 아닙니다. 2025년 7월 1일부터 3단계가 시행되어 스트레스 금리는 1.50%p, 지방 주택담보대출은 0.75%p가 적용되고 있으며 신용대출은 잔액 1억원 초과분에만 적용됩니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "중도상환수수료도 계산되나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "아닙니다. 이 화면은 원리금과 이자만 계산합니다. 중도상환수수료는 상품마다 다르고 보통 3년 슬라이딩으로 줄어들며, 인지세·근저당 설정비·보증료도 반영하지 않습니다. 실제 절감액은 대출 약정서의 수수료율을 빼서 판단해야 합니다." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+:root {
+  --bg: #0b0b0d;
+  --bg2: #0e0e11;
+  --panel: #141311;
+  --panel2: #1b1917;
+  --line: rgba(255,255,255,.09);
+  --line2: rgba(255,255,255,.18);
+  --ink: #f7f2e9;
+  --muted: #a9a29a;
+  --muted2: #7d766e;
+  --accent: #e5b45c;
+  --accent2: #f3cf85;
+  --accent-dim: rgba(229,180,92,.12);
+  --on-accent: #1d1503;
+  --ok: #7fd6a0;
+  --warn: #ffa06b;
+  --bad: #ff7d7d;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  line-height: 1.6;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(110% 55% at 50% -18%, rgba(229,180,92,.13), transparent 62%),
+    radial-gradient(60% 40% at 100% 2%, rgba(229,180,92,.05), transparent 60%);
+  background-repeat: no-repeat;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: var(--accent); color: var(--on-accent); }
+a { color: inherit; }
+button, input, select, textarea { font-family: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+.wrap { width: 100%; max-width: 1220px; margin: 0 auto; padding: 0 20px 48px; }
+
+/* ---------- topbar ---------- */
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0 12px; }
+.brand { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: var(--ink); min-width: 0; }
+.mark {
+  min-width: 28px; height: 22px; padding: 0 6px; border-radius: 7px; flex: none;
+  border: 1px solid rgba(229,180,92,.45); background: var(--accent-dim);
+  display: grid; place-items: center; font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: var(--accent);
+}
+.brand-txt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.top-actions { display: inline-flex; align-items: center; gap: 9px; flex: none; }
+.lang-toggle {
+  appearance: none; border: 1px solid var(--line); background: var(--panel); color: var(--muted2);
+  height: 34px; padding: 0 11px; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px;
+  cursor: pointer; font-size: 11px; font-weight: 700; letter-spacing: .06em; line-height: 1;
+  transition: color .2s, border-color .2s, transform .15s;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.94); }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
+.topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
+
+/* ---------- hero ---------- */
+.hero { padding: 22px 0 18px; max-width: 880px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; margin: 0 0 14px; max-width: 100%;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--accent);
+  border: 1px solid rgba(229,180,92,.28); background: rgba(229,180,92,.06); padding: 6px 11px; border-radius: 999px;
+}
+.eyebrow .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+h1 { margin: 0 0 14px; font-size: clamp(28px, 4.4vw, 44px); line-height: 1.14; letter-spacing: -.025em; font-weight: 800; word-break: keep-all; overflow-wrap: break-word; }
+h1 .soft { color: var(--muted); }
+h1 .gold { color: var(--accent); }
+.lede { margin: 0 0 16px; color: var(--muted); font-size: 15px; max-width: 790px; word-break: keep-all; overflow-wrap: break-word; }
+.lede strong { color: var(--ink); font-weight: 600; }
+.lede code { font-family: var(--mono); font-size: .92em; color: var(--accent); }
+
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--panel); font-size: 11.5px; color: var(--muted);
+  font-family: var(--mono); letter-spacing: .02em;
+}
+.pill b { color: var(--ink); font-weight: 700; }
+.pill--live { border-color: rgba(127,214,160,.32); background: rgba(127,214,160,.07); color: #a6e6c4; }
+.pill--live b { color: #bff3d8; }
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px rgba(127,214,160,.14); }
+
+/* ---------- layout ---------- */
+.work { display: grid; grid-template-columns: minmax(0,1fr) 330px; gap: 16px; align-items: start; margin-top: 6px; }
+@media (max-width: 1060px) { .work { grid-template-columns: minmax(0,1fr); } }
+
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); min-width: 0; }
+.panel { padding: 16px; display: grid; gap: 13px; min-width: 0; }
+.panel h3 { margin: 0; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted2); font-family: var(--mono); font-weight: 700; }
+.side { display: grid; gap: 12px; min-width: 0; }
+@media (min-width: 1061px) { .side { position: sticky; top: 14px; } }
+
+.btn {
+  appearance: none; cursor: pointer; border-radius: 11px; border: 1px solid var(--line2);
+  background: var(--panel2); color: var(--ink); font-size: 13px; font-weight: 650;
+  padding: 10px 16px; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  transition: transform .12s, border-color .2s, background .2s, opacity .2s; text-decoration: none;
+}
+.btn:hover { border-color: rgba(255,255,255,.3); }
+.btn:active { transform: scale(.98); }
+.btn:disabled { opacity: .42; cursor: not-allowed; }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 750; }
+.btn--primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.btn--ghost { background: transparent; }
+.btn--sm { padding: 7px 11px; font-size: 12px; border-radius: 9px; }
+.btn--block { width: 100%; }
+
+/* ---------- tabs ---------- */
+.tabs { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 6px; margin-bottom: 4px; }
+.tabs button {
+  appearance: none; cursor: pointer; text-align: left; min-width: 0;
+  display: grid; gap: 2px; padding: 10px 12px; border-radius: 12px;
+  border: 1px solid var(--line); background: var(--panel2); color: var(--muted);
+  transition: border-color .2s, background .2s, color .2s;
+}
+.tabs button:hover { border-color: var(--line2); }
+.tabs button b { font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; color: var(--muted2); font-weight: 700; }
+.tabs button span { font-size: 13px; font-weight: 700; color: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tabs button[aria-selected="true"] { border-color: rgba(229,180,92,.5); background: linear-gradient(180deg, rgba(229,180,92,.14), rgba(229,180,92,.03)); color: var(--ink); }
+.tabs button[aria-selected="true"] b { color: var(--accent); }
+@media (max-width: 560px) {
+  .tabs button { padding: 9px 10px; }
+  .tabs button span { font-size: 12.5px; }
+}
+
+.tabpanel { display: grid; gap: 14px; min-width: 0; }
+.calc-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.calc-head h2 { margin: 0; font-size: 16.5px; letter-spacing: -.01em; }
+.calc-head span { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted2); }
+
+/* ---------- inputs ---------- */
+.fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(158px, 1fr)); gap: 9px; min-width: 0; }
+.field { display: grid; gap: 5px; padding: 9px 11px 8px; border: 1px solid var(--line); border-radius: 11px; background: var(--panel2); min-width: 0; }
+.field label { font-size: 10.5px; font-family: var(--mono); letter-spacing: .06em; color: var(--muted2); display: flex; align-items: baseline; justify-content: space-between; gap: 6px; }
+.field label > span:first-child { white-space: nowrap; }
+.field label > i { flex: none; white-space: nowrap; }
+.field label i { font-style: normal; font-size: 9.5px; color: var(--muted2); opacity: .8; }
+.field-row { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.field input {
+  appearance: none; border: 0; background: transparent; color: var(--ink);
+  font-size: 15px; font-weight: 700; padding: 0; width: 100%; min-width: 0; line-height: 1.4;
+  font-family: var(--mono); letter-spacing: -.015em;
+}
+.field input:focus { outline: none; }
+.field:focus-within { border-color: rgba(229,180,92,.6); }
+.field .suffix { font-size: 11px; color: var(--muted2); flex: none; font-family: var(--mono); }
+.field .read { font-size: 10.5px; color: var(--muted2); font-family: var(--mono); letter-spacing: .01em; min-height: 14px; word-break: keep-all; overflow-wrap: break-word; }
+.field.is-bad { border-color: rgba(255,125,125,.5); }
+
+.mini-seg { display: flex; gap: 2px; padding: 2px; background: rgba(255,255,255,.05); border-radius: 7px; flex: none; }
+.mini-seg button { appearance: none; border: 0; background: transparent; color: var(--muted2); font-size: 10.5px; font-weight: 700; padding: 3px 7px; border-radius: 5px; cursor: pointer; line-height: 1.2; }
+.mini-seg button[aria-pressed="true"] { background: var(--accent-dim); color: var(--accent); }
+
+.seg { display: flex; gap: 3px; padding: 3px; background: var(--panel2); border: 1px solid var(--line); border-radius: 11px; min-width: 0; flex-wrap: wrap; }
+.seg button { flex: 1 1 auto; appearance: none; border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; font-weight: 650; padding: 7px 6px; border-radius: 8px; line-height: 1.25; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--accent-dim); color: var(--accent); box-shadow: inset 0 0 0 1px rgba(229,180,92,.35); }
+
+.chk-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 7px; min-width: 0; }
+
+/* ---------- tables ---------- */
+.tblwrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-sm); -webkit-overflow-scrolling: touch; min-width: 0; }
+table.ref { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 520px; font-size: 12.4px; }
+table.ref th, table.ref td { padding: 8px 11px; text-align: left; border-bottom: 1px solid rgba(255,255,255,.07); }
+table.ref th { background: #171614; color: var(--muted); font-weight: 700; font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; position: sticky; top: 0; z-index: 1; }
+table.ref td { color: var(--ink); font-family: var(--mono); white-space: nowrap; }
+table.ref td.num { text-align: right; }
+table.ref th.num { text-align: right; }
+table.ref tr:last-child td { border-bottom: 0; }
+table.ref tbody tr { cursor: default; }
+table.cmp tbody tr { cursor: pointer; }
+table.cmp tbody tr:hover td { background: rgba(255,255,255,.03); }
+table.cmp tbody tr.is-on td { background: rgba(229,180,92,.1); color: var(--accent); font-weight: 700; }
+table.cmp tbody tr.is-on td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+table.cmp td:first-child { font-family: var(--font); font-size: 12.6px; font-weight: 650; color: var(--ink); }
+table.ref tfoot td { border-top: 1px solid var(--line2); border-bottom: 0; font-weight: 700; }
+.tbl-scroll { max-height: 430px; overflow: auto; }
+.tbl-scroll table.ref th { z-index: 2; }
+.tbl-note { margin: 0; font-size: 11.5px; color: var(--muted2); }
+.tbl-note b { color: var(--muted); font-weight: 600; }
+
+/* ---------- bars ---------- */
+.bars { display: grid; gap: 8px; }
+.bar-row { display: grid; grid-template-columns: 110px minmax(0,1fr) auto; align-items: center; gap: 10px; font-size: 11.8px; color: var(--muted); }
+.bar-row .nm { font-family: var(--mono); font-size: 10.5px; letter-spacing: .02em; color: var(--muted2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar-track { height: 8px; border-radius: 999px; background: rgba(255,255,255,.07); overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, rgba(229,180,92,.55), var(--accent)); }
+.bar-row.is-best .bar-fill { background: linear-gradient(90deg, rgba(127,214,160,.5), var(--ok)); }
+.bar-val { font-family: var(--mono); font-size: 11.5px; color: var(--ink); white-space: nowrap; }
+@media (max-width: 520px) { .bar-row { grid-template-columns: 74px minmax(0,1fr); } .bar-row .bar-val { grid-column: 2; text-align: right; } }
+
+/* ---------- results ---------- */
+.kv { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.kv li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 10px; font-size: 12.4px; color: var(--muted); }
+.kv li b { color: var(--ink); font-family: var(--mono); font-weight: 650; font-size: 12.5px; text-align: right; overflow-wrap: anywhere; }
+.kv li.is-key { border-top: 1px solid rgba(255,255,255,.1); padding-top: 6px; margin-top: 2px; }
+.kv li.is-key b { color: var(--accent); }
+
+.bignum { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 4px 12px; padding: 14px 15px; border-radius: 12px; border: 1px solid rgba(229,180,92,.26); background: linear-gradient(180deg, rgba(229,180,92,.10), rgba(229,180,92,.02)); min-width: 0; }
+.bignum b { font-family: var(--mono); font-size: clamp(21px, 5.6vw, 30px); line-height: 1.05; font-weight: 700; letter-spacing: -.03em; color: var(--accent); overflow-wrap: anywhere; }
+.bignum span { font-size: 11.5px; color: var(--muted); font-family: var(--mono); letter-spacing: .04em; }
+
+.statgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)); gap: 8px; min-width: 0; }
+.stat { padding: 11px 12px; border-radius: 11px; border: 1px solid var(--line); background: var(--panel2); min-width: 0; display: grid; gap: 3px; }
+.stat .k { font-size: 10px; font-family: var(--mono); letter-spacing: .07em; text-transform: uppercase; color: var(--muted2); }
+.stat .v { font-family: var(--mono); font-size: 16px; font-weight: 700; letter-spacing: -.02em; color: var(--ink); overflow-wrap: anywhere; }
+.stat .s { font-size: 10.5px; color: var(--muted2); font-family: var(--mono); }
+.stat.is-on { border-color: rgba(229,180,92,.4); background: rgba(229,180,92,.07); }
+.stat.is-on .v { color: var(--accent); }
+.stat.is-over { border-color: rgba(255,125,125,.4); background: rgba(255,125,125,.06); }
+.stat.is-over .v { color: #ffb3b3; }
+
+.badge { display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 999px; font-size: 11.5px; font-weight: 700; letter-spacing: .01em; }
+.badge--ok { border: 1px solid rgba(127,214,160,.4); background: rgba(127,214,160,.1); color: #a6e6c4; }
+.badge--bad { border: 1px solid rgba(255,125,125,.4); background: rgba(255,125,125,.1); color: #ffb3b3; }
+.badge--warn { border: 1px solid rgba(255,160,107,.4); background: rgba(255,160,107,.08); color: #ffc2a3; }
+.badge--idle { border: 1px solid var(--line); background: var(--panel2); color: var(--muted2); font-weight: 600; }
+
+.caveat { margin: 0; font-size: 11.6px; color: var(--muted2); line-height: 1.62; }
+.caveat b { color: var(--muted); }
+.caveat code { font-family: var(--mono); color: var(--accent); font-size: .95em; }
+.note-box { padding: 12px 13px; border: 1px solid var(--line); border-radius: 11px; background: var(--panel2); display: grid; gap: 6px; }
+.note-box h4 { margin: 0; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; font-family: var(--mono); color: var(--muted2); font-weight: 700; }
+.note-box p { margin: 0; font-size: 12.2px; color: var(--muted); line-height: 1.65; }
+.note-box b { color: var(--ink); font-weight: 600; }
+
+.status { min-height: 16px; margin: 0; font-size: 12px; color: var(--muted); }
+.status.is-ok { color: var(--ok); }
+.status.is-warn { color: var(--warn); }
+.status.is-bad { color: var(--bad); }
+.row-actions { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+
+/* ---------- sections ---------- */
+.section { margin-top: 40px; scroll-margin-top: 18px; }
+.sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 12px; border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 16px; }
+.sec-head h2 { margin: 0; font-size: 17px; letter-spacing: -.01em; }
+.sec-head span { font-family: var(--mono); font-size: 11px; color: var(--muted2); letter-spacing: .08em; text-transform: uppercase; }
+
+.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+.note { padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel); min-width: 0; }
+.note h3 { margin: 0 0 8px; font-size: 14px; display: flex; gap: 8px; align-items: baseline; }
+.note h3 span { font-family: var(--mono); font-size: 10.5px; color: var(--accent); letter-spacing: .1em; }
+.note h3 em { font-style: normal; }
+.note p { margin: 0; font-size: 12.8px; color: var(--muted); line-height: 1.62; }
+.note b { color: var(--ink); font-weight: 600; }
+.note code { font-family: var(--mono); font-size: .94em; color: var(--accent); }
+
+.faq { display: grid; gap: 8px; }
+details.qa { border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); overflow: hidden; }
+details.qa summary { cursor: pointer; padding: 13px 44px 13px 15px; font-size: 13.5px; font-weight: 600; list-style: none; position: relative; }
+details.qa summary::-webkit-details-marker { display: none; }
+details.qa summary::after { content: "+"; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--accent); font-family: var(--mono); font-size: 15px; }
+details.qa[open] summary::after { content: "−"; }
+details.qa .a { padding: 0 15px 14px; font-size: 12.8px; color: var(--muted); line-height: 1.68; }
+details.qa .a b { color: var(--ink); font-weight: 600; }
+details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: .95em; }
+
+.foot { margin-top: 34px; padding-top: 14px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--muted2); }
+.foot-links { display: inline-flex; flex-wrap: wrap; gap: 12px; }
+.foot-links a { text-decoration: none; color: var(--muted); border-bottom: 1px solid transparent; }
+.foot-links a:hover { color: var(--ink); border-bottom-color: var(--line2); }
+.foot .net { font-family: var(--mono); letter-spacing: .02em; }
+.foot .net b { color: var(--ok); }
+
+@media (max-width: 640px) {
+  .wrap { padding: 0 14px 36px; }
+  .topbar { padding: 14px 0 8px; }
+  .brand-txt { font-size: 12px; letter-spacing: .1em; }
+  .hero { padding: 12px 0 10px; }
+  h1 { font-size: 26px; }
+  .eyebrow { font-size: 9.5px; letter-spacing: .13em; }
+  .tabs button span { white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.25; }
+  .lede { font-size: 14px; }
+  .panel { padding: 13px; }
+  .sec-head h2 { font-size: 16px; }
+  .btn { padding: 10px 13px; }
+  table.ref th, table.ref td { padding: 7px 9px; }
+  .bignum b { font-size: 22px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="/portfolio/" aria-label="Kim Yihyung — 포트폴리오" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="View in English" aria-label="View in English">
+        <span class="lt on" data-lt="ko">KO</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="en">EN</span>
+      </button>
+      <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← 도구 전체</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="eyebrow">LoanCalc · 상환 3방식 · 스트레스 DSR · 업로드 0</span></p>
+      <h1 data-i18n-html="h1">같은 대출이라도,<br><span class="soft">갚는 방식에 따라 이자가 다릅니다.</span><br><span class="gold">세 방식으로 나란히.</span></h1>
+      <p class="lede" data-i18n-html="lede">
+        3억원·연 4.2%·30년이면 <strong>원리금균등</strong>의 첫 달은 147만원이지만 <strong>원금균등</strong>은 188만원입니다.
+        대신 총 이자는 3,800만원 넘게 차이 납니다. <strong>거치기간</strong>을 넣고, <strong>스트레스 DSR</strong> 한도와
+        <strong>회차별 상환 스케줄</strong>까지 한 화면에서 확인하세요. 입력한 금액은 어디에도 저장되지 않습니다.
+      </p>
+      <div class="badge-row">
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillUp">업로드 0바이트</b></span>
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillNet">외부 요청 0건</b></span>
+        <span class="pill" data-i18n="pillWon">원 단위 반올림</span>
+        <span class="pill" data-i18n="pillCsv">엑셀 CSV · BOM</span>
+      </div>
+    </section>
+
+    <section class="work" aria-label="대출 계산기" data-i18n-aria="workAria">
+      <div class="card panel">
+        <div class="tabs" role="tablist" aria-label="도구" data-i18n-aria="tabAria">
+          <button type="button" role="tab" id="tab-compare" data-tab="compare" aria-selected="true" aria-controls="panel-compare">
+            <b>01</b><span data-i18n="tab1">3방식 비교</span>
+          </button>
+          <button type="button" role="tab" id="tab-dsr" data-tab="dsr" aria-selected="false" aria-controls="panel-dsr" tabindex="-1">
+            <b>02</b><span data-i18n="tab2">스트레스 DSR</span>
+          </button>
+          <button type="button" role="tab" id="tab-sched" data-tab="sched" aria-selected="false" aria-controls="panel-sched" tabindex="-1">
+            <b>03</b><span data-i18n="tab3">상환 스케줄 · CSV</span>
+          </button>
+        </div>
+
+        <!-- ── 01 compare ── -->
+        <section class="tabpanel" id="panel-compare" role="tabpanel" aria-labelledby="tab-compare">
+          <div class="calc-head">
+            <h2 data-i18n="cTitle">조건을 넣으면 세 방식이 나란히</h2>
+            <span data-i18n="cNote">거치기간 포함</span>
+          </div>
+
+          <div class="fields">
+            <div class="field">
+              <label for="principal"><span data-i18n="fPrincipal">대출원금</span><i data-i18n="unitWon">원</i></label>
+              <div class="field-row">
+                <input type="text" id="principal" inputmode="numeric" value="300,000,000" autocomplete="off" aria-describedby="principalRead">
+              </div>
+              <div class="read" id="principalRead"></div>
+            </div>
+            <div class="field">
+              <label for="rate"><span data-i18n="fRate">연이자율</span></label>
+              <div class="field-row">
+                <input type="text" id="rate" inputmode="decimal" value="4.2" autocomplete="off" aria-describedby="rateRead">
+                <span class="suffix">%</span>
+              </div>
+              <div class="read" id="rateRead"></div>
+            </div>
+            <div class="field">
+              <label for="term"><span data-i18n="fTerm">기간</span>
+                <span class="mini-seg" id="termUnit">
+                  <button type="button" data-unit="year" aria-pressed="true" data-i18n="unitYear">년</button>
+                  <button type="button" data-unit="month" aria-pressed="false" data-i18n="unitMonth">개월</button>
+                </span>
+              </label>
+              <div class="field-row">
+                <input type="text" id="term" inputmode="numeric" value="30" autocomplete="off" aria-describedby="termRead">
+              </div>
+              <div class="read" id="termRead"></div>
+            </div>
+            <div class="field">
+              <label for="grace"><span data-i18n="fGrace">거치기간</span><i data-i18n="graceHint">이자만</i></label>
+              <div class="field-row">
+                <input type="text" id="grace" inputmode="numeric" value="0" autocomplete="off" aria-describedby="graceRead">
+                <span class="suffix" data-i18n="unitMonthShort">개월</span>
+              </div>
+              <div class="read" id="graceRead"></div>
+            </div>
+          </div>
+
+          <div class="tblwrap">
+            <table class="ref cmp" id="cmpTable">
+              <thead>
+                <tr>
+                  <th data-i18n="thMethod">상환방식</th>
+                  <th class="num" data-i18n="thFirst">첫 달 납입금</th>
+                  <th class="num" data-i18n="thPeak">월 최고 납입금</th>
+                  <th class="num" data-i18n="thInterest">총 이자</th>
+                  <th class="num" data-i18n="thTotal">총 상환액</th>
+                </tr>
+              </thead>
+              <tbody id="cmpBody"></tbody>
+            </table>
+          </div>
+
+          <div class="bars" id="cmpBars"></div>
+          <p class="caveat" id="cmpNote"></p>
+          <p class="status" id="status" aria-live="polite"></p>
+        </section>
+
+        <!-- ── 02 dsr ── -->
+        <section class="tabpanel" id="panel-dsr" role="tabpanel" aria-labelledby="tab-dsr" hidden>
+          <div class="calc-head">
+            <h2 data-i18n="dTitle">연소득으로 한도를 가늠합니다</h2>
+            <span data-i18n="dNote">스트레스 가산금리 반영</span>
+          </div>
+
+          <div class="fields">
+            <div class="field">
+              <label for="income"><span data-i18n="fIncome">연소득</span><i data-i18n="unitWon">원</i></label>
+              <div class="field-row">
+                <input type="text" id="income" inputmode="numeric" value="70,000,000" autocomplete="off">
+              </div>
+              <div class="read" id="incomeRead"></div>
+            </div>
+            <div class="field">
+              <label for="existing"><span data-i18n="fExisting">기존 대출 연 원리금</span><i data-i18n="unitWon">원</i></label>
+              <div class="field-row">
+                <input type="text" id="existing" inputmode="numeric" value="0" autocomplete="off">
+              </div>
+              <div class="read" id="existingRead"></div>
+            </div>
+            <div class="field">
+              <label for="newLoan"><span data-i18n="fNewLoan">신규 대출 원금</span><i data-i18n="unitWon">원</i></label>
+              <div class="field-row">
+                <input type="text" id="newLoan" inputmode="numeric" value="300,000,000" autocomplete="off">
+              </div>
+              <div class="read" id="newLoanRead"></div>
+            </div>
+            <div class="field">
+              <label for="dsrRate"><span data-i18n="fDsrRate">신규 대출 금리</span></label>
+              <div class="field-row">
+                <input type="text" id="dsrRate" inputmode="decimal" value="4.2" autocomplete="off">
+                <span class="suffix">%</span>
+              </div>
+              <div class="read" id="dsrRateRead"></div>
+            </div>
+            <div class="field">
+              <label for="dsrYears"><span data-i18n="fDsrYears">기간</span><i data-i18n="unitYearShort">년</i></label>
+              <div class="field-row">
+                <input type="text" id="dsrYears" inputmode="numeric" value="30" autocomplete="off">
+                <span class="suffix" data-i18n="unitYearShort">년</span>
+              </div>
+              <div class="read" id="dsrYearsRead"></div>
+            </div>
+            <div class="field">
+              <label for="stress"><span data-i18n="fStress">스트레스 가산금리</span><i>%p</i></label>
+              <div class="field-row">
+                <input type="text" id="stress" inputmode="decimal" value="1.5" autocomplete="off">
+                <span class="suffix">%p</span>
+              </div>
+              <div class="read" id="stressRead"></div>
+            </div>
+            <div class="field">
+              <label for="limit"><span data-i18n="fLimit">DSR 한도</span></label>
+              <div class="field-row">
+                <input type="text" id="limit" inputmode="decimal" value="40" autocomplete="off">
+                <span class="suffix">%</span>
+              </div>
+              <div class="read" id="limitRead"></div>
+            </div>
+          </div>
+
+          <div class="statgrid">
+            <div class="stat" id="statExisting">
+              <span class="k" data-i18n="sExisting">기존 DSR</span>
+              <span class="v" id="dsrExisting">—</span>
+              <span class="s" data-i18n="sExistingSub">기존 대출만</span>
+            </div>
+            <div class="stat is-on" id="statStress">
+              <span class="k" data-i18n="sStress">스트레스 DSR</span>
+              <span class="v" id="dsrStress">—</span>
+              <span class="s" data-i18n="sStressSub">신규 대출 포함</span>
+            </div>
+            <div class="stat" id="statPlain">
+              <span class="k" data-i18n="sPlain">가산 없는 DSR</span>
+              <span class="v" id="dsrPlain">—</span>
+              <span class="s" data-i18n="sPlainSub">참고용</span>
+            </div>
+            <div class="stat" id="statMax">
+              <span class="k" data-i18n="sMax">최대 가능 원금</span>
+              <span class="v" id="dsrMax">—</span>
+              <span class="s" id="dsrMaxSub"></span>
+            </div>
+          </div>
+
+          <div class="tblwrap">
+            <table class="ref" id="dsrTable">
+              <thead>
+                <tr>
+                  <th data-i18n="thDsrRow">구분</th>
+                  <th class="num" data-i18n="thAnnual">연 원리금</th>
+                  <th class="num" data-i18n="thDsr">DSR</th>
+                </tr>
+              </thead>
+              <tbody id="dsrBody"></tbody>
+            </table>
+          </div>
+
+          <div class="note-box">
+            <h4 data-i18n="dInfoHead">기준 안내</h4>
+            <p data-i18n-html="dInfo"></p>
+          </div>
+          <p class="status" id="dsrStatus" aria-live="polite"></p>
+        </section>
+
+        <!-- ── 03 schedule ── -->
+        <section class="tabpanel" id="panel-sched" role="tabpanel" aria-labelledby="tab-sched" hidden>
+          <div class="calc-head">
+            <h2 data-i18n="scTitle">회차별 상환 스케줄</h2>
+            <span data-i18n="scNote">중도상환 시뮬레이션 포함</span>
+          </div>
+
+          <div class="seg" id="schedMethod" role="group" aria-label="상환방식" data-i18n-aria="schedAria">
+            <button type="button" data-method="annuity" aria-pressed="true" data-i18n="mAnnuity">원리금균등</button>
+            <button type="button" data-method="principal" aria-pressed="false" data-i18n="mPrincipal">원금균등</button>
+            <button type="button" data-method="bullet" aria-pressed="false" data-i18n="mBullet">만기일시</button>
+          </div>
+
+          <div class="fields">
+            <div class="field">
+              <label for="extra"><span data-i18n="fExtra">월 추가상환</span><i data-i18n="unitWon">원</i></label>
+              <div class="field-row">
+                <input type="text" id="extra" inputmode="numeric" value="0" autocomplete="off">
+              </div>
+              <div class="read" id="extraRead"></div>
+            </div>
+            <div class="field">
+              <label><span data-i18n="fSim">적용 결과</span></label>
+              <div class="read" id="simRead" style="font-size:12px;color:var(--ink)">—</div>
+              <div class="read" id="simRead2"></div>
+            </div>
+          </div>
+
+          <div class="row-actions">
+            <button class="btn btn--sm btn--primary" id="btnCsv" type="button" data-i18n="btnCsv">CSV 내려받기 (BOM)</button>
+            <span class="tbl-note" id="schedMeta"></span>
+          </div>
+
+          <div class="tblwrap tbl-scroll">
+            <table class="ref" id="schedTable">
+              <thead>
+                <tr>
+                  <th class="num" data-i18n="thRound">회차</th>
+                  <th class="num" data-i18n="thPay">납입액</th>
+                  <th class="num" data-i18n="thInt">이자</th>
+                  <th class="num" data-i18n="thPrin">원금</th>
+                  <th class="num" data-i18n="thBal">잔액</th>
+                </tr>
+              </thead>
+              <tbody id="schedBody"></tbody>
+              <tfoot id="schedFoot"></tfoot>
+            </table>
+          </div>
+          <p class="caveat" data-i18n-html="scCaveat"></p>
+          <p class="status" id="schedStatus" aria-live="polite"></p>
+        </section>
+      </div>
+
+      <aside class="side">
+        <div class="card panel">
+          <h3 data-i18n="sideHead">선택한 방식</h3>
+          <div class="bignum">
+            <b id="sideFirst">—</b>
+            <span data-i18n="sideFirstUnit">첫 달 납입금</span>
+          </div>
+          <ul class="kv">
+            <li><span data-i18n="sideMethod">방식</span><b id="sideMethod">—</b></li>
+            <li><span data-i18n="sidePeak">월 최고 납입</span><b id="sidePeak">—</b></li>
+            <li><span data-i18n="sideInterest">총 이자</span><b id="sideInterest">—</b></li>
+            <li><span data-i18n="sideTotal">총 상환액</span><b id="sideTotal">—</b></li>
+            <li class="is-key"><span data-i18n="sideRatio">이자 비중</span><b id="sideRatio">—</b></li>
+          </ul>
+          <p class="caveat" data-i18n-html="sideCaveat">비교표의 행을 누르면 그 방식이 선택되고 스케줄 탭도 함께 바뀝니다.</p>
+        </div>
+
+        <div class="card panel">
+          <h3 data-i18n="defHead">세 방식의 차이</h3>
+          <ul class="kv">
+            <li><span data-i18n="def1k">원리금균등</span><b data-i18n="def1v">매달 같은 금액</b></li>
+            <li><span data-i18n="def2k">원금균등</span><b data-i18n="def2v">원금이 매달 같음</b></li>
+            <li><span data-i18n="def3k">만기일시</span><b data-i18n="def3v">이자만, 원금은 만기</b></li>
+          </ul>
+          <p class="caveat" data-i18n-html="defCaveat">원리금균등은 <b>월 납입금이 일정</b>해 계획이 쉽고, 원금균등은 <b>총 이자가 적지만</b> 초반 납입이 무겁습니다. 만기일시는 <b>월 부담이 가장 작고 총 이자가 가장 큽니다</b>. 같은 금리·기간이라면 이 순서는 바뀌지 않습니다.</p>
+        </div>
+
+        <div class="card panel">
+          <h3 data-i18n="basisHead">기준과 한계</h3>
+          <p class="caveat" data-i18n-html="basis"></p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" aria-labelledby="howTitle">
+      <div class="sec-head">
+        <h2 id="howTitle" data-i18n="howTitle">숫자 뒤에서 벌어지는 일</h2>
+        <span data-i18n="howNote">세 가지 함정</span>
+      </div>
+      <div class="notes">
+        <div class="note">
+          <h3><span>01</span><em data-i18n="n1h">첫 달이 전부가 아닙니다</em></h3>
+          <p data-i18n-html="n1p">원금균등의 첫 달 188만원은 <b>가장 무거운 달</b>이고, 원리금균등의 147만원은 <b>30년 내내 같은 금액</b>입니다. 두 숫자를 나란히 놓으면 원금균등이 비싸 보이지만, 마지막 달에는 83만원대로 내려갑니다. 비교는 <b>총액</b>과 <b>현금흐름</b>을 따로 봐야 합니다.</p>
+        </div>
+        <div class="note">
+          <h3><span>02</span><em data-i18n="n2h">거치기간은 공짜가 아닙니다</em></h3>
+          <p data-i18n-html="n2p">거치기간에는 이자만 내므로 월 부담이 줄어 보이지만, 그동안 원금이 하나도 줄지 않습니다. 3억원 기준 1년 거치면 <b>1,260만원을 이자로만</b> 내고, 남은 29년에 3억원을 다시 나눠 갚아야 하므로 월 납입금도 총 이자도 늘어납니다.</p>
+        </div>
+        <div class="note">
+          <h3><span>03</span><em data-i18n="n3h">중도상환은 이자에 먼저 닿습니다</em></h3>
+          <p data-i18n-html="n3p">추가로 넣은 돈은 <b>원금</b>을 줄이고, 줄어든 원금이 다음 달 이자를 줄입니다. 그래서 1년차에 넣은 100만원이 20년차에 넣은 100만원보다 훨씬 큰 절감을 만듭니다. 이 화면의 시뮬레이션은 <b>매달 같은 금액을 추가</b>하는 경우만 계산하고, 중도상환수수료는 빼지 않습니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="faqTitle">
+      <div class="sec-head">
+        <h2 id="faqTitle" data-i18n="faqTitle">질문</h2>
+        <span data-i18n="faqNote">방식 · DSR · 수수료</span>
+      </div>
+      <div class="faq">
+        <details class="qa">
+          <summary data-i18n="q1">은행에서 받은 견적과 왜 조금 다른가요?</summary>
+          <div class="a" data-i18n-html="a1">이 화면은 <b>원 단위로 반올림</b>하고, 이자를 <b>월 단위 단리</b>로 계산합니다. 은행은 일 단위로 이자를 계산하고(대출 실행일과 상환일의 날짜 수), 인지세·근저당 설정비·보증료·중도상환수수료를 따로 붙입니다. 그래서 총액은 수만원에서 수십만원 차이가 날 수 있고, <b>방식 간 비교</b>에는 차이가 거의 없습니다.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q2">DSR 40%면 연봉의 40%까지 갚을 수 있다는 뜻인가요?</summary>
+          <div class="a" data-i18n-html="a2">정확히는 <b>모든 대출의 1년 원리금 상환액</b>이 연소득의 40%를 넘지 않는다는 뜻입니다. 이자만이 아니라 원금까지 포함하고, 신규 대출은 <b>스트레스 금리를 더한 금리</b>로 계산합니다. 은행권은 40%, 2금융권은 50%가 기준입니다.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q3">만기일시는 왜 총 이자가 가장 큰가요?</summary>
+          <div class="a" data-i18n-html="a3">원금을 만기까지 <b>하나도 갚지 않기</b> 때문입니다. 이자는 남은 원금에 붙으므로, 30년 내내 3억원 전액에 이자가 붙습니다. 원리금균등은 매달 원금을 조금씩 갚아 잔액이 줄고, 원금균등은 더 빨리 줄어 가장 적습니다. 대신 만기일시는 <b>만기에 3억원을 한 번에</b> 마련해야 합니다.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q4">여기 입력한 금액이 저장되나요?</summary>
+          <div class="a" data-i18n-html="a4">아니요. 연소득과 대출 금액은 이 탭의 메모리에만 있고, 서버로 가지 않습니다. 페이지는 다른 호스트에서 폰트도 스크립트도 불러오지 않으며, 바닥의 카운터가 <b>PerformanceObserver</b>로 외부 요청을 세어 0을 표시합니다. 탭을 닫으면 숫자도 함께 사라집니다.</div>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span data-i18n="footCopy">© 2026 Kim Yihyung · 브라우저에서, 브라우저를 위해.</span>
+    <span class="net"><span data-i18n="footNet">외부 요청</span> <b id="netCount">0</b></span>
+    <span class="foot-links">
+      <a href="/portfolio/" data-i18n="footP1">포트폴리오</a>
+      <a href="/portfolio/tools/" data-i18n="footP2">도구 전체</a>
+      <a href="https://github.com/kimyihyung/portfolio" target="_blank" rel="noopener" data-i18n="footP3">소스</a>
+    </span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var LANG_KEY = 'loancalc.lang';
+  var SHARED_KEY = 'kyh.lang';
+  var CHECK_DATE = '2026-11-18';
+
+  var I18N = {
+    ko: {
+      docTitle: 'LoanCalc — 원리금균등·원금균등·만기일시 비교, 스트레스 DSR, 상환 스케줄 | Kim Yihyung',
+      brandAria: 'Kim Yihyung — 포트폴리오',
+      back: '← 도구 전체',
+      eyebrow: 'LoanCalc · 3방식 · DSR · 업로드 0',
+      h1: '같은 대출이라도,<br><span class="soft">갚는 방식에 따라 이자가 다릅니다.</span><br><span class="gold">세 방식으로 나란히.</span>',
+      lede: '3억원·연 4.2%·30년이면 <strong>원리금균등</strong>의 첫 달은 147만원이지만 <strong>원금균등</strong>은 188만원입니다. 대신 총 이자는 3,800만원 넘게 차이 납니다. <strong>거치기간</strong>을 넣고, <strong>스트레스 DSR</strong> 한도와 <strong>회차별 상환 스케줄</strong>까지 한 화면에서 확인하세요. 입력한 금액은 어디에도 저장되지 않습니다.',
+      pillUp: '업로드 0바이트',
+      pillNet: '외부 요청 0건',
+      pillWon: '원 단위 반올림',
+      pillCsv: '엑셀 CSV · BOM',
+      workAria: '대출 계산기',
+      tabAria: '도구',
+      tab1: '3방식 비교',
+      tab2: '스트레스 DSR',
+      tab3: '상환 스케줄 · CSV',
+
+      cTitle: '조건을 넣으면 세 방식이 나란히',
+      cNote: '거치기간 포함',
+      fPrincipal: '대출원금',
+      unitWon: '원',
+      fRate: '연이자율',
+      unitYearRate: '연 %',
+      graceHint: '이자만',
+      unitShareLimit: '상환액 비율',
+      fTerm: '기간',
+      unitYear: '년',
+      unitMonth: '개월',
+      fGrace: '거치기간',
+      unitMonthShort: '개월',
+      thMethod: '상환방식',
+      thFirst: '첫 달 납입금',
+      thPeak: '월 최고 납입금',
+      thInterest: '총 이자',
+      thTotal: '총 상환액',
+
+      m_annuity: '원리금균등',
+      m_principal: '원금균등',
+      m_bullet: '만기일시',
+      mAnnuity: '원리금균등',
+      mPrincipal: '원금균등',
+      mBullet: '만기일시',
+
+      dTitle: '연소득으로 한도를 가늠합니다',
+      dNote: '스트레스 가산금리 반영',
+      fIncome: '연소득',
+      fExisting: '기존 대출 연 원리금',
+      fNewLoan: '신규 대출 원금',
+      fDsrRate: '신규 대출 금리',
+      fDsrYears: '기간',
+      unitYearShort: '년',
+      fStress: '스트레스 가산금리',
+      fLimit: 'DSR 한도',
+      sExisting: '기존 DSR',
+      sExistingSub: '기존 대출만',
+      sStress: '스트레스 DSR',
+      sStressSub: '신규 대출 포함',
+      sPlain: '가산 없는 DSR',
+      sPlainSub: '참고용',
+      sMax: '최대 가능 원금',
+      thDsrRow: '구분',
+      thAnnual: '연 원리금',
+      thDsr: 'DSR',
+      dInfoHead: '기준 안내',
+      dInfo: '2025년 7월 1일 시행된 <b>스트레스 DSR 3단계</b> 기준입니다. 스트레스 금리는 <b>1.50%p</b>, 지방(서울·경기·인천 제외) 주택담보대출은 <b>0.75%p</b>이며, 신용대출은 잔액 1억원 초과분에만 적용됩니다. 혼합형·주기형은 고정기간 비중에 따라 가산 비율이 낮아집니다(변동형 100% 기준). 한도는 은행권 40%·2금융권 50%가 기준이며, 정책은 바뀔 수 있으니 실제 한도는 금융기관 심사로 확인하세요. 기준 확인일 <b>{d}</b>.',
+
+      scTitle: '회차별 상환 스케줄',
+      scNote: '중도상환 시뮬레이션 포함',
+      schedAria: '상환방식',
+      fExtra: '월 추가상환',
+      fSim: '적용 결과',
+      btnCsv: 'CSV 내려받기 (BOM)',
+      thRound: '회차',
+      thPay: '납입액',
+      thInt: '이자',
+      thPrin: '원금',
+      thBal: '잔액',
+      scCaveat: '스케줄은 <code>원</code> 단위로 반올림하며, 마지막 회차에서 잔액을 한 번에 정리합니다. CSV는 <b>UTF-8 BOM</b>으로 저장되어 Excel에서 한글이 깨지지 않고, 마지막 줄에 중도상환 시뮬레이션 결과가 한 줄로 들어갑니다.',
+
+      sideHead: '선택한 방식',
+      sideFirstUnit: '첫 달 납입금',
+      sideMethod: '방식',
+      sidePeak: '월 최고 납입',
+      sideInterest: '총 이자',
+      sideTotal: '총 상환액',
+      sideRatio: '이자 비중',
+      sideCaveat: '비교표의 행을 누르면 그 방식이 선택되고 스케줄 탭도 함께 바뀝니다.',
+      defHead: '세 방식의 차이',
+      def1k: '원리금균등',
+      def1v: '매달 같은 금액',
+      def2k: '원금균등',
+      def2v: '원금이 매달 같음',
+      def3k: '만기일시',
+      def3v: '이자만, 원금은 만기',
+      defCaveat: '원리금균등은 <b>월 납입금이 일정</b>해 계획이 쉽고, 원금균등은 <b>총 이자가 적지만</b> 초반 납입이 무겁습니다. 만기일시는 <b>월 부담이 가장 작고 총 이자가 가장 큽니다</b>. 같은 금리·기간이라면 이 순서는 바뀌지 않습니다.',
+      basisHead: '기준과 한계',
+      basis: '실제 내는 돈은 <b>금리·수수료·세금</b>에 따라 달라집니다. 이 화면은 원리금과 이자만 추정하며, 중도상환수수료·인지세·근저당 설정비·보증료는 반영하지 않습니다. 기준 확인일 <b>{d}</b>의 제도와 관행을 따랐고, 금리는 입력값을 그대로 씁니다.',
+
+      howTitle: '숫자 뒤에서 벌어지는 일',
+      howNote: '세 가지 함정',
+      n1h: '첫 달이 전부가 아닙니다',
+      n1p: '원금균등의 첫 달 188만원은 <b>가장 무거운 달</b>이고, 원리금균등의 147만원은 <b>30년 내내 같은 금액</b>입니다. 두 숫자를 나란히 놓으면 원금균등이 비싸 보이지만, 마지막 달에는 83만원대로 내려갑니다. 비교는 <b>총액</b>과 <b>현금흐름</b>을 따로 봐야 합니다.',
+      n2h: '거치기간은 공짜가 아닙니다',
+      n2p: '거치기간에는 이자만 내므로 월 부담이 줄어 보이지만, 그동안 원금이 하나도 줄지 않습니다. 3억원 기준 1년 거치면 <b>1,260만원을 이자로만</b> 내고, 남은 29년에 3억원을 다시 나눠 갚아야 하므로 월 납입금도 총 이자도 늘어납니다.',
+      n3h: '중도상환은 이자에 먼저 닿습니다',
+      n3p: '추가로 넣은 돈은 <b>원금</b>을 줄이고, 줄어든 원금이 다음 달 이자를 줄입니다. 그래서 1년차에 넣은 100만원이 20년차에 넣은 100만원보다 훨씬 큰 절감을 만듭니다. 이 화면의 시뮬레이션은 <b>매달 같은 금액을 추가</b>하는 경우만 계산하고, 중도상환수수료는 빼지 않습니다.',
+      faqTitle: '질문',
+      faqNote: '방식 · DSR · 수수료',
+      q1: '은행에서 받은 견적과 왜 조금 다른가요?',
+      a1: '이 화면은 <b>원 단위로 반올림</b>하고, 이자를 <b>월 단위 단리</b>로 계산합니다. 은행은 일 단위로 이자를 계산하고(대출 실행일과 상환일의 날짜 수), 인지세·근저당 설정비·보증료·중도상환수수료를 따로 붙입니다. 그래서 총액은 수만원에서 수십만원 차이가 날 수 있고, <b>방식 간 비교</b>에는 차이가 거의 없습니다.',
+      q2: 'DSR 40%면 연봉의 40%까지 갚을 수 있다는 뜻인가요?',
+      a2: '정확히는 <b>모든 대출의 1년 원리금 상환액</b>이 연소득의 40%를 넘지 않는다는 뜻입니다. 이자만이 아니라 원금까지 포함하고, 신규 대출은 <b>스트레스 금리를 더한 금리</b>로 계산합니다. 은행권은 40%, 2금융권은 50%가 기준입니다.',
+      q3: '만기일시는 왜 총 이자가 가장 큰가요?',
+      a3: '원금을 만기까지 <b>하나도 갚지 않기</b> 때문입니다. 이자는 남은 원금에 붙으므로, 30년 내내 3억원 전액에 이자가 붙습니다. 원리금균등은 매달 원금을 조금씩 갚아 잔액이 줄고, 원금균등은 더 빨리 줄어 가장 적습니다. 대신 만기일시는 <b>만기에 3억원을 한 번에</b> 마련해야 합니다.',
+      q4: '여기 입력한 금액이 저장되나요?',
+      a4: '아니요. 연소득과 대출 금액은 이 탭의 메모리에만 있고, 서버로 가지 않습니다. 페이지는 다른 호스트에서 폰트도 스크립트도 불러오지 않으며, 바닥의 카운터가 <b>PerformanceObserver</b>로 외부 요청을 세어 0을 표시합니다. 탭을 닫으면 숫자도 함께 사라집니다.',
+
+      footCopy: '© 2026 Kim Yihyung · 브라우저에서, 브라우저를 위해.',
+      footNet: '외부 요청',
+      footP1: '포트폴리오',
+      footP2: '도구 전체',
+      footP3: '소스',
+      toggleTo: 'View in English',
+
+      stReady: '값을 바꾸면 바로 다시 계산합니다.',
+      stBad: '입력값을 확인하세요 — 원금과 기간은 0보다 커야 합니다.',
+      stSaved: 'CSV를 저장했습니다.',
+      stCopy: '클립보드에 복사했습니다.',
+      stCopyFail: '브라우저가 클립보드를 막았습니다.',
+
+      readMonths: '{n}개월',
+      readTerm: '{m}개월 · {y}년',
+      readRate: '월 {r}% · 3억 기준 월 이자 {i}원',
+      readGrace: '거치 중 이자만 납입',
+      readGraceNone: '거치 없음',
+      readStress: '수도권 1.50 · 지방 0.75',
+      readNone: '없음',
+      readLimit: '은행 40 · 2금융 50',
+      readExtra: '추가 납입 없음',
+      readExtra2: '원금에 바로 반영',
+
+      simNone: '추가상환을 넣으면 단축 개월과 절감 이자를 계산합니다.',
+      simLine: '{m}개월 단축',
+      simLine0: '단축 없음',
+      simSaved: '이자 {n} 절감',
+      simFail: '추가상환이 월 납입금보다 큽니다 — 잔액이 한 회차에 정리됩니다.',
+
+      dsrLineExisting: '기존 대출',
+      dsrLineNew: '신규 대출 (스트레스)',
+      dsrLineTotal: '합계',
+      dsrMaxSub: '{y}년 만기 · {l}% 한도',
+      dsrOver: '한도 초과',
+      dsrUnder: '한도 이내',
+      dsrNoIncome: '연소득을 입력하세요.',
+      dsrZero: '여유가 없습니다',
+      dsrMaxNote: '기존 대출을 유지한 채 남은 여력 전부를 신규 대출로 쓸 때',
+      dsrOverBy: '한도까지 {n} 여유',
+      dsrOverNeg: '한도보다 {n} 초과',
+
+      schedMeta: '총 {n}회차 · 이자 {i}',
+      schedFootRound: '합계',
+      schedFootPay: '납입액',
+      schedFootInt: '이자',
+      schedFootPrin: '원금'
+    },
+    en: {
+      docTitle: 'LoanCalc — annuity vs equal principal vs bullet, stress DSR and amortisation | Kim Yihyung',
+      brandAria: 'Kim Yihyung — portfolio',
+      back: '← All tools',
+      eyebrow: 'LoanCalc · three repayment methods · stress DSR · zero upload',
+      h1: 'Same loan,<br><span class="soft">different money by method.</span><br><span class="gold">Side by side.</span>',
+      lede: 'On ₩300M at 4.2% over 30 years the annuity method takes ₩1,467,052 in month one while equal principal takes ₩1,883,333 — but the total interest differs by more than ₩38M the other way. Add a grace period, test a stress DSR limit and read the month-by-month schedule here. Nothing you type leaves the tab.',
+      pillUp: '0 bytes uploaded',
+      pillNet: '0 external requests',
+      pillWon: 'rounded to the won',
+      pillCsv: 'Excel-safe CSV · BOM',
+      workAria: 'Loan calculator',
+      tabAria: 'Tool',
+      tab1: 'Compare 3 methods',
+      tab2: 'Stress DSR',
+      tab3: 'Schedule · CSV',
+
+      cTitle: 'Three methods from one set of terms',
+      cNote: 'grace period included',
+      fPrincipal: 'Principal',
+      unitWon: 'KRW',
+      fRate: 'Annual rate',
+      unitYearRate: 'per year',
+      graceHint: 'interest',
+      unitShareLimit: 'of income',
+      fTerm: 'Term',
+      unitYear: 'yr',
+      unitMonth: 'mo',
+      fGrace: 'Grace period',
+      unitMonthShort: 'mo',
+      thMethod: 'Method',
+      thFirst: 'First payment',
+      thPeak: 'Peak payment',
+      thInterest: 'Total interest',
+      thTotal: 'Total repaid',
+
+      m_annuity: 'Annuity',
+      m_principal: 'Equal principal',
+      m_bullet: 'Bullet',
+      mAnnuity: 'Annuity',
+      mPrincipal: 'Equal principal',
+      mBullet: 'Bullet',
+
+      dTitle: 'How much income buys how much loan',
+      dNote: 'stress buffer included',
+      fIncome: 'Annual income',
+      fExisting: 'Existing annual repayments',
+      fNewLoan: 'New loan principal',
+      fDsrRate: 'New loan rate',
+      fDsrYears: 'Term',
+      unitYearShort: 'yr',
+      fStress: 'Stress add-on',
+      fLimit: 'DSR limit',
+      sExisting: 'Existing DSR',
+      sExistingSub: 'existing loans only',
+      sStress: 'Stressed DSR',
+      sStressSub: 'new loan included',
+      sPlain: 'DSR without buffer',
+      sPlainSub: 'for reference',
+      sMax: 'Maximum principal',
+      thDsrRow: 'Item',
+      thAnnual: 'Annual repayment',
+      thDsr: 'DSR',
+      dInfoHead: 'Basis',
+      dInfo: 'Based on the <b>third phase of stress DSR</b>, in force since 1 July 2025: a <b>1.50%p</b> add-on, reduced to <b>0.75%p</b> for mortgages outside Seoul, Gyeonggi and Incheon, and applied to credit loans only above ₩100M. Mixed and periodic-rate mortgages use a fraction of the buffer (variable 100%). The limit is 40% at banks and 50% at non-bank lenders, and policy can change — the real number comes from the lender\'s underwriting. Checked <b>{d}</b>.',
+
+      scTitle: 'Month-by-month schedule',
+      scNote: 'with a prepayment simulation',
+      schedAria: 'Repayment method',
+      fExtra: 'Extra per month',
+      fSim: 'Result',
+      btnCsv: 'Download CSV (BOM)',
+      thRound: 'No.',
+      thPay: 'Payment',
+      thInt: 'Interest',
+      thPrin: 'Principal',
+      thBal: 'Balance',
+      scCaveat: 'The schedule rounds to the <code>won</code> and clears the remaining balance in the final instalment. The CSV is written with a <b>UTF-8 BOM</b> so Excel opens Korean text correctly, and its last line carries the prepayment simulation.',
+
+      sideHead: 'Selected method',
+      sideFirstUnit: 'first payment',
+      sideMethod: 'Method',
+      sidePeak: 'Peak payment',
+      sideInterest: 'Total interest',
+      sideTotal: 'Total repaid',
+      sideRatio: 'Interest share',
+      sideCaveat: 'Click a row in the comparison to select that method; the schedule tab follows.',
+      defHead: 'How they differ',
+      def1k: 'Annuity',
+      def1v: 'same payment every month',
+      def2k: 'Equal principal',
+      def2v: 'same principal every month',
+      def3k: 'Bullet',
+      def3v: 'interest only, principal at maturity',
+      defCaveat: 'Annuity makes the <b>monthly payment flat</b> and easy to plan; equal principal <b>costs less in total</b> but starts heavy. Bullet has the <b>smallest monthly burden and the largest total interest</b>. At the same rate and term that order never changes.',
+      basisHead: 'Basis and limits',
+      basis: 'What you actually pay depends on <b>rate, fees and taxes</b>. This page estimates principal and interest only: no prepayment penalty, stamp duty, mortgage registration fee or guarantee fee. Policy is as of <b>{d}</b>, and every rate is the number you typed.',
+
+      howTitle: 'What the numbers are doing',
+      howNote: 'three traps',
+      n1h: 'Month one is not the story',
+      n1p: 'The ₩1,883,333 first payment of equal principal is its <b>heaviest month</b>; the annuity\'s ₩1,467,052 stays <b>identical for thirty years</b>. Side by side equal principal looks expensive, yet its last payment is in the ₩830,000s. Compare the <b>total</b> and the <b>cash flow</b> separately.',
+      n2h: 'A grace period is not free',
+      n2p: 'During grace you pay interest only, so the monthly figure falls — and the principal does not move at all. One year of grace on ₩300M costs <b>₩12.6M in interest alone</b>, and the same ₩300M is then spread over 29 years, so both the payment and the total interest rise.',
+      n3h: 'Prepayment reaches the interest first',
+      n3p: 'Extra money cuts the <b>principal</b>, and the smaller principal cuts next month\'s interest. That is why ₩1M paid in year one saves far more than ₩1M paid in year twenty. This simulation adds the <b>same amount every month</b> and does not subtract a prepayment penalty.',
+
+      faqTitle: 'Questions',
+      faqNote: 'methods · DSR · fees',
+      q1: 'Why is the bank quote slightly different?',
+      a1: 'This page <b>rounds to the won</b> and charges interest <b>monthly, simple</b>. A bank charges by actual days between disbursement and repayment and adds stamp duty, registration fees, guarantee fees and any prepayment penalty. Totals can differ by tens of thousands of won; the <b>comparison between methods</b> barely moves.',
+      q2: 'Does a 40% DSR mean I can spend 40% of my salary on repayments?',
+      a2: 'It means the <b>annual principal and interest</b> of every loan together stay under 40% of income. Principal counts, not just interest, and a new loan is tested at the <b>stressed rate</b>. Banks use 40%, non-bank lenders 50%.',
+      q3: 'Why does the bullet method cost the most?',
+      a3: 'Because <b>none of the principal is repaid</b> before maturity. Interest attaches to the outstanding balance, so the full ₩300M carries interest for thirty years. Annuity shrinks the balance a little each month and equal principal shrinks it fastest. In exchange, bullet needs the <b>whole ₩300M</b> ready on one date.',
+      q4: 'Is anything I type stored?',
+      a4: 'No. Income and loan amounts live in this tab\'s memory and never reach a server. The page loads no font or script from another host, and the footer counts cross-origin requests with a <b>PerformanceObserver</b> at 0. Close the tab and the numbers are gone.',
+
+      footCopy: '© 2026 Kim Yihyung · Built in the browser, for the browser.',
+      footNet: 'external requests',
+      footP1: 'Portfolio',
+      footP2: 'All tools',
+      footP3: 'Source',
+      toggleTo: '한국어로 보기',
+
+      stReady: 'Change a value and it recalculates immediately.',
+      stBad: 'Check the inputs — principal and term must be above zero.',
+      stSaved: 'CSV saved.',
+      stCopy: 'Copied to the clipboard.',
+      stCopyFail: 'The clipboard was blocked by the browser.',
+
+      readMonths: '{n} months',
+      readTerm: '{m} months · {y} years',
+      readRate: 'monthly {r}% · {i} per month on ₩300M',
+      readGrace: 'interest only during grace',
+      readGraceNone: 'no grace period',
+      readStress: 'metro 1.50 · regional 0.75',
+      readNone: 'none',
+      readLimit: 'banks 40 · non-bank 50',
+      readExtra: 'no extra payment',
+      readExtra2: 'applied to principal',
+
+      simNone: 'Add an extra payment to see the months it cuts and the interest it saves.',
+      simLine: '{m} months shorter',
+      simLine0: 'no shortening',
+      simSaved: 'saves {n} of interest',
+      simFail: 'The extra payment exceeds the monthly payment — the balance clears in one instalment.',
+
+      dsrLineExisting: 'Existing loans',
+      dsrLineNew: 'New loan (stressed)',
+      dsrLineTotal: 'Total',
+      dsrMaxSub: '{y}-year term · {l}% limit',
+      dsrOver: 'over the limit',
+      dsrUnder: 'within the limit',
+      dsrNoIncome: 'Enter an annual income.',
+      dsrZero: 'no headroom',
+      dsrMaxNote: 'with existing loans kept and all remaining headroom in the new loan',
+      dsrOverBy: '{n} of headroom left',
+      dsrOverNeg: '{n} over the limit',
+
+      schedMeta: '{n} instalments · {i} interest',
+      schedFootRound: 'Total',
+      schedFootPay: 'payment',
+      schedFootInt: 'interest',
+      schedFootPrin: 'principal'
+    }
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var state = {
+    lang: 'ko',
+    tab: 'compare',
+    termUnit: 'year',
+    method: 'annuity',
+    results: null,
+    sched: null,
+    sim: null
+  };
+
+  function t(k) {
+    var v = I18N[state.lang] && I18N[state.lang][k];
+    if (v == null) v = I18N.ko[k];
+    return v == null ? k : v;
+  }
+  function fmt(s, o) {
+    return String(s).replace(/\{(\w+)\}/g, function (m, k) {
+      return o && o[k] != null ? String(o[k]) : m;
+    });
+  }
+  function group(n) {
+    return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+  function num(el) {
+    var v = String(el.value || '').replace(/[^\d.]/g, '');
+    var f = parseFloat(v);
+    return isNaN(f) ? 0 : f;
+  }
+  function int(el) {
+    var v = String(el.value || '').replace(/[^\d]/g, '');
+    return v ? parseInt(v, 10) : 0;
+  }
+  function money(n) {
+    return state.lang === 'ko' ? group(n) + '원' : '₩' + group(n);
+  }
+  function pct(n, d) {
+    var dec = d == null ? 2 : d;
+    var f = Math.pow(10, dec);
+    return (Math.round(n * f) / f).toFixed(dec) + '%';
+  }
+  function koAmount(n) {
+    if (!n) return '0원';
+    var eok = Math.floor(n / 100000000);
+    var man = Math.floor((n % 100000000) / 10000);
+    var won = Math.round(n % 10000);
+    var s = '';
+    if (eok) s += eok + '억 ';
+    if (man) s += group(man) + '만 ';
+    if (won) s += group(won);
+    return (s.trim() || '0') + '원';
+  }
+  function status(msg, kind, id) {
+    var el = $(id || 'status');
+    el.className = 'status' + (kind ? ' is-' + kind : '');
+    el.textContent = msg || '';
+  }
+  function moneyInput(el) {
+    var raw = String(el.value || '').replace(/[^\d]/g, '');
+    if (raw.length > 15) raw = raw.slice(0, 15);
+    el.value = raw ? group(parseInt(raw, 10)) : '';
+    return raw ? parseInt(raw, 10) : 0;
+  }
+  function decInput(el) {
+    var raw = String(el.value || '').replace(/[^\d.]/g, '');
+    var parts = raw.split('.');
+    if (parts.length > 2) raw = parts[0] + '.' + parts.slice(1).join('');
+    el.value = raw;
+    var f = parseFloat(raw);
+    return isNaN(f) ? 0 : f;
+  }
+
+  /* ═════════════════════ core maths ═════════════════════ */
+
+  function annuity(P, r, n) {
+    if (n <= 0) return 0;
+    if (r === 0) return P / n;
+    var f = Math.pow(1 + r, n);
+    return P * r * f / (f - 1);
+  }
+
+  /* method: annuity | principal | bullet. extra: additional principal each month */
+  function build(method, P, annualRate, months, grace, extra) {
+    var r = annualRate / 100 / 12;
+    var rows = [], bal = P, totalInt = 0, totalPay = 0, month = 0;
+    var g = Math.max(0, Math.min(grace, months - 1));
+    var i, interest, prin, pay;
+
+    for (i = 1; i <= g; i++) {
+      interest = Math.round(bal * r);
+      prin = 0;
+      pay = interest;
+      bal -= prin;
+      totalInt += interest;
+      totalPay += pay;
+      rows.push({ m: i, pay: pay, int: interest, prin: prin, bal: bal, grace: true });
+    }
+    month = g;
+
+    var n = months - g;
+    if (n > 0) {
+      if (method === 'annuity') {
+        var pmt = Math.round(annuity(bal, r, n));
+        for (i = 1; i <= n; i++) {
+          if (bal <= 0) break;
+          interest = Math.round(bal * r);
+          prin = i === n ? bal : Math.max(0, pmt - interest);
+          if (prin > bal) prin = bal;
+          pay = prin + interest;
+          bal -= prin;
+          if (extra > 0 && bal > 0) {
+            var add = Math.min(extra, bal);
+            bal -= add; prin += add; pay += add;
+          }
+          month++;
+          totalInt += interest;
+          totalPay += pay;
+          rows.push({ m: month, pay: pay, int: interest, prin: prin, bal: bal });
+        }
+      } else if (method === 'principal') {
+        var step = bal / n;
+        for (i = 1; i <= n; i++) {
+          if (bal <= 0) break;
+          interest = Math.round(bal * r);
+          prin = i === n ? bal : Math.round(step);
+          if (prin > bal) prin = bal;
+          pay = prin + interest;
+          bal -= prin;
+          if (extra > 0 && bal > 0) {
+            var add2 = Math.min(extra, bal);
+            bal -= add2; prin += add2; pay += add2;
+          }
+          month++;
+          totalInt += interest;
+          totalPay += pay;
+          rows.push({ m: month, pay: pay, int: interest, prin: prin, bal: bal });
+        }
+      } else {
+        for (i = 1; i <= n; i++) {
+          if (bal <= 0) break;
+          interest = Math.round(bal * r);
+          prin = i === n ? bal : 0;
+          if (prin > bal) prin = bal;
+          pay = prin + interest;
+          bal -= prin;
+          if (extra > 0 && bal > 0) {
+            var add3 = Math.min(extra, bal);
+            bal -= add3; prin += add3; pay += add3;
+          }
+          month++;
+          totalInt += interest;
+          totalPay += pay;
+          rows.push({ m: month, pay: pay, int: interest, prin: prin, bal: bal });
+        }
+      }
+    }
+    var maxPay = 0;
+    rows.forEach(function (x) { if (x.pay > maxPay) maxPay = x.pay; });
+    return { rows: rows, totalInt: totalInt, totalPay: totalPay, first: rows.length ? rows[0].pay : 0, peak: maxPay, count: rows.length };
+  }
+
+  function readTerms() {
+    var P = int($('principal'));
+    var rate = num($('rate'));
+    var termVal = int($('term'));
+    var months = state.termUnit === 'year' ? Math.round(termVal * 12) : termVal;
+    var grace = int($('grace'));
+    return { P: P, rate: rate, months: months, grace: grace };
+  }
+
+  /* ═════════════════════ render: compare ═════════════════════ */
+
+  function renderCompare() {
+    var q = readTerms();
+    var ok = q.P > 0 && q.months > 0 && q.rate >= 0 && q.rate < 100;
+    $('principalRead').textContent = q.P ? (state.lang === 'ko' ? koAmount(q.P) : group(q.P) + ' KRW') : '—';
+    var monthRate = Math.round(q.rate / 12 * 1000) / 1000;
+    var monthInt = Math.round(q.P * q.rate / 100 / 12);
+    $('rateRead').textContent = q.rate ? (state.lang === 'ko'
+      ? '월 ' + monthRate + '% · ' + koAmount(monthInt)
+      : monthRate + '%/mo · ' + money(monthInt)) : '—';
+    $('termRead').textContent = q.months ? (state.lang === 'ko'
+      ? q.months + '개월 · ' + (Math.round(q.months / 12 * 10) / 10) + '년'
+      : q.months + ' months · ' + (Math.round(q.months / 12 * 10) / 10) + ' years') : '—';
+    $('graceRead').textContent = q.grace > 0 ? t('readGrace') : t('readGraceNone');
+
+    if (!ok) {
+      $('cmpBody').innerHTML = '';
+      $('cmpBars').innerHTML = '';
+      $('cmpNote').textContent = '';
+      status(t('stBad'), 'bad');
+      state.results = null;
+      renderSide();
+      return;
+    }
+    status(t('stReady'));
+
+    var methods = ['annuity', 'principal', 'bullet'];
+    var res = {};
+    methods.forEach(function (m) { res[m] = build(m, q.P, q.rate, q.months, q.grace, 0); });
+    state.results = { terms: q, by: res };
+
+    var body = $('cmpBody');
+    body.innerHTML = '';
+    methods.forEach(function (m) {
+      var r = res[m];
+      var tr = document.createElement('tr');
+      tr.setAttribute('data-method', m);
+      if (m === state.method) tr.className = 'is-on';
+      var cells = [t('m_' + m), money(r.first), money(r.peak), money(r.totalInt), money(r.totalPay)];
+      cells.forEach(function (c, i) {
+        var td = document.createElement('td');
+        td.textContent = c;
+        if (i > 0) td.className = 'num';
+        tr.appendChild(td);
+      });
+      tr.addEventListener('click', function () {
+        state.method = m;
+        renderCompare();
+        renderSched();
+      });
+      body.appendChild(tr);
+    });
+
+    var maxInt = Math.max(res.annuity.totalInt, res.principal.totalInt, res.bullet.totalInt) || 1;
+    var bars = $('cmpBars');
+    bars.innerHTML = '';
+    methods.forEach(function (m) {
+      var row = document.createElement('div');
+      row.className = 'bar-row' + (m === 'principal' ? ' is-best' : '');
+      var nm = document.createElement('span');
+      nm.className = 'nm';
+      nm.textContent = t('m_' + m);
+      var track = document.createElement('div');
+      track.className = 'bar-track';
+      var fill = document.createElement('div');
+      fill.className = 'bar-fill';
+      fill.style.width = Math.max(3, Math.round(res[m].totalInt / maxInt * 100)) + '%';
+      track.appendChild(fill);
+      var val = document.createElement('span');
+      val.className = 'bar-val';
+      val.textContent = money(res[m].totalInt);
+      row.appendChild(nm); row.appendChild(track); row.appendChild(val);
+      bars.appendChild(row);
+    });
+
+    var diff = res.bullet.totalInt - res.principal.totalInt;
+    $('cmpNote').innerHTML = state.lang === 'ko'
+      ? '같은 조건에서 <b>만기일시</b>가 <b>원금균등</b>보다 이자를 <b>' + money(diff) + '</b> 더 냅니다. ' +
+        (q.grace > 0 ? '거치 ' + q.grace + '개월 동안은 세 방식 모두 이자만 냅니다. ' : '') +
+        '금리와 기간이 같다면 이 순서는 바뀌지 않습니다.'
+      : 'On identical terms <b>bullet</b> pays <b>' + money(diff) + '</b> more interest than <b>equal principal</b>. ' +
+        (q.grace > 0 ? 'During the ' + q.grace + '-month grace period all three methods pay interest only. ' : '') +
+        'At the same rate and term this order does not change.';
+
+    renderSide();
+  }
+
+  function renderSide() {
+    if (!state.results) {
+      $('sideMethod').textContent = '—';
+      $('sidePeak').textContent = '—';
+      $('sideInterest').textContent = '—';
+      $('sideTotal').textContent = '—';
+      $('sideRatio').textContent = '—';
+      return;
+    }
+    var r = state.results.by[state.method];
+    $('sideFirst').textContent = money(r.first);
+    $('sideMethod').textContent = t('m_' + state.method);
+    $('sidePeak').textContent = money(r.peak);
+    $('sideInterest').textContent = money(r.totalInt);
+    $('sideTotal').textContent = money(r.totalPay);
+    $('sideRatio').textContent = pct(r.totalInt / r.totalPay * 100, 1);
+  }
+
+  /* ═════════════════════ render: dsr ═════════════════════ */
+
+  function renderDsr() {
+    var income = int($('income'));
+    var existing = int($('existing'));
+    var principal = int($('newLoan'));
+    var rate = num($('dsrRate'));
+    var years = int($('dsrYears')) || 30;
+    var stress = num($('stress'));
+    var limit = num($('limit')) || 40;
+
+    $('incomeRead').textContent = income ? (state.lang === 'ko' ? koAmount(income) + ' · 월 ' + money(Math.round(income / 12)) : group(income) + ' KRW') : '—';
+    $('existingRead').textContent = existing ? money(existing) + (state.lang === 'ko' ? ' / 년' : ' / yr') : t('readNone');
+    $('newLoanRead').textContent = principal ? (state.lang === 'ko' ? koAmount(principal) : group(principal) + ' KRW') : '—';
+    $('dsrRateRead').textContent = rate + '%' + (stress ? ' + ' + stress + '%p' : '');
+    $('dsrYearsRead').textContent = years + (state.lang === 'ko' ? '년' : ' yr') + ' · ' + (years * 12) + (state.lang === 'ko' ? '개월' : ' mo');
+    $('stressRead').textContent = t('readStress');
+    $('limitRead').textContent = t('readLimit');
+
+    if (!income) {
+      ['dsrExisting', 'dsrStress', 'dsrPlain', 'dsrMax'].forEach(function (id) { $(id).textContent = '—'; });
+      $('dsrBody').innerHTML = '';
+      $('dsrMaxSub').textContent = '';
+      status(t('dsrNoIncome'), 'warn', 'dsrStatus');
+      state.dsr = null;
+      return;
+    }
+    status('', null, 'dsrStatus');
+
+    var months = years * 12;
+    var rStress = (rate + stress) / 100 / 12;
+    var rPlain = rate / 100 / 12;
+    var newPIStress = annuity(principal, rStress, months) * 12;
+    var newPIPlain = annuity(principal, rPlain, months) * 12;
+    var dsrStress = (existing + newPIStress) / income * 100;
+    var dsrPlain = (existing + newPIPlain) / income * 100;
+    var dsrExisting = existing / income * 100;
+    var perWon = annuity(1, rStress, months) * 12;
+    var maxPrincipal = Math.max(0, (limit / 100 * income - existing) / perWon);
+    var headroom = limit - dsrStress;
+
+    $('dsrExisting').textContent = pct(dsrExisting);
+    $('dsrStress').textContent = pct(dsrStress);
+    $('dsrPlain').textContent = pct(dsrPlain);
+    $('dsrMax').textContent = maxPrincipal > 0 ? money(Math.floor(maxPrincipal)) : t('dsrZero');
+    $('dsrMaxSub').textContent = state.lang === 'ko'
+      ? years + '년 만기 · ' + limit + '% 한도'
+      : years + '-yr term · ' + limit + '% limit';
+
+    $('statStress').className = 'stat ' + (dsrStress > limit ? 'is-over' : 'is-on');
+    $('statMax').className = 'stat' + (maxPrincipal <= 0 ? ' is-over' : '');
+
+    var rows = [
+      { k: t('dsrLineExisting'), annual: existing, dsr: dsrExisting },
+      { k: t('dsrLineNew'), annual: newPIStress, dsr: (newPIStress / income * 100) },
+      { k: t('dsrLineTotal'), annual: existing + newPIStress, dsr: dsrStress, total: true }
+    ];
+    var body = $('dsrBody');
+    body.innerHTML = '';
+    rows.forEach(function (row) {
+      var tr = document.createElement('tr');
+      var td1 = document.createElement('td');
+      td1.textContent = row.k;
+      var td2 = document.createElement('td');
+      td2.className = 'num';
+      td2.textContent = money(row.annual);
+      var td3 = document.createElement('td');
+      td3.className = 'num';
+      td3.textContent = pct(row.dsr);
+      if (row.total) {
+        td1.style.color = 'var(--accent)';
+        td3.style.color = dsrStress > limit ? '#ffb3b3' : 'var(--ok)';
+        td3.style.fontWeight = '700';
+      }
+      tr.appendChild(td1); tr.appendChild(td2); tr.appendChild(td3);
+      body.appendChild(tr);
+    });
+
+    var headroomLine = headroom >= 0
+      ? fmt(t('dsrOverBy'), { n: (Math.round(headroom * 100) / 100) + '%p' })
+      : fmt(t('dsrOverNeg'), { n: (Math.round(-headroom * 100) / 100) + '%p' });
+    status((dsrStress > limit ? t('dsrOver') + ' · ' : t('dsrUnder') + ' · ') + headroomLine, dsrStress > limit ? 'bad' : 'ok', 'dsrStatus');
+
+    state.dsr = {
+      income: income, existing: existing, principal: principal, rate: rate, years: years,
+      stress: stress, limit: limit, dsrStress: dsrStress, dsrPlain: dsrPlain, dsrExisting: dsrExisting,
+      maxPrincipal: maxPrincipal, headroom: headroom
+    };
+  }
+
+  /* ═════════════════════ render: schedule ═════════════════════ */
+
+  function renderSched() {
+    var q = readTerms();
+    var ok = q.P > 0 && q.months > 0 && q.rate >= 0;
+    var chips = document.querySelectorAll('#schedMethod button');
+    for (var i = 0; i < chips.length; i++) chips[i].setAttribute('aria-pressed', String(chips[i].getAttribute('data-method') === state.method));
+    if (!ok) {
+      $('schedBody').innerHTML = '';
+      $('schedFoot').innerHTML = '';
+      $('schedMeta').textContent = '';
+      $('simRead').textContent = '—';
+      $('simRead2').textContent = '';
+      status(t('stBad'), 'bad', 'schedStatus');
+      return;
+    }
+    status('', null, 'schedStatus');
+    var extra = int($('extra'));
+    $('extraRead').textContent = extra > 0
+      ? (state.lang === 'ko' ? money(extra) + ' · ' + t('readExtra2') : money(extra) + ' · ' + t('readExtra2'))
+      : t('readExtra');
+
+    var base = build(state.method, q.P, q.rate, q.months, q.grace, 0);
+    var sim = extra > 0 ? build(state.method, q.P, q.rate, q.months, q.grace, extra) : null;
+    state.sched = { terms: q, method: state.method, base: base, sim: sim, extra: extra };
+
+    var took = base.rows;
+    var body = $('schedBody');
+    body.innerHTML = '';
+    var limit = 400;
+    took.slice(0, limit).forEach(function (row, idx) {
+      var tr = document.createElement('tr');
+      if (row.grace) tr.style.opacity = '.62';
+      var cells = [row.m, money(row.pay), money(row.int), money(row.prin), money(row.bal)];
+      cells.forEach(function (c, ci) {
+        var td = document.createElement('td');
+        td.textContent = c;
+        td.className = 'num';
+        tr.appendChild(td);
+      });
+      body.appendChild(tr);
+    });
+
+    var foot = $('schedFoot');
+    foot.innerHTML = '';
+    var trf = document.createElement('tr');
+    [t('schedFootRound'), money(base.totalPay), money(base.totalInt), money(q.P), money(0)].forEach(function (c) {
+      var td = document.createElement('td');
+      td.textContent = c;
+      td.className = 'num';
+      trf.appendChild(td);
+    });
+    foot.appendChild(trf);
+
+    $('schedMeta').textContent = state.lang === 'ko'
+      ? '총 ' + base.rows.length + '회차 · 총 이자 ' + money(base.totalInt)
+      : base.rows.length + ' instalments · ' + money(base.totalInt) + ' interest';
+
+    if (sim) {
+      var cut = base.rows.length - sim.rows.length;
+      var saved = base.totalInt - sim.totalInt;
+      $('simRead').textContent = cut > 0 ? fmt(t('simLine'), { m: cut }) : t('simLine0');
+      $('simRead2').textContent = cut > 0 ? fmt(t('simSaved'), { n: money(saved) }) : '';
+      if (sim.rows.length <= 1) status(t('simFail'), 'warn', 'schedStatus');
+    } else {
+      $('simRead').textContent = t('simNone');
+      $('simRead2').textContent = '';
+    }
+  }
+
+  /* ═════════════════════ csv ═════════════════════ */
+
+  function csvCell(v) {
+    var s = v == null ? '' : String(v);
+    if (/[",\n\r]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+    return s;
+  }
+  function schedCsv() {
+    if (!state.sched) return null;
+    var s = state.sched;
+    var lines = [];
+    lines.push(['회차', '납입액(원)', '이자(원)', '원금(원)', '잔액(원)'].join(','));
+    s.base.rows.forEach(function (r) {
+      lines.push([r.m, r.pay, r.int, r.prin, r.bal].join(','));
+    });
+    lines.push(['합계', s.base.totalPay, s.base.totalInt, s.terms.P, 0].join(','));
+    if (s.sim) {
+      var cut = s.base.rows.length - s.sim.rows.length;
+      var saved = s.base.totalInt - s.sim.totalInt;
+      lines.push(['중도상환 시뮬레이션',
+        '월 ' + group(s.extra) + '원 추가',
+        saved + '원 절감',
+        cut + '개월 단축',
+        '총 ' + s.sim.rows.length + '회차'].map(csvCell).join(','));
+    }
+    return lines.join('\r\n') + '\r\n';
+  }
+  function download(name, text) {
+    var blob = new Blob([text], { type: 'text/csv;charset=utf-8' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+  }
+
+  /* ═════════════════════ tabs + language ═════════════════════ */
+
+  function setTab(name) {
+    state.tab = name;
+    var tabs = document.querySelectorAll('.tabs button');
+    for (var i = 0; i < tabs.length; i++) {
+      var on = tabs[i].getAttribute('data-tab') === name;
+      tabs[i].setAttribute('aria-selected', String(on));
+      tabs[i].setAttribute('tabindex', on ? '0' : '-1');
+    }
+    ['compare', 'dsr', 'sched'].forEach(function (n) { $('panel-' + n).hidden = n !== name; });
+    if (name === 'dsr') renderDsr();
+    if (name === 'sched') renderSched();
+    if (name === 'compare') renderCompare();
+  }
+
+  function applyLang(lang) {
+    state.lang = lang === 'en' ? 'en' : 'ko';
+    document.documentElement.setAttribute('lang', state.lang);
+    document.title = t('docTitle');
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var v = t(nodes[i].getAttribute('data-i18n'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-html'));
+      if (v) nodes[i].innerHTML = fmt(v, { d: CHECK_DATE });
+    }
+    nodes = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-aria'));
+      if (v) nodes[i].setAttribute('aria-label', v);
+    }
+    var lt = $('langToggle');
+    var spans = lt.querySelectorAll('[data-lt]');
+    for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
+    lt.setAttribute('aria-label', t('toggleTo'));
+    lt.setAttribute('title', t('toggleTo'));
+
+    renderCompare();
+    renderDsr();
+    renderSched();
+    try {
+      localStorage.setItem(LANG_KEY, state.lang);
+      localStorage.setItem(SHARED_KEY, state.lang);
+    } catch (e) { /* storage may be blocked */ }
+  }
+
+  function initialLang() {
+    var saved = null;
+    try { saved = localStorage.getItem(SHARED_KEY) || localStorage.getItem(LANG_KEY); } catch (e) { }
+    return saved === 'en' ? 'en' : 'ko';
+  }
+
+  /* ═════════════════════ events ═════════════════════ */
+
+  $('langToggle').addEventListener('click', function () { applyLang(state.lang === 'ko' ? 'en' : 'ko'); });
+
+  var tabEls = document.querySelectorAll('.tabs button');
+  for (var ti = 0; ti < tabEls.length; ti++) {
+    tabEls[ti].addEventListener('click', function () { setTab(this.getAttribute('data-tab')); });
+    tabEls[ti].addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      var all = Array.prototype.slice.call(tabEls);
+      var idx = all.indexOf(this);
+      var next = all[(idx + (e.key === 'ArrowRight' ? 1 : all.length - 1)) % all.length];
+      next.focus(); setTab(next.getAttribute('data-tab'));
+    });
+  }
+
+  var recalcTimer = null;
+  function recalc() {
+    clearTimeout(recalcTimer);
+    recalcTimer = setTimeout(function () {
+      renderCompare();
+      if (state.tab === 'dsr') renderDsr();
+      if (state.tab === 'sched') renderSched();
+    }, 120);
+  }
+
+  var moneyIds = ['principal', 'income', 'existing', 'newLoan', 'extra'];
+  moneyIds.forEach(function (id) {
+    $(id).addEventListener('input', function () { moneyInput(this); recalc(); });
+  });
+  var decIds = ['rate', 'dsrRate', 'stress', 'limit'];
+  decIds.forEach(function (id) {
+    $(id).addEventListener('input', function () { decInput(this); recalc(); });
+  });
+  ['term', 'grace', 'dsrYears'].forEach(function (id) {
+    $(id).addEventListener('input', function () { recalc(); });
+  });
+
+  $('termUnit').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-unit]');
+    if (!b) return;
+    state.termUnit = b.getAttribute('data-unit');
+    var chips = this.querySelectorAll('button');
+    for (var i = 0; i < chips.length; i++) chips[i].setAttribute('aria-pressed', String(chips[i] === b));
+    if (state.termUnit === 'month' && int($('term')) < 12) $('term').value = String(int($('term')) * 12 || 360);
+    if (state.termUnit === 'year' && int($('term')) > 60) $('term').value = String(Math.round(int($('term')) / 12));
+    recalc();
+  });
+
+  $('schedMethod').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-method]');
+    if (!b) return;
+    state.method = b.getAttribute('data-method');
+    renderCompare();
+    renderSched();
+  });
+
+  $('btnCsv').addEventListener('click', function () {
+    var csv = schedCsv();
+    if (!csv) { status(t('stBad'), 'bad', 'schedStatus'); return; }
+    var name = 'loancalc-' + state.method + '-' + state.sched.terms.months + 'm.csv';
+    download(name, '\uFEFF' + csv);
+    status(t('stSaved') + ' ' + name, 'ok', 'schedStatus');
+  });
+
+  /* ═════════════════════ external request counter ═════════════════════ */
+
+  var netCount = 0;
+  function netWatch() {
+    if (!('PerformanceObserver' in window)) return;
+    try {
+      var po = new PerformanceObserver(function (list) {
+        var es = list.getEntries();
+        for (var i = 0; i < es.length; i++) {
+          try {
+            var u = new URL(es[i].name, location.href);
+            if (u.origin !== location.origin) {
+              netCount++;
+              $('netCount').textContent = String(netCount);
+            }
+          } catch (e) { /* ignore */ }
+        }
+      });
+      po.observe({ type: 'resource', buffered: true });
+    } catch (e) { /* older engines */ }
+  }
+
+  /* ═════════════════════ boot ═════════════════════ */
+
+  applyLang(initialLang());
+  setTab('compare');
+  status(t('stReady'));
+  netWatch();
+
+  /* read-only hook for tests and automation */
+  window.LoanCalc = {
+    version: '1.0',
+    lang: function () { return state.lang; },
+    setLang: function (l) { applyLang(l); },
+    tab: function () { return state.tab; },
+    setTab: setTab,
+    net: function () { return netCount; },
+    set: function (opts) {
+      Object.keys(opts || {}).forEach(function (k) {
+        var el = $(k);
+        if (!el) return;
+        var isMoney = ['principal', 'income', 'existing', 'newLoan', 'extra'].indexOf(k) > -1;
+        el.value = typeof opts[k] === 'number' && isMoney ? group(opts[k]) : String(opts[k]);
+      });
+      if (opts && opts.termUnit) state.termUnit = opts.termUnit;
+      renderCompare(); renderDsr(); renderSched();
+    },
+    terms: readTerms,
+    compare: function () {
+      if (!state.results) return null;
+      var out = {};
+      ['annuity', 'principal', 'bullet'].forEach(function (m) {
+        var r = state.results.by[m];
+        out[m] = { first: r.first, peak: r.peak, totalInt: r.totalInt, totalPay: r.totalPay, count: r.count };
+      });
+      return out;
+    },
+    method: function () { return state.method; },
+    setMethod: function (m) { state.method = m; renderCompare(); renderSched(); },
+    sched: function () {
+      if (!state.sched) return null;
+      var s = state.sched;
+      return { rows: s.base.rows, totalInt: s.base.totalInt, totalPay: s.base.totalPay, count: s.base.rows.length, extra: s.extra };
+    },
+    sim: function () {
+      if (!state.sched || !state.sched.sim) return null;
+      var s = state.sched;
+      return { count: s.sim.rows.length, cut: s.base.rows.length - s.sim.rows.length, saved: s.base.totalInt - s.sim.totalInt, totalInt: s.sim.totalInt };
+    },
+    setExtra: function (n) { $('extra').value = n ? group(n) : '0'; renderSched(); },
+    dsr: function () { return state.dsr || null; },
+    csv: schedCsv,
+    annuityPayment: function (P, rate, months) { return annuity(P, rate / 100 / 12, months); }
+  };
+})();
+</script>
+</body>
+</html>
