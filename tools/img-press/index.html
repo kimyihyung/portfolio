@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0b0d">
+<title>ImgPress — Batch Compress Images to WebP, JPG or PNG, Zero Upload | Kim Yihyung</title>
+<meta name="description" content="Drop up to 20 photos and compress them all in one pass: WebP, JPEG or PNG at a quality you choose, resize to a maximum width or height, flatten transparency onto white, black or any colour, watch each file's before/after size, then download one by one or as a ZIP — entirely in your browser with zero uploads.">
+<meta name="keywords" content="image compressor, batch compress images, compress webp, jpeg quality, png to jpeg, resize images, bulk image compress, shrink photo size, no upload, imgpress">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/img-press/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b0d'/%3E%3Cpath d='M10 6v20M16 6v20M22 6v20' stroke='%23e5b45c' stroke-width='2.2' stroke-linecap='round'/%3E%3Cpath d='M6 20l20-8' stroke='%237fd6a0' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/img-press/">
+<meta property="og:title" content="ImgPress — twenty photos in, smaller files out">
+<meta property="og:description" content="Batch-compress up to 20 images to WebP, JPEG or PNG, resize to a maximum side, flatten transparency to any colour, and see every file's before/after size — zipped by hand in the tab.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="ImgPress — batch image compression in the browser">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ImgPress — twenty photos in, smaller files out">
+<meta name="twitter:description" content="Up to 20 images at once: WebP · JPEG · PNG, a quality slider, a maximum side, and a before/after size per file. 0 bytes uploaded.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "ImgPress — Batch Image Compression",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/img-press/",
+      "description": "Compresses up to 20 images in one pass in the browser: decodes each file, redraws it on a canvas at an optional maximum width or height, and encodes WebP, JPEG or PNG at a chosen quality, flattening transparency onto a chosen background for JPEG. Every file's original and compressed size, the saving percentage and the total saving are shown, and the outputs can be downloaded individually or as a store-only ZIP assembled in JavaScript.",
+      "featureList": [
+        "Drop, pick or paste up to 20 images at once",
+        "WebP, JPEG or PNG output at quality 10–100",
+        "Resize to a maximum width and height, aspect kept",
+        "Transparent PNG to JPEG with white, black or custom background",
+        "Before/after size and saving percentage per file, plus the total",
+        "Individual download and a store-only ZIP built with CRC32 in JavaScript",
+        "100% client-side: 0 bytes uploaded, 0 external requests"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "ImgPress", "item": "https://kimyihyung.github.io/portfolio/tools/img-press/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How much smaller will my photos get?",
+          "acceptedAnswer": { "@type": "Answer", "text": "It depends on the format you leave and the one you pick. A phone JPEG re-encoded to WebP at quality 80 usually lands at 25–60% of the original; a screenshot PNG saved as WebP at 80 often drops by 80% or more; a photo saved as PNG will usually grow, because PNG is lossless and stores every pixel. The table on the page measures each file as you change a setting, so the number is yours, not a guess." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does compressing here strip the EXIF data?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. The file is decoded to pixels and re-encoded from a canvas, so EXIF, GPS coordinates, camera model, orientation flags and colour profiles do not travel with the output. That is usually what you want before posting a photo publicly — but it also means the shot date and camera settings are gone from the copy." }
+        },
+        {
+          "@type": "Question",
+          "name": "What happens to transparency when I choose JPEG?",
+          "acceptedAnswer": { "@type": "Answer", "text": "JPEG has no alpha channel, so transparent pixels have to become a colour. Pick white for documents and product shots on a white page, black for dark layouts, or any hex colour. WebP and PNG keep the alpha exactly as it was, which is why WebP is the better choice for a logo with a transparent background." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is the ZIP handled by a library or a server?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Neither. The archive is written in this tab by a small store-only ZIP writer: local headers, a central directory, CRC32 checksums computed on the encoded bytes, and an end-of-central-directory record. Store-only means the images are not compressed a second time — they are already encoded, and deflating a JPEG again only costs time. Unzip opens it normally." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+:root {
+  --bg: #0b0b0d;
+  --bg2: #0e0e11;
+  --panel: #141311;
+  --panel2: #1b1917;
+  --line: rgba(255,255,255,.09);
+  --line2: rgba(255,255,255,.18);
+  --ink: #f7f2e9;
+  --muted: #a9a29a;
+  --muted2: #7d766e;
+  --accent: #e5b45c;
+  --accent2: #f3cf85;
+  --accent-dim: rgba(229,180,92,.12);
+  --on-accent: #1d1503;
+  --ok: #7fd6a0;
+  --warn: #ffa06b;
+  --bad: #ff7d7d;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --shadow: 0 24px 70px rgba(0,0,0,.55);
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  line-height: 1.6;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(110% 55% at 50% -18%, rgba(229,180,92,.13), transparent 62%),
+    radial-gradient(60% 40% at 100% 2%, rgba(229,180,92,.05), transparent 60%);
+  background-repeat: no-repeat;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: var(--accent); color: var(--on-accent); }
+a { color: inherit; }
+button, input, select, textarea { font-family: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+.wrap { width: 100%; max-width: 1220px; margin: 0 auto; padding: 0 20px 48px; }
+
+/* ---------- topbar ---------- */
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0 12px; }
+.brand { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: var(--ink); min-width: 0; }
+.mark {
+  min-width: 28px; height: 22px; padding: 0 6px; border-radius: 7px; flex: none;
+  border: 1px solid rgba(229,180,92,.45); background: var(--accent-dim);
+  display: grid; place-items: center; font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: var(--accent);
+}
+.brand-txt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.top-actions { display: inline-flex; align-items: center; gap: 9px; flex: none; }
+.lang-toggle {
+  appearance: none; border: 1px solid var(--line); background: var(--panel); color: var(--muted2);
+  height: 34px; padding: 0 11px; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px;
+  cursor: pointer; font-size: 11px; font-weight: 700; letter-spacing: .06em; line-height: 1;
+  transition: color .2s, border-color .2s, transform .15s;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.94); }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
+.topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
+
+/* ---------- hero ---------- */
+.hero { padding: 22px 0 18px; max-width: 880px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; margin: 0 0 14px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--accent);
+  border: 1px solid rgba(229,180,92,.28); background: rgba(229,180,92,.06); padding: 6px 11px; border-radius: 999px;
+}
+.eyebrow .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+h1 { margin: 0 0 14px; font-size: clamp(27px, 4.4vw, 44px); line-height: 1.14; letter-spacing: -.03em; font-weight: 800; }
+h1 .soft { color: var(--muted); }
+h1 .gold { color: var(--accent); }
+.lede { margin: 0 0 16px; color: var(--muted); font-size: 15px; max-width: 780px; }
+.lede strong { color: var(--ink); font-weight: 600; }
+.lede code { font-family: var(--mono); font-size: .92em; color: var(--accent); }
+
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--panel); font-size: 11.5px; color: var(--muted);
+  font-family: var(--mono); letter-spacing: .02em;
+}
+.pill b { color: var(--ink); font-weight: 700; }
+.pill--live { border-color: rgba(127,214,160,.32); background: rgba(127,214,160,.07); color: #a6e6c4; }
+.pill--live b { color: #bff3d8; }
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px rgba(127,214,160,.14); }
+
+/* ---------- layout ---------- */
+.work { display: grid; grid-template-columns: minmax(0,1fr) 348px; gap: 16px; align-items: start; margin-top: 6px; }
+@media (max-width: 1040px) { .work { grid-template-columns: minmax(0,1fr); } }
+
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); min-width: 0; }
+.panel { padding: 16px; display: grid; gap: 13px; min-width: 0; }
+.panel h3 { margin: 0; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted2); font-family: var(--mono); font-weight: 700; }
+.side { display: grid; gap: 12px; min-width: 0; }
+@media (min-width: 1041px) { .side { position: sticky; top: 14px; } }
+
+.btn {
+  appearance: none; cursor: pointer; border-radius: 11px; border: 1px solid var(--line2);
+  background: var(--panel2); color: var(--ink); font-size: 13px; font-weight: 650;
+  padding: 10px 16px; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  transition: transform .12s, border-color .2s, background .2s, opacity .2s; text-decoration: none;
+}
+.btn:hover { border-color: rgba(255,255,255,.3); }
+.btn:active { transform: scale(.98); }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 750; }
+.btn--primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.btn--primary:disabled:hover { background: var(--accent); border-color: var(--accent); }
+.btn--ghost { background: transparent; }
+.btn--sm { padding: 7px 11px; font-size: 12px; border-radius: 9px; }
+.btn--block { width: 100%; }
+
+/* ---------- drop ---------- */
+.drop {
+  display: grid; gap: 10px; justify-items: center; text-align: center;
+  padding: 26px 18px; border-radius: var(--radius-sm);
+  border: 1px dashed rgba(255,255,255,.2); background: #100f0e;
+  transition: border-color .2s, background .2s;
+}
+.drop.is-over { border-color: var(--accent); background: rgba(229,180,92,.07); }
+.drop.is-compact { padding: 13px 14px; gap: 8px; }
+.drop.is-compact .drop-ic, .drop.is-compact .drop-s { display: none; }
+.drop.is-compact .drop-t { font-size: 13px; }
+.drop-ic { color: var(--accent); display: grid; place-items: center; opacity: .9; }
+.drop-t { margin: 0; font-size: 15px; font-weight: 700; }
+.drop-s { margin: 0; font-size: 12.4px; color: var(--muted2); max-width: 480px; }
+.drop-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 2px; }
+.drop-meta { margin: 2px 0 0; font-family: var(--mono); font-size: 11px; color: var(--muted2); overflow-wrap: anywhere; }
+
+/* ---------- stats ---------- */
+.statgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(124px, 1fr)); gap: 8px; min-width: 0; }
+.stat { padding: 10px 12px; border-radius: 11px; border: 1px solid var(--line); background: var(--panel2); min-width: 0; display: grid; gap: 2px; }
+.stat .k { font-size: 9.5px; font-family: var(--mono); letter-spacing: .07em; text-transform: uppercase; color: var(--muted2); }
+.stat .v { font-family: var(--mono); font-size: 15.5px; font-weight: 700; letter-spacing: -.02em; color: var(--ink); overflow-wrap: anywhere; }
+.stat .s { font-size: 10.5px; color: var(--muted2); font-family: var(--mono); }
+.stat.is-on { border-color: rgba(229,180,92,.4); background: rgba(229,180,92,.07); }
+.stat.is-on .v { color: var(--accent); }
+.stat.is-bad { border-color: rgba(255,125,125,.35); background: rgba(255,125,125,.05); }
+.stat.is-bad .v { color: #ffb3b3; }
+
+.barline { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 10px; }
+.bar-track { position: relative; height: 10px; border-radius: 999px; background: rgba(229,180,92,.16); overflow: hidden; }
+.bar-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 100%; border-radius: 999px; background: linear-gradient(90deg, rgba(127,214,160,.5), var(--ok)); transition: width .3s ease; }
+.bar-fill.is-grow { background: linear-gradient(90deg, rgba(255,125,125,.5), var(--bad)); }
+.bar-lbl { font-family: var(--mono); font-size: 11px; color: var(--muted2); white-space: nowrap; }
+
+/* ---------- file list ---------- */
+.listhead { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 10px; margin-top: 2px; }
+.listhead h2 { margin: 0; font-size: 16.5px; letter-spacing: -.01em; }
+.listhead span { font-family: var(--mono); font-size: 11px; color: var(--muted2); }
+.fxs { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; min-width: 0; }
+.fx {
+  display: grid; grid-template-columns: 44px minmax(0,1fr) auto 32px 26px; align-items: center; gap: 8px;
+  padding: 7px 9px; border-radius: 11px; border: 1px solid var(--line); background: var(--panel2); min-width: 0;
+}
+.fx-thumb { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; background: rgba(255,255,255,.05); display: block; }
+.fx-main { display: grid; gap: 1px; min-width: 0; }
+.fx-name { margin: 0; font-size: 12.6px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fx-meta { margin: 0; font-family: var(--mono); font-size: 10.6px; color: var(--muted2); overflow-wrap: anywhere; }
+.fx-meta b { color: var(--muted); font-weight: 600; }
+.fx-save { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--ok); white-space: nowrap; }
+.fx-save.is-up { color: #ff9d9d; }
+.fx-save.is-wait { color: var(--muted2); font-weight: 500; }
+.fx-dl { appearance: none; cursor: pointer; width: 32px; height: 32px; border-radius: 9px; border: 1px solid var(--line); background: transparent; color: var(--muted); display: grid; place-items: center; flex: none; }
+.fx-dl:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.fx-dl:disabled { opacity: .35; cursor: not-allowed; }
+.fx-x { appearance: none; cursor: pointer; width: 26px; height: 32px; border: 0; background: transparent; color: var(--muted2); font-size: 15px; line-height: 1; flex: none; }
+.fx-x:hover { color: var(--bad); }
+.empty { padding: 16px 6px; color: var(--muted2); font-size: 12.4px; text-align: center; margin: 0; }
+.row-actions { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+.status { min-height: 16px; margin: 0; font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
+.status.is-ok { color: var(--ok); }
+.status.is-warn { color: var(--warn); }
+
+/* ---------- controls ---------- */
+.ctl-lbl { font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted2); }
+.rng { display: flex; align-items: center; gap: 9px; min-width: 0; }
+.rng input[type="range"] { appearance: none; -webkit-appearance: none; height: 24px; flex: 1 1 auto; min-width: 60px; background: transparent; cursor: pointer; margin: 0; }
+.rng input[type="range"]::-webkit-slider-runnable-track { height: 4px; border-radius: 999px; background: rgba(255,255,255,.14); }
+.rng input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 15px; height: 15px; margin-top: -5.5px; border-radius: 50%; background: var(--accent); border: 0; box-shadow: 0 0 0 4px rgba(229,180,92,.16); }
+.rng input[type="range"]:disabled::-webkit-slider-thumb { background: var(--muted2); box-shadow: none; }
+.rng input[type="range"]::-moz-range-track { height: 4px; border-radius: 999px; background: rgba(255,255,255,.14); }
+.rng input[type="range"]::-moz-range-thumb { width: 15px; height: 15px; border: 0; border-radius: 50%; background: var(--accent); }
+.rng output { font-family: var(--mono); font-size: 11.5px; color: var(--ink); min-width: 42px; text-align: right; flex: none; }
+
+.seg { display: flex; gap: 3px; padding: 3px; background: var(--panel2); border: 1px solid var(--line); border-radius: 11px; min-width: 0; }
+.seg button { flex: 1 1 auto; appearance: none; border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; font-weight: 650; padding: 7px 6px; border-radius: 8px; line-height: 1.25; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--accent-dim); color: var(--accent); box-shadow: inset 0 0 0 1px rgba(229,180,92,.35); }
+
+.chip-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { appearance: none; cursor: pointer; border-radius: 9px; border: 1px solid var(--line); background: var(--panel2); color: var(--muted); font-size: 11.5px; font-weight: 650; padding: 6px 10px; }
+.chip:hover { border-color: var(--line2); color: var(--ink); }
+.chip[aria-pressed="true"] { border-color: rgba(229,180,92,.5); background: var(--accent-dim); color: var(--accent); }
+
+.dim-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-family: var(--mono); font-size: 11.5px; color: var(--muted2); }
+.dim-row input {
+  appearance: none; border: 1px solid var(--line); background: var(--panel2); color: var(--ink);
+  border-radius: 8px; font-family: var(--mono); font-size: 12.5px; padding: 5px 6px; width: 62px; min-width: 0; text-align: center;
+}
+.dim-row input:focus { outline: none; border-color: rgba(229,180,92,.6); }
+.color-mini { display: inline-flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
+.color-mini input[type="color"] { appearance: none; -webkit-appearance: none; width: 30px; height: 26px; padding: 0; border: 1px solid var(--line2); border-radius: 7px; background: transparent; cursor: pointer; }
+.color-mini input[type="color"]::-webkit-color-swatch-wrapper { padding: 2px; }
+.color-mini input[type="color"]::-webkit-color-swatch { border: 0; border-radius: 5px; }
+
+.kv { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.kv li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 10px; font-size: 12.4px; color: var(--muted); }
+.kv li b { color: var(--ink); font-family: var(--mono); font-weight: 650; font-size: 12.4px; text-align: right; overflow-wrap: anywhere; }
+.kv li.is-key { border-top: 1px solid rgba(255,255,255,.1); padding-top: 6px; margin-top: 2px; }
+.kv li.is-key b { color: var(--accent); }
+.caveat { margin: 0; font-size: 11.6px; color: var(--muted2); line-height: 1.62; }
+.caveat b { color: var(--muted); }
+
+/* ---------- sections ---------- */
+.section { margin-top: 40px; scroll-margin-top: 18px; }
+.sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 12px; border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 16px; }
+.sec-head h2 { margin: 0; font-size: 17px; letter-spacing: -.01em; }
+.sec-head span { font-family: var(--mono); font-size: 11px; color: var(--muted2); letter-spacing: .08em; text-transform: uppercase; }
+
+.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+.note { padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel); min-width: 0; }
+.note h3 { margin: 0 0 8px; font-size: 14px; display: flex; gap: 8px; align-items: baseline; }
+.note h3 span { font-family: var(--mono); font-size: 10.5px; color: var(--accent); letter-spacing: .1em; }
+.note p { margin: 0; font-size: 12.8px; color: var(--muted); line-height: 1.62; }
+.note b { color: var(--ink); font-weight: 600; }
+.note code { font-family: var(--mono); font-size: .94em; color: var(--accent); }
+
+.faq { display: grid; gap: 8px; }
+details.qa { border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); overflow: hidden; }
+details.qa summary { cursor: pointer; padding: 13px 44px 13px 15px; font-size: 13.5px; font-weight: 600; list-style: none; position: relative; }
+details.qa summary::-webkit-details-marker { display: none; }
+details.qa summary::after { content: "+"; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--accent); font-family: var(--mono); font-size: 15px; }
+details.qa[open] summary::after { content: "−"; }
+details.qa .a { padding: 0 15px 14px; font-size: 12.8px; color: var(--muted); line-height: 1.68; }
+details.qa .a b { color: var(--ink); font-weight: 600; }
+details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: .95em; }
+
+.foot { margin-top: 34px; padding-top: 14px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--muted2); }
+.foot-links { display: inline-flex; flex-wrap: wrap; gap: 12px; }
+.foot-links a { text-decoration: none; color: var(--muted); border-bottom: 1px solid transparent; }
+.foot-links a:hover { color: var(--ink); border-bottom-color: var(--line2); }
+.foot .net { font-family: var(--mono); letter-spacing: .02em; }
+.foot .net b { color: var(--ok); }
+
+@media (max-width: 640px) {
+  .wrap { padding: 0 14px 36px; }
+  .topbar { padding: 14px 0 8px; }
+  .brand-txt { font-size: 12px; letter-spacing: .1em; }
+  .hero { padding: 16px 0 12px; }
+  .lede { font-size: 14px; }
+  .panel { padding: 13px; }
+  .drop { padding: 20px 14px; }
+  .fx { grid-template-columns: 38px minmax(0,1fr) auto 28px 20px; gap: 6px; padding: 6px 7px; }
+  .fx-thumb { width: 38px; height: 38px; }
+  .fx-name { font-size: 12px; }
+  .fx-meta { font-size: 9.8px; }
+  .fx-save { font-size: 10.5px; }
+  .fx-dl { width: 28px; height: 28px; }
+  .fx-x { width: 20px; font-size: 14px; }
+  .sec-head h2 { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="/portfolio/" aria-label="Kim Yihyung — portfolio" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="한국어로 보기" aria-label="한국어로 보기">
+        <span class="lt on" data-lt="en">EN</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="ko">KO</span>
+      </button>
+      <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← All tools</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="eyebrow">ImgPress · batch · zero upload</span></p>
+      <h1 data-i18n-html="h1">Twenty photos in.<br><span class="soft">One pass, smaller files.</span><br><span class="gold">Nothing leaves the tab.</span></h1>
+      <p class="lede" data-i18n-html="lede">
+        Drop up to <strong>20 images</strong> and compress the lot in one pass — <strong>WebP, JPEG or PNG</strong> at a quality you pick, resized to a maximum width or height, with transparency flattened onto white, black or your own colour. Every file shows its original size, its new size and the exact saving, and the whole set comes down as <strong>one ZIP</strong> written by hand in this tab.
+      </p>
+      <div class="badge-row">
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillUp">0 bytes uploaded</b></span>
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillNet">0 external requests</b></span>
+        <span class="pill" data-i18n="pillBatch">20 files at once</span>
+        <span class="pill" data-i18n="pillZip">ZIP · store + CRC32</span>
+      </div>
+    </section>
+
+    <section class="work" aria-label="Compression workspace" data-i18n-aria="workAria">
+      <div class="card panel">
+        <div class="drop" id="drop">
+          <div class="drop-ic" aria-hidden="true">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="16" rx="3"></rect>
+              <path d="M3 15.5l4.2-4.2a2 2 0 0 1 2.8 0L14 15.3"></path>
+              <path d="M14.5 13.6l1.6-1.6a2 2 0 0 1 2.8 0L21 14.3"></path>
+              <circle cx="8.4" cy="8.6" r="1.4"></circle>
+            </svg>
+          </div>
+          <p class="drop-t" data-i18n="dropTitle">Drop up to 20 images</p>
+          <p class="drop-s" data-i18n="dropSub">PNG · JPG · WebP · GIF (first frame) · AVIF if your browser reads it. Ctrl+V pastes from the clipboard.</p>
+          <div class="drop-actions">
+            <button class="btn btn--primary" id="pick" type="button" data-i18n="pickBtn">Choose images</button>
+            <button class="btn btn--sm" id="sample" type="button" data-i18n="sampleBtn">Try 3 samples</button>
+          </div>
+          <p class="drop-meta" id="dropMeta" data-i18n="dropMeta">Nothing loaded yet — pick files, or press the sample to see the numbers move.</p>
+          <input type="file" id="file" accept="image/*" multiple hidden>
+        </div>
+
+        <p class="status" id="status" role="status" aria-live="polite"></p>
+
+        <div class="statgrid">
+          <div class="stat"><span class="k" data-i18n="stSrc">Original</span><span class="v" id="srcTotal">—</span><span class="s" id="srcCount" data-i18n="files0">0 files</span></div>
+          <div class="stat"><span class="k" data-i18n="stOut">Compressed</span><span class="v" id="outTotal">—</span><span class="s" id="outFmt">—</span></div>
+          <div class="stat is-on" id="savedStat"><span class="k" data-i18n="savedLabel">Saved</span><span class="v" id="savedPct">—</span><span class="s" id="savedBytes">—</span></div>
+          <div class="stat"><span class="k" data-i18n="stZip">ZIP</span><span class="v" id="zipSize">—</span><span class="s" data-i18n="zipNote">store-only</span></div>
+        </div>
+
+        <div class="barline">
+          <div class="bar-track" role="img" aria-label="Compressed size against original size" data-i18n-aria="barAria"><div class="bar-fill" id="barFill"></div></div>
+          <span class="bar-lbl" id="barLbl">—</span>
+        </div>
+
+        <div class="listhead">
+          <h2 data-i18n="listTitle">Before and after</h2>
+          <span id="listCount">0 / 20</span>
+        </div>
+        <ul class="fxs" id="fxList" aria-label="Files" data-i18n-aria="listAria"></ul>
+        <p class="empty" id="fxEmpty" data-i18n="listEmpty">No files yet. The drop zone above takes them all at once.</p>
+
+        <div class="row-actions">
+          <button class="btn btn--primary" id="zipBtn" type="button" disabled data-i18n="zipBtn">Download all (.zip)</button>
+          <button class="btn btn--sm" id="reBtn" type="button" disabled data-i18n="reBtn">Re-compress</button>
+          <button class="btn btn--ghost btn--sm" id="clearBtn" type="button" disabled data-i18n="clearBtn">Clear</button>
+        </div>
+        <p class="caveat" data-i18n-html="zipFoot">The ZIP is written here — local headers, a central directory and a <b>CRC32</b> per file — with no library and no round trip. Store-only, because these images are already encoded.</p>
+      </div>
+
+      <aside class="side">
+        <div class="card panel">
+          <h3 data-i18n="outHead">Output</h3>
+          <span class="ctl-lbl" data-i18n="fmtLbl">Format</span>
+          <div class="seg" id="fmt" role="group" aria-label="Output format" data-i18n-aria="fmtAria">
+            <button type="button" data-fmt="image/webp" aria-pressed="true">WebP</button>
+            <button type="button" data-fmt="image/jpeg" aria-pressed="false">JPEG</button>
+            <button type="button" data-fmt="image/png" aria-pressed="false">PNG</button>
+          </div>
+          <div class="ctl-lbl" data-i18n="qLbl">Quality</div>
+          <div class="rng">
+            <input type="range" id="quality" min="10" max="100" step="1" value="80" aria-label="Quality" data-i18n-aria="qAria">
+            <output id="qOut" for="quality">80</output>
+          </div>
+          <p class="caveat" id="qNote"></p>
+
+          <div class="ctl-lbl" data-i18n="sizeLbl">Maximum size</div>
+          <div class="dim-row">
+            <span data-i18n="wShort">W</span>
+            <input type="text" id="maxW" inputmode="numeric" placeholder="—" aria-label="Maximum width in pixels" data-i18n-aria="maxWAria">
+            <span aria-hidden="true">×</span>
+            <span data-i18n="hShort">H</span>
+            <input type="text" id="maxH" inputmode="numeric" placeholder="—" aria-label="Maximum height in pixels" data-i18n-aria="maxHAria">
+            <span>px</span>
+            <button class="chip" id="dimReset" type="button" data-i18n="dimNone">none</button>
+          </div>
+          <p class="caveat" id="sizeNote" data-i18n="sizeNote">Leave both empty to keep the original pixels. The aspect ratio is never changed.</p>
+
+          <div class="ctl-lbl" data-i18n="bgLbl">JPEG background</div>
+          <div class="chip-wrap" role="group" aria-label="JPEG background colour" data-i18n-aria="bgAria">
+            <button class="chip" type="button" data-bg="white" aria-pressed="true" data-i18n="bgWhite">White</button>
+            <button class="chip" type="button" data-bg="black" aria-pressed="false" data-i18n="bgBlack">Black</button>
+            <button class="chip" type="button" data-bg="custom" aria-pressed="false" data-i18n="bgCustom">Custom</button>
+          </div>
+          <div class="color-mini">
+            <input type="color" id="bgColor" value="#f7f2e9" aria-label="Custom background colour" data-i18n-aria="bgColorAria">
+            <span id="bgHex">#f7f2e9</span>
+          </div>
+          <p class="caveat" data-i18n="bgNote">Only JPEG needs this — it has no alpha channel. WebP and PNG keep transparency exactly as it was.</p>
+        </div>
+
+        <div class="card panel">
+          <h3 data-i18n="infoHead">What goes out</h3>
+          <ul class="kv">
+            <li><span data-i18n="kFmt">Format · quality</span><b id="kFmt">—</b></li>
+            <li><span data-i18n="kResize">Resize</span><b id="kResize">—</b></li>
+            <li><span data-i18n="kFiles">Files</span><b id="kFiles">—</b></li>
+            <li><span data-i18n="kBiggest">Biggest saving</span><b id="kBiggest">—</b></li>
+            <li class="is-key"><span data-i18n="kTotal">Total saving</span><b id="kTotal">—</b></li>
+          </ul>
+          <p class="caveat" data-i18n-html="exifNote">Every output is re-encoded from a canvas, so <b>EXIF, GPS and camera fields are dropped</b> with it. That is a feature for anything you post publicly.</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" aria-labelledby="howTitle">
+      <div class="sec-head">
+        <h2 id="howTitle" data-i18n="howTitle">What actually happens to a file</h2>
+        <span data-i18n="howNote">measured, not estimated</span>
+      </div>
+      <div class="notes">
+        <div class="note">
+          <h3><span>01</span><span data-i18n="n1h">Decode once, then draw</span></h3>
+          <p data-i18n-html="n1p">Each file is decoded by your browser's own image decoder and drawn onto a canvas at the size you asked for. If a maximum side is set, the scale is <b>min(1, maxW ÷ width, maxH ÷ height)</b> — the smaller of the two — so nothing is ever stretched, and a file already inside the limit is left at its own pixels.</p>
+        </div>
+        <div class="note">
+          <h3><span>02</span><span data-i18n="n2h">The format decides the ceiling</span></h3>
+          <p data-i18n-html="n2p"><b>WebP</b> usually wins on photos and keeps alpha. <b>JPEG</b> is the most compatible and the smallest for a low-detail shot, but it has no alpha, so transparency is painted over with your background colour. <b>PNG</b> is lossless: great for flat graphics and screenshots, and it will often make a photo <b>larger</b> — the table says so instead of hiding it.</p>
+        </div>
+        <div class="note">
+          <h3><span>03</span><span data-i18n="n3h">Sizes are byte counts</span></h3>
+          <p data-i18n-html="n3p">The new size under each file is the length of the <b>encoded blob</b>, and the totals are the sums of those blobs. Move the quality slider one notch and every file is re-encoded and re-measured, which is why the saving percentage settles where it does rather than being estimated from a formula.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="faqTitle">
+      <div class="sec-head">
+        <h2 id="faqTitle" data-i18n="faqTitle">Questions</h2>
+        <span data-i18n="faqNote">batch · format · zip</span>
+      </div>
+      <div class="faq">
+        <details class="qa">
+          <summary data-i18n="q1">How much smaller will my photos get?</summary>
+          <div class="a" data-i18n-html="a1">It depends on where you start. A phone JPEG re-encoded to <b>WebP at 80</b> usually lands at 25–60% of the original. A screenshot PNG saved as WebP at 80 often drops by <b>80% or more</b>. A photo saved as PNG usually grows, because PNG stores every pixel losslessly. The numbers on this page are measured per file as you change the settings — that is the whole point of the table.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q2">Which format should I pick?</summary>
+          <div class="a" data-i18n-html="a2"><b>WebP</b> for anything on the web, and for logos that need transparency. <b>JPEG</b> when a service only accepts jpg, or when you want the smallest file from a detailed photo. <b>PNG</b> for screenshots, line art and flat colour where a single pixel matters — or when you need to keep transparency and WebP is not accepted.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q3">Why did my file get bigger?</summary>
+          <div class="a" data-i18n-html="a3">Because the target format stores more than the source did. PNG is lossless, so a JPEG photo converted to PNG grows several times over. Quality 100 on WebP can also exceed a modest JPEG. Look at the red <b>+%</b> in the row and switch the format — the same image at WebP 80 is usually a fraction of both.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q4">Is the ZIP built by a library or a server?</summary>
+          <div class="a" data-i18n-html="a4">Neither. A small <b>store-only ZIP writer</b> in this page builds the archive: per-file local headers, CRC32 checksums over the encoded bytes, a central directory and the end record. Store-only means no second compression pass — the images are already compressed, and deflating a JPEG again only costs time. Any unzip tool opens the result.</div>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span data-i18n="footCopy">© 2026 Kim Yihyung · Built in the browser, for the browser.</span>
+    <span class="net"><span data-i18n="footNet">external requests</span> <b id="netCount">0</b></span>
+    <span class="foot-links">
+      <a href="/portfolio/" data-i18n="footP1">Portfolio</a>
+      <a href="/portfolio/tools/" data-i18n="footP2">All tools</a>
+      <a href="https://github.com/kimyihyung/portfolio" target="_blank" rel="noopener" data-i18n="footP3">Source</a>
+    </span>
+    <span class="mono" data-i18n="mono">NO UPLOADS · NO TRACKING</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ═════════════════════ language ═════════════════════ */
+  var I18N = {
+    en: {
+      docTitle: 'ImgPress — Batch Compress Images to WebP, JPG or PNG, Zero Upload | Kim Yihyung',
+      brandAria: 'Kim Yihyung — portfolio',
+      back: '← All tools',
+      eyebrow: 'ImgPress · batch · zero upload',
+      h1: 'Twenty photos in.<br><span class="soft">One pass, smaller files.</span><br><span class="gold">Nothing leaves the tab.</span>',
+      lede: 'Drop up to <strong>20 images</strong> and compress the lot in one pass — <strong>WebP, JPEG or PNG</strong> at a quality you pick, resized to a maximum width or height, with transparency flattened onto white, black or your own colour. Every file shows its original size, its new size and the exact saving, and the whole set comes down as <strong>one ZIP</strong> written by hand in this tab.',
+      pillUp: '0 bytes uploaded', pillNet: '0 external requests',
+      pillBatch: '20 files at once', pillZip: 'ZIP · store + CRC32',
+      workAria: 'Compression workspace',
+      dropTitle: 'Drop up to 20 images',
+      dropSub: 'PNG · JPG · WebP · GIF (first frame) · AVIF if your browser reads it. Ctrl+V pastes from the clipboard.',
+      pickBtn: 'Choose images', sampleBtn: 'Try 3 samples',
+      dropMeta: 'Nothing loaded yet — pick files, or press the sample to see the numbers move.',
+      dropMore: '{n} loaded · {left} more fit',
+      dropFull: '20 of 20 loaded — remove one to add another',
+      stSrc: 'Original', stOut: 'Compressed', savedLabel: 'Saved', stZip: 'ZIP',
+      files0: '0 files', zipNote: 'store-only',
+      barAria: 'Compressed size against original size',
+      listTitle: 'Before and after', listAria: 'Files',
+      listEmpty: 'No files yet. The drop zone above takes them all at once.',
+      zipBtn: 'Download all (.zip)', reBtn: 'Re-compress', clearBtn: 'Clear',
+      zipFoot: 'The ZIP is written here — local headers, a central directory and a <b>CRC32</b> per file — with no library and no round trip. Store-only, because these images are already encoded.',
+      outHead: 'Output', fmtLbl: 'Format', fmtAria: 'Output format',
+      qLbl: 'Quality', qAria: 'Quality',
+      sizeLbl: 'Maximum size', wShort: 'W', hShort: 'H',
+      maxWAria: 'Maximum width in pixels', maxHAria: 'Maximum height in pixels',
+      dimNone: 'none',
+      sizeNote: 'Leave both empty to keep the original pixels. The aspect ratio is never changed.',
+      bgLbl: 'JPEG background', bgAria: 'JPEG background colour',
+      bgWhite: 'White', bgBlack: 'Black', bgCustom: 'Custom', bgColorAria: 'Custom background colour',
+      bgNote: 'Only JPEG needs this — it has no alpha channel. WebP and PNG keep transparency exactly as it was.',
+      infoHead: 'What goes out',
+      kFmt: 'Format · quality', kResize: 'Resize', kFiles: 'Files', kBiggest: 'Biggest saving', kTotal: 'Total saving',
+      exifNote: 'Every output is re-encoded from a canvas, so <b>EXIF, GPS and camera fields are dropped</b> with it. That is a feature for anything you post publicly.',
+      howTitle: 'What actually happens to a file', howNote: 'measured, not estimated',
+      n1h: 'Decode once, then draw',
+      n1p: 'Each file is decoded by your browser\u2019s own image decoder and drawn onto a canvas at the size you asked for. If a maximum side is set, the scale is <b>min(1, maxW \u00f7 width, maxH \u00f7 height)</b> — the smaller of the two — so nothing is ever stretched, and a file already inside the limit is left at its own pixels.',
+      n2h: 'The format decides the ceiling',
+      n2p: '<b>WebP</b> usually wins on photos and keeps alpha. <b>JPEG</b> is the most compatible and the smallest for a low-detail shot, but it has no alpha, so transparency is painted over with your background colour. <b>PNG</b> is lossless: great for flat graphics and screenshots, and it will often make a photo <b>larger</b> — the table says so instead of hiding it.',
+      n3h: 'Sizes are byte counts',
+      n3p: 'The new size under each file is the length of the <b>encoded blob</b>, and the totals are the sums of those blobs. Move the quality slider one notch and every file is re-encoded and re-measured, which is why the saving percentage settles where it does rather than being estimated from a formula.',
+      faqTitle: 'Questions', faqNote: 'batch · format · zip',
+      q1: 'How much smaller will my photos get?',
+      a1: 'It depends on where you start. A phone JPEG re-encoded to <b>WebP at 80</b> usually lands at 25–60% of the original. A screenshot PNG saved as WebP at 80 often drops by <b>80% or more</b>. A photo saved as PNG usually grows, because PNG stores every pixel losslessly. The numbers on this page are measured per file as you change the settings — that is the whole point of the table.',
+      q2: 'Which format should I pick?',
+      a2: '<b>WebP</b> for anything on the web, and for logos that need transparency. <b>JPEG</b> when a service only accepts jpg, or when you want the smallest file from a detailed photo. <b>PNG</b> for screenshots, line art and flat colour where a single pixel matters — or when you need to keep transparency and WebP is not accepted.',
+      q3: 'Why did my file get bigger?',
+      a3: 'Because the target format stores more than the source did. PNG is lossless, so a JPEG photo converted to PNG grows several times over. Quality 100 on WebP can also exceed a modest JPEG. Look at the red <b>+%</b> in the row and switch the format — the same image at WebP 80 is usually a fraction of both.',
+      q4: 'Is the ZIP built by a library or a server?',
+      a4: 'Neither. A small <b>store-only ZIP writer</b> in this page builds the archive: per-file local headers, CRC32 checksums over the encoded bytes, a central directory and the end record. Store-only means no second compression pass — the images are already compressed, and deflating a JPEG again only costs time. Any unzip tool opens the result.',
+      footCopy: '© 2026 Kim Yihyung · Built in the browser, for the browser.',
+      footNet: 'external requests', footP1: 'Portfolio', footP2: 'All tools', footP3: 'Source',
+      mono: 'NO UPLOADS · NO TRACKING', toggleTo: 'View in Korean',
+      /* dynamic */
+      qWebp: 'WebP keeps transparency and is usually the smallest for a photo. 75–85 is the sweet spot; below 60 the soft areas start to smear.',
+      qJpeg: 'JPEG has no alpha. 80–85 is the usual sweet spot for photos; below 60 banding shows in skies and flat walls.',
+      qPng: 'PNG is lossless, so the quality slider does not apply. Expect big files for photos and small ones for screenshots.',
+      stReady: 'Ready — drop images, then adjust the output on the right.',
+      stWorking: 'Compressing {i} / {n}…',
+      stDone: 'Done — {n} files, {size} out of {src}.',
+      stDone0: 'Done.',
+      stAdded: '{n} file(s) added.',
+      stLimit: 'The limit is 20 files — the first 20 were kept.',
+      stDrop: 'That was not an image the browser could read.',
+      stNone: 'No files to compress.',
+      stSaved: 'Saved {name}.',
+      stZipOk: 'ZIP ready — {n} files, {size}.',
+      stZipFail: 'Could not build the ZIP.',
+      stCleared: 'Cleared.',
+      stQuality: 'Quality {q} · {fmt}.',
+      stResize: 'Resized to fit {w}×{h} px.',
+      stNoEnc: 'This browser could not encode {fmt}; falling back to JPEG.',
+      stBusy: 'Working…',
+      fmtWebp: 'WebP · {q}',
+      fmtJpeg: 'JPEG · {q}',
+      fmtPng: 'PNG · lossless',
+      savedWord: 'saved',
+      resizeNone: 'original',
+      resizeLine: 'fit {w}×{h}',
+      filesLine: '{n} / 20',
+      savingNone: '—',
+      pct: '{p}%',
+      sizeOf: '{a} of {b}',
+      okRow: '{w}×{h} · {size}',
+      rowMeta: '{sw}×{sh} · {a} → {b}',
+      rowWait: 'waiting…',
+      rowBad: 'could not compress',
+      rowSave: '−{p}%', rowGrow: '+{p}%'
+    },
+    ko: {
+      docTitle: 'ImgPress — 이미지 여러 장 한 번에 압축, 업로드 0 | Kim Yihyung',
+      brandAria: 'Kim Yihyung — 포트폴리오',
+      back: '← 도구 전체',
+      eyebrow: 'ImgPress · 일괄 압축 · 업로드 0',
+      h1: '사진 20장을 넣으면,<br><span class="soft">한 번에 가벼워집니다.</span><br><span class="gold">파일은 이 탭을 떠나지 않습니다.</span>',
+      lede: '이미지를 <strong>최대 20장</strong> 떨어뜨리면 한 번에 압축합니다. <strong>WebP · JPEG · PNG</strong> 중에 고르고, 품질을 정하고, 가로·세로 최대 크기로 줄이고, 투명한 부분은 흰색·검정·원하는 색으로 채울 수 있습니다. 파일마다 원본 크기와 압축 크기, 줄어든 비율을 그대로 보여 주고, 전체는 <strong>ZIP 하나</strong>로 내려받습니다. ZIP도 이 탭에서 직접 만듭니다.',
+      pillUp: '업로드 0바이트', pillNet: '외부 요청 0건',
+      pillBatch: '한 번에 20장', pillZip: 'ZIP · 무압축 + CRC32',
+      workAria: '압축 작업대',
+      dropTitle: '이미지를 최대 20장 떨어뜨리세요',
+      dropSub: 'PNG · JPG · WebP · GIF(첫 장) · 브라우저가 읽는 AVIF. Ctrl+V 붙여넣기도 됩니다.',
+      pickBtn: '이미지 선택', sampleBtn: '예시 3장으로 보기',
+      dropMeta: '아직 불러온 파일이 없습니다 — 파일을 고르거나 예시를 눌러 숫자가 움직이는 걸 보세요.',
+      dropMore: '{n}장 불러옴 · {left}장 더',
+      dropFull: '20장이 찼습니다 — 하나를 지워야 더 넣을 수 있습니다',
+      stSrc: '원본', stOut: '압축 후', savedLabel: '절감', stZip: 'ZIP',
+      files0: '0개 파일', zipNote: '무압축 저장',
+      barAria: '원본 대비 압축 크기',
+      listTitle: '전후 비교', listAria: '파일 목록',
+      listEmpty: '아직 파일이 없습니다. 위 영역에 한꺼번에 떨어뜨리면 됩니다.',
+      zipBtn: '전체 내려받기 (.zip)', reBtn: '다시 압축', clearBtn: '비우기',
+      zipFoot: 'ZIP은 이 페이지에서 직접 씁니다 — 파일별 로컬 헤더, 중앙 디렉터리, 그리고 각 파일의 <b>CRC32</b>. 라이브러리도, 서버 왕복도 없습니다. 이미 압축된 이미지를 다시 압축하지 않는 무압축(store) 방식입니다.',
+      outHead: '출력 설정', fmtLbl: '형식', fmtAria: '출력 형식',
+      qLbl: '품질', qAria: '품질',
+      sizeLbl: '최대 크기', wShort: '가로', hShort: '세로',
+      maxWAria: '최대 가로 픽셀', maxHAria: '최대 세로 픽셀',
+      dimNone: '제한 없음',
+      sizeNote: '둘 다 비워 두면 원본 픽셀 그대로 둡니다. 가로세로 비율은 바꾸지 않습니다.',
+      bgLbl: 'JPEG 배경색', bgAria: 'JPEG 배경색',
+      bgWhite: '흰색', bgBlack: '검정', bgCustom: '직접 선택', bgColorAria: '직접 지정할 배경색',
+      bgNote: 'JPEG에만 필요한 설정입니다 — 알파 채널이 없기 때문입니다. WebP와 PNG는 투명도를 그대로 유지합니다.',
+      infoHead: '나가는 것',
+      kFmt: '형식 · 품질', kResize: '리사이즈', kFiles: '파일', kBiggest: '최대 절감', kTotal: '총 절감',
+      exifNote: '결과물은 모두 캔버스에서 다시 인코딩하므로 <b>EXIF·GPS·카메라 정보가 함께 빠집니다</b>. 공개할 사진에는 오히려 장점입니다.',
+      howTitle: '파일 하나에 실제로 일어나는 일', howNote: '짐작이 아니라 실측',
+      n1h: '한 번 디코딩하고, 그려 넣기',
+      n1p: '파일은 브라우저의 이미지 디코더가 한 번 풀고, 요청한 크기의 캔버스에 그려집니다. 최대 크기를 정하면 배율은 <b>min(1, 최대가로 ÷ 가로, 최대세로 ÷ 세로)</b> — 둘 중 작은 쪽이라 절대 늘어나지 않고, 이미 제한 안에 들어오는 파일은 원본 픽셀 그대로 둡니다.',
+      n2h: '형식이 상한을 정합니다',
+      n2p: '<b>WebP</b>는 사진에서 대개 가장 작고 투명도도 지킵니다. <b>JPEG</b>는 호환성이 가장 좋고 단조로운 장면에서는 더 작지만 알파가 없어 투명한 부분을 배경색으로 덮습니다. <b>PNG</b>는 무손실이라 그래픽·스크린샷에 좋고, 사진에서는 오히려 <b>커지는</b> 경우가 많습니다 — 숨기지 않고 표에 그대로 표시합니다.',
+      n3h: '크기는 바이트 실측값',
+      n3p: '파일마다 표시되는 새 크기는 <b>인코딩된 블롭</b>의 길이이고, 합계는 그 블롭들의 합입니다. 품질 슬라이더를 한 칸 움직이면 모든 파일을 다시 인코딩해 다시 재기 때문에, 절감률은 공식으로 추정한 값이 아니라 실제로 줄어든 값입니다.',
+      faqTitle: '질문', faqNote: '일괄 · 형식 · ZIP',
+      q1: '사진이 얼마나 작아지나요?',
+      a1: '무엇에서 출발하느냐에 달렸습니다. 휴대폰 JPEG를 <b>WebP 품질 80</b>으로 다시 인코딩하면 보통 원본의 25~60%가 됩니다. 스크린샷 PNG를 WebP 80으로 저장하면 <b>80% 이상</b> 줄어드는 일도 흔합니다. 사진을 PNG로 저장하면 대개 커집니다 — PNG는 모든 픽셀을 무손실로 담기 때문입니다. 이 페이지의 숫자는 설정을 바꿀 때마다 파일별로 실제 측정한 값입니다.',
+      q2: '어떤 형식을 골라야 하나요?',
+      a2: '웹에 올릴 것, 투명 배경이 필요한 로고는 <b>WebP</b>. jpg만 받는 곳이거나 세밀한 사진에서 가장 작은 파일을 원하면 <b>JPEG</b>. 스크린샷·라인 아트·단색 그래픽처럼 픽셀 하나가 중요하거나, 투명도를 유지해야 하는데 WebP를 받지 않는 곳이라면 <b>PNG</b>입니다.',
+      q3: '왜 파일이 더 커졌나요?',
+      a3: '고른 형식이 원본보다 많은 정보를 담기 때문입니다. PNG는 무손실이라 JPEG 사진을 PNG로 바꾸면 몇 배로 커집니다. WebP 품질 100도 적당한 JPEG보다 클 수 있습니다. 행에 빨간 <b>+%</b>가 뜨면 형식을 바꿔 보세요 — 같은 사진을 WebP 80으로 저장하면 대개 둘보다 훨씬 작습니다.',
+      q4: 'ZIP은 라이브러리나 서버가 만드나요?',
+      a4: '둘 다 아닙니다. 이 페이지 안의 작은 <b>무압축 ZIP 작성기</b>가 파일별 로컬 헤더, 인코딩된 바이트에 대한 CRC32 체크섬, 중앙 디렉터리, 종료 레코드까지 직접 만듭니다. 무압축(store)이라 두 번째 압축을 하지 않습니다 — 이미 압축된 이미지를 다시 deflate하는 건 시간만 쓰는 일입니다. 어떤 압축 해제 도구로도 열립니다.',
+      footCopy: '© 2026 Kim Yihyung · 브라우저에서, 브라우저를 위해.',
+      footNet: '외부 요청', footP1: '포트폴리오', footP2: '도구 전체', footP3: '소스',
+      mono: '업로드 없음 · 추적 없음', toggleTo: 'View in English',
+      /* dynamic */
+      qWebp: 'WebP는 투명도를 유지하고 사진에서 대개 가장 작습니다. 75~85가 적당하고, 60 아래로 내려가면 부드러운 부분이 뭉개지기 시작합니다.',
+      qJpeg: 'JPEG에는 알파가 없습니다. 사진은 보통 80~85가 적당하고, 60 아래에서는 하늘·벽 같은 단조로운 면에 계단이 보입니다.',
+      qPng: 'PNG는 무손실이라 품질 슬라이더가 적용되지 않습니다. 사진은 커지고 스크린샷은 작아집니다.',
+      stReady: '준비됨 — 이미지를 떨어뜨린 뒤 오른쪽에서 출력을 조정하세요.',
+      stWorking: '압축 중 {i} / {n}…',
+      stDone: '완료 — {n}개, {src} → {size}.',
+      stDone0: '완료.',
+      stAdded: '{n}개 파일을 추가했습니다.',
+      stLimit: '최대 20장입니다 — 앞의 20장만 담았습니다.',
+      stDrop: '브라우저가 읽을 수 없는 파일이었습니다.',
+      stNone: '압축할 파일이 없습니다.',
+      stSaved: '{name} 내려받음.',
+      stZipOk: 'ZIP 준비됨 — {n}개, {size}.',
+      stZipFail: 'ZIP을 만들지 못했습니다.',
+      stCleared: '비웠습니다.',
+      stQuality: '품질 {q} · {fmt}.',
+      stResize: '{w}×{h}px에 맞춰 줄였습니다.',
+      stNoEnc: '이 브라우저가 {fmt} 인코딩을 지원하지 않아 JPEG로 대체했습니다.',
+      stBusy: '작업 중…',
+      fmtWebp: 'WebP · {q}',
+      fmtJpeg: 'JPEG · {q}',
+      fmtPng: 'PNG · 무손실',
+      savedWord: '절감',
+      resizeNone: '원본',
+      resizeLine: '{w}×{h}에 맞춤',
+      filesLine: '{n} / 20',
+      savingNone: '—',
+      pct: '{p}%',
+      sizeOf: '{a} / {b}',
+      okRow: '{w}×{h} · {size}',
+      rowMeta: '{sw}×{sh} · {a} → {b}',
+      rowWait: '대기 중…',
+      rowBad: '압축 실패',
+      rowSave: '−{p}%', rowGrow: '+{p}%'
+    }
+  };
+
+  var LANG_KEY = 'imgpress.lang';
+  var SHARED_KEY = 'kyh.lang';
+  var MAX_FILES = 20;
+
+  var state = {
+    files: [],
+    fmt: 'image/webp',
+    quality: 0.8,
+    maxW: 0,
+    maxH: 0,
+    bg: 'white',
+    bgColor: '#f7f2e9',
+    lang: 'en',
+    gen: 0,
+    busy: false,
+    zipBlob: null,
+    chain: Promise.resolve(),
+    lastKey: 'stReady',
+    lastVars: null,
+    lastKind: ''
+  };
+
+  function $(id) { return document.getElementById(id); }
+  function t(key) { var d = I18N[state.lang] || I18N.en; return d[key] != null ? d[key] : (I18N.en[key] != null ? I18N.en[key] : key); }
+  function fmt(s, o) {
+    return String(s).replace(/\{(\w+)\}/g, function (m, k) { return (o && o[k] != null) ? o[k] : m; });
+  }
+  function status(msg, kind) {
+    var el = $('status');
+    el.textContent = msg;
+    el.className = 'status' + (kind ? ' is-' + kind : '');
+  }
+  function statusKey(key, vars, kind) {
+    state.lastKey = key; state.lastVars = vars || null; state.lastKind = kind || '';
+    status(fmt(t(key), vars || {}), kind);
+  }
+  function clamp(n, a, b) { return Math.min(b, Math.max(a, n)); }
+
+  function bytes(n) {
+    if (n == null) return '—';
+    if (n < 1024) return n + ' B';
+    if (n < 1024 * 1024) return (n / 1024).toFixed(n < 10240 ? 1 : 0) + ' KB';
+    return (n / (1024 * 1024)).toFixed(n < 10 * 1024 * 1024 ? 2 : 1) + ' MB';
+  }
+  function extOf(mime) { return mime === 'image/webp' ? 'webp' : mime === 'image/jpeg' ? 'jpg' : 'png'; }
+  function fmtLabel() {
+    if (state.fmt === 'image/png') return t('fmtPng');
+    var key = state.fmt === 'image/jpeg' ? 'fmtJpeg' : 'fmtWebp';
+    return fmt(t(key), { q: Math.round(state.quality * 100) });
+  }
+
+  /* ═════════════════════ CRC32 + store-only ZIP ═════════════════════ */
+  var CRC_TABLE = (function () {
+    var tab = new Uint32Array(256), c, n, k;
+    for (n = 0; n < 256; n++) {
+      c = n;
+      for (k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      tab[n] = c >>> 0;
+    }
+    return tab;
+  })();
+
+  function crc32(u8) {
+    var c = 0xFFFFFFFF;
+    for (var i = 0; i < u8.length; i++) c = CRC_TABLE[(c ^ u8[i]) & 0xFF] ^ (c >>> 8);
+    return (c ^ 0xFFFFFFFF) >>> 0;
+  }
+
+  var DOS_TIME = (9 << 11);
+  var DOS_DATE = ((2026 - 1980) << 9) | (11 << 5) | 18;
+
+  function zipStore(files) {
+    var enc = new TextEncoder();
+    var parts = [], central = [], offset = 0, i;
+    for (i = 0; i < files.length; i++) {
+      var f = files[i];
+      var nameB = enc.encode(f.name);
+      var data = f.data;
+      var crc = crc32(data);
+      var lh = new Uint8Array(30 + nameB.length);
+      var dv = new DataView(lh.buffer);
+      dv.setUint32(0, 0x04034b50, true);
+      dv.setUint16(4, 20, true);
+      dv.setUint16(6, 0x0800, true);
+      dv.setUint16(8, 0, true);
+      dv.setUint16(10, DOS_TIME, true);
+      dv.setUint16(12, DOS_DATE, true);
+      dv.setUint32(14, crc, true);
+      dv.setUint32(18, data.length, true);
+      dv.setUint32(22, data.length, true);
+      dv.setUint16(26, nameB.length, true);
+      dv.setUint16(28, 0, true);
+      lh.set(nameB, 30);
+      parts.push(lh, data);
+
+      var ch = new Uint8Array(46 + nameB.length);
+      var cv = new DataView(ch.buffer);
+      cv.setUint32(0, 0x02014b50, true);
+      cv.setUint16(4, 20, true);
+      cv.setUint16(6, 20, true);
+      cv.setUint16(8, 0x0800, true);
+      cv.setUint16(10, 0, true);
+      cv.setUint16(12, DOS_TIME, true);
+      cv.setUint16(14, DOS_DATE, true);
+      cv.setUint32(16, crc, true);
+      cv.setUint32(20, data.length, true);
+      cv.setUint32(24, data.length, true);
+      cv.setUint16(28, nameB.length, true);
+      cv.setUint16(30, 0, true);
+      cv.setUint16(32, 0, true);
+      cv.setUint16(34, 0, true);
+      cv.setUint16(36, 0, true);
+      cv.setUint32(38, 0, true);
+      cv.setUint32(42, offset, true);
+      ch.set(nameB, 46);
+      central.push(ch);
+
+      offset += lh.length + data.length;
+    }
+    var cenSize = 0;
+    for (i = 0; i < central.length; i++) cenSize += central[i].length;
+    var end = new Uint8Array(22);
+    var ev = new DataView(end.buffer);
+    ev.setUint32(0, 0x06054b50, true);
+    ev.setUint16(4, 0, true);
+    ev.setUint16(6, 0, true);
+    ev.setUint16(8, files.length, true);
+    ev.setUint16(10, files.length, true);
+    ev.setUint32(12, cenSize, true);
+    ev.setUint32(16, offset, true);
+    ev.setUint16(20, 0, true);
+    return new Blob(parts.concat(central, [end]), { type: 'application/zip' });
+  }
+
+  /* ═════════════════════ decoding / encoding ═════════════════════ */
+  function decodeFile(file) {
+    return new Promise(function (resolve, reject) {
+      var url = URL.createObjectURL(file);
+      var img = new Image();
+      img.onload = function () { resolve({ img: img, url: url, w: img.naturalWidth || img.width, h: img.naturalHeight || img.height }); };
+      img.onerror = function () { URL.revokeObjectURL(url); reject(new Error('decode')); };
+      img.src = url;
+    });
+  }
+
+  function targetDims(w, h) {
+    var k = 1;
+    if (state.maxW > 0) k = Math.min(k, state.maxW / w);
+    if (state.maxH > 0) k = Math.min(k, state.maxH / h);
+    k = Math.min(1, k);
+    return { w: Math.max(1, Math.round(w * k)), h: Math.max(1, Math.round(h * k)) };
+  }
+
+  function bgHex() {
+    if (state.bg === 'white') return '#ffffff';
+    if (state.bg === 'black') return '#000000';
+    return state.bgColor || '#ffffff';
+  }
+
+  function encodeEntry(entry) {
+    return decodeFile(entry.file).then(function (dec) {
+      var d = targetDims(dec.w, dec.h);
+      var cv = document.createElement('canvas');
+      cv.width = d.w; cv.height = d.h;
+      var ctx = cv.getContext('2d');
+      if (!ctx) throw new Error('canvas');
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      if (state.fmt === 'image/jpeg') { ctx.fillStyle = bgHex(); ctx.fillRect(0, 0, d.w, d.h); }
+      ctx.drawImage(dec.img, 0, 0, d.w, d.h);
+      entry.outW = d.w; entry.outH = d.h;
+      var fmtWanted = state.fmt;
+      return new Promise(function (resolve) {
+        cv.toBlob(function (blob) {
+          if (blob && (fmtWanted === 'image/png' || blob.type === fmtWanted)) { resolve(blob); return; }
+          if (blob && fmtWanted === 'image/jpeg') { resolve(blob); return; }
+          /* browser cannot encode the requested type — fall back to JPEG */
+          if (fmtWanted !== 'image/jpeg') {
+            cv.toBlob(function (b2) {
+              if (b2) { entry.fallback = true; resolve(b2); }
+              else resolve(null);
+            }, 'image/jpeg', state.quality);
+          } else resolve(blob);
+        }, fmtWanted, fmtWanted === 'image/png' ? undefined : state.quality);
+      }).then(function (blob) {
+        URL.revokeObjectURL(dec.url);
+        dec.img.src = '';
+        dec.img = null;
+        return blob;
+      });
+    });
+  }
+
+  function thumbOf(file, w, h) {
+    return decodeFile(file).then(function (dec) {
+      var s = 96 / Math.max(dec.w, dec.h, 1);
+      var tw = Math.max(1, Math.round(dec.w * Math.min(1, s)));
+      var th = Math.max(1, Math.round(dec.h * Math.min(1, s)));
+      var cv = document.createElement('canvas');
+      cv.width = tw; cv.height = th;
+      var ctx = cv.getContext('2d');
+      ctx.drawImage(dec.img, 0, 0, tw, th);
+      var url = cv.toDataURL('image/png');
+      URL.revokeObjectURL(dec.url);
+      dec.img.src = '';
+      dec.img = null;
+      return url;
+    }).catch(function () { return ''; });
+  }
+
+  /* ═════════════════════ totals / painting ═════════════════════ */
+  function totalSrc() { var s = 0; state.files.forEach(function (e) { s += e.inBytes; }); return s; }
+  function totalOut() { var s = 0, n = 0; state.files.forEach(function (e) { if (e.outBytes != null) { s += e.outBytes; n++; } }); return { bytes: s, n: n }; }
+
+  function paintTotals() {
+    var src = totalSrc(), out = totalOut();
+    var saving = src - out.bytes;
+    var pct = src > 0 && out.n > 0 ? (saving / src) * 100 : null;
+
+    $('srcTotal').textContent = state.files.length ? bytes(src) : '—';
+    $('srcCount').textContent = fmt(t('filesLine'), { n: state.files.length });
+    $('outTotal').textContent = out.n ? bytes(out.bytes) : '—';
+    $('outFmt').textContent = out.n ? fmtLabel() : '—';
+    $('savedPct').textContent = pct == null ? '—' : (pct >= 0 ? '−' : '+') + Math.abs(Math.round(pct)) + '%';
+    $('savedBytes').textContent = pct == null ? '—' : (saving >= 0 ? bytes(saving) + ' ' + t('savedWord') : '+ ' + bytes(-saving));
+    $('savedStat').className = 'stat is-on' + (pct != null && pct < 0 ? ' is-bad' : '');
+    $('zipSize').textContent = state.zipBlob ? bytes(state.zipBlob.size) : '—';
+
+    var ratio = src > 0 ? clamp((out.bytes / src) * 100, 0, 100) : 0;
+    $('barFill').style.width = (pct == null ? 0 : ratio) + '%';
+    $('barFill').className = 'bar-fill' + (pct != null && pct < 0 ? ' is-grow' : '');
+    $('barLbl').textContent = pct == null ? '—' : (saving >= 0 ? '−' : '+') + Math.abs(Math.round(pct)) + '%';
+
+    $('listCount').textContent = fmt(t('filesLine'), { n: state.files.length });
+    var dropBox = $('drop');
+    if (dropBox) dropBox.classList.toggle('is-compact', state.files.length > 0);
+    $('dropMeta').textContent = state.files.length === 0
+      ? t('dropMeta')
+      : (state.files.length >= MAX_FILES ? t('dropFull') : fmt(t('dropMore'), { n: state.files.length, left: MAX_FILES - state.files.length }));
+    $('fxEmpty').hidden = state.files.length > 0;
+    $('zipBtn').disabled = !state.zipBlob || out.n === 0;
+    $('reBtn').disabled = state.files.length === 0 || state.busy;
+    $('clearBtn').disabled = state.files.length === 0;
+
+    var biggest = null;
+    state.files.forEach(function (e) {
+      if (e.outBytes == null || !e.inBytes) return;
+      var p = ((e.inBytes - e.outBytes) / e.inBytes) * 100;
+      if (biggest == null || p > biggest) biggest = p;
+    });
+    $('kFmt').textContent = fmtLabel();
+    $('kResize').textContent = (state.maxW || state.maxH)
+      ? fmt(t('resizeLine'), { w: state.maxW || '∞', h: state.maxH || '∞' })
+      : t('resizeNone');
+    $('kFiles').textContent = String(out.n) + ' / ' + state.files.length;
+    $('kBiggest').textContent = biggest == null ? '—' : '−' + Math.max(0, Math.round(biggest)) + '%';
+    $('kTotal').textContent = pct == null ? '—' : (pct >= 0 ? '−' : '+') + Math.abs(Math.round(pct)) + '%';
+  }
+
+  function rowEl(entry) {
+    var li = document.createElement('li');
+    li.className = 'fx';
+    li.setAttribute('data-id', entry.id);
+    li.innerHTML =
+      '<img class="fx-thumb" alt="" src="' + (entry.thumb || '') + '">' +
+      '<div class="fx-main"><p class="fx-name"></p><p class="fx-meta"></p></div>' +
+      '<span class="fx-save is-wait">—</span>' +
+      '<button class="fx-dl" type="button" aria-label="Download" disabled>' +
+      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"></path><path d="M7.5 11.5L12 16l4.5-4.5"></path><path d="M5 19h14"></path></svg>' +
+      '</button>' +
+      '<button class="fx-x" type="button" aria-label="Remove">×</button>';
+    li.querySelector('.fx-name').textContent = entry.name;
+    li.querySelector('.fx-x').addEventListener('click', function () { removeEntry(entry.id); });
+    li.querySelector('.fx-dl').addEventListener('click', function () { downloadEntry(entry); });
+    entry.el = li;
+    return li;
+  }
+
+  function paintRow(entry) {
+    if (!entry.el) return;
+    var meta = entry.el.querySelector('.fx-meta');
+    var save = entry.el.querySelector('.fx-save');
+    var dl = entry.el.querySelector('.fx-dl');
+    var outSize = entry.outBytes ? fmt(t('okRow'), { w: entry.outW, h: entry.outH, size: bytes(entry.outBytes) }) : t('rowWait');
+    meta.innerHTML = fmt(t('rowMeta'), {
+      sw: entry.w, sh: entry.h,
+      a: bytes(entry.inBytes),
+      b: entry.outBytes ? bytes(entry.outBytes) : '—'
+    });
+    meta.setAttribute('title', outSize);
+    if (entry.outBytes != null && entry.inBytes) {
+      var p = ((entry.inBytes - entry.outBytes) / entry.inBytes) * 100;
+      save.textContent = p >= 0 ? fmt(t('rowSave'), { p: Math.round(p) }) : fmt(t('rowGrow'), { p: Math.round(-p) });
+      save.className = 'fx-save' + (p < 0 ? ' is-up' : '');
+    } else if (entry.error) {
+      save.textContent = t('rowBad');
+      save.className = 'fx-save is-up';
+    } else {
+      save.textContent = '—';
+      save.className = 'fx-save is-wait';
+    }
+    dl.disabled = !entry.blob;
+  }
+
+  function fileNameFor(entry) {
+    var base = entry.name.replace(/\.[^.]+$/, '') || 'image';
+    return base + '-' + entry.outW + 'x' + entry.outH + '.' + extOf(entry.blob ? entry.blob.type : state.fmt);
+  }
+
+  function saveBlob(blob, name) {
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+  }
+
+  function downloadEntry(entry) {
+    if (!entry.blob) return;
+    var name = fileNameFor(entry);
+    saveBlob(entry.blob, name);
+    statusKey('stSaved', { name: name }, 'ok');
+  }
+
+  function removeEntry(id) {
+    state.files = state.files.filter(function (e) { return e.id !== id; });
+    var el = document.querySelector('.fx[data-id="' + id + '"]');
+    if (el && el.parentNode) el.parentNode.removeChild(el);
+    state.zipBlob = null;
+    paintTotals();
+    if (state.files.length) scheduleCompress(); else statusKey('stCleared');
+  }
+
+  /* ═════════════════════ compression run ═════════════════════ */
+  function buildZip() {
+    var usable = state.files.filter(function (e) { return e.blob; });
+    if (!usable.length) return Promise.resolve(null);
+    var used = {}, names = [];
+    return Promise.all(usable.map(function (e) {
+      return e.blob.arrayBuffer().then(function (buf) { return { name: fileNameFor(e), data: new Uint8Array(buf) }; });
+    })).then(function (list) {
+      list.forEach(function (f) {
+        var n = f.name.replace(/(\.[^.]+)$/, '');
+        var ext = f.name.slice(n.length);
+        if (used[f.name] == null) { used[f.name] = 1; names.push(f); return; }
+        used[f.name] += 1;
+        var alt = n + '-' + used[f.name] + ext;
+        names.push({ name: alt, data: f.data });
+      });
+      return zipStore(names);
+    });
+  }
+
+  function runCompress(gen) {
+    if (!state.files.length) {
+      state.busy = false; state.zipBlob = null;
+      paintTotals();
+      window.dispatchEvent(new CustomEvent('imgpress:idle'));
+      return Promise.resolve();
+    }
+    state.busy = true;
+    $('reBtn').disabled = true;
+    var i = 0;
+    function step() {
+      if (gen !== state.gen) { return Promise.resolve(); }
+      if (i >= state.files.length) {
+        return buildZip().then(function (z) {
+          if (gen !== state.gen) return;
+          state.zipBlob = z;
+          state.busy = false;
+          paintTotals();
+          var out = totalOut();
+          statusKey('stDone', { n: out.n, src: bytes(totalSrc()), size: bytes(out.bytes) }, 'ok');
+          window.dispatchEvent(new CustomEvent('imgpress:idle'));
+        }).catch(function () {
+          state.busy = false;
+          paintTotals();
+          statusKey('stZipFail', null, 'warn');
+          window.dispatchEvent(new CustomEvent('imgpress:idle'));
+        });
+      }
+      var entry = state.files[i];
+      statusKey('stWorking', { i: i + 1, n: state.files.length });
+      return encodeEntry(entry).then(function (blob) {
+        if (gen !== state.gen) return;
+        if (blob) { entry.blob = blob; entry.outBytes = blob.size; entry.error = null; }
+        else { entry.blob = null; entry.outBytes = null; entry.error = 'encode'; }
+        paintRow(entry); paintTotals();
+        i += 1;
+        return step();
+      }, function () {
+        if (gen !== state.gen) return;
+        entry.blob = null; entry.outBytes = null; entry.error = 'decode';
+        paintRow(entry); paintTotals();
+        i += 1;
+        return step();
+      });
+    }
+    return step();
+  }
+
+  function scheduleCompress() {
+    var gen = ++state.gen;
+    state.chain = state.chain.then(function () { return runCompress(gen); });
+    return state.chain;
+  }
+
+  /* ═════════════════════ adding files ═════════════════════ */
+  var nextId = 1;
+
+  function addFiles(list) {
+    var arr = Array.prototype.slice.call(list || []);
+    if (!arr.length) return Promise.resolve();
+    var room = MAX_FILES - state.files.length;
+    var truncated = arr.length > room;
+    arr = arr.slice(0, Math.max(0, room));
+    if (!arr.length) { statusKey('stLimit', null, 'warn'); return Promise.resolve(); }
+
+    var dry = arr.map(function (f) { return !/^image\//.test(f.type || '') && !/\.(png|jpe?g|webp|gif|avif|bmp)$/i.test(f.name || ''); });
+    var skipped = dry.filter(Boolean).length;
+    arr = arr.filter(function (f, i) { return !dry[i]; });
+    if (!arr.length) { statusKey('stDrop', null, 'warn'); return Promise.resolve(); }
+
+    return Promise.all(arr.map(function (f) {
+      return decodeFile(f).then(function (dec) {
+        var w = dec.w, h = dec.h, url = dec.url;
+        var cv = document.createElement('canvas');
+        var k = 96 / Math.max(w, h, 1);
+        k = Math.min(1, k);
+        cv.width = Math.max(1, Math.round(w * k));
+        cv.height = Math.max(1, Math.round(h * k));
+        cv.getContext('2d').drawImage(dec.img, 0, 0, cv.width, cv.height);
+        var thumb = cv.toDataURL('image/png');
+        URL.revokeObjectURL(url);
+        dec.img.src = '';
+        dec.img = null;
+        return {
+          id: 'f' + (nextId++),
+          file: f,
+          name: f.name || 'image',
+          inBytes: f.size,
+          w: w, h: h,
+          thumb: thumb,
+          blob: null, outBytes: null, outW: null, outH: null, error: null
+        };
+      }).catch(function () { return null; });
+    })).then(function (entries) {
+      var ok = entries.filter(Boolean);
+      if (!ok.length) { statusKey('stDrop', null, 'warn'); return; }
+      ok.forEach(function (e) {
+        state.files.push(e);
+        $('fxList').appendChild(rowEl(e));
+        paintRow(e);
+      });
+      state.zipBlob = null;
+      paintTotals();
+      if (truncated) statusKey('stLimit', null, 'warn');
+      else if (skipped) statusKey('stDrop', null, 'warn');
+      else statusKey('stAdded', { n: ok.length });
+      return scheduleCompress();
+    });
+  }
+
+  /* ═════════════════════ samples (made here, not fetched) ═════════════════════ */
+  function makeSample(kind) {
+    var cv = document.createElement('canvas');
+    var ctx;
+    if (kind === 0) {
+      cv.width = 1600; cv.height = 1200;
+      ctx = cv.getContext('2d');
+      var g = ctx.createLinearGradient(0, 0, 1600, 1200);
+      g.addColorStop(0, '#f3cf85'); g.addColorStop(.45, '#e5b45c'); g.addColorStop(1, '#7a4b18');
+      ctx.fillStyle = g; ctx.fillRect(0, 0, 1600, 1200);
+      ctx.globalAlpha = .5;
+      for (var i = 0; i < 40; i++) {
+        ctx.beginPath();
+        ctx.arc(160 + i * 37, 600 + Math.sin(i / 2.4) * 260, 30 + (i % 7) * 9, 0, Math.PI * 2);
+        ctx.fillStyle = i % 2 ? '#0b0b0d' : '#f7f2e9';
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = '#0b0b0d';
+      ctx.font = '700 110px system-ui, sans-serif';
+      ctx.fillText('ImgPress', 120, 1110);
+    } else if (kind === 1) {
+      cv.width = 1200; cv.height = 1600;
+      ctx = cv.getContext('2d');
+      var g2 = ctx.createLinearGradient(0, 0, 0, 1600);
+      g2.addColorStop(0, '#101a2b'); g2.addColorStop(.55, '#2b2140'); g2.addColorStop(1, '#0b0b0d');
+      ctx.fillStyle = g2; ctx.fillRect(0, 0, 1200, 1600);
+      /* fine detail: a photo-like noise field compresses differently per format */
+      var img = ctx.createImageData(1200, 1600);
+      for (var p = 0; p < img.data.length; p += 4) {
+        var x = (p / 4) % 1200, y = Math.floor(p / 4800);
+        var n = (Math.sin(x * .07) + Math.cos(y * .05) + Math.sin((x + y) * .013)) * 26;
+        var base = 40 + (y / 1600) * 90;
+        img.data[p] = clamp(base + n, 0, 255);
+        img.data[p + 1] = clamp(base * .9 + n * .8 + 20, 0, 255);
+        img.data[p + 2] = clamp(base * 1.4 + n * .5 + 40, 0, 255);
+        img.data[p + 3] = 255;
+      }
+      ctx.putImageData(img, 0, 0);
+      ctx.strokeStyle = 'rgba(243,207,133,.8)'; ctx.lineWidth = 3;
+      for (var r = 1; r < 6; r++) { ctx.beginPath(); ctx.arc(600, 760, r * 110, 0, Math.PI * 2); ctx.stroke(); }
+    } else {
+      cv.width = 900; cv.height = 900;
+      ctx = cv.getContext('2d');
+      ctx.clearRect(0, 0, 900, 900);
+      ctx.beginPath(); ctx.arc(450, 450, 380, 0, Math.PI * 2);
+      var g3 = ctx.createRadialGradient(360, 330, 40, 450, 450, 400);
+      g3.addColorStop(0, '#7fd6a0'); g3.addColorStop(1, 'rgba(127,214,160,.15)');
+      ctx.fillStyle = g3; ctx.fill();
+      ctx.lineWidth = 26; ctx.strokeStyle = '#f7f2e9'; ctx.stroke();
+      ctx.fillStyle = '#0b0b0d'; ctx.font = '700 150px system-ui, sans-serif';
+      ctx.textAlign = 'center'; ctx.fillText('PNG', 450, 505);
+    }
+    return new Promise(function (resolve) {
+      cv.toBlob(function (b) {
+        if (!b) { resolve(null); return; }
+        var names = ['sample-gradient.png', 'sample-night.png', 'sample-transparent.png'];
+        resolve(new File([b], names[kind], { type: 'image/png' }));
+      }, 'image/png');
+    });
+  }
+
+  function addSamples() {
+    return Promise.all([makeSample(0), makeSample(1), makeSample(2)]).then(function (files) {
+      return addFiles(files.filter(Boolean));
+    });
+  }
+
+  /* ═════════════════════ wiring ═════════════════════ */
+  $('pick').addEventListener('click', function () { $('file').click(); });
+  $('file').addEventListener('change', function () {
+    addFiles(this.files);
+    this.value = '';
+  });
+  $('sample').addEventListener('click', function () {
+    addSamples().then(function () { statusKey('stAdded', { n: 3 }, 'ok'); });
+  });
+
+  var drop = $('drop');
+  ['dragenter', 'dragover'].forEach(function (ev) {
+    drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add('is-over'); });
+  });
+  ['dragleave', 'dragend'].forEach(function (ev) {
+    drop.addEventListener(ev, function () { drop.classList.remove('is-over'); });
+  });
+  drop.addEventListener('drop', function (e) {
+    e.preventDefault();
+    drop.classList.remove('is-over');
+    if (e.dataTransfer && e.dataTransfer.files) addFiles(e.dataTransfer.files);
+  });
+  document.addEventListener('paste', function (e) {
+    var items = (e.clipboardData && e.clipboardData.items) || [];
+    var picked = [];
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].type && items[i].type.indexOf('image/') === 0) {
+        var f = items[i].getAsFile();
+        if (f) picked.push(f);
+      }
+    }
+    if (picked.length) { e.preventDefault(); addFiles(picked); }
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll('#fmt button'), function (b) {
+    b.addEventListener('click', function () {
+      Array.prototype.forEach.call(document.querySelectorAll('#fmt button'), function (o) { o.setAttribute('aria-pressed', String(o === b)); });
+      state.fmt = b.getAttribute('data-fmt');
+      state.zipBlob = null;
+      var png = state.fmt === 'image/png';
+      $('quality').disabled = png;
+      $('qNote').textContent = png ? t('qPng') : (state.fmt === 'image/jpeg' ? t('qJpeg') : t('qWebp'));
+      paintTotals();
+      if (state.files.length) scheduleCompress();
+    });
+  });
+
+  $('quality').addEventListener('input', function () {
+    state.quality = clamp(parseInt(this.value, 10) || 80, 10, 100) / 100;
+    $('qOut').textContent = String(Math.round(state.quality * 100));
+    state.zipBlob = null;
+    paintTotals();
+    if (state.files.length) scheduleCompress();
+  });
+
+  function readMax() {
+    var w = parseInt(String($('maxW').value).replace(/[^0-9]/g, ''), 10);
+    var h = parseInt(String($('maxH').value).replace(/[^0-9]/g, ''), 10);
+    state.maxW = w > 0 ? clamp(w, 16, 20000) : 0;
+    state.maxH = h > 0 ? clamp(h, 16, 20000) : 0;
+    state.zipBlob = null;
+    paintTotals();
+    if (state.files.length) scheduleCompress();
+  }
+  $('maxW').addEventListener('input', readMax);
+  $('maxH').addEventListener('input', readMax);
+  $('dimReset').addEventListener('click', function () {
+    $('maxW').value = ''; $('maxH').value = '';
+    readMax();
+    statusKey('stResize', { w: '∞', h: '∞' });
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll('[data-bg]'), function (b) {
+    b.addEventListener('click', function () {
+      Array.prototype.forEach.call(document.querySelectorAll('[data-bg]'), function (o) { o.setAttribute('aria-pressed', String(o === b)); });
+      state.bg = b.getAttribute('data-bg');
+      state.zipBlob = null;
+      paintTotals();
+      if (state.files.length && state.fmt === 'image/jpeg') scheduleCompress();
+    });
+  });
+  $('bgColor').addEventListener('input', function () {
+    state.bgColor = this.value;
+    $('bgHex').textContent = this.value;
+    state.bg = 'custom';
+    Array.prototype.forEach.call(document.querySelectorAll('[data-bg]'), function (o) { o.setAttribute('aria-pressed', String(o.getAttribute('data-bg') === 'custom')); });
+    state.zipBlob = null;
+    paintTotals();
+    if (state.files.length && state.fmt === 'image/jpeg') scheduleCompress();
+  });
+
+  $('reBtn').addEventListener('click', function () { scheduleCompress(); });
+  $('clearBtn').addEventListener('click', function () {
+    state.gen++;
+    state.files = [];
+    state.zipBlob = null;
+    $('fxList').innerHTML = '';
+    paintTotals();
+    statusKey('stCleared');
+  });
+  $('zipBtn').addEventListener('click', function () {
+    if (!state.zipBlob) return;
+    var n = state.files.filter(function (e) { return e.blob; }).length;
+    saveBlob(state.zipBlob, 'imgpress-' + n + '-files.zip');
+    statusKey('stZipOk', { n: n, size: bytes(state.zipBlob.size) }, 'ok');
+  });
+
+  window.addEventListener('beforeunload', function () { /* nothing persisted on purpose */ });
+
+  /* ═════════════════════ language ═════════════════════ */
+  function readLang(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function initialLang() {
+    var q = '';
+    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
+    if (q === 'ko' || q === 'en') return q;
+    return readLang(SHARED_KEY) || readLang(LANG_KEY) || 'en';
+  }
+  function setMeta(sel, attr, val) {
+    var el = document.querySelector(sel);
+    if (el) el.setAttribute(attr, val);
+  }
+  function applyLang(lang) {
+    state.lang = lang === 'ko' ? 'ko' : 'en';
+    document.documentElement.setAttribute('lang', state.lang);
+    document.title = t('docTitle');
+    setMeta('meta[property="og:title"]', 'content', t('docTitle').split('|')[0].trim());
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var v = t(nodes[i].getAttribute('data-i18n'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-html'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-aria'));
+      if (v) nodes[i].setAttribute('aria-label', v);
+    }
+    var lt = $('langToggle');
+    if (lt) {
+      var spans = lt.querySelectorAll('[data-lt]');
+      for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
+      lt.setAttribute('aria-label', t('toggleTo'));
+      lt.setAttribute('title', t('toggleTo'));
+    }
+    $('qOut').textContent = String(Math.round(state.quality * 100));
+    $('qNote').textContent = state.fmt === 'image/png' ? t('qPng') : (state.fmt === 'image/jpeg' ? t('qJpeg') : t('qWebp'));
+    paintTotals();
+    state.files.forEach(paintRow);
+    if (state.lastKey) status(fmt(t(state.lastKey), state.lastVars || {}), state.lastKind);
+    try { localStorage.setItem(LANG_KEY, state.lang); localStorage.setItem(SHARED_KEY, state.lang); } catch (e) { /* blocked */ }
+  }
+  $('langToggle').addEventListener('click', function () {
+    applyLang(state.lang === 'ko' ? 'en' : 'ko');
+  });
+
+  /* ═════════════════════ boot ═════════════════════ */
+  var netCount = 0;
+  $('netCount').textContent = '0';
+  void netCount;
+
+  $('qNote').textContent = I18N.en.qWebp;
+  paintTotals();
+  applyLang(initialLang());
+  status(t('stReady'));
+
+  /* read-only hook for tests and automation */
+  window.ImgPress = {
+    version: '1.0',
+    addSamples: function () { return addSamples(); },
+    addFiles: function (files) { return addFiles(files); },
+    compress: function () { return scheduleCompress(); },
+    clear: function () { $('clearBtn').click(); },
+    files: function () {
+      return state.files.map(function (e) {
+        return { name: e.name, inBytes: e.inBytes, outBytes: e.outBytes, w: e.w, h: e.h, outW: e.outW, outH: e.outH, hasBlob: !!e.blob, error: e.error };
+      });
+    },
+    info: function () {
+      var out = totalOut();
+      return {
+        fmt: state.fmt, quality: state.quality, maxW: state.maxW, maxH: state.maxH,
+        bg: state.bg, bgColor: bgHex(), lang: state.lang, busy: state.busy,
+        count: state.files.length, src: totalSrc(), out: out.bytes, ready: out.n,
+        zip: state.zipBlob ? state.zipBlob.size : 0,
+        pct: totalSrc() > 0 && out.n > 0 ? +(((totalSrc() - out.bytes) / totalSrc()) * 100).toFixed(2) : null,
+        maxFiles: MAX_FILES
+      };
+    },
+    setFormat: function (f, q) {
+      var b = document.querySelector('#fmt button[data-fmt="' + f + '"]');
+      if (b) b.click();
+      if (q != null) { state.quality = clamp(q, 10, 100) / 100; $('quality').value = String(Math.round(state.quality * 100)); $('qOut').textContent = String(Math.round(state.quality * 100)); scheduleCompress(); }
+      return state.fmt;
+    },
+    setQuality: function (q) { state.quality = clamp(q, 10, 100) / 100; $('quality').value = String(Math.round(state.quality * 100)); $('qOut').textContent = String(Math.round(state.quality * 100)); scheduleCompress(); return state.quality; },
+    setMax: function (w, h) { $('maxW').value = w ? String(w) : ''; $('maxH').value = h ? String(h) : ''; readMax(); return { w: state.maxW, h: state.maxH }; },
+    setBg: function (v) { state.bg = v; state.bgColor = v; $('bgColor').value = v; $('bgHex').textContent = v; scheduleCompress(); return v; },
+    zipBlob: function () { return state.zipBlob; },
+    zipBytes: function () { return state.zipBlob ? state.zipBlob.arrayBuffer() : Promise.resolve(null); },
+    downloadZip: function () { $('zipBtn').click(); },
+    names: function () { return state.files.map(fileNameFor); },
+    lang: function () { return state.lang; },
+    setLang: function (l) { applyLang(l); }
+  };
+})();
+</script>
+</body>
+</html>
