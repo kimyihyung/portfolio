@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0b0d">
+<title>DateSnap — 디데이·영업일·만나이 계산기 | Kim Yihyung</title>
+<meta name="description" content="기준일 하나로 디데이와 100일·1000일·1~5주년 날짜를 뽑고, 주말과 2026년 공휴일(노동절·제헌절 포함)을 뺀 실제 영업일 수와 영업일 N일 뒤 날짜를 세며, 만나이·연나이·띠·다음 생일까지 한 화면에서 계산합니다. 입력한 날짜는 브라우저를 떠나지 않습니다.">
+<meta name="keywords" content="디데이 계산기, 100일 계산, 1000일 계산, 기념일 계산기, 영업일 계산기, 워킹데이, 공휴일 제외, 2026 공휴일, 노동절, 제헌절, 만나이 계산기, 연나이, 세는나이, 띠 계산, 다음 생일, dday calculator, korean age calculator, business day calculator korea, datesnap">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/date-snap/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b0d'/%3E%3Crect x='7' y='9' width='18' height='16' rx='3' fill='none' stroke='%23e5b45c' stroke-width='2'/%3E%3Cpath d='M7 14h18M12 7v4M20 7v4' stroke='%23e5b45c' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='13' cy='19' r='1.7' fill='%237fd6a0'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/date-snap/">
+<meta property="og:title" content="DateSnap — 디데이 · 영업일 · 만나이, 한 화면에서">
+<meta property="og:description" content="100일·1000일·1~5주년 날짜, 주말과 2026년 공휴일을 뺀 영업일 수, 만나이·연나이·띠·다음 생일까지. 계산은 이 탭에서만.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="DateSnap — 디데이·영업일·만나이 계산기">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="DateSnap — 디데이 · 영업일 · 만나이, 한 화면에서">
+<meta name="twitter:description" content="100일·1000일·1~5주년, 2026년 공휴일 뺀 영업일, 만나이·띠·다음 생일. 업로드 0바이트, 외부 요청 0건.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "DateSnap — 디데이·영업일·만나이 계산기",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/date-snap/",
+      "inLanguage": "ko-KR",
+      "description": "기준일에서 100일·200일·300일·500일·1000일과 1~5주년 날짜를 계산해 오늘의 디데이를 보여 주고, 주말과 2026년 법정공휴일(노동절·제헌절·대체공휴일 포함)을 뺀 실제 영업일 수와 영업일 N일 뒤 날짜를 세며, 생년월일로 만나이·연나이·세는나이·띠·다음 생일 디데이를 계산한다. 모든 계산은 브라우저 안에서 끝나고 아무것도 전송하지 않는다.",
+      "featureList": [
+        "D-day와 100일·200일·300일·500일·1000일 날짜",
+        "1~5주년 기념일과 남은 날짜",
+        "1일째 포함 / 0일 기준 전환",
+        "주말과 2026년 공휴일을 뺀 영업일 수",
+        "영업일 N일 뒤 날짜 계산",
+        "만나이·연나이·세는나이·띠·다음 생일",
+        "카톡 요약 원클릭 복사",
+        "100% 브라우저 계산: 업로드 0바이트, 외부 요청 0건"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "KRW" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "DateSnap", "item": "https://kimyihyung.github.io/portfolio/tools/date-snap/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "100일은 첫날을 포함해서 세나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "관습이 갈립니다. DateSnap은 둘 다 계산합니다. '1일째 포함'은 시작한 날을 1일로 세므로 100일째가 시작일 + 99일이고, '0일 기준'은 시작한 날을 0으로 두어 100일 뒤가 시작일 + 100일입니다. 화면 위 전환으로 두 날짜를 오가며 볼 수 있고, 기념일 카드에는 두 값이 함께 나옵니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "영업일에서 빼는 공휴일은 어디까지인가요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "「관공서의 공휴일에 관한 규정」을 따른 2026년 법정공휴일과 대체공휴일입니다. 2026년부터 새로 공휴일이 된 노동절(5월 1일)과 제헌절(7월 17일)도 들어 있고, 6월 3일 지방선거일처럼 임기가 만료되어 확정된 선거일도 포함합니다. 정부가 따로 정하는 임시공휴일은 들어 있지 않습니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "만나이와 연나이는 어떻게 다른가요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "만나이는 생일이 지날 때마다 한 살이 늘어나는 국제 기준이고, 연나이는 해가 바뀌면 한 살이 늘어나는 계산입니다. 2023년 6월 28일부터 법령과 행정에서는 만나이를 쓰므로, 서류에 적는 나이는 만나이입니다. 세는나이는 태어난 해를 한 살로 세는 옛 방식이라 참고로만 함께 보여 줍니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "계산 결과를 어디에 저장하나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "저장하지 않습니다. 날짜는 입력하는 즉시 이 탭의 자바스크립트로만 계산되고, 서버도 쿠키도 없습니다. 한 번에 보내려면 '카톡 요약 복사'를 눌러 클립보드로 옮기면 되고, 그 밖에는 아무 데도 남지 않습니다." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+:root {
+  --bg: #0b0b0d;
+  --bg2: #0e0e11;
+  --panel: #141311;
+  --panel2: #1b1917;
+  --line: rgba(255,255,255,.09);
+  --line2: rgba(255,255,255,.18);
+  --ink: #f7f2e9;
+  --muted: #a9a29a;
+  --muted2: #7d766e;
+  --accent: #e5b45c;
+  --accent2: #f3cf85;
+  --accent-dim: rgba(229,180,92,.12);
+  --on-accent: #1d1503;
+  --ok: #7fd6a0;
+  --warn: #ffa06b;
+  --bad: #ff7d7d;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --shadow: 0 24px 70px rgba(0,0,0,.55);
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  line-height: 1.6;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(110% 55% at 50% -18%, rgba(229,180,92,.13), transparent 62%),
+    radial-gradient(60% 40% at 100% 2%, rgba(229,180,92,.05), transparent 60%);
+  background-repeat: no-repeat;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: var(--accent); color: var(--on-accent); }
+a { color: inherit; }
+button, input, select, textarea { font-family: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+.wrap { width: 100%; max-width: 1220px; margin: 0 auto; padding: 0 20px 48px; }
+
+/* ---------- topbar ---------- */
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0 12px; }
+.brand { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: var(--ink); min-width: 0; }
+.mark {
+  min-width: 28px; height: 22px; padding: 0 6px; border-radius: 7px; flex: none;
+  border: 1px solid rgba(229,180,92,.45); background: var(--accent-dim);
+  display: grid; place-items: center; font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: var(--accent);
+}
+.brand-txt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.top-actions { display: inline-flex; align-items: center; gap: 9px; flex: none; }
+.lang-toggle {
+  appearance: none; border: 1px solid var(--line); background: var(--panel); color: var(--muted2);
+  height: 34px; padding: 0 11px; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px;
+  cursor: pointer; font-size: 11px; font-weight: 700; letter-spacing: .06em; line-height: 1;
+  transition: color .2s, border-color .2s, transform .15s;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.94); }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
+.topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
+
+/* ---------- hero ---------- */
+.hero { padding: 22px 0 18px; max-width: 880px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; margin: 0 0 14px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent);
+  border: 1px solid rgba(229,180,92,.28); background: rgba(229,180,92,.06); padding: 6px 11px; border-radius: 999px;
+}
+.eyebrow .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+h1 { margin: 0 0 14px; font-size: clamp(26px, 4.2vw, 43px); line-height: 1.16; letter-spacing: -.03em; font-weight: 800; }
+h1 .soft { color: var(--muted); }
+h1 .gold { color: var(--accent); }
+.lede { margin: 0 0 16px; color: var(--muted); font-size: 15px; max-width: 780px; }
+.lede strong { color: var(--ink); font-weight: 600; }
+
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--panel); font-size: 11.5px; color: var(--muted);
+  font-family: var(--mono); letter-spacing: .02em;
+}
+.pill b { color: var(--ink); font-weight: 700; }
+.pill--live { border-color: rgba(127,214,160,.32); background: rgba(127,214,160,.07); color: #a6e6c4; }
+.pill--live b { color: #bff3d8; }
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px rgba(127,214,160,.14); }
+
+/* ---------- layout ---------- */
+.work { display: grid; grid-template-columns: minmax(0,1fr) 348px; gap: 16px; align-items: start; margin-top: 6px; }
+@media (max-width: 1040px) { .work { grid-template-columns: minmax(0,1fr); } }
+
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); min-width: 0; }
+.panel { padding: 16px; display: grid; gap: 13px; min-width: 0; }
+.panel h3 { margin: 0; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted2); font-family: var(--mono); font-weight: 700; }
+.side { display: grid; gap: 12px; min-width: 0; }
+@media (min-width: 1041px) { .side { position: sticky; top: 14px; } }
+
+.btn {
+  appearance: none; cursor: pointer; border-radius: 11px; border: 1px solid var(--line2);
+  background: var(--panel2); color: var(--ink); font-size: 13px; font-weight: 650;
+  padding: 10px 16px; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  transition: transform .12s, border-color .2s, background .2s, opacity .2s; text-decoration: none;
+}
+.btn:hover { border-color: rgba(255,255,255,.3); }
+.btn:active { transform: scale(.98); }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 750; }
+.btn--primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.btn--ghost { background: transparent; }
+.btn--sm { padding: 7px 11px; font-size: 12px; border-radius: 9px; }
+.btn--block { width: 100%; }
+
+/* ---------- tabs ---------- */
+.tabs { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 6px; }
+.tabs button {
+  appearance: none; cursor: pointer; text-align: left; min-width: 0;
+  display: grid; gap: 2px; padding: 10px 12px; border-radius: 12px;
+  border: 1px solid var(--line); background: var(--panel2); color: var(--muted);
+  transition: border-color .2s, background .2s, color .2s;
+}
+.tabs button:hover { border-color: var(--line2); }
+.tabs button b { font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; color: var(--muted2); font-weight: 700; }
+.tabs button span { font-size: 13px; font-weight: 700; color: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tabs button[aria-selected="true"] { border-color: rgba(229,180,92,.5); background: linear-gradient(180deg, rgba(229,180,92,.14), rgba(229,180,92,.03)); color: var(--ink); }
+.tabs button[aria-selected="true"] b { color: var(--accent); }
+@media (max-width: 560px) {
+  .tabs { grid-template-columns: 1fr 1fr; }
+  .tabs button:last-child { grid-column: 1 / -1; }
+  .tabs button { padding: 9px 10px; }
+  .tabs button span { font-size: 12.5px; }
+}
+
+.tabpanel { display: grid; gap: 14px; min-width: 0; }
+.calc-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.calc-head h2 { margin: 0; font-size: 16.5px; letter-spacing: -.01em; }
+.calc-head span { font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted2); }
+
+/* ---------- inputs ---------- */
+.in-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; min-width: 0; }
+.in {
+  display: grid; gap: 5px; padding: 9px 11px 8px; border: 1px solid var(--line);
+  border-radius: 11px; background: var(--panel2); min-width: 0;
+}
+.in label, .in .lbl { font-size: 10.5px; font-family: var(--mono); letter-spacing: .04em; color: var(--muted2); }
+.in .val { display: flex; align-items: baseline; gap: 5px; min-width: 0; }
+.in input[type="date"], .in input[type="number"], .in input[type="text"] {
+  appearance: none; border: 0; background: transparent; color: var(--ink);
+  font-size: 15px; font-weight: 650; padding: 0; width: 100%; min-width: 0; line-height: 1.5;
+  font-family: var(--mono); letter-spacing: -.01em;
+}
+.in input[type="date"] { color-scheme: dark; }
+.in input:focus { outline: none; }
+.in:focus-within { border-color: rgba(229,180,92,.6); }
+.in .unit { font-size: 11px; color: var(--muted2); flex: none; font-family: var(--mono); }
+
+.seg { display: flex; gap: 3px; padding: 3px; background: var(--panel2); border: 1px solid var(--line); border-radius: 11px; min-width: 0; }
+.seg button { flex: 1 1 auto; appearance: none; border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; font-weight: 650; padding: 7px 6px; border-radius: 8px; line-height: 1.25; }
+.seg button[aria-pressed="true"] { background: var(--accent-dim); color: var(--accent); box-shadow: inset 0 0 0 1px rgba(229,180,92,.35); }
+
+.switch-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-size: 12.4px; color: var(--muted); }
+.switch { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+.switch input { appearance: none; width: 34px; height: 20px; border-radius: 999px; background: rgba(255,255,255,.14); border: 1px solid var(--line2); position: relative; cursor: pointer; transition: background .2s; flex: none; }
+.switch input::after { content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: var(--muted); transition: transform .2s, background .2s; }
+.switch input:checked { background: rgba(229,180,92,.35); border-color: rgba(229,180,92,.6); }
+.switch input:checked::after { transform: translateX(14px); background: var(--accent); }
+
+/* ---------- result ---------- */
+.result { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px 18px; padding: 16px; border-radius: var(--radius-sm); border: 1px solid rgba(229,180,92,.26); background: linear-gradient(180deg, rgba(229,180,92,.10), rgba(229,180,92,.02)); min-width: 0; }
+.result .num { font-family: var(--mono); font-size: clamp(26px, 6vw, 38px); line-height: 1.06; font-weight: 700; letter-spacing: -.03em; color: var(--accent); overflow-wrap: anywhere; }
+.result .num small { font-size: 13px; letter-spacing: .01em; color: var(--muted); margin-left: 6px; font-weight: 600; font-family: var(--font); }
+.result .meta { display: grid; gap: 2px; font-size: 12.2px; color: var(--muted); min-width: 0; }
+.result .meta b { color: var(--ink); font-weight: 650; }
+.result.is-ok { border-color: rgba(127,214,160,.3); background: linear-gradient(180deg, rgba(127,214,160,.10), rgba(127,214,160,.02)); }
+.result.is-ok .num { color: var(--ok); }
+
+.kv { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.kv li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 10px; font-size: 12.4px; color: var(--muted); }
+.kv li b { color: var(--ink); font-family: var(--mono); font-weight: 650; font-size: 12.4px; text-align: right; overflow-wrap: anywhere; }
+.kv li.is-key { border-top: 1px solid rgba(255,255,255,.1); padding-top: 6px; margin-top: 2px; }
+.kv li.is-key b { color: var(--accent); }
+.caveat { margin: 0; font-size: 11.6px; color: var(--muted2); line-height: 1.6; }
+.caveat b { color: var(--muted); }
+.status { min-height: 16px; margin: 0; font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
+.status.is-ok { color: var(--ok); }
+.status.is-warn { color: var(--warn); }
+
+/* ---------- milestone grid ---------- */
+.ms-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); gap: 8px; min-width: 0; }
+.ms {
+  padding: 11px 12px; border-radius: 11px; border: 1px solid var(--line);
+  background: var(--panel2); display: grid; gap: 2px; min-width: 0;
+}
+.ms .k { font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; color: var(--accent); font-weight: 700; }
+.ms .d { font-size: 14px; font-weight: 700; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ms .m { font-family: var(--mono); font-size: 11px; color: var(--muted2); }
+.ms.is-past { opacity: .58; }
+.ms.is-today { border-color: rgba(127,214,160,.45); background: rgba(127,214,160,.06); }
+.ms.is-today .d { color: #bff3d8; }
+.ms.is-today .k { color: var(--ok); }
+
+.chip-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
+.hchip {
+  display: inline-flex; align-items: center; gap: 6px; padding: 5px 9px; border-radius: 8px;
+  border: 1px solid rgba(229,180,92,.28); background: rgba(229,180,92,.06);
+  font-size: 11.5px; color: var(--accent2); font-family: var(--mono); white-space: nowrap;
+}
+.hchip em { font-style: normal; color: var(--muted); font-family: var(--font); font-size: 11px; }
+
+.sum { margin: 0; padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: #0d0d10; color: #cfd6c9; font-family: var(--mono); font-size: 11px; line-height: 1.75; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 320px; overflow-y: auto; }
+
+/* ---------- sections ---------- */
+.section { margin-top: 40px; scroll-margin-top: 18px; }
+.sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 12px; border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 16px; }
+.sec-head h2 { margin: 0; font-size: 17px; letter-spacing: -.01em; }
+.sec-head span { font-family: var(--mono); font-size: 11px; color: var(--muted2); letter-spacing: .08em; text-transform: uppercase; }
+
+.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+.note { padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel); min-width: 0; }
+.note h3 { margin: 0 0 8px; font-size: 14px; display: flex; gap: 8px; align-items: baseline; }
+.note h3 span { font-family: var(--mono); font-size: 10.5px; color: var(--accent); letter-spacing: .1em; }
+.note p { margin: 0; font-size: 12.8px; color: var(--muted); line-height: 1.62; }
+.note b { color: var(--ink); font-weight: 600; }
+.note table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 11.6px; }
+.note table th, .note table td { padding: 4px 6px; border-bottom: 1px dashed rgba(255,255,255,.08); text-align: right; color: var(--ink); font-family: var(--mono); }
+.note table th:first-child, .note table td:first-child { text-align: left; font-family: var(--font); color: var(--muted); }
+.note table th { font-family: var(--mono); font-size: 9.5px; letter-spacing: .06em; color: var(--muted2); font-weight: 700; }
+
+.faq { display: grid; gap: 8px; }
+details.qa { border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); overflow: hidden; }
+details.qa summary { cursor: pointer; padding: 13px 44px 13px 15px; font-size: 13.5px; font-weight: 600; list-style: none; position: relative; }
+details.qa summary::-webkit-details-marker { display: none; }
+details.qa summary::after { content: "+"; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--accent); font-family: var(--mono); font-size: 15px; }
+details.qa[open] summary::after { content: "−"; }
+details.qa .a { padding: 0 15px 14px; font-size: 12.8px; color: var(--muted); line-height: 1.68; }
+details.qa .a b { color: var(--ink); font-weight: 600; }
+
+.foot { margin-top: 34px; padding-top: 14px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--muted2); }
+.foot-links { display: inline-flex; flex-wrap: wrap; gap: 12px; }
+.foot-links a { text-decoration: none; color: var(--muted); border-bottom: 1px solid transparent; }
+.foot-links a:hover { color: var(--ink); border-bottom-color: var(--line2); }
+.foot .net { font-family: var(--mono); letter-spacing: .02em; }
+.foot .net b { color: var(--ok); }
+
+@media (max-width: 640px) {
+  .wrap { padding: 0 14px 36px; }
+  .topbar { padding: 14px 0 8px; }
+  .brand-txt { font-size: 12px; letter-spacing: .1em; }
+  .hero { padding: 16px 0 12px; }
+  .lede { font-size: 14px; }
+  .panel { padding: 13px; }
+  .result { padding: 13px; }
+  .sec-head h2 { font-size: 16px; }
+  .ms-grid { grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)); }
+  .result { flex-direction: column; align-items: flex-start; gap: 6px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="/portfolio/" aria-label="Kim Yihyung — 포트폴리오" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="View in English" aria-label="View in English">
+        <span class="lt on" data-lt="ko">KO</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="en">EN</span>
+      </button>
+      <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← 도구 전체</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="eyebrow">DateSnap · 디데이 · 영업일 · 만나이 · 업로드 0</span></p>
+      <h1 data-i18n-html="h1">날짜 셈은 실수하기 쉬워서.<br><span class="soft">100일도, 영업일도, 만나이도.</span><br><span class="gold">한 화면에서 한 번에.</span></h1>
+      <p class="lede" data-i18n-html="lede">
+        기준일 하나를 넣으면 <strong>100일·200일·300일·500일·1000일</strong>과 <strong>1~5주년</strong> 날짜가 나오고,
+        주말과 <strong>2026년 공휴일(노동절·제헌절 포함)</strong>을 뺀 실제 <strong>영업일</strong>을 세며,
+        생년월일로 <strong>만나이·연나이·띠·다음 생일</strong>까지 계산합니다. 입력한 날짜는 이 탭을 떠나지 않습니다.
+      </p>
+      <div class="badge-row">
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillUp">업로드 0바이트</b></span>
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillNet">외부 요청 0건</b></span>
+        <span class="pill" data-i18n="pill2026">2026 공휴일 반영</span>
+        <span class="pill" data-i18n="pillCopy">카톡 요약 복사</span>
+      </div>
+    </section>
+
+    <section class="work" aria-label="날짜 계산기" data-i18n-aria="calcAria">
+      <div class="card panel" id="calcCard">
+
+        <div class="tabs" role="tablist" aria-label="계산 종류" data-i18n-aria="tabAria">
+          <button type="button" id="tab-dday" role="tab" aria-selected="true" aria-controls="panel-dday"><b>01</b><span data-i18n="tabDday">디데이·기념일</span></button>
+          <button type="button" id="tab-biz" role="tab" aria-selected="false" aria-controls="panel-biz"><b>02</b><span data-i18n="tabBiz">영업일</span></button>
+          <button type="button" id="tab-age" role="tab" aria-selected="false" aria-controls="panel-age"><b>03</b><span data-i18n="tabAge">만나이</span></button>
+        </div>
+
+        <!-- ══════════ 디데이 ══════════ -->
+        <section class="tabpanel" id="panel-dday" role="tabpanel" aria-labelledby="tab-dday">
+          <div class="calc-head">
+            <h2 data-i18n="dHead">디데이·기념일</h2>
+            <span data-i18n="dHeadNote">기준일 하나로</span>
+          </div>
+          <div class="in-row">
+            <div class="in">
+              <label for="dBase" data-i18n="dBaseLbl">기준일 (시작한 날)</label>
+              <div class="val"><input type="date" id="dBase"></div>
+            </div>
+            <div class="in">
+              <label for="dToday" data-i18n="todayLbl">오늘</label>
+              <div class="val"><input type="date" id="dToday"></div>
+            </div>
+          </div>
+          <div class="switch-row">
+            <span data-i18n="convLbl">세는 방식</span>
+            <div class="seg" id="conv" role="group" aria-label="세는 방식" data-i18n-aria="convAria" style="flex:1 1 200px;max-width:320px">
+              <button type="button" data-conv="inclusive" aria-pressed="true" data-i18n="convIncl">1일째 포함</button>
+              <button type="button" data-conv="zero" aria-pressed="false" data-i18n="convZero">0일 기준</button>
+            </div>
+          </div>
+
+          <div class="result" id="dResult">
+            <div class="num" id="dBig">—</div>
+            <div class="meta" id="dMeta"></div>
+          </div>
+          <p class="caveat" id="dNote" data-i18n-html="dNote"></p>
+
+          <div class="calc-head">
+            <h3 style="margin:0;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);font-family:var(--mono)" data-i18n="msHead">100일부터 5주년까지</h3>
+            <span data-i18n="msNote">양쪽 관습 함께</span>
+          </div>
+          <div class="ms-grid" id="msGrid"></div>
+        </section>
+
+        <!-- ══════════ 영업일 ══════════ -->
+        <section class="tabpanel" id="panel-biz" role="tabpanel" aria-labelledby="tab-biz" hidden>
+          <div class="calc-head">
+            <h2 data-i18n="bHead">영업일 계산</h2>
+            <span data-i18n="bHeadNote">주말 + 2026 공휴일 제외</span>
+          </div>
+          <div class="in-row">
+            <div class="in">
+              <label for="bFrom" data-i18n="bFromLbl">시작일</label>
+              <div class="val"><input type="date" id="bFrom"></div>
+            </div>
+            <div class="in">
+              <label for="bTo" data-i18n="bToLbl">종료일</label>
+              <div class="val"><input type="date" id="bTo"></div>
+            </div>
+          </div>
+          <div class="switch-row">
+            <label class="switch"><input type="checkbox" id="bSat"><span data-i18n="bSatLbl">토요일도 영업일로 셈</span></label>
+            <label class="switch"><input type="checkbox" id="bHol" checked><span data-i18n="bHolLbl">공휴일 제외</span></label>
+          </div>
+
+          <div class="result" id="bResult">
+            <div class="num" id="bBig">—</div>
+            <div class="meta" id="bMeta"></div>
+          </div>
+          <ul class="kv" id="bRows"></ul>
+          <div>
+            <span class="ctl-lbl" style="font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted2)" data-i18n="bHolHead">구간 안의 공휴일</span>
+            <div class="chip-wrap" id="bHols" style="margin-top:7px"></div>
+          </div>
+
+          <div class="calc-head" style="margin-top:2px">
+            <h3 style="margin:0;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);font-family:var(--mono)" data-i18n="bRevHead">영업일 N일 뒤는 언제인가</h3>
+            <span data-i18n="bRevNote">시작일 다음부터 1일째</span>
+          </div>
+          <div class="in-row">
+            <div class="in">
+              <label for="bN" data-i18n="bNLbl">영업일 수</label>
+              <div class="val"><input type="number" id="bN" value="5" min="1" max="999" step="1" inputmode="numeric"><span class="unit" data-i18n="bNUnit">영업일</span></div>
+            </div>
+            <div class="in">
+              <label data-i18n="bRevOutLbl">도착하는 날</label>
+              <div class="val"><b id="bRevOut" style="font-family:var(--mono);font-size:15px;font-weight:650">—</b></div>
+            </div>
+          </div>
+          <p class="status" id="bStatus"></p>
+        </section>
+
+        <!-- ══════════ 만나이 ══════════ -->
+        <section class="tabpanel" id="panel-age" role="tabpanel" aria-labelledby="tab-age" hidden>
+          <div class="calc-head">
+            <h2 data-i18n="aHead">만나이·연나이</h2>
+            <span data-i18n="aHeadNote">2023년부터 만나이 기준</span>
+          </div>
+          <div class="in-row">
+            <div class="in">
+              <label for="aBirth" data-i18n="aBirthLbl">생년월일</label>
+              <div class="val"><input type="date" id="aBirth"></div>
+            </div>
+            <div class="in">
+              <label for="aToday" data-i18n="aTodayLbl">기준일</label>
+              <div class="val"><input type="date" id="aToday"></div>
+            </div>
+          </div>
+
+          <div class="result" id="aResult">
+            <div class="num" id="aBig">—</div>
+            <div class="meta" id="aMeta"></div>
+          </div>
+          <ul class="kv" id="aRows"></ul>
+          <p class="caveat" data-i18n-html="aNote"><b>만나이</b>는 생일이 지날 때마다 한 살, <b>연나이</b>는 해가 바뀌면 한 살, <b>세는나이</b>는 태어난 해를 한 살로 셉니다. 2023년 6월 28일부터 법령·행정에서는 만나이를 쓰므로 서류에 적는 나이는 만나이입니다.</p>
+        </section>
+
+      </div>
+
+      <aside class="side">
+        <div class="card panel">
+          <h3 data-i18n="sumHead">요약 — 카톡에 붙여넣기</h3>
+          <pre class="sum" id="sumText">—</pre>
+          <button class="btn btn--primary btn--block" id="copySum" type="button" data-i18n="copyBtn">요약 복사</button>
+          <p class="status" id="sumStatus"></p>
+          <p class="caveat" data-i18n-html="sumFoot">복사는 클립보드로만 갑니다. 어디에도 저장하지 않습니다.</p>
+        </div>
+
+        <div class="card panel">
+          <h3 data-i18n="nowHead">오늘 기준</h3>
+          <ul class="kv">
+            <li><span data-i18n="nowDate">오늘</span><b id="nowDate">—</b></li>
+            <li><span data-i18n="nowWeek">요일</span><b id="nowWeek">—</b></li>
+            <li><span data-i18n="nowDay">올해 몇 번째 날</span><b id="nowDay">—</b></li>
+            <li><span data-i18n="nowLeft">올해 남은 날</span><b id="nowLeft">—</b></li>
+            <li><span data-i18n="nowBiz">이번 달 남은 영업일</span><b id="nowBiz">—</b></li>
+            <li class="is-key"><span data-i18n="nowNext">다음 공휴일</span><b id="nowNext">—</b></li>
+          </ul>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" aria-labelledby="howTitle">
+      <div class="sec-head">
+        <h2 id="howTitle" data-i18n="howTitle">셈은 이렇게 합니다</h2>
+        <span data-i18n="howNote">규정과 달력 그대로</span>
+      </div>
+      <div class="notes">
+        <div class="note">
+          <h3><span>01</span><span data-i18n="n1h">1일째 포함과 0일 기준</span></h3>
+          <p data-i18n-html="n1p">기념일 관습이 둘로 갈려서 둘 다 계산합니다. <b>1일째 포함</b>은 시작한 날을 1일로 세므로 100일째가 시작일 + 99일이고, <b>0일 기준</b>은 시작한 날을 0으로 두어 100일째가 시작일 + 100일입니다. 카드마다 두 날짜를 함께 적어 두었으니, 상대와 쓰는 관습이 다르면 그 자리에서 확인하면 됩니다.</p>
+        </div>
+        <div class="note">
+          <h3><span>02</span><span data-i18n="n2h">영업일에서 빼는 날</span></h3>
+          <p data-i18n-html="n2p">토·일과 <b>2026년 법정공휴일</b>을 뺍니다 — 노동절(5/1)과 제헌절(7/17)이 2026년부터 새로 들어왔고, 주말과 겹친 공휴일은 <b>대체공휴일</b>로 옮겨진 날짜까지 반영했습니다. 신정과 현충일은 대체공휴일이 없습니다. 정부가 그때그때 정하는 <b>임시공휴일</b>은 들어 있지 않으니, 그게 걸린 달은 하루 이틀 어긋날 수 있습니다.</p>
+        </div>
+        <div class="note">
+          <h3><span>03</span><span data-i18n="n3h">만나이와 띠</span></h3>
+          <p data-i18n-html="n3p">만나이는 생일이 지났는지만 보면 되므로 <b>(기준 연도 − 출생 연도)</b>에서 생일이 아직 안 지났으면 1을 뺍니다. 2월 29일생은 평년에 2월 28일을 생일로 봅니다. 띠는 태어난 해의 <b>12지</b>로 정했습니다(2026년은 말). 전통적으로는 설날을 기준으로 띠가 바뀌니, 1~2월 초생은 한 해 앞설 수 있습니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="faqTitle">
+      <div class="sec-head">
+        <h2 id="faqTitle" data-i18n="faqTitle">자주 묻는 것</h2>
+        <span data-i18n="faqNote">디데이 · 영업일 · 나이</span>
+      </div>
+      <div class="faq">
+        <details class="qa">
+          <summary data-i18n="q1">100일은 첫날을 포함해서 세나요?</summary>
+          <div class="a" data-i18n-html="a1">관습이 갈립니다. DateSnap은 둘 다 계산합니다. <b>1일째 포함</b>은 시작한 날을 1일로 세므로 100일째가 시작일 + 99일이고, <b>0일 기준</b>은 시작한 날을 0으로 두어 100일 뒤가 시작일 + 100일입니다. 화면 위 전환으로 두 날짜를 오가며 볼 수 있고, 기념일 카드에는 두 값이 함께 나옵니다.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q2">영업일에서 빼는 공휴일은 어디까지인가요?</summary>
+          <div class="a" data-i18n-html="a2">「관공서의 공휴일에 관한 규정」을 따른 2026년 법정공휴일과 대체공휴일입니다. 2026년부터 새로 공휴일이 된 <b>노동절(5월 1일)</b>과 <b>제헌절(7월 17일)</b>도 들어 있고, 6월 3일 지방선거일처럼 임기가 만료되어 확정된 선거일도 포함합니다. 정부가 따로 정하는 임시공휴일은 들어 있지 않습니다.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q3">만나이와 연나이는 어떻게 다른가요?</summary>
+          <div class="a" data-i18n-html="a3">만나이는 생일이 지날 때마다 한 살이 늘어나는 국제 기준이고, 연나이는 해가 바뀌면 한 살이 늘어나는 계산입니다. 2023년 6월 28일부터 법령과 행정에서는 만나이를 쓰므로, 서류에 적는 나이는 만나이입니다. 세는나이는 태어난 해를 한 살로 세는 옛 방식이라 참고로만 함께 보여 줍니다.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q4">영업일 N일 뒤는 어떻게 세나요?</summary>
+          <div class="a" data-i18n-html="a4"><b>시작일 다음 영업일을 1일째</b>로 셉니다. 시작일이 금요일이고 3영업일이면 수요일입니다. 시작일이 이미 주말이나 공휴일이면 그 뒤 첫 영업일부터 세기 시작합니다. 계약서의 "3영업일 이내"처럼 시작일을 포함해서 세는 경우가 있으니, 상대가 정한 기준이 있으면 그쪽이 맞습니다.</div>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span data-i18n="footCopy">© 2026 Kim Yihyung · 브라우저 안에서, 브라우저를 위해.</span>
+    <span class="net"><span data-i18n="footNet">외부 요청</span> <b id="netCount">0</b></span>
+    <span class="foot-links">
+      <a href="/portfolio/" data-i18n="footP1">포트폴리오</a>
+      <a href="/portfolio/tools/" data-i18n="footP2">도구 전체</a>
+      <a href="https://github.com/kimyihyung/portfolio" target="_blank" rel="noopener" data-i18n="footP3">소스</a>
+    </span>
+    <span class="mono" data-i18n="mono">업로드 없음 · 추적 없음</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ═════════════════════ language ═════════════════════ */
+  var I18N = {
+    ko: {
+      docTitle: 'DateSnap — 디데이·영업일·만나이 계산기 | Kim Yihyung',
+      brandAria: 'Kim Yihyung — 포트폴리오',
+      back: '← 도구 전체',
+      eyebrow: 'DateSnap · 디데이 · 영업일 · 만나이 · 업로드 0',
+      h1: '날짜 셈은 실수하기 쉬워서.<br><span class="soft">100일도, 영업일도, 만나이도.</span><br><span class="gold">한 화면에서 한 번에.</span>',
+      lede: '기준일 하나를 넣으면 <strong>100일·200일·300일·500일·1000일</strong>과 <strong>1~5주년</strong> 날짜가 나오고, 주말과 <strong>2026년 공휴일(노동절·제헌절 포함)</strong>을 뺀 실제 <strong>영업일</strong>을 세며, 생년월일로 <strong>만나이·연나이·띠·다음 생일</strong>까지 계산합니다. 입력한 날짜는 이 탭을 떠나지 않습니다.',
+      pillUp: '업로드 0바이트', pillNet: '외부 요청 0건', pill2026: '2026 공휴일 반영', pillCopy: '카톡 요약 복사',
+      calcAria: '날짜 계산기', tabAria: '계산 종류',
+      tabDday: '디데이·기념일', tabBiz: '영업일', tabAge: '만나이',
+      dHead: '디데이·기념일', dHeadNote: '기준일 하나로',
+      dBaseLbl: '기준일 (시작한 날)', todayLbl: '오늘',
+      convLbl: '세는 방식', convAria: '세는 방식', convIncl: '1일째 포함', convZero: '0일 기준',
+      dNote: '<b>1일째 포함</b>은 시작한 날을 1일로 셉니다. 100일째가 시작일 + 99일이 되고, <b>0일 기준</b>으로 보면 + 100일입니다. 아래 카드에는 두 날짜가 함께 있습니다.',
+      msHead: '100일부터 5주년까지', msNote: '양쪽 관습 함께',
+      bHead: '영업일 계산', bHeadNote: '주말 + 2026 공휴일 제외',
+      bFromLbl: '시작일', bToLbl: '종료일',
+      bSatLbl: '토요일도 영업일로 셈', bHolLbl: '공휴일 제외',
+      bHolHead: '구간 안의 공휴일', bRevHead: '영업일 N일 뒤는 언제인가', bRevNote: '시작일 다음부터 1일째',
+      bNLbl: '영업일 수', bNUnit: '영업일', bRevOutLbl: '도착하는 날',
+      aHead: '만나이·연나이', aHeadNote: '2023년부터 만나이 기준',
+      aBirthLbl: '생년월일', aTodayLbl: '기준일',
+      aNote: '<b>만나이</b>는 생일이 지날 때마다 한 살, <b>연나이</b>는 해가 바뀌면 한 살, <b>세는나이</b>는 태어난 해를 한 살로 셉니다. 2023년 6월 28일부터 법령·행정에서는 만나이를 쓰므로 서류에 적는 나이는 만나이입니다.',
+      sumHead: '요약 — 카톡에 붙여넣기', copyBtn: '요약 복사',
+      sumFoot: '복사는 클립보드로만 갑니다. 어디에도 저장하지 않습니다.',
+      nowHead: '오늘 기준',
+      nowDate: '오늘', nowWeek: '요일', nowDay: '올해 몇 번째 날', nowLeft: '올해 남은 날', nowBiz: '이번 달 남은 영업일', nowNext: '다음 공휴일',
+      howTitle: '셈은 이렇게 합니다', howNote: '규정과 달력 그대로',
+      n1h: '1일째 포함과 0일 기준',
+      n1p: '기념일 관습이 둘로 갈려서 둘 다 계산합니다. <b>1일째 포함</b>은 시작한 날을 1일로 세므로 100일째가 시작일 + 99일이고, <b>0일 기준</b>은 시작한 날을 0으로 두어 100일째가 시작일 + 100일입니다. 카드마다 두 날짜를 함께 적어 두었으니, 상대와 쓰는 관습이 다르면 그 자리에서 확인하면 됩니다.',
+      n2h: '영업일에서 빼는 날',
+      n2p: '토·일과 <b>2026년 법정공휴일</b>을 뺍니다 — 노동절(5/1)과 제헌절(7/17)이 2026년부터 새로 들어왔고, 주말과 겹친 공휴일은 <b>대체공휴일</b>로 옮겨진 날짜까지 반영했습니다. 신정과 현충일은 대체공휴일이 없습니다. 정부가 그때그때 정하는 <b>임시공휴일</b>은 들어 있지 않으니, 그게 걸린 달은 하루 이틀 어긋날 수 있습니다.',
+      n3h: '만나이와 띠',
+      n3p: '만나이는 생일이 지났는지만 보면 되므로 <b>(기준 연도 − 출생 연도)</b>에서 생일이 아직 안 지났으면 1을 뺍니다. 2월 29일생은 평년에 2월 28일을 생일로 봅니다. 띠는 태어난 해의 <b>12지</b>로 정했습니다(2026년은 말). 전통적으로는 설날을 기준으로 띠가 바뀌니, 1~2월 초생은 한 해 앞설 수 있습니다.',
+      faqTitle: '자주 묻는 것', faqNote: '디데이 · 영업일 · 나이',
+      q1: '100일은 첫날을 포함해서 세나요?',
+      a1: '관습이 갈립니다. DateSnap은 둘 다 계산합니다. <b>1일째 포함</b>은 시작한 날을 1일로 세므로 100일째가 시작일 + 99일이고, <b>0일 기준</b>은 시작한 날을 0으로 두어 100일 뒤가 시작일 + 100일입니다. 화면 위 전환으로 두 날짜를 오가며 볼 수 있고, 기념일 카드에는 두 값이 함께 나옵니다.',
+      q2: '영업일에서 빼는 공휴일은 어디까지인가요?',
+      a2: '「관공서의 공휴일에 관한 규정」을 따른 2026년 법정공휴일과 대체공휴일입니다. 2026년부터 새로 공휴일이 된 <b>노동절(5월 1일)</b>과 <b>제헌절(7월 17일)</b>도 들어 있고, 6월 3일 지방선거일처럼 임기가 만료되어 확정된 선거일도 포함합니다. 정부가 따로 정하는 임시공휴일은 들어 있지 않습니다.',
+      q3: '만나이와 연나이는 어떻게 다른가요?',
+      a3: '만나이는 생일이 지날 때마다 한 살이 늘어나는 국제 기준이고, 연나이는 해가 바뀌면 한 살이 늘어나는 계산입니다. 2023년 6월 28일부터 법령과 행정에서는 만나이를 쓰므로, 서류에 적는 나이는 만나이입니다. 세는나이는 태어난 해를 한 살로 세는 옛 방식이라 참고로만 함께 보여 줍니다.',
+      q4: '영업일 N일 뒤는 어떻게 세나요?',
+      a4: '<b>시작일 다음 영업일을 1일째</b>로 셉니다. 시작일이 금요일이고 3영업일이면 수요일입니다. 시작일이 이미 주말이나 공휴일이면 그 뒤 첫 영업일부터 세기 시작합니다. 계약서의 "3영업일 이내"처럼 시작일을 포함해서 세는 경우가 있으니, 상대가 정한 기준이 있으면 그쪽이 맞습니다.',
+      footCopy: '© 2026 Kim Yihyung · 브라우저 안에서, 브라우저를 위해.',
+      footNet: '외부 요청', footP1: '포트폴리오', footP2: '도구 전체', footP3: '소스',
+      mono: '업로드 없음 · 추적 없음', toggleTo: 'View in English',
+      /* dynamic */
+      nA: '—',
+      dayUnit: '일', yearUnit: '년', monthUnit: '개월', ymd: '{y}년 {m}개월 {d}일',
+      dToday: '오늘은 D+{n}', dTodayZero: '오늘은 D+{n}', dPast: '오늘은 D{n}', dSame: '바로 오늘이 기준일입니다',
+      dBasisIncl: '{n}일째', dBasisZero: '{n}일 지남',
+      bothCounts: '1일째 포함 {a}일째 · 0일 기준 {b}일', altOther: '다른 셈',
+      dBaseFmt: '{date} ({week}) 시작',
+      dTodayIs: '오늘 {date} ({week})',
+      dBad: '기준일을 넣어 주세요.',
+      dBigIncl: '{n}일째',
+      dBigZero: 'D+{n}',
+      dMIncl: '{n}일째', dMZero: '{n}일 뒤', dMYears: '{n}주년',
+      stReady: '날짜를 넣으면 바로 계산합니다.',
+      msPast: '{n}일 지남', msLeft: 'D-{n}', msToday: '오늘',
+      bBig: '{n} 영업일', bBigUnit: '영업일',
+      bTotal: '총 일수', bWeekend: '주말 제외', bHolOut: '공휴일 제외', bFirst: '첫 영업일', bLast: '마지막 영업일',
+      bMetaFrom: '{a} → {b}', bNoHols: '구간에 공휴일이 없습니다', bBadRange: '종료일이 시작일보다 빠릅니다 — 두 날짜를 바꿔 볼게요',
+      bRevSame: '시작일이 영업일이면 그날을 1일째로 보는 경우도 있습니다.',
+      bRev: '{date} ({week})',
+      bRevPast: '시작일과 같은 날',
+      aBig: '만 {n}세', aBigUnit: '세',
+      aIntl: '만나이', aYear: '연나이', aCount: '세는나이', aZodiac: '띠',
+      aNextBday: '다음 생일', aBdayWeek: '태어난 요일', aDays: '살아온 날', aUntil: '다음 생일까지',
+      aTodayBday: '오늘 생일입니다', aBdayFmt: '{date} ({week})',
+      wd0: '일', wd1: '월', wd2: '화', wd3: '수', wd4: '목', wd5: '금', wd6: '토',
+      z0: '쥐', z1: '소', z2: '호랑이', z3: '토끼', z4: '용', z5: '뱀', z6: '말', z7: '양', z8: '원숭이', z9: '닭', z10: '개', z11: '돼지',
+      dlDateFormat: '{y}. {m}. {d}.',
+      holNewyear: '신정', holSeollal: '설날 연휴', holMar1: '삼일절', holLabor: '노동절', holChildren: '어린이날',
+      holBuddha: '부처님오신날', holElection: '지방선거일', holMemorial: '현충일', holConstitution: '제헌절',
+      holLiberation: '광복절', holChuseok: '추석 연휴', holGaecheon: '개천절', holHangeul: '한글날', holChristmas: '기독탄신일',
+      subTag: '(대체)',
+      sumDdayHead: '디데이·기념일', sumBizHead: '영업일', sumAgeHead: '만나이',
+      sumBase: '기준일', sumToday: '오늘', sumConv: '세는 방식', sumMilestones: '기념일',
+      sumBizRange: '구간', sumBizTotal: '총 일수', sumBizWeekend: '주말 제외', sumBizHol: '공휴일 제외', sumBizRev: '영업일 {n}일 뒤',
+      sumBirth: '생년월일', sumIntl: '만나이', sumYear: '연나이', sumCount: '세는나이', sumZodiac: '띠', sumNextBday: '다음 생일',
+      sumFoot: 'DateSnap · 브라우저에서 계산 · 업로드 0',
+      sumEmpty: '값이 없습니다.'
+    },
+    en: {
+      docTitle: 'DateSnap — D-day, Business Day & Korean Age Calculator | Kim Yihyung',
+      brandAria: 'Kim Yihyung — portfolio',
+      back: '← All tools',
+      eyebrow: 'DateSnap · D-day · business days · Korean age · zero upload',
+      h1: 'Date arithmetic is easy to get wrong.<br><span class="soft">100 days, business days, Korean age.</span><br><span class="gold">One screen, counted twice.</span>',
+      lede: 'Give one base date and get the <strong>100th, 200th, 300th, 500th and 1000th day</strong> plus the <strong>1st–5th anniversary</strong>, count real <strong>business days</strong> with weekends and the <strong>2026 Korean public holidays (Labour Day and Constitution Day included)</strong> removed, and work out <strong>Korean age, calendar age and the next birthday</strong> from a birth date. The dates you type never leave the tab.',
+      pillUp: '0 bytes uploaded', pillNet: '0 external requests', pill2026: '2026 holidays built in', pillCopy: 'Copy a KakaoTalk summary',
+      calcAria: 'Date calculator', tabAria: 'Calculator',
+      tabDday: 'D-day · anniversary', tabBiz: 'Business days', tabAge: 'Korean age',
+      dHead: 'D-day and anniversaries', dHeadNote: 'from one base date',
+      dBaseLbl: 'Base date (the first day)', todayLbl: 'Today',
+      convLbl: 'Counting', convAria: 'Counting convention', convIncl: 'Day 1 counts', convZero: 'Day 0 start',
+      dNote: '<b>Day 1 counts</b> treats the base date as day one, so the 100th day is base + 99. With a <b>day 0 start</b> it is base + 100. Every card below carries both dates.',
+      msHead: 'From day 100 to the 5th year', msNote: 'both conventions',
+      bHead: 'Business days', bHeadNote: 'weekends + 2026 holidays removed',
+      bFromLbl: 'Start', bToLbl: 'End',
+      bSatLbl: 'Count Saturday as a business day', bHolLbl: 'Skip public holidays',
+      bHolHead: 'Holidays inside the range', bRevHead: 'What date is N business days later', bRevNote: 'the day after the start is day 1',
+      bNLbl: 'Business days', bNUnit: 'days', bRevOutLbl: 'Arrives on',
+      aHead: 'Korean age', aHeadNote: 'the legal age since 2023',
+      aBirthLbl: 'Date of birth', aTodayLbl: 'As of',
+      aNote: '<b>Korean age</b> (만나이) adds a year on each birthday, the <b>calendar age</b> (연나이) adds one on 1 January, and the old <b>counting age</b> (세는나이) starts at one at birth. Since 28 June 2023 Korean law and administration use the birthday-based age, so that is the one you write on a form.',
+      sumHead: 'Summary — paste into KakaoTalk', copyBtn: 'Copy summary',
+      sumFoot: 'The copy goes to the clipboard only. Nothing is stored.',
+      nowHead: 'Today at a glance',
+      nowDate: 'Today', nowWeek: 'Weekday', nowDay: 'Day of the year', nowLeft: 'Days left this year', nowBiz: 'Business days left this month', nowNext: 'Next public holiday',
+      howTitle: 'How the counting works', howNote: 'by regulation and by calendar',
+      n1h: 'Day 1 or day 0',
+      n1p: 'Anniversary custom splits in two, so both are computed. <b>Day 1 counts</b> makes the base date day one, so the 100th day is base + 99; a <b>day 0 start</b> puts the base date at zero, so the 100th day is base + 100. Each card carries both dates, so you can settle the convention with the other person on the spot.',
+      n2h: 'What a business day skips',
+      n2p: 'Saturdays, Sundays and the <b>2026 Korean public holidays</b> — Labour Day (1 May) and Constitution Day (17 July) are new that year, and holidays that landed on a weekend appear on their <b>substitute</b> weekday. New Year\'s Day and Memorial Day never move. <b>Temporary holidays</b> declared by the government are not in the list, so a month with one can be a day or two off.',
+      n3h: 'Age and the zodiac animal',
+      n3p: 'The birthday-based age only needs to know whether the birthday has passed: <b>(reference year − birth year)</b>, minus one before the birthday. A 29 February birthday is treated as 28 February in common years. The zodiac animal comes from the <b>twelve earthly branches</b> of the birth year (2026 is the horse). Traditionally it changes at Seollal, so a birth in January or early February can belong to the previous animal.',
+      faqTitle: 'Questions', faqNote: 'D-day · business days · age',
+      q1: 'Does the 100th day count the first day?',
+      a1: 'Custom splits, so DateSnap computes both. <b>Day 1 counts</b> makes the base date day one, so the 100th day is base + 99; a <b>day 0 start</b> makes the 100th day base + 100. The switch at the top moves between the two, and every anniversary card carries both values.',
+      q2: 'Which holidays are skipped?',
+      a2: 'The 2026 Korean public holidays and their substitute days under the Regulation on Public Holidays of Public Offices — including <b>Labour Day (1 May)</b> and <b>Constitution Day (17 July)</b>, new that year, and the 3 June local election day. Temporary holidays declared by the government are not included.',
+      q3: 'How do Korean age and calendar age differ?',
+      a3: 'The birthday-based age (만나이) adds a year on each birthday, which is the international rule; the calendar age (연나이) adds one on 1 January. Since 28 June 2023 Korean law and administration use the birthday-based age, so that is what goes on a form. The old counting age (세는나이) starts at one at birth and is shown for reference only.',
+      q4: 'How is "N business days later" counted?',
+      a4: 'The <b>first business day after the start date is day 1</b>. A Friday start with 3 business days lands on Wednesday. If the start date is already a weekend or holiday, counting begins at the next business day. Contracts sometimes count the start date itself, so if the other side has a stated rule, that rule wins.',
+      footCopy: '© 2026 Kim Yihyung · Built in the browser, for the browser.',
+      footNet: 'external requests', footP1: 'Portfolio', footP2: 'All tools', footP3: 'Source',
+      mono: 'NO UPLOADS · NO TRACKING', toggleTo: '한국어로 보기',
+      /* dynamic */
+      nA: '—',
+      dayUnit: 'd', yearUnit: 'y', monthUnit: 'mo', ymd: '{y}y {m}m {d}d',
+      dToday: 'Today is D+{n}', dTodayZero: 'Today is D+{n}', dPast: 'Today is D{n}', dSame: 'Today is the base date itself',
+      dBasisIncl: 'day {n}', dBasisZero: '{n} days in',
+      bothCounts: '{a} days by day 1 · {b} days from day 0', altOther: 'other count',
+      dBaseFmt: 'started {date} ({week})',
+      dTodayIs: 'today {date} ({week})',
+      dBad: 'Enter a base date.',
+      dBigIncl: 'Day {n}',
+      dBigZero: 'D+{n}',
+      dMIncl: 'day {n}', dMZero: '{n} days', dMYears: 'year {n}',
+      stReady: 'Pick a date and the numbers appear.',
+      msPast: '{n} days ago', msLeft: 'D-{n}', msToday: 'today',
+      bBig: '{n} business days', bBigUnit: 'business days',
+      bTotal: 'Days total', bWeekend: 'Weekend days out', bHolOut: 'Holidays out', bFirst: 'First business day', bLast: 'Last business day',
+      bMetaFrom: '{a} → {b}', bNoHols: 'No public holiday in the range', bBadRange: 'The end is before the start — swapping them',
+      bRevSame: 'Some contracts count the start date itself as day 1.',
+      bRev: '{date} ({week})',
+      bRevPast: 'same day as the start',
+      aBig: 'Age {n}', aBigUnit: 'years',
+      aIntl: 'Age (birthday)', aYear: 'Calendar age', aCount: 'Counting age', aZodiac: 'Zodiac',
+      aNextBday: 'Next birthday', aBdayWeek: 'Born on a', aDays: 'Days lived', aUntil: 'Until the next birthday',
+      aTodayBday: 'The birthday is today', aBdayFmt: '{date} ({week})',
+      wd0: 'Sun', wd1: 'Mon', wd2: 'Tue', wd3: 'Wed', wd4: 'Thu', wd5: 'Fri', wd6: 'Sat',
+      z0: 'Rat', z1: 'Ox', z2: 'Tiger', z3: 'Rabbit', z4: 'Dragon', z5: 'Snake', z6: 'Horse', z7: 'Goat', z8: 'Monkey', z9: 'Rooster', z10: 'Dog', z11: 'Pig',
+      dlDateFormat: '{y}-{m}-{d}',
+      holNewyear: "New Year's Day", holSeollal: 'Seollal', holMar1: 'Independence Movement Day', holLabor: 'Labour Day', holChildren: "Children's Day",
+      holBuddha: "Buddha's Birthday", holElection: 'Local Election Day', holMemorial: 'Memorial Day', holConstitution: 'Constitution Day',
+      holLiberation: 'Liberation Day', holChuseok: 'Chuseok', holGaecheon: 'National Foundation Day', holHangeul: 'Hangeul Day', holChristmas: 'Christmas',
+      subTag: '(substitute)',
+      sumDdayHead: 'D-day · anniversary', sumBizHead: 'Business days', sumAgeHead: 'Korean age',
+      sumBase: 'Base date', sumToday: 'Today', sumConv: 'Counting', sumMilestones: 'Milestones',
+      sumBizRange: 'Range', sumBizTotal: 'Days total', sumBizWeekend: 'Weekend days out', sumBizHol: 'Holidays out', sumBizRev: '{n} business days later',
+      sumBirth: 'Date of birth', sumIntl: 'Age', sumYear: 'Calendar age', sumCount: 'Counting age', sumZodiac: 'Zodiac', sumNextBday: 'Next birthday',
+      sumFoot: 'DateSnap · calculated in the browser · 0 bytes uploaded',
+      sumEmpty: 'Nothing to show yet.'
+    }
+  };
+
+  var LANG_KEY = 'datesnap.lang';
+  var SHARED_KEY = 'kyh.lang';
+
+  /* ═════════════════════ 공휴일 데이터 ═════════════════════ */
+  /* 「관공서의 공휴일에 관한 규정」(2026.4.30 개정, 시행 2026.5.11)
+     · 2026년부터 노동절(5/1)·제헌절(7/17) 공휴일
+     · 대체공휴일: 국경일·부처님오신날·노동절·어린이날·성탄절이 토·일과 겹칠 때,
+       설·추석 연휴가 일요일과 겹칠 때 → 다음 첫 비공휴일
+     · 신정·현충일은 대체 없음 / 임시공휴일 미포함 (6/3 지방선거일은 확정 임기만료 선거일) */
+  var HOLIDAYS = [
+    { d: '2026-01-01', k: 'newyear' },
+    { d: '2026-02-16', k: 'seollal' },
+    { d: '2026-02-17', k: 'seollal' },
+    { d: '2026-02-18', k: 'seollal' },
+    { d: '2026-03-01', k: 'mar1' },
+    { d: '2026-03-02', k: 'mar1', sub: true },
+    { d: '2026-05-01', k: 'labor' },
+    { d: '2026-05-05', k: 'children' },
+    { d: '2026-05-24', k: 'buddha' },
+    { d: '2026-05-25', k: 'buddha', sub: true },
+    { d: '2026-06-03', k: 'election' },
+    { d: '2026-06-06', k: 'memorial' },
+    { d: '2026-07-17', k: 'constitution' },
+    { d: '2026-08-15', k: 'liberation' },
+    { d: '2026-08-17', k: 'liberation', sub: true },
+    { d: '2026-09-24', k: 'chuseok' },
+    { d: '2026-09-25', k: 'chuseok' },
+    { d: '2026-09-26', k: 'chuseok' },
+    { d: '2026-10-03', k: 'gaecheon' },
+    { d: '2026-10-05', k: 'gaecheon', sub: true },
+    { d: '2026-10-09', k: 'hangeul' },
+    { d: '2026-12-25', k: 'christmas' },
+    /* 다음 해로 넘어가는 구간도 어긋나지 않게 2027년치를 함께 둔다 */
+    { d: '2027-01-01', k: 'newyear' },
+    { d: '2027-02-06', k: 'seollal' },
+    { d: '2027-02-07', k: 'seollal' },
+    { d: '2027-02-08', k: 'seollal' },
+    { d: '2027-02-09', k: 'seollal', sub: true },
+    { d: '2027-03-01', k: 'mar1' },
+    { d: '2027-05-01', k: 'labor' },
+    { d: '2027-05-03', k: 'labor', sub: true },
+    { d: '2027-05-05', k: 'children' },
+    { d: '2027-05-13', k: 'buddha' },
+    { d: '2027-06-06', k: 'memorial' },
+    { d: '2027-07-17', k: 'constitution' },
+    { d: '2027-07-19', k: 'constitution', sub: true },
+    { d: '2027-08-15', k: 'liberation' },
+    { d: '2027-08-16', k: 'liberation', sub: true },
+    { d: '2027-09-14', k: 'chuseok' },
+    { d: '2027-09-15', k: 'chuseok' },
+    { d: '2027-09-16', k: 'chuseok' },
+    { d: '2027-10-03', k: 'gaecheon' },
+    { d: '2027-10-04', k: 'gaecheon', sub: true },
+    { d: '2027-10-09', k: 'hangeul' },
+    { d: '2027-10-11', k: 'hangeul', sub: true },
+    { d: '2027-12-25', k: 'christmas' },
+    { d: '2027-12-27', k: 'christmas', sub: true }
+  ];
+  var HOLMAP = {};
+  for (var hi = 0; hi < HOLIDAYS.length; hi++) HOLMAP[HOLIDAYS[hi].d] = HOLIDAYS[hi];
+
+  /* ═════════════════════ state ═════════════════════ */
+  var state = {
+    lang: 'ko',
+    tab: 'dday',
+    conv: 'inclusive',
+    today: null
+  };
+
+  function $(id) { return document.getElementById(id); }
+  function t(key) {
+    var d = I18N[state.lang] || I18N.ko;
+    if (d[key] != null) return d[key];
+    var e = I18N.ko[key];
+    return e != null ? e : key;
+  }
+  function fmt(s, o) {
+    return String(s).replace(/\{(\w+)\}/g, function (m, k) { return o[k] != null ? o[k] : m; });
+  }
+  function nInt(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+
+  /* ═════════════════════ date helpers ═════════════════════ */
+  var DAY = 86400000;
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
+  function ymd(d) { return d.getUTCFullYear() + '-' + pad2(d.getUTCMonth() + 1) + '-' + pad2(d.getUTCDate()); }
+  function mk(y, m, d) { return new Date(Date.UTC(y, m - 1, d)); }
+  function parse(s) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s || ''));
+    if (!m) return null;
+    var y = +m[1], mo = +m[2], da = +m[3];
+    if (mo < 1 || mo > 12 || da < 1 || da > 31) return null;
+    return mk(y, mo, da);
+  }
+  function todayDate() {
+    var n = new Date();
+    return mk(n.getFullYear(), n.getMonth() + 1, n.getDate());
+  }
+  function daysBetween(a, b) { return Math.round((b.getTime() - a.getTime()) / DAY); }
+  function addDays(a, n) { return new Date(a.getTime() + n * DAY); }
+  function wd(d) { return d.getUTCDay(); }
+  function weekdayName(d) { return t('wd' + wd(d)); }
+  function dstr(d) {
+    return state.lang === 'ko'
+      ? d.getUTCFullYear() + '. ' + (d.getUTCMonth() + 1) + '. ' + d.getUTCDate() + '.'
+      : d.getUTCFullYear() + '-' + pad2(d.getUTCMonth() + 1) + '-' + pad2(d.getUTCDate());
+  }
+  function dstrShort(d) {
+    return state.lang === 'ko'
+      ? (d.getUTCMonth() + 1) + '월 ' + d.getUTCDate() + '일'
+      : d.getUTCDate() + ' ' + ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getUTCMonth()];
+  }
+  function fullDate(d) { return dstr(d) + ' (' + weekdayName(d) + ')'; }
+  function isHoliday(d) { return !!HOLMAP[ymd(d)]; }
+  function isWeekend(d) { var w = wd(d); return w === 0 || w === 6; }
+  function isBusiness(d, satWork, skipHol) {
+    if (wd(d) === 0) return false;
+    if (wd(d) === 6 && !satWork) return false;
+    if (skipHol && isHoliday(d)) return false;
+    return true;
+  }
+  function holName(code) { return t('hol' + code.charAt(0).toUpperCase() + code.slice(1)); }
+
+  /* ═════════════════════ 디데이 ═════════════════════ */
+  var MILESTONES = [
+    { kind: 'day', n: 100 }, { kind: 'day', n: 200 }, { kind: 'day', n: 300 },
+    { kind: 'day', n: 500 }, { kind: 'day', n: 1000 },
+    { kind: 'year', n: 1 }, { kind: 'year', n: 2 }, { kind: 'year', n: 3 }, { kind: 'year', n: 4 }, { kind: 'year', n: 5 }
+  ];
+  function convOffset() { return state.conv === 'inclusive' ? -1 : 0; }
+  function anniv(base, years) {
+    var y = base.getUTCFullYear() + years;
+    var m = base.getUTCMonth() + 1, d = base.getUTCDate();
+    var out = mk(y, m, d);
+    if (out.getUTCMonth() + 1 !== m) out = mk(y, m + 1, 0); /* 2/29 → 그달 마지막 날 */
+    return out;
+  }
+  function milestoneDate(base, ms) {
+    return ms.kind === 'day'
+      ? addDays(base, ms.n + convOffset())
+      : anniv(base, ms.n);
+  }
+
+  function paintDday() {
+    var base = parse($('dBase').value);
+    var today = parse($('dToday').value) || state.today;
+    var grid = $('msGrid');
+    grid.innerHTML = '';
+    if (!base) {
+      $('dBig').textContent = '—';
+      $('dMeta').textContent = t('dBad');
+      $('dResult').className = 'result';
+      return;
+    }
+    var diff = daysBetween(base, today);
+    if (diff >= 0) {
+      $('dBig').textContent = state.conv === 'inclusive'
+        ? fmt(t('dBigIncl'), { n: nInt(diff + 1) })
+        : fmt(t('dBigZero'), { n: nInt(diff) });
+    } else {
+      $('dBig').textContent = fmt(t('dPast'), { n: nInt(diff) });
+    }
+    $('dMeta').innerHTML =
+      '<span>' + fmt(t('dBaseFmt'), { date: dstr(base), week: weekdayName(base) }) + '</span>' +
+      '<span>' + fmt(t('dTodayIs'), { date: dstr(today), week: weekdayName(today) }) + '</span>' +
+      '<span>' + fmt(t('bothCounts'), { a: nInt(diff + 1), b: nInt(diff) }) + '</span>';
+    $('dResult').className = 'result' + (diff === 0 ? ' is-ok' : '');
+
+    for (var i = 0; i < MILESTONES.length; i++) {
+      var ms = MILESTONES[i];
+      var d = milestoneDate(base, ms);
+      var left = daysBetween(today, d);
+      var el = document.createElement('div');
+      var label = ms.kind === 'day'
+        ? (ms.n + t('dayUnit'))
+        : fmt(t('dMYears'), { n: ms.n });
+      var meta;
+      if (left === 0) meta = t('msToday');
+      else if (left > 0) meta = fmt(t('msLeft'), { n: nInt(left) });
+      else meta = fmt(t('msPast'), { n: nInt(-left) });
+      var altTxt = '';
+      if (ms.kind === 'day') {
+        var alt = addDays(base, ms.n + (convOffset() === -1 ? 0 : -1));
+        altTxt = ' · ' + t('altOther') + ' ' + dstrShort(alt);
+      }
+      el.className = 'ms' + (left < 0 ? ' is-past' : '') + (left === 0 ? ' is-today' : '');
+      el.innerHTML = '<span class="k">' + label + '</span>' +
+        '<span class="d">' + fullDate(d) + '</span>' +
+        '<span class="m">' + meta + altTxt + '</span>';
+      grid.appendChild(el);
+    }
+  }
+
+  /* ═════════════════════ 영업일 ═════════════════════ */
+  function bizCount(from, to, satWork, skipHol) {
+    var total = daysBetween(from, to) + 1;
+    var biz = 0, weekend = 0, holOut = 0;
+    var holList = [];
+    if (total <= 0) return { total: 0, biz: 0, weekend: 0, holOut: 0, holList: [], first: null, last: null };
+    var cur = from;
+    for (var i = 0; i < total; i++) {
+      var w = wd(cur);
+      var isWeekendDay = (w === 0 || (w === 6 && !satWork));
+      var h = skipHol ? HOLMAP[ymd(cur)] : null;
+      if (h && isWeekendDay) { weekend++; if (holList.indexOf(h) < 0) holList.push(h); }
+      else if (h) { holOut++; if (holList.indexOf(h) < 0) holList.push(h); }
+      else if (isWeekendDay) weekend++;
+      else biz++;
+      cur = addDays(cur, 1);
+    }
+    var first = null, last = null;
+    cur = from;
+    for (i = 0; i < total; i++) {
+      if (isBusiness(cur, satWork, skipHol)) { if (!first) first = cur; last = cur; }
+      cur = addDays(cur, 1);
+    }
+    return { total: total, biz: biz, weekend: weekend, holOut: holOut, holList: holList, first: first, last: last };
+  }
+  function bizAdd(from, n, satWork, skipHol) {
+    var cur = addDays(from, 1), count = 0, guard = 0;
+    while (guard < 4000) {
+      if (isBusiness(cur, satWork, skipHol)) {
+        count++;
+        if (count >= n) return cur;
+      }
+      cur = addDays(cur, 1); guard++;
+    }
+    return null;
+  }
+
+  function paintBiz() {
+    var from = parse($('bFrom').value);
+    var to = parse($('bTo').value);
+    var satWork = $('bSat').checked;
+    var skipHol = $('bHol').checked;
+    var rows = $('bRows');
+    var holBox = $('bHols');
+    rows.innerHTML = ''; holBox.innerHTML = '';
+    if (!from || !to) {
+      $('bBig').textContent = '—';
+      $('bMeta').textContent = '—';
+      $('bRevOut').textContent = '—';
+      return;
+    }
+    var swap = daysBetween(from, to) < 0;
+    if (swap) { var tmp = from; from = to; to = tmp; }
+    var r = bizCount(from, to, satWork, skipHol);
+    $('bBig').textContent = nInt(r.biz);
+    $('bMeta').innerHTML =
+      '<span>' + fmt(t('bMetaFrom'), { a: fullDate(from), b: fullDate(to) }) + '</span>' +
+      '<span>' + t('bBigUnit') + '</span>';
+    var li = '';
+    li += '<li><span>' + t('bTotal') + '</span><b>' + nInt(r.total) + t('dayUnit') + '</b></li>';
+    li += '<li><span>' + t('bWeekend') + '</span><b>' + nInt(r.weekend) + t('dayUnit') + '</b></li>';
+    li += '<li><span>' + t('bHolOut') + '</span><b>' + nInt(r.holOut) + t('dayUnit') + '</b></li>';
+    li += '<li><span>' + t('bFirst') + '</span><b>' + (r.first ? dstrShort(r.first) + ' (' + weekdayName(r.first) + ')' : '—') + '</b></li>';
+    li += '<li class="is-key"><span>' + t('bLast') + '</span><b>' + (r.last ? dstrShort(r.last) + ' (' + weekdayName(r.last) + ')' : '—') + '</b></li>';
+    rows.innerHTML = li;
+
+    if (r.holList.length) {
+      for (var i = 0; i < r.holList.length; i++) {
+        var h = r.holList[i];
+        var s = document.createElement('span');
+        s.className = 'hchip';
+        s.innerHTML = dstrShort(parse(h.d)) + ' <em>' + holName(h.k) + (h.sub ? ' ' + t('subTag') : '') + '</em>';
+        holBox.appendChild(s);
+      }
+    } else {
+      var s2 = document.createElement('span');
+      s2.className = 'status';
+      s2.textContent = t('bNoHols');
+      holBox.appendChild(s2);
+    }
+
+    var n = Math.max(1, Math.min(999, parseInt($('bN').value, 10) || 1));
+    var target = bizAdd(from, n, satWork, skipHol);
+    $('bRevOut').textContent = target ? fmt(t('bRev'), { date: dstr(target), week: weekdayName(target) }) : '—';
+    $('bStatus').textContent = swap ? t('bBadRange') : (n === 1 ? '' : t('bRevSame'));
+    $('bStatus').className = 'status' + (swap ? ' is-warn' : '');
+  }
+
+  /* ═════════════════════ 만나이 ═════════════════════ */
+  function intlAge(birth, ref) {
+    var a = ref.getUTCFullYear() - birth.getUTCFullYear();
+    var bm = birth.getUTCMonth() + 1, bd = birth.getUTCDate();
+    var rm = ref.getUTCMonth() + 1, rd = ref.getUTCDate();
+    /* 2/29생은 평년에 2/28을 생일로 본다 */
+    if (bm === 2 && bd === 29 && !isLeap(ref.getUTCFullYear())) bd = 28;
+    if (rm < bm || (rm === bm && rd < bd)) a -= 1;
+    return a;
+  }
+  function isLeap(y) { return (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0; }
+  function nextBirthday(birth, ref, yearsAhead) {
+    var m = birth.getUTCMonth() + 1, d = birth.getUTCDate();
+    var y = ref.getUTCFullYear();
+    var cand = mk(y, m, d);
+    if (m === 2 && d === 29 && !isLeap(y)) cand = mk(y, 2, 28);
+    var guard = 0;
+    while (daysBetween(ref, cand) < (yearsAhead ? 0 : 0) && guard < 3) { y++; cand = mk(y, m, d); if (m === 2 && d === 29 && !isLeap(y)) cand = mk(y, 2, 28); guard++; }
+    return cand;
+  }
+  function paintAge() {
+    var birth = parse($('aBirth').value);
+    var ref = parse($('aToday').value) || state.today;
+    var rows = $('aRows');
+    rows.innerHTML = '';
+    if (!birth) {
+      $('aBig').textContent = '—';
+      $('aMeta').textContent = '—';
+      return;
+    }
+    var age = intlAge(birth, ref);
+    var calAge = ref.getUTCFullYear() - birth.getUTCFullYear();
+    var countAge = calAge + 1;
+    var zodiac = ((birth.getUTCFullYear() - 4) % 12 + 12) % 12;
+    var nb = nextBirthday(birth, ref);
+    var toBday = daysBetween(ref, nb);
+    if (toBday === 0) {
+      nb = nextBirthday(birth, addDays(ref, 1));
+      toBday = daysBetween(ref, nb);
+    }
+    var lived = daysBetween(birth, ref);
+    $('aBig').textContent = fmt(t('aBig'), { n: age });
+    $('aMeta').innerHTML =
+      '<span>' + fullDate(ref) + '</span>' +
+      '<span>' + t('sumBirth') + ' ' + fullDate(birth) + '</span>';
+    var li = '';
+    li += '<li><span>' + t('aIntl') + '</span><b>' + age + t('aBigUnit') + '</b></li>';
+    li += '<li><span>' + t('aYear') + '</span><b>' + calAge + t('aBigUnit') + '</b></li>';
+    li += '<li><span>' + t('aCount') + '</span><b>' + countAge + t('aBigUnit') + '</b></li>';
+    li += '<li><span>' + t('aZodiac') + '</span><b>' + t('z' + zodiac) + '</b></li>';
+    li += '<li><span>' + t('aBdayWeek') + '</span><b>' + weekdayName(birth) + '</b></li>';
+    li += '<li><span>' + t('aDays') + '</span><b>' + nInt(lived) + t('dayUnit') + '</b></li>';
+    li += '<li><span>' + t('aNextBday') + '</span><b>' + fullDate(nb) + '</b></li>';
+    li += '<li class="is-key"><span>' + t('aUntil') + '</span><b>' + (toBday === 0 ? t('aTodayBday') : 'D-' + nInt(toBday)) + '</b></li>';
+    rows.innerHTML = li;
+  }
+
+  /* ═════════════════════ 오늘 기준 ═════════════════════ */
+  function paintToday() {
+    var d = state.today;
+    var y = d.getUTCFullYear();
+    var start = mk(y, 1, 1), end = mk(y, 12, 31);
+    $('nowDate').textContent = dstr(d);
+    $('nowWeek').textContent = weekdayName(d) + (state.lang === 'ko' ? '요일' : '');
+    $('nowDay').textContent = (daysBetween(start, d) + 1) + t('dayUnit');
+    $('nowLeft').textContent = daysBetween(d, end) + t('dayUnit');
+    var mEnd = mk(y, d.getUTCMonth() + 1, new Date(Date.UTC(y, d.getUTCMonth() + 1, 0)).getUTCDate());
+    var tomorrow = addDays(d, 1);
+    var r = daysBetween(tomorrow, mEnd) >= 0 ? bizCount(tomorrow, mEnd, false, true) : { biz: 0 };
+    $('nowBiz').textContent = nInt(r.biz) + t('dayUnit');
+    var next = null;
+    for (var i = 0; i < HOLIDAYS.length; i++) {
+      var hd = parse(HOLIDAYS[i].d);
+      if (daysBetween(d, hd) > 0) { next = HOLIDAYS[i]; break; }
+    }
+    $('nowNext').textContent = next
+      ? dstrShort(parse(next.d)) + ' · ' + holName(next.k) + ' (D-' + daysBetween(d, parse(next.d)) + ')'
+      : t('nA');
+  }
+
+  /* ═════════════════════ 요약 ═════════════════════ */
+  function summaryText() {
+    var l = [];
+    if (state.tab === 'dday') {
+      var base = parse($('dBase').value), today = parse($('dToday').value) || state.today;
+      l.push('[DateSnap] ' + t('sumDdayHead'));
+      if (base) {
+        var diff = daysBetween(base, today);
+        l.push(t('sumBase') + ' ' + dstr(base) + ' (' + weekdayName(base) + ')');
+        l.push(t('sumToday') + ' ' + dstr(today) + ' (' + weekdayName(today) + ')');
+        l.push(t('sumConv') + ' ' + (state.conv === 'inclusive' ? t('convIncl') : t('convZero')));
+        l.push(diff >= 0 ? fmt(t('dToday'), { n: nInt(diff) }) : fmt(t('dPast'), { n: nInt(diff) }));
+        l.push('· ' + t('sumMilestones'));
+        for (var i = 0; i < MILESTONES.length; i++) {
+          var ms = MILESTONES[i];
+          var d0 = milestoneDate(base, ms);
+          var left = daysBetween(today, d0);
+          var label = ms.kind === 'day' ? (ms.n + t('dayUnit')) : fmt(t('dMYears'), { n: ms.n });
+          l.push(label + ' · ' + dstr(d0) + ' (' + weekdayName(d0) + ') · ' + (left === 0 ? t('msToday') : left > 0 ? 'D-' + nInt(left) : fmt(t('msPast'), { n: nInt(-left) })));
+        }
+      } else l.push(t('sumEmpty'));
+    } else if (state.tab === 'biz') {
+      var from = parse($('bFrom').value), to = parse($('bTo').value);
+      l.push('[DateSnap] ' + t('sumBizHead'));
+      if (from && to) {
+        if (daysBetween(from, to) < 0) { var tmp = from; from = to; to = tmp; }
+        var r = bizCount(from, to, $('bSat').checked, $('bHol').checked);
+        l.push(t('sumBizRange') + ' ' + dstr(from) + ' ~ ' + dstr(to));
+        l.push(t('bBigUnit') + ' ' + nInt(r.biz) + t('dayUnit'));
+        l.push(t('sumBizTotal') + ' ' + nInt(r.total) + t('dayUnit') + ' · ' + t('sumBizWeekend') + ' ' + nInt(r.weekend) + t('dayUnit') + ' · ' + t('sumBizHol') + ' ' + nInt(r.holOut) + t('dayUnit'));
+        var n = Math.max(1, Math.min(999, parseInt($('bN').value, 10) || 1));
+        var target = bizAdd(from, n, $('bSat').checked, $('bHol').checked);
+        if (target) l.push(fmt(t('sumBizRev'), { n: n }) + ' · ' + dstr(target) + ' (' + weekdayName(target) + ')');
+      } else l.push(t('sumEmpty'));
+    } else {
+      var birth = parse($('aBirth').value);
+      l.push('[DateSnap] ' + t('sumAgeHead'));
+      if (birth) {
+        var ref = parse($('aToday').value) || state.today;
+        var age = intlAge(birth, ref);
+        var z = ((birth.getUTCFullYear() - 4) % 12 + 12) % 12;
+        var nb = nextBirthday(birth, ref);
+        var toB = daysBetween(ref, nb);
+        l.push(t('sumBirth') + ' ' + dstr(birth) + ' (' + weekdayName(birth) + ')');
+        l.push(t('sumIntl') + ' ' + age + t('aBigUnit') + ' · ' + t('sumYear') + ' ' + (ref.getUTCFullYear() - birth.getUTCFullYear()) + t('aBigUnit') + ' · ' + t('sumCount') + ' ' + (ref.getUTCFullYear() - birth.getUTCFullYear() + 1) + t('aBigUnit'));
+        l.push(t('sumZodiac') + ' ' + t('z' + z));
+        l.push(t('sumNextBday') + ' ' + dstr(nb) + ' (' + weekdayName(nb) + ') · ' + (toB === 0 ? t('aTodayBday') : 'D-' + toB));
+      } else l.push(t('sumEmpty'));
+    }
+    l.push(t('sumFoot'));
+    return l.join('\n');
+  }
+  function paintSummary() { $('sumText').textContent = summaryText(); }
+
+  function paintAll() {
+    paintDday();
+    paintBiz();
+    paintAge();
+    paintToday();
+    paintSummary();
+  }
+
+  /* ═════════════════════ clipboard ═════════════════════ */
+  function copyText(text) {
+    return new Promise(function (resolve, reject) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(resolve, function () { fallback(); });
+      } else fallback();
+      function fallback() {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.setAttribute('readonly', '');
+          ta.style.cssText = 'position:fixed;top:-1000px;left:-1000px;opacity:0';
+          document.body.appendChild(ta);
+          ta.select();
+          var ok = document.execCommand('copy');
+          document.body.removeChild(ta);
+          ok ? resolve() : reject(new Error('copy'));
+        } catch (e) { reject(e); }
+      }
+    });
+  }
+
+  /* ═════════════════════ events ═════════════════════ */
+  function selectTab(id) {
+    state.tab = id;
+    var tabs = [['dday', 'tab-dday', 'panel-dday'], ['biz', 'tab-biz', 'panel-biz'], ['age', 'tab-age', 'panel-age']];
+    tabs.forEach(function (x) {
+      var isOn = x[0] === id;
+      $(x[1]).setAttribute('aria-selected', String(isOn));
+      $(x[1]).tabIndex = isOn ? 0 : -1;
+      $(x[2]).hidden = !isOn;
+    });
+    paintSummary();
+  }
+  $('tab-dday').addEventListener('click', function () { selectTab('dday'); });
+  $('tab-biz').addEventListener('click', function () { selectTab('biz'); });
+  $('tab-age').addEventListener('click', function () { selectTab('age'); });
+
+  Array.prototype.forEach.call(document.querySelectorAll('#conv button'), function (b) {
+    b.addEventListener('click', function () {
+      Array.prototype.forEach.call(document.querySelectorAll('#conv button'), function (o) { o.setAttribute('aria-pressed', String(o === b)); });
+      state.conv = b.getAttribute('data-conv');
+      paintDday(); paintSummary();
+    });
+  });
+
+  ['dBase', 'dToday'].forEach(function (id) {
+    $(id).addEventListener('input', function () { paintDday(); paintSummary(); });
+    $(id).addEventListener('change', function () { paintDday(); paintSummary(); });
+  });
+  ['bFrom', 'bTo', 'bN'].forEach(function (id) {
+    $(id).addEventListener('input', function () { paintBiz(); paintSummary(); });
+    $(id).addEventListener('change', function () { paintBiz(); paintSummary(); });
+  });
+  ['bSat', 'bHol'].forEach(function (id) {
+    $(id).addEventListener('change', function () { paintBiz(); paintSummary(); });
+  });
+  ['aBirth', 'aToday'].forEach(function (id) {
+    $(id).addEventListener('input', function () { paintAge(); paintSummary(); });
+    $(id).addEventListener('change', function () { paintAge(); paintSummary(); });
+  });
+
+  $('copySum').addEventListener('click', function () {
+    copyText(summaryText()).then(function () {
+      $('sumStatus').textContent = state.lang === 'ko' ? '클립보드에 복사했습니다.' : 'Copied to the clipboard.';
+      $('sumStatus').className = 'status is-ok';
+    }, function () {
+      $('sumStatus').textContent = state.lang === 'ko' ? '복사에 실패했습니다 — 요약을 직접 선택해 복사해 주세요.' : 'Copy failed — select the summary and copy it by hand.';
+      $('sumStatus').className = 'status is-warn';
+    });
+  });
+
+  /* ═════════════════════ language ═════════════════════ */
+  function readLang(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function initialLang() {
+    var q = '';
+    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
+    if (q === 'ko' || q === 'en') return q;
+    return readLang(SHARED_KEY) || readLang(LANG_KEY) || 'ko';
+  }
+  function setMeta(sel, attr, val) {
+    var el = document.querySelector(sel);
+    if (el) el.setAttribute(attr, val);
+  }
+  function applyLang(lang) {
+    state.lang = lang === 'en' ? 'en' : 'ko';
+    document.documentElement.setAttribute('lang', state.lang);
+    document.title = t('docTitle');
+    setMeta('meta[property="og:title"]', 'content', t('docTitle').split('|')[0].trim());
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var v = t(nodes[i].getAttribute('data-i18n'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-html'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-aria'));
+      if (v) nodes[i].setAttribute('aria-label', v);
+    }
+    var lt = $('langToggle');
+    if (lt) {
+      var spans = lt.querySelectorAll('[data-lt]');
+      for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
+      lt.setAttribute('aria-label', t('toggleTo'));
+      lt.setAttribute('title', t('toggleTo'));
+    }
+    paintAll();
+    try { localStorage.setItem(LANG_KEY, state.lang); localStorage.setItem(SHARED_KEY, state.lang); } catch (e) { /* blocked */ }
+  }
+  $('langToggle').addEventListener('click', function () {
+    applyLang(state.lang === 'ko' ? 'en' : 'ko');
+  });
+
+  /* ═════════════════════ boot ═════════════════════ */
+  state.today = todayDate();
+  var td = ymd(state.today);
+  $('dToday').value = td;
+  $('aToday').value = td;
+  $('aBirth').value = '2001-10-09';
+  $('dBase').value = td;
+  var d0 = addDays(state.today, -42);
+  $('bFrom').value = ymd(d0);
+  $('bTo').value = ymd(state.today);
+
+  selectTab('dday');
+  applyLang(initialLang());
+
+  /* read-only hook for tests and automation */
+  window.DateSnap = {
+    version: '1.0',
+    today: function () { return ymd(state.today); },
+    holidays: function (year) { return HOLIDAYS.filter(function (h) { return !year || h.d.indexOf(year) === 0; }).map(function (h) { return { d: h.d, k: h.k, sub: !!h.sub }; }); },
+    dday: function (base, today, conv) {
+      var b = parse(base) || state.today;
+      var c = parse(today) || state.today;
+      var cv = conv === 'zero' ? 'zero' : 'inclusive';
+      var out = { base: ymd(b), today: ymd(c), diff: daysBetween(b, c), conv: cv, ms: [] };
+      for (var i = 0; i < MILESTONES.length; i++) {
+        var ms = MILESTONES[i];
+        var d = ms.kind === 'day' ? addDays(b, ms.n + (cv === 'inclusive' ? -1 : 0)) : anniv(b, ms.n);
+        out.ms.push({ label: ms.kind === 'day' ? ms.n + 'd' : ms.n + 'y', date: ymd(d), weekday: weekdayName(d), left: daysBetween(c, d) });
+      }
+      return out;
+    },
+    biz: function (from, to, sat, hol) {
+      var f = parse(from), tt = parse(to);
+      if (!f || !tt) return null;
+      if (daysBetween(f, tt) < 0) { var tmp = f; f = tt; tt = tmp; }
+      var r = bizCount(f, tt, !!sat, hol === undefined ? true : !!hol);
+      return { total: r.total, biz: r.biz, weekend: r.weekend, holOut: r.holOut, hols: r.holList.map(function (h) { return h.d; }), first: r.first ? ymd(r.first) : null, last: r.last ? ymd(r.last) : null };
+    },
+    bizAdd: function (from, n, sat, hol) {
+      var f = parse(from);
+      if (!f) return null;
+      var d = bizAdd(f, n, !!sat, hol === undefined ? true : !!hol);
+      return d ? ymd(d) : null;
+    },
+    age: function (birth, ref) {
+      var b = parse(birth), r = parse(ref) || state.today;
+      if (!b) return null;
+      return {
+        intl: intlAge(b, r),
+        cal: r.getUTCFullYear() - b.getUTCFullYear(),
+        count: r.getUTCFullYear() - b.getUTCFullYear() + 1,
+        zodiac: t('z' + (((b.getUTCFullYear() - 4) % 12 + 12) % 12)),
+        next: ymd((function () { var n = nextBirthday(b, r); return daysBetween(r, n) === 0 ? nextBirthday(b, addDays(r, 1)) : n; })()),
+        born: weekdayName(b)
+      };
+    },
+    summary: summaryText,
+    setTab: selectTab,
+    lang: function () { return state.lang; },
+    setLang: function (l) { applyLang(l); }
+  };
+})();
+</script>
+</body>
+</html>
