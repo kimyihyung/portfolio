@@ -862,9 +862,10 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
   function derive(list) {
     var base = list[0].rgb;
     var steps = [
-      mix(base, [255, 255, 255], .2), mix(base, [255, 255, 255], .42),
-      mix(base, [0, 0, 0], .2), mix(base, [0, 0, 0], .42),
-      mix(base, [255, 255, 255], .62), mix(base, [0, 0, 0], .62)
+      mix(base, [255, 255, 255], .18), mix(base, [255, 255, 255], .34),
+      mix(base, [255, 255, 255], .52), mix(base, [255, 255, 255], .7),
+      mix(base, [0, 0, 0], .18), mix(base, [0, 0, 0], .34),
+      mix(base, [0, 0, 0], .52), mix(base, [0, 0, 0], .7)
     ];
     while (list.length < N) {
       var next = null;

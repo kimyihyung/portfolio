@@ -452,7 +452,7 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
 
           <ul class="kv" id="sRows"></ul>
 
-          <p class="caveat" data-i18n-html="sCaveat">4대보험은 <b>비과세 식대를 뺀 월급</b>에 요율을 곱합니다. 국민연금은 기준소득월액 상한 <b>659만원</b>·하한 <b>41만원</b>(2026년 7월~2027년 6월)이 적용됩니다. 소득세는 국세청 간이세액표를 그대로 옮기지 않고 같은 산식(근로소득공제·기본공제·연금보험료공제·특별소득공제 어림값·근로소득세액공제)으로 계산한 <b>예상치</b>이며, 실제 원천징수액과 월 3만원 안팎 차이가 날 수 있습니다. 연말정산에서 정산됩니다.</p>
+          <p class="caveat" data-i18n-html="sCaveat">4대보험은 <b>비과세 식대를 뺀 월급</b>에 요율을 곱합니다. 국민연금은 기준소득월액 상한 <b>659만원</b>(2026년 7월~2027년 6월)까지만 매기고, 보수가 하한 41만원보다 낮으면 실제 보수로 계산합니다(사업장별 하한·납부예외에 따라 다름). 소득세는 국세청 간이세액표를 그대로 옮기지 않고 같은 산식(근로소득공제·기본공제·연금보험료공제·특별소득공제 어림값·근로소득세액공제)으로 계산한 <b>예상치</b>이며, 실제 원천징수액과 월 3만원 안팎 차이가 날 수 있습니다. 연말정산에서 정산됩니다.</p>
         </section>
 
         <!-- ── 02 3.3% · 8.8% ── -->
@@ -563,7 +563,7 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
             <li><span data-i18n="r5k">비과세 식대</span><b data-i18n="r5v">월 20만원</b></li>
             <li><span data-i18n="r6k">최저임금</span><b data-i18n="r6v">10,320원 / 시간</b></li>
           </ul>
-          <p class="caveat" data-i18n-html="rateNote">산재보험은 사업주가 전액 부담하므로 월급에서 빠지지 않습니다. 국민연금은 기준소득월액 <b>41만~659만원</b> 범위에서만 매겨집니다.</p>
+          <p class="caveat" data-i18n-html="rateNote">산재보험은 사업주가 전액 부담하므로 월급에서 빠지지 않습니다. 국민연금은 기준소득월액 <b>659만원</b>까지만 매기고, 하한 41만원 미만은 사업장별 처리(하한 적용·납부예외)를 따릅니다.</p>
         </div>
       </aside>
     </section>
@@ -660,7 +660,7 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
       sTitle: '연봉·월급 실수령액', sNote: '2026 4대보험 · 비과세 식대',
       sSalary: '세전 연봉', unitMan: '만원', sMeal: '비과세 식대 (월)', sFamily: '부양가족 (본인 포함)', sChild: '8~20세 자녀',
       lgNet: '실수령', lgIns: '4대보험', lgTax: '소득세·지방세',
-      sCaveat: '4대보험은 <b>비과세 식대를 뺀 월급</b>에 요율을 곱합니다. 국민연금은 기준소득월액 상한 <b>659만원</b>·하한 <b>41만원</b>(2026년 7월~2027년 6월)이 적용됩니다. 소득세는 국세청 간이세액표를 그대로 옮기지 않고 같은 산식(근로소득공제·기본공제·연금보험료공제·특별소득공제 어림값·근로소득세액공제)으로 계산한 <b>예상치</b>이며, 실제 원천징수액과 월 3만원 안팎 차이가 날 수 있습니다. 연말정산에서 정산됩니다.',
+      sCaveat: '4대보험은 <b>비과세 식대를 뺀 월급</b>에 요율을 곱합니다. 국민연금은 기준소득월액 상한 <b>659만원</b>(2026년 7월~2027년 6월)까지만 매기고, 보수가 하한 41만원보다 낮으면 실제 보수로 계산합니다(사업장별 하한·납부예외에 따라 다름). 소득세는 국세청 간이세액표를 그대로 옮기지 않고 같은 산식(근로소득공제·기본공제·연금보험료공제·특별소득공제 어림값·근로소득세액공제)으로 계산한 <b>예상치</b>이며, 실제 원천징수액과 월 3만원 안팎 차이가 날 수 있습니다. 연말정산에서 정산됩니다.',
       fTitle: '프리랜서 원천징수 정산', fNote: '3.3% · 8.8%',
       fTypeAria: '소득 유형', fBiz: '프리랜서 3.3%', fGipo: '기타소득 8.8%',
       fAmount: '계약금액 (세전)', unitWon: '원', fTarget: '목표 실수령액',
@@ -673,7 +673,7 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
       sumHead: '요약 — 카톡에 붙여넣기', copyBtn: '요약 복사',
       rateHead: '2026년 근로자 부담',
       r1k: '국민연금', r2k: '건강보험', r3k: '장기요양', r3v: '건강보험료 × 13.14%', r4k: '고용보험', r5k: '비과세 식대', r5v: '월 20만원', r6k: '최저임금', r6v: '10,320원 / 시간',
-      rateNote: '산재보험은 사업주가 전액 부담하므로 월급에서 빠지지 않습니다. 국민연금은 기준소득월액 <b>41만~659만원</b> 범위에서만 매겨집니다.',
+      rateNote: '산재보험은 사업주가 전액 부담하므로 월급에서 빠지지 않습니다. 국민연금은 기준소득월액 <b>659만원</b>까지만 매기고, 하한 41만원 미만은 사업장별 처리(하한 적용·납부예외)를 따릅니다.',
       rateTitle: '2026년 4대보험 요율표', rateNote2: '근로자 부담분',
       t1h: '직장가입자', tItem: '항목', tTotal: '전체', tMine: '근로자',
       tNps: '국민연금', tHealth: '건강보험', tLtc: '장기요양', tEmp: '고용보험', tSang: '산재보험', tSangV: '사업주 전액 (업종별)',
@@ -737,7 +737,7 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
       sTitle: 'Take-home pay', sNote: '2026 insurances · meal allowance',
       sSalary: 'Gross annual salary', unitMan: '만원', sMeal: 'Tax-free meal (month)', sFamily: 'Dependants (incl. you)', sChild: 'Children 8–20',
       lgNet: 'take-home', lgIns: 'insurances', lgTax: 'income tax',
-      sCaveat: 'The four insurances are charged on <b>monthly pay minus the tax-free meal allowance</b>. The national pension uses a base income of <b>₩410,000 to ₩6,590,000</b> (July 2026 – June 2027). Income tax here is an <b>estimate</b> built from the same formula the withholding table uses (earned-income deduction, basic deduction, pension deduction, an approximation of the special deductions, earned-income tax credit), not the table itself, so it can differ from the payslip by up to about ₩30,000 a month. It is settled at year-end.',
+      sCaveat: 'The four insurances are charged on <b>monthly pay minus the tax-free meal allowance</b>. The national pension is charged up to a base income of <b>₩6,590,000</b> (July 2026 – June 2027); below the ₩410,000 floor this tool uses the actual pay, which workplaces handle with the floor or a payment exemption. Income tax here is an <b>estimate</b> built from the same formula the withholding table uses (earned-income deduction, basic deduction, pension deduction, an approximation of the special deductions, earned-income tax credit), not the table itself, so it can differ from the payslip by up to about ₩30,000 a month. It is settled at year-end.',
       fTitle: 'Freelance withholding', fNote: '3.3% · 8.8%',
       fTypeAria: 'Income type', fBiz: 'Freelance 3.3%', fGipo: 'Other income 8.8%',
       fAmount: 'Contract amount (gross)', unitWon: ' KRW', fTarget: 'Target take-home',
@@ -750,7 +750,7 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
       sumHead: 'Summary — paste into KakaoTalk', copyBtn: 'Copy summary',
       rateHead: '2026 employee share',
       r1k: 'National pension', r2k: 'Health insurance', r3k: 'Long-term care', r3v: '13.14% of health premium', r4k: 'Employment insurance', r5k: 'Tax-free meal', r5v: '₩200,000 / month', r6k: 'Minimum wage', r6v: '₩10,320 / hour',
-      rateNote: 'Industrial accident insurance is paid entirely by the employer, so it never leaves your pay. The national pension is charged only between <b>₩410,000 and ₩6,590,000</b> a month.',
+      rateNote: 'Industrial accident insurance is paid entirely by the employer, so it never leaves your pay. The national pension is charged up to <b>₩6,590,000</b> a month; below the ₩410,000 floor the workplace decides.',
       rateTitle: '2026 insurance rates', rateNote2: 'employee share',
       t1h: 'Employee', tItem: 'Item', tTotal: 'Total', tMine: 'Employee',
       tNps: 'National pension', tHealth: 'Health', tLtc: 'Long-term care', tEmp: 'Employment', tSang: 'Industrial accident', tSangV: 'Employer, by industry',
@@ -853,7 +853,9 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
 
   /* ═════════════════════ 4대보험·소득세 ═════════════════════ */
   function insurance(monthlyTaxable) {
-    var base = Math.min(Math.max(monthlyTaxable, R.npsMin), R.npsMax);
+    /* 위 상한은 그대로 두고, 하한(41만원)은 실제 보수가 그보다 낮을 때 음수 실수령을
+       만들므로 적용하지 않는다 — 그 구간은 사업장별 하한·납부예외로 갈린다. */
+    var base = Math.min(Math.max(monthlyTaxable, 0), R.npsMax);
     var nps = floor10(base * R.nps);
     var health = floor10(monthlyTaxable * R.health);
     var ltc = floor10(health * R.ltc);
