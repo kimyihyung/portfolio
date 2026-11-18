@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0b0d">
+<title>SvgForge — SVG Optimizer, React JSX &amp; Multi-Size PNG | Kim Yihyung</title>
+<meta name="description" content="Drop an SVG and watch it shrink: comments, metadata, editor namespaces, empty groups and long decimals removed in the browser, with original vs optimized bytes and savings in real time. Convert the result to React JSX, a CSS data URI or 64–1024 px transparent PNG. Zero uploads.">
+<meta name="keywords" content="svg optimizer, svg minify, svg to jsx, svg to react, svg to css background, svg to png, data uri svg, remove metadata svg, inkscape namespace, round decimals svg, svg compressor, svgforge, zero upload">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/svg-forge/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b0d'/%3E%3Cpath d='M8 24 L14 10 L18 20 L22 10 L26 24' fill='none' stroke='%23e5b45c' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/svg-forge/">
+<meta property="og:title" content="SvgForge — smaller SVG, same picture">
+<meta property="og:description" content="Strip comments, metadata and editor namespaces, round the decimals, clean empty groups — then take the result as SVG, React JSX, a CSS data URI or 64–1024 px PNG. Nothing leaves the tab.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="SvgForge — SVG optimizer and converter">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SvgForge — smaller SVG, same picture">
+<meta name="twitter:description" content="Optimize an SVG in the browser and take it out as JSX, a CSS data URI or five PNG sizes. Zero uploads, zero external requests.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "SvgForge — SVG Optimizer, React JSX & Multi-Size PNG",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/svg-forge/",
+      "description": "Optimizes an SVG inside the browser: XML comments, metadata, title and description, editor namespaces (inkscape, sodipodi, sketch), empty groups and decimal precision are handled with DOMParser and serialisation, and the original and optimized byte counts are measured and compared as you type. The result can be copied or downloaded as SVG, converted to a React JSX component with className and camelCase attributes, turned into a CSS data URI, or rendered to transparent PNGs at 64, 128, 256, 512 and 1024 pixels. Nothing is uploaded and no external request is made.",
+      "featureList": [
+        "Load by drag and drop, file picker, pasted code or one of two sample SVGs",
+        "Remove XML comments, metadata, title and description",
+        "Strip inkscape, sodipodi, sketch and figma elements, attributes and namespace declarations",
+        "Remove empty groups, repeatedly and from the deepest level",
+        "Round decimal precision to 1–4 places in path data, points, transforms and geometry attributes",
+        "Original vs optimized bytes and savings percentage, measured live",
+        "Convert to a React component: className, camelCase attributes and style objects",
+        "Convert to a CSS url(\"data:image/svg+xml,…\") rule with the encoded character count",
+        "Export transparent PNG at 64, 128, 256, 512 and 1024 pixels",
+        "100% in the browser: 0 bytes uploaded, 0 external requests"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "SvgForge", "item": "https://kimyihyung.github.io/portfolio/tools/svg-forge/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does the optimized SVG look the same as the original?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The picture is drawn by the same elements with the same fills, strokes and paths — what is removed is what a renderer ignores anyway: comments, metadata, editor-only attributes and empty groups. Rounding decimals is the one change that touches geometry, so it is capped at four places by default and can be set to one place when a file is huge. The preview beside the numbers is rendered from the optimized text itself, not from the original." }
+        },
+        {
+          "@type": "Question",
+          "name": "Which editor namespaces are removed?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Elements and attributes prefixed with inkscape:, sodipodi:, sketch:, figma: or adobe: — the layer names, guides, page colours and app state that editors write but browsers never draw — plus their xmlns declarations. Nothing in the SVG namespace is touched." }
+        },
+        {
+          "@type": "Question",
+          "name": "How is the saving measured?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Both texts are encoded to UTF-8 and counted byte for byte, the way a server or a bundler would count them, and the percentage is the difference over the original. A small icon may save a few hundred bytes; an editor export with metadata often loses a third of its size." }
+        },
+        {
+          "@type": "Question",
+          "name": "Where do the files go?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Nowhere. The file is read with the browser's own text reader, parsed with DOMParser, and every download is built from a blob inside this tab. There is no server, no analytics and no storage, and the external request counter at the bottom never moves." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+:root {
+  --bg: #0b0b0d;
+  --panel: #131311;
+  --panel2: #1a1916;
+  --line: rgba(255,255,255,.09);
+  --line2: rgba(255,255,255,.18);
+  --ink: #f6f2e9;
+  --muted: #a9a29a;
+  --muted2: #7d766e;
+  --accent: #e5b45c;
+  --accent2: #f3cf85;
+  --accent-dim: rgba(229,180,92,.12);
+  --on-accent: #1d1503;
+  --ok: #7fd6a0;
+  --warn: #ffa06b;
+  --bad: #ff7d7d;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --maxw: 1180px;
+}
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(110% 55% at 50% -15%, rgba(229,180,92,.10), transparent 62%),
+    radial-gradient(70% 45% at 100% 3%, rgba(229,180,92,.05), transparent 58%);
+  background-repeat: no-repeat;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+img, svg { max-width: 100%; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--accent2); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+
+.wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 22px; }
+
+/* ── topbar ── */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  padding: 18px 0 8px;
+}
+.brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); }
+.brand:hover { color: var(--ink); }
+.mark {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 22px; border-radius: 7px;
+  border: 1px solid rgba(229,180,92,.45);
+  color: var(--accent); font-family: var(--mono);
+  font-size: 10px; letter-spacing: .08em; font-weight: 700;
+}
+.brand-txt { font-size: 13px; font-weight: 600; letter-spacing: .01em; color: var(--muted); }
+.top-actions { display: inline-flex; align-items: center; gap: 12px; }
+.lang-toggle {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 6px 10px; border-radius: 999px;
+  border: 1px solid var(--line); background: rgba(255,255,255,.03);
+  color: var(--muted); font-family: var(--mono); font-size: 11px; letter-spacing: .06em;
+  cursor: pointer; transition: border-color .2s ease, transform .12s ease;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.94); }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); }
+.topbar-link { font-size: 12px; color: var(--muted); }
+.topbar-link:hover { color: var(--accent); }
+
+/* ── hero ── */
+.hero { padding: 34px 0 26px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin: 0 0 16px; font-family: var(--mono); font-size: 11px;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
+}
+.eyebrow .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px rgba(229,180,92,.15); }
+h1 {
+  margin: 0 0 16px; font-size: clamp(30px, 5.4vw, 52px); line-height: 1.08;
+  letter-spacing: -.03em; font-weight: 700;
+}
+h1 .soft { color: var(--muted); font-weight: 500; }
+h1 .gold { color: var(--accent); }
+.lede { max-width: 720px; margin: 0 0 22px; color: var(--muted); font-size: 15.5px; }
+.lede strong { color: var(--ink); font-weight: 600; }
+.badge-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 6px 11px; border-radius: 999px;
+  border: 1px solid var(--line); background: rgba(255,255,255,.025);
+  font-size: 11.5px; color: var(--muted);
+}
+.pill b { color: var(--ink); font-weight: 600; }
+.pill--live { border-color: rgba(127,214,160,.28); background: rgba(127,214,160,.06); }
+.pill--live .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--ok); }
+
+/* ── layout ── */
+.work {
+  display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+  gap: 16px; align-items: start; margin: 8px 0 32px;
+}
+.card {
+  background: linear-gradient(180deg, rgba(255,255,255,.028), rgba(255,255,255,0) 42%), var(--panel);
+  border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 20px; min-width: 0;
+}
+.card + .card { margin-top: 16px; }
+.card h2, .card h3 { margin: 0; font-size: 14.5px; font-weight: 650; letter-spacing: -.01em; }
+.card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
+.card-head .k { font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; color: var(--muted2); text-transform: uppercase; }
+
+/* ── drop zone ── */
+.drop {
+  display: grid; place-items: center; gap: 6px;
+  padding: 26px 18px; border-radius: var(--radius-sm);
+  border: 1px dashed var(--line2); background: rgba(255,255,255,.015);
+  text-align: center; cursor: pointer; transition: border-color .2s ease, background .2s ease;
+}
+.drop:hover, .drop.is-over { border-color: var(--accent); background: var(--accent-dim); }
+.drop .big { font-size: 14px; font-weight: 600; }
+.drop .small { font-size: 11.5px; color: var(--muted2); }
+.drop .ico { color: var(--accent); font-family: var(--mono); font-size: 20px; line-height: 1; }
+
+.row-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; }
+.btn {
+  appearance: none; border: 1px solid var(--line2); border-radius: 10px;
+  background: rgba(255,255,255,.035); color: var(--ink);
+  font-family: inherit; font-size: 12.5px; font-weight: 550;
+  padding: 8px 13px; cursor: pointer; transition: border-color .18s ease, background .18s ease, transform .12s ease;
+}
+.btn:hover { border-color: var(--accent); background: var(--accent-dim); }
+.btn:active { transform: scale(.98); }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 700; }
+.btn--primary:hover { background: var(--accent2); border-color: var(--accent2); color: var(--on-accent); }
+.btn--ghost { background: transparent; color: var(--muted); }
+.btn--sm { font-size: 11.5px; padding: 6px 10px; border-radius: 8px; }
+
+/* ── inputs ── */
+.area {
+  width: 100%; max-width: 100%; min-height: 132px; resize: vertical;
+  padding: 12px 13px; border-radius: var(--radius-sm);
+  border: 1px solid var(--line); background: rgba(0,0,0,.28);
+  color: var(--ink); font-family: var(--mono); font-size: 12px; line-height: 1.55;
+  overflow: auto; white-space: pre; tab-size: 2;
+}
+.area:focus { outline: none; border-color: rgba(229,180,92,.55); }
+.area--out { background: rgba(0,0,0,.36); }
+.opts { display: grid; gap: 1px; margin-top: 14px; border-top: 1px solid var(--line); }
+.opt {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 9px 2px; border-bottom: 1px solid var(--line); font-size: 12.5px; color: var(--muted);
+}
+.opt b { color: var(--ink); font-weight: 550; }
+.opt .hint { display: block; font-size: 11px; color: var(--muted2); margin-top: 2px; }
+.switch { position: relative; flex: 0 0 auto; width: 38px; height: 22px; }
+.switch input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.switch span {
+  position: absolute; inset: 0; border-radius: 999px; background: rgba(255,255,255,.1);
+  border: 1px solid var(--line); transition: background .2s ease, border-color .2s ease;
+}
+.switch span::after {
+  content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px;
+  border-radius: 50%; background: var(--muted); transition: transform .18s ease, background .18s ease;
+}
+.switch input:checked + span { background: var(--accent-dim); border-color: rgba(229,180,92,.55); }
+.switch input:checked + span::after { transform: translateX(16px); background: var(--accent); }
+.switch input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+select.sel {
+  appearance: none; background: rgba(255,255,255,.04); color: var(--ink);
+  border: 1px solid var(--line2); border-radius: 8px; padding: 5px 26px 5px 9px;
+  font-family: var(--mono); font-size: 11.5px; cursor: pointer;
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: calc(100% - 13px) 50%, calc(100% - 9px) 50%;
+  background-size: 4px 4px, 4px 4px; background-repeat: no-repeat;
+}
+
+/* ── stats ── */
+.stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.stat {
+  padding: 11px 12px; border-radius: 10px; border: 1px solid var(--line);
+  background: rgba(255,255,255,.02); min-width: 0;
+}
+.stat b { display: block; font-family: var(--mono); font-size: 16px; letter-spacing: -.02em; color: var(--ink); }
+.stat span { font-size: 10.5px; color: var(--muted2); letter-spacing: .02em; }
+.stat--good b { color: var(--ok); }
+.stat--warn b { color: var(--warn); }
+
+.preview {
+  margin-top: 12px; border-radius: var(--radius-sm); border: 1px solid var(--line);
+  background:
+    repeating-conic-gradient(rgba(255,255,255,.045) 0% 25%, transparent 0% 50%) 0 0 / 18px 18px,
+    rgba(0,0,0,.25);
+  min-height: 150px; display: grid; place-items: center; padding: 16px; overflow: hidden;
+}
+.preview img { max-height: 168px; width: auto; max-width: 100%; }
+
+/* ── tabs ── */
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.tab {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 13px; border-radius: 999px; border: 1px solid var(--line);
+  background: transparent; color: var(--muted); font-family: inherit; font-size: 12px;
+  cursor: pointer; transition: border-color .18s ease, color .18s ease, background .18s ease;
+}
+.tab:hover { color: var(--ink); border-color: var(--line2); }
+.tab[aria-selected="true"] { color: var(--accent); border-color: rgba(229,180,92,.5); background: var(--accent-dim); }
+.tab .n { font-family: var(--mono); font-size: 9.5px; color: var(--muted2); }
+.tab[aria-selected="true"] .n { color: var(--accent); }
+
+.section { margin: 0 0 34px; }
+.sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+.sec-head h2 { margin: 0; font-size: 19px; letter-spacing: -.02em; }
+.sec-head .note { font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted2); }
+
+/* ── png grid ── */
+.png-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.png-cell {
+  border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 10px;
+  background: rgba(255,255,255,.02); display: grid; gap: 7px; justify-items: center; min-width: 0;
+}
+.png-cell canvas, .png-cell .ph {
+  width: 100%; max-width: 96px; height: auto; aspect-ratio: 1/1; border-radius: 6px;
+  background: repeating-conic-gradient(rgba(255,255,255,.05) 0% 25%, transparent 0% 50%) 0 0 / 12px 12px;
+}
+.png-cell .sz { font-family: var(--mono); font-size: 11px; color: var(--ink); }
+.png-cell .bd { font-family: var(--mono); font-size: 10px; color: var(--muted2); }
+.png-cell .btn { width: 100%; text-align: center; padding: 5px 6px; font-size: 10.5px; }
+
+/* ── notes / faq ── */
+.notes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.note {
+  border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 16px;
+  background: rgba(255,255,255,.02); min-width: 0;
+}
+.note h3 { margin: 0 0 7px; font-size: 13.5px; }
+.note p { margin: 0; font-size: 12.5px; color: var(--muted); }
+.note b { color: var(--ink); font-weight: 600; }
+
+.faq { display: grid; gap: 8px; }
+.qa {
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: rgba(255,255,255,.02); padding: 13px 15px;
+}
+.qa summary { cursor: pointer; font-size: 13.5px; font-weight: 550; list-style: none; }
+.qa summary::-webkit-details-marker { display: none; }
+.qa summary::before { content: "+"; display: inline-block; width: 16px; color: var(--accent); font-family: var(--mono); }
+.qa[open] summary::before { content: "−"; }
+.qa .a { margin-top: 9px; padding-left: 16px; font-size: 12.5px; color: var(--muted); }
+.qa .a b { color: var(--ink); }
+
+.err {
+  display: flex; gap: 8px; align-items: flex-start; margin: 10px 0 0;
+  padding: 10px 12px; border-radius: 10px; font-size: 12px;
+  border: 1px solid rgba(255,125,125,.35); background: rgba(255,125,125,.08); color: var(--bad);
+}
+.err b { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; }
+.ok-line { color: var(--ok); }
+
+.caveat { margin: 10px 0 0; font-size: 11.5px; color: var(--muted2); }
+.caveat b { color: var(--muted); }
+.mono { font-family: var(--mono); }
+
+/* ── footer ── */
+.foot {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 10px 20px; margin-top: 44px; padding: 20px 0 40px;
+  border-top: 1px solid var(--line); font-size: 11.5px; color: var(--muted2);
+}
+.foot .net b { color: var(--ok); font-family: var(--mono); }
+.foot-links { display: inline-flex; flex-wrap: wrap; gap: 14px; }
+.foot-links a { color: var(--muted); }
+.foot-links a:hover { color: var(--accent); }
+
+@media (max-width: 980px) {
+  .work { grid-template-columns: minmax(0, 1fr); }
+  .notes { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 620px) {
+  .wrap { padding: 0 16px; }
+  .hero { padding: 24px 0 20px; }
+  .card { padding: 16px; }
+  .png-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .brand-txt { display: none; }
+  .area { font-size: 11.5px; }
+  .tab .n { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="/portfolio/" aria-label="Kim Yihyung — portfolio" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="한국어로 보기" aria-label="한국어로 보기">
+        <span class="lt on" data-lt="en">EN</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="ko">KO</span>
+      </button>
+      <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← All tools</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="eyebrow">SvgForge · optimize · JSX · data URI · PNG · zero upload</span></p>
+      <h1 data-i18n-html="h1">Smaller SVG.<br><span class="soft">Same picture.</span><br><span class="gold">Then out as JSX, CSS or PNG.</span></h1>
+      <p class="lede" data-i18n-html="lede">
+        Drop an editor export and watch the bytes come off: <strong>comments, metadata, editor namespaces,
+        empty groups and long decimals</strong> are removed with the browser's own parser. The original and
+        the optimized file are weighed side by side, then the result leaves as <strong>SVG, a React component,
+        a CSS data URI or five PNG sizes</strong>.
+      </p>
+      <div class="badge-row">
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillUp">0 bytes uploaded</b></span>
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillNet">0 external requests</b></span>
+        <span class="pill" data-i18n="pillPrec">precision 1–4 places</span>
+        <span class="pill" data-i18n="pillPng">64 · 128 · 256 · 512 · 1024 PNG</span>
+      </div>
+    </section>
+
+    <section class="work" aria-label="SVG optimizer" data-i18n-aria="labAria">
+      <div>
+        <div class="card">
+          <div class="card-head">
+            <h2 data-i18n="inHead">1 · The SVG</h2>
+            <span class="k" data-i18n="inK">load</span>
+          </div>
+
+          <div class="drop" id="drop" tabindex="0" role="button" aria-label="Drop an SVG file or choose one" data-i18n-aria="dropAria">
+            <span class="ico" aria-hidden="true">↓</span>
+            <span class="big" data-i18n="dropBig">Drop an .svg here</span>
+            <span class="small" data-i18n="dropSmall">or click to choose a file — it never leaves this tab</span>
+          </div>
+          <input type="file" id="file" accept=".svg,image/svg+xml,text/xml,application/xml" hidden>
+
+          <div class="row-actions">
+            <button class="btn btn--sm" id="sample1" type="button" data-i18n="sample1">Sample · brand mark</button>
+            <button class="btn btn--sm" id="sample2" type="button" data-i18n="sample2">Sample · icon set</button>
+            <button class="btn btn--ghost btn--sm" id="clearIn" type="button" data-i18n="clearIn">Clear</button>
+            <span class="caveat mono" id="fileName" style="margin:0">—</span>
+          </div>
+
+          <textarea class="area" id="paste" spellcheck="false" aria-label="SVG source" data-i18n-aria="pasteAria" data-i18n-placeholder="pastePlaceholder" placeholder="…or paste the SVG source here." style="margin-top:12px"></textarea>
+
+          <div class="opts">
+            <label class="opt" for="optComments">
+              <span><b data-i18n="optComments">XML comments</b><span class="hint" data-i18n="optCommentsH">Notes left by the editor, never drawn</span></span>
+              <span class="switch"><input type="checkbox" id="optComments" checked><span></span></span>
+            </label>
+            <label class="opt" for="optMeta">
+              <span><b data-i18n="optMeta">metadata</b><span class="hint" data-i18n="optMetaH">&lt;metadata&gt; blocks and RDF descriptions</span></span>
+              <span class="switch"><input type="checkbox" id="optMeta" checked><span></span></span>
+            </label>
+            <label class="opt" for="optTitle">
+              <span><b data-i18n="optTitle">&lt;title&gt; · &lt;desc&gt;</b><span class="hint" data-i18n="optTitleH">Recommended to keep for accessibility</span></span>
+              <span class="switch"><input type="checkbox" id="optTitle"><span></span></span>
+            </label>
+            <label class="opt" for="optNs">
+              <span><b data-i18n="optNs">editor namespaces</b><span class="hint" data-i18n="optNsH">inkscape · sodipodi · sketch · figma · adobe</span></span>
+              <span class="switch"><input type="checkbox" id="optNs" checked><span></span></span>
+            </label>
+            <label class="opt" for="optEmpty">
+              <span><b data-i18n="optEmpty">empty groups</b><span class="hint" data-i18n="optEmptyH">&lt;g&gt; elements with nothing inside, deepest first</span></span>
+              <span class="switch"><input type="checkbox" id="optEmpty" checked><span></span></span>
+            </label>
+            <label class="opt" for="optWs">
+              <span><b data-i18n="optWs">whitespace between tags</b><span class="hint" data-i18n="optWsH">Skipped automatically when the file contains text</span></span>
+              <span class="switch"><input type="checkbox" id="optWs" checked><span></span></span>
+            </label>
+            <div class="opt" style="border-bottom:0">
+              <span><b data-i18n="optPrec">decimal precision</b><span class="hint" data-i18n="optPrecH">Applies to path data, points, transforms and geometry</span></span>
+              <select class="sel" id="optPrec" aria-label="Decimal precision" data-i18n-aria="optPrecAria">
+                <option value="1">1</option>
+                <option value="2" selected>2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="err" id="errBox" hidden><b data-i18n="errLabel">ERROR</b><span id="errMsg"></span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <div class="card-head">
+            <h2 data-i18n="outHead">2 · The result</h2>
+            <span class="k" data-i18n="outK">measured</span>
+          </div>
+
+          <div class="stats">
+            <div class="stat"><b id="srcBytes">—</b><span data-i18n="stSrc">original bytes</span></div>
+            <div class="stat stat--good"><b id="outBytes">—</b><span data-i18n="stOut">optimized bytes</span></div>
+            <div class="stat stat--good"><b id="savedPct">—</b><span data-i18n="stSaved">saved</span></div>
+            <div class="stat"><b id="nodeDelta">—</b><span data-i18n="stNodes">nodes removed</span></div>
+          </div>
+
+          <div class="preview" id="previewBox">
+            <img id="previewImg" alt="Optimized SVG preview" data-i18n-alt="previewAlt">
+          </div>
+
+          <textarea class="area area--out" id="outCode" readonly spellcheck="false" aria-label="Optimized SVG" data-i18n-aria="outAria" style="margin-top:12px;min-height:120px"></textarea>
+
+          <div class="row-actions">
+            <button class="btn btn--primary btn--sm" id="copyOut" type="button" data-i18n="copyOut">Copy SVG</button>
+            <button class="btn btn--sm" id="dlOut" type="button" data-i18n="dlOut">Download .svg</button>
+            <span class="caveat mono" id="saveLine" style="margin:0">—</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="convTitle">
+      <div class="sec-head">
+        <h2 id="convTitle" data-i18n="convTitle">3 · One click out</h2>
+        <span class="note" data-i18n="convNote">from the optimized text</span>
+      </div>
+
+      <div class="card">
+        <div class="tabs" role="tablist" aria-label="Output format" data-i18n-aria="tabsAria">
+          <button class="tab" id="tabJsx" type="button" role="tab" aria-selected="true" aria-controls="panelJsx" data-tab="jsx">
+            <span data-i18n="tabJsx">React JSX</span><span class="n">01</span>
+          </button>
+          <button class="tab" id="tabCss" type="button" role="tab" aria-selected="false" aria-controls="panelCss" data-tab="css">
+            <span data-i18n="tabCss">CSS data URI</span><span class="n">02</span>
+          </button>
+          <button class="tab" id="tabPng" type="button" role="tab" aria-selected="false" aria-controls="panelPng" data-tab="png">
+            <span data-i18n="tabPng">PNG export</span><span class="n">03</span>
+          </button>
+        </div>
+
+        <div id="panelJsx" role="tabpanel" aria-labelledby="tabJsx">
+          <textarea class="area area--out" id="jsxOut" readonly spellcheck="false" aria-label="React JSX output" data-i18n-aria="jsxAria" style="min-height:230px"></textarea>
+          <div class="row-actions">
+            <button class="btn btn--primary btn--sm" id="copyJsx" type="button" data-i18n="copyJsx">Copy component</button>
+            <button class="btn btn--sm" id="dlJsx" type="button" data-i18n="dlJsx">Save .jsx</button>
+            <span class="caveat" data-i18n-html="jsxHint" style="margin:0">Attributes are camel-cased (<b>stroke-width → strokeWidth</b>), <b>class → className</b>, <b>style</b> becomes an object, and the root takes <b>{...props}</b>.</span>
+          </div>
+        </div>
+
+        <div id="panelCss" role="tabpanel" aria-labelledby="tabCss" hidden>
+          <textarea class="area area--out" id="cssOut" readonly spellcheck="false" aria-label="CSS data URI output" data-i18n-aria="cssAria" style="min-height:200px"></textarea>
+          <div class="row-actions">
+            <button class="btn btn--primary btn--sm" id="copyCss" type="button" data-i18n="copyCss">Copy CSS</button>
+            <button class="btn btn--sm" id="dlCss" type="button" data-i18n="dlCss">Save .css</button>
+            <span class="caveat mono" id="cssSize" style="margin:0">—</span>
+          </div>
+          <p class="caveat" data-i18n-html="cssHint">The SVG is percent-encoded, so <b>#</b>, <b>&lt;</b> and <b>"</b> survive inside the url. Quotes, parentheses and apostrophes are escaped too, which keeps the rule valid in a style attribute.</p>
+        </div>
+
+        <div id="panelPng" role="tabpanel" aria-labelledby="tabPng" hidden>
+          <div class="row-actions" style="margin:0 0 12px">
+            <button class="btn btn--sm" id="genPng" type="button" data-i18n="genPng">Render PNGs</button>
+            <button class="btn btn--ghost btn--sm" id="dlAllPng" type="button" data-i18n="dlAllPng">Download all 5</button>
+            <span class="caveat" id="pngStatus" style="margin:0" aria-live="polite">—</span>
+          </div>
+          <div class="png-grid" id="pngGrid"></div>
+          <p class="caveat" data-i18n-html="pngHint">Each size is drawn on a <b>transparent square canvas</b>, the artwork scaled to fit and centred — no white backdrop, no crop. 1024 is set as the largest because past that the file grows faster than the detail most icons carry.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="howTitle">
+      <div class="sec-head">
+        <h2 id="howTitle" data-i18n="howTitle">What comes off, and why</h2>
+        <span class="note" data-i18n="howNote">the same bytes a bundler weighs</span>
+      </div>
+      <div class="notes">
+        <div class="note">
+          <h3 data-i18n="n1h">Editor state, not artwork</h3>
+          <p data-i18n-html="n1p">An Inkscape or Sketch file carries layer names, guides, page colours and app state in its own namespace. A browser skips all of it. Removing those elements and their <b>xmlns</b> declarations is the biggest single win on an exported logo — and the picture does not change.</p>
+        </div>
+        <div class="note">
+          <h3 data-i18n="n2h">Decimals cost more than they show</h3>
+          <p data-i18n-html="n2p">Six decimals is <b>8 characters per number</b> on a canvas that resolves to a pixel grid. Two places is under a thousandth of a pixel at icon size. The slider goes to one for files that must be small and to four when a path is fine enough that rounding would show.</p>
+        </div>
+        <div class="note">
+          <h3 data-i18n="n3h">Measured, not estimated</h3>
+          <p data-i18n-html="n3p">Both texts are encoded to UTF-8 with <b>TextEncoder</b> and counted byte for byte, then the preview and every export are built from the optimized text itself. If the parser rejects the file, the error is shown and nothing is replaced.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="faqTitle">
+      <div class="sec-head">
+        <h2 id="faqTitle" data-i18n="faqTitle">Questions</h2>
+        <span class="note" data-i18n="faqNote">four honest answers</span>
+      </div>
+      <div class="faq">
+        <details class="qa">
+          <summary data-i18n="q1">Does the optimized SVG look the same?</summary>
+          <div class="a" data-i18n-html="a1">The same elements with the same fills, strokes and paths draw it. What goes is what a renderer ignores: comments, metadata, editor attributes and empty groups. Precision is the one setting that touches geometry, so it starts at two places and the preview is rendered from the result — compare the two before you ship.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q2">Why keep &lt;title&gt; and &lt;desc&gt;?</summary>
+          <div class="a" data-i18n-html="a2">Screen readers announce a <b>&lt;title&gt;</b> as the graphic's name, and <b>&lt;desc&gt;</b> as its description. They cost a few dozen bytes. The switch is off by default, and turning it on removes both when an icon is decorative and labelled in the surrounding markup.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q3">Can I use the JSX output as it is?</summary>
+          <div class="a" data-i18n-html="a3">Yes — it is a default-exported component with <b>{...props}</b> on the root, so <b>&lt;SvgForgeIcon className="h-5 w-5" /&gt;</b> works. Attributes are camel-cased, <b>class</b> becomes <b>className</b>, and a <b>style</b> attribute becomes a JSX object. Gradients keep their ids, so give the component a unique id if you render the same file twice on one page.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q4">Where do my files go?</summary>
+          <div class="a" data-i18n-html="a4">Nowhere. The file is read by the browser, parsed by <b>DOMParser</b>, and every download is a blob built in this tab. No server, no analytics, no storage — the external request counter below stays at zero, and the tab forgets everything when you close it.</div>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span data-i18n="footCopy">© 2026 Kim Yihyung · Built in the browser, for the browser.</span>
+    <span class="net"><span data-i18n="footNet">external requests</span> <b id="netCount">0</b></span>
+    <span class="foot-links">
+      <a href="/portfolio/" data-i18n="footP1">Portfolio</a>
+      <a href="/portfolio/tools/" data-i18n="footP2">All tools</a>
+      <a href="https://github.com/kimyihyung/portfolio" target="_blank" rel="noopener" data-i18n="footP3">Source</a>
+    </span>
+    <span class="mono" data-i18n="footMono">NO UPLOADS · NO TRACKING</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ═════════════════════ language ═════════════════════ */
+  var I18N = {
+    en: {
+      docTitle: 'SvgForge — SVG Optimizer, React JSX & Multi-Size PNG | Kim Yihyung',
+      brandAria: 'Kim Yihyung — portfolio',
+      back: '← All tools',
+      eyebrow: 'SvgForge · optimize · JSX · data URI · PNG · zero upload',
+      h1: 'Smaller SVG.<br><span class="soft">Same picture.</span><br><span class="gold">Then out as JSX, CSS or PNG.</span>',
+      lede: 'Drop an editor export and watch the bytes come off: <strong>comments, metadata, editor namespaces, empty groups and long decimals</strong> are removed with the browser\'s own parser. The original and the optimized file are weighed side by side, then the result leaves as <strong>SVG, a React component, a CSS data URI or five PNG sizes</strong>.',
+      pillUp: '0 bytes uploaded', pillNet: '0 external requests',
+      pillPrec: 'precision 1–4 places', pillPng: '64 · 128 · 256 · 512 · 1024 PNG',
+      labAria: 'SVG optimizer',
+      inHead: '1 · The SVG', inK: 'load',
+      dropAria: 'Drop an SVG file or choose one',
+      dropBig: 'Drop an .svg here', dropSmall: 'or click to choose a file — it never leaves this tab',
+      sample1: 'Sample · brand mark', sample2: 'Sample · icon set', clearIn: 'Clear',
+      pasteAria: 'SVG source', pastePlaceholder: '…or paste the SVG source here.',
+      optComments: 'XML comments', optCommentsH: 'Notes left by the editor, never drawn',
+      optMeta: 'metadata', optMetaH: '<metadata> blocks and RDF descriptions',
+      optTitle: '<title> · <desc>', optTitleH: 'Recommended to keep for accessibility',
+      optNs: 'editor namespaces', optNsH: 'inkscape · sodipodi · sketch · figma · adobe',
+      optEmpty: 'empty groups', optEmptyH: '<g> elements with nothing inside, deepest first',
+      optWs: 'whitespace between tags', optWsH: 'Skipped automatically when the file contains text',
+      optPrec: 'decimal precision', optPrecH: 'Applies to path data, points, transforms and geometry',
+      optPrecAria: 'Decimal precision',
+      errLabel: 'ERROR',
+      errParse: 'This is not a valid SVG. The parser said: ',
+      errRoot: 'The root element is not <svg>, so there is nothing to optimize.',
+      errEmpty: 'Load an SVG first — drop a file, paste the code or pick a sample.',
+      outHead: '2 · The result', outK: 'measured',
+      stSrc: 'original bytes', stOut: 'optimized bytes', stSaved: 'saved', stNodes: 'nodes removed',
+      previewAlt: 'Optimized SVG preview', outAria: 'Optimized SVG',
+      copyOut: 'Copy SVG', dlOut: 'Download .svg',
+      savedLine: 'saved {n} bytes · {p}% smaller',
+      sameLine: 'nothing left to remove at these settings',
+      copyDone: 'Copied', copyFail: 'Select the text and copy it',
+      convTitle: '3 · One click out', convNote: 'from the optimized text',
+      tabsAria: 'Output format', tabJsx: 'React JSX', tabCss: 'CSS data URI', tabPng: 'PNG export',
+      jsxAria: 'React JSX output', cssAria: 'CSS data URI output',
+      copyJsx: 'Copy component', dlJsx: 'Save .jsx',
+      jsxHint: 'Attributes are camel-cased (<b>stroke-width → strokeWidth</b>), <b>class → className</b>, <b>style</b> becomes an object, and the root takes <b>{...props}</b>.',
+      copyCss: 'Copy CSS', dlCss: 'Save .css',
+      cssHint: 'The SVG is percent-encoded, so <b>#</b>, <b>&lt;</b> and <b>"</b> survive inside the url. Quotes, parentheses and apostrophes are escaped too, which keeps the rule valid in a style attribute.',
+      genPng: 'Render PNGs', dlAllPng: 'Download all 5', dl: 'Download',
+      pngHint: 'Each size is drawn on a <b>transparent square canvas</b>, the artwork scaled to fit and centred — no white backdrop, no crop. 1024 is set as the largest because past that the file grows faster than the detail most icons carry.',
+      pngReady: '{n} PNG rendered · {ms} ms', pngRendering: 'rendering…',
+      pngFail: 'This SVG could not be drawn on a canvas — a filter or an external image reference may be blocking it.',
+      howTitle: 'What comes off, and why', howNote: 'the same bytes a bundler weighs',
+      n1h: 'Editor state, not artwork',
+      n1p: 'An Inkscape or Sketch file carries layer names, guides, page colours and app state in its own namespace. A browser skips all of it. Removing those elements and their <b>xmlns</b> declarations is the biggest single win on an exported logo — and the picture does not change.',
+      n2h: 'Decimals cost more than they show',
+      n2p: 'Six decimals is <b>8 characters per number</b> on a canvas that resolves to a pixel grid. Two places is under a thousandth of a pixel at icon size. The slider goes to one for files that must be small and to four when a path is fine enough that rounding would show.',
+      n3h: 'Measured, not estimated',
+      n3p: 'Both texts are encoded to UTF-8 with <b>TextEncoder</b> and counted byte for byte, then the preview and every export are built from the optimized text itself. If the parser rejects the file, the error is shown and nothing is replaced.',
+      faqTitle: 'Questions', faqNote: 'four honest answers',
+      q1: 'Does the optimized SVG look the same?',
+      a1: 'The same elements with the same fills, strokes and paths draw it. What goes is what a renderer ignores: comments, metadata, editor attributes and empty groups. Precision is the one setting that touches geometry, so it starts at two places and the preview is rendered from the result — compare the two before you ship.',
+      q2: 'Why keep <title> and <desc>?',
+      a2: 'Screen readers announce a <b>&lt;title&gt;</b> as the graphic\'s name, and <b>&lt;desc&gt;</b> as its description. They cost a few dozen bytes. The switch is off by default, and turning it on removes both when an icon is decorative and labelled in the surrounding markup.',
+      q3: 'Can I use the JSX output as it is?',
+      a3: 'Yes — it is a default-exported component with <b>{...props}</b> on the root, so <b>&lt;SvgForgeIcon className="h-5 w-5" /&gt;</b> works. Attributes are camel-cased, <b>class</b> becomes <b>className</b>, and a <b>style</b> attribute becomes a JSX object. Gradients keep their ids, so give the component a unique id if you render the same file twice on one page.',
+      q4: 'Where do my files go?',
+      a4: 'Nowhere. The file is read by the browser, parsed by <b>DOMParser</b>, and every download is a blob built in this tab. No server, no analytics, no storage — the external request counter below stays at zero, and the tab forgets everything when you close it.',
+      footCopy: '© 2026 Kim Yihyung · Built in the browser, for the browser.',
+      footNet: 'external requests', footP1: 'Portfolio', footP2: 'All tools', footP3: 'Source',
+      footMono: 'NO UPLOADS · NO TRACKING',
+      jsxName: 'SvgForgeIcon'
+    },
+    ko: {
+      docTitle: 'SvgForge — SVG 최적화·React JSX·다중 해상도 PNG | Kim Yihyung',
+      brandAria: 'Kim Yihyung — 포트폴리오',
+      back: '← 도구 전체',
+      eyebrow: 'SvgForge · 최적화 · JSX · 데이터 URI · PNG · 업로드 0',
+      h1: 'SVG는 가볍게.<br><span class="soft">그림은 그대로.</span><br><span class="gold">JSX·CSS·PNG로 한 번에.</span>',
+      lede: '에디터에서 내보낸 SVG를 떨어뜨리면 <strong>주석·메타데이터·에디터 네임스페이스·빈 그룹·긴 소수점</strong>이 브라우저 파서로 정리됩니다. 원본과 최적화본을 나란히 저울질한 뒤 <strong>SVG·React 컴포넌트·CSS 데이터 URI·PNG 5종</strong>으로 내려받습니다.',
+      pillUp: '업로드 0바이트', pillNet: '외부 요청 0건',
+      pillPrec: '소수점 1~4자리', pillPng: '64 · 128 · 256 · 512 · 1024 PNG',
+      labAria: 'SVG 최적화',
+      inHead: '1 · SVG 넣기', inK: '불러오기',
+      dropAria: 'SVG 파일을 떨어뜨리거나 선택',
+      dropBig: '.svg 파일을 여기에', dropSmall: '또는 클릭해 선택 — 파일은 이 탭을 떠나지 않습니다',
+      sample1: '샘플 · 브랜드 마크', sample2: '샘플 · 아이콘 세트', clearIn: '비우기',
+      pasteAria: 'SVG 소스', pastePlaceholder: '…또는 SVG 소스를 여기에 붙여넣으세요.',
+      optComments: 'XML 주석', optCommentsH: '에디터가 남긴 메모 — 그려지지 않습니다',
+      optMeta: '메타데이터', optMetaH: '<metadata> 블록과 RDF 설명',
+      optTitle: '<title> · <desc>', optTitleH: '접근성을 위해 남겨 두는 편이 좋습니다',
+      optNs: '에디터 네임스페이스', optNsH: 'inkscape · sodipodi · sketch · figma · adobe',
+      optEmpty: '빈 그룹', optEmptyH: '안이 빈 <g> — 가장 안쪽부터',
+      optWs: '태그 사이 공백', optWsH: '글자가 든 파일에서는 자동으로 건너뜁니다',
+      optPrec: '소수점 자릿수', optPrecH: '패스 데이터·points·변환·기하 속성에 적용',
+      optPrecAria: '소수점 자릿수',
+      errLabel: '오류',
+      errParse: '올바른 SVG가 아닙니다. 파서 메시지: ',
+      errRoot: '루트 요소가 <svg>가 아니라 정리할 것이 없습니다.',
+      errEmpty: '먼저 SVG를 넣어 주세요 — 파일을 떨어뜨리거나 코드를 붙여넣거나 샘플을 고르세요.',
+      outHead: '2 · 결과', outK: '실측',
+      stSrc: '원본 바이트', stOut: '최적화 바이트', stSaved: '절감', stNodes: '줄어든 노드',
+      previewAlt: '최적화된 SVG 미리보기', outAria: '최적화된 SVG',
+      copyOut: 'SVG 복사', dlOut: 'SVG 내려받기',
+      savedLine: '{n}바이트 절감 · {p}% 작아짐',
+      sameLine: '이 설정에서는 더 줄일 것이 없습니다',
+      copyDone: '복사했습니다', copyFail: '텍스트를 선택해 복사해 주세요',
+      convTitle: '3 · 한 번에 내보내기', convNote: '최적화된 텍스트 기준',
+      tabsAria: '출력 형식', tabJsx: 'React JSX', tabCss: 'CSS 데이터 URI', tabPng: 'PNG 내보내기',
+      jsxAria: 'React JSX 출력', cssAria: 'CSS 데이터 URI 출력',
+      copyJsx: '컴포넌트 복사', dlJsx: '.jsx 저장',
+      jsxHint: '속성은 카멜케이스로(<b>stroke-width → strokeWidth</b>), <b>class → className</b>, <b>style</b>은 객체로 바뀌고 루트에 <b>{...props}</b>가 붙습니다.',
+      copyCss: 'CSS 복사', dlCss: '.css 저장',
+      cssHint: 'SVG를 퍼센트 인코딩해 <b>#</b>·<b>&lt;</b>·<b>"</b>가 url 안에서 살아남습니다. 따옴표·괄호·작은따옴표까지 인코딩해 style 속성에 넣어도 규칙이 깨지지 않습니다.',
+      genPng: 'PNG 렌더', dlAllPng: '5종 모두 내려받기', dl: '내려받기',
+      pngHint: '각 크기는 <b>투명 정사각 캔버스</b>에 그림을 비율대로 맞춰 가운데 놓습니다 — 흰 배경도, 잘림도 없습니다. 1024를 최대로 둔 이유는 그 위로는 아이콘이 담은 디테일보다 파일이 더 빨리 커지기 때문입니다.',
+      pngReady: 'PNG {n}종 렌더 · {ms}ms', pngRendering: '렌더 중…',
+      pngFail: '이 SVG는 캔버스에 그릴 수 없습니다 — 필터나 외부 이미지 참조가 막고 있을 수 있습니다.',
+      howTitle: '무엇이 빠지고, 왜 빠지는가', howNote: '번들러가 세는 것과 같은 바이트',
+      n1h: '그림이 아니라 에디터 상태',
+      n1p: 'Inkscape·Sketch 파일은 레이어 이름, 안내선, 페이지 색, 앱 상태를 자기 네임스페이스에 담습니다. 브라우저는 전부 건너뜁니다. 그 요소와 <b>xmlns</b> 선언을 지우는 것이 내보낸 로고에서 가장 큰 몫입니다 — 그림은 그대로입니다.',
+      n2h: '소수점은 보이는 것보다 비쌉니다',
+      n2p: '소수 여섯 자리는 픽셀 격자 위에서 숫자 하나에 <b>8글자</b>입니다. 아이콘 크기에서는 두 자리면 1000분의 1픽셀 아래입니다. 작아야 하는 파일은 1자리, 패스가 촘촘해 반올림이 보일 만하면 4자리까지 열어 두었습니다.',
+      n3h: '추정하지 않고 재어 봅니다',
+      n3p: '두 텍스트를 <b>TextEncoder</b>로 UTF-8 인코딩해 바이트 단위로 세고, 미리보기와 모든 내보내기는 최적화된 텍스트 자체로 만듭니다. 파서가 거부하면 오류를 보여 주고 원본을 건드리지 않습니다.',
+      faqTitle: '질문', faqNote: '솔직한 답 네 가지',
+      q1: '최적화해도 그림이 같나요?',
+      a1: '같은 요소가 같은 채움·선·패스로 그립니다. 빠지는 것은 렌더러가 무시하는 것 — 주석·메타데이터·에디터 속성·빈 그룹입니다. 자릿수만이 기하에 닿는 설정이라 기본 2자리로 두고, 미리보기도 결과로 그립니다. 배포 전에 둘을 비교해 보세요.',
+      q2: '<title>·<desc>는 왜 남기나요?',
+      a2: '화면 낭독기가 <b>&lt;title&gt;</b>을 그림의 이름으로, <b>&lt;desc&gt;</b>를 설명으로 읽습니다. 비용은 몇십 바이트입니다. 스위치는 기본 꺼짐이고, 주변 마크업이 이름을 대신하는 장식용 아이콘이라면 켜서 둘 다 지우면 됩니다.',
+      q3: 'JSX 출력을 그대로 써도 되나요?',
+      a3: '됩니다 — 루트에 <b>{...props}</b>가 붙은 default export 컴포넌트라 <b>&lt;SvgForgeIcon className="h-5 w-5" /&gt;</b>로 씁니다. 속성은 카멜케이스, <b>class</b>는 <b>className</b>, <b>style</b>은 JSX 객체가 됩니다. 그라디언트 id는 그대로이므로 같은 파일을 한 화면에 두 번 그린다면 id를 고유하게 바꾸세요.',
+      q4: '파일이 어디로 가나요?',
+      a4: '아무 데도 가지 않습니다. 브라우저가 파일을 읽고 <b>DOMParser</b>가 파싱하며, 내려받는 파일은 이 탭에서 만든 blob입니다. 서버도 분석도 저장소도 없어 아래 외부 요청 수는 0에서 움직이지 않고, 탭을 닫으면 전부 사라집니다.',
+      footCopy: '© 2026 Kim Yihyung · 브라우저에서, 브라우저를 위해 만들었습니다.',
+      footNet: '외부 요청', footP1: '포트폴리오', footP2: '도구 전체', footP3: '소스',
+      footMono: '업로드 없음 · 추적 없음',
+      jsxName: 'SvgForgeIcon'
+    }
+  };
+
+  var state = { lang: 'en', raw: '', out: '', svgEl: null, tab: 'jsx', png: {}, pngToken: 0 };
+
+  function $(id) { return document.getElementById(id); }
+  function t(key) { return (I18N[state.lang] && I18N[state.lang][key]) || I18N.en[key] || key; }
+
+  function applyLang(lang) {
+    state.lang = lang;
+    var dict = I18N[lang];
+    document.documentElement.lang = lang;
+    document.title = dict.docTitle;
+    Array.prototype.forEach.call(document.querySelectorAll('[data-i18n]'), function (el) {
+      var v = dict[el.getAttribute('data-i18n')];
+      if (typeof v === 'string') el.textContent = v;
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-html]'), function (el) {
+      var v = dict[el.getAttribute('data-i18n-html')];
+      if (typeof v === 'string') el.innerHTML = v;
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-placeholder]'), function (el) {
+      var v = dict[el.getAttribute('data-i18n-placeholder')];
+      if (typeof v === 'string') el.setAttribute('placeholder', v);
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-aria]'), function (el) {
+      var v = dict[el.getAttribute('data-i18n-aria')];
+      if (typeof v === 'string') el.setAttribute('aria-label', v);
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-alt]'), function (el) {
+      var v = dict[el.getAttribute('data-i18n-alt')];
+      if (typeof v === 'string') el.setAttribute('alt', v);
+    });
+    var lt = document.querySelectorAll('.lang-toggle .lt');
+    Array.prototype.forEach.call(lt, function (el) {
+      el.classList.toggle('on', el.getAttribute('data-lt') === lang);
+    });
+    var tog = $('langToggle');
+    if (tog) {
+      var next = lang === 'en' ? '한국어로 보기' : 'View in English';
+      tog.setAttribute('title', next);
+      tog.setAttribute('aria-label', next);
+    }
+    render();
+  }
+
+  /* ═════════════════════ external request counter ═════════════════════ */
+  var net = { n: 0 };
+  function paintNet() { var el = $('netCount'); if (el) el.textContent = String(net.n); }
+  try {
+    var of = window.fetch;
+    if (of) {
+      window.fetch = function () { net.n++; paintNet(); return of.apply(this, arguments); };
+    }
+    if (window.XMLHttpRequest) {
+      var ox = XMLHttpRequest.prototype.open;
+      XMLHttpRequest.prototype.open = function () { net.n++; paintNet(); return ox.apply(this, arguments); };
+    }
+  } catch (e) { /* a locked-down browser simply keeps the counter at zero */ }
+
+  /* ═════════════════════ samples ═════════════════════ */
+  var SAMPLE_1 = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    + '<!-- Exported by an editor. Comments, metadata and 6-decimal coordinates are most of this file. -->\n'
+    + '<svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" viewBox="0 0 120 120" width="120" height="120">\n'
+    + '  <title>YH mark</title>\n'
+    + '  <desc>A ring with a notch, and a bar that never closes.</desc>\n'
+    + '  <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><dc:format xmlns:dc="http://purl.org/dc/elements/1.1/">image/svg+xml</dc:format></rdf:RDF></metadata>\n'
+    + '  <sodipodi:namedview id="namedview1" pagecolor="#ffffff" bordercolor="#666666" inkscape:zoom="1.4142136"/>\n'
+    + '  <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1" transform="translate(0.000000,0.000000)">\n'
+    + '    <g id="empty-a"></g>\n'
+    + '    <circle cx="60.000000" cy="60.000000" r="41.123456" fill="none" stroke="#e5b45c" stroke-width="6.500000"/>\n'
+    + '    <path d="M 32.124567 78.456789 L 47.987654 40.123456 L 60.000000 66.789012 L 72.012345 40.123456 L 87.875432 78.456789" fill="none" stroke="#e5b45c" stroke-width="6.500000" stroke-linecap="round" stroke-linejoin="round"/>\n'
+    + '    <g id="empty-b"></g>\n'
+    + '  </g>\n'
+    + '</svg>';
+
+  var SAMPLE_2 = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 32" width="96" height="32">\n'
+    + '  <title>Three icons</title>\n'
+    + '  <desc>Sun, drop and bolt, each on a 24 pixel grid.</desc>\n'
+    + '  <g fill="none" stroke="#f5f2ea" stroke-width="1.800000" stroke-linecap="round">\n'
+    + '    <circle cx="16.000000" cy="16.000000" r="6.400000"/>\n'
+    + '    <path d="M16.000000 3.200000 L16.000000 6.400000 M16.000000 25.600000 L16.000000 28.800000 M3.200000 16.000000 L6.400000 16.000000 M25.600000 16.000000 L28.800000 16.000000"/>\n'
+    + '  </g>\n'
+    + '  <g id="deco"></g>\n'
+    + '  <path d="M48.000000 4.000000 C44.123456 10.234567 40.000000 16.123456 40.000000 20.456789 A8.000000 8.000000 0 0 0 56.000000 20.456789 C56.000000 16.123456 51.876544 10.234567 48.000000 4.000000 Z" fill="#6ea8ff"/>\n'
+    + '  <path d="M78.000000 4.000000 L68.000000 18.000000 L76.000000 18.000000 L72.000000 28.000000 L84.000000 12.000000 L76.000000 12.000000 Z" fill="#e5b45c"/>\n'
+    + '</svg>';
+
+  /* ═════════════════════ input ═════════════════════ */
+  var dropEl = $('drop'), fileEl = $('file'), pasteEl = $('paste');
+
+  function bytes(str) {
+    try { return new TextEncoder().encode(str).length; } catch (e) { return unescape(encodeURIComponent(str)).length; }
+  }
+
+  function setInput(text, name) {
+    state.raw = String(text || '');
+    pasteEl.value = state.raw;
+    $('fileName').textContent = name || '—';
+    render();
+  }
+
+  function readFile(file) {
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function () { setInput(String(reader.result || ''), file.name); };
+    reader.onerror = function () { showError('Could not read that file.'); };
+    reader.readAsText(file, 'utf-8');
+  }
+
+  dropEl.addEventListener('click', function () { fileEl.click(); });
+  dropEl.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileEl.click(); }
+  });
+  ['dragenter', 'dragover'].forEach(function (ev) {
+    dropEl.addEventListener(ev, function (e) { e.preventDefault(); dropEl.classList.add('is-over'); });
+  });
+  ['dragleave', 'drop'].forEach(function (ev) {
+    dropEl.addEventListener(ev, function (e) { e.preventDefault(); dropEl.classList.remove('is-over'); });
+  });
+  dropEl.addEventListener('drop', function (e) {
+    var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (f) readFile(f);
+  });
+  fileEl.addEventListener('change', function () {
+    if (fileEl.files && fileEl.files[0]) readFile(fileEl.files[0]);
+    fileEl.value = '';
+  });
+  $('sample1').addEventListener('click', function () { setInput(SAMPLE_1, 'sample-brand-mark.svg'); });
+  $('sample2').addEventListener('click', function () { setInput(SAMPLE_2, 'sample-icon-set.svg'); });
+  $('clearIn').addEventListener('click', function () { setInput('', '—'); });
+
+  var pasteTimer = null;
+  pasteEl.addEventListener('input', function () {
+    clearTimeout(pasteTimer);
+    pasteTimer = setTimeout(function () {
+      state.raw = pasteEl.value;
+      $('fileName').textContent = 'pasted.svg';
+      render();
+    }, 260);
+  });
+
+  ['optComments', 'optMeta', 'optTitle', 'optNs', 'optEmpty', 'optWs', 'optPrec'].forEach(function (id) {
+    $(id).addEventListener('change', render);
+  });
+
+  /* ═════════════════════ optimize ═════════════════════ */
+  var EDITOR_PREFIX = /^(inkscape|sodipodi|sketch|figma|adobe|vectornator):/i;
+  var GEOM_ATTRS = ('d points transform gradientTransform patternTransform viewBox x y width height cx cy r rx ry '
+    + 'x1 y1 x2 y2 stroke-width stroke-dasharray stroke-dashoffset stroke-miterlimit font-size letter-spacing '
+    + 'word-spacing opacity fill-opacity stroke-opacity stop-opacity offset markerWidth markerHeight refX refY '
+    + 'textLength startOffset pathLength').split(' ');
+  var NUM_RE = /-?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?/g;
+
+  function roundNumberString(value, places) {
+    return value.replace(NUM_RE, function (m) {
+      var n = parseFloat(m);
+      if (!isFinite(n)) return m;
+      var s = n.toFixed(places);
+      if (s.indexOf('.') >= 0) s = s.replace(/0+$/, '').replace(/\.$/, '');
+      if (s === '-0') s = '0';
+      if (s.indexOf('0.') === 0) s = s.slice(1);
+      if (s.indexOf('-0.') === 0) s = '-' + s.slice(2);
+      return s;
+    });
+  }
+
+  function walkElements(root, fn) {
+    var list = [root];
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, null);
+    var n;
+    while ((n = w.nextNode())) list.push(n);
+    list.forEach(fn);
+    return list;
+  }
+
+  function removeComments(root) {
+    var doomed = [];
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_COMMENT, null);
+    var n;
+    while ((n = w.nextNode())) doomed.push(n);
+    doomed.forEach(function (c) { if (c.parentNode) c.parentNode.removeChild(c); });
+    return doomed.length;
+  }
+
+  function removeByTag(root, tags) {
+    var removed = 0;
+    tags.forEach(function (tag) {
+      Array.prototype.slice.call(root.getElementsByTagName(tag)).forEach(function (el) {
+        if (el.parentNode) { el.parentNode.removeChild(el); removed++; }
+      });
+    });
+    return removed;
+  }
+
+  function removeEditorNamespaces(root) {
+    var removed = 0;
+    var attrKilled = 0;
+    walkElements(root, function (el) {
+      if (EDITOR_PREFIX.test(el.nodeName)) {
+        if (el.parentNode) { el.parentNode.removeChild(el); removed++; }
+        return;
+      }
+      var attrs = Array.prototype.slice.call(el.attributes);
+      attrs.forEach(function (a) {
+        if (EDITOR_PREFIX.test(a.name) || /^xmlns:(inkscape|sodipodi|sketch|figma|adobe|vectornator)$/i.test(a.name)) {
+          el.removeAttribute(a.name);
+          attrKilled++;
+        }
+      });
+    });
+    return removed + attrKilled;
+  }
+
+  function removeEmptyGroups(root) {
+    var removed = 0, guard = 0;
+    while (guard++ < 20) {
+      var hit = 0;
+      Array.prototype.slice.call(root.getElementsByTagName('g')).forEach(function (g) {
+        var hasElement = false;
+        for (var i = 0; i < g.childNodes.length; i++) {
+          var c = g.childNodes[i];
+          if (c.nodeType === 1) { hasElement = true; break; }
+          if (c.nodeType === 3 && c.nodeValue.trim()) { hasElement = true; break; }
+        }
+        if (!hasElement && g.parentNode) { g.parentNode.removeChild(g); hit++; }
+      });
+      removed += hit;
+      if (!hit) break;
+    }
+    return removed;
+  }
+
+  function roundPrecision(root, places) {
+    var changed = 0;
+    walkElements(root, function (el) {
+      GEOM_ATTRS.forEach(function (name) {
+        if (!el.hasAttribute(name)) return;
+        var v = el.getAttribute(name);
+        var next = roundNumberString(v, places);
+        if (next !== v) { el.setAttribute(name, next); changed++; }
+      });
+      // style / presentation values can hold numbers too (stroke-dasharray in style)
+      if (el.hasAttribute('style')) {
+        var st = el.getAttribute('style');
+        var nst = roundNumberString(st, places);
+        if (nst !== st) { el.setAttribute('style', nst); changed++; }
+      }
+    });
+    return changed;
+  }
+
+  function countNodes(root) {
+    var n = 0;
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_COMMENT, null);
+    while (w.nextNode()) n++;
+    return n;
+  }
+
+  function optimize(raw, options) {
+    var doc = new DOMParser().parseFromString(raw, 'image/svg+xml');
+    var perr = doc.getElementsByTagName('parsererror');
+    if (perr && perr.length) {
+      var msg = perr[0].textContent || 'unknown parse error';
+      throw new Error(t('errParse') + msg.replace(/\s+/g, ' ').slice(0, 220));
+    }
+    var root = doc.documentElement;
+    if (!root || root.nodeName.toLowerCase() !== 'svg') throw new Error(t('errRoot'));
+
+    var before = countNodes(root);
+    if (options.comments) removeComments(root);
+    if (options.meta) removeByTag(root, ['metadata']);
+    if (options.title) removeByTag(root, ['title', 'desc']);
+    if (options.ns) removeEditorNamespaces(root);
+    if (options.empty) removeEmptyGroups(root);
+    if (options.precision) roundPrecision(root, options.precision);
+    var after = countNodes(root);
+
+    var text = new XMLSerializer().serializeToString(root);
+    if (options.ws && !root.getElementsByTagName('text').length && !root.getElementsByTagName('tspan').length) {
+      text = text.replace(/>\s+</g, '><');
+    }
+    if (text.indexOf('<?xml') !== 0) text = '<?xml version="1.0" encoding="UTF-8"?>\n' + text;
+
+    return { text: text, removed: before - after, el: root };
+  }
+
+  var currentOptions = function () {
+    return {
+      comments: $('optComments').checked,
+      meta: $('optMeta').checked,
+      title: $('optTitle').checked,
+      ns: $('optNs').checked,
+      empty: $('optEmpty').checked,
+      ws: $('optWs').checked,
+      precision: parseInt($('optPrec').value, 10) || 2
+    };
+  };
+
+  function showError(msg) {
+    var box = $('errBox');
+    if (!msg) { box.hidden = true; $('errMsg').textContent = ''; return; }
+    $('errMsg').textContent = msg;
+    box.hidden = false;
+  }
+
+  var previewUrl = null;
+
+  function render() {
+    if (!state.raw.trim()) {
+      showError('');
+      $('srcBytes').textContent = '—';
+      $('outBytes').textContent = '—';
+      $('savedPct').textContent = '—';
+      $('nodeDelta').textContent = '—';
+      $('outCode').value = '';
+      $('saveLine').textContent = '—';
+      $('jsxOut').value = '';
+      $('cssOut').value = '';
+      if (previewUrl) { URL.revokeObjectURL(previewUrl); previewUrl = null; }
+      $('previewImg').removeAttribute('src');
+      state.out = '';
+      state.svgEl = null;
+      $('pngGrid').innerHTML = '';
+      return;
+    }
+    var result;
+    try {
+      result = optimize(state.raw, currentOptions());
+    } catch (err) {
+      showError(err.message || String(err));
+      return;
+    }
+    showError('');
+    state.out = result.text;
+    state.svgEl = result.el;
+
+    var srcN = bytes(state.raw);
+    var outN = bytes(result.text);
+    var pct = srcN ? ((srcN - outN) / srcN) * 100 : 0;
+    $('srcBytes').textContent = srcN.toLocaleString('en-US');
+    $('outBytes').textContent = outN.toLocaleString('en-US');
+    $('savedPct').textContent = (pct >= 0 ? '' : '+') + (pct >= 0 ? pct.toFixed(1) : Math.abs(pct).toFixed(1)) + '%';
+    $('nodeDelta').textContent = String(result.removed);
+    $('outCode').value = result.text;
+    $('saveLine').textContent = srcN > outN
+      ? t('savedLine').replace('{n}', (srcN - outN).toLocaleString('en-US')).replace('{p}', pct.toFixed(1))
+      : t('sameLine');
+
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    previewUrl = URL.createObjectURL(new Blob([result.text], { type: 'image/svg+xml;charset=utf-8' }));
+    $('previewImg').src = previewUrl;
+
+    paintJsx();
+    paintCss();
+    if (state.tab === 'png') schedulePng();
+  }
+
+  /* ═════════════════════ JSX ═════════════════════ */
+  var JSX_ATTR = {
+    'class': 'className',
+    'for': 'htmlFor',
+    'xlink:href': 'xlinkHref',
+    'xml:space': 'xmlSpace',
+    'xml:lang': 'xmlLang',
+    'xmlns:xlink': 'xmlnsXlink',
+    'stroke-width': 'strokeWidth',
+    'stroke-linecap': 'strokeLinecap',
+    'stroke-linejoin': 'strokeLinejoin',
+    'stroke-dasharray': 'strokeDasharray',
+    'stroke-dashoffset': 'strokeDashoffset',
+    'stroke-miterlimit': 'strokeMiterlimit',
+    'stroke-opacity': 'strokeOpacity',
+    'fill-opacity': 'fillOpacity',
+    'fill-rule': 'fillRule',
+    'clip-rule': 'clipRule',
+    'clip-path': 'clipPath',
+    'font-family': 'fontFamily',
+    'font-size': 'fontSize',
+    'font-weight': 'fontWeight',
+    'text-anchor': 'textAnchor',
+    'dominant-baseline': 'dominantBaseline',
+    'alignment-baseline': 'alignmentBaseline',
+    'letter-spacing': 'letterSpacing',
+    'word-spacing': 'wordSpacing',
+    'stop-color': 'stopColor',
+    'stop-opacity': 'stopOpacity',
+    'paint-order': 'paintOrder',
+    'shape-rendering': 'shapeRendering',
+    'vector-effect': 'vectorEffect',
+    'marker-start': 'markerStart',
+    'marker-mid': 'markerMid',
+    'marker-end': 'markerEnd',
+    'gradient-units': 'gradientUnits',
+    'gradient-transform': 'gradientTransform',
+    'pattern-units': 'patternUnits',
+    'pattern-transform': 'patternTransform',
+    'spread-method': 'spreadMethod',
+    'start-offset': 'startOffset',
+    'text-length': 'textLength',
+    'length-adjust': 'lengthAdjust',
+    'baseline-shift': 'baselineShift',
+    'mask-type': 'maskType',
+    'mix-blend-mode': 'mixBlendMode'
+  };
+
+  function camel(name) {
+    if (JSX_ATTR[name.toLowerCase()]) return JSX_ATTR[name.toLowerCase()];
+    if (name.indexOf(':') >= 0) {
+      return name.split(':').map(function (p, i) { return i === 0 ? p : p.charAt(0).toUpperCase() + p.slice(1); }).join('');
+    }
+    return name.replace(/-([a-z])/g, function (m, c) { return c.toUpperCase(); });
+  }
+
+  function styleToJsx(value) {
+    var parts = value.split(';').map(function (s) { return s.trim(); }).filter(Boolean);
+    var out = [];
+    parts.forEach(function (decl) {
+      var i = decl.indexOf(':');
+      if (i < 0) return;
+      var k = decl.slice(0, i).trim().replace(/-([a-z])/g, function (m, c) { return c.toUpperCase(); });
+      var v = decl.slice(i + 1).trim();
+      if (k) out.push(k + ": '" + v.replace(/'/g, "\\'") + "'");
+    });
+    return '{{' + out.join(', ') + '}}';
+  }
+
+  function jsxElement(el, depth, isRoot) {
+    var pad = new Array(depth + 1).join('  ');
+    var name = el.localName;
+    var attrs = [];
+    Array.prototype.slice.call(el.attributes || []).forEach(function (a) {
+      if (/^xmlns:(inkscape|sodipodi|sketch|figma|adobe)$/i.test(a.name)) return;
+      if (/^(inkscape|sodipodi|sketch|figma|adobe):/i.test(a.name)) return;
+      if (a.name === 'style') { attrs.push(['style', styleToJsx(a.value), true]); return; }
+      attrs.push([camel(a.name), a.value, false]);
+    });
+    if (isRoot || depth === 0) attrs.push(['...props', null, 'spread']);
+
+    var attrText = attrs.map(function (pair) {
+      if (pair[2] === 'spread') return '{' + pair[0] + '}';
+      if (pair[2] === true) return pair[0] + '=' + pair[1];
+      return pair[0] + '="' + String(pair[1]).replace(/&/g, '&amp;').replace(/"/g, '&quot;') + '"';
+    }).join(' ');
+
+    var open = pad + '<' + name + (attrText ? ' ' + attrText : '');
+    var kids = Array.prototype.slice.call(el.childNodes).filter(function (c) {
+      return c.nodeType === 1 || (c.nodeType === 3 && c.nodeValue.trim());
+    });
+    if (!kids.length) return open + ' />';
+    if (kids.length === 1 && kids[0].nodeType === 3) {
+      return open + '>' + kids[0].nodeValue.trim() + '</' + name + '>';
+    }
+    var inner = kids.map(function (c) {
+      if (c.nodeType === 3) return pad + '  ' + c.nodeValue.trim();
+      return jsxElement(c, depth + 1, false);
+    }).join('\n');
+    return open + '>\n' + inner + '\n' + pad + '</' + name + '>';
+  }
+
+  function buildJsx() {
+    if (!state.svgEl) return '';
+    var el = state.svgEl;
+    var body = jsxElement(el, 2, true);
+    return 'export default function ' + t('jsxName') + '(props) {\n'
+      + '  return (\n'
+      + body + '\n'
+      + '  );\n'
+      + '}\n';
+  }
+
+  function paintJsx() {
+    var code = buildJsx();
+    $('jsxOut').value = code;
+  }
+
+  /* ═════════════════════ CSS ═════════════════════ */
+  function encodeSvg(text) {
+    return encodeURIComponent(text)
+      .replace(/'/g, '%27')
+      .replace(/\(/g, '%28')
+      .replace(/\)/g, '%29')
+      .replace(/!/g, '%21')
+      .replace(/\*/g, '%2A');
+  }
+
+  function paintCss() {
+    if (!state.out) { $('cssOut').value = ''; $('cssSize').textContent = '—'; return; }
+    var uri = encodeSvg(state.out);
+    var css = '/* SvgForge · ' + bytes(state.out).toLocaleString('en-US') + ' byte SVG, percent-encoded */\n'
+      + '.svg-bg {\n'
+      + '  background-image: url("data:image/svg+xml,' + uri + '");\n'
+      + '  background-repeat: no-repeat;\n'
+      + '  background-position: center;\n'
+      + '  background-size: contain;\n'
+      + '}\n';
+    $('cssOut').value = css;
+    $('cssSize').textContent = css.length.toLocaleString('en-US') + ' chars';
+  }
+
+  /* ═════════════════════ PNG ═════════════════════ */
+  var PNG_SIZES = [64, 128, 256, 512, 1024];
+
+  function svgAspect() {
+    var el = state.svgEl;
+    if (!el) return 1;
+    var vb = (el.getAttribute('viewBox') || '').trim().split(/[\s,]+/).map(parseFloat);
+    if (vb.length === 4 && vb[2] > 0 && vb[3] > 0) return vb[2] / vb[3];
+    var w = parseFloat(el.getAttribute('width'));
+    var h = parseFloat(el.getAttribute('height'));
+    if (w > 0 && h > 0) return w / h;
+    return 1;
+  }
+
+  function renderPng(size) {
+    return new Promise(function (resolve, reject) {
+      var blob = new Blob([state.out], { type: 'image/svg+xml;charset=utf-8' });
+      var url = URL.createObjectURL(blob);
+      var img = new Image();
+      img.onload = function () {
+        try {
+          var canvas = document.createElement('canvas');
+          canvas.width = size;
+          canvas.height = size;
+          var ctx = canvas.getContext('2d');
+          ctx.clearRect(0, 0, size, size);
+          var ar = svgAspect();
+          var w = ar >= 1 ? size : size * ar;
+          var h = ar >= 1 ? size / ar : size;
+          if (w > size) { h = h * (size / w); w = size; }
+          if (h > size) { w = w * (size / h); h = size; }
+          var dx = (size - w) / 2;
+          var dy = (size - h) / 2;
+          ctx.drawImage(img, dx, dy, w, h);
+          canvas.toBlob(function (png) {
+            URL.revokeObjectURL(url);
+            if (!png) reject(new Error('toBlob failed'));
+            else resolve({ blob: png, canvas: canvas, w: Math.round(w), h: Math.round(h) });
+          }, 'image/png');
+        } catch (e) {
+          URL.revokeObjectURL(url);
+          reject(e);
+        }
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); reject(new Error('image load failed')); };
+      img.src = url;
+    });
+  }
+
+  function fmtBytes(n) {
+    if (n < 1024) return n + ' B';
+    return (n / 1024).toFixed(n < 10240 ? 1 : 0) + ' KB';
+  }
+
+  function schedulePng() {
+    if (!state.out) return;
+    var token = ++state.pngToken;
+    var host = $('pngGrid');
+    $('pngStatus').textContent = t('pngRendering');
+    if (!host.children.length) {
+      host.innerHTML = '';
+      PNG_SIZES.forEach(function (size) {
+        var cell = document.createElement('div');
+        cell.className = 'png-cell';
+        cell.setAttribute('data-size', String(size));
+        cell.innerHTML = '<canvas width="96" height="96" aria-hidden="true"></canvas>'
+          + '<span class="sz">' + size + ' px</span>'
+          + '<span class="bd" data-bd="' + size + '">—</span>'
+          + '<button class="btn btn--sm" type="button" data-dl="' + size + '" disabled>' + t('dl') + '</button>';
+        host.appendChild(cell);
+      });
+    }
+    var started = Date.now();
+    var chain = Promise.resolve();
+    PNG_SIZES.forEach(function (size) {
+      chain = chain.then(function () {
+        if (token !== state.pngToken) return null;
+        return renderPng(size).then(function (r) {
+          if (token !== state.pngToken) return null;
+          state.png[size] = r;
+          var cell = host.querySelector('[data-size="' + size + '"]');
+          if (cell) {
+            var cv = cell.querySelector('canvas');
+            cv.width = 96; cv.height = 96;
+            var cx = cv.getContext('2d');
+            cx.clearRect(0, 0, 96, 96);
+            cx.drawImage(r.canvas, 0, 0, 96, 96);
+            cell.querySelector('[data-bd]').textContent = fmtBytes(r.blob.size);
+            var btn = cell.querySelector('[data-dl]');
+            btn.disabled = false;
+            btn.setAttribute('data-ready', '1');
+          }
+        });
+      });
+    });
+    chain.then(function () {
+      if (token !== state.pngToken) return;
+      $('pngStatus').textContent = t('pngReady').replace('{n}', String(PNG_SIZES.length)).replace('{ms}', String(Date.now() - started));
+    }).catch(function () {
+      if (token !== state.pngToken) return;
+      $('pngStatus').textContent = t('pngFail');
+    });
+  }
+
+  $('pngGrid').addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-dl]');
+    if (!btn) return;
+    var size = parseInt(btn.getAttribute('data-dl'), 10);
+    var r = state.png[size];
+    if (!r) return;
+    downloadBlob('svgforge-' + size + '.png', r.blob);
+  });
+  $('genPng').addEventListener('click', function () { state.png = {}; $('pngGrid').innerHTML = ''; schedulePng(); });
+  $('dlAllPng').addEventListener('click', function () {
+    var i = 0;
+    function next() {
+      if (i >= PNG_SIZES.length) return;
+      var size = PNG_SIZES[i++];
+      var r = state.png[size];
+      if (r) downloadBlob('svgforge-' + size + '.png', r.blob);
+      setTimeout(next, 420);
+    }
+    next();
+  });
+  $('tabPng').addEventListener('click', function () { schedulePng(); });
+
+  /* ═════════════════════ downloads + tabs ═════════════════════ */
+  function downloadBlob(name, blob) {
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+  }
+
+  function downloadText(name, text, mime) {
+    downloadBlob(name, new Blob([text], { type: (mime || 'text/plain') + ';charset=utf-8' }));
+  }
+
+  function copyText(text, statusEl) {
+    var done = function () { if (statusEl) { statusEl.textContent = t('copyDone'); setTimeout(function () { statusEl.textContent = ''; }, 1800); } };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(function () { fallbackCopy(text, done); });
+    } else {
+      fallbackCopy(text, done);
+    }
+  }
+  function fallbackCopy(text, done) {
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+      done();
+    } catch (e) { /* nothing to do */ }
+  }
+
+  $('copyOut').addEventListener('click', function () { if (state.out) copyText(state.out, $('saveLine').nextElementSibling || null); });
+  $('dlOut').addEventListener('click', function () { if (state.out) downloadText('optimized.svg', state.out, 'image/svg+xml'); });
+  $('copyJsx').addEventListener('click', function () { copyText($('jsxOut').value, null); });
+  $('dlJsx').addEventListener('click', function () { downloadText('SvgForgeIcon.jsx', $('jsxOut').value, 'text/javascript'); });
+  $('copyCss').addEventListener('click', function () { copyText($('cssOut').value, null); });
+  $('dlCss').addEventListener('click', function () { downloadText('svg-bg.css', $('cssOut').value, 'text/css'); });
+
+  var TABS = ['jsx', 'css', 'png'];
+  function showTab(name) {
+    state.tab = name;
+    TABS.forEach(function (key) {
+      var btn = $('tab' + key.charAt(0).toUpperCase() + key.slice(1));
+      var panel = $('panel' + key.charAt(0).toUpperCase() + key.slice(1));
+      var on = key === name;
+      btn.setAttribute('aria-selected', String(on));
+      panel.hidden = !on;
+    });
+    if (name === 'png') schedulePng();
+  }
+  TABS.forEach(function (key) {
+    $('tab' + key.charAt(0).toUpperCase() + key.slice(1)).addEventListener('click', function () { showTab(key); });
+  });
+
+  $('langToggle').addEventListener('click', function () {
+    applyLang(state.lang === 'en' ? 'ko' : 'en');
+  });
+
+  /* ═════════════════════ boot ═════════════════════ */
+  setInput(SAMPLE_1, 'sample-brand-mark.svg');
+  applyLang('en');
+  paintNet();
+})();
+</script>
+</body>
+</html>
