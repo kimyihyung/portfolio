@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0b0d">
+<title>CronMint — Cron Expression Explainer &amp; Next 10 Runs | Kim Yihyung</title>
+<meta name="description" content="Paste a 5-field or 6-field cron expression and read it back in plain English or Korean, see the next 10 runs in the timezone you choose, and copy a crontab or GitHub Actions snippet. Parsed in your browser — zero uploads, zero external requests.">
+<meta name="keywords" content="cron expression generator, cron explainer, crontab syntax, cron next run, cron timezone, github actions schedule, cron 6 fields seconds, cron validator, crontab example, cronmint, zero upload">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/cron-mint/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b0d'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23e5b45c' stroke-width='2'/%3E%3Cpath d='M16 11v5.5l3.6 2.4' fill='none' stroke='%23e5b45c' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/cron-mint/">
+<meta property="og:title" content="CronMint — a cron line, read back to you">
+<meta property="og:description" content="5-field and 6-field cron explained in English or Korean, the next 10 runs in your timezone, and crontab · GitHub Actions snippets ready to copy.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="CronMint — cron expression explainer and next-run calculator">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CronMint — a cron line, read back to you">
+<meta name="twitter:description" content="Cron in plain English or Korean, next 10 runs by timezone, crontab and GitHub Actions snippets — all in the tab, zero uploads.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "CronMint — Cron Expression Explainer & Next Runs",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/cron-mint/",
+      "description": "Reads a five-field or six-field cron expression and explains it in plain English or Korean, computes the next ten runs in a chosen IANA timezone with relative times and the UTC equivalent, offers twelve common presets, and writes ready-to-copy crontab and GitHub Actions snippets. Every calculation happens in the browser; nothing is uploaded and no external request is made.",
+      "featureList": [
+        "5-field and 6-field (seconds) cron input with a per-field visual editor",
+        "Plain-language reading in English and Korean",
+        "Next 10 runs in Asia/Seoul, UTC, America/New_York, Europe/London, Asia/Tokyo or local time",
+        "Relative time and UTC equivalent for every run",
+        "12 common presets",
+        "One-line, Linux crontab and GitHub Actions snippets with copy",
+        "Field-level errors for bad values, ranges and steps",
+        "100% client-side: 0 bytes uploaded, 0 external requests"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "CronMint", "item": "https://kimyihyung.github.io/portfolio/tools/cron-mint/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Why does my cron job run at the wrong hour?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Almost always a timezone gap. Linux crontab has no timezone field: it fires in the server's local time, or in UTC when the server runs on UTC — which most containers and CI runners do. GitHub Actions schedules default to UTC as well. Pick the zone your job actually runs in here, then read the UTC equivalent printed beside each run." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between 5 and 6 cron fields?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Five fields are minute, hour, day of month, month and weekday — the POSIX/Vixie form used by crontab, systemd timers and GitHub Actions. Six fields put seconds first, which is what Quartz and Kubernetes CronJob-style parsers accept. This tool parses both; the extra field only changes the input, not the reading." }
+        },
+        {
+          "@type": "Question",
+          "name": "Are L, W and # supported?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. L (last day), W (nearest weekday) and # (nth weekday) are Quartz extensions, not POSIX cron, and each engine implements them differently. Rather than guess, this parser reports them as unsupported so a line that works here also works in crontab." }
+        },
+        {
+          "@type": "Question",
+          "name": "When both day-of-month and weekday are set, which one wins?",
+          "acceptedAnswer": { "@type": "Answer", "text": "In Vixie cron — the crontab most Linux systems ship — the two are ORed: it fires when either matches. 0 0 1 * 1 runs on the 1st of the month and on every Monday. Quartz does the opposite and refuses the expression unless one of the two is ?. This tool follows the POSIX behaviour and says so in the reading." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does anything leave the browser?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. The expression is parsed, explained and projected by the script on this page. There is no API call, no analytics and no storage of what you typed. The footer counts external requests and the tab reports 0." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+:root {
+  --bg: #0b0b0d;
+  --bg2: #0e0e11;
+  --panel: #141311;
+  --panel2: #1b1917;
+  --line: rgba(255,255,255,.09);
+  --line2: rgba(255,255,255,.18);
+  --ink: #f7f2e9;
+  --muted: #a9a29a;
+  --muted2: #7d766e;
+  --accent: #e5b45c;
+  --accent2: #f3cf85;
+  --accent-dim: rgba(229,180,92,.12);
+  --on-accent: #1d1503;
+  --ok: #7fd6a0;
+  --warn: #ffa06b;
+  --bad: #ff7d7d;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --shadow: 0 24px 70px rgba(0,0,0,.55);
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  line-height: 1.6;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(110% 55% at 50% -18%, rgba(229,180,92,.13), transparent 62%),
+    radial-gradient(60% 40% at 100% 2%, rgba(229,180,92,.05), transparent 60%);
+  background-repeat: no-repeat;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: var(--accent); color: var(--on-accent); }
+a { color: inherit; }
+button, input, select, textarea { font-family: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+.wrap { width: 100%; max-width: 1220px; margin: 0 auto; padding: 0 20px 48px; }
+
+/* ---------- topbar ---------- */
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0 12px; }
+.brand { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: var(--ink); min-width: 0; }
+.mark {
+  min-width: 28px; height: 22px; padding: 0 6px; border-radius: 7px; flex: none;
+  border: 1px solid rgba(229,180,92,.45); background: var(--accent-dim);
+  display: grid; place-items: center; font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: var(--accent);
+}
+.brand-txt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.top-actions { display: inline-flex; align-items: center; gap: 9px; flex: none; }
+.lang-toggle {
+  appearance: none; border: 1px solid var(--line); background: var(--panel); color: var(--muted2);
+  height: 34px; padding: 0 11px; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px;
+  cursor: pointer; font-size: 11px; font-weight: 700; letter-spacing: .06em; line-height: 1;
+  transition: color .2s, border-color .2s, transform .15s;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.94); }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
+.topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
+
+/* ---------- hero ---------- */
+.hero { padding: 22px 0 18px; max-width: 880px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; margin: 0 0 14px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--accent);
+  border: 1px solid rgba(229,180,92,.28); background: rgba(229,180,92,.06); padding: 6px 11px; border-radius: 999px;
+}
+.eyebrow .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+h1 { margin: 0 0 14px; font-size: clamp(28px, 4.4vw, 44px); line-height: 1.12; letter-spacing: -.025em; font-weight: 800; }
+h1 .soft { color: var(--muted); }
+h1 .gold { color: var(--accent); }
+.lede { margin: 0 0 16px; color: var(--muted); font-size: 15px; max-width: 780px; }
+.lede strong { color: var(--ink); font-weight: 600; }
+.lede code { font-family: var(--mono); font-size: .92em; color: var(--accent); }
+
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--panel); font-size: 11.5px; color: var(--muted);
+  font-family: var(--mono); letter-spacing: .02em;
+}
+.pill b { color: var(--ink); font-weight: 700; }
+.pill--live { border-color: rgba(127,214,160,.32); background: rgba(127,214,160,.07); color: #a6e6c4; }
+.pill--live b { color: #bff3d8; }
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px rgba(127,214,160,.14); }
+
+/* ---------- layout ---------- */
+.work { display: grid; grid-template-columns: minmax(0,1fr) 352px; gap: 16px; align-items: start; margin-top: 6px; }
+@media (max-width: 1040px) { .work { grid-template-columns: minmax(0,1fr); } }
+
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); min-width: 0; }
+.panel { padding: 16px; display: grid; gap: 13px; min-width: 0; }
+.panel h3 { margin: 0; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted2); font-family: var(--mono); font-weight: 700; }
+.side { display: grid; gap: 12px; min-width: 0; }
+@media (min-width: 1041px) { .side { position: sticky; top: 14px; } }
+
+.btn {
+  appearance: none; cursor: pointer; border-radius: 11px; border: 1px solid var(--line2);
+  background: var(--panel2); color: var(--ink); font-size: 13px; font-weight: 650;
+  padding: 10px 16px; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  transition: transform .12s, border-color .2s, background .2s, opacity .2s; text-decoration: none;
+}
+.btn:hover { border-color: rgba(255,255,255,.3); }
+.btn:active { transform: scale(.98); }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 750; }
+.btn--primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.btn--ghost { background: transparent; }
+.btn--sm { padding: 7px 11px; font-size: 12px; border-radius: 9px; }
+.btn--block { width: 100%; }
+
+.seg { display: flex; gap: 3px; padding: 3px; background: var(--panel2); border: 1px solid var(--line); border-radius: 11px; min-width: 0; }
+.seg button { flex: 1 1 auto; appearance: none; border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; font-weight: 650; padding: 7px 6px; border-radius: 8px; line-height: 1.25; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--accent-dim); color: var(--accent); box-shadow: inset 0 0 0 1px rgba(229,180,92,.35); }
+
+/* ---------- expression ---------- */
+.calc-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.calc-head h2 { margin: 0; font-size: 16.5px; letter-spacing: -.01em; }
+.calc-head span { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted2); }
+
+.expr-wrap {
+  display: flex; align-items: center; gap: 10px; padding: 12px 14px;
+  border: 1px solid var(--line); border-radius: var(--radius-sm); background: #0d0d10; min-width: 0;
+  transition: border-color .2s, background .2s;
+}
+.expr-wrap:focus-within { border-color: rgba(229,180,92,.55); }
+.expr-wrap.is-bad { border-color: rgba(255,125,125,.45); background: rgba(255,125,125,.04); }
+.expr-wrap .pr { font-family: var(--mono); color: var(--muted2); font-size: 15px; flex: none; }
+#expr {
+  appearance: none; border: 0; background: transparent; color: var(--ink); width: 100%; min-width: 0;
+  font-family: var(--mono); font-size: clamp(16px, 3.6vw, 22px); font-weight: 650; letter-spacing: .02em;
+  padding: 2px 0; line-height: 1.4;
+}
+#expr:focus { outline: none; }
+.expr-state { flex: none; font-family: var(--mono); font-size: 10px; letter-spacing: .08em; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted2); white-space: nowrap; }
+.expr-state.is-ok { color: var(--ok); border-color: rgba(127,214,160,.35); background: rgba(127,214,160,.07); }
+.expr-state.is-bad { color: var(--bad); border-color: rgba(255,125,125,.35); background: rgba(255,125,125,.07); }
+
+.errs { display: grid; gap: 5px; margin: 0; padding: 0; list-style: none; }
+.errs li { font-size: 12.4px; color: var(--bad); display: flex; gap: 7px; align-items: baseline; }
+.errs li::before { content: "!"; font-family: var(--mono); font-size: 10px; font-weight: 700; width: 14px; height: 14px; border-radius: 4px; background: rgba(255,125,125,.14); display: inline-grid; place-items: center; flex: none; }
+
+/* ---------- field editor ---------- */
+.fields { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 8px; min-width: 0; }
+@media (max-width: 900px) { .fields { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+@media (max-width: 460px) { .fields { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+.field { border: 1px solid var(--line); border-radius: 11px; background: var(--panel2); padding: 8px 9px 7px; display: grid; gap: 5px; min-width: 0; transition: border-color .2s; }
+.field:focus-within { border-color: rgba(229,180,92,.6); }
+.field.is-bad { border-color: rgba(255,125,125,.55); }
+.f-top { display: flex; align-items: baseline; justify-content: space-between; gap: 4px; }
+.f-name { font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted2); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.f-range { font-family: var(--mono); font-size: 8.5px; color: var(--muted2); opacity: .8; flex: none; }
+.f-input {
+  appearance: none; border: 0; background: transparent; color: var(--ink); width: 100%; min-width: 0;
+  font-family: var(--mono); font-size: 15px; font-weight: 700; padding: 0; line-height: 1.5; letter-spacing: -.01em;
+}
+.f-input:focus { outline: none; }
+.f-chips { display: flex; flex-wrap: wrap; gap: 3px; }
+.f-chips button {
+  appearance: none; border: 1px solid var(--line); background: transparent; color: var(--muted2);
+  font-family: var(--mono); font-size: 9.5px; padding: 2px 4px; border-radius: 5px; cursor: pointer; line-height: 1.3;
+  transition: color .15s, border-color .15s, background .15s;
+}
+.f-chips button:hover { color: var(--accent); border-color: rgba(229,180,92,.45); background: rgba(229,180,92,.06); }
+
+/* ---------- reading ---------- */
+.human {
+  padding: 14px 16px; border-radius: var(--radius-sm); border: 1px solid rgba(229,180,92,.26);
+  background: linear-gradient(180deg, rgba(229,180,92,.10), rgba(229,180,92,.02)); min-width: 0;
+}
+.h-label { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
+.h-label span:first-child { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted2); }
+.h-badge { font-family: var(--mono); font-size: 9px; letter-spacing: .1em; color: var(--accent); border: 1px solid rgba(229,180,92,.32); border-radius: 999px; padding: 1px 7px; }
+.h-text { margin: 0; font-size: clamp(16px, 3.4vw, 20px); font-weight: 700; letter-spacing: -.015em; line-height: 1.42; color: var(--accent); overflow-wrap: anywhere; }
+.h-text.is-muted { color: var(--muted2); font-weight: 600; font-size: 15px; }
+.h-sub { margin: 6px 0 0; font-size: 11.6px; color: var(--muted2); line-height: 1.6; }
+.h-sub b { color: var(--muted); font-weight: 600; }
+
+/* ---------- presets ---------- */
+.presets { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 6px; min-width: 0; }
+@media (max-width: 880px) { .presets { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 420px) { .presets { grid-template-columns: minmax(0,1fr); } }
+.preset {
+  appearance: none; cursor: pointer; text-align: left; min-width: 0; display: grid; gap: 1px;
+  padding: 7px 9px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel2);
+  color: var(--muted); transition: border-color .18s, background .18s, color .18s;
+}
+.preset:hover { border-color: var(--line2); color: var(--ink); }
+.preset[aria-pressed="true"] { border-color: rgba(229,180,92,.5); background: rgba(229,180,92,.1); color: var(--ink); }
+.preset .p-name { font-size: 11.5px; font-weight: 650; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.preset .p-expr { font-family: var(--mono); font-size: 9.5px; color: var(--muted2); letter-spacing: .02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.preset[aria-pressed="true"] .p-expr { color: var(--accent); }
+
+/* ---------- runs ---------- */
+.run-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.run-head h3 { margin: 0; }
+.tz-sel {
+  appearance: none; border: 1px solid var(--line); background: var(--panel2); color: var(--ink);
+  border-radius: 9px; padding: 5px 8px; font-size: 11.5px; font-family: var(--mono); cursor: pointer; max-width: 100%;
+}
+.tz-sel option { background: #141311; color: var(--ink); }
+.now-line { margin: 0; font-size: 11.4px; color: var(--muted2); font-family: var(--mono); letter-spacing: .01em; }
+.now-line b { color: var(--muted); font-weight: 650; }
+
+.runs { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+.run { display: grid; grid-template-columns: 20px minmax(0,1fr) auto; gap: 8px; align-items: baseline; padding: 7px 0; border-top: 1px dashed rgba(255,255,255,.07); min-width: 0; }
+.run:first-child { border-top: 0; }
+.run .i { font-family: var(--mono); font-size: 9.5px; color: var(--muted2); }
+.run .when { min-width: 0; display: grid; gap: 1px; }
+.run .abs { font-family: var(--mono); font-size: 12.4px; color: var(--ink); letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.run .utc { font-family: var(--mono); font-size: 9.5px; color: var(--muted2); }
+.run .rel { font-size: 11px; color: var(--muted); font-family: var(--mono); white-space: nowrap; text-align: right; }
+.run.is-next .abs { color: var(--accent); }
+.run.is-next .rel { color: var(--accent); }
+.runs-empty { margin: 0; padding: 10px 0 4px; font-size: 12px; color: var(--muted2); }
+
+/* ---------- snippets ---------- */
+.code { margin: 0; padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: #0d0d10; color: #cfd6c9; font-family: var(--mono); font-size: 11px; line-height: 1.75; white-space: pre; overflow-x: auto; max-height: 280px; }
+.row-actions { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+.status { min-height: 16px; margin: 0; font-size: 12px; color: var(--muted); }
+.status.is-ok { color: var(--ok); }
+.status.is-warn { color: var(--warn); }
+
+/* ---------- sections ---------- */
+.section { margin-top: 40px; scroll-margin-top: 18px; }
+.sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 12px; border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 16px; }
+.sec-head h2 { margin: 0; font-size: 17px; letter-spacing: -.01em; }
+.sec-head span { font-family: var(--mono); font-size: 11px; color: var(--muted2); letter-spacing: .08em; text-transform: uppercase; }
+
+.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+.note { padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel); min-width: 0; }
+.note h3 { margin: 0 0 8px; font-size: 14px; display: flex; gap: 8px; align-items: baseline; }
+.note h3 span { font-family: var(--mono); font-size: 10.5px; color: var(--accent); letter-spacing: .1em; }
+.note p { margin: 0; font-size: 12.8px; color: var(--muted); line-height: 1.62; }
+.note p + p { margin-top: 8px; }
+.note b { color: var(--ink); font-weight: 600; }
+.note table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 11.6px; }
+.note table th, .note table td { padding: 4px 6px; border-bottom: 1px dashed rgba(255,255,255,.08); text-align: right; color: var(--ink); font-family: var(--mono); }
+.note table th:first-child, .note table td:first-child { text-align: left; font-family: var(--font); color: var(--muted); }
+.note table th { font-family: var(--mono); font-size: 9.5px; letter-spacing: .06em; color: var(--muted2); font-weight: 700; }
+
+.faq { display: grid; gap: 8px; }
+details.qa { border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); overflow: hidden; }
+details.qa summary { cursor: pointer; padding: 13px 44px 13px 15px; font-size: 13.5px; font-weight: 600; list-style: none; position: relative; }
+details.qa summary::-webkit-details-marker { display: none; }
+details.qa summary::after { content: "+"; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--accent); font-family: var(--mono); font-size: 15px; }
+details.qa[open] summary::after { content: "−"; }
+details.qa .a { padding: 0 15px 14px; font-size: 12.8px; color: var(--muted); line-height: 1.68; }
+details.qa .a b { color: var(--ink); font-weight: 600; }
+
+.foot { margin-top: 34px; padding-top: 14px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--muted2); }
+.foot-links { display: inline-flex; flex-wrap: wrap; gap: 12px; }
+.foot-links a { text-decoration: none; color: var(--muted); border-bottom: 1px solid transparent; }
+.foot-links a:hover { color: var(--ink); border-bottom-color: var(--line2); }
+.foot .net { font-family: var(--mono); letter-spacing: .02em; }
+.foot .net b { color: var(--ok); }
+
+@media (max-width: 640px) {
+  .wrap { padding: 0 14px 36px; }
+  .topbar { padding: 14px 0 8px; }
+  .brand-txt { font-size: 12px; letter-spacing: .1em; }
+  .hero { padding: 16px 0 12px; }
+  .lede { font-size: 14px; }
+  .panel { padding: 13px; }
+  .sec-head h2 { font-size: 16px; }
+  .expr-wrap { padding: 10px 11px; gap: 7px; }
+  .run .rel { font-size: 10px; }
+  .eyebrow { font-size: 9.5px; letter-spacing: .1em; padding: 5px 9px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="/portfolio/" aria-label="Kim Yihyung — portfolio" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="한국어로 보기" aria-label="한국어로 보기">
+        <span class="lt on" data-lt="en">EN</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="ko">KO</span>
+      </button>
+      <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← All tools</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="eyebrow">CronMint · parse · explain · next runs</span></p>
+      <h1 data-i18n-html="h1">A cron line,<br><span class="soft">read back to you.</span><br><span class="gold">Before it runs.</span></h1>
+      <p class="lede" data-i18n-html="lede">
+        Paste a <strong>5-field or 6-field cron</strong> expression and get it back in plain English or Korean,
+        the <strong>next 10 runs</strong> in the timezone you choose, and a <strong>crontab or GitHub Actions</strong>
+        snippet of the same schedule — parsed and projected in this tab, never on a server.
+      </p>
+      <div class="badge-row">
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillUp">0 bytes uploaded</b></span>
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillNet">0 external requests</b></span>
+        <span class="pill" data-i18n="pillFields">5 + 6 fields</span>
+        <span class="pill" data-i18n="pillOut">crontab · Actions</span>
+      </div>
+    </section>
+
+    <!-- ══════════ editor ══════════ -->
+    <section class="work" aria-label="Cron editor" data-i18n-aria="editorAria">
+      <div class="card panel" id="editorCard">
+
+        <div class="seg" id="modeSeg" role="group" aria-label="Field count" data-i18n-aria="modeAria">
+          <button type="button" data-mode="5" aria-pressed="true" data-i18n="mode5">5 fields · every minute</button>
+          <button type="button" data-mode="6" aria-pressed="false" data-i18n="mode6">6 fields · with seconds</button>
+        </div>
+
+        <div class="calc-head">
+          <h2 data-i18n="exprHead">Expression</h2>
+          <span data-i18n="exprNote">minute hour day month weekday</span>
+        </div>
+
+        <div class="expr-wrap" id="exprWrap">
+          <span class="pr" aria-hidden="true">$</span>
+          <input id="expr" type="text" value="0 9 * * 1-5" spellcheck="false" autocapitalize="off"
+                 autocomplete="off" aria-label="Cron expression" aria-describedby="errs">
+          <span class="expr-state" id="exprState">—</span>
+        </div>
+        <ul class="errs" id="errs" aria-live="polite"></ul>
+
+        <div class="calc-head" style="margin-top:2px">
+          <h2 data-i18n="fieldHead">Field editor</h2>
+          <span data-i18n="fieldNote">click a value to set it</span>
+        </div>
+        <div class="fields" id="fields"></div>
+
+        <div class="human" id="human">
+          <div class="h-label"><span data-i18n="readsAs">Reads as</span><span class="h-badge" id="hBadge">EN</span></div>
+          <p class="h-text" id="hText">—</p>
+          <p class="h-sub" id="hSub"></p>
+        </div>
+
+        <div class="calc-head" style="margin-top:2px">
+          <h2 data-i18n="presetHead">Presets</h2>
+          <span data-i18n="presetNote">twelve lines that cover most jobs</span>
+        </div>
+        <div class="presets" id="presets"></div>
+      </div>
+
+      <aside class="side">
+        <div class="card panel">
+          <div class="run-head">
+            <h3 data-i18n="runsHead">Next 10 runs</h3>
+            <select class="tz-sel" id="tzSel" aria-label="Timezone" data-i18n-aria="tzAria"></select>
+          </div>
+          <p class="now-line"><span data-i18n="nowIn">now in</span> <b id="nowTz">Asia/Seoul</b> · <span id="nowTime">—</span></p>
+          <ol class="runs" id="runs"></ol>
+          <p class="runs-empty" id="runsEmpty" hidden data-i18n="runsEmpty">Fix the expression to see runs.</p>
+        </div>
+      </aside>
+    </section>
+
+    <!-- ══════════ snippets ══════════ -->
+    <section class="section" aria-labelledby="snipTitle">
+      <div class="sec-head">
+        <h2 id="snipTitle" data-i18n="snipHead">Take it with you</h2>
+        <span data-i18n="snipNote">same schedule, ready to paste</span>
+      </div>
+      <div class="card panel">
+        <div class="seg" id="snipSeg" role="group" aria-label="Snippet type" data-i18n-aria="snipAria">
+          <button type="button" data-kind="line" aria-pressed="true" data-i18n="snipLine">One line</button>
+          <button type="button" data-kind="crontab" aria-pressed="false" data-i18n="snipCrontab">Linux crontab</button>
+          <button type="button" data-kind="actions" aria-pressed="false" data-i18n="snipActions">GitHub Actions</button>
+        </div>
+        <pre class="code" id="codeOut" tabindex="0"></pre>
+        <div class="row-actions">
+          <button class="btn btn--primary" id="copySnip" type="button" data-i18n="copySnip">Copy snippet</button>
+          <button class="btn btn--sm" id="copyExpr" type="button" data-i18n="copyExpr">Copy expression only</button>
+          <p class="status" id="snipStatus" aria-live="polite"></p>
+        </div>
+        <p class="caveat" id="snipCaveat"></p>
+      </div>
+    </section>
+
+    <!-- ══════════ notes ══════════ -->
+    <section class="section" aria-labelledby="nrTitle">
+      <div class="sec-head">
+        <h2 id="nrTitle" data-i18n="nrHead">How this reads a line</h2>
+        <span data-i18n="nrNote">POSIX first, edges stated</span>
+      </div>
+      <div class="notes">
+        <div class="note">
+          <h3><span>01</span><span data-i18n="n1h">Fields, ranges and steps</span></h3>
+          <p data-i18n-html="n1p">Each field is a list of numbers, names, ranges and steps: <b>1,15</b>, <b>mon-fri</b>, <b>9-17</b>, <b>*/5</b> and <b>20/15</b> all parse. A field that is <b>*</b> (or <b>?</b>) is unrestricted — the difference matters for the next note.</p>
+          <table>
+            <thead><tr><th data-i18n="tField">Field</th><th data-i18n="tRange">Range</th></tr></thead>
+            <tbody>
+              <tr><td data-i18n="fMin">Minute</td><td>0–59</td></tr>
+              <tr><td data-i18n="fHour">Hour</td><td>0–23</td></tr>
+              <tr><td data-i18n="fDom">Day of month</td><td>1–31</td></tr>
+              <tr><td data-i18n="fMon">Month</td><td>1–12 / JAN–DEC</td></tr>
+              <tr><td data-i18n="fDow">Weekday</td><td>0–7 / SUN–SAT</td></tr>
+              <tr><td data-i18n="fSec">Second (6-field)</td><td>0–59</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="note">
+          <h3><span>02</span><span data-i18n="n2h">Two day rules, one tie</span></h3>
+          <p data-i18n-html="n2p">In Vixie cron, if <b>day of month</b> and <b>weekday</b> are both restricted, the job runs when <b>either</b> matches — <b>0 0 1 * 1</b> fires on the 1st and on every Monday. Leave one as <b>*</b> and only the other applies. Quartz refuses that line instead unless one of the two is <b>?</b>; this tool follows crontab and states which rule it used.</p>
+        </div>
+        <div class="note">
+          <h3><span>03</span><span data-i18n="n3h">Timezones are the usual bug</span></h3>
+          <p data-i18n-html="n3p">crontab has no timezone field: it fires in the server's local time, which is <b>UTC</b> on most containers and runners. GitHub Actions schedules also default to UTC and now accept an optional <b>timezone:</b> key; the shortest interval there is <b>5 minutes</b>. Each run below is shown in your chosen zone with its <b>UTC</b> equivalent, so the line you paste says the hour you meant.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="faqTitle">
+      <div class="sec-head">
+        <h2 id="faqTitle" data-i18n="faqTitle">Questions</h2>
+        <span data-i18n="faqNote">syntax · timezone · platforms</span>
+      </div>
+      <div class="faq">
+        <details class="qa">
+          <summary data-i18n="q1">Why does my job run at the wrong hour?</summary>
+          <div class="a" data-i18n-html="a1">Nearly always a timezone gap. <b>crontab</b> fires in the server's local time — UTC on most containers — and <b>GitHub Actions</b> schedules default to UTC too. Set the zone your machine actually uses above and read the UTC column: <b>0 9 * * 1-5</b> in Asia/Seoul is <b>0 0 * * 1-5</b> in UTC, which is what a UTC server needs.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q2">5 fields or 6 — which do I need?</summary>
+          <div class="a" data-i18n-html="a2"><b>Five</b> for crontab, systemd timers, GitHub Actions and most schedulers. <b>Six</b> when the first field is seconds — Quartz, and parsers that follow it. Nothing else changes: a six-field line is a five-field line with a second in front, and this page reads both the same way.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q3">Why are L, W and # rejected?</summary>
+          <div class="a" data-i18n-html="a3">They are Quartz extensions rather than POSIX cron, and they mean different things in different engines. Rather than let a line work here and fail in crontab, the parser reports them as unsupported. For "last day of the month" the portable form is a normal day list plus a guard inside the job.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q4">What happens on a daylight-saving change?</summary>
+          <div class="a" data-i18n-html="a4">Runs are projected on the zone's real offsets, so an <b>09:00</b> schedule stays 09:00 local while its UTC time shifts by an hour. A wall-clock time that <b>does not exist</b> — the hour skipped when clocks spring forward — is dropped rather than invented, and the next valid run is shown instead.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q5">Does this page keep what I type?</summary>
+          <div class="a" data-i18n-html="a5">No. There is no endpoint, no analytics and no storage of the expression — only your language choice is remembered in this browser. The footer measures the page's own external requests and it stays at <b>0</b>.</div>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span data-i18n="footCopy">© 2026 Kim Yihyung · Built in the browser, for the browser.</span>
+    <span class="net"><span data-i18n="footNet">external requests</span> <b id="netCount">0</b></span>
+    <span class="foot-links">
+      <a href="/portfolio/" data-i18n="footP1">Portfolio</a>
+      <a href="/portfolio/tools/" data-i18n="footP2">All tools</a>
+      <a href="https://github.com/kimyihyung/portfolio" target="_blank" rel="noopener" data-i18n="footP3">Source</a>
+    </span>
+    <span class="mono" data-i18n="mono">NO UPLOADS · NO TRACKING</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ═════════════════════ language ═════════════════════ */
+  var I18N = {
+    en: {
+      docTitle: 'CronMint — Cron Expression Explainer & Next 10 Runs | Kim Yihyung',
+      brandAria: 'Kim Yihyung — portfolio',
+      back: '← All tools',
+      eyebrow: 'CronMint · parse · explain · next runs',
+      h1: 'A cron line,<br><span class="soft">read back to you.</span><br><span class="gold">Before it runs.</span>',
+      lede: 'Paste a <strong>5-field or 6-field cron</strong> expression and get it back in plain English or Korean, the <strong>next 10 runs</strong> in the timezone you choose, and a <strong>crontab or GitHub Actions</strong> snippet of the same schedule — parsed and projected in this tab, never on a server.',
+      pillUp: '0 bytes uploaded', pillNet: '0 external requests', pillFields: '5 + 6 fields', pillOut: 'crontab · Actions',
+      editorAria: 'Cron editor', modeAria: 'Field count',
+      mode5: '5 fields · every minute', mode6: '6 fields · with seconds',
+      exprHead: 'Expression', exprNote: 'minute hour day month weekday',
+      fieldHead: 'Field editor', fieldNote: 'click a value to set it',
+      readsAs: 'Reads as',
+      presetHead: 'Presets', presetNote: 'twelve lines that cover most jobs', runsHead: 'Next 10 runs', tzAria: 'Timezone',
+      nowIn: 'now in', runsEmpty: 'Fix the expression to see runs.',
+      snipHead: 'Take it with you', snipNote: 'same schedule, ready to paste', snipAria: 'Snippet type',
+      snipLine: 'One line', snipCrontab: 'Linux crontab', snipActions: 'GitHub Actions',
+      copySnip: 'Copy snippet', copyExpr: 'Copy expression only',
+      nrHead: 'How this reads a line', nrNote: 'POSIX first, edges stated',
+      n1h: 'Fields, ranges and steps',
+      n1p: 'Each field is a list of numbers, names, ranges and steps: <b>1,15</b>, <b>mon-fri</b>, <b>9-17</b>, <b>*/5</b> and <b>20/15</b> all parse. A field that is <b>*</b> (or <b>?</b>) is unrestricted — the difference matters for the next note.',
+      tField: 'Field', tRange: 'Range', fMin: 'Minute', fHour: 'Hour', fDom: 'Day of month', fMon: 'Month', fDow: 'Weekday', fSec: 'Second (6-field)',
+      n2h: 'Two day rules, one tie',
+      n2p: 'In Vixie cron, if <b>day of month</b> and <b>weekday</b> are both restricted, the job runs when <b>either</b> matches — <b>0 0 1 * 1</b> fires on the 1st and on every Monday. Leave one as <b>*</b> and only the other applies. Quartz refuses that line instead unless one of the two is <b>?</b>; this tool follows crontab and states which rule it used.',
+      n3h: 'Timezones are the usual bug',
+      n3p: 'crontab has no timezone field: it fires in the server\'s local time, which is <b>UTC</b> on most containers and runners. GitHub Actions schedules also default to UTC and now accept an optional <b>timezone:</b> key; the shortest interval there is <b>5 minutes</b>. Each run below is shown in your chosen zone with its <b>UTC</b> equivalent, so the line you paste says the hour you meant.',
+      faqTitle: 'Questions', faqNote: 'syntax · timezone · platforms',
+      q1: 'Why does my job run at the wrong hour?',
+      a1: 'Nearly always a timezone gap. <b>crontab</b> fires in the server\'s local time — UTC on most containers — and <b>GitHub Actions</b> schedules default to UTC too. Set the zone your machine actually uses above and read the UTC column: <b>0 9 * * 1-5</b> in Asia/Seoul is <b>0 0 * * 1-5</b> in UTC, which is what a UTC server needs.',
+      q2: '5 fields or 6 — which do I need?',
+      a2: '<b>Five</b> for crontab, systemd timers, GitHub Actions and most schedulers. <b>Six</b> when the first field is seconds — Quartz, and parsers that follow it. Nothing else changes: a six-field line is a five-field line with a second in front, and this page reads both the same way.',
+      q3: 'Why are L, W and # rejected?',
+      a3: 'They are Quartz extensions rather than POSIX cron, and they mean different things in different engines. Rather than let a line work here and fail in crontab, the parser reports them as unsupported. For "last day of the month" the portable form is a normal day list plus a guard inside the job.',
+      q4: 'What happens on a daylight-saving change?',
+      a4: 'Runs are projected on the zone\'s real offsets, so an <b>09:00</b> schedule stays 09:00 local while its UTC time shifts by an hour. A wall-clock time that <b>does not exist</b> — the hour skipped when clocks spring forward — is dropped rather than invented, and the next valid run is shown instead.',
+      q5: 'Does this page keep what I type?',
+      a5: 'No. There is no endpoint, no analytics and no storage of the expression — only your language choice is remembered in this browser. The footer measures the page\'s own external requests and it stays at <b>0</b>.',
+      footCopy: '© 2026 Kim Yihyung · Built in the browser, for the browser.',
+      footNet: 'external requests', footP1: 'Portfolio', footP2: 'All tools', footP3: 'Source',
+      mono: 'NO UPLOADS · NO TRACKING', toggleTo: 'View in Korean',
+      /* fields */
+      fMinute: 'MINUTE', fHour2: 'HOUR', fDom2: 'DAY', fMon2: 'MONTH', fDow2: 'WEEKDAY', fSec2: 'SECOND',
+      /* dynamic */
+      stValid: 'VALID', stInvalid: 'CHECK', stMacro: 'MACRO',
+      errCount: 'Use 5 fields (minute hour day month weekday) or 6 with seconds first — {n} given.',
+      errEmpty: '{field} is empty.',
+      errBad: '{field}: “{tok}” is not a number, name, range, list or step.',
+      errStep: '{field}: the step after “/” must be 1 or more.',
+      errRange: '{field}: {lo} comes after {hi}.',
+      errHigh: '{field}: {tok} is above {max}.',
+      errLow: '{field}: {tok} is below {min}.',
+      errUnsupported: '{field}: L, W and # are not supported here.',
+      subBoth: 'Both day fields are set, so crontab runs on either — this follows that rule.',
+      subDow: 'Weekday is the day rule; day of month is unrestricted.',
+      subDom: 'Day of month is the day rule; weekday is unrestricted.',
+      subNext: 'Next run {rel} · {abs}',
+      subNone: 'No run in the next five years.',
+      subMacro: 'Macro expanded to {expr}.',
+      runEmpty: 'Fix the expression to see runs.',
+      copiedSnip: 'Copied the {kind} snippet.',
+      copiedExpr: 'Copied the expression.',
+      copyFail: 'Copy failed — select the code and copy it by hand.',
+      caveatCrontab: 'crontab runs in the server\'s local time. CRON_TZ is honoured by Vixie cron and cronie; some busybox builds ignore it.',
+      caveatActions: 'GitHub Actions schedules default to UTC, accept an optional timezone key (IANA name), and run at most every 5 minutes — and may run late under load.',
+      caveatLine: 'The bare expression. Seconds are not accepted by crontab or GitHub Actions — drop the first field for those.',
+      tagLine: 'one line', tagCrontab: 'crontab', tagActions: 'GitHub Actions',
+      presetEveryMinute: 'Every minute', presetEvery5: 'Every 5 minutes', presetHourly: 'Hourly, on the hour',
+      presetDaily9: 'Daily at 09:00', presetWeekday9: 'Weekdays at 09:00', presetMonday: 'Every Monday at 00:00',
+      presetMonthly1: 'Monthly on the 1st', presetQuarter: 'First day of each quarter', presetDaily1830: 'Daily at 18:30',
+      presetWeekend10: 'Weekends at 10:00', presetSlots: 'Every 30 min, 09–18 weekdays', presetMonthly15: 'Monthly on the 15th, 09:00',
+      tzLocal: 'Local', tzLabel: 'Timezone',
+      /* describe */
+      dEveryMinute: 'every minute', dEverySecond: 'every second', dEveryNSeconds: 'every {n} seconds',
+      dEveryNMinutes: 'every {n} minutes', dEveryNMinutesRange: 'every {n} minutes from {a} to {b}',
+      dEveryHour: 'every hour, on the hour', dAtMinuteOfHour: 'at minute {m} of every hour',
+      dAtMinutesOfHour: 'at minutes {list} of every hour', dAt: 'at {list}', dAtMore: 'at {list} + {n} more',
+      dHourMinute: 'at minute {m} of hour {h}', dEveryMinuteHour: 'every minute of hour {h}',
+      dEveryDay: 'Every day', dEveryWeekday: 'Every weekday', dEveryWeekend: 'Every weekend',
+      dEveryDow: 'Every {list}', dOnDom: 'On the {list} of the month', dInMonth: 'In {list}',
+      dOnDomMonth: 'On the {list} of {month}', dOnRate: 'on {list}', dInRate: 'in {month}',
+      dFallback: 'minute {m}, hour {h}, day {d}, month {mo}, weekday {w}',
+      ordSt: '{n}st', ordNd: '{n}nd', ordRd: '{n}rd', ordTh: '{n}th',
+      wkSun: 'Sunday', wkMon: 'Monday', wkTue: 'Tuesday', wkWed: 'Wednesday', wkThu: 'Thursday', wkFri: 'Friday', wkSat: 'Saturday',
+      wkSunS: 'Sun', wkMonS: 'Mon', wkTueS: 'Tue', wkWedS: 'Wed', wkThuS: 'Thu', wkFriS: 'Fri', wkSatS: 'Sat',
+      monJan: 'Jan', monFeb: 'Feb', monMar: 'Mar', monApr: 'Apr', monMay: 'May', monJun: 'Jun', monJul: 'Jul', monAug: 'Aug', monSep: 'Sep', monOct: 'Oct', monNov: 'Nov', monDec: 'Dec',
+      relNow: 'in under a minute', relMin: 'in {n} min', relHour: 'in {h}h {m}m', relDay: 'in {d}d {h}h'
+    },
+    ko: {
+      docTitle: 'CronMint — 크론 식 해석 · 다음 실행 10회 | Kim Yihyung',
+      brandAria: 'Kim Yihyung — 포트폴리오',
+      back: '← 도구 전체',
+      eyebrow: 'CronMint · 해석 · 다음 실행 · 무업로드',
+      h1: '크론 한 줄,<br><span class="soft">다시 읽어 드립니다.</span><br><span class="gold">돌기 전에.</span>',
+      lede: '<strong>5필드·6필드 크론 식</strong>을 넣으면 한국어와 영어로 풀어 읽어 주고, 고른 타임존에서 <strong>다음 실행 10회</strong>를 계산하며, 같은 일정의 <strong>crontab·GitHub Actions</strong> 스니펫까지 만들어 줍니다. 계산은 모두 이 탭 안에서, 서버 없이.',
+      pillUp: '업로드 0바이트', pillNet: '외부 요청 0건', pillFields: '5필드 + 6필드', pillOut: 'crontab · Actions',
+      editorAria: '크론 편집기', modeAria: '필드 수',
+      mode5: '5필드 · 분 단위', mode6: '6필드 · 초 포함',
+      exprHead: '크론 식', exprNote: '분 시 일 월 요일',
+      fieldHead: '필드 편집기', fieldNote: '값을 눌러 바로 넣기',
+      readsAs: '읽으면',
+      presetHead: '프리셋', presetNote: '자주 쓰는 일정 열두 가지', runsHead: '다음 실행 10회', tzAria: '타임존',
+      nowIn: '현재', runsEmpty: '올바른 식을 넣으면 실행 시각이 나옵니다.',
+      snipHead: '그대로 가져가기', snipNote: '같은 일정, 붙여넣기만', snipAria: '스니펫 종류',
+      snipLine: '한 줄', snipCrontab: '리눅스 crontab', snipActions: 'GitHub Actions',
+      copySnip: '스니펫 복사', copyExpr: '식만 복사',
+      nrHead: '이 줄을 읽는 방법', nrNote: 'POSIX 우선 · 예외까지',
+      n1h: '필드·범위·간격',
+      n1p: '각 필드는 숫자, 이름, 범위, 간격의 목록입니다. <b>1,15</b>, <b>mon-fri</b>, <b>9-17</b>, <b>*/5</b>, <b>20/15</b> 모두 해석합니다. <b>*</b>(또는 <b>?</b>)는 제한 없음을 뜻하고, 이 구분이 다음 항목의 핵심입니다.',
+      tField: '필드', tRange: '범위', fMin: '분', fHour: '시', fDom: '일', fMon: '월', fDow: '요일', fSec: '초(6필드)',
+      n2h: '두 개의 날짜 규칙, 하나의 처리',
+      n2p: '비직스(Vixie) 크론은 <b>일</b>과 <b>요일</b>이 모두 제한돼 있으면 <b>둘 중 하나만</b> 맞아도 실행합니다. <b>0 0 1 * 1</b>은 매월 1일과 매주 월요일 모두 돕니다. 한쪽을 <b>*</b>로 두면 다른 쪽만 적용됩니다. Quartz는 이 경우 한쪽을 <b>?</b>로 두지 않으면 식을 거부하며, 이 도구는 crontab 쪽 규칙을 따르고 어느 규칙을 썼는지 함께 표시합니다.',
+      n3h: '타임존이 늘 문제입니다',
+      n3p: 'crontab에는 타임존 필드가 없어 <b>서버 로컬 시간</b>으로 돕니다. 대부분의 컨테이너·러너는 <b>UTC</b>입니다. GitHub Actions 스케줄도 기본이 UTC이며 선택적으로 <b>timezone:</b> 키를 받고, 최소 간격은 <b>5분</b>입니다. 아래 모든 실행 시각은 고른 타임존과 그 <b>UTC</b> 환산을 함께 보여 주므로, 붙여넣을 줄이 의도한 시각을 가리키게 됩니다.',
+      faqTitle: '자주 묻는 것', faqNote: '문법 · 타임존 · 플랫폼',
+      q1: '왜 엉뚱한 시각에 실행되나요?',
+      a1: '거의 항상 타임존 차이입니다. <b>crontab</b>은 서버 로컬 시간(대부분 컨테이너는 UTC)으로 돌고, <b>GitHub Actions</b> 스케줄도 기본이 UTC입니다. 위에서 실제 서버의 타임존을 고르고 UTC 열을 확인하세요. 아시아/서울의 <b>0 9 * * 1-5</b>는 UTC의 <b>0 0 * * 1-5</b>이고, UTC 서버에는 뒤쪽 식이 필요합니다.',
+      q2: '5필드와 6필드 중 무엇을 써야 하나요?',
+      a2: 'crontab·systemd 타이머·GitHub Actions·대부분의 스케줄러는 <b>5필드</b>입니다. 첫 필드가 초인 경우(Quartz 계열)만 <b>6필드</b>입니다. 달라지는 것은 없습니다. 6필드는 5필드 앞에 초를 하나 붙인 것이고, 이 페이지는 둘을 같은 방식으로 읽습니다.',
+      q3: 'L, W, #은 왜 거부되나요?',
+      a3: 'POSIX 크론이 아니라 Quartz 확장이고, 엔진마다 뜻이 다릅니다. 여기서는 통과하고 crontab에서 실패하는 일을 막으려고 지원하지 않음으로 알립니다. "월말"은 일반 날짜 목록을 쓰고 작업 안에서 한 번 더 확인하는 방식이 이식성이 좋습니다.',
+      q4: '서머타임이 바뀌면 어떻게 되나요?',
+      a4: '각 타임존의 실제 오프셋으로 계산하므로 <b>09:00</b> 일정은 현지 09:00을 유지하고 UTC 시각만 한 시간 움직입니다. 시계가 앞으로 가며 <b>사라진 시각</b>(존재하지 않는 시각)은 지어내지 않고 건너뛰고, 그다음 유효한 실행을 보여 줍니다.',
+      q5: '입력한 내용이 저장되나요?',
+      a5: '아니요. 전송 지점도, 분석 도구도, 식을 저장하는 곳도 없습니다. 언어 선택만 이 브라우저에 기억됩니다. 바닥글의 외부 요청 수는 이 페이지가 실제로 잰 값이고, <b>0</b>에 머뭅니다.',
+      footCopy: '© 2026 Kim Yihyung · 브라우저 안에서, 브라우저를 위해.',
+      footNet: '외부 요청', footP1: '포트폴리오', footP2: '도구 전체', footP3: '소스',
+      mono: '업로드 없음 · 추적 없음', toggleTo: 'View in English',
+      fMinute: '분', fHour2: '시', fDom2: '일', fMon2: '월', fDow2: '요일', fSec2: '초',
+      stValid: '정상', stInvalid: '확인', stMacro: '매크로',
+      errCount: '5필드(분 시 일 월 요일) 또는 초를 맨 앞에 둔 6필드여야 합니다 — {n}개가 들어왔습니다.',
+      errEmpty: '{field} 필드가 비었습니다.',
+      errBad: '{field}: “{tok}”은(는) 숫자·이름·범위·목록·간격이 아닙니다.',
+      errStep: '{field}: “/” 뒤 간격은 1 이상이어야 합니다.',
+      errRange: '{field}: {lo}이(가) {hi}보다 뒤입니다.',
+      errHigh: '{field}: {tok}은(는) 최대 {max}를 넘습니다.',
+      errLow: '{field}: {tok}은(는) 최소 {min}보다 작습니다.',
+      errUnsupported: '{field}: L, W, #은 지원하지 않습니다.',
+      subBoth: '일과 요일이 모두 지정돼 crontab 규칙대로 둘 중 하나만 맞아도 실행됩니다.',
+      subDow: '요일이 기준이고 일은 제한 없음입니다.',
+      subDom: '일이 기준이고 요일은 제한 없음입니다.',
+      subNext: '다음 실행 {rel} · {abs}',
+      subNone: '5년 안에 실행 시각이 없습니다.',
+      subMacro: '매크로를 {expr}로 펼쳤습니다.',
+      runEmpty: '올바른 식을 넣으면 실행 시각이 나옵니다.',
+      copiedSnip: '{kind} 스니펫을 복사했습니다.',
+      copiedExpr: '식을 복사했습니다.',
+      copyFail: '복사에 실패했습니다 — 코드를 직접 선택해 복사해 주세요.',
+      caveatCrontab: 'crontab은 서버 로컬 시간으로 돕니다. CRON_TZ는 Vixie cron·cronie에서 동작하고 일부 busybox 빌드는 무시합니다.',
+      caveatActions: 'GitHub Actions 스케줄은 기본 UTC이고 선택적 timezone 키(IANA 이름)를 받습니다. 최소 간격은 5분이며 부하가 크면 늦게 실행될 수 있습니다.',
+      caveatLine: '식만 있습니다. crontab과 GitHub Actions는 초를 받지 않으므로 그쪽에는 첫 필드를 빼고 쓰세요.',
+      tagLine: '한 줄', tagCrontab: 'crontab', tagActions: 'GitHub Actions',
+      presetEveryMinute: '매분', presetEvery5: '매 5분', presetHourly: '매시 정각',
+      presetDaily9: '매일 09:00', presetWeekday9: '평일 09:00', presetMonday: '매주 월요일 00:00',
+      presetMonthly1: '매월 1일', presetQuarter: '분기 첫날(1·4·7·10월)', presetDaily1830: '매일 18:30',
+      presetWeekend10: '주말 10:00', presetSlots: '평일 09–18시 30분마다', presetMonthly15: '매월 15일 09:00',
+      tzLocal: '로컬', tzLabel: '타임존',
+      dEveryMinute: '매분', dEverySecond: '매초', dEveryNSeconds: '{n}초마다',
+      dEveryNMinutes: '{n}분마다', dEveryNMinutesRange: '{a}부터 {b}까지 {n}분마다',
+      dEveryHour: '매시간 정각', dAtMinuteOfHour: '매시간 {m}분',
+      dAtMinutesOfHour: '매시간 {list}분', dAt: '{list}', dAtMore: '{list} 외 {n}회',
+      dHourMinute: '{h}시 {m}분', dEveryMinuteHour: '{h}시 정각부터 매분',
+      dEveryDay: '매일', dEveryWeekday: '매주 월~금', dEveryWeekend: '매주 토·일',
+      dEveryDow: '매주 {list}', dOnDom: '매월 {list}일', dInMonth: '매년 {list}월',
+      dOnDomMonth: '매년 {month} {list}일', dOnRate: '매주 {list}', dInRate: '매년 {month}',
+      dFallback: '분 {m}, 시 {h}, 일 {d}, 월 {mo}, 요일 {w}',
+      ordSt: '{n}일', ordNd: '{n}일', ordRd: '{n}일', ordTh: '{n}일',
+      wkSun: '일요일', wkMon: '월요일', wkTue: '화요일', wkWed: '수요일', wkThu: '목요일', wkFri: '금요일', wkSat: '토요일',
+      wkSunS: '일', wkMonS: '월', wkTueS: '화', wkWedS: '수', wkThuS: '목', wkFriS: '금', wkSatS: '토',
+      monJan: '1월', monFeb: '2월', monMar: '3월', monApr: '4월', monMay: '5월', monJun: '6월', monJul: '7월', monAug: '8월', monSep: '9월', monOct: '10월', monNov: '11월', monDec: '12월',
+      relNow: '곧', relMin: '{n}분 후', relHour: '{h}시간 {m}분 후', relDay: '{d}일 {h}시간 후'
+    }
+  };
+
+  var LANG_KEY = 'cronmint.lang';
+  var SHARED_KEY = 'kyh.lang';
+
+  var state = {
+    lang: 'en', mode: 5, expr: '0 9 * * 1-5', tz: 'Asia/Seoul', snip: 'line',
+    parsed: null, runs: [], presetId: 'w9'
+  };
+
+  function $(id) { return document.getElementById(id); }
+  function t(key, lang) {
+    var d = I18N[lang || state.lang] || I18N.en;
+    if (d[key] != null) return d[key];
+    return I18N.en[key] != null ? I18N.en[key] : '';
+  }
+  function fmt(s, o) {
+    return String(s).replace(/\{(\w+)\}/g, function (m, k) { return o[k] != null ? o[k] : m; });
+  }
+  function readLang(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function initialLang() {
+    var q = '';
+    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
+    if (q === 'ko' || q === 'en') return q;
+    return readLang(SHARED_KEY) || readLang(LANG_KEY) || 'en';
+  }
+
+  /* ═════════════════════ parsing ═════════════════════ */
+  var FIELDS = [
+    { k: 'min', min: 0, max: 59 },
+    { k: 'hour', min: 0, max: 23 },
+    { k: 'dom', min: 1, max: 31 },
+    { k: 'mon', min: 1, max: 12, names: { jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6, jul: 7, aug: 8, sep: 9, oct: 10, nov: 11, dec: 12 } },
+    { k: 'dow', min: 0, max: 7, names: { sun: 0, mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6 } }
+  ];
+  var SEC_FIELD = { k: 'sec', min: 0, max: 59 };
+  var FIELD_ORDER6 = [SEC_FIELD, FIELDS[0], FIELDS[1], FIELDS[2], FIELDS[3], FIELDS[4]];
+
+  var MACROS = {
+    '@yearly': '0 0 1 1 *', '@annually': '0 0 1 1 *', '@monthly': '0 0 1 * *',
+    '@weekly': '0 0 * * 0', '@daily': '0 0 * * *', '@midnight': '0 0 * * *',
+    '@hourly': '0 * * * *'
+  };
+
+  function fieldName(k) {
+    return { min: t('fMinute'), hour: t('fHour2'), dom: t('fDom2'), mon: t('fMon2'), dow: t('fDow2'), sec: t('fSec2') }[k] || k;
+  }
+  function fieldLabel(k) {
+    return { min: t('fMin'), hour: t('fHour'), dom: t('fDom'), mon: t('fMon'), dow: t('fDow'), sec: t('fSec') }[k] || k;
+  }
+
+  function tok(txt, d) {
+    var s = String(txt).trim().toLowerCase();
+    if (/^\d+$/.test(s)) {
+      var n = parseInt(s, 10);
+      return (n >= d.min && n <= d.max) ? n : { bad: n };
+    }
+    if (d.names && d.names[s] != null) return d.names[s];
+    return null;
+  }
+
+  function quartzToken(txt) {
+    if (txt.indexOf('#') >= 0) return true;
+    var parts = txt.split(',');
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i].trim().toUpperCase();
+      if (p === 'L' || p === 'W' || p === 'LW' || p === 'L-3') return true;
+      if (/^\d+L$/.test(p) || /^\d+W$/.test(p) || /-L$/.test(p) || /-W$/.test(p) || /L-\d+$/.test(p)) return true;
+    }
+    return false;
+  }
+
+  function parseField(raw, d) {
+    var txt = String(raw == null ? '' : raw).trim();
+    if (txt === '') return { err: 'empty' };
+    if (txt === '?') txt = '*';
+    if (quartzToken(txt)) return { err: 'unsupported' }; 
+    var out = [];
+    var parts = txt.split(',');
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i].trim();
+      if (!p) return { err: 'empty' };
+      if (p === '?') p = '*';
+      var step = 1;
+      var slash = p.split('/');
+      if (slash.length > 2) return { err: 'bad', tok: p };
+      var body = slash[0].trim();
+      if (slash.length === 2) {
+        var st = slash[1].trim();
+        if (!/^\d+$/.test(st)) return { err: 'bad', tok: p };
+        step = parseInt(st, 10);
+        if (step < 1) return { err: 'step' };
+      }
+      var lo, hi;
+      if (body === '*') { lo = d.min; hi = d.max; }
+      else if (body.indexOf('-') > 0) {
+        var ab = body.split('-');
+        if (ab.length !== 2) return { err: 'bad', tok: p };
+        var a1 = tok(ab[0], d), b1 = tok(ab[1], d);
+        if (a1 === null || b1 === null) return { err: 'bad', tok: p };
+        if (typeof a1 === 'object') return { err: 'high', tok: a1.bad, max: d.max };
+        if (typeof b1 === 'object') return { err: 'high', tok: b1.bad, max: d.max };
+        lo = a1; hi = b1;
+      } else {
+        var one = tok(body, d);
+        if (one === null) return { err: 'bad', tok: p };
+        if (typeof one === 'object') return { err: 'high', tok: one.bad, max: d.max };
+        if (slash.length === 2) { lo = one; hi = d.max; }
+        else { lo = one; hi = one; }
+      }
+      if (lo > hi) return { err: 'range', lo: lo, hi: hi };
+      for (var v = lo; v <= hi; v += step) out.push(v);
+    }
+    if (d.k === 'dow') out = out.map(function (v) { return v === 7 ? 0 : v; });
+    var uniq = [];
+    out.sort(function (a, b) { return a - b; });
+    for (i = 0; i < out.length; i++) if (uniq[uniq.length - 1] !== out[i]) uniq.push(out[i]);
+    return { values: uniq, star: txt.trim() === '*' };
+  }
+
+  function parse(expr) {
+    var src = String(expr == null ? '' : expr).trim().replace(/\s+/g, ' ');
+    var res = { ok: false, errors: [], raw: src, macro: null, fields: null };
+    if (!src) { res.errors.push({ code: 'empty', field: 'min' }); return res; }
+    var body = src;
+    var low = src.toLowerCase();
+    if (MACROS[low]) { res.macro = low; body = MACROS[low]; }
+    var toks = body.split(' ');
+    var n = toks.length;
+    if (n !== 5 && n !== 6) { res.errors.push({ code: 'count', n: n }); return res; }
+    var defs = n === 6 ? FIELD_ORDER6 : FIELDS;
+    var map = {};
+    for (var i = 0; i < defs.length; i++) {
+      var d = defs[i];
+      var r = parseField(toks[i], d);
+      if (r.err) {
+        res.errors.push({ code: r.err, field: d.k, tok: r.tok, lo: r.lo, hi: r.hi, min: d.min, max: d.max });
+        continue;
+      }
+      map[d.k] = r;
+    }
+    if (res.errors.length) return res;
+    if (!map.sec) map.sec = { values: [0], star: false };
+    /* dow 7 → 0 keeps the highest value; re-expand for full 0..6 */
+    res.fields = {
+      min: map.min.values, hour: map.hour.values, dom: map.dom.values,
+      mon: map.mon.values, dow: map.dow.values, sec: map.sec.values,
+      star: {
+        min: map.min.star, hour: map.hour.star, dom: map.dom.star,
+        mon: map.mon.star, dow: map.dow.star, sec: map.sec.star
+      }
+    };
+    res.hasSec = n === 6;
+    res.tokens = toks;
+    res.ok = true;
+    return res;
+  }
+
+  function errText(e) {
+    switch (e.code) {
+      case 'count': return fmt(t('errCount'), { n: e.n });
+      case 'empty': return fmt(t('errEmpty'), { field: fieldLabel(e.field || 'min') });
+      case 'bad': return fmt(t('errBad'), { field: fieldLabel(e.field), tok: e.tok });
+      case 'step': return fmt(t('errStep'), { field: fieldLabel(e.field) });
+      case 'range': return fmt(t('errRange'), { field: fieldLabel(e.field), lo: e.lo, hi: e.hi });
+      case 'high': return fmt(t('errHigh'), { field: fieldLabel(e.field), tok: e.tok, max: e.max });
+      case 'low': return fmt(t('errLow'), { field: fieldLabel(e.field), tok: e.tok, min: e.min });
+      case 'unsupported': return fmt(t('errUnsupported'), { field: fieldLabel(e.field) });
+      default: return String(e.code);
+    }
+  }
+
+  /* ═════════════════════ describing ═════════════════════ */
+  var DOW_ORDER = [1, 2, 3, 4, 5, 6, 0];
+  var DOW_SHORT = ['wkSunS', 'wkMonS', 'wkTueS', 'wkWedS', 'wkThuS', 'wkFriS', 'wkSatS'];
+  var DOW_LONG = ['wkSun', 'wkMon', 'wkTue', 'wkWed', 'wkThu', 'wkFri', 'wkSat'];
+  var MON_SHORT = ['monJan', 'monFeb', 'monMar', 'monApr', 'monMay', 'monJun', 'monJul', 'monAug', 'monSep', 'monOct', 'monNov', 'monDec'];
+
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
+  function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+  function joinList(items, lang) {
+    if (items.length === 1) return items[0];
+    if (items.length === 2) return items[0] + (lang === 'ko' ? '·' : ' and ') + items[1];
+    var last = items[items.length - 1];
+    return items.slice(0, -1).join(lang === 'ko' ? '·' : ', ') + (lang === 'ko' ? '·' : ' and ') + last;
+  }
+  function seqLabel(vals) {
+    /* returns {step:n} when values are a uniform arithmetic run from 0 */
+    if (vals.length < 2) return null;
+    var step = vals[1] - vals[0];
+    if (step < 1) return null;
+    for (var i = 2; i < vals.length; i++) if (vals[i] - vals[i - 1] !== step) return null;
+    return { step: step };
+  }
+  function ord(n, lang) {
+    if (lang === 'ko') return n + '일';
+    var m10 = n % 10, m100 = n % 100;
+    if (m10 === 1 && m100 !== 11) return n + 'st';
+    if (m10 === 2 && m100 !== 12) return n + 'nd';
+    if (m10 === 3 && m100 !== 13) return n + 'rd';
+    return n + 'th';
+  }
+
+  function time12(h, lang) {
+    if (lang === 'ko') {
+      var ap = h < 12 ? '오전' : '오후';
+      var hh = h % 12 === 0 ? 12 : h % 12;
+      return ap + ' ' + hh + '시';
+    }
+    return pad2(h) + ':00';
+  }
+
+  function describe(exprOrParsed, lang) {
+    var p;
+    if (exprOrParsed && typeof exprOrParsed === 'object' && exprOrParsed.fields) p = exprOrParsed;
+    else p = parse(exprOrParsed);
+    if (!p || !p.ok) return '';
+    var f = p.fields;
+    var L = lang || state.lang;
+    function tx(key, l2) { return t(key, l2 || L); }
+    var mins = f.min, hours = f.hour, doms = f.dom, mons = f.mon, dows = f.dow, secs = f.sec;
+    var allMin = mins.length === 60, allHour = hours.length === 24;
+    var hasSec = p.hasSec && !(secs.length === 1 && secs[0] === 0);
+    var secAll = hasSec && secs.length === 60;
+
+    /* ---- time part ---- */
+    var timeText = '', isRate = false;
+    if (allHour && allMin) {
+      isRate = true;
+      if (!hasSec) timeText = L === 'ko' ? tx('dEveryMinute') : tx('dEveryMinute');
+      else if (secAll) timeText = tx('dEverySecond');
+      else {
+        var ss = seqLabel(secs);
+        timeText = ss && secs.length < 60 ? fmt(tx('dEveryNSeconds'), { n: ss.step }) : (L === 'ko' ? '매분 ' + joinList(secs.map(String), 'ko') + '초' : 'at second ' + joinList(secs.map(String), 'en') + ' of every minute');
+      }
+    } else if (allHour) {
+      var ms = seqLabel(mins);
+      if (mins.length === 1 && mins[0] === 0) {
+        timeText = tx('dEveryHour');
+      } else if (ms && mins[0] === 0 && mins.length > 2) {
+        isRate = true;
+        timeText = fmt(tx('dEveryNMinutes'), { n: ms.step });
+      } else if (mins.length > 8) {
+        isRate = true;
+        timeText = fmt(tx('dEveryNMinutes'), { n: Math.round(60 / mins.length) });
+      } else if (mins.length === 1) {
+        timeText = fmt(tx('dAtMinuteOfHour'), { m: mins[0] });
+      } else {
+        timeText = fmt(tx('dAtMinutesOfHour'), { list: joinList(mins.map(String), L) });
+      }
+    } else if (allMin) {
+      isRate = true;
+      timeText = L === 'ko' ? joinList(hours.map(function (h) { return time12(h, 'ko'); }), 'ko') + '부터 매분'
+        : 'every minute from ' + joinList(hours.map(function (h) { return pad2(h) + ':00'; }), 'en')
+          + ' through ' + pad2(hours[hours.length - 1]) + ':59';
+    } else {
+      var hoursContig = true;
+      for (var hc = 1; hc < hours.length; hc++) if (hours[hc] - hours[hc - 1] !== 1) hoursContig = false;
+      var mstep = seqLabel(mins);
+      if (hoursContig && hours.length > 1 && mstep && mins[0] === 0 && mins.length > 1) {
+        isRate = true;
+        var fromT = pad2(hours[0]) + ':00';
+        var toT = pad2(hours[hours.length - 1]) + ':' + pad2(mins[mins.length - 1]);
+        timeText = fmt(tx('dEveryNMinutesRange'), { n: mstep.step, a: fromT, b: toT });
+        if (L === 'ko') timeText = fmt(tx('dEveryNMinutesRange'), { n: mstep.step, a: fromT, b: toT });
+      }
+      var combos = [];
+      if (isRate) combos = [];
+      for (var hi2 = 0; hi2 < hours.length && !isRate && combos.length < 6; hi2++) {
+        for (var mi2 = 0; mi2 < mins.length && combos.length < 6; mi2++) combos.push([hours[hi2], mins[mi2]]);
+      }
+      var shown = combos.length;
+      if (!isRate) {
+      var texts = combos.map(function (c) {
+        if (L === 'ko') {
+          return time12(c[0], 'ko') + ' ' + c[1] + '분' + (hasSec ? ' ' + secs[0] + '초' : '');
+        }
+        return pad2(c[0]) + ':' + pad2(c[1]) + (hasSec ? ':' + pad2(secs[0]) : '');
+      });
+      if (hours.length === 1 && mins.length === 1) {
+        timeText = fmt(tx('dAt'), { list: texts[0] });
+      } else {
+        var total = hours.length * mins.length;
+        if (total > shown) timeText = fmt(tx('dAtMore'), { list: joinList(texts, L), n: total - shown });
+        else timeText = fmt(tx('dAt'), { list: joinList(texts, L) });
+      }
+      }
+    }
+
+    /* ---- day part ---- */
+    var dowRestricted = !f.star.dow && dows.length !== 7;
+    var domRestricted = !f.star.dom && doms.length !== 31;
+    var monRestricted = !f.star.mon;
+    var dowList = DOW_ORDER.filter(function (d) { return dows.indexOf(d) >= 0; });
+    var dayText, rateSuffix = '', dayKind = 'every';
+    var monNames = mons.map(function (m) { return tx(MON_SHORT[m - 1]); });
+    var monPhrase = joinList(monNames, L);
+    var isWeekday = dows.length === 5 && dows.indexOf(1) >= 0 && dows.indexOf(2) >= 0 && dows.indexOf(3) >= 0 && dows.indexOf(4) >= 0 && dows.indexOf(5) >= 0;
+    var isWeekend = dows.length === 2 && dows.indexOf(0) >= 0 && dows.indexOf(6) >= 0;
+    var domOrd = joinList(doms.map(function (d) { return ord(d, L); }), L);
+    var domNum = joinList(doms.map(String), L);
+
+    if (!dowRestricted && !domRestricted) {
+      if (monRestricted) {
+        dayKind = 'month';
+        dayText = L === 'ko' ? '매년 ' + monPhrase + ' 매일' : 'Every day in ' + monPhrase;
+        rateSuffix = L === 'ko' ? '매년 ' + monPhrase : 'in ' + monPhrase;
+      } else {
+        dayText = tx('dEveryDay');
+      }
+    } else if (dowRestricted && !domRestricted) {
+      dayKind = 'dow';
+      if (isWeekday) { dayText = tx('dEveryWeekday'); rateSuffix = L === 'ko' ? '평일' : 'on weekdays'; }
+      else if (isWeekend) { dayText = tx('dEveryWeekend'); rateSuffix = L === 'ko' ? '주말' : 'at weekends'; }
+      else if (dows.length === 1) {
+        dayText = (L === 'ko' ? '매주 ' : 'Every ') + tx(DOW_LONG[dows[0]]);
+        rateSuffix = L === 'ko' ? tx(DOW_LONG[dows[0]]) + '마다' : 'on ' + tx(DOW_LONG[dows[0]]) + 's';
+      } else {
+        var nm = dowList.map(function (d) { return tx(dows.length === 1 ? DOW_LONG[d] : DOW_SHORT[d]); });
+        dayText = (L === 'ko' ? '매주 ' : 'Every ') + joinList(nm, L);
+        rateSuffix = (L === 'ko' ? '' : 'on ') + joinList(dowList.map(function (d) { return tx(DOW_SHORT[d]); }), L);
+      }
+      if (monRestricted) {
+        dayText = (L === 'ko' ? '매년 ' + monPhrase + ' ' : dayText + ' in ') + (L === 'ko' ? dayText.replace(/^매년 [^ ]+ /, '') : monPhrase);
+        rateSuffix = rateSuffix + (L === 'ko' ? ' ' + '매년 ' + monPhrase : ' in ' + monPhrase);
+      }
+    } else if (domRestricted && !dowRestricted) {
+      dayKind = 'dom';
+      if (monRestricted) {
+        dayText = L === 'ko' ? '매년 ' + monPhrase + ' ' + domNum + '일' : 'On the ' + domOrd + ' of ' + monPhrase;
+        rateSuffix = L === 'ko' ? '매년 ' + monPhrase + ' ' + domNum + '일' : 'on the ' + domOrd + ' of ' + monPhrase;
+      } else {
+        dayText = L === 'ko' ? fmt(tx('dOnDom'), { list: domNum }) : 'On the ' + domOrd + ' of the month';
+        rateSuffix = L === 'ko' ? fmt(tx('dOnDom'), { list: domNum }) : 'on the ' + domOrd + ' of the month';
+      }
+    } else {
+      dayKind = 'both';
+      dayText = L === 'ko'
+        ? '매월 ' + domNum + '일 또는 매주 ' + joinList(dowList.map(function (d) { return tx(DOW_SHORT[d]); }), L)
+        : 'On the ' + domOrd + ' of the month or every ' + joinList(dowList.map(function (d) { return tx(DOW_LONG[d]); }), L);
+      rateSuffix = L === 'ko' ? '그 날짜' : 'on those days';
+      if (monRestricted) {
+        dayText = L === 'ko' ? '매년 ' + monPhrase + ' ' + dayText.replace(/^매년 /, '') : dayText + ' in ' + monPhrase;
+        rateSuffix = rateSuffix + (L === 'ko' ? ' 매년 ' + monPhrase : ' in ' + monPhrase);
+      }
+    }
+
+    /* ---- compose ---- */
+    var out;
+    if (isRate) {
+      if (L === 'ko') out = (dayKind === 'every' ? '' : dayText + ' ') + timeText;
+      else out = cap(timeText + (dayKind === 'every' ? '' : ' ' + rateSuffix));
+    } else {
+      var skipDay = dayKind === 'every' && (L === 'ko' ? /^매/.test(timeText) : /^every /i.test(timeText));
+      var pre = dayKind === 'every' ? (skipDay ? '' : tx('dEveryDay') + ' ') : dayText + ' ';
+      out = L === 'ko' ? pre + timeText : cap(pre + timeText);
+    }
+    return out.replace(/\s+/g, ' ').trim();
+  }
+
+  /* ═════════════════════ timezone ═════════════════════ */
+  var tzFmt = {};
+  function tzFormat(tz) {
+    if (!tzFmt[tz]) {
+      tzFmt[tz] = new Intl.DateTimeFormat('en-US', {
+        timeZone: tz, hour12: false, year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', second: '2-digit'
+      });
+    }
+    return tzFmt[tz];
+  }
+  function tzParts(ms, tz) {
+    var parts = tzFormat(tz).formatToParts(new Date(ms));
+    var o = {};
+    for (var i = 0; i < parts.length; i++) if (parts[i].type !== 'literal') o[parts[i].type] = parts[i].value;
+    var h = parseInt(o.hour, 10) % 24;
+    return { y: +o.year, mo: +o.month, d: +o.day, h: h, mi: +o.minute, s: +o.second };
+  }
+  function tzOffset(ms, tz) {
+    var p = tzParts(ms, tz);
+    var asUtc = Date.UTC(p.y, p.mo - 1, p.d, p.h, p.mi, p.s);
+    return asUtc - Math.floor(ms / 1000) * 1000;
+  }
+  function localToUtc(y, mo, d, h, mi, s, tz) {
+    var guess = Date.UTC(y, mo - 1, d, h, mi, s);
+    var off = tzOffset(guess, tz);
+    var ms = guess - off;
+    var off2 = tzOffset(ms, tz);
+    if (off2 !== off) ms = guess - off2;
+    var check = tzParts(ms, tz);
+    if (check.y !== y || check.mo !== mo || check.d !== d || check.h !== h || check.mi !== mi || check.s !== s) return null;
+    return ms;
+  }
+  function resolvedTz(id) {
+    if (id !== 'local') return id;
+    try { return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'; } catch (e) { return 'UTC'; }
+  }
+
+  function nextRuns(exprOrParsed, tzId, count, fromMs) {
+    var p = (exprOrParsed && typeof exprOrParsed === 'object' && exprOrParsed.fields) ? exprOrParsed : parse(exprOrParsed);
+    if (!p || !p.ok) return [];
+    var tz = resolvedTz(tzId || state.tz);
+    var f = p.fields;
+    var out = [];
+    var now = fromMs == null ? Date.now() : fromMs;
+    var start = Math.floor(now / 1000) * 1000 + 1000;
+    var sp = tzParts(start, tz);
+    var secOn = !(f.sec.length === 1 && f.sec[0] === 0);
+    var dayCount = 0;
+    var dowRestricted = !f.star.dow, domRestricted = !f.star.dom;
+    for (var i = 0; dayCount < 1830 && out.length < count; i++) {
+      var base = Date.UTC(sp.y, sp.mo - 1, sp.d + i);
+      var dp = new Date(base);
+      var y = dp.getUTCFullYear(), mo = dp.getUTCMonth() + 1, d = dp.getUTCDate(), wd = dp.getUTCDay();
+      dayCount++;
+      if (f.mon.indexOf(mo) < 0) continue;
+      var domOk = f.dom.indexOf(d) >= 0;
+      var dowOk = f.dow.indexOf(wd) >= 0;
+      var dayOk;
+      if (dowRestricted && domRestricted) dayOk = domOk || dowOk;
+      else if (dowRestricted) dayOk = dowOk;
+      else if (domRestricted) dayOk = domOk;
+      else dayOk = true;
+      if (!dayOk) continue;
+      if (i === 0) {
+        /* skip the part of today already gone */
+      }
+      var secList = secOn ? f.sec : [0];
+      var dayStartMs = Date.UTC(y, mo - 1, d, 0, 0, 0);
+      var offA = tzOffset(dayStartMs, tz);
+      var offB = tzOffset(dayStartMs + 86399000, tz);
+      var stable = (offA === offB);
+      outer:
+      for (var hi = 0; hi < f.hour.length; hi++) {
+        for (var mi = 0; mi < f.min.length; mi++) {
+          for (var si = 0; si < secList.length; si++) {
+            var wall = Date.UTC(y, mo - 1, d, f.hour[hi], f.min[mi], secList[si]);
+            var ms = stable ? wall - offA : localToUtc(y, mo, d, f.hour[hi], f.min[mi], secList[si], tz);
+            if (ms == null) continue;
+            if (ms < start) continue;
+            out.push({ ms: ms, local: { y: y, mo: mo, d: d, h: f.hour[hi], mi: f.min[mi], s: secList[si], wd: wd } });
+            if (out.length >= count) break outer;
+          }
+        }
+      }
+      if (out.length >= count) break;
+    }
+    out.sort(function (a, b) { return a.ms - b.ms; });
+    return out.slice(0, count);
+  }
+
+  /* ═════════════════════ display helpers ═════════════════════ */
+  function absText(r, lang) {
+    var wd = t(DOW_SHORT[r.local.wd]);
+    var mon = t(MON_SHORT[r.local.mo - 1]);
+    var hm = pad2(r.local.h) + ':' + pad2(r.local.mi) + (r.local.s ? ':' + pad2(r.local.s) : '');
+    if (lang === 'ko') return mon + ' ' + r.local.d + '일 (' + wd + ') ' + hm;
+    return wd + ', ' + mon + ' ' + r.local.d + ' · ' + hm;
+  }
+  function utcText(ms) {
+    var d = new Date(ms);
+    return pad2(d.getUTCHours()) + ':' + pad2(d.getUTCMinutes()) + (d.getUTCSeconds() ? ':' + pad2(d.getUTCSeconds()) : '') + ' UTC';
+  }
+  function relText(ms) {
+    var diff = ms - Date.now();
+    if (diff < 60000) return t('relNow');
+    var mins = Math.floor(diff / 60000);
+    if (mins < 60) return fmt(t('relMin'), { n: mins });
+    var hrs = Math.floor(mins / 60), rm = mins % 60;
+    if (hrs < 24) return fmt(t('relHour'), { h: hrs, m: rm });
+    var days = Math.floor(hrs / 24);
+    return fmt(t('relDay'), { d: days, h: hrs % 24 });
+  }
+
+  /* ═════════════════════ presets ═════════════════════ */
+  var PRESETS = [
+    { id: 'm1', expr: '* * * * *', key: 'presetEveryMinute' },
+    { id: 'm5', expr: '*/5 * * * *', key: 'presetEvery5' },
+    { id: 'h1', expr: '0 * * * *', key: 'presetHourly' },
+    { id: 'd9', expr: '0 9 * * *', key: 'presetDaily9' },
+    { id: 'w9', expr: '0 9 * * 1-5', key: 'presetWeekday9' },
+    { id: 'mon', expr: '0 0 * * 1', key: 'presetMonday' },
+    { id: 'm1st', expr: '0 0 1 * *', key: 'presetMonthly1' },
+    { id: 'q', expr: '0 0 1 1,4,7,10 *', key: 'presetQuarter' },
+    { id: 'd1830', expr: '30 18 * * *', key: 'presetDaily1830' },
+    { id: 'we', expr: '0 10 * * 0,6', key: 'presetWeekend10' },
+    { id: 'slot', expr: '*/30 9-18 * * 1-5', key: 'presetSlots' },
+    { id: 'm15', expr: '0 9 15 * *', key: 'presetMonthly15' }
+  ];
+
+  /* ═════════════════════ field editor ═════════════════════ */
+  var CHIPS = {
+    min: ['*', '0', '*/5', '*/15', '30', '0,30'],
+    hour: ['*', '0', '9', '*/2', '12', '18'],
+    dom: ['*', '1', '*/2', '15', '1,15'],
+    mon: ['*', '1', '*/3', '6', '12'],
+    dow: ['*', '1-5', '0', '6', '0,6'],
+    sec: ['*', '0', '*/10', '*/30', '15']
+  };
+
+  function tokensOf(expr) {
+    var s = String(expr || '').trim().replace(/\s+/g, ' ');
+    var low = s.toLowerCase();
+    if (MACROS[low]) s = MACROS[low];
+    return s ? s.split(' ') : [];
+  }
+
+  function renderFields() {
+    var wrap = $('fields');
+    wrap.innerHTML = '';
+    var toks = tokensOf(state.expr);
+    var n = toks.length === 6 ? 6 : toks.length === 5 ? 5 : state.mode;
+    var defs = n === 6 ? FIELD_ORDER6 : FIELDS;
+    var errKeys = {};
+    if (state.parsed && state.parsed.errors) {
+      for (var e = 0; e < state.parsed.errors.length; e++) errKeys[state.parsed.errors[e].field || ''] = true;
+    }
+    for (var i = 0; i < defs.length; i++) {
+      var d = defs[i];
+      var val = toks[i] != null ? toks[i] : (d.k === 'sec' ? '0' : '*');
+      var box = document.createElement('div');
+      box.className = 'field' + (errKeys[d.k] ? ' is-bad' : '');
+      box.setAttribute('data-k', d.k);
+      var chips = (CHIPS[d.k] || []).map(function (c) {
+        return '<button type="button" data-v="' + c + '" aria-label="' + c + '">' + c + '</button>';
+      }).join('');
+      box.innerHTML =
+        '<div class="f-top"><span class="f-name">' + fieldName(d.k) + '</span>' +
+        '<span class="f-range">' + d.min + '–' + d.max + '</span></div>' +
+        '<input class="f-input" type="text" spellcheck="false" autocomplete="off" value="' + val.replace(/"/g, '&quot;') + '" ' +
+        'aria-label="' + fieldLabel(d.k) + '">' +
+        '<div class="f-chips">' + chips + '</div>';
+      wrap.appendChild(box);
+    }
+  }
+
+  function setFieldValue(k, v) {
+    var toks = tokensOf(state.expr);
+    if (toks.length !== 6 && toks.length !== 5) {
+      toks = state.expr.trim().split(/\s+/);
+    }
+    var order = toks.length === 6 ? ['sec', 'min', 'hour', 'dom', 'mon', 'dow'] : ['min', 'hour', 'dom', 'mon', 'dow'];
+    var idx = order.indexOf(k);
+    if (idx < 0) return;
+    toks[idx] = v;
+    state.expr = toks.join(' ');
+    $('expr').value = state.expr;
+    render();
+  }
+
+  /* ═════════════════════ snippets ═════════════════════ */
+  function baseExpr() {
+    var p = state.parsed;
+    if (!p || !p.ok) return state.expr.trim();
+    if (p.macro) return String(state.expr).trim().toLowerCase();
+    return p.tokens.join(' ');
+  }
+  function expr5() {
+    var b = baseExpr();
+    if (MACROS[b]) b = MACROS[b];
+    var toks = b.split(' ');
+    if (toks.length === 6) toks = toks.slice(1);
+    return toks.join(' ');
+  }
+  function hasSeconds() {
+    var p = state.parsed;
+    return !!(p && p.ok && p.hasSec && !(p.fields.sec.length === 1 && p.fields.sec[0] === 0));
+  }
+  function snippet(kind) {
+    var p = state.parsed;
+    var lang = state.lang;
+    var desc = (p && p.ok) ? describe(p, lang) : '';
+    var tz = resolvedTz(state.tz);
+    var line = baseExpr();
+    if (kind === 'line') return line;
+    if (kind === 'crontab') {
+      var head = '# CronMint · ' + desc;
+      var tzl = '# Timezone: ' + tz + (tz === 'UTC' ? ' (server local time)' : ' — crontab fires in the server\'s local time');
+      var hasS = hasSeconds();
+      var d5 = hasS ? describe(expr5(), lang) : desc;
+      var head5 = '# CronMint · ' + d5;
+      var secNote = hasS ? '# note: crontab has no seconds field — the seconds in ' + line + ' are dropped here\n' : '';
+      var cmd = expr5() + '  /path/to/your/command.sh' + (d5 ? '    # ' + d5 : '');
+      return head5 + '\n' + tzl + '\n' + secNote + (tz === 'UTC' ? '' : 'CRON_TZ=' + tz + '\n') + cmd;
+    }
+    /* actions */
+    var tzKey = state.tz === 'local' ? tz : state.tz;
+    var hasS = hasSeconds();
+    var desc5 = hasS ? describe(expr5(), lang) : desc;
+    var secNote = hasS ? '# note: GitHub Actions has no seconds field — ' + line + ' is written above without it\n' : '';
+    return 'name: cron-job\non:\n  schedule:\n    - cron: \'' + expr5() + '\'\n      timezone: \'' + tzKey + '\'' +
+      (desc5 ? '   # ' + desc5 : '') + '\n' + secNote +
+      'jobs:\n  run:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: ./scripts/job.sh';
+  }
+  function snipCaveat() {
+    if (state.snip === 'crontab') return t('caveatCrontab');
+    if (state.snip === 'actions') return t('caveatActions');
+    return t('caveatLine');
+  }
+
+  /* ═════════════════════ render ═════════════════════ */
+  function render(skipFields) {
+    var p = parse(state.expr);
+    state.parsed = p;
+
+    $('exprWrap').classList.toggle('is-bad', !p.ok);
+    var stEl = $('exprState');
+    stEl.textContent = p.ok ? (p.macro ? t('stMacro') : t('stValid')) : t('stInvalid');
+    stEl.className = 'expr-state ' + (p.ok ? 'is-ok' : 'is-bad');
+
+    var errs = $('errs');
+    errs.innerHTML = '';
+    if (!p.ok) {
+      for (var i = 0; i < p.errors.length; i++) {
+        var li = document.createElement('li');
+        li.textContent = errText(p.errors[i]);
+        errs.appendChild(li);
+      }
+    }
+
+    /* mode buttons follow the parsed field count */
+    var toks = tokensOf(state.expr);
+    var mode = toks.length === 6 ? 6 : 5;
+    state.mode = mode;
+    var segs = $('modeSeg').querySelectorAll('button');
+    for (i = 0; i < segs.length; i++) segs[i].setAttribute('aria-pressed', String(segs[i].getAttribute('data-mode') === String(mode)));
+
+    if (!skipFields) renderFields();
+
+    /* reading */
+    var hText = $('hText'), hSub = $('hSub'), hBadge = $('hBadge');
+    hBadge.textContent = state.lang.toUpperCase();
+    if (p.ok) {
+      hText.classList.remove('is-muted');
+      hText.textContent = describe(p, state.lang);
+      var sub = '';
+      if (p.macro) sub = fmt(t('subMacro'), { expr: MACROS[p.macro] });
+      if (!p.fields.star.dow && !p.fields.star.dom) sub = (sub ? sub + ' ' : '') + t('subBoth');
+      else if (!p.fields.star.dow) sub = (sub ? sub + ' ' : '') + t('subDow');
+      else if (!p.fields.star.dom) sub = (sub ? sub + ' ' : '') + t('subDom');
+      hSub.textContent = sub;
+    } else {
+      hText.classList.add('is-muted');
+      hText.textContent = t('runsEmpty');
+      hSub.textContent = '';
+    }
+
+    /* runs */
+    var tzId = $('tzSel').value || state.tz;
+    state.tz = tzId;
+    var tz = resolvedTz(tzId);
+    var nowMs = Date.now();
+    var np = tzParts(nowMs, tz);
+    $('nowTz').textContent = tzId === 'local' ? t('tzLocal') + ' · ' + tz : tz;
+    $('nowTime').textContent = absText({ local: { y: np.y, mo: np.mo, d: np.d, h: np.h, mi: np.mi, s: np.s, wd: new Date(Date.UTC(np.y, np.mo - 1, np.d)).getUTCDay() } }, state.lang);
+
+    var runsEl = $('runs');
+    runsEl.innerHTML = '';
+    var runs = p.ok ? nextRuns(p, tzId, 10, nowMs) : [];
+    state.runs = runs;
+    $('runsEmpty').hidden = runs.length > 0;
+    if (!p.ok) $('runsEmpty').textContent = t('runEmpty');
+    else if (!runs.length) $('runsEmpty').textContent = t('subNone');
+    for (i = 0; i < runs.length; i++) {
+      var r = runs[i];
+      var li2 = document.createElement('li');
+      li2.className = 'run' + (i === 0 ? ' is-next' : '');
+      li2.innerHTML =
+        '<span class="i">' + pad2(i + 1) + '</span>' +
+        '<span class="when"><span class="abs">' + absText(r, state.lang) + '</span>' +
+        (tz !== 'UTC' ? '<span class="utc">' + utcText(r.ms) + '</span>' : '') + '</span>' +
+        '<span class="rel">' + relText(r.ms) + '</span>';
+      runsEl.appendChild(li2);
+    }
+
+    /* presets */
+    var pv = $('presets');
+    pv.innerHTML = '';
+    var cur = baseExpr();
+    for (i = 0; i < PRESETS.length; i++) {
+      var ps = PRESETS[i];
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'preset';
+      b.setAttribute('data-expr', ps.expr);
+      b.setAttribute('aria-pressed', String(ps.expr === cur));
+      b.innerHTML = '<span class="p-name">' + t(ps.key) + '</span><span class="p-expr">' + ps.expr + '</span>';
+      pv.appendChild(b);
+    }
+
+    /* snippet */
+    $('codeOut').textContent = snippet(state.snip);
+    $('snipCaveat').textContent = snipCaveat();
+    var ss = $('snipSeg').querySelectorAll('button');
+    for (i = 0; i < ss.length; i++) ss[i].setAttribute('aria-pressed', String(ss[i].getAttribute('data-kind') === state.snip));
+
+    countNetLater();
+  }
+
+  /* ═════════════════════ copy ═════════════════════ */
+  function copyText(text, okMsg) {
+    var done = function () {
+      var s = $('snipStatus');
+      s.textContent = okMsg;
+      s.className = 'status is-ok';
+      setTimeout(function () { s.textContent = ''; s.className = 'status'; }, 2600);
+    };
+    var fail = function () {
+      var s = $('snipStatus');
+      s.textContent = t('copyFail');
+      s.className = 'status is-warn';
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () {
+        if (legacyCopy(text)) done(); else fail();
+      });
+    } else if (legacyCopy(text)) done();
+    else fail();
+  }
+  function legacyCopy(text) {
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.top = '-1000px';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      return ok;
+    } catch (e) { return false; }
+  }
+
+  /* ═════════════════════ network counter ═════════════════════ */
+  var netCounted = 0;
+  function countNet() {
+    var n = 0;
+    try {
+      var res = performance.getEntriesByType ? performance.getEntriesByType('resource') : [];
+      for (var i = 0; i < res.length; i++) {
+        try {
+          var u = new URL(res[i].name, location.href);
+          if (u.protocol === 'data:' || u.protocol === 'blob:') continue;
+          if (u.origin !== location.origin) n++;
+        } catch (e) { /* ignore */ }
+      }
+    } catch (e) { n = 0; }
+    netCounted = n;
+    var el = $('netCount');
+    if (el) el.textContent = String(n);
+    return n;
+  }
+  function countNetLater() { setTimeout(countNet, 60); }
+
+  /* ═════════════════════ timezone select ═════════════════════ */
+  var TZS = ['Asia/Seoul', 'UTC', 'America/New_York', 'Europe/London', 'Asia/Tokyo', 'local'];
+  function buildTzSelect() {
+    var sel = $('tzSel');
+    sel.innerHTML = '';
+    for (var i = 0; i < TZS.length; i++) {
+      var o = document.createElement('option');
+      o.value = TZS[i];
+      o.textContent = TZS[i] === 'local' ? t('tzLocal') + ' (' + resolvedTz('local') + ')' : TZS[i];
+      sel.appendChild(o);
+    }
+    sel.value = state.tz;
+  }
+
+  /* ═════════════════════ language ═════════════════════ */
+  function applyLang(lang) {
+    state.lang = lang === 'ko' ? 'ko' : 'en';
+    document.documentElement.setAttribute('lang', state.lang);
+    document.title = t('docTitle');
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var v = t(nodes[i].getAttribute('data-i18n'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-html'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-aria'));
+      if (v) nodes[i].setAttribute('aria-label', v);
+    }
+    var lt = $('langToggle');
+    if (lt) {
+      var spans = lt.querySelectorAll('[data-lt]');
+      for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
+      lt.setAttribute('aria-label', t('toggleTo'));
+      lt.setAttribute('title', t('toggleTo'));
+    }
+    buildTzSelect();
+    render();
+    try {
+      localStorage.setItem(LANG_KEY, state.lang);
+      localStorage.setItem(SHARED_KEY, state.lang);
+    } catch (e) { /* storage may be blocked */ }
+  }
+
+  $('langToggle').addEventListener('click', function () {
+    applyLang(state.lang === 'ko' ? 'en' : 'ko');
+  });
+
+  /* ═════════════════════ events ═════════════════════ */
+  var exprEl = $('expr');
+  exprEl.addEventListener('input', function () {
+    state.expr = exprEl.value;
+    render();
+  });
+  exprEl.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); render(); }
+  });
+
+  $('modeSeg').addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b) return;
+    var want = b.getAttribute('data-mode');
+    var toks = tokensOf(state.expr);
+    if (want === '6' && toks.length === 5) toks = ['0'].concat(toks);
+    else if (want === '5' && toks.length === 6) toks = toks.slice(1);
+    state.expr = toks.join(' ');
+    exprEl.value = state.expr;
+    render();
+  });
+
+  $('fields').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-v]');
+    if (!b) return;
+    var box = b.closest('.field');
+    setFieldValue(box.getAttribute('data-k'), b.getAttribute('data-v'));
+  });
+  $('fields').addEventListener('input', function (e) {
+    var inp = e.target.closest('.f-input');
+    if (!inp) return;
+    var box = inp.closest('.field');
+    var k = box.getAttribute('data-k');
+    var toks = tokensOf(state.expr);
+    if (toks.length !== 6 && toks.length !== 5) toks = state.expr.trim().split(/\s+/);
+    var order = toks.length === 6 ? ['sec', 'min', 'hour', 'dom', 'mon', 'dow'] : ['min', 'hour', 'dom', 'mon', 'dow'];
+    var idx = order.indexOf(k);
+    if (idx < 0) return;
+    toks[idx] = inp.value;
+    state.expr = toks.join(' ');
+    exprEl.value = state.expr;
+    render(true);
+  });
+  $('fields').addEventListener('focusin', function (e) {
+    var inp = e.target.closest('.f-input');
+    if (inp) setTimeout(function () { try { inp.select(); } catch (er) { /* noop */ } }, 0);
+  });
+
+  $('presets').addEventListener('click', function (e) {
+    var b = e.target.closest('.preset');
+    if (!b) return;
+    state.expr = b.getAttribute('data-expr');
+    exprEl.value = state.expr;
+    render();
+  });
+
+  $('tzSel').addEventListener('change', function () {
+    state.tz = $('tzSel').value;
+    render();
+  });
+
+  $('snipSeg').addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b) return;
+    state.snip = b.getAttribute('data-kind');
+    $('codeOut').textContent = snippet(state.snip);
+    $('snipCaveat').textContent = snipCaveat();
+    var ss = $('snipSeg').querySelectorAll('button');
+    for (var i = 0; i < ss.length; i++) ss[i].setAttribute('aria-pressed', String(ss[i].getAttribute('data-kind') === state.snip));
+  });
+
+  $('copySnip').addEventListener('click', function () {
+    var kind = state.snip === 'line' ? t('tagLine') : state.snip === 'crontab' ? t('tagCrontab') : t('tagActions');
+    copyText(snippet(state.snip), fmt(t('copiedSnip'), { kind: kind }));
+  });
+  $('copyExpr').addEventListener('click', function () {
+    copyText(baseExpr(), t('copiedExpr'));
+  });
+
+  /* ═════════════════════ boot ═════════════════════ */
+  buildTzSelect();
+  exprEl.value = state.expr;
+  render();
+  applyLang(initialLang());
+  window.addEventListener('load', countNet);
+  setTimeout(countNet, 900);
+
+  /* read-only hook for tests and automation */
+  window.CronMint = {
+    version: '1.0',
+    ready: true,
+    parse: function (e) {
+      var p = parse(e == null ? state.expr : e);
+      return {
+        ok: p.ok, macro: p.macro, hasSec: !!p.hasSec,
+        errors: (p.errors || []).map(function (er) { return { code: er.code, field: er.field, tok: er.tok }; }),
+        tokens: p.tokens || null, fields: p.fields || null
+      };
+    },
+    describe: function (e, lang) { return describe(e == null ? state.expr : e, lang || state.lang); },
+    nextRuns: function (e, tz, n, from) {
+      var r = nextRuns(e == null ? state.expr : e, tz || state.tz, n || 10, from);
+      return r.map(function (x) {
+        return {
+          iso: new Date(x.ms).toISOString(), ms: x.ms,
+          y: x.local.y, mo: x.local.mo, d: x.local.d, h: x.local.h, mi: x.local.mi, s: x.local.s, wd: x.local.wd,
+          abs: absText(x, state.lang), utc: utcText(x.ms), rel: relText(x.ms)
+        };
+      });
+    },
+    setExpr: function (e) { state.expr = String(e); exprEl.value = state.expr; render(); return state.expr; },
+    setTz: function (tz) { state.tz = tz; $('tzSel').value = tz; render(); return state.tz; },
+    setSnip: function (k) { state.snip = k; $('codeOut').textContent = snippet(k); $('snipCaveat').textContent = snipCaveat(); return k; },
+    setLang: function (l) { applyLang(l); return state.lang; },
+    snippet: snippet,
+    expr: function () { return state.expr; },
+    tz: function () { return state.tz; },
+    resolvedTz: function () { return resolvedTz(state.tz); },
+    lang: function () { return state.lang; },
+    runs: function () { return state.runs.length; },
+    presets: PRESETS.map(function (p) { return { id: p.id, expr: p.expr }; }),
+    net: function () { return countNet(); }
+  };
+})();
+</script>
+</body>
+</html>

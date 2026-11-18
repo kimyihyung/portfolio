@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0b0d">
+<title>UnitKR — 평·근·돈·되 한국 단위 변환기 | Kim Yihyung</title>
+<meta name="description" content="34평은 몇 ㎡인지, 금 한 돈은 몇 g인지, 고기 한 근과 채소 한 근은 왜 다른지 — 평·㎡, 자·치·간, 돈·냥·관·근, 되·말·소주병, ℃·℉를 한 화면에서 바꾸고 카톡 요약으로 복사합니다. 모두 브라우저 안에서 계산하고 업로드 0바이트.">
+<meta name="keywords" content="평수 계산기, 평 ㎡ 변환, 34평 몇 제곱미터, 금 한돈 몇g, 고기 한근 600g, 채소 한근 375g, 돈 냥 관, 되 말 리터, 소주 한병 ml, 맥주 한병 ml, 섭씨 화씨 변환, 자 치 간 cm, 인치 피트 야드 마일, 한국 단위 변환, unitkr">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/unit-kr/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b0d'/%3E%3Cpath d='M7 21h18' stroke='%23e5b45c' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M10 21V15M16 21V11M22 21V17' stroke='%23e5b45c' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/unit-kr/">
+<meta property="og:title" content="UnitKR — 평·근·돈·되, 한국 단위 변환기">
+<meta property="og:description" content="평↔㎡, 자·치·간, 돈·냥·관·근, 되·말·소주병, ℃↔℉를 한 화면에서. 기준표와 카톡 요약 복사까지, 브라우저 안에서만.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="UnitKR — 한국 생활 단위 변환기">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="UnitKR — 평·근·돈·되, 한국 단위 변환기">
+<meta name="twitter:description" content="34평은 몇 ㎡, 금 한 돈은 몇 g, 고기 한 근은 왜 600g인지 — 한 화면에서 바꾸고 카톡으로 복사.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "UnitKR — 한국 생활 단위 변환기",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/unit-kr/",
+      "description": "한국에서 실제로 쓰는 단위를 서로 바꾸는 계산기. 평과 ㎡(1평 = 3.305785㎡), 자·치·간과 cm·m, 인치·피트·야드·마일, 금의 돈·냥·관, 고기 600g 근과 채소 375g·400g 근, 되·말·컵·소주병·맥주병, 섭씨·화씨를 한 화면에서 변환하고 자주 쓰는 기준표와 카톡 요약을 복사한다. 모든 계산은 브라우저 안에서 이루어지며 업로드도 외부 요청도 없다.",
+      "featureList": [
+        "평 ↔ ㎡ (1평 = 3.305785㎡) 와 평방피트",
+        "자·치·간 ↔ cm·m, 인치·피트·야드·마일 ↔ cm·m·km",
+        "금 한 돈 3.75g · 한 냥 37.5g · 한 관 3.75kg",
+        "고기 한 근 600g, 채소 한 근 375g과 400g 관행 구분",
+        "되 1.8039L · 말 18.039L · 소주병 360ml · 맥주병 500ml · 컵 200ml와 240ml",
+        "섭씨 ↔ 화씨 ↔ 켈빈",
+        "자주 쓰는 한국 생활 기준표",
+        "카톡 요약 복사",
+        "100% 브라우저 계산: 업로드 0바이트, 외부 요청 0건"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "KRW" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "UnitKR", "item": "https://kimyihyung.github.io/portfolio/tools/unit-kr/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "59㎡는 몇 평인가요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "59㎡ ÷ 3.305785 = 17.85평입니다. 다만 부동산에서 말하는 '24평형'은 공급면적이고 59㎡는 전용면적이라, 같은 집을 두 숫자로 부르는 경우가 많습니다. 이 계산기는 입력한 숫자를 그대로 환산하므로, 어느 면적인지 확인하고 넣어야 합니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "고기 한 근은 600g인데 채소 한 근은 왜 375g인가요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "관행이 갈라진 결과입니다. 1근은 16냥, 1냥은 37.5g이어서 600g이 되고, 정육점은 이 값을 그대로 씁니다. 채소·과일은 1관 3.75kg의 10분의 1인 375g을 한 근으로 부르는 관행이 굳었고, 지역이나 가게에 따라 400g을 쓰기도 합니다. 시장에서는 어느 쪽인지 한 번 확인하는 편이 안전합니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "금 한 돈은 왜 3.75g인가요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "1냥이 37.5g이고 1돈은 그 10분의 1이라 3.75g입니다. 귀금속 시세는 이 돈 단위와 g 단위를 함께 쓰고, 국제 금 시세는 트로이온스(31.1034768g)로 표시되므로 상형온스(28.3495g)와 섞지 않도록 주의해야 합니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "일본 1척이나 중국 1척과 같나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "아닙니다. 한국의 1자는 10/33m, 약 30.303cm로 일본 척(30.303cm와 유사하지만 역사적으로 다름)과 중국 시척(약 33.3cm)이 서로 다릅니다. 이 계산기는 한국 기준 1자 = 30.303cm, 1간 = 6자 = 181.818cm를 씁니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "입력한 값이 저장되거나 전송되나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "아니요. 변환은 이 페이지의 스크립트가 브라우저 안에서 계산합니다. 서버 호출도, 분석 도구도, 값을 저장하는 곳도 없으며 언어 선택만 이 브라우저에 기억됩니다. 바닥글의 외부 요청 수는 페이지가 실제로 센 값이고 0에 머뭅니다." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+:root {
+  --bg: #0b0b0d;
+  --panel: #131311;
+  --panel2: #1a1916;
+  --line: rgba(255,255,255,.09);
+  --line2: rgba(255,255,255,.18);
+  --ink: #f6f2e9;
+  --muted: #a9a29a;
+  --muted2: #7d766e;
+  --accent: #e5b45c;
+  --accent2: #f3cf85;
+  --accent-dim: rgba(229,180,92,.12);
+  --on-accent: #1d1503;
+  --ok: #7fd6a0;
+  --warn: #ffa06b;
+  --bad: #ff7d7d;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  line-height: 1.6;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(110% 55% at 50% -18%, rgba(229,180,92,.13), transparent 62%),
+    radial-gradient(60% 40% at 100% 2%, rgba(229,180,92,.05), transparent 60%);
+  background-repeat: no-repeat;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: var(--accent); color: var(--on-accent); }
+a { color: inherit; }
+button, input, select, textarea { font-family: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+.wrap { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 20px 48px; }
+
+/* ---------- topbar ---------- */
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0 12px; }
+.brand { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: var(--ink); min-width: 0; }
+.mark {
+  min-width: 28px; height: 22px; padding: 0 6px; border-radius: 7px; flex: none;
+  border: 1px solid rgba(229,180,92,.45); background: var(--accent-dim);
+  display: grid; place-items: center; font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: var(--accent);
+}
+.brand-txt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.top-actions { display: inline-flex; align-items: center; gap: 9px; flex: none; }
+.lang-toggle {
+  appearance: none; border: 1px solid var(--line); background: var(--panel); color: var(--muted2);
+  height: 34px; padding: 0 11px; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px;
+  cursor: pointer; font-size: 11px; font-weight: 700; letter-spacing: .06em; line-height: 1;
+  transition: color .2s, border-color .2s, transform .15s;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.94); }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
+.topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
+
+/* ---------- hero ---------- */
+.hero { padding: 22px 0 18px; max-width: 860px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; margin: 0 0 14px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent);
+  border: 1px solid rgba(229,180,92,.28); background: rgba(229,180,92,.06); padding: 6px 11px; border-radius: 999px;
+}
+.eyebrow .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+h1 { margin: 0 0 14px; font-size: clamp(26px, 4.2vw, 42px); line-height: 1.16; letter-spacing: -.03em; font-weight: 800; }
+h1 .soft { color: var(--muted); }
+h1 .gold { color: var(--accent); }
+.lede { margin: 0 0 16px; color: var(--muted); font-size: 15px; max-width: 780px; }
+.lede strong { color: var(--ink); font-weight: 600; }
+
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--panel); font-size: 11.5px; color: var(--muted);
+  font-family: var(--mono); letter-spacing: .02em;
+}
+.pill b { color: var(--ink); font-weight: 700; }
+.pill--live { border-color: rgba(127,214,160,.32); background: rgba(127,214,160,.07); color: #a6e6c4; }
+.pill--live b { color: #bff3d8; }
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px rgba(127,214,160,.14); }
+
+/* ---------- layout ---------- */
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); min-width: 0; }
+.panel { padding: 16px; display: grid; gap: 13px; min-width: 0; }
+
+.btn {
+  appearance: none; cursor: pointer; border-radius: 11px; border: 1px solid var(--line2);
+  background: var(--panel2); color: var(--ink); font-size: 13px; font-weight: 650;
+  padding: 10px 16px; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  transition: transform .12s, border-color .2s, background .2s; text-decoration: none;
+}
+.btn:hover { border-color: rgba(255,255,255,.3); }
+.btn:active { transform: scale(.98); }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 750; }
+.btn--primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.btn--ghost { background: transparent; }
+.btn--sm { padding: 7px 11px; font-size: 12px; border-radius: 9px; }
+
+.seg { display: flex; gap: 3px; padding: 3px; background: var(--panel2); border: 1px solid var(--line); border-radius: 11px; min-width: 0; }
+.seg button { flex: 1 1 auto; appearance: none; border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; font-weight: 650; padding: 7px 6px; border-radius: 8px; line-height: 1.25; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--accent-dim); color: var(--accent); box-shadow: inset 0 0 0 1px rgba(229,180,92,.35); }
+
+/* ---------- tabs ---------- */
+.tabs { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 6px; margin-bottom: 4px; }
+.tabs button {
+  appearance: none; cursor: pointer; text-align: left; min-width: 0;
+  display: grid; gap: 2px; padding: 10px 12px; border-radius: 12px;
+  border: 1px solid var(--line); background: var(--panel2); color: var(--muted);
+  transition: border-color .2s, background .2s, color .2s;
+}
+.tabs button:hover { border-color: var(--line2); }
+.tabs button b { font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; color: var(--muted2); font-weight: 700; }
+.tabs button span { font-size: 13px; font-weight: 700; color: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tabs button[aria-selected="true"] { border-color: rgba(229,180,92,.5); background: linear-gradient(180deg, rgba(229,180,92,.14), rgba(229,180,92,.03)); color: var(--ink); }
+.tabs button[aria-selected="true"] b { color: var(--accent); }
+@media (max-width: 640px) {
+  .tabs { grid-template-columns: 1fr 1fr; }
+  .tabs button { padding: 9px 10px; }
+  .tabs button span { font-size: 12.5px; }
+}
+
+.tabpanel { display: grid; gap: 14px; min-width: 0; }
+.calc-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.calc-head h2 { margin: 0; font-size: 16.5px; letter-spacing: -.01em; }
+.calc-head span { font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; color: var(--muted2); }
+
+/* ---------- converter ---------- */
+.conv-block { display: grid; gap: 14px; min-width: 0; }
+.conv { display: grid; grid-template-columns: minmax(0,1fr) 40px minmax(0,1fr); gap: 10px; align-items: stretch; min-width: 0; }
+@media (max-width: 620px) { .conv { grid-template-columns: minmax(0,1fr); } }
+.cv-side {
+  display: grid; gap: 7px; padding: 11px 13px 10px; border: 1px solid var(--line);
+  border-radius: var(--radius-sm); background: var(--panel2); min-width: 0; align-content: start;
+}
+.cv-side:focus-within { border-color: rgba(229,180,92,.55); }
+.cv-side.is-out { border-color: rgba(229,180,92,.24); background: linear-gradient(180deg, rgba(229,180,92,.08), rgba(229,180,92,.02)); }
+.cv-side > label { font-size: 10px; font-family: var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted2); }
+.val { display: flex; align-items: baseline; gap: 5px; min-width: 0; }
+.cv-in {
+  appearance: none; border: 0; background: transparent; color: var(--ink);
+  font-size: clamp(21px, 5vw, 28px); font-weight: 700; padding: 0; width: 100%; min-width: 0;
+  line-height: 1.25; font-family: var(--mono); letter-spacing: -.03em;
+}
+.cv-in:focus { outline: none; }
+.val .u { font-size: 12px; color: var(--muted); flex: none; font-family: var(--mono); }
+.cv-big {
+  font-family: var(--mono); font-size: clamp(21px, 5vw, 28px); line-height: 1.25; font-weight: 700;
+  letter-spacing: -.03em; color: var(--accent); overflow-wrap: anywhere; min-width: 0;
+}
+.cv-big .u { font-size: 12px; color: var(--muted); font-weight: 600; margin-left: 4px; letter-spacing: 0; }
+.cv-side select {
+  appearance: none; border: 1px solid var(--line); background-color: #141311; color: var(--ink);
+  border-radius: 9px; padding: 6px 26px 6px 8px; font-size: 12.5px; cursor: pointer; width: 100%; min-width: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' fill='none' stroke='%237d766e' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 9px center; background-size: 10px 7px;
+}
+.cv-side select option { background: #141311; color: var(--ink); }
+.swap {
+  appearance: none; cursor: pointer; align-self: center; justify-self: center;
+  width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line2);
+  background: var(--panel2); color: var(--muted); font-size: 15px; line-height: 1; display: grid; place-items: center;
+  transition: color .18s, border-color .18s, transform .18s;
+}
+.swap:hover { color: var(--accent); border-color: rgba(229,180,92,.5); transform: rotate(180deg); }
+@media (max-width: 620px) { .swap { width: 100%; height: 32px; border-radius: 9px; transform: none; } }
+
+/* ---------- equivalents ---------- */
+.eq-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.eq-head h3 { margin: 0; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted2); font-family: var(--mono); font-weight: 700; }
+.eq-head span { font-size: 11px; color: var(--muted2); font-family: var(--mono); }
+.eq-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 6px; min-width: 0; }
+.eq {
+  appearance: none; cursor: pointer; text-align: left; min-width: 0; display: grid; gap: 1px;
+  padding: 8px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel2);
+  transition: border-color .18s, background .18s;
+}
+.eq:hover { border-color: rgba(229,180,92,.45); background: rgba(229,180,92,.06); }
+.eq.is-cur { border-color: rgba(229,180,92,.5); background: rgba(229,180,92,.1); }
+.eq .eq-u { font-family: var(--mono); font-size: 9.5px; letter-spacing: .04em; color: var(--muted2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.eq .eq-v { font-family: var(--mono); font-size: 13.5px; font-weight: 700; color: var(--ink); letter-spacing: -.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.eq.is-cur .eq-v { color: var(--accent); }
+
+.caveat { margin: 0; font-size: 11.6px; color: var(--muted2); line-height: 1.62; }
+.caveat b { color: var(--muted); font-weight: 600; }
+.status { min-height: 16px; margin: 0; font-size: 12px; color: var(--muted); }
+.status.is-ok { color: var(--ok); }
+
+/* ---------- reference table ---------- */
+.ref-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; min-width: 0; align-items: start; }
+@media (max-width: 760px) { .ref-grid { grid-template-columns: minmax(0,1fr); } }
+.ref { padding: 14px 15px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel); min-width: 0; }
+.ref h4 { margin: 0 0 8px; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted2); font-family: var(--mono); font-weight: 700; }
+.ref table { width: 100%; border-collapse: collapse; font-size: 12.2px; }
+.ref table td { padding: 5px 0; border-bottom: 1px dashed rgba(255,255,255,.08); color: var(--muted); }
+.ref table td:last-child { text-align: right; color: var(--ink); font-family: var(--mono); font-weight: 650; white-space: nowrap; }
+.ref table tr:last-child td { border-bottom: 0; }
+
+.sum { margin: 0; padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: #0d0d10; color: #cfd6c9; font-family: var(--mono); font-size: 11.4px; line-height: 1.8; white-space: pre-wrap; overflow-wrap: anywhere; }
+.row-actions { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+
+/* ---------- toast ---------- */
+.toast {
+  position: fixed; left: 50%; bottom: 22px; transform: translate(-50%, 14px);
+  background: #1f1d19; border: 1px solid rgba(229,180,92,.45); color: var(--ink);
+  padding: 9px 15px; border-radius: 999px; font-size: 12.5px; font-family: var(--mono);
+  opacity: 0; pointer-events: none; transition: opacity .18s, transform .18s; z-index: 50; max-width: calc(100% - 28px);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.toast.is-on { opacity: 1; transform: translate(-50%, 0); }
+
+/* ---------- sections ---------- */
+.section { margin-top: 40px; scroll-margin-top: 18px; }
+.sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 12px; border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 16px; }
+.sec-head h2 { margin: 0; font-size: 17px; letter-spacing: -.01em; }
+.sec-head span { font-family: var(--mono); font-size: 11px; color: var(--muted2); letter-spacing: .08em; text-transform: uppercase; }
+
+.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+.note { padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel); min-width: 0; }
+.note h3 { margin: 0 0 8px; font-size: 14px; display: flex; gap: 8px; align-items: baseline; }
+.note h3 span { font-family: var(--mono); font-size: 10.5px; color: var(--accent); letter-spacing: .1em; }
+.note p { margin: 0; font-size: 12.8px; color: var(--muted); line-height: 1.62; }
+.note p + p { margin-top: 8px; }
+.note b { color: var(--ink); font-weight: 600; }
+
+.faq { display: grid; gap: 8px; }
+details.qa { border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); overflow: hidden; }
+details.qa summary { cursor: pointer; padding: 13px 44px 13px 15px; font-size: 13.5px; font-weight: 600; list-style: none; position: relative; }
+details.qa summary::-webkit-details-marker { display: none; }
+details.qa summary::after { content: "+"; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--accent); font-family: var(--mono); font-size: 15px; }
+details.qa[open] summary::after { content: "−"; }
+details.qa .a { padding: 0 15px 14px; font-size: 12.8px; color: var(--muted); line-height: 1.68; }
+details.qa .a b { color: var(--ink); font-weight: 600; }
+
+.foot { margin-top: 34px; padding-top: 14px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--muted2); }
+.foot-links { display: inline-flex; flex-wrap: wrap; gap: 12px; }
+.foot-links a { text-decoration: none; color: var(--muted); border-bottom: 1px solid transparent; }
+.foot-links a:hover { color: var(--ink); border-bottom-color: var(--line2); }
+.foot .net { font-family: var(--mono); letter-spacing: .02em; }
+.foot .net b { color: var(--ok); }
+
+@media (max-width: 640px) {
+  .wrap { padding: 0 14px 36px; }
+  .topbar { padding: 14px 0 8px; }
+  .brand-txt { font-size: 12px; letter-spacing: .1em; }
+  .hero { padding: 16px 0 12px; }
+  .lede { font-size: 14px; }
+  .panel { padding: 13px; }
+  .sec-head h2 { font-size: 16px; }
+  .eyebrow { font-size: 9.5px; letter-spacing: .09em; padding: 5px 9px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="/portfolio/" aria-label="Kim Yihyung — 포트폴리오" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="View in English" aria-label="View in English">
+        <span class="lt on" data-lt="ko">KO</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="en">EN</span>
+      </button>
+      <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← 도구 전체</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="eyebrow">UnitKR · 평·근·돈·되 · 업로드 0</span></p>
+      <h1 data-i18n-html="h1">34평이 몇 ㎡인지,<br><span class="soft">금 한 돈이 몇 g인지.</span><br><span class="gold">이 탭 안에서, 바로.</span></h1>
+      <p class="lede" data-i18n-html="lede">
+        부동산 <strong>평수와 ㎡</strong>, <strong>자·치·간</strong>, 고기와 채소의 <strong>근</strong>, 금의 <strong>돈</strong>,
+        <strong>되·말·소주병</strong>, <strong>℃와 ℉</strong>까지 — 한국에서 실제로 쓰는 단위를 서로 바꾸고,
+        자주 쓰는 기준표와 <strong>카톡 요약</strong>까지 한 화면에서. 입력한 값은 어디에도 저장되지 않습니다.
+      </p>
+      <div class="badge-row">
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillUp">업로드 0바이트</b></span>
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillNet">외부 요청 0건</b></span>
+        <span class="pill" data-i18n="pillUnits">평 · 근 · 돈 · 되</span>
+        <span class="pill" data-i18n="pillCopy">카톡 요약 복사</span>
+      </div>
+    </section>
+
+    <!-- ══════════ converters ══════════ -->
+    <section class="card panel" aria-label="단위 변환기" data-i18n-aria="calcAria">
+      <div class="tabs" role="tablist" aria-label="변환 종류" data-i18n-aria="tabAria">
+        <button type="button" role="tab" id="tab-area" data-tab="area" aria-selected="true" aria-controls="panel-area">
+          <b>01</b><span data-i18n="tab1">부동산·길이</span>
+        </button>
+        <button type="button" role="tab" id="tab-mass" data-tab="mass" aria-selected="false" aria-controls="panel-mass" tabindex="-1">
+          <b>02</b><span data-i18n="tab2">무게</span>
+        </button>
+        <button type="button" role="tab" id="tab-volume" data-tab="volume" aria-selected="false" aria-controls="panel-volume" tabindex="-1">
+          <b>03</b><span data-i18n="tab3">부피·온도</span>
+        </button>
+        <button type="button" role="tab" id="tab-ref" data-tab="ref" aria-selected="false" aria-controls="panel-ref" tabindex="-1">
+          <b>04</b><span data-i18n="tab4">기준표·복사</span>
+        </button>
+      </div>
+
+      <!-- ── 01 면적 · 길이 ── -->
+      <section class="tabpanel" id="panel-area" role="tabpanel" aria-labelledby="tab-area">
+        <div class="seg" id="segArea" role="group" aria-label="면적 또는 길이" data-i18n-aria="seg1Aria">
+          <button type="button" data-pane="area" aria-pressed="true" data-i18n="segArea">면적 · 평수</button>
+          <button type="button" data-pane="length" aria-pressed="false" data-i18n="segLength">길이 · 자·간</button>
+        </div>
+
+        <div class="conv-block" data-pane="area">
+        <div class="calc-head">
+          <h2 data-i18n="areaHead">평 ↔ ㎡</h2>
+          <span data-i18n="areaNote">1평 = 3.305785㎡</span>
+        </div>
+
+        <div class="conv" data-pane="area">
+          <div class="cv-side">
+            <label data-i18n="fromLabel">바꿀 값</label>
+            <div class="val"><input class="cv-in" type="text" inputmode="decimal" data-i18n-aria="valueAria" value="34" aria-label="값"><span class="u"></span></div>
+            <select class="cv-from" aria-label="시작 단위" data-i18n-aria="fromAria"></select>
+          </div>
+          <button class="swap" type="button" aria-label="단위 바꾸기" data-i18n-aria="swapAria">⇄</button>
+          <div class="cv-side is-out">
+            <label data-i18n="toLabel">바꾼 값</label>
+            <div class="cv-big">—</div>
+            <select class="cv-to" aria-label="결과 단위" data-i18n-aria="toAria"></select>
+          </div>
+        </div>
+        <div class="eq-head">
+          <h3 data-i18n="eqHead">한 번에 보기</h3>
+          <span data-i18n="eqNote">눌러서 복사</span>
+        </div>
+        <div class="eq-grid"></div>
+        <p class="caveat" data-i18n-html="areaCaveat">부동산의 <b>24평형</b>은 공급면적, <b>59㎡·84㎡</b>는 전용면적으로 부르는 경우가 많아 같은 집도 숫자가 다릅니다. 여기서는 입력한 값만 환산합니다.</p>
+        </div>
+
+        <div class="conv-block" data-pane="length" hidden>
+        <div class="calc-head" style="margin-top:6px">
+          <h2 data-i18n="lengthHead">자 · 치 · 간 ↔ cm · m</h2>
+          <span data-i18n="lengthNote">1자 = 30.303cm</span>
+        </div>
+
+        <div class="conv" data-pane="length">
+          <div class="cv-side">
+            <label data-i18n="fromLabel">바꿀 값</label>
+            <div class="val"><input class="cv-in" type="text" inputmode="decimal" data-i18n-aria="valueAria" value="1" aria-label="값"><span class="u"></span></div>
+            <select class="cv-from" aria-label="시작 단위" data-i18n-aria="fromAria"></select>
+          </div>
+          <button class="swap" type="button" aria-label="단위 바꾸기" data-i18n-aria="swapAria">⇄</button>
+          <div class="cv-side is-out">
+            <label data-i18n="toLabel">바꾼 값</label>
+            <div class="cv-big">—</div>
+            <select class="cv-to" aria-label="결과 단위" data-i18n-aria="toAria"></select>
+          </div>
+        </div>
+        <div class="eq-head">
+          <h3 data-i18n="eqHead">한 번에 보기</h3>
+          <span data-i18n="eqNote">눌러서 복사</span>
+        </div>
+        <div class="eq-grid"></div>
+        <p class="caveat" data-i18n-html="lengthCaveat">한국 <b>1자 = 10/33m</b>, <b>1치 = 1/10자</b>, <b>1간 = 6자</b>입니다. 인치·피트·야드·마일은 국제 기준(1인치 = 2.54cm)을 씁니다.</p>
+        </div>
+      </section>
+
+      <!-- ── 02 무게 ── -->
+      <section class="tabpanel" id="panel-mass" role="tabpanel" aria-labelledby="tab-mass" hidden>
+        <div class="calc-head">
+          <h2 data-i18n="massHead">돈 · 냥 · 관 · 근 ↔ g · kg</h2>
+          <span data-i18n="massNote">금 1돈 = 3.75g · 고기 1근 = 600g</span>
+        </div>
+
+        <div class="conv" data-pane="mass">
+          <div class="cv-side">
+            <label data-i18n="fromLabel">바꿀 값</label>
+            <div class="val"><input class="cv-in" type="text" inputmode="decimal" data-i18n-aria="valueAria" value="10" aria-label="값"><span class="u"></span></div>
+            <select class="cv-from" aria-label="시작 단위" data-i18n-aria="fromAria"></select>
+          </div>
+          <button class="swap" type="button" aria-label="단위 바꾸기" data-i18n-aria="swapAria">⇄</button>
+          <div class="cv-side is-out">
+            <label data-i18n="toLabel">바꾼 값</label>
+            <div class="cv-big">—</div>
+            <select class="cv-to" aria-label="결과 단위" data-i18n-aria="toAria"></select>
+          </div>
+        </div>
+        <div class="eq-head">
+          <h3 data-i18n="eqHead">한 번에 보기</h3>
+          <span data-i18n="eqNote">눌러서 복사</span>
+        </div>
+        <div class="eq-grid"></div>
+        <p class="caveat" data-i18n-html="massCaveat"><b>고기 한 근은 600g</b>(1근 = 16냥), <b>채소·과일 한 근은 375g</b>이 관행이고 가게에 따라 <b>400g</b>을 쓰기도 합니다. 금은 <b>1돈 3.75g</b>이며, 국제 시세의 트로이온스(31.1034768g)는 상형온스(28.3495g)와 다릅니다.</p>
+      </section>
+
+      <!-- ── 03 부피 · 온도 ── -->
+      <section class="tabpanel" id="panel-volume" role="tabpanel" aria-labelledby="tab-volume" hidden>
+        <div class="seg" id="segVolume" role="group" aria-label="부피 또는 온도" data-i18n-aria="seg3Aria">
+          <button type="button" data-pane="volume" aria-pressed="true" data-i18n="segVolume">부피 · 요리</button>
+          <button type="button" data-pane="temp" aria-pressed="false" data-i18n="segTemp">온도 ℃ ↔ ℉</button>
+        </div>
+
+        <div class="conv-block" data-pane="volume">
+        <div class="calc-head">
+          <h2 data-i18n="volumeHead">되 · 말 · 소주병 ↔ ml · L</h2>
+          <span data-i18n="volumeNote">1되 = 1.8039L · 소주 1병 = 360ml</span>
+        </div>
+
+        <div class="conv" data-pane="volume">
+          <div class="cv-side">
+            <label data-i18n="fromLabel">바꿀 값</label>
+            <div class="val"><input class="cv-in" type="text" inputmode="decimal" data-i18n-aria="valueAria" value="1" aria-label="값"><span class="u"></span></div>
+            <select class="cv-from" aria-label="시작 단위" data-i18n-aria="fromAria"></select>
+          </div>
+          <button class="swap" type="button" aria-label="단위 바꾸기" data-i18n-aria="swapAria">⇄</button>
+          <div class="cv-side is-out">
+            <label data-i18n="toLabel">바꾼 값</label>
+            <div class="cv-big">—</div>
+            <select class="cv-to" aria-label="결과 단위" data-i18n-aria="toAria"></select>
+          </div>
+        </div>
+        <div class="eq-head">
+          <h3 data-i18n="eqHead">한 번에 보기</h3>
+          <span data-i18n="eqNote">눌러서 복사</span>
+        </div>
+        <div class="eq-grid"></div>
+        <p class="caveat" data-i18n-html="volumeCaveat">한국 <b>1되 = 1.8039L</b>, <b>1말 = 10되</b>, <b>1홉 = 1/10되</b>입니다. 계량컵은 <b>200ml</b>가 흔하지만 미국 컵은 <b>240ml</b>라 같은 1컵도 다릅니다.</p>
+        </div>
+
+        <div class="conv-block" data-pane="temp" hidden>
+        <div class="calc-head" style="margin-top:6px">
+          <h2 data-i18n="tempHead">섭씨 ↔ 화씨</h2>
+          <span data-i18n="tempNote">100℃ = 212℉</span>
+        </div>
+
+        <div class="conv" data-pane="temp">
+          <div class="cv-side">
+            <label data-i18n="fromLabel">바꿀 값</label>
+            <div class="val"><input class="cv-in" type="text" inputmode="decimal" data-i18n-aria="valueAria" value="100" aria-label="값"><span class="u"></span></div>
+            <select class="cv-from" aria-label="시작 단위" data-i18n-aria="fromAria"></select>
+          </div>
+          <button class="swap" type="button" aria-label="단위 바꾸기" data-i18n-aria="swapAria">⇄</button>
+          <div class="cv-side is-out">
+            <label data-i18n="toLabel">바꾼 값</label>
+            <div class="cv-big">—</div>
+            <select class="cv-to" aria-label="결과 단위" data-i18n-aria="toAria"></select>
+          </div>
+        </div>
+        <div class="eq-head">
+          <h3 data-i18n="eqHead">한 번에 보기</h3>
+          <span data-i18n="eqNote">눌러서 복사</span>
+        </div>
+        <div class="eq-grid"></div>
+        <p class="caveat" data-i18n-html="tempCaveat">℉ = ℃ × 9 ÷ 5 + 32, ℃ = (℉ − 32) × 5 ÷ 9. 오븐 <b>180℃ = 356℉</b>, 체온 <b>36.5℃ = 97.7℉</b>입니다.</p>
+        </div>
+      </section>
+
+      <!-- ── 04 기준표 · 복사 ── -->
+      <section class="tabpanel" id="panel-ref" role="tabpanel" aria-labelledby="tab-ref" hidden>
+        <div class="calc-head">
+          <h2 data-i18n="refHead">자주 쓰는 생활 기준표</h2>
+          <span data-i18n="refNote">시장·부동산·주방</span>
+        </div>
+        <div class="ref-grid">
+          <div class="ref">
+            <h4 data-i18n="refA">면적 · 길이</h4>
+            <table>
+              <tbody>
+                <tr><td data-i18n="r1">아파트 24평</td><td>79.34㎡</td></tr>
+                <tr><td data-i18n="r2">아파트 34평</td><td>112.4㎡</td></tr>
+                <tr><td data-i18n="r3">59㎡ (전용)</td><td>17.85평</td></tr>
+                <tr><td data-i18n="r4">84㎡ (전용)</td><td>25.41평</td></tr>
+                <tr><td data-i18n="r5">한 자</td><td>30.303cm</td></tr>
+                <tr><td data-i18n="r6">한 간 (6자)</td><td>181.82cm</td></tr>
+                <tr><td data-i18n="r7">1마일</td><td>1.609km</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="ref">
+            <h4 data-i18n="refB">무게 · 부피 · 온도</h4>
+            <table>
+              <tbody>
+                <tr><td data-i18n="r8">금 한 돈</td><td>3.75g</td></tr>
+                <tr><td data-i18n="r9">금 한 냥</td><td>37.5g</td></tr>
+                <tr><td data-i18n="r10">고기 한 근</td><td>600g</td></tr>
+                <tr><td data-i18n="r11">채소 한 근</td><td>375g (관행 400g)</td></tr>
+                <tr><td data-i18n="r12">소주 한 병</td><td>360ml</td></tr>
+                <tr><td data-i18n="r13">맥주 한 병</td><td>500ml</td></tr>
+                <tr><td data-i18n="r14">쌀 한 말</td><td>18.04L</td></tr>
+                <tr><td data-i18n="r15">오븐 180℃</td><td>356℉</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="calc-head" style="margin-top:6px">
+          <h2 data-i18n="sumHead">카톡 요약</h2>
+          <span data-i18n="sumNote">지금 화면의 값으로</span>
+        </div>
+        <pre class="sum" id="sumOut" tabindex="0"></pre>
+        <div class="row-actions">
+          <button class="btn btn--primary" id="copySum" type="button" data-i18n="copySum">카톡 요약 복사</button>
+          <button class="btn btn--sm" id="refreshSum" type="button" data-i18n="refreshSum">지금 값으로 새로고침</button>
+          <p class="status" id="sumStatus" aria-live="polite"></p>
+        </div>
+        <p class="caveat" data-i18n-html="sumCaveat">앞의 세 탭에서 <b>바꾼 값이 그대로</b> 들어갑니다. 시장·부동산에서 숫자를 주고받을 때 붙여넣기 좋은 형태로 정리합니다.</p>
+      </section>
+    </section>
+
+    <!-- ══════════ notes ══════════ -->
+    <section class="section" aria-labelledby="nrTitle">
+      <div class="sec-head">
+        <h2 id="nrTitle" data-i18n="nrHead">숫자의 근거</h2>
+        <span data-i18n="nrNote">관행까지 적어 둡니다</span>
+      </div>
+      <div class="notes">
+        <div class="note">
+          <h3><span>01</span><span data-i18n="n1h">1평은 400/121㎡</span></h3>
+          <p data-i18n-html="n1p">평은 <b>6자 × 6자</b>의 넓이입니다. 1자가 10/33m이므로 1평은 <b>400/121㎡ = 3.3057851…㎡</b>이고, 부동산에서 쓰는 값 <b>3.305785</b>와 사실상 같습니다. ㎡를 평으로 바꿀 때는 <b>3.305785로 나누면</b> 됩니다.</p>
+        </div>
+        <div class="note">
+          <h3><span>02</span><span data-i18n="n2h">근은 하나가 아닙니다</span></h3>
+          <p data-i18n-html="n2p">정육점의 <b>한 근은 600g</b>(1근 = 16냥, 1냥 = 37.5g)입니다. 채소·과일은 <b>1관 3.75kg의 10분의 1인 375g</b>을 한 근으로 부르는 관행이 굳었고, 지역에 따라 <b>400g</b>을 쓰는 곳도 있습니다. 사전에 어느 쪽인지 물으면 계산이 어긋나지 않습니다.</p>
+        </div>
+        <div class="note">
+          <h3><span>03</span><span data-i18n="n3h">금은 돈, 시세는 트로이온스</span></h3>
+          <p data-i18n-html="n3p">국내 귀금속은 <b>돈(3.75g)</b>과 <b>냥(37.5g)</b>으로 거래하고, 국제 시세는 <b>트로이온스(31.1034768g)</b>로 표시합니다. 같은 "온스"라도 상형온스가 <b>28.3495g</b>이라 값이 10% 가까이 벌어지므로, 시세를 옮길 때는 어느 온스인지 확인해야 합니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="faqTitle">
+      <div class="sec-head">
+        <h2 id="faqTitle" data-i18n="faqTitle">자주 묻는 것</h2>
+        <span data-i18n="faqNote">평수 · 근 · 돈 · 온도</span>
+      </div>
+      <div class="faq">
+        <details class="qa">
+          <summary data-i18n="q1">59㎡는 몇 평인가요?</summary>
+          <div class="a" data-i18n-html="a1"><b>59 ÷ 3.305785 = 17.85평</b>입니다. 다만 부동산의 <b>24평형</b>은 공급면적이고 <b>59㎡</b>는 전용면적이라 같은 집을 두 숫자로 부릅니다. 계약서에 적힌 면적이 어느 쪽인지 먼저 확인하세요.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q2">고기 한 근이 600g인데 채소는 왜 375g인가요?</summary>
+          <div class="a" data-i18n-html="a2">1근은 <b>16냥</b>, 1냥은 <b>37.5g</b>이라 600g이 됩니다. 정육점은 이 값을 그대로 쓰고, 채소·과일은 <b>1관 3.75kg의 10분의 1인 375g</b>을 한 근으로 부르는 관행이 자리 잡았습니다. 가게에 따라 <b>400g</b>을 쓰기도 하니, 시장에서는 한 번 물어보는 편이 정확합니다.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q3">금 한 돈은 몇 g인가요?</summary>
+          <div class="a" data-i18n-html="a3"><b>3.75g</b>입니다. 1냥이 37.5g이고 한 돈은 그 10분의 1입니다. 금 1kg은 약 <b>266.7돈</b>이 됩니다.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q4">1자는 일본 척과 같은가요?</summary>
+          <div class="a" data-i18n-html="a4">값이 비슷해 보여도 다른 단위입니다. 한국의 1자는 <b>10/33m ≈ 30.303cm</b>이고, 중국의 시척은 약 <b>33.3cm</b>입니다. 이 계산기는 한국 기준 <b>1자 = 30.303cm, 1치 = 3.0303cm, 1간 = 181.82cm</b>를 씁니다.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q5">입력한 값이 저장되거나 전송되나요?</summary>
+          <div class="a" data-i18n-html="a5">아니요. 변환은 이 페이지의 스크립트가 브라우저 안에서 계산합니다. 서버 호출도, 분석 도구도, 값을 저장하는 곳도 없고 <b>언어 선택만</b> 이 브라우저에 기억됩니다. 바닥글의 외부 요청 수는 페이지가 실제로 센 값이며 <b>0</b>에 머뭅니다.</div>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span data-i18n="footCopy">© 2026 Kim Yihyung · 브라우저 안에서, 브라우저를 위해.</span>
+    <span class="net"><span data-i18n="footNet">외부 요청</span> <b id="netCount">0</b></span>
+    <span class="foot-links">
+      <a href="/portfolio/" data-i18n="footP1">포트폴리오</a>
+      <a href="/portfolio/tools/" data-i18n="footP2">도구 전체</a>
+      <a href="https://github.com/kimyihyung/portfolio" target="_blank" rel="noopener" data-i18n="footP3">소스</a>
+    </span>
+    <span class="mono" data-i18n="mono">업로드 없음 · 추적 없음</span>
+  </footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ═════════════════════ language ═════════════════════ */
+  var I18N = {
+    ko: {
+      docTitle: 'UnitKR — 평·근·돈·되 한국 단위 변환기 | Kim Yihyung',
+      brandAria: 'Kim Yihyung — 포트폴리오',
+      back: '← 도구 전체',
+      eyebrow: 'UnitKR · 평·근·돈·되 · 업로드 0',
+      h1: '34평이 몇 ㎡인지,<br><span class="soft">금 한 돈이 몇 g인지.</span><br><span class="gold">이 탭 안에서, 바로.</span>',
+      lede: '부동산 <strong>평수와 ㎡</strong>, <strong>자·치·간</strong>, 고기와 채소의 <strong>근</strong>, 금의 <strong>돈</strong>, <strong>되·말·소주병</strong>, <strong>℃와 ℉</strong>까지 — 한국에서 실제로 쓰는 단위를 서로 바꾸고, 자주 쓰는 기준표와 <strong>카톡 요약</strong>까지 한 화면에서. 입력한 값은 어디에도 저장되지 않습니다.',
+      pillUp: '업로드 0바이트', pillNet: '외부 요청 0건', pillUnits: '평 · 근 · 돈 · 되', pillCopy: '카톡 요약 복사',
+      calcAria: '단위 변환기', tabAria: '변환 종류',
+      tab1: '부동산·길이', tab2: '무게', tab3: '부피·온도', tab4: '기준표·복사',
+      seg1Aria: '면적 또는 길이', seg3Aria: '부피 또는 온도',
+      segArea: '면적 · 평수', segLength: '길이 · 자·간', segVolume: '부피 · 요리', segTemp: '온도 ℃ ↔ ℉',
+      fromLabel: '바꿀 값', toLabel: '바꾼 값', valueAria: '값', fromAria: '시작 단위', toAria: '결과 단위', swapAria: '단위 바꾸기',
+      eqHead: '한 번에 보기', eqNote: '눌러서 복사',
+      areaHead: '평 ↔ ㎡', areaNote: '1평 = 3.305785㎡',
+      lengthHead: '자 · 치 · 간 ↔ cm · m', lengthNote: '1자 = 30.303cm',
+      massHead: '돈 · 냥 · 관 · 근 ↔ g · kg', massNote: '금 1돈 = 3.75g · 고기 1근 = 600g',
+      volumeHead: '되 · 말 · 소주병 ↔ ml · L', volumeNote: '1되 = 1.8039L · 소주 1병 = 360ml',
+      tempHead: '섭씨 ↔ 화씨', tempNote: '100℃ = 212℉',
+      areaCaveat: '부동산의 <b>24평형</b>은 공급면적, <b>59㎡·84㎡</b>는 전용면적으로 부르는 경우가 많아 같은 집도 숫자가 다릅니다. 여기서는 입력한 값만 환산합니다.',
+      lengthCaveat: '한국 <b>1자 = 10/33m</b>, <b>1치 = 1/10자</b>, <b>1간 = 6자</b>입니다. 인치·피트·야드·마일은 국제 기준(1인치 = 2.54cm)을 씁니다.',
+      massCaveat: '<b>고기 한 근은 600g</b>(1근 = 16냥), <b>채소·과일 한 근은 375g</b>이 관행이고 가게에 따라 <b>400g</b>을 쓰기도 합니다. 금은 <b>1돈 3.75g</b>이며, 국제 시세의 트로이온스(31.1034768g)는 상형온스(28.3495g)와 다릅니다.',
+      volumeCaveat: '한국 <b>1되 = 1.8039L</b>, <b>1말 = 10되</b>, <b>1홉 = 1/10되</b>입니다. 계량컵은 <b>200ml</b>가 흔하지만 미국 컵은 <b>240ml</b>라 같은 1컵도 다릅니다.',
+      tempCaveat: '℉ = ℃ × 9 ÷ 5 + 32, ℃ = (℉ − 32) × 5 ÷ 9. 오븐 <b>180℃ = 356℉</b>, 체온 <b>36.5℃ = 97.7℉</b>입니다.',
+      refHead: '자주 쓰는 생활 기준표', refNote: '시장·부동산·주방',
+      refA: '면적 · 길이', refB: '무게 · 부피 · 온도',
+      r1: '아파트 24평', r2: '아파트 34평', r3: '59㎡ (전용)', r4: '84㎡ (전용)', r5: '한 자', r6: '한 간 (6자)', r7: '1마일',
+      r8: '금 한 돈', r9: '금 한 냥', r10: '고기 한 근', r11: '채소 한 근', r12: '소주 한 병', r13: '맥주 한 병', r14: '쌀 한 말', r15: '오븐 180℃',
+      sumHead: '카톡 요약', sumNote: '지금 화면의 값으로',
+      copySum: '카톡 요약 복사', refreshSum: '지금 값으로 새로고침',
+      sumCaveat: '앞의 세 탭에서 <b>바꾼 값이 그대로</b> 들어갑니다. 시장·부동산에서 숫자를 주고받을 때 붙여넣기 좋은 형태로 정리합니다.',
+      nrHead: '숫자의 근거', nrNote: '관행까지 적어 둡니다',
+      n1h: '1평은 400/121㎡',
+      n1p: '평은 <b>6자 × 6자</b>의 넓이입니다. 1자가 10/33m이므로 1평은 <b>400/121㎡ = 3.3057851…㎡</b>이고, 부동산에서 쓰는 값 <b>3.305785</b>와 사실상 같습니다. ㎡를 평으로 바꿀 때는 <b>3.305785로 나누면</b> 됩니다.',
+      n2h: '근은 하나가 아닙니다',
+      n2p: '정육점의 <b>한 근은 600g</b>입니다. 채소·과일은 <b>1관 3.75kg의 10분의 1인 375g</b>을 한 근으로 부르는 관행이 굳었고, 지역에 따라 <b>400g</b>을 쓰는 곳도 있습니다. 사전에 어느 쪽인지 물으면 계산이 어긋나지 않습니다.',
+      n3h: '금은 돈, 시세는 트로이온스',
+      n3p: '국내 귀금속은 <b>돈(3.75g)</b>과 <b>냥(37.5g)</b>으로 거래하고, 국제 시세는 <b>트로이온스(31.1034768g)</b>로 표시합니다. 같은 "온스"라도 상형온스가 <b>28.3495g</b>이라 값이 10% 가까이 벌어지므로, 어느 온스인지 확인해야 합니다.',
+      faqTitle: '자주 묻는 것', faqNote: '평수 · 근 · 돈 · 온도',
+      q1: '59㎡는 몇 평인가요?',
+      a1: '<b>59 ÷ 3.305785 = 17.85평</b>입니다. 다만 부동산의 <b>24평형</b>은 공급면적이고 <b>59㎡</b>는 전용면적이라 같은 집을 두 숫자로 부릅니다. 계약서에 적힌 면적이 어느 쪽인지 먼저 확인하세요.',
+      q2: '고기 한 근이 600g인데 채소는 왜 375g인가요?',
+      a2: '1근은 <b>16냥</b>, 1냥은 <b>37.5g</b>이라 600g이 됩니다. 정육점은 이 값을 그대로 쓰고, 채소·과일은 <b>1관 3.75kg의 10분의 1인 375g</b>을 한 근으로 부르는 관행이 자리 잡았습니다. 가게에 따라 <b>400g</b>을 쓰기도 하니, 시장에서는 한 번 물어보는 편이 정확합니다.',
+      q3: '금 한 돈은 몇 g인가요?',
+      a3: '<b>3.75g</b>입니다. 1냥이 37.5g이고 한 돈은 그 10분의 1입니다. 금 1kg은 약 <b>266.7돈</b>이 됩니다.',
+      q4: '1자는 일본 척과 같은가요?',
+      a4: '값이 비슷해 보여도 다른 단위입니다. 한국의 1자는 <b>10/33m ≈ 30.303cm</b>이고, 중국의 시척은 약 <b>33.3cm</b>입니다. 이 계산기는 한국 기준 <b>1자 = 30.303cm, 1치 = 3.0303cm, 1간 = 181.82cm</b>를 씁니다.',
+      q5: '입력한 값이 저장되거나 전송되나요?',
+      a5: '아니요. 변환은 이 페이지의 스크립트가 브라우저 안에서 계산합니다. 서버 호출도, 분석 도구도, 값을 저장하는 곳도 없고 <b>언어 선택만</b> 이 브라우저에 기억됩니다. 바닥글의 외부 요청 수는 페이지가 실제로 센 값이며 <b>0</b>에 머뭅니다.',
+      footCopy: '© 2026 Kim Yihyung · 브라우저 안에서, 브라우저를 위해.',
+      footNet: '외부 요청', footP1: '포트폴리오', footP2: '도구 전체', footP3: '소스',
+      mono: '업로드 없음 · 추적 없음', toggleTo: 'View in English',
+      copied: '복사했습니다', refreshDone: '지금 값으로 새로고침했습니다',
+      sumTitle: '[UnitKR 생활 단위 요약]',
+      sumArea: '면적', sumLength: '길이', sumMass: '무게', sumVolume: '부피', sumTemp: '온도',
+      sumTail: '고기 1근 600g · 채소 1근 375g(관행 400g) · 금 1돈 3.75g · 1평 3.305785㎡',
+      sumFoot: '단위 변환: UnitKR (kimyihyung.github.io/portfolio/tools/unit-kr)'
+    },
+    en: {
+      docTitle: 'UnitKR — Korean Units (pyeong, geun, don) Converter | Kim Yihyung',
+      brandAria: 'Kim Yihyung — portfolio',
+      back: '← All tools',
+      eyebrow: 'UnitKR · pyeong · geun · don · zero upload',
+      h1: 'How many ㎡ is 34 pyeong?<br><span class="soft">How many grams is one don of gold?</span><br><span class="gold">Answered in this tab.</span>',
+      lede: 'Korean units as they are actually used — <strong>pyeong and ㎡</strong>, <strong>ja·chi·gan</strong>, the <strong>geun</strong> of the butcher and of the produce stall, the <strong>don</strong> of gold, <strong>doe·mal·soju bottles</strong> and <strong>℃ ↔ ℉</strong> — plus a reference sheet and a one-tap chat summary. Nothing you type is stored.',
+      pillUp: '0 bytes uploaded', pillNet: '0 external requests', pillUnits: 'pyeong · geun · don', pillCopy: 'Chat summary copy',
+      calcAria: 'Unit converter', tabAria: 'Conversion type',
+      tab1: 'Area & length', tab2: 'Weight', tab3: 'Volume & temp', tab4: 'Reference & copy',
+      seg1Aria: 'Area or length', seg3Aria: 'Volume or temperature',
+      segArea: 'Area · pyeong', segLength: 'Length · ja', segVolume: 'Volume · cooking', segTemp: 'Temperature ℃ ↔ ℉',
+      fromLabel: 'Value', toLabel: 'Result', valueAria: 'Value', fromAria: 'From unit', toAria: 'To unit', swapAria: 'Swap units',
+      eqHead: 'All at once', eqNote: 'click to copy',
+      areaHead: 'pyeong ↔ ㎡', areaNote: '1 pyeong = 3.305785 ㎡',
+      lengthHead: 'ja · chi · gan ↔ cm · m', lengthNote: '1 ja = 30.303 cm',
+      massHead: 'don · nyang · gwan · geun ↔ g · kg', massNote: 'gold 1 don = 3.75 g · meat 1 geun = 600 g',
+      volumeHead: 'doe · mal · bottles ↔ ml · L', volumeNote: '1 doe = 1.8039 L · soju bottle = 360 ml',
+      tempHead: 'Celsius ↔ Fahrenheit', tempNote: '100℃ = 212℉',
+      areaCaveat: 'In Korean listings a <b>24-pyeong</b> flat is quoted by gross area while <b>59㎡ or 84㎡</b> is the exclusive area, so one home carries two numbers. This converts the number you type.',
+      lengthCaveat: 'Korean <b>1 ja = 10/33 m</b>, <b>1 chi = 1/10 ja</b>, <b>1 gan = 6 ja</b>. Inch, foot, yard and mile use the international definitions (1 in = 2.54 cm).',
+      massCaveat: '<b>One geun of meat is 600 g</b> (1 geun = 16 nyang); <b>one geun of produce is 375 g</b> by custom, with <b>400 g</b> in some markets. Gold is <b>3.75 g per don</b>; the troy ounce used for world prices (31.1034768 g) differs from the avoirdupois ounce (28.3495 g).',
+      volumeCaveat: 'Korean <b>1 doe = 1.8039 L</b>, <b>1 mal = 10 doe</b>, <b>1 hop = 1/10 doe</b>. A Korean measuring cup is usually <b>200 ml</b>; a US cup is <b>240 ml</b>.',
+      tempCaveat: '℉ = ℃ × 9 ÷ 5 + 32, ℃ = (℉ − 32) × 5 ÷ 9. An oven at <b>180℃ = 356℉</b>; body temperature <b>36.5℃ = 97.7℉</b>.',
+      refHead: 'Everyday Korean reference', refNote: 'market · property · kitchen',
+      refA: 'Area · length', refB: 'Weight · volume · temperature',
+      r1: '24-pyeong flat', r2: '34-pyeong flat', r3: '59㎡ (exclusive)', r4: '84㎡ (exclusive)', r5: 'one ja', r6: 'one gan (6 ja)', r7: 'one mile',
+      r8: 'gold, one don', r9: 'gold, one nyang', r10: 'meat, one geun', r11: 'produce, one geun', r12: 'soju bottle', r13: 'beer bottle', r14: 'rice, one mal', r15: 'oven 180℃',
+      sumHead: 'Chat summary', sumNote: 'from the values on screen',
+      copySum: 'Copy chat summary', refreshSum: 'Refresh with current values',
+      sumCaveat: 'The values you changed in the three tabs above go in as they are, shaped to paste into a message when someone asks you for numbers.',
+      nrHead: 'Where the numbers come from', nrNote: 'customs included',
+      n1h: 'One pyeong is 400/121 ㎡',
+      n1p: 'A pyeong is <b>6 ja × 6 ja</b>. With 1 ja = 10/33 m, one pyeong is <b>400/121 ㎡ = 3.3057851… ㎡</b> — the <b>3.305785</b> quoted in listings. To go the other way, divide ㎡ by <b>3.305785</b>.',
+      n2h: 'There is more than one geun',
+      n2p: 'At the butcher, <b>one geun is 600 g</b>. For produce, custom settled on <b>375 g — a tenth of the 3.75 kg gwan</b> — with <b>400 g</b> still used in some markets. Asking which one is meant keeps the arithmetic honest.',
+      n3h: 'Gold in don, prices in troy ounces',
+      n3p: 'Korean gold trades in <b>don (3.75 g)</b> and <b>nyang (37.5 g)</b>, while world prices are quoted per <b>troy ounce (31.1034768 g)</b>. The avoirdupois ounce is <b>28.3495 g</b>, so mixing the two shifts a price by nearly 10%.',
+      faqTitle: 'Questions', faqNote: 'pyeong · geun · don · degrees',
+      q1: 'How many pyeong is 59㎡?',
+      a1: '<b>59 ÷ 3.305785 = 17.85 pyeong.</b> Note that a <b>24-pyeong</b> listing is gross area while <b>59㎡</b> is exclusive area — the same home, two numbers. Check which area your contract states.',
+      q2: 'Why is a geun of meat 600 g but of vegetables 375 g?',
+      a2: 'One geun is <b>16 nyang</b> at 37.5 g, so 600 g, and butchers keep that. For produce the custom became <b>375 g, a tenth of the 3.75 kg gwan</b>, with <b>400 g</b> in some places. Ask at the stall and the number will hold.',
+      q3: 'How many grams is one don of gold?',
+      a3: '<b>3.75 g.</b> One nyang is 37.5 g and a don is a tenth of it, so a kilogram of gold is about <b>266.7 don</b>.',
+      q4: 'Is a Korean ja the same as a Japanese shaku?',
+      a4: 'Close in size but not the same unit. The Korean ja is <b>10/33 m ≈ 30.303 cm</b>; the Chinese chi is about <b>33.3 cm</b>. This page uses the Korean definitions: <b>1 ja = 30.303 cm, 1 chi = 3.0303 cm, 1 gan = 181.82 cm</b>.',
+      q5: 'Is anything I type stored or sent?',
+      a5: 'No. The conversion runs in this tab. There is no server call, no analytics and no storage of the numbers — only your language choice is kept in this browser. The footer counts the page\'s own external requests and it stays at <b>0</b>.',
+      footCopy: '© 2026 Kim Yihyung · Built in the browser, for the browser.',
+      footNet: 'external requests', footP1: 'Portfolio', footP2: 'All tools', footP3: 'Source',
+      mono: 'NO UPLOADS · NO TRACKING', toggleTo: '한국어로 보기',
+      copied: 'Copied', refreshDone: 'Refreshed with the current values',
+      sumTitle: '[UnitKR Korean units summary]',
+      sumArea: 'Area', sumLength: 'Length', sumMass: 'Weight', sumVolume: 'Volume', sumTemp: 'Temp',
+      sumTail: 'meat 1 geun 600g · produce 1 geun 375g (400g in places) · gold 1 don 3.75g · 1 pyeong 3.305785㎡',
+      sumFoot: 'Unit converter: UnitKR (kimyihyung.github.io/portfolio/tools/unit-kr)'
+    }
+  };
+
+  var LANG_KEY = 'unitkr.lang';
+  var SHARED_KEY = 'kyh.lang';
+
+  var state = {
+    lang: 'ko',
+    panes: {
+      area:   { v: 34,  from: 'pyeong',   to: 'm2' },
+      length: { v: 1,   from: 'ja',       to: 'cm' },
+      mass:   { v: 10,  from: 'don',      to: 'g' },
+      volume: { v: 1,   from: 'soju',     to: 'ml' },
+      temp:   { v: 100, from: 'c',        to: 'f' }
+    },
+    tab: 'area'
+  };
+
+  function $(id) { return document.getElementById(id); }
+  function t(key, lang) {
+    var d = I18N[lang || state.lang] || I18N.ko;
+    if (d[key] != null) return d[key];
+    return I18N.ko[key] != null ? I18N.ko[key] : '';
+  }
+  function readLang(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function initialLang() {
+    var q = '';
+    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
+    if (q === 'ko' || q === 'en') return q;
+    var own = readLang(LANG_KEY);
+    if (own === 'ko' || own === 'en') return own;
+    return 'ko';
+  }
+
+  /* ═════════════════════ units ═════════════════════ */
+  /* f = factor to the pane's base unit (㎡, m, g, ml) */
+  var PANES = {
+    area: {
+      base: 'm2',
+      units: [
+        { k: 'pyeong', f: 3.305785, ko: '평', en: 'pyeong' },
+        { k: 'm2', f: 1, ko: '㎡', en: '㎡' },
+        { k: 'ft2', f: 0.09290304, ko: '평방피트', en: 'ft²' }
+      ]
+    },
+    length: {
+      base: 'm',
+      units: [
+        { k: 'ja', f: 0.3030303030, ko: '자', en: 'ja' },
+        { k: 'chi', f: 0.0303030303, ko: '치', en: 'chi' },
+        { k: 'gan', f: 1.8181818182, ko: '간', en: 'gan' },
+        { k: 'mm', f: 0.001, ko: 'mm', en: 'mm' },
+        { k: 'cm', f: 0.01, ko: 'cm', en: 'cm' },
+        { k: 'm', f: 1, ko: 'm', en: 'm' },
+        { k: 'km', f: 1000, ko: 'km', en: 'km' },
+        { k: 'in', f: 0.0254, ko: '인치', en: 'in' },
+        { k: 'ft', f: 0.3048, ko: '피트', en: 'ft' },
+        { k: 'yd', f: 0.9144, ko: '야드', en: 'yd' },
+        { k: 'mi', f: 1609.344, ko: '마일', en: 'mi' },
+        { k: 'ri', f: 392.727, ko: '리', en: 'ri' }
+      ]
+    },
+    mass: {
+      base: 'g',
+      units: [
+        { k: 'don', f: 3.75, ko: '돈', en: 'don' },
+        { k: 'nyang', f: 37.5, ko: '냥', en: 'nyang' },
+        { k: 'gwan', f: 3750, ko: '관', en: 'gwan' },
+        { k: 'g', f: 1, ko: 'g', en: 'g' },
+        { k: 'kg', f: 1000, ko: 'kg', en: 'kg' },
+        { k: 't', f: 1000000, ko: '톤', en: 't' },
+        { k: 'geun_meat', f: 600, ko: '근 (고기)', en: 'geun · meat', s: { ko: '근(고기)', en: 'geun·meat' } },
+        { k: 'geun_v375', f: 375, ko: '근 (채소 375g)', en: 'geun · produce 375g', s: { ko: '근(채소)', en: 'geun·veg' } },
+        { k: 'geun_v400', f: 400, ko: '근 (채소 400g)', en: 'geun · produce 400g', s: { ko: '근(채소400)', en: 'geun·veg400' } },
+        { k: 'lb', f: 453.59237, ko: '파운드', en: 'lb' },
+        { k: 'oz', f: 28.349523125, ko: '온스', en: 'oz' },
+        { k: 'ozt', f: 31.1034768, ko: '트로이온스', en: 'troy oz' }
+      ]
+    },
+    volume: {
+      base: 'ml',
+      units: [
+        { k: 'ml', f: 1, ko: 'ml', en: 'ml' },
+        { k: 'l', f: 1000, ko: 'L', en: 'L' },
+        { k: 'cup200', f: 200, ko: '컵 (200ml)', en: 'cup 200ml', s: { ko: '컵200', en: 'cup200' } },
+        { k: 'cup240', f: 240, ko: '컵 (240ml US)', en: 'cup 240ml US', s: { ko: '컵240', en: 'cup240' } },
+        { k: 'hop', f: 180.39, ko: '홉', en: 'hop' },
+        { k: 'doe', f: 1803.9, ko: '되', en: 'doe' },
+        { k: 'mal', f: 18039, ko: '말', en: 'mal' },
+        { k: 'soju', f: 360, ko: '소주병 (360ml)', en: 'soju bottle 360ml', s: { ko: '소주병', en: 'soju' } },
+        { k: 'beer', f: 500, ko: '맥주병 (500ml)', en: 'beer bottle 500ml', s: { ko: '맥주병', en: 'beer' } },
+        { k: 'floz', f: 29.5735295625, ko: 'fl oz', en: 'fl oz' },
+        { k: 'gal', f: 3785.411784, ko: '갤런 (US)', en: 'US gal' }
+      ]
+    },
+    temp: {
+      base: 'c',
+      units: [
+        { k: 'c', ko: '℃', en: '℃' },
+        { k: 'f', ko: '℉', en: '℉' },
+        { k: 'k', ko: 'K', en: 'K' }
+      ]
+    }
+  };
+
+  function unitOf(pane, key) {
+    var list = PANES[pane].units;
+    for (var i = 0; i < list.length; i++) if (list[i].k === key) return list[i];
+    return list[0];
+  }
+  function unitLabel(pane, key, lang) {
+    var u = unitOf(pane, key);
+    return (lang || state.lang) === 'en' ? (u.en || u.ko) : (u.ko || u.en);
+  }
+  function unitShort(pane, key, lang) {
+    var u = unitOf(pane, key);
+    var L = lang || state.lang;
+    if (u.s) return L === 'en' ? (u.s.en || u.s.ko) : (u.s.ko || u.s.en);
+    return unitLabel(pane, key, L);
+  }
+
+  function toBase(pane, key, v) {
+    if (pane === 'temp') {
+      if (key === 'f') return (v - 32) * 5 / 9;
+      if (key === 'k') return v - 273.15;
+      return v;
+    }
+    return v * unitOf(pane, key).f;
+  }
+  function fromBase(pane, key, b) {
+    if (pane === 'temp') {
+      if (key === 'f') return b * 9 / 5 + 32;
+      if (key === 'k') return b + 273.15;
+      return b;
+    }
+    return b / unitOf(pane, key).f;
+  }
+  function convert(v, from, to, pane) {
+    var p = pane || guessPane(from, to);
+    return fromBase(p, to, toBase(p, from, v));
+  }
+  function guessPane(from, to) {
+    var keys = Object.keys(PANES);
+    for (var i = 0; i < keys.length; i++) {
+      var list = PANES[keys[i]].units;
+      var hasF = false, hasT = false;
+      for (var j = 0; j < list.length; j++) {
+        if (list[j].k === from) hasF = true;
+        if (list[j].k === to) hasT = true;
+      }
+      if (hasF && hasT) return keys[i];
+    }
+    return 'area';
+  }
+
+  /* ═════════════════════ number format ═════════════════════ */
+  function round4(v) {
+    if (!isFinite(v)) return '—';
+    var a = Math.abs(v), s;
+    if (a === 0) s = '0';
+    else if (a >= 1000) s = v.toFixed(2);
+    else if (a >= 1) s = v.toFixed(4);
+    else if (a >= 0.0001) s = v.toFixed(5);
+    else s = v.toPrecision(4);
+    s = String(s);
+    if (s.indexOf('.') >= 0) s = s.replace(/0+$/, '').replace(/\.$/, '');
+    return s;
+  }
+  function group(s) {
+    var neg = s.charAt(0) === '-';
+    if (neg) s = s.slice(1);
+    var parts = s.split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return (neg ? '-' : '') + parts.join('.');
+  }
+  function fmt(v) { return group(round4(v)); }
+
+  function parseVal(txt) {
+    var s = String(txt == null ? '' : txt).replace(/,/g, '').replace(/[^\d.\-]/g, '');
+    if (s === '' || s === '-' || s === '.') return NaN;
+    var n = Number(s);
+    return isFinite(n) ? n : NaN;
+  }
+
+  /* ═════════════════════ render ═════════════════════ */
+  function paneEl(pane) {
+    return document.querySelector('.conv[data-pane="' + pane + '"]');
+  }
+
+  function buildPane(pane) {
+    var box = paneEl(pane);
+    if (!box) return;
+    var st = state.panes[pane];
+    var from = box.querySelector('.cv-from');
+    var to = box.querySelector('.cv-to');
+    var units = PANES[pane].units;
+    var html = '';
+    for (var i = 0; i < units.length; i++) {
+      html += '<option value="' + units[i].k + '">' + unitLabel(pane, units[i].k) + '</option>';
+    }
+    from.innerHTML = html;
+    to.innerHTML = html;
+    from.value = st.from;
+    to.value = st.to;
+    var inp = box.querySelector('.cv-in');
+    if (document.activeElement !== inp) inp.value = String(st.v);
+    renderPane(pane);
+  }
+
+  function renderPane(pane) {
+    var box = paneEl(pane);
+    if (!box) return;
+    var st = state.panes[pane];
+    var inp = box.querySelector('.cv-in');
+    var raw = parseVal(inp.value);
+    var big = box.querySelector('.cv-big');
+    var tagEl = box.querySelector('.val .u');
+    tagEl.textContent = unitLabel(pane, st.from);
+    box.querySelector('.cv-to').value = st.to;
+    box.querySelector('.cv-from').value = st.from;
+
+    if (isNaN(raw)) {
+      big.innerHTML = '—';
+    } else {
+      var out = convert(raw, st.from, st.to, pane);
+      big.innerHTML = fmt(out) + '<span class="u">' + unitLabel(pane, st.to) + '</span>';
+      st.v = raw;
+    }
+
+    /* equivalents */
+    var block = box.closest('.conv-block') || box.parentNode;
+    var grid = block.querySelector('.eq-grid');
+    if (!grid) return;
+    var units = PANES[pane].units;
+    var cur = st.to;
+    grid.innerHTML = '';
+    var baseVal = isNaN(raw) ? null : toBase(pane, st.from, raw);
+    for (var i = 0; i < units.length; i++) {
+      var u = units[i];
+      var v = baseVal == null ? null : fromBase(pane, u.k, baseVal);
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'eq' + (u.k === cur ? ' is-cur' : '');
+      b.setAttribute('data-pane', pane);
+      b.setAttribute('data-key', u.k);
+      b.setAttribute('data-val', v == null ? '' : round4(v));
+      b.innerHTML = '<span class="eq-u">' + unitShort(pane, u.k) + '</span><span class="eq-v">' + (v == null ? '—' : fmt(v)) + '</span>';
+      grid.appendChild(b);
+    }
+  }
+
+  function renderAll() {
+    var keys = Object.keys(PANES);
+    for (var i = 0; i < keys.length; i++) renderPane(keys[i]);
+    renderSummary();
+  }
+
+  /* ═════════════════════ summary ═════════════════════ */
+  function summaryText() {
+    var L = state.lang;
+    var lines = [t('sumTitle', L)];
+    var order = [['area', 'sumArea'], ['length', 'sumLength'], ['mass', 'sumMass'], ['volume', 'sumVolume'], ['temp', 'sumTemp']];
+    for (var i = 0; i < order.length; i++) {
+      var pane = order[i][0], st = state.panes[pane];
+      var v = isNaN(st.v) ? 0 : st.v;
+      var res = convert(v, st.from, st.to, pane);
+      if (L === 'en') {
+        lines.push('· ' + t(order[i][1], L) + ' ' + group(round4(v)) + ' ' + unitShort(pane, st.from, L) +
+          ' = ' + group(round4(res)) + ' ' + unitShort(pane, st.to, L));
+      } else {
+        lines.push('· ' + t(order[i][1], L) + ' ' + group(round4(v)) + unitShort(pane, st.from, L) +
+          ' = ' + group(round4(res)) + unitShort(pane, st.to, L));
+      }
+    }
+    lines.push('· ' + t('sumTail', L));
+    lines.push(t('sumFoot', L));
+    return lines.join('\n');
+  }
+  function renderSummary() {
+    var el = $('sumOut');
+    if (el) el.textContent = summaryText();
+  }
+
+  /* ═════════════════════ copy + toast ═════════════════════ */
+  var toastTimer = null;
+  function toast(msg) {
+    var el = $('toast');
+    el.textContent = msg;
+    el.classList.add('is-on');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.classList.remove('is-on'); }, 1900);
+  }
+  function legacyCopy(text) {
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.top = '-1000px';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      return ok;
+    } catch (e) { return false; }
+  }
+  function copyText(text, okMsg) {
+    var done = function () {
+      var s = $('sumStatus');
+      if (s) { s.textContent = okMsg; s.className = 'status is-ok'; setTimeout(function () { s.textContent = ''; s.className = 'status'; }, 2600); }
+      toast(okMsg);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { if (legacyCopy(text)) done(); });
+    } else if (legacyCopy(text)) done();
+  }
+
+  /* ═════════════════════ network counter ═════════════════════ */
+  function countNet() {
+    var n = 0;
+    try {
+      var res = performance.getEntriesByType ? performance.getEntriesByType('resource') : [];
+      for (var i = 0; i < res.length; i++) {
+        try {
+          var u = new URL(res[i].name, location.href);
+          if (u.protocol === 'data:' || u.protocol === 'blob:') continue;
+          if (u.origin !== location.origin) n++;
+        } catch (e) { /* ignore */ }
+      }
+    } catch (e) { n = 0; }
+    var el = $('netCount');
+    if (el) el.textContent = String(n);
+    return n;
+  }
+
+  /* ═════════════════════ tabs ═════════════════════ */
+  var TABS = ['area', 'mass', 'volume', 'ref'];
+  function showTab(name) {
+    if (TABS.indexOf(name) < 0) name = 'area';
+    state.tab = name;
+    for (var i = 0; i < TABS.length; i++) {
+      var on = TABS[i] === name;
+      var btn = $('tab-' + TABS[i]);
+      btn.setAttribute('aria-selected', on ? 'true' : 'false');
+      btn.tabIndex = on ? 0 : -1;
+      $('panel-' + TABS[i]).hidden = !on;
+    }
+    if (name === 'ref') renderSummary();
+  }
+
+  /* ═════════════════════ language ═════════════════════ */
+  function applyLang(lang) {
+    state.lang = lang === 'en' ? 'en' : 'ko';
+    document.documentElement.setAttribute('lang', state.lang);
+    document.title = t('docTitle');
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var v = t(nodes[i].getAttribute('data-i18n'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-html'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-aria'));
+      if (v) nodes[i].setAttribute('aria-label', v);
+    }
+    var lt = $('langToggle');
+    if (lt) {
+      var spans = lt.querySelectorAll('[data-lt]');
+      for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
+      lt.setAttribute('aria-label', t('toggleTo'));
+      lt.setAttribute('title', t('toggleTo'));
+    }
+    /* rebuild selects so unit names follow the language */
+    var keys = Object.keys(PANES);
+    for (i = 0; i < keys.length; i++) buildPane(keys[i]);
+    renderSummary();
+    try {
+      localStorage.setItem(LANG_KEY, state.lang);
+      localStorage.setItem(SHARED_KEY, state.lang);
+    } catch (e) { /* storage may be blocked */ }
+  }
+
+  /* ═════════════════════ events ═════════════════════ */
+  document.addEventListener('input', function (e) {
+    var inp = e.target.closest && e.target.closest('.cv-in');
+    if (!inp) return;
+    var pane = inp.closest('.conv').getAttribute('data-pane');
+    renderPane(pane);
+    renderSummary();
+  });
+
+  document.addEventListener('change', function (e) {
+    var sel = e.target.closest && e.target.closest('.cv-side select');
+    if (!sel) return;
+    var box = sel.closest('.conv');
+    var pane = box.getAttribute('data-pane');
+    if (sel.classList.contains('cv-from')) state.panes[pane].from = sel.value;
+    if (sel.classList.contains('cv-to')) state.panes[pane].to = sel.value;
+    renderPane(pane);
+    renderSummary();
+  });
+
+  document.addEventListener('click', function (e) {
+    var swap = e.target.closest && e.target.closest('.swap');
+    if (swap) {
+      var box = swap.closest('.conv');
+      var pane = box.getAttribute('data-pane');
+      var st = state.panes[pane];
+      var inp = box.querySelector('.cv-in');
+      var v = parseVal(inp.value);
+      var res = isNaN(v) ? NaN : convert(v, st.from, st.to, pane);
+      var tmp = st.from;
+      st.from = st.to;
+      st.to = tmp;
+      if (!isNaN(res)) { st.v = res; inp.value = round4(res); }
+      renderPane(pane);
+      renderSummary();
+      return;
+    }
+    var eq = e.target.closest && e.target.closest('.eq');
+    if (eq) {
+      var pane2 = eq.getAttribute('data-pane');
+      var key = eq.getAttribute('data-key');
+      var val = eq.getAttribute('data-val');
+      if (val === '') return;
+      var txt = group(val) + unitShort(pane2, key);
+      copyText(txt, t('copied') + ' · ' + txt);
+      return;
+    }
+    var seg = e.target.closest && e.target.closest('.seg button');
+    if (seg) {
+      var segWrap = seg.closest('.seg');
+      var segBtns = segWrap.querySelectorAll('button');
+      for (var i = 0; i < segBtns.length; i++) segBtns[i].setAttribute('aria-pressed', String(segBtns[i] === seg));
+      var target = seg.getAttribute('data-pane');
+      var panel = seg.closest('.tabpanel');
+      var blocks = panel.querySelectorAll('.conv-block');
+      for (i = 0; i < blocks.length; i++) blocks[i].hidden = (blocks[i].getAttribute('data-pane') !== target);
+      return;
+    }
+    var tab = e.target.closest && e.target.closest('.tabs button');
+    if (tab) { showTab(tab.getAttribute('data-tab')); return; }
+  });
+
+  $('tab-area').parentNode.addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    var i = TABS.indexOf(state.tab);
+    i = (i + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length;
+    showTab(TABS[i]);
+    $('tab-' + TABS[i]).focus();
+  });
+
+  $('copySum').addEventListener('click', function () {
+    copyText(summaryText(), t('copied'));
+  });
+  $('refreshSum').addEventListener('click', function () {
+    renderAll();
+    toast(t('refreshDone'));
+  });
+  $('langToggle').addEventListener('click', function () {
+    applyLang(state.lang === 'ko' ? 'en' : 'ko');
+  });
+
+  /* ═════════════════════ boot ═════════════════════ */
+  var keys = Object.keys(PANES);
+  for (var i = 0; i < keys.length; i++) buildPane(keys[i]);
+  showTab('area');
+  applyLang(initialLang());
+  window.addEventListener('load', countNet);
+  setTimeout(countNet, 900);
+
+  /* read-only hook for tests and automation */
+  window.UnitKR = {
+    version: '1.0',
+    ready: true,
+    convert: function (v, from, to, pane) { return convert(Number(v), from, to, pane); },
+    convertText: function (v, from, to, pane) { return round4(convert(Number(v), from, to, pane)); },
+    display: function (v, from, to, pane) { return fmt(convert(Number(v), from, to, pane)); },
+    setPane: function (pane, v, from, to) {
+      var st = state.panes[pane];
+      if (!st) return null;
+      if (from) st.from = from;
+      if (to) st.to = to;
+      if (v != null) st.v = Number(v);
+      var box = paneEl(pane);
+      if (box) box.querySelector('.cv-in').value = String(st.v);
+      renderPane(pane);
+      renderSummary();
+      return { v: st.v, from: st.from, to: st.to };
+    },
+    paneValue: function (pane) {
+      var box = paneEl(pane);
+      return box ? { input: box.querySelector('.cv-in').value, out: box.querySelector('.cv-big').textContent, from: state.panes[pane].from, to: state.panes[pane].to } : null;
+    },
+    summary: summaryText,
+    tab: function (n) { if (n) showTab(n); return state.tab; },
+    setLang: function (l) { applyLang(l); return state.lang; },
+    lang: function () { return state.lang; },
+    unitLabel: unitLabel,
+    unitShort: unitShort,
+    net: countNet,
+    units: function (pane) { return PANES[pane].units.map(function (u) { return { k: u.k, f: u.f }; }); }
+  };
+})();
+</script>
+</body>
+</html>
