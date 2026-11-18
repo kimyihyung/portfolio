@@ -1,0 +1,2052 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0b0d">
+<title>TinyGIF — Zero-Upload Video to GIF Converter | Kim Yihyung</title>
+<meta name="description" content="Turn an MP4, WebM or MOV clip into an animated GIF inside your browser: pick the in and out points, frames per second, width and palette, and download a GIF89a written by this page — zero uploads, zero external requests.">
+<meta name="keywords" content="video to gif, mp4 to gif, webm to gif, mov to gif, gif converter, animated gif maker, gif89a encoder, median cut palette, floyd steinberg dithering, no upload gif, offline gif maker, private gif converter, client-side gif, browser gif encoder">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/tiny-gif/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0b0d'/%3E%3Cg fill='none' stroke='%23e5b45c' stroke-width='2' stroke-linejoin='round'%3E%3Crect x='6' y='8' width='20' height='16' rx='3'/%3E%3Cpath d='M6 13h20M11 8v5M21 8v5' stroke-linecap='round'/%3E%3C/g%3E%3C/svg%3E">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/tiny-gif/">
+<meta property="og:title" content="TinyGIF — Zero-Upload Video to GIF Converter">
+<meta property="og:description" content="Pick a clip, a frame rate and a palette, and take a GIF89a away — encoded by JavaScript in the tab. 0 bytes uploaded, 0 external requests.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="TinyGIF — a video clip being turned into an animated GIF inside the browser">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TinyGIF — Zero-Upload Video to GIF Converter">
+<meta name="twitter:description" content="Turn a 5-second clip into an animated GIF with no upload: frames, palette and LZW encoding all happen in the tab.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta name="twitter:image:alt" content="TinyGIF — a video clip being turned into an animated GIF inside the browser">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "TinyGIF — Zero-Upload Video to GIF Converter",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/tiny-gif/",
+      "description": "Converts a video clip to an animated GIF in the browser: pick the in and out points, frames per second, output width, palette size and dithering, then download a GIF89a assembled by JavaScript on the page, with no uploads and no external requests.",
+      "featureList": [
+        "MP4, WebM and MOV clips opened by the browser's own video decoder",
+        "Two sample clips drawn on a canvas and recorded in the tab, so the tool can be tried without a file",
+        "In and out points on a time slider, up to 15 seconds",
+        "Frame rates of 5, 10, 15 and 20 fps, widths of 320, 480, 640 and 720 pixels",
+        "Median-cut palette of 64, 128 or 256 colours and optional Floyd–Steinberg dithering",
+        "GIF89a written by JavaScript: LZW compression and file assembly are part of this page",
+        "Live looping preview with the real file size, frame count and pixel size",
+        "One-click .gif download",
+        "100% client-side: no uploads, no accounts, no external requests"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "TinyGIF", "item": "https://kimyihyung.github.io/portfolio/tools/tiny-gif/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does my video get uploaded anywhere?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. The file is opened by the page with a local object URL, decoded by the browser's own video decoder, drawn into a canvas, and compressed by JavaScript in the same tab. The counter in the footer reports every request the page makes outside its own origin, and it stays at zero." }
+        },
+        {
+          "@type": "Question",
+          "name": "Which video formats can be converted?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Whatever the browser can decode: MP4 with H.264 everywhere, WebM in Chrome and Firefox, and MOV when it carries a codec the browser supports. Safari on an iPhone does not decode WebM; Chrome on Windows often cannot decode the HEVC video found in iPhone MOV files." }
+        },
+        {
+          "@type": "Question",
+          "name": "Why is the GIF so much larger than the video?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A GIF has no inter-frame compression and only 256 colours per palette, so each frame is stored almost on its own. A 5-second clip at 480 pixels and 10 frames per second is normally 1 to 3 MB. Lowering the width, the frame rate, the colour count, or turning dithering off all make the file smaller." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+:root {
+  --bg: #0a0b0d;
+  --bg2: #0d0e10;
+  --panel: #14130f;
+  --panel2: #1a1813;
+  --line: rgba(255, 255, 255, .09);
+  --line2: rgba(255, 255, 255, .19);
+  --ink: #f4f1ea;
+  --muted: #a8a29a;
+  --muted2: #837d74;
+  --accent: #e5b45c;
+  --accent2: #c8952f;
+  --on-accent: #1a1205;
+  --ok: #79dfa3;
+  --warn: #ffc06b;
+  --danger: #ff837a;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--bg);
+  background-image:
+    radial-gradient(120% 70% at 50% -20%, rgba(229, 180, 92, .12), transparent 60%),
+    radial-gradient(90% 60% at 100% 0%, rgba(229, 180, 92, .05), transparent 55%);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: 1.5;
+}
+
+::selection { background: var(--accent); color: var(--on-accent); }
+a { color: inherit; }
+[hidden] { display: none !important; }
+button, input, select, textarea { font-family: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.wrap { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 16px 40px; }
+
+/* ── header ─────────────────────────────────────────── */
+.top {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 10px; padding: 18px 0 0;
+}
+.brand { display: inline-flex; align-items: center; gap: 9px; text-decoration: none; color: var(--ink); }
+.mark {
+  min-width: 30px; height: 30px; padding: 0 6px;
+  border-radius: 9px; border: 1px solid var(--line2);
+  background: var(--panel); color: var(--accent);
+  display: grid; place-items: center;
+  font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .06em;
+}
+.brand-txt { font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; white-space: nowrap; }
+.top-actions { display: flex; align-items: center; gap: 8px; }
+.lang-toggle {
+  display: inline-flex; align-items: center; gap: 5px;
+  height: 30px; padding: 0 9px;
+  border: 1px solid var(--line); border-radius: 8px;
+  background: rgba(255, 255, 255, .03); color: var(--muted2);
+  cursor: pointer; font-family: var(--mono); font-size: 10.5px;
+  font-weight: 700; letter-spacing: .08em; line-height: 1;
+  transition: border-color .18s ease, transform .12s ease;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.95); }
+.lang-toggle .lt { transition: color .18s ease; }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.back {
+  font-size: 12px; color: var(--muted); text-decoration: none;
+  border: 1px solid var(--line); border-radius: 8px;
+  padding: 7px 10px; line-height: 1;
+  transition: color .18s ease, border-color .18s ease;
+}
+.back:hover { color: var(--ink); border-color: var(--line2); }
+
+/* ── hero ───────────────────────────────────────────── */
+.hero { padding: 26px 0 18px; }
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 16px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--line); background: rgba(255, 255, 255, .025);
+  border-radius: 999px; padding: 5px 11px;
+  font-size: 11px; letter-spacing: .02em; color: var(--muted);
+}
+.pill b { color: var(--ink); font-weight: 650; }
+.pill--live { border-color: rgba(229, 180, 92, .34); color: var(--accent); }
+.pill--live b { color: var(--accent); }
+.pill .dot {
+  width: 5px; height: 5px; border-radius: 50%; background: var(--accent);
+  box-shadow: 0 0 0 3px rgba(229, 180, 92, .14);
+}
+.hero h1 {
+  margin: 0 0 13px;
+  font-size: clamp(28px, 6vw, 46px);
+  line-height: 1.07; letter-spacing: -.035em; font-weight: 730;
+  max-width: 22ch;
+}
+.hero h1 .dim { color: var(--muted2); }
+.lede { margin: 0; max-width: 66ch; font-size: 14.5px; line-height: 1.68; color: var(--muted); }
+.lede b { color: var(--ink); font-weight: 600; }
+
+/* ── layout ─────────────────────────────────────────── */
+.grid { display: grid; grid-template-columns: 1fr; gap: 14px; align-items: start; }
+.col-left { display: contents; }
+#panelSource { order: 1; }
+#panelSettings { order: 2; }
+#panelResult { order: 3; }
+.panel {
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--panel); padding: 16px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .03);
+}
+.ph {
+  margin: 0 0 12px; font-size: 11px; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--muted2);
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+.ph .count-note { text-transform: none; font-family: var(--mono); font-size: 10px; letter-spacing: .04em; }
+
+/* ── stage ──────────────────────────────────────────── */
+.stage {
+  position: relative;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .028), rgba(255, 255, 255, 0) 60%),
+    #0b0a08;
+  overflow: hidden;
+}
+.stage.is-over { border-color: rgba(229, 180, 92, .6); }
+#video { display: block; width: 100%; height: auto; max-height: 400px; background: #0b0a08; }
+#still { display: block; width: 100%; height: auto; max-height: 400px; background: #0b0a08; }
+.vstage { min-height: 186px; display: grid; }
+.stage-empty {
+  position: absolute; inset: 0;
+  display: grid; place-content: center; gap: 8px; justify-items: center;
+  padding: 20px; text-align: center; pointer-events: none;
+}
+.stage-empty svg { width: 30px; height: 30px; color: var(--muted2); opacity: .8; }
+.stage-empty p { margin: 0; font-size: 12.5px; color: var(--muted2); max-width: 34ch; line-height: 1.6; }
+.stage-empty p b { color: var(--muted); font-weight: 600; }
+
+.gstage {
+  min-height: 168px;
+  display: grid; place-items: center; padding: 8px;
+  background-image:
+    linear-gradient(45deg, rgba(255, 255, 255, .03) 25%, transparent 25%, transparent 75%, rgba(255, 255, 255, .03) 75%),
+    linear-gradient(45deg, rgba(255, 255, 255, .03) 25%, transparent 25%, transparent 75%, rgba(255, 255, 255, .03) 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+  background-color: #0b0a08;
+}
+#gifImg { display: block; max-width: 100%; max-height: 400px; border-radius: 4px; }
+
+.readout {
+  display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 0;
+}
+.chip {
+  display: inline-flex; align-items: baseline; gap: 6px;
+  border: 1px solid var(--line); border-radius: 9px;
+  background: var(--bg2); padding: 6px 9px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: .06em;
+  color: var(--muted2); text-transform: uppercase;
+}
+.chip b { color: var(--ink); font-size: 12px; font-weight: 700; letter-spacing: 0; }
+.chip--accent { border-color: rgba(229, 180, 92, .32); }
+.chip--accent b { color: var(--accent); }
+
+/* ── drop / file bar ────────────────────────────────── */
+.drop {
+  margin: 14px 0 0; padding: 16px;
+  border: 1px dashed var(--line2); border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, .015);
+  text-align: center;
+}
+.drop.is-over { border-color: var(--accent); background: rgba(229, 180, 92, .06); }
+.drop-title { margin: 0 0 4px; font-size: 14px; font-weight: 650; letter-spacing: -.01em; }
+.drop-note { margin: 0 0 12px; font-size: 12px; line-height: 1.55; color: var(--muted2); }
+.drop-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.demo-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 10px 0 0; }
+
+.filebar {
+  margin: 14px 0 0; padding: 10px 12px;
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--bg2);
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px;
+}
+.filebar .fname {
+  font-size: 12.5px; color: var(--ink); font-weight: 600;
+  flex: 1 1 160px; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.filebar .fmeta { font-family: var(--mono); font-size: 10px; letter-spacing: .05em; color: var(--muted2); }
+.filebar .fbtns { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* ── buttons ────────────────────────────────────────── */
+.btn {
+  appearance: none; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  border: 1px solid var(--line2); background: var(--panel2); color: var(--ink);
+  border-radius: 10px; padding: 9px 13px;
+  font-size: 12.5px; font-weight: 600; letter-spacing: -.01em;
+  transition: background .18s ease, border-color .18s ease, color .18s ease, transform .12s ease;
+}
+.btn:hover { border-color: var(--accent); }
+.btn:active { transform: scale(.985); }
+.btn:disabled { opacity: .38; cursor: not-allowed; }
+.btn:disabled:hover { border-color: var(--line2); }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 700; }
+.btn--primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.btn--primary:disabled { background: var(--panel2); border-color: var(--line2); color: var(--muted2); }
+.btn--ghost { background: transparent; color: var(--muted); border-color: var(--line); }
+.btn--ghost:hover { color: var(--ink); }
+.btn--sm { padding: 6px 9px; font-size: 11.5px; border-radius: 8px; }
+.btn svg { width: 14px; height: 14px; flex: none; }
+.btn--block { width: 100%; }
+
+/* ── controls ───────────────────────────────────────── */
+.sec { padding: 0 0 14px; margin: 0 0 14px; border-bottom: 1px solid var(--line); }
+.sec:last-child { padding-bottom: 0; margin-bottom: 0; border-bottom: 0; }
+.sec-h {
+  margin: 0 0 10px; font-size: 11px; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--muted2);
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+.sec-h .note { font-family: var(--mono); font-size: 10px; letter-spacing: .04em; text-transform: none; color: var(--muted2); }
+
+.field { margin: 0 0 10px; }
+.field:last-child { margin-bottom: 0; }
+.lbl { display: block; margin: 0 0 5px; font-size: 12px; color: var(--muted); letter-spacing: .01em; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.btn-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 0; }
+
+.slider-row { display: flex; align-items: center; gap: 10px; }
+input[type="range"] {
+  appearance: none; -webkit-appearance: none;
+  flex: 1; height: 22px; background: transparent; cursor: pointer; min-width: 0;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px; border-radius: 99px; background: #2a251c;
+}
+input[type="range"]::-moz-range-track { height: 4px; border-radius: 99px; background: #2a251c; }
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 15px; height: 15px; margin-top: -5.5px;
+  border-radius: 50%; background: var(--accent); border: 0;
+  box-shadow: 0 0 0 3px rgba(229, 180, 92, .16);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 15px; height: 15px; border-radius: 50%; background: var(--accent); border: 0;
+}
+input[type="range"]:disabled { opacity: .4; cursor: not-allowed; }
+.num {
+  font-family: var(--mono); font-size: 11.5px; color: var(--ink);
+  min-width: 54px; text-align: right; letter-spacing: .02em;
+}
+
+.seg {
+  display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px;
+  border: 1px solid var(--line); border-radius: 10px;
+  background: var(--bg2); padding: 4px;
+}
+.seg button {
+  appearance: none; cursor: pointer; border: 0; background: transparent;
+  color: var(--muted); font-family: var(--mono); font-size: 12px;
+  padding: 7px 0; border-radius: 7px; letter-spacing: .04em; line-height: 1;
+  transition: background .16s ease, color .16s ease;
+}
+.seg button:hover { color: var(--ink); }
+.seg button.on { background: var(--accent); color: var(--on-accent); font-weight: 700; }
+.seg button:disabled { opacity: .4; cursor: not-allowed; }
+
+.chk {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12.5px; color: var(--muted); cursor: pointer;
+  padding: 3px 0;
+}
+.chk input { accent-color: var(--accent); width: 15px; height: 15px; flex: none; }
+.chk--top { align-items: flex-start; margin-top: 10px; }
+.chk--top input { margin-top: 2px; }
+.hint { margin: 8px 0 0; font-size: 12px; line-height: 1.55; color: var(--muted2); }
+.hint b { color: var(--muted); font-weight: 600; }
+.hint--warn { color: var(--warn); }
+.hint--err { color: var(--danger); }
+.hint--ok { color: var(--ok); }
+.mono-note { font-family: var(--mono); font-size: 10px; letter-spacing: .04em; color: var(--muted2); margin: 6px 0 0; }
+
+.progress { margin: 10px 0 0; }
+.progress-bar { height: 6px; border-radius: 99px; background: #2a251c; overflow: hidden; }
+.progress-bar i {
+  display: block; height: 100%; width: 0;
+  background: linear-gradient(90deg, var(--accent2), var(--accent));
+  transition: width .16s linear;
+}
+
+/* ── notes / faq ────────────────────────────────────── */
+.notes { display: grid; grid-template-columns: 1fr; gap: 14px; margin: 26px 0 0; }
+.note h3 { margin: 0 0 5px; font-size: 13.5px; font-weight: 650; letter-spacing: -.01em; }
+.note p { margin: 0; font-size: 12.5px; line-height: 1.65; color: var(--muted2); }
+.faq { margin: 22px 0 0; }
+.faq h2 { margin: 0 0 12px; font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--muted2); }
+.faq-item { padding: 12px 0; border-top: 1px solid var(--line); }
+.faq-item h3 { margin: 0 0 5px; font-size: 13.5px; font-weight: 650; letter-spacing: -.01em; }
+.faq-item p { margin: 0; font-size: 12.5px; line-height: 1.65; color: var(--muted2); }
+
+.caveat {
+  margin: 22px 0 0; padding: 12px 14px;
+  border: 1px solid rgba(255, 192, 107, .25); border-radius: var(--radius-sm);
+  background: rgba(255, 192, 107, .05);
+  font-size: 12px; line-height: 1.65; color: var(--muted);
+}
+.caveat strong { color: var(--warn); font-weight: 600; }
+.lic { margin: 10px 0 0; font-size: 10.5px; line-height: 1.6; color: var(--muted2); }
+
+.foot {
+  display: flex; flex-wrap: wrap; gap: 8px 16px;
+  align-items: center; justify-content: space-between;
+  margin-top: 34px; padding-top: 16px; border-top: 1px solid var(--line);
+  font-family: var(--mono); font-size: 10px; letter-spacing: .06em;
+  color: var(--muted2); text-transform: uppercase;
+}
+.foot .net b { color: var(--accent); font-weight: 700; }
+.foot a { color: var(--muted2); text-decoration: none; border-bottom: 1px solid transparent; }
+.foot a:hover { color: var(--ink); border-bottom-color: var(--line2); }
+
+@media (min-width: 700px) {
+  .wrap { padding: 0 24px 48px; }
+  .hero { padding: 40px 0 26px; }
+  .panel { padding: 20px; }
+  .notes { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  #video { max-height: 420px; }
+}
+@media (min-width: 980px) {
+  .top { padding-top: 24px; }
+  .grid {
+    grid-template-columns: minmax(0, 1fr) 348px;
+    gap: 18px;
+  }
+  .col-left { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+  .sticky { position: sticky; top: 18px; }
+  #panelSettings { order: 0; }
+}
+@media (max-width: 700px) {
+  .btn { min-height: 42px; }
+  .btn--sm { min-height: 38px; }
+  .lang-toggle, .back { min-height: 34px; }
+  .seg button { padding: 9px 0; }
+}
+@media (max-width: 420px) {
+  .row2 { grid-template-columns: 1fr; }
+  .brand-txt { display: none; }
+  .drop-actions .btn { flex: 1 1 100%; }
+  .demo-row .btn { flex: 1 1 100%; }
+  .num { min-width: 48px; font-size: 11px; }
+}
+@media (hover: none) {
+  .btn:active { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <a class="brand" href="/portfolio/" aria-label="Kim Yihyung — portfolio" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="View in Korean" aria-label="View in Korean">
+        <span class="lt on" data-lt="en">EN</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="ko">KO</span>
+      </button>
+      <a class="back" href="../" data-i18n="backTools">← Tools</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="badge-row">
+      <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillLive">0 bytes uploaded</b></span>
+      <span class="pill" data-i18n-html="pillLocal">In-browser <b>100% local</b></span>
+      <span class="pill" data-i18n-html="pillOut"><b>GIF89a</b> out · <b>MP4 · WebM · MOV</b> in</span>
+      <span class="pill" data-i18n-html="pillPal"><b>Median cut</b> · <b>Floyd–Steinberg</b></span>
+    </div>
+    <h1 data-i18n-html="h1">Turn the clip.<br><span class="dim">Not the upload.</span></h1>
+    <p class="lede" data-i18n-html="lede">Drop a video and keep a few seconds of it as a looping GIF. Set the <b>in and out points</b>, the frame rate, the width and the palette, and the page pulls the frames out of the video, quantises them and writes the <b>GIF89a with its own LZW encoder</b>. No upload, no account, no library pulled from a CDN — the clip never leaves your device.</p>
+  </section>
+
+  <main class="grid">
+
+    <div class="col-left">
+
+    <!-- ═══════════════ SOURCE ═══════════════ -->
+    <section class="panel" id="panelSource">
+      <h2 class="ph"><span data-i18n="srcTitle">Source clip</span><span class="count-note" id="srcMeta">—</span></h2>
+
+      <div class="stage vstage" id="stageV">
+        <video id="video" playsinline muted loop controls hidden aria-label="Source video preview" data-i18n-aria="videoAria"></video>
+        <canvas id="still" hidden aria-label="Sample clip frame" data-i18n-aria="stillAria"></canvas>
+        <div class="stage-empty" id="stageEmptyV">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+            <rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M10 10.2v3.6l3.4-1.8z" stroke-linejoin="round"/>
+          </svg>
+          <p data-i18n-html="videoEmpty"><b>No clip loaded.</b> A video appears here as soon as a file is in.</p>
+        </div>
+      </div>
+
+      <div class="readout">
+        <span class="chip"><span data-i18n="chipIn">in</span><b id="chipIn">0:00.00</b></span>
+        <span class="chip"><span data-i18n="chipOut">out</span><b id="chipOut">0:00.00</b></span>
+        <span class="chip chip--accent"><span data-i18n="chipClip">clip</span><b id="chipClip">0:00.00</b></span>
+      </div>
+
+      <div class="drop" id="drop">
+        <p class="drop-title" data-i18n="dropTitle">Drop a video clip</p>
+        <p class="drop-note" data-i18n="dropNote">MP4 · WebM · MOV — whatever this browser can decode. Nothing is uploaded.</p>
+        <div class="drop-actions">
+          <button class="btn btn--primary" id="pickFile" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 16V5m0 0-4 4m4-4 4 4M5 19h14" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span data-i18n="pickFile">Choose a file</span>
+          </button>
+        </div>
+        <div class="demo-row">
+          <button class="btn btn--ghost btn--sm" id="demo1" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><ellipse cx="12" cy="12" rx="9" ry="4" transform="rotate(-24 12 12)"/></svg>
+            <span data-i18n="demo1">Orbit sample</span>
+          </button>
+          <button class="btn btn--ghost btn--sm" id="demo2" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 15v-4M8 18V8M12 16V6M16 18v-8M20 14v-2" stroke-linecap="round"/></svg>
+            <span data-i18n="demo2">Bars sample</span>
+          </button>
+        </div>
+        <p class="hint" id="demoHint" data-i18n="demoNote">Both samples are drawn and recorded inside this tab — nothing to download, nothing sent anywhere.</p>
+        <input type="file" id="fileInput" accept="video/*,.mp4,.webm,.mov,.m4v" hidden>
+      </div>
+
+      <div class="filebar" id="fileBar" hidden>
+        <span class="fname" id="fileName">—</span>
+        <span class="fmeta" id="fileMeta"></span>
+        <div class="fbtns">
+          <button class="btn btn--ghost btn--sm" id="replaceFile" type="button" data-i18n="replaceFile">Replace</button>
+          <button class="btn btn--ghost btn--sm" id="demo1b" type="button" data-i18n="demo1s">Orbit</button>
+          <button class="btn btn--ghost btn--sm" id="demo2b" type="button" data-i18n="demo2s">Bars</button>
+          <button class="btn btn--ghost btn--sm" id="clearFile" type="button" data-i18n="clearFile">Clear</button>
+        </div>
+      </div>
+
+      <p class="hint hint--err" id="loadErr" hidden></p>
+      <p class="hint" id="srcHint" hidden data-i18n="srcHint">Scrub the clip above, then set the in and out points on the right.</p>
+    </section>
+
+    <!-- ═══════════════ RESULT ═══════════════ -->
+    <section class="panel" id="panelResult">
+      <h2 class="ph"><span data-i18n="resTitle">GIF result</span><span class="count-note" id="resMeta">—</span></h2>
+
+      <div class="stage gstage" id="stageG">
+        <img id="gifImg" alt="Generated GIF preview" data-i18n-aria="gifAria" hidden>
+        <div class="stage-empty" id="stageEmptyG">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+            <rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M9 15V9.5l3.2 2.5L15 9.5V15" stroke-linejoin="round" stroke-linecap="round"/>
+          </svg>
+          <p data-i18n-html="gifEmpty"><b>No GIF yet.</b> The encoded loop plays here, at the size it will download.</p>
+        </div>
+      </div>
+
+      <div class="readout">
+        <span class="chip"><span data-i18n="chipSize">size</span><b id="chipSize">—</b></span>
+        <span class="chip"><span data-i18n="chipFrames">frames</span><b id="chipFrames">—</b></span>
+        <span class="chip chip--accent"><span data-i18n="chipDims">pixels</span><b id="chipDims">—</b></span>
+      </div>
+
+      <button class="btn btn--primary btn--block" id="dlBtn" type="button" disabled style="margin-top:12px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 4v11m0 0 4-4m-4 4-4-4M5 19h14" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span data-i18n="dlBtn">Download .gif</span>
+      </button>
+      <p class="hint" id="gifInfo" aria-live="polite" data-i18n="gifIdle">Load a clip, then press Make the GIF.</p>
+    </section>
+    </div>
+
+    <!-- ═══════════════ SETTINGS ═══════════════ -->
+    <section class="panel sticky" id="panelSettings">
+      <div class="sec">
+        <h3 class="sec-h"><span data-i18n="clipTitle">Clip</span><span class="note" data-i18n="clipUnit">15 s max</span></h3>
+        <div class="field">
+          <span class="lbl" data-i18n="startLabel">In point</span>
+          <div class="slider-row">
+            <input type="range" id="startRange" min="0" max="15" step="0.05" value="0" disabled aria-label="In point in seconds" data-i18n-aria="startAria">
+            <span class="num" id="startOut">0:00.00</span>
+          </div>
+        </div>
+        <div class="field">
+          <span class="lbl" data-i18n="endLabel">Out point</span>
+          <div class="slider-row">
+            <input type="range" id="endRange" min="0" max="15" step="0.05" value="2" disabled aria-label="Out point in seconds" data-i18n-aria="endAria">
+            <span class="num" id="endOut">0:02.00</span>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn--ghost btn--sm" id="btnWhole" type="button" data-i18n="wholeClip">Whole clip</button>
+          <button class="btn btn--ghost btn--sm" id="btnIn" type="button" data-i18n="markIn">In at playhead</button>
+          <button class="btn btn--ghost btn--sm" id="btnOut" type="button" data-i18n="markOut">Out at playhead</button>
+        </div>
+        <p class="hint" data-i18n="clipHint">A GIF stores each frame almost on its own, so 2–6 seconds and 10 fps is the sweet spot. The clip is capped at 15 seconds.</p>
+      </div>
+
+      <div class="sec">
+        <h3 class="sec-h"><span data-i18n="framesTitle">Frames</span><span class="note" id="frameNote">—</span></h3>
+        <span class="lbl" data-i18n="fpsLabel">Frames per second</span>
+        <div class="seg" id="segFps" role="group" aria-label="Frames per second" data-i18n-aria="fpsAria">
+          <button type="button" data-v="5">5</button>
+          <button type="button" data-v="10" class="on">10</button>
+          <button type="button" data-v="15">15</button>
+          <button type="button" data-v="20">20</button>
+        </div>
+        <span class="lbl" style="margin-top:12px" data-i18n="widthLabel">Width</span>
+        <div class="seg" id="segWidth" role="group" aria-label="Output width in pixels" data-i18n-aria="widthAria">
+          <button type="button" data-v="320">320</button>
+          <button type="button" data-v="480" class="on">480</button>
+          <button type="button" data-v="640">640</button>
+          <button type="button" data-v="720">720</button>
+        </div>
+        <p class="hint" id="dimsHint">—</p>
+      </div>
+
+      <div class="sec">
+        <h3 class="sec-h"><span data-i18n="palTitle">Palette</span><span class="note">GIF89a</span></h3>
+        <div class="seg" id="segColors" role="group" aria-label="Palette colour count" data-i18n-aria="colorsAria">
+          <button type="button" data-v="64">64</button>
+          <button type="button" data-v="128" class="on">128</button>
+          <button type="button" data-v="256">256</button>
+        </div>
+        <label class="chk chk--top">
+          <input type="checkbox" id="ditherChk" checked>
+          <span data-i18n="ditherLabel">Floyd–Steinberg dithering</span>
+        </label>
+        <p class="hint" data-i18n="ditherHint">Median cut picks one palette for the whole clip. Dithering trades banding for grain; switch it off for flat graphics, slides and screen recordings — the file also gets smaller.</p>
+      </div>
+
+      <div class="sec">
+        <h3 class="sec-h"><span data-i18n="convTitle">Convert</span><span class="note" id="estNote">—</span></h3>
+        <button class="btn btn--primary btn--block" id="convertBtn" type="button" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 8h9l-2.5-2.5M20 16h-9l2.5 2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span data-i18n="convBtn">Make the GIF</span>
+        </button>
+        <div class="progress" id="progWrap" hidden>
+          <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progBar"><i id="progFill"></i></div>
+          <p class="mono-note" id="progTxt"></p>
+        </div>
+        <p class="hint" id="convInfo" data-i18n="convIdle">Load a clip to enable the conversion.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="notes">
+    <div class="note">
+      <h3 data-i18n="n1t">Nothing leaves the tab</h3>
+      <p data-i18n="n1">The file is opened by this page with a local object URL, decoded by the browser's own video decoder, drawn into a canvas, and compressed here in JavaScript. The counter in the footer reports every request this page makes outside its own origin; it stays at zero.</p>
+    </div>
+    <div class="note">
+      <h3 data-i18n="n2t">Why the GIF is heavy</h3>
+      <p data-i18n="n2">A GIF keeps every frame almost on its own and caps a palette at 256 colours, so size grows with width × height × frames. Dropping to 480 px and 10 fps, or to 64 colours, is usually enough to bring a short clip down to a couple of megabytes.</p>
+    </div>
+    <div class="note">
+      <h3 data-i18n="n3t">Palette and dithering</h3>
+      <p data-i18n="n3">Median cut samples the clip, then splits the colour space into the palette you asked for, so a single palette serves every frame and colour stays steady. Floyd–Steinberg spreads the rounding error of each pixel into its neighbours — smoother gradients, more noise, a slightly bigger file.</p>
+    </div>
+  </div>
+
+  <div class="faq">
+    <h2 data-i18n="faqTitle">Questions</h2>
+    <div class="faq-item">
+      <h3 data-i18n="q1">Which formats can be opened?</h3>
+      <p data-i18n="a1">Whatever the browser decodes: MP4 with H.264 everywhere, WebM in Chrome and Firefox, and MOV when its codec is supported. Safari on an iPhone does not decode WebM, and Chrome on Windows often cannot decode the HEVC inside an iPhone MOV — convert those first or use a desktop browser.</p>
+    </div>
+    <div class="faq-item">
+      <h3 data-i18n="q2">Why only 15 seconds?</h3>
+      <p data-i18n="a2">Because the whole clip is held in memory as pixels while it is encoded: 15 seconds at 640 px and 20 fps is already around 130 MB of frames, and a phone tab will not thank you. Short loops are also what GIF is good at.</p>
+    </div>
+    <div class="faq-item">
+      <h3 data-i18n="q3">Can the GIF be transparent?</h3>
+      <p data-i18n="a3">No. GIF transparency is a single on/off bit per pixel, which looks ragged on moving footage, so the frames are composited as they are. If the clip has an alpha channel it is flattened onto black.</p>
+    </div>
+  </div>
+
+  <p class="caveat" data-i18n-html="caveat"><strong>Note.</strong> Only convert clips you have the right to use. The page never modifies your file and never sends it anywhere — the GIF is a new file you download.</p>
+
+  <p class="lic" data-i18n="lic">No third-party library: decoding uses the browser's video element, and the median-cut quantiser, the Floyd–Steinberg dither, the LZW compressor and the GIF89a container are all written into this page. Everything is served from this site with the page, never from a CDN.</p>
+
+  <footer class="foot">
+    <span data-i18n="foot1">0 uploads · 0 servers · 0 cookies</span>
+    <span class="net"><span data-i18n="netLabel">external requests made by this page</span>: <b id="netCount">0</b></span>
+    <span><a href="/portfolio/" data-i18n="back">← Portfolio</a> · <a href="../" data-i18n="footTools">All tools</a></span>
+  </footer>
+</div>
+
+<script>
+/* Fault trap: keeps a list of runtime errors so a broken step can be traced instead of
+   freezing silently. It costs nothing when the page runs cleanly. */
+window.__tgFaults = [];
+window.addEventListener('error', function (e) {
+  try { window.__tgFaults.push(String((e && (e.message || e.type)) || 'error')); } catch (err) {}
+});
+window.addEventListener('unhandledrejection', function (e) {
+  try { window.__tgFaults.push('rejection: ' + String(e && e.reason)); } catch (err) {}
+});
+</script>
+<script>
+(function () {
+  'use strict';
+
+  var $ = function (id) { return document.getElementById(id); };
+  function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
+  function tick() { return new Promise(function (r) { setTimeout(r, 0); }); }
+
+  var CLIP_MAX = 15;        /* seconds, as stated in the panel note */
+  var MAX_FRAMES = 300;     /* 15 s at 20 fps */
+  var SAMPLE_FPS = 30;      /* fallback frame-bank rate, only if MediaRecorder is missing */
+  var LANG_KEY = 'kyh.lang';
+
+  var state = {
+    lang: 'en',
+    url: '',
+    src: null,       /* {name, bytes, dur, w, h, kind} */
+    frames: null,    /* fallback: array of canvases, only when recording is impossible */
+    selStart: 0, selEnd: 0,
+    fps: 10, width: 480, colors: 128, dither: true,
+    gif: null, gifUrl: '', busy: false, genId: 0
+  };
+
+  /* ─────────────────────────────── 언어 ─────────────────────────────── */
+  /* Only the shared language key is written to storage: no clip, name or
+     selection of the user is ever persisted. */
+  var I18N = {
+    en: {
+      docTitle: 'TinyGIF — Zero-Upload Video to GIF Converter | Kim Yihyung',
+      metaDesc: 'Turn an MP4, WebM or MOV clip into an animated GIF inside your browser: pick the in and out points, frames per second, width and palette, and download a GIF89a written by this page — zero uploads, zero external requests.',
+      ogTitle: 'TinyGIF — Zero-Upload Video to GIF Converter',
+      ogDesc: 'Pick a clip, a frame rate and a palette, and take a GIF89a away — encoded by JavaScript in the tab. 0 bytes uploaded, 0 external requests.',
+
+      brandAria: 'Kim Yihyung — portfolio',
+      backTools: '← Tools',
+      toggleTo: 'View in Korean',
+
+      pillLive: '0 bytes uploaded',
+      pillLocal: 'In-browser <b>100% local</b>',
+      pillOut: '<b>GIF89a</b> out · <b>MP4 · WebM · MOV</b> in',
+      pillPal: '<b>Median cut</b> · <b>Floyd–Steinberg</b>',
+      h1: 'Turn the clip.<br><span class="dim">Not the upload.</span>',
+      lede: 'Drop a video and keep a few seconds of it as a looping GIF. Set the <b>in and out points</b>, the frame rate, the width and the palette, and the page pulls the frames out of the video, quantises them and writes the <b>GIF89a with its own LZW encoder</b>. No upload, no account, no library pulled from a CDN — the clip never leaves your device.',
+
+      srcTitle: 'Source clip',
+      videoAria: 'Source video preview',
+      stillAria: 'Sample clip frame',
+      videoEmpty: '<b>No clip loaded.</b> A video appears here as soon as a file is in.',
+      chipIn: 'in',
+      chipOut: 'out',
+      chipClip: 'clip',
+      dropTitle: 'Drop a video clip',
+      dropNote: 'MP4 · WebM · MOV — whatever this browser can decode. Nothing is uploaded.',
+      pickFile: 'Choose a file',
+      demo1: 'Orbit sample',
+      demo2: 'Bars sample',
+      demoNote: 'Both samples are drawn and recorded inside this tab — nothing to download, nothing sent anywhere.',
+      replaceFile: 'Replace',
+      demo1s: 'Orbit',
+      demo2s: 'Bars',
+      clearFile: 'Clear',
+      srcHint: 'Scrub the clip above, then set the in and out points on the right.',
+
+      resTitle: 'GIF result',
+      gifAria: 'Generated GIF, looping',
+      gifEmpty: '<b>No GIF yet.</b> The encoded loop plays here, at the size it will download.',
+      chipSize: 'size',
+      chipFrames: 'frames',
+      chipDims: 'pixels',
+      dlBtn: 'Download .gif',
+      gifIdle: 'Load a clip, then press Make the GIF.',
+
+      clipTitle: 'Clip',
+      clipUnit: '15 s max',
+      startLabel: 'In point',
+      endLabel: 'Out point',
+      startAria: 'In point in seconds',
+      endAria: 'Out point in seconds',
+      wholeClip: 'Whole clip',
+      markIn: 'In at playhead',
+      markOut: 'Out at playhead',
+      clipHint: 'A GIF stores each frame almost on its own, so 2–6 seconds and 10 fps is the sweet spot. The clip is capped at 15 seconds.',
+
+      framesTitle: 'Frames',
+      fpsLabel: 'Frames per second',
+      fpsAria: 'Frames per second',
+      widthLabel: 'Width',
+      widthAria: 'Output width in pixels',
+
+      palTitle: 'Palette',
+      colorsAria: 'Palette colour count',
+      ditherLabel: 'Floyd–Steinberg dithering',
+      ditherHint: 'Median cut picks one palette for the whole clip. Dithering trades banding for grain; switch it off for flat graphics, slides and screen recordings — the file also gets smaller.',
+
+      convTitle: 'Convert',
+      convBtn: 'Make the GIF',
+      convIdle: 'Load a clip to enable the conversion.',
+
+      n1t: 'Nothing leaves the tab',
+      n1: 'The file is opened by this page with a local object URL, decoded by the browser\'s own video decoder, drawn into a canvas, and compressed here in JavaScript. The counter in the footer reports every request this page makes outside its own origin; it stays at zero.',
+      n2t: 'Why the GIF is heavy',
+      n2: 'A GIF keeps every frame almost on its own and caps a palette at 256 colours, so size grows with width × height × frames. Dropping to 480 px and 10 fps, or to 64 colours, is usually enough to bring a short clip down to a couple of megabytes.',
+      n3t: 'Palette and dithering',
+      n3: 'Median cut samples the clip, then splits the colour space into the palette you asked for, so a single palette serves every frame and colour stays steady. Floyd–Steinberg spreads the rounding error of each pixel into its neighbours — smoother gradients, more noise, a slightly bigger file.',
+
+      faqTitle: 'Questions',
+      q1: 'Which formats can be opened?',
+      a1: 'Whatever the browser decodes: MP4 with H.264 everywhere, WebM in Chrome and Firefox, and MOV when its codec is supported. Safari on an iPhone does not decode WebM, and Chrome on Windows often cannot decode the HEVC inside an iPhone MOV — convert those first or use a desktop browser.',
+      q2: 'Why only 15 seconds?',
+      a2: 'Because the whole clip is held in memory as pixels while it is encoded: 15 seconds at 640 px and 20 fps is already around 130 MB of frames, and a phone tab will not thank you. Short loops are also what GIF is good at.',
+      q3: 'Can the GIF be transparent?',
+      a3: 'No. GIF transparency is a single on/off bit per pixel, which looks ragged on moving footage, so the frames are composited as they are. If the clip has an alpha channel it is flattened onto black.',
+
+      caveat: '<strong>Note.</strong> Only convert clips you have the right to use. The page never modifies your file and never sends it anywhere — the GIF is a new file you download.',
+      lic: 'No third-party library: decoding uses the browser\'s video element, and the median-cut quantiser, the Floyd–Steinberg dither, the LZW compressor and the GIF89a container are all written into this page. Everything is served from this site with the page, never from a CDN.',
+
+      foot1: '0 uploads · 0 servers · 0 cookies',
+      netLabel: 'external requests made by this page',
+      back: '← Portfolio',
+      footTools: 'All tools',
+
+      /* dynamic */
+      metaIdle: 'no clip',
+      metaClip: '{dur} · {w}×{h} · {size}',
+      metaDemo: '{dur} · made here',
+      srcMetaLoaded: '{fps} fps · {w}×{h} → {frames} frames',
+      frameUnit: '{n} frames',
+      dimsHint: 'Output {w} × {h} px',
+      estLabel: '≈ {size}',
+      convReady: '{frames} frames · {w}×{h} · about {size}.',
+      progColors: 'Reading colours {i}/{n}',
+      progEncode: 'Encoding {p}%',
+      progDone: 'Done',
+      gifReady: 'GIF ready — {size} · {frames} frames · {w}×{h} · {dur} loops.',
+      gifBusy: 'Working…',
+      gifStale: 'Settings changed since this GIF — convert again to apply them.',
+      gifFail: 'The GIF could not be built. Try a shorter clip or a smaller width.',
+      demoWorking: 'Recording the sample inside the tab…',
+      demoFail: 'The sample could not be recorded in this browser.',
+      errDecode: 'This browser could not open that video. Try an MP4 with H.264, or a desktop browser.',
+      errEmpty: 'That file does not look like a video we can read.',
+      errDuration: 'The length of that clip is not readable, so the in and out points cannot be set.',
+      errSeek: 'The clip did not seek — the browser may not have its frames ready yet. Try again.'
+    },
+    ko: {
+      docTitle: 'TinyGIF — 업로드 없는 영상→GIF 변환기 | 김이형',
+      metaDesc: 'MP4·WebM·MOV 클립을 브라우저 안에서 움직이는 GIF로 바꾸세요. 시작·끝 지점, 초당 프레임, 가로 해상도, 팔레트를 정하고 이 페이지가 직접 만든 GIF89a를 내려받으면 됩니다. 업로드 0바이트, 외부 요청 0건.',
+      ogTitle: 'TinyGIF — 업로드 없는 영상→GIF 변환기',
+      ogDesc: '클립과 프레임 레이트, 팔레트를 고르면 GIF89a가 탭 안에서 만들어진 채로 나옵니다. 업로드 0바이트, 외부 요청 0건.',
+
+      brandAria: '김이형 — 포트폴리오',
+      backTools: '← 도구',
+      toggleTo: '영어로 보기',
+
+      pillLive: '업로드 0바이트',
+      pillLocal: '브라우저 안에서 <b>100% 로컬</b>',
+      pillOut: '<b>GIF89a</b> 내보내기 · <b>MP4 · WebM · MOV</b> 불러오기',
+      pillPal: '<b>미디언 컷</b> · <b>플로이드–스타인버그</b>',
+      h1: '클립만 바꿉니다.<br><span class="dim">업로드는 안 합니다.</span>',
+      lede: '영상을 놓고 몇 초만 떼어 반복 재생되는 GIF로 만드세요. <b>시작·끝 지점</b>과 프레임 레이트, 가로 해상도, 팔레트를 정하면 페이지가 영상에서 프레임을 뽑아 색을 줄이고 <b>자체 LZW 인코더로 GIF89a를 씁니다</b>. 업로드도, 계정도, CDN에서 받아오는 라이브러리도 없습니다 — 클립은 기기를 떠나지 않습니다.',
+
+      srcTitle: '원본 클립',
+      videoAria: '원본 영상 미리보기',
+      stillAria: '샘플 클립 화면',
+      videoEmpty: '<b>아직 클립이 없습니다.</b> 파일이 들어오면 이 자리에 영상이 나타납니다.',
+      chipIn: '시작',
+      chipOut: '끝',
+      chipClip: '구간',
+      dropTitle: '영상 클립을 놓으세요',
+      dropNote: 'MP4 · WebM · MOV — 이 브라우저가 해석할 수 있는 형식이면 됩니다. 업로드는 하지 않습니다.',
+      pickFile: '파일 선택',
+      demo1: '궤도 샘플',
+      demo2: '막대 샘플',
+      demoNote: '두 샘플 모두 이 탭 안에서 그리고 녹화합니다 — 내려받을 것도, 보낼 곳도 없습니다.',
+      replaceFile: '교체',
+      demo1s: '궤도',
+      demo2s: '막대',
+      clearFile: '비우기',
+      srcHint: '위에서 구간을 확인한 뒤 오른쪽에서 시작·끝 지점을 잡으세요.',
+
+      resTitle: 'GIF 결과',
+      gifAria: '생성된 GIF 반복 재생',
+      gifEmpty: '<b>아직 GIF가 없습니다.</b> 만들어진 루프가 내려받을 크기 그대로 여기서 재생됩니다.',
+      chipSize: '크기',
+      chipFrames: '프레임',
+      chipDims: '픽셀',
+      dlBtn: '.gif 내려받기',
+      gifIdle: '클립을 불러온 뒤 GIF 만들기를 누르세요.',
+
+      clipTitle: '구간',
+      clipUnit: '최대 15초',
+      startLabel: '시작 지점',
+      endLabel: '끝 지점',
+      startAria: '시작 지점(초)',
+      endAria: '끝 지점(초)',
+      wholeClip: '클립 전체',
+      markIn: '재생 위치를 시작으로',
+      markOut: '재생 위치를 끝으로',
+      clipHint: 'GIF는 프레임을 거의 하나씩 저장하므로 2~6초, 10 fps가 가장 좋습니다. 구간은 최대 15초까지입니다.',
+
+      framesTitle: '프레임',
+      fpsLabel: '초당 프레임',
+      fpsAria: '초당 프레임',
+      widthLabel: '가로 해상도',
+      widthAria: '출력 가로 픽셀',
+
+      palTitle: '팔레트',
+      colorsAria: '팔레트 색 수',
+      ditherLabel: '플로이드–스타인버그 디더링',
+      ditherHint: '미디언 컷이 클립 전체에 쓸 팔레트 하나를 고릅니다. 디더링은 계단 현상을 입자로 바꾸고, 평면 그래픽·슬라이드·화면 녹화라면 끄는 편이 깔끔하고 파일도 작아집니다.',
+
+      convTitle: '변환',
+      convBtn: 'GIF 만들기',
+      convIdle: '클립을 불러오면 변환할 수 있습니다.',
+
+      n1t: '아무것도 탭을 떠나지 않습니다',
+      n1: '파일은 이 페이지가 로컬 객체 URL로 열고, 브라우저 자체 영상 디코더가 해석한 뒤 캔버스에 그려 이 자바스크립트가 압축합니다. 아래 카운터는 이 페이지가 자기 사이트 밖으로 보낸 요청 수이며, 계속 0으로 남습니다.',
+      n2t: 'GIF가 무거운 이유',
+      n2: 'GIF는 프레임을 거의 하나씩 저장하고 팔레트가 256색으로 제한되므로 크기는 가로 × 세로 × 프레임에 비례합니다. 480 px·10 fps로 낮추거나 64색으로 줄이면 짧은 클립은 보통 1~2 MB 수준이 됩니다.',
+      n3t: '팔레트와 디더링',
+      n3: '미디언 컷이 클립에서 색을 뽑아 요청한 색 수만큼 공간을 나누므로, 팔레트 하나가 모든 프레임에 쓰여 색이 흔들리지 않습니다. 플로이드–스타인버그는 픽셀의 반올림 오차를 이웃으로 흩어 그라데이션을 매끄럽게 만들고, 대신 입자가 늘고 파일이 조금 커집니다.',
+
+      faqTitle: '자주 묻는 질문',
+      q1: '어떤 형식을 열 수 있나요?',
+      a1: '브라우저가 해석하는 형식입니다. H.264 MP4는 어디서나 되고, WebM은 Chrome·Firefox, MOV는 그 코덱을 지원할 때 됩니다. 아이폰 Safari는 WebM을 해석하지 못하고, 윈도우 Chrome은 아이폰 MOV의 HEVC를 자주 못 엽니다 — 그런 파일은 먼저 변환하거나 데스크톱 브라우저를 쓰세요.',
+      q2: '왜 15초까지만 되나요?',
+      a2: '인코딩하는 동안 클립 전체를 픽셀로 메모리에 들고 있어야 하기 때문입니다. 640 px·20 fps로 15초면 이미 프레임만 130 MB쯤 되고, 휴대폰 탭에는 부담입니다. GIF는 짧은 루프에 어울리는 형식이기도 합니다.',
+      q3: 'GIF를 투명하게 만들 수 있나요?',
+      a3: '안 됩니다. GIF의 투명도는 픽셀당 켜짐/꺼짐 한 비트뿐이라 움직이는 영상에서는 테두리가 거칠어집니다. 그래서 프레임은 있는 그대로 합성되며, 알파 채널이 있으면 검정 위에 눌러 담습니다.',
+
+      caveat: '<strong>참고.</strong> 사용할 권리가 있는 클립만 변환하세요. 이 페이지는 원본 파일을 수정하지도, 어디로 보내지도 않습니다 — GIF는 새로 내려받는 파일입니다.',
+      lic: '제3자 라이브러리를 쓰지 않습니다. 해석은 브라우저의 video 요소가, 미디언 컷 양자화·플로이드–스타인버그 디더·LZW 압축·GIF89a 컨테이너는 모두 이 페이지의 코드가 합니다. 모든 파일은 페이지와 함께 이 사이트에서만 오고 CDN을 쓰지 않습니다.',
+
+      foot1: '업로드 0 · 서버 0 · 쿠키 0',
+      netLabel: '이 페이지가 보낸 외부 요청',
+      back: '← 포트폴리오',
+      footTools: '도구 전체',
+
+      metaIdle: '클립 없음',
+      metaClip: '{dur} · {w}×{h} · {size}',
+      metaDemo: '{dur} · 이 탭에서 생성',
+      srcMetaLoaded: '{fps} fps · {w}×{h} → {frames}프레임',
+      frameUnit: '{n}프레임',
+      dimsHint: '출력 {w} × {h} px',
+      estLabel: '≈ {size}',
+      convReady: '{frames}프레임 · {w}×{h} · 약 {size}.',
+      progColors: '색 읽는 중 {i}/{n}',
+      progEncode: '인코딩 {p}%',
+      progDone: '완료',
+      gifReady: 'GIF 완성 — {size} · {frames}프레임 · {w}×{h} · {dur} 반복.',
+      gifBusy: '작업 중…',
+      gifStale: '이 GIF를 만든 뒤 설정이 바뀌었습니다 — 다시 변환하면 적용됩니다.',
+      gifFail: 'GIF를 만들지 못했습니다. 구간을 줄이거나 가로 해상도를 낮춰 보세요.',
+      demoWorking: '탭 안에서 샘플을 녹화하는 중…',
+      demoFail: '이 브라우저에서는 샘플을 녹화할 수 없습니다.',
+      errDecode: '이 브라우저가 그 영상을 열지 못했습니다. H.264 MP4로 시도하거나 데스크톱 브라우저에서 열어 보세요.',
+      errEmpty: '읽을 수 있는 영상 파일로 보이지 않습니다.',
+      errDuration: '그 클립의 길이를 읽지 못해 시작·끝 지점을 잡을 수 없습니다.',
+      errSeek: '클립이 이동하지 않았습니다 — 브라우저가 프레임을 아직 준비하지 못했을 수 있습니다. 다시 시도해 주세요.'
+    }
+  };
+
+  function t(key) {
+    var d = I18N[state.lang] || I18N.en;
+    if (d[key] != null) return d[key];
+    return I18N.en[key] != null ? I18N.en[key] : '';
+  }
+  function fmt(key, map) {
+    var s = t(key);
+    Object.keys(map || {}).forEach(function (k) { s = s.split('{' + k + '}').join(String(map[k])); });
+    return s;
+  }
+  function readLang() {
+    try {
+      var v = localStorage.getItem(LANG_KEY);
+      return v === 'ko' || v === 'en' ? v : '';
+    } catch (e) { return ''; }
+  }
+
+  /* ─────────────────────────── 표시 도우미 ─────────────────────────── */
+  function timeStr(sec) {
+    sec = Math.max(0, sec || 0);
+    var total = Math.round(sec * 100), m = Math.floor(total / 6000);
+    var s = Math.floor((total % 6000) / 100), cs = total % 100;
+    return m + ':' + (s < 10 ? '0' + s : s) + '.' + (cs < 10 ? '0' + cs : cs);
+  }
+  function durStr(sec) {
+    if (!isFinite(sec) || sec <= 0) return '0 s';
+    return sec < 10 ? sec.toFixed(2) + ' s' : sec.toFixed(1) + ' s';
+  }
+  function sizeStr(bytes) {
+    if (!isFinite(bytes) || bytes <= 0) return '0 KB';
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(bytes < 102400 ? 1 : 0) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  }
+  function showErr(msg) {
+    var el = $('loadErr');
+    if (!msg) { el.hidden = true; el.textContent = ''; return; }
+    el.hidden = false;
+    el.textContent = msg;
+  }
+
+  /* ─────────────────────────── 캔버스 ─────────────────────────── */
+  var CANV = document.createElement('canvas');
+  var CCTX = CANV.getContext('2d', { willReadFrequently: true });
+
+  function outDims() {
+    var vw = state.src ? state.src.w : 16, vh = state.src ? state.src.h : 9;
+    var w = state.width;
+    var h = Math.round(w * vh / vw);
+    h = Math.max(2, h - (h % 2));
+    return { w: w, h: h };
+  }
+
+  /* ─────────────────────────── 영상 열기 ─────────────────────────── */
+  function waitMedia(v) {
+    return new Promise(function (res, rej) {
+      var done = false;
+      function ok() { if (done) return; done = true; clean(); res(); }
+      function bad() { if (done) return; done = true; clean(); rej(new Error('decode')); }
+      function clean() {
+        v.removeEventListener('loadedmetadata', ok);
+        v.removeEventListener('error', bad);
+        clearTimeout(tm);
+      }
+      var tm = setTimeout(bad, 15000);
+      v.addEventListener('loadedmetadata', ok);
+      v.addEventListener('error', bad);
+    });
+  }
+
+  /* MediaRecorder writes WebM without a duration header, so the element reports
+     Infinity until it has been pushed past the end once. */
+  function resolveDuration(v) {
+    return new Promise(function (res) {
+      if (isFinite(v.duration) && v.duration > 0) { res(v.duration); return; }
+      var settled = false;
+      function finish() {
+        if (settled) return;
+        settled = true;
+        res(isFinite(v.duration) && v.duration > 0 ? v.duration : 0);
+      }
+      try {
+        v.currentTime = 1e101;
+        var t1 = setTimeout(function () {
+          try { v.currentTime = 0; } catch (e) {}
+          setTimeout(finish, 900);
+        }, 1200);
+        v.addEventListener('timeupdate', function once() {
+          v.removeEventListener('timeupdate', once);
+          clearTimeout(t1);
+          try { v.currentTime = 0; } catch (e) {}
+          setTimeout(finish, 900);
+        }, { once: true });
+      } catch (e) { finish(); }
+    });
+  }
+
+  function resetResult() {
+    if (state.gifUrl) { URL.revokeObjectURL(state.gifUrl); state.gifUrl = ''; }
+    state.gif = null;
+    var img = $('gifImg');
+    img.hidden = true;
+    img.removeAttribute('src');
+    $('stageEmptyG').hidden = false;
+    $('chipSize').textContent = '—';
+    $('chipFrames').textContent = '—';
+    $('chipDims').textContent = '—';
+    $('dlBtn').disabled = true;
+    $('resMeta').textContent = '—';
+    $('gifInfo').textContent = t('gifIdle');
+    $('gifInfo').className = 'hint';
+  }
+
+  function drawStill() {
+    var c = $('still');
+    if (!state.frames || !state.frames.length) { c.hidden = true; return; }
+    var i = clamp(Math.round(state.selStart * SAMPLE_FPS), 0, state.frames.length - 1);
+    var src = state.frames[i];
+    if (c.width !== src.width || c.height !== src.height) { c.width = src.width; c.height = src.height; }
+    c.getContext('2d').drawImage(src, 0, 0);
+    c.hidden = false;
+  }
+
+  function setSource(src, videoEl) {
+    state.src = src;
+    $('video').hidden = !!state.frames;
+    if (state.frames) drawStill(); else $('still').hidden = true;
+    state.selStart = 0;
+    state.selEnd = Math.min(src.dur, CLIP_MAX);
+    var sr = $('startRange'), er = $('endRange');
+    sr.max = String(src.dur); er.max = String(src.dur);
+    sr.disabled = false; er.disabled = false;
+    sr.value = '0'; er.value = String(state.selEnd);
+    $('drop').hidden = true;
+    $('fileBar').hidden = false;
+    $('srcHint').hidden = false;
+    $('fileName').textContent = src.name;
+    $('fileMeta').textContent = fmt('metaClip', {
+      dur: durStr(src.dur), w: src.w, h: src.h,
+      size: src.kind === 'demo' ? t('metaDemo').split(' · ')[1] : sizeStr(src.bytes)
+    });
+    $('srcMeta').textContent = src.kind === 'demo'
+      ? fmt('metaDemo', { dur: durStr(src.dur) })
+      : fmt('metaClip', { dur: durStr(src.dur), w: src.w, h: src.h, size: sizeStr(src.bytes) });
+    $('convertBtn').disabled = false;
+    resetResult();
+    syncClipUI(false);
+    try { videoEl.currentTime = 0; } catch (e) {}
+  }
+
+  function clearSource() {
+    var v = $('video');
+    try { v.pause(); } catch (e) {}
+    v.removeAttribute('src');
+    try { v.load(); } catch (e) {}
+    v.hidden = true;
+    $('still').hidden = true;
+    $('stageEmptyV').hidden = false;
+    if (state.url) { URL.revokeObjectURL(state.url); state.url = ''; }
+    state.src = null;
+    state.frames = null;
+    state.selStart = 0; state.selEnd = 0;
+    $('fileBar').hidden = true;
+    $('drop').hidden = false;
+    $('srcHint').hidden = true;
+    $('srcMeta').textContent = t('metaIdle');
+    $('startRange').disabled = true; $('endRange').disabled = true;
+    $('startRange').value = '0'; $('endRange').value = '0';
+    $('convertBtn').disabled = true;
+    $('chipIn').textContent = '0:00.00';
+    $('chipOut').textContent = '0:00.00';
+    $('chipClip').textContent = '0:00.00';
+    $('startOut').textContent = '0:00.00';
+    $('endOut').textContent = '0:00.00';
+    $('frameNote').textContent = '—';
+    $('dimsHint').textContent = '—';
+    $('estNote').textContent = '—';
+    $('convInfo').textContent = t('convIdle');
+    $('convInfo').className = 'hint';
+    $('progWrap').hidden = true;
+    showErr('');
+    resetResult();
+  }
+
+  async function loadSource(blob, name, bytes, knownDur, kind) {
+    if (!blob || blob.size < 16) { showErr(t('errEmpty')); return; }
+    showErr('');
+    var v = $('video');
+    try {
+      try { v.pause(); } catch (e) {}
+      if (state.url) { URL.revokeObjectURL(state.url); state.url = ''; }
+      state.frames = null;
+      state.url = URL.createObjectURL(blob);
+      v.hidden = false;
+      $('stageEmptyV').hidden = true;
+      v.src = state.url;
+      try { v.load(); } catch (e) {}
+      await waitMedia(v);
+
+      var dur = 0;
+      if (isFinite(v.duration) && v.duration > 0) dur = v.duration;
+      if (!dur) dur = await resolveDuration(v);
+      if (!dur && knownDur) dur = knownDur;
+      if (!dur || !isFinite(dur) || dur <= 0) throw new Error('duration');
+
+      setSource({
+        name: name, bytes: bytes, dur: dur,
+        w: v.videoWidth || 640, h: v.videoHeight || 360, kind: kind || 'file'
+      }, v);
+      return true;
+    } catch (e) {
+      clearSource();
+      showErr(t(e && e.message === 'duration' ? 'errDuration' : 'errDecode'));
+      return false;
+    }
+  }
+
+  /* ─────────────────────────── 샘플 영상 합성 ─────────────────────────── */
+  function drawOrbit(ctx, W, H, p) {
+    var a = p * Math.PI * 2;
+    ctx.fillStyle = '#0a0b0d';
+    ctx.fillRect(0, 0, W, H);
+    var cx = W * 0.5, cy = H * 0.5;
+    /* rotating glow */
+    var gx = cx + Math.cos(a) * W * 0.24, gy = cy + Math.sin(a) * H * 0.26;
+    var g = ctx.createRadialGradient(gx, gy, 0, gx, gy, H * 0.75);
+    g.addColorStop(0, 'rgba(255, 222, 160, 0.95)');
+    g.addColorStop(0.28, 'rgba(229, 150, 92, 0.55)');
+    g.addColorStop(0.62, 'rgba(92, 74, 160, 0.22)');
+    g.addColorStop(1, 'rgba(10, 11, 13, 0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+    /* orbit rings */
+    ctx.save();
+    ctx.translate(cx, cy);
+    for (var r = 0; r < 3; r++) {
+      ctx.save();
+      ctx.rotate(a * (r % 2 ? -1 : 1) * 0.4 + r);
+      ctx.strokeStyle = 'rgba(229, 180, 92,' + (0.28 - r * 0.07) + ')';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, W * (0.18 + r * 0.07), H * (0.12 + r * 0.06), 0, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    }
+    /* satellites */
+    for (var i = 0; i < 6; i++) {
+      var ang = a * (1 + i * 0.16) + i * 1.05;
+      var rr = W * (0.14 + (i % 3) * 0.07);
+      var sx = Math.cos(ang) * rr, sy = Math.sin(ang) * rr * 0.62;
+      var hue = [255, 214, 140, 120, 92, 200][i];
+      ctx.fillStyle = 'rgb(' + hue + ',' + (150 + i * 12) + ',' + (240 - i * 20) + ')';
+      ctx.beginPath();
+      ctx.arc(sx, sy, 5 + (i % 3) * 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+    /* core */
+    ctx.fillStyle = '#f4f1ea';
+    ctx.beginPath();
+    ctx.arc(cx, cy, 16 + Math.sin(a * 3) * 4, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  function drawBars(ctx, W, H, p) {
+    var a = p * Math.PI * 2;
+    ctx.fillStyle = '#0a0b0d';
+    ctx.fillRect(0, 0, W, H);
+    var n = 14, gap = 8;
+    var bw = (W * 0.86 - gap * (n - 1)) / n;
+    var x0 = W * 0.07, base = H * 0.8;
+    for (var i = 0; i < n; i++) {
+      var ph = a * 1.6 + i * 0.55;
+      var v = 0.5 + 0.5 * Math.sin(ph);
+      var bh = 20 + v * (H * 0.58);
+      var g = ctx.createLinearGradient(0, base - bh, 0, base);
+      g.addColorStop(0, 'rgba(255,' + (210 - i * 6) + ',' + (140 - i * 6) + ',1)');
+      g.addColorStop(1, 'rgba(200,' + (90 + i * 8) + ',' + (90 + i * 4) + ',0.85)');
+      ctx.fillStyle = g;
+      roundRect(ctx, x0 + i * (bw + gap), base - bh, bw, bh, 6);
+      ctx.fill();
+      /* cap highlight */
+      ctx.fillStyle = 'rgba(255,255,255,' + (0.15 + v * 0.4) + ')';
+      roundRect(ctx, x0 + i * (bw + gap), base - bh, bw, 4, 2);
+      ctx.fill();
+    }
+    /* sweeping stripe */
+    var sx = ((a / (Math.PI * 2)) % 1) * W;
+    var sg = ctx.createLinearGradient(sx - 60, 0, sx + 60, 0);
+    sg.addColorStop(0, 'rgba(229,180,92,0)');
+    sg.addColorStop(0.5, 'rgba(229,180,92,0.16)');
+    sg.addColorStop(1, 'rgba(229,180,92,0)');
+    ctx.fillStyle = sg;
+    ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = 'rgba(255,255,255,.08)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0, base + 1); ctx.lineTo(W, base + 1); ctx.stroke();
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    r = Math.min(r, w / 2, h / 2);
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+  }
+
+  function pickMime() {
+    if (!window.MediaRecorder) return '';
+    var cands = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm', 'video/mp4'];
+    for (var i = 0; i < cands.length; i++) {
+      try { if (MediaRecorder.isTypeSupported(cands[i])) return cands[i]; } catch (e) {}
+    }
+    return '';
+  }
+
+  /* Sample clips: drawn on a canvas and recorded with MediaRecorder in this tab,
+     so no sample file is ever fetched. */
+  function synthSample(kind) {
+    var W = 640, H = 360, T = 2.6;
+    var cv = document.createElement('canvas');
+    cv.width = W; cv.height = H;
+    var ctx = cv.getContext('2d');
+    var draw = kind === 'bars' ? drawBars : drawOrbit;
+    var mime = pickMime();
+
+    if (!mime || typeof cv.captureStream !== 'function') return synthFrames(kind, cv, ctx, W, H, T);
+
+    return new Promise(function (resolve, reject) {
+      var stream, rec, chunks = [], stopped;
+      try {
+        stream = cv.captureStream(30);
+        rec = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 3000000 });
+      } catch (e) { resolve(synthFrames(kind, cv, ctx, W, H, T)); return; }
+
+      rec.ondataavailable = function (e) { if (e.data && e.data.size) chunks.push(e.data); };
+      stopped = new Promise(function (res) { rec.onstop = function () { res(); }; });
+      try { rec.start(); } catch (e) { resolve(synthFrames(kind, cv, ctx, W, H, T)); return; }
+
+      draw(ctx, W, H, 0);
+      var t0 = performance.now();
+      (function frame(now) {
+        var el = (now - t0) / 1000;
+        draw(ctx, W, H, Math.min(el, T));
+        if (el < T) { requestAnimationFrame(frame); return; }
+        setTimeout(function () {
+          try { rec.stop(); } catch (e) {}
+          stopped.then(function () {
+            try { stream.getTracks().forEach(function (tr) { tr.stop(); }); } catch (e) {}
+            if (!chunks.length) { resolve(synthFrames(kind, cv, ctx, W, H, T)); return; }
+            var type = mime.split(';')[0];
+            resolve({
+              blob: new Blob(chunks, { type: type }),
+              name: 'sample-' + kind + (type === 'video/mp4' ? '.mp4' : '.webm'),
+              dur: T, w: W, h: H
+            });
+          });
+        }, 70);
+      })(t0);
+    });
+  }
+
+  /* Last resort when the browser has no MediaRecorder: keep the drawn frames
+     in memory and encode from them directly. */
+  function synthFrames(kind, cv, ctx, W, H, T) {
+    var draw = kind === 'bars' ? drawBars : drawOrbit;
+    var n = Math.round(T * SAMPLE_FPS);
+    var frames = [];
+    for (var i = 0; i < n; i++) {
+      draw(ctx, W, H, i / n * 0.999);
+      var c = document.createElement('canvas');
+      c.width = W; c.height = H;
+      c.getContext('2d').drawImage(cv, 0, 0);
+      frames.push(c);
+    }
+    return { frames: frames, name: 'sample-' + kind, dur: n / SAMPLE_FPS, w: W, h: H };
+  }
+
+  async function loadSample(kind) {
+    if (state.busy) return;
+    $('demoHint').hidden = false;
+    $('demoHint').textContent = t('demoWorking');
+    $('demoHint').className = 'hint';
+    try {
+      var ok = false;
+      for (var attempt = 0; attempt < 2 && !ok; attempt++) {
+        var res = await synthSample(kind);
+        if (res.frames) {
+          state.frames = res.frames;
+          setSource({ name: res.name, bytes: 0, dur: res.dur, w: res.w, h: res.h, kind: 'demo' }, $('video'));
+          $('video').hidden = true;
+          $('stageEmptyV').hidden = true;
+          ok = true;
+        } else {
+          ok = await loadSource(res.blob, res.name, res.blob.size, res.dur, 'demo');
+          state.lastDemo = { size: res.blob.size, type: res.blob.type, dur: res.dur, ok: ok };
+        }
+      }
+      $('demoHint').textContent = ok ? t('demoNote') : t('demoFail');
+      $('demoHint').className = ok ? 'hint' : 'hint hint--err';
+    } catch (e) {
+      $('demoHint').textContent = t('demoFail');
+      $('demoHint').className = 'hint hint--err';
+    }
+  }
+
+  /* ─────────────────────────── 프레임 꺼내기 ─────────────────────────── */
+  function seekTo(v, tsec) {
+    return new Promise(function (res) {
+      if (state.frames) { res(); return; }
+      var done = false;
+      function fin() {
+        if (done) return;
+        done = true;
+        v.removeEventListener('seeked', onSeek);
+        clearTimeout(tm);
+        res();
+      }
+      function onSeek() { fin(); }
+      var tm = setTimeout(fin, 2000);
+      v.addEventListener('seeked', onSeek, { once: true });
+      try {
+        var max = isFinite(v.duration) && v.duration > 0 ? v.duration - 0.001 : tsec;
+        v.currentTime = clamp(tsec, 0, Math.max(0, max));
+      } catch (e) { fin(); }
+    });
+  }
+
+  async function frameAt(tsec, w, h) {
+    CANV.width = w; CANV.height = h;
+    CCTX.imageSmoothingEnabled = true;
+    try { CCTX.imageSmoothingQuality = 'high'; } catch (e) {}
+    if (state.frames) {
+      var i = clamp(Math.round(tsec * SAMPLE_FPS), 0, state.frames.length - 1);
+      CCTX.drawImage(state.frames[i], 0, 0, w, h);
+    } else {
+      await seekTo($('video'), tsec);
+      CCTX.drawImage($('video'), 0, 0, w, h);
+    }
+    return CCTX.getImageData(0, 0, w, h).data;
+  }
+
+  /* ─────────────────────────── 양자화 (median cut) ─────────────────────────── */
+  function medianCut(px, maxColors) {
+    var n = (px.length / 3) | 0;
+    if (n < 1) return [[0, 0, 0]];
+    var idx = new Uint32Array(n);
+    for (var i = 0; i < n; i++) idx[i] = i;
+
+    function bounds(s, e) {
+      var rmin = 255, rmax = 0, gmin = 255, gmax = 0, bmin = 255, bmax = 0;
+      for (var i = s; i < e; i++) {
+        var p = idx[i] * 3, r = px[p], g = px[p + 1], b = px[p + 2];
+        if (r < rmin) rmin = r; if (r > rmax) rmax = r;
+        if (g < gmin) gmin = g; if (g > gmax) gmax = g;
+        if (b < bmin) bmin = b; if (b > bmax) bmax = b;
+      }
+      return { s: s, e: e, rmin: rmin, rmax: rmax, gmin: gmin, gmax: gmax, bmin: bmin, bmax: bmax };
+    }
+
+    var boxes = [bounds(0, n)];
+    var target = clamp(maxColors, 2, 256);
+    while (boxes.length < target) {
+      var bi = -1, best = -1;
+      for (var k = 0; k < boxes.length; k++) {
+        var bx = boxes[k];
+        if (bx.e - bx.s < 2) continue;
+        var span = Math.max(bx.rmax - bx.rmin, bx.gmax - bx.gmin, bx.bmax - bx.bmin);
+        if (span > best) { best = span; bi = k; }
+      }
+      if (bi < 0 || best <= 0) break;
+      var box = boxes[bi];
+      var rr = box.rmax - box.rmin, gr = box.gmax - box.gmin, br = box.bmax - box.bmin;
+      var ch = (rr >= gr && rr >= br) ? 0 : (gr >= br ? 1 : 2);
+      var sub = Array.prototype.slice.call(idx.subarray(box.s, box.e));
+      sub.sort(function (a, b) { return px[a * 3 + ch] - px[b * 3 + ch]; });
+      for (var q = 0; q < sub.length; q++) idx[box.s + q] = sub[q];
+      var mid = box.s + (sub.length >> 1);
+      boxes.splice(bi, 1, bounds(box.s, mid), bounds(mid, box.e));
+    }
+
+    var pal = [];
+    for (var b2 = 0; b2 < boxes.length; b2++) {
+      var bo = boxes[b2];
+      var sr = 0, sg = 0, sb = 0, cnt = 0;
+      for (var p2 = bo.s; p2 < bo.e; p2++) {
+        var o = idx[p2] * 3;
+        sr += px[o]; sg += px[o + 1]; sb += px[o + 2]; cnt++;
+      }
+      if (!cnt) cnt = 1;
+      pal.push([Math.round(sr / cnt), Math.round(sg / cnt), Math.round(sb / cnt)]);
+    }
+    if (!pal.length) pal.push([0, 0, 0]);
+    return pal;
+  }
+
+  /* Nearest-colour lookups are cached per 5-bit colour cell, so a frame costs one
+     table read per pixel instead of a palette scan. */
+  function makeMapper(pal) {
+    var N = pal.length;
+    var pr = new Uint8Array(N), pg = new Uint8Array(N), pb = new Uint8Array(N);
+    for (var i = 0; i < N; i++) { pr[i] = pal[i][0]; pg[i] = pal[i][1]; pb[i] = pal[i][2]; }
+    var cache = new Int16Array(32768);
+    cache.fill(-1);
+    return function (r, g, b) {
+      var key = ((r >> 3) << 10) | ((g >> 3) << 5) | (b >> 3);
+      var v = cache[key];
+      if (v >= 0) return v;
+      var bestI = 0, bestD = 1e18;
+      for (var j = 0; j < N; j++) {
+        var dr = r - pr[j], dg = g - pg[j], db = b - pb[j];
+        var d = dr * dr * 3 + dg * dg * 4 + db * db * 2;
+        if (d < bestD) { bestD = d; bestI = j; if (!d) break; }
+      }
+      cache[key] = bestI;
+      return bestI;
+    };
+  }
+
+  function indexFrame(data, w, h, pal, mapper, dither) {
+    var total = w * h;
+    var out = new Uint8Array(total);
+    var i, o;
+    if (!dither) {
+      for (i = 0, o = 0; i < total; i++, o += 4) out[i] = mapper(data[o], data[o + 1], data[o + 2]);
+      return out;
+    }
+    var e0 = new Float32Array(w * 3);   /* error falling on this row */
+    var e1 = new Float32Array(w * 3);   /* error collected for the next row */
+    var x, y, k;
+    for (y = 0; y < h; y++) {
+      for (x = 0; x < w; x++) {
+        o = (y * w + x) * 4;
+        k = x * 3;
+        var r = data[o] + e0[k], g = data[o + 1] + e0[k + 1], b = data[o + 2] + e0[k + 2];
+        r = r < 0 ? 0 : (r > 255 ? 255 : r);
+        g = g < 0 ? 0 : (g > 255 ? 255 : g);
+        b = b < 0 ? 0 : (b > 255 ? 255 : b);
+        var ci = mapper(r | 0, g | 0, b | 0);
+        out[y * w + x] = ci;
+        var pc = pal[ci];
+        var er = r - pc[0], eg = g - pc[1], eb = b - pc[2];
+        if (x + 1 < w) {
+          e0[k + 3] += er * 0.4375; e0[k + 4] += eg * 0.4375; e0[k + 5] += eb * 0.4375;
+        }
+        if (x > 0) {
+          e1[k - 3] += er * 0.1875; e1[k - 2] += eg * 0.1875; e1[k - 1] += eb * 0.1875;
+        }
+        e1[k] += er * 0.3125; e1[k + 1] += eg * 0.3125; e1[k + 2] += eb * 0.3125;
+        if (x + 1 < w) {
+          e1[k + 3] += er * 0.0625; e1[k + 4] += eg * 0.0625; e1[k + 5] += eb * 0.0625;
+        }
+      }
+      var tmp = e0; e0 = e1; e1 = tmp;
+      e1.fill(0);
+    }
+    return out;
+  }
+
+  /* ─────────────────────────── LZW + GIF89a ─────────────────────────── */
+  function BitOut() {
+    this.buf = new Uint8Array(8192);
+    this.len = 0;
+    this.cur = 0;
+    this.bits = 0;
+  }
+  BitOut.prototype.pushByte = function (b) {
+    if (this.len >= this.buf.length) {
+      var nb = new Uint8Array(this.buf.length * 2);
+      nb.set(this.buf);
+      this.buf = nb;
+    }
+    this.buf[this.len++] = b;
+  };
+  BitOut.prototype.write = function (code, size) {
+    this.cur |= code << this.bits;
+    this.bits += size;
+    while (this.bits >= 8) {
+      this.pushByte(this.cur & 255);
+      this.cur >>>= 8;
+      this.bits -= 8;
+    }
+  };
+  BitOut.prototype.flushBits = function () {
+    if (this.bits > 0) { this.pushByte(this.cur & 255); this.cur = 0; this.bits = 0; }
+  };
+
+  function lzwEncode(indices, minCodeSize) {
+    var clear = 1 << minCodeSize;
+    var eoi = clear + 1;
+    var codeSize = minCodeSize + 1;
+    var next = eoi + 1;
+    var dict = new Map();
+    var out = new BitOut();
+    var n = indices.length;
+
+    out.write(clear, codeSize);
+    var prefix = indices[0];
+    for (var i = 1; i < n; i++) {
+      var k = indices[i];
+      var key = (prefix << 8) | k;
+      var code = dict.get(key);
+      if (code !== undefined) { prefix = code; continue; }
+      out.write(prefix, codeSize);
+      if (next === 4096) {
+        out.write(clear, codeSize);
+        dict.clear();
+        next = eoi + 1;
+        codeSize = minCodeSize + 1;
+      } else {
+        if (next >= (1 << codeSize) && codeSize < 12) codeSize++;
+        dict.set(key, next++);
+      }
+      prefix = k;
+    }
+    out.write(prefix, codeSize);
+    out.write(eoi, codeSize);
+    out.flushBits();
+    return out;
+  }
+
+  function gifHeader(w, h, pal, bits) {
+    var size = 1 << bits;
+    var head = new Uint8Array(13 + size * 3 + 19);
+    var p = 0;
+    head[p++] = 0x47; head[p++] = 0x49; head[p++] = 0x46;   /* GIF */
+    head[p++] = 0x38; head[p++] = 0x39; head[p++] = 0x61;   /* 89a */
+    head[p++] = w & 255; head[p++] = (w >> 8) & 255;
+    head[p++] = h & 255; head[p++] = (h >> 8) & 255;
+    head[p++] = 0x80 | 0x70 | (bits - 1);                   /* GCT on, 8-bit, size */
+    head[p++] = 0;                                          /* background index */
+    head[p++] = 0;                                          /* pixel aspect ratio */
+    for (var c = 0; c < size; c++) {
+      var col = pal[c] || [0, 0, 0];
+      head[p++] = col[0]; head[p++] = col[1]; head[p++] = col[2];
+    }
+    var ns = [0x21, 0xFF, 0x0B, 0x4E, 0x45, 0x54, 0x53, 0x43, 0x41, 0x50, 0x45, 0x32, 0x2E, 0x30,
+              0x03, 0x01, 0x00, 0x00, 0x00];                /* NETSCAPE2.0, loop forever */
+    for (var i = 0; i < ns.length; i++) head[p++] = ns[i];
+    return head.subarray(0, p);
+  }
+
+  function gifFrame(indices, w, h, delayCs, minCodeSize) {
+    var lzw = lzwEncode(indices, minCodeSize);
+    var parts = [];
+    /* GCE: 0x21 0xF9 0x04 | packed | delay(2) | transparent index | block end */
+    parts.push(new Uint8Array([0x21, 0xF9, 0x04, 0x08, delayCs & 255, (delayCs >> 8) & 255, 0x00, 0x00]));
+    var desc = new Uint8Array(10);
+    desc[0] = 0x2C;
+    desc[5] = w & 255; desc[6] = (w >> 8) & 255;
+    desc[7] = h & 255; desc[8] = (h >> 8) & 255;
+    parts.push(desc);
+    parts.push(new Uint8Array([minCodeSize]));
+    var buf = lzw.buf, len = lzw.len, o;
+    for (o = 0; o < len; o += 255) {
+      var nb = Math.min(255, len - o);
+      parts.push(new Uint8Array([nb]));
+      parts.push(buf.slice(o, o + nb));
+    }
+    parts.push(new Uint8Array([0x00]));
+    return parts;
+  }
+
+  /* ─────────────────────────── 변환 ─────────────────────────── */
+  function setProgress(p, text) {
+    var pct = clamp(Math.round(p * 100), 0, 100);
+    $('progWrap').hidden = false;
+    $('progFill').style.width = pct + '%';
+    $('progBar').setAttribute('aria-valuenow', String(pct));
+    if (text != null) $('progTxt').textContent = text;
+  }
+
+  async function collectSamples(w, h) {
+    var dur = state.selEnd - state.selStart;
+    var n = clamp(Math.round(dur * 2), 4, 24);
+    var sw = Math.min(224, w);
+    var sh = Math.max(2, Math.round(sw * h / w));
+    var px = [];
+    for (var i = 0; i < n; i++) {
+      if (state.busyId !== state.genId) throw new Error('cancelled');
+      var tt = state.selStart + (i + 0.5) * dur / n;
+      var d = await frameAt(tt, sw, sh);
+      for (var p = 0; p < sw * sh; p += 2) {
+        var o = p * 4;
+        px.push(d[o], d[o + 1], d[o + 2]);
+      }
+      setProgress(0.02 + 0.28 * (i + 1) / n, fmt('progColors', { i: i + 1, n: n }));
+      await tick();
+    }
+    /* keep the median-cut sort bounded */
+    var maxSamples = 78000;
+    var have = px.length / 3;
+    if (have > maxSamples) {
+      var keep = [];
+      var stepN = have / maxSamples;
+      for (var s = 0; s < maxSamples; s++) {
+        var src = Math.floor(s * stepN) * 3;
+        keep.push(px[src], px[src + 1], px[src + 2]);
+      }
+      px = keep;
+    }
+    return px;
+  }
+
+  async function convert() {
+    if (state.busy || !state.src) return;
+    var dur = state.selEnd - state.selStart;
+    if (!(dur > 0.05)) return;
+
+    var dims = outDims();
+    var fps = state.fps;
+    var n = clamp(Math.round(dur * fps), 1, MAX_FRAMES);
+    var delayCs = Math.max(2, Math.round(100 / fps));
+
+    state.busy = true;
+    state.genId++;
+    state.busyId = state.genId;
+    $('convertBtn').disabled = true;
+    $('dlBtn').disabled = true;
+    $('convInfo').textContent = t('gifBusy');
+    $('convInfo').className = 'hint';
+    setProgress(0.01, fmt('progColors', { i: 0, n: Math.round(dur * 2) }));
+    await tick();
+
+    try {
+      var px = await collectSamples(dims.w, dims.h);
+      if (!px.length) throw new Error('nosample');
+
+      var pal = medianCut(px, state.colors);
+      var bits = 1;
+      while ((1 << bits) < pal.length) bits++;
+      if (bits < 2) bits = 2;              /* LZW minimum code size is at least 2 */
+      if (bits > 8) bits = 8;
+      var gctSize = 1 << bits;
+      while (pal.length < gctSize) pal.push(pal[pal.length - 1] || [0, 0, 0]);
+      var minCodeSize = Math.max(2, bits);
+      var mapper = makeMapper(pal);
+
+      var parts = [gifHeader(dims.w, dims.h, pal, bits)];
+
+      for (var i = 0; i < n; i++) {
+        var tt = state.selStart + (i + 0.5) * dur / n;
+        var data = await frameAt(tt, dims.w, dims.h);
+        var idx = indexFrame(data, dims.w, dims.h, pal, mapper, state.dither);
+        var fp = gifFrame(idx, dims.w, dims.h, delayCs, minCodeSize);
+        for (var q = 0; q < fp.length; q++) parts.push(fp[q]);
+        setProgress(0.3 + 0.69 * (i + 1) / n, fmt('progEncode', { p: Math.round((i + 1) / n * 100) }));
+        await tick();
+      }
+      parts.push(new Uint8Array([0x3B]));
+
+      var blob = new Blob(parts, { type: 'image/gif' });
+      if (state.gifUrl) URL.revokeObjectURL(state.gifUrl);
+      state.gifUrl = URL.createObjectURL(blob);
+      state.gif = { blob: blob, bytes: blob.size, frames: n, w: dims.w, h: dims.h, delay: delayCs };
+
+      var img = $('gifImg');
+      img.src = state.gifUrl;
+      img.hidden = false;
+      $('stageEmptyG').hidden = true;
+      $('chipSize').textContent = sizeStr(blob.size);
+      $('chipFrames').textContent = String(n);
+      $('chipDims').textContent = dims.w + '×' + dims.h;
+      $('resMeta').textContent = sizeStr(blob.size) + ' · ' + n + 'f';
+      $('dlBtn').disabled = false;
+      $('gifInfo').textContent = fmt('gifReady', {
+        size: sizeStr(blob.size), frames: n, w: dims.w, h: dims.h,
+        dur: (n / fps).toFixed(1) + ' s'
+      });
+      $('gifInfo').className = 'hint hint--ok';
+      $('convInfo').textContent = fmt('gifReady', {
+        size: sizeStr(blob.size), frames: n, w: dims.w, h: dims.h,
+        dur: (n / fps).toFixed(1) + ' s'
+      });
+      $('convInfo').className = 'hint hint--ok';
+      setProgress(1, t('progDone'));
+      state.genSig = settingsSig();
+    } catch (e) {
+      $('gifInfo').textContent = t('gifFail');
+      $('gifInfo').className = 'hint hint--err';
+      $('convInfo').textContent = t('gifFail');
+      $('convInfo').className = 'hint hint--err';
+      $('progWrap').hidden = true;
+    } finally {
+      state.busy = false;
+      $('convertBtn').disabled = !state.src;
+    }
+  }
+
+  function settingsSig() {
+    return [state.selStart.toFixed(2), state.selEnd.toFixed(2), state.fps, state.width, state.colors, state.dither ? 1 : 0].join('|');
+  }
+
+  /* ─────────────────────────── 다운로드 ─────────────────────────── */
+  function download() {
+    if (!state.gif) return;
+    var base = (state.src && state.src.name || 'clip').replace(/\.[^.]+$/, '');
+    base = base.replace(/[^\w\-]+/g, '-').replace(/^-+|-+$/g, '') || 'clip';
+    var url = URL.createObjectURL(state.gif.blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = base + '-tiny.gif';
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 9000);
+  }
+
+  /* ─────────────────────────── 화면 갱신 ─────────────────────────── */
+  function syncClipUI(seek) {
+    var dur = state.src ? state.src.dur : 0;
+    var len = Math.max(0, state.selEnd - state.selStart);
+    $('chipIn').textContent = timeStr(state.selStart);
+    $('chipOut').textContent = timeStr(state.selEnd);
+    $('chipClip').textContent = timeStr(len);
+    $('startOut').textContent = timeStr(state.selStart);
+    $('endOut').textContent = timeStr(state.selEnd);
+    $('startRange').value = String(state.selStart);
+    $('endRange').value = String(state.selEnd);
+
+    var dims = outDims();
+    var n = clamp(Math.round(len * state.fps), 1, MAX_FRAMES);
+    $('dimsHint').textContent = fmt('dimsHint', { w: dims.w, h: dims.h });
+    $('frameNote').textContent = fmt('frameUnit', { n: n });
+    var est = n * dims.w * dims.h * (state.dither ? 0.21 : 0.115) + n * 24;
+    $('estNote').textContent = fmt('estLabel', { size: sizeStr(Math.round(est)) });
+    $('srcMeta').textContent = state.src
+      ? fmt('srcMetaLoaded', { fps: state.fps, w: dims.w, h: dims.h, frames: n })
+      : t('metaIdle');
+    if (state.src && !state.busy) {
+      $('convInfo').textContent = fmt('convReady', {
+        frames: n, w: dims.w, h: dims.h, size: sizeStr(Math.round(est))
+      });
+      $('convInfo').className = 'hint';
+    }
+    if (state.gif && state.genSig && state.genSig !== settingsSig() && !state.busy) {
+      $('gifInfo').textContent = t('gifStale');
+      $('gifInfo').className = 'hint hint--warn';
+    }
+    if (seek && state.src && !state.frames) {
+      try { $('video').currentTime = clamp(state.selStart, 0, Math.max(0, dur - 0.05)); } catch (e) {}
+    }
+    if (state.frames) drawStill();
+  }
+
+  function onStartInput() {
+    if (!state.src) return;
+    var dur = state.src.dur;
+    var s = parseFloat($('startRange').value);
+    s = clamp(s, 0, Math.max(0, dur - 0.1));
+    if (s > state.selEnd - 0.1) state.selEnd = Math.min(dur, s + 0.1);
+    state.selStart = s;
+    if (state.selEnd - state.selStart > CLIP_MAX) state.selEnd = Math.min(dur, s + CLIP_MAX);
+    syncClipUI(false);
+  }
+  function onEndInput() {
+    if (!state.src) return;
+    var dur = state.src.dur;
+    var e = parseFloat($('endRange').value);
+    e = clamp(e, 0.1, dur);
+    if (e < state.selStart + 0.1) state.selStart = Math.max(0, e - 0.1);
+    state.selEnd = e;
+    if (state.selEnd - state.selStart > CLIP_MAX) state.selStart = Math.max(0, e - CLIP_MAX);
+    syncClipUI(false);
+  }
+
+  function setClip(s, e, seek) {
+    if (!state.src) return;
+    var dur = state.src.dur;
+    s = clamp(s, 0, dur);
+    e = clamp(e, 0, dur);
+    if (e - s < 0.1) { if (s + 0.1 <= dur) e = s + 0.1; else s = Math.max(0, e - 0.1); }
+    if (e - s > CLIP_MAX) e = s + CLIP_MAX;
+    state.selStart = s; state.selEnd = Math.min(e, dur);
+    syncClipUI(seek);
+  }
+
+  /* ─────────────────────────── 언어 적용 ─────────────────────────── */
+  function applyLang(lang) {
+    state.lang = lang === 'ko' ? 'ko' : 'en';
+    document.documentElement.setAttribute('lang', state.lang);
+
+    document.title = t('docTitle');
+    var md = document.querySelector('meta[name="description"]'); if (md) md.setAttribute('content', t('metaDesc'));
+    var ot = document.querySelector('meta[property="og:title"]'); if (ot) ot.setAttribute('content', t('ogTitle'));
+    var od = document.querySelector('meta[property="og:description"]'); if (od) od.setAttribute('content', t('ogDesc'));
+    var tt = document.querySelector('meta[name="twitter:title"]'); if (tt) tt.setAttribute('content', t('ogTitle'));
+    var td = document.querySelector('meta[name="twitter:description"]'); if (td) td.setAttribute('content', t('ogDesc'));
+
+    var nodes = document.querySelectorAll('[data-i18n]'), i, k, v;
+    for (i = 0; i < nodes.length; i++) {
+      k = nodes[i].getAttribute('data-i18n');
+      v = t(k);
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < nodes.length; i++) {
+      k = nodes[i].getAttribute('data-i18n-html');
+      v = t(k);
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-aria'));
+      if (v) nodes[i].setAttribute('aria-label', v);
+    }
+
+    var spans = document.querySelectorAll('#langToggle [data-lt]');
+    for (i = 0; i < spans.length; i++) {
+      spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
+    }
+    var lt = $('langToggle');
+    lt.setAttribute('title', t('toggleTo'));
+    lt.setAttribute('aria-label', t('toggleTo'));
+
+    /* 문구가 상태에 따라 바뀌는 자리는 다시 그린다 */
+    if (state.src) {
+      $('fileMeta').textContent = fmt('metaClip', {
+        dur: durStr(state.src.dur), w: state.src.w, h: state.src.h,
+        size: state.src.kind === 'demo' ? t('metaDemo').split(' · ')[1] : sizeStr(state.src.bytes)
+      });
+      syncClipUI(false);
+    } else {
+      $('srcMeta').textContent = t('metaIdle');
+      $('convInfo').textContent = t('convIdle');
+      $('convInfo').className = 'hint';
+      if (!state.gif) {
+        $('gifInfo').textContent = t('gifIdle');
+        $('gifInfo').className = 'hint';
+      }
+    }
+    if (state.gif && !state.busy) {
+      $('gifInfo').textContent = fmt('gifReady', {
+        size: sizeStr(state.gif.bytes), frames: state.gif.frames,
+        w: state.gif.w, h: state.gif.h, dur: (state.gif.frames * state.gif.delay / 100).toFixed(1) + ' s'
+      });
+      $('gifInfo').className = 'hint hint--ok';
+    }
+    if (state.busy) {
+      $('progTxt').textContent = t('progDone');
+    }
+    if (!$('drop').hidden) $('demoHint').textContent = t('demoNote');
+  }
+
+  /* ─────────────────────────── 연결 ─────────────────────────── */
+  function bindSeg(el, key) {
+    var btns = el.querySelectorAll('button');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].addEventListener('click', function () {
+        var v = parseFloat(this.getAttribute('data-v'));
+        state[key] = v;
+        var all = el.querySelectorAll('button');
+        for (var j = 0; j < all.length; j++) all[j].classList.toggle('on', all[j] === this);
+        syncClipUI(false);
+      });
+    }
+  }
+
+  function bindUI() {
+    $('langToggle').addEventListener('click', function () {
+      var next = state.lang === 'ko' ? 'en' : 'ko';
+      try { localStorage.setItem(LANG_KEY, next); } catch (e) {}
+      applyLang(next);
+    });
+
+    $('pickFile').addEventListener('click', function () { $('fileInput').click(); });
+    $('replaceFile').addEventListener('click', function () { $('fileInput').click(); });
+    $('fileInput').addEventListener('change', function (ev) {
+      var f = ev.target.files && ev.target.files[0];
+      if (f) loadSource(f, f.name, f.size, 0, 'file');
+      ev.target.value = '';
+    });
+
+    ['demo1', 'demo1b'].forEach(function (id) { $(id).addEventListener('click', function () { loadSample('orbit'); }); });
+    ['demo2', 'demo2b'].forEach(function (id) { $(id).addEventListener('click', function () { loadSample('bars'); }); });
+    $('clearFile').addEventListener('click', clearSource);
+
+    $('startRange').addEventListener('input', onStartInput);
+    $('endRange').addEventListener('input', onEndInput);
+    $('startRange').addEventListener('change', function () { if (state.src) syncClipUI(true); });
+    $('endRange').addEventListener('change', function () { if (state.src) syncClipUI(true); });
+
+    $('btnWhole').addEventListener('click', function () {
+      if (!state.src) return;
+      setClip(0, Math.min(state.src.dur, CLIP_MAX), true);
+    });
+    $('btnIn').addEventListener('click', function () {
+      if (!state.src || state.frames) return;
+      setClip($('video').currentTime, state.selEnd, false);
+    });
+    $('btnOut').addEventListener('click', function () {
+      if (!state.src || state.frames) return;
+      setClip(state.selStart, $('video').currentTime, false);
+    });
+
+    bindSeg($('segFps'), 'fps');
+    bindSeg($('segWidth'), 'width');
+    bindSeg($('segColors'), 'colors');
+    $('ditherChk').addEventListener('change', function () { state.dither = this.checked; syncClipUI(false); });
+
+    $('convertBtn').addEventListener('click', convert);
+    $('dlBtn').addEventListener('click', download);
+
+    /* 드래그 & 드롭 */
+    ['dragenter', 'dragover'].forEach(function (evt) {
+      document.addEventListener(evt, function (ev) {
+        if (!ev.dataTransfer) return;
+        ev.preventDefault();
+        $('stageV').classList.add('is-over');
+        if (!$('drop').hidden) $('drop').classList.add('is-over');
+      });
+    });
+    ['dragleave', 'drop'].forEach(function (evt) {
+      document.addEventListener(evt, function (ev) {
+        if (evt === 'dragleave' && ev.target !== document.documentElement && ev.target !== document.body) return;
+        $('stageV').classList.remove('is-over');
+        $('drop').classList.remove('is-over');
+      });
+    });
+    document.addEventListener('drop', function (ev) {
+      if (!ev.dataTransfer) return;
+      ev.preventDefault();
+      var f = ev.dataTransfer.files && ev.dataTransfer.files[0];
+      if (f) loadSource(f, f.name, f.size, 0, 'file');
+    });
+  }
+
+  /* ─────────────────────── 외부 요청 카운터 ─────────────────────── */
+  var ext = 0;
+  function countExt() {
+    var el = $('netCount');
+    if (el) el.textContent = String(ext);
+  }
+  function note(list) {
+    for (var i = 0; i < list.length; i++) {
+      try {
+        var u = new URL(list[i].name, location.href);
+        if (u.origin !== location.origin) ext++;
+      } catch (e) {}
+    }
+    countExt();
+  }
+  if (window.PerformanceObserver) {
+    try {
+      new PerformanceObserver(function (l) { note(l.getEntries()); }).observe({ entryTypes: ['resource'] });
+    } catch (e) {}
+  }
+  window.addEventListener('load', function () {
+    setTimeout(function () {
+      if (window.performance && performance.getEntriesByType) note(performance.getEntriesByType('resource'));
+    }, 350);
+  });
+
+  function init() {
+    bindUI();
+    state.dither = $('ditherChk').checked;
+    applyLang(readLang() || 'en');
+    $('srcMeta').textContent = t('metaIdle');
+    $('progWrap').hidden = true;
+    /* 테스트 훅: 실측에서 생성 결과를 직접 확인할 수 있게 남긴다 */
+    window.__tgState = state;
+    window.__tgReady = true;
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>

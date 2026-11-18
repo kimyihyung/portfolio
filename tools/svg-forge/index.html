@@ -256,6 +256,7 @@ h1 .gold { color: var(--accent); }
 .switch span {
   position: absolute; inset: 0; border-radius: 999px; background: rgba(255,255,255,.1);
   border: 1px solid var(--line); transition: background .2s ease, border-color .2s ease;
+  pointer-events: none;
 }
 .switch span::after {
   content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px;
@@ -513,6 +514,22 @@ select.sel {
             <span class="caveat mono" id="saveLine" style="margin:0">—</span>
           </div>
         </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h2 data-i18n="rmHead">What came off</h2>
+            <span class="k" data-i18n="rmK">counted</span>
+          </div>
+          <div class="opts" style="margin-top:0">
+            <div class="opt"><span><b data-i18n="rmComments">XML comments</b></span><span class="mono" id="rmComments">0</span></div>
+            <div class="opt"><span><b data-i18n="rmMeta">metadata blocks</b></span><span class="mono" id="rmMeta">0</span></div>
+            <div class="opt"><span><b data-i18n="rmTitle">&lt;title&gt; · &lt;desc&gt;</b></span><span class="mono" id="rmTitle">0</span></div>
+            <div class="opt"><span><b data-i18n="rmNs">editor nodes · attributes</b></span><span class="mono" id="rmNs">0</span></div>
+            <div class="opt"><span><b data-i18n="rmEmpty">empty groups</b></span><span class="mono" id="rmEmpty">0</span></div>
+            <div class="opt" style="border-bottom:0"><span><b data-i18n="rmRound">numbers rounded</b></span><span class="mono" id="rmRound">0</span></div>
+          </div>
+          <p class="caveat" data-i18n-html="rmHint">Counts are of what this run actually removed — a switch that is off shows zero, and the preview beside it is the file that remains.</p>
+        </div>
       </div>
     </section>
 
@@ -663,6 +680,9 @@ select.sel {
       previewAlt: 'Optimized SVG preview', outAria: 'Optimized SVG',
       copyOut: 'Copy SVG', dlOut: 'Download .svg',
       savedLine: 'saved {n} bytes · {p}% smaller',
+      rmHead: 'What came off', rmK: 'counted',
+      rmComments: 'XML comments', rmMeta: 'metadata blocks', rmTitle: '<title> · <desc>', rmNs: 'editor nodes · attributes', rmEmpty: 'empty groups', rmRound: 'numbers rounded',
+      rmHint: 'Counts are of what this run actually removed — a switch that is off shows zero, and the preview beside it is the file that remains.',
       sameLine: 'nothing left to remove at these settings',
       copyDone: 'Copied', copyFail: 'Select the text and copy it',
       convTitle: '3 · One click out', convNote: 'from the optimized text',
@@ -729,6 +749,9 @@ select.sel {
       previewAlt: '최적화된 SVG 미리보기', outAria: '최적화된 SVG',
       copyOut: 'SVG 복사', dlOut: 'SVG 내려받기',
       savedLine: '{n}바이트 절감 · {p}% 작아짐',
+      rmHead: '무엇이 빠졌나', rmK: '실측',
+      rmComments: 'XML 주석', rmMeta: '메타데이터 블록', rmTitle: '<title> · <desc>', rmNs: '에디터 노드 · 속성', rmEmpty: '빈 그룹', rmRound: '반올림한 숫자',
+      rmHint: '이번 실행에서 실제로 지운 개수입니다 — 꺼 둔 스위치는 0으로 남고, 옆의 미리보기는 남은 파일 그대로입니다.',
       sameLine: '이 설정에서는 더 줄일 것이 없습니다',
       copyDone: '복사했습니다', copyFail: '텍스트를 선택해 복사해 주세요',
       convTitle: '3 · 한 번에 내보내기', convNote: '최적화된 텍스트 기준',
@@ -1032,12 +1055,13 @@ select.sel {
     if (!root || root.nodeName.toLowerCase() !== 'svg') throw new Error(t('errRoot'));
 
     var before = countNodes(root);
-    if (options.comments) removeComments(root);
-    if (options.meta) removeByTag(root, ['metadata']);
-    if (options.title) removeByTag(root, ['title', 'desc']);
-    if (options.ns) removeEditorNamespaces(root);
-    if (options.empty) removeEmptyGroups(root);
-    if (options.precision) roundPrecision(root, options.precision);
+    var counts = { comments: 0, meta: 0, title: 0, ns: 0, empty: 0, round: 0 };
+    if (options.comments) counts.comments = removeComments(doc);
+    if (options.meta) counts.meta = removeByTag(root, ['metadata']);
+    if (options.title) counts.title = removeByTag(root, ['title', 'desc']);
+    if (options.ns) counts.ns = removeEditorNamespaces(root);
+    if (options.empty) counts.empty = removeEmptyGroups(root);
+    if (options.precision) counts.round = roundPrecision(root, options.precision);
     var after = countNodes(root);
 
     var text = new XMLSerializer().serializeToString(root);
@@ -1046,7 +1070,7 @@ select.sel {
     }
     if (text.indexOf('<?xml') !== 0) text = '<?xml version="1.0" encoding="UTF-8"?>\n' + text;
 
-    return { text: text, removed: before - after, el: root };
+    return { text: text, removed: before - after, el: root, counts: counts };
   }
 
   var currentOptions = function () {
@@ -1077,6 +1101,7 @@ select.sel {
       $('outBytes').textContent = '—';
       $('savedPct').textContent = '—';
       $('nodeDelta').textContent = '—';
+      ['rmComments', 'rmMeta', 'rmTitle', 'rmNs', 'rmEmpty', 'rmRound'].forEach(function (id) { $(id).textContent = '0'; });
       $('outCode').value = '';
       $('saveLine').textContent = '—';
       $('jsxOut').value = '';
@@ -1106,6 +1131,12 @@ select.sel {
     $('outBytes').textContent = outN.toLocaleString('en-US');
     $('savedPct').textContent = (pct >= 0 ? '' : '+') + (pct >= 0 ? pct.toFixed(1) : Math.abs(pct).toFixed(1)) + '%';
     $('nodeDelta').textContent = String(result.removed);
+    $('rmComments').textContent = String(result.counts.comments);
+    $('rmMeta').textContent = String(result.counts.meta);
+    $('rmTitle').textContent = String(result.counts.title);
+    $('rmNs').textContent = String(result.counts.ns);
+    $('rmEmpty').textContent = String(result.counts.empty);
+    $('rmRound').textContent = String(result.counts.round);
     $('outCode').value = result.text;
     $('saveLine').textContent = srcN > outN
       ? t('savedLine').replace('{n}', (srcN - outN).toLocaleString('en-US')).replace('{p}', pct.toFixed(1))
