@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0b0d">
+<title>StampSnap — 무업로드 도장·전자서명 만들기 (투명 PNG) | Kim Yihyung</title>
+<meta name="description" content="이름 석 자로 막도장·인감을 만들고 손으로 서명해 512·1024 투명 PNG로 내려받습니다. 원형·타원·사각, 명조·각진체·고딕, 인주 4색, 번짐·노이즈 질감까지 조절하고 서명은 속도에 따라 선 굵기가 살아납니다. 파일은 기기 밖으로 나가지 않습니다.">
+<meta name="keywords" content="도장 만들기, 막도장, 인감, 직인, 전자서명, 서명 이미지, 투명 PNG 도장, 인주 색, 손서명 패드, 도장 png, 서명 png, 사인 만들기, stampsnap, 업로드 없는 도구">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/stamp-snap/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b0d'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23c8342a' stroke-width='3'/%3E%3Cpath d='M12 16h8' stroke='%23c8342a' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/stamp-snap/">
+<meta property="og:title" content="StampSnap — 도장·서명을 투명 PNG로, 브라우저 안에서">
+<meta property="og:description" content="이름 석 자로 막도장·인감, 손으로 서명, 인주 4색과 빈티지 질감까지. 512·1024 투명 PNG로 바로 내려받고 업로드는 0바이트.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="StampSnap — 무업로드 도장·전자서명 생성기">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="StampSnap — 도장·서명을 투명 PNG로">
+<meta name="twitter:description" content="막도장·인감·손서명을 만들고 512·1024 투명 PNG로. 인주 4색, 번짐·노이즈 질감, 업로드 0바이트.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "StampSnap — 무업로드 도장·전자서명 생성기",
+      "applicationCategory": "DesignApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/stamp-snap/",
+      "inLanguage": "ko",
+      "description": "이름을 넣어 원형 막도장·타원형·사각 인감을 그리고, 손서명 패드에서는 펜 속도에 따라 선 굵기가 변하는 서명을 만듭니다. 서체 세 가지, 테두리 굵기, 인주 네 색, 살짝 번짐과 미세 노이즈 질감을 조절해 512 또는 1024 픽셀의 투명 배경 PNG로 내려받습니다. 알파 채널을 매번 실제 픽셀로 확인해 보고하며, 모든 계산은 브라우저 안에서 끝납니다.",
+      "featureList": [
+        "이름 1~6자로 원형 막도장·타원형·사각 인감 생성",
+        "서체 3종(명조·전통각진체·고딕) 시스템 폴백 조합",
+        "테두리 굵기와 인주 4색(전통 주홍·진적·청인·흑인)",
+        "살짝 번짐과 미세 노이즈로 만드는 빈티지 인주 질감",
+        "체크·흰 종이·검은 종이 위 실시간 투명 배경 미리보기",
+        "마우스·터치·펜 입력 손서명, 속도 기반 선 굵기, 지우개·실행취소",
+        "512×512 또는 1024×1024 투명 배경 PNG 즉시 다운로드",
+        "알파 채널 실측 보고: 모서리 투명도·잉크 픽셀·반투명 픽셀",
+        "100% 브라우저 안: 업로드 0바이트, 외부 요청 0건"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "KRW" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "StampSnap", "item": "https://kimyihyung.github.io/portfolio/tools/stamp-snap/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "만든 도장을 실제 서류에 써도 되나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "이 도구가 만드는 것은 이미지 파일입니다. 법적 효력이 있는 인감증명이나 전자서명(공동인증서·금융인증서)과는 다른 것이므로, 계약서·관공서 서류처럼 효력이 문제되는 곳에는 정해진 절차를 쓰셔야 합니다. 내부 문서, 스캔본 정리, 초안 표시, 디자인 시안처럼 이미지가 필요한 자리에 쓰는 도구입니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "투명 PNG인지 어떻게 확인할 수 있나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "내려받기 전에 캔버스 픽셀을 직접 읽어 모서리 알파(0이어야 합니다), 잉크가 찍힌 픽셀 수, 가장자리의 반투명 픽셀 수를 계산해 화면에 적습니다. 미리보기 뒤의 체크무늬는 장식이 아니라 실제로 비어 있는 자리이고, 내려받는 파일도 같은 캔버스를 PNG로 인코딩한 것이라 배경이 남지 않습니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "서명의 선 굵기는 무엇으로 정해지나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "펜이 있으면 필압을 쓰고, 마우스나 손가락이면 포인터가 움직인 속도로 정합니다. 빨리 그으면 얇고 천천히 그으면 두꺼워져 실제 사인처럼 획에 강약이 생깁니다. 점 사이는 이차 곡선으로 이어 붙여 각지지 않게 했습니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "파일이 어디로 전송되나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "어디로도 가지 않습니다. 서버도, 분석 도구도, 저장소도 없습니다. 이름과 획은 이 탭의 캔버스에서만 쓰이고 탭을 닫으면 사라집니다. 화면 아래 외부 요청 수는 0에서 움직이지 않습니다." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+:root {
+  --bg: #0b0b0d;
+  --panel: #141311;
+  --panel2: #1b1917;
+  --line: rgba(255,255,255,.09);
+  --line2: rgba(255,255,255,.18);
+  --ink: #f7f2e9;
+  --muted: #a9a29a;
+  --muted2: #7d766e;
+  --accent: #e5b45c;
+  --accent2: #f3cf85;
+  --accent-dim: rgba(229,180,92,.12);
+  --on-accent: #1d1503;
+  --ok: #7fd6a0;
+  --warn: #ffa06b;
+  --bad: #ff7d7d;
+  --seal: #c8342a;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --checker: 12px;
+}
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  line-height: 1.6;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(110% 55% at 50% -18%, rgba(200,52,42,.14), transparent 62%),
+    radial-gradient(60% 40% at 100% 2%, rgba(229,180,92,.05), transparent 60%);
+  background-repeat: no-repeat;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: var(--accent); color: var(--on-accent); }
+a { color: inherit; }
+button, input, select, textarea { font-family: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+.wrap { width: 100%; max-width: 1220px; margin: 0 auto; padding: 0 20px 48px; }
+
+/* ---------- topbar ---------- */
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0 12px; }
+.brand { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: var(--ink); min-width: 0; }
+.mark {
+  min-width: 28px; height: 22px; padding: 0 6px; border-radius: 7px; flex: none;
+  border: 1px solid rgba(229,180,92,.45); background: var(--accent-dim);
+  display: grid; place-items: center; font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: var(--accent);
+}
+.brand-txt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.top-actions { display: inline-flex; align-items: center; gap: 9px; flex: none; }
+.lang-toggle {
+  appearance: none; border: 1px solid var(--line); background: var(--panel); color: var(--muted2);
+  height: 34px; padding: 0 11px; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px;
+  cursor: pointer; font-size: 11px; font-weight: 700; letter-spacing: .06em; line-height: 1;
+  transition: color .2s, border-color .2s, transform .15s;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.94); }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
+.topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
+
+/* ---------- hero ---------- */
+.hero { padding: 22px 0 18px; max-width: 860px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; margin: 0 0 14px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent);
+  border: 1px solid rgba(229,180,92,.28); background: rgba(229,180,92,.06); padding: 6px 11px; border-radius: 999px;
+}
+.eyebrow .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--seal); box-shadow: 0 0 0 3px rgba(200,52,42,.18); }
+h1 { margin: 0 0 14px; font-size: clamp(28px, 4.4vw, 44px); line-height: 1.14; letter-spacing: -.025em; font-weight: 800; }
+h1 .soft { color: var(--muted); }
+h1 .gold { color: var(--accent); }
+.lede { margin: 0 0 16px; color: var(--muted); font-size: 15px; max-width: 780px; }
+.lede strong { color: var(--ink); font-weight: 600; }
+
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--panel); font-size: 11.5px; color: var(--muted);
+  font-family: var(--mono); letter-spacing: .02em;
+}
+.pill b { color: var(--ink); font-weight: 700; }
+.pill--live { border-color: rgba(127,214,160,.32); background: rgba(127,214,160,.07); color: #a6e6c4; }
+.pill--live b { color: #bff3d8; }
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px rgba(127,214,160,.14); }
+
+/* ---------- tabs ---------- */
+.tabs { display: flex; gap: 4px; padding: 4px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; margin: 18px 0 16px; max-width: 520px; }
+.tab {
+  flex: 1 1 0; appearance: none; border: 0; background: transparent; color: var(--muted); cursor: pointer;
+  font-size: 13px; font-weight: 650; padding: 9px 12px; border-radius: 10px; white-space: nowrap;
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px; transition: background .18s, color .18s;
+}
+.tab[aria-selected="true"] { background: var(--accent-dim); color: var(--accent); box-shadow: inset 0 0 0 1px rgba(229,180,92,.35); }
+.tab .n { font-family: var(--mono); font-size: 9.5px; color: var(--muted2); letter-spacing: .08em; }
+.tab[aria-selected="true"] .n { color: rgba(229,180,92,.75); }
+
+/* ---------- layout ---------- */
+.work { display: grid; grid-template-columns: minmax(0,1fr) 400px; gap: 16px; align-items: start; }
+@media (max-width: 1080px) { .work { grid-template-columns: minmax(0,1fr); } }
+
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); min-width: 0; }
+.panel { padding: 16px; display: grid; gap: 13px; min-width: 0; }
+.panel h3 { margin: 0; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted2); font-family: var(--mono); font-weight: 700; }
+.side { display: grid; gap: 12px; min-width: 0; }
+
+.field { display: grid; gap: 6px; min-width: 0; }
+.field > label, .field > .lbl { font-size: 11px; font-family: var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted2); }
+.hint { margin: 0; font-size: 11.4px; color: var(--muted2); line-height: 1.55; }
+
+.input {
+  width: 100%; appearance: none; border: 1px solid var(--line2); border-radius: 11px; background: #0d0d10;
+  padding: 11px 13px; font-size: 15px; letter-spacing: .02em;
+}
+.input:focus { outline: none; border-color: rgba(229,180,92,.5); }
+.input-row { display: flex; align-items: center; gap: 9px; }
+.input-row .count { font-family: var(--mono); font-size: 11px; color: var(--muted2); flex: none; }
+
+.seg { display: flex; gap: 3px; padding: 3px; background: var(--panel2); border: 1px solid var(--line); border-radius: 11px; min-width: 0; }
+.seg button {
+  flex: 1 1 auto; appearance: none; border: 0; background: transparent; color: var(--muted); cursor: pointer;
+  font-size: 12px; font-weight: 650; padding: 8px 6px; border-radius: 8px; line-height: 1.25; white-space: nowrap;
+}
+.seg button[aria-pressed="true"] { background: var(--accent-dim); color: var(--accent); box-shadow: inset 0 0 0 1px rgba(229,180,92,.35); }
+
+.range { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.range input[type="range"] {
+  flex: 1 1 auto; min-width: 0; appearance: none; height: 22px; background: transparent; cursor: pointer;
+}
+.range input[type="range"]::-webkit-slider-runnable-track { height: 4px; border-radius: 999px; background: rgba(255,255,255,.14); }
+.range input[type="range"]::-webkit-slider-thumb {
+  appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent);
+  border: 2px solid #0b0b0d; margin-top: -6px; box-shadow: 0 0 0 1px rgba(229,180,92,.5);
+}
+.range input[type="range"]::-moz-range-track { height: 4px; border-radius: 999px; background: rgba(255,255,255,.14); }
+.range input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 2px solid #0b0b0d; }
+.range b { font-family: var(--mono); font-size: 11.5px; color: var(--muted); min-width: 34px; text-align: right; flex: none; }
+
+.swatches { display: flex; flex-wrap: wrap; gap: 7px; }
+.sw {
+  appearance: none; cursor: pointer; border: 1px solid var(--line2); background: var(--panel2);
+  border-radius: 10px; padding: 5px 9px 5px 6px; display: inline-flex; align-items: center; gap: 7px;
+  font-size: 11.5px; color: var(--muted); line-height: 1.2;
+}
+.sw i { width: 18px; height: 18px; border-radius: 50%; border: 1px solid rgba(0,0,0,.4); flex: none; }
+.sw[aria-pressed="true"] { border-color: rgba(229,180,92,.55); background: rgba(229,180,92,.08); color: var(--ink); }
+
+.btn {
+  appearance: none; cursor: pointer; border-radius: 11px; border: 1px solid var(--line2);
+  background: var(--panel2); color: var(--ink); font-size: 13px; font-weight: 650;
+  padding: 10px 16px; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  transition: transform .12s, border-color .2s, background .2s, opacity .2s; text-decoration: none;
+}
+.btn:hover { border-color: rgba(255,255,255,.3); }
+.btn:active { transform: scale(.98); }
+.btn:disabled { opacity: .42; cursor: not-allowed; }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 750; }
+.btn--primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.btn--ghost { background: transparent; }
+.btn--sm { padding: 7px 11px; font-size: 12px; border-radius: 9px; }
+.btn--block { width: 100%; }
+.row-actions { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+
+/* ---------- preview ---------- */
+.stage {
+  position: relative; border-radius: var(--radius-sm); border: 1px solid var(--line);
+  padding: 14px; display: grid; place-items: center; min-height: 240px;
+}
+.stage.bg-checker {
+  background-color: #101010;
+  background-image:
+    linear-gradient(45deg, rgba(255,255,255,.07) 25%, transparent 25%, transparent 75%, rgba(255,255,255,.07) 75%),
+    linear-gradient(45deg, rgba(255,255,255,.07) 25%, transparent 25%, transparent 75%, rgba(255,255,255,.07) 75%);
+  background-size: 24px 24px;
+  background-position: 0 0, 12px 12px;
+}
+.stage.bg-paper { background: #f4efe4; }
+.stage.bg-dark { background: #0a0a0a; }
+.stage canvas { display: block; width: 100%; max-width: 340px; height: auto; touch-action: none; }
+.stage.bg-checker canvas { filter: drop-shadow(0 2px 6px rgba(0,0,0,.35)); }
+
+.preview-toggles { display: flex; gap: 6px; }
+.preview-toggles button {
+  appearance: none; cursor: pointer; border: 1px solid var(--line); background: var(--panel2); color: var(--muted2);
+  border-radius: 8px; padding: 5px 9px; font-size: 10.5px; font-family: var(--mono); letter-spacing: .04em;
+}
+.preview-toggles button[aria-pressed="true"] { color: var(--accent); border-color: rgba(229,180,92,.45); }
+
+.report { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 7px; }
+@media (max-width: 520px) { .report { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+.rep-item { border: 1px solid var(--line); background: var(--panel2); border-radius: 10px; padding: 8px 9px; min-width: 0; }
+.rep-item b { display: block; font-family: var(--mono); font-size: 14px; line-height: 1.25; }
+.rep-item span { font-size: 9.5px; color: var(--muted2); font-family: var(--mono); letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+.rep-item.is-ok b { color: var(--ok); }
+.rep-item.is-warn b { color: var(--warn); }
+
+.sig-wrap { border: 1px solid var(--line); border-radius: var(--radius-sm); background: #f7f4ee; overflow: hidden; }
+.sig-wrap canvas { display: block; width: 100%; height: 240px; touch-action: none; cursor: crosshair; }
+.sig-tools { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.eraser[aria-pressed="true"] { background: rgba(255,125,125,.14); border-color: rgba(255,125,125,.5); color: #ffb6b6; }
+
+/* ---------- notes / faq ---------- */
+.section { margin-top: 40px; scroll-margin-top: 18px; }
+.sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 12px; border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 16px; }
+.sec-head h2 { margin: 0; font-size: 17px; letter-spacing: -.01em; }
+.sec-head span { font-family: var(--mono); font-size: 11px; color: var(--muted2); letter-spacing: .08em; text-transform: uppercase; }
+
+.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+.note { padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel); min-width: 0; }
+.note h3 { margin: 0 0 8px; font-size: 14px; display: flex; gap: 8px; align-items: baseline; }
+.note h3 span { font-family: var(--mono); font-size: 10.5px; color: var(--accent); letter-spacing: .1em; }
+.note p { margin: 0 0 8px; font-size: 12.8px; color: var(--muted); line-height: 1.66; }
+.note p:last-child { margin-bottom: 0; }
+.note b { color: var(--ink); font-weight: 600; }
+.note ol, .note ul { margin: 0; padding-left: 18px; font-size: 12.8px; color: var(--muted); line-height: 1.66; }
+.note li { margin-bottom: 4px; }
+.note code { font-family: var(--mono); font-size: .92em; color: var(--accent); }
+.note a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(229,180,92,.35); }
+
+.faq { display: grid; gap: 8px; }
+details.qa { border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); overflow: hidden; }
+details.qa summary { cursor: pointer; padding: 13px 44px 13px 15px; font-size: 13.5px; font-weight: 600; list-style: none; position: relative; }
+details.qa summary::-webkit-details-marker { display: none; }
+details.qa summary::after { content: "+"; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--accent); font-family: var(--mono); font-size: 15px; }
+details.qa[open] summary::after { content: "−"; }
+details.qa .a { padding: 0 15px 14px; font-size: 12.8px; color: var(--muted); line-height: 1.7; }
+details.qa .a b { color: var(--ink); font-weight: 600; }
+
+.foot { margin-top: 34px; padding-top: 14px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--muted2); }
+.foot-links { display: inline-flex; flex-wrap: wrap; gap: 12px; }
+.foot-links a { text-decoration: none; color: var(--muted); border-bottom: 1px solid transparent; }
+.foot-links a:hover { color: var(--ink); border-bottom-color: var(--line2); }
+.foot .net { font-family: var(--mono); letter-spacing: .02em; }
+.foot .net b { color: var(--ok); }
+.foot .mono { font-family: var(--mono); letter-spacing: .04em; }
+
+.status { min-height: 16px; margin: 0; font-size: 12px; color: var(--muted); }
+.status.is-ok { color: var(--ok); }
+.status.is-warn { color: var(--warn); }
+
+@media (max-width: 640px) {
+  .wrap { padding: 0 14px 36px; }
+  .topbar { padding: 14px 0 8px; }
+  .brand-txt { font-size: 12px; letter-spacing: .1em; }
+  .hero { padding: 16px 0 12px; }
+  .lede { font-size: 14px; }
+  .panel { padding: 13px; }
+  .sec-head h2 { font-size: 16px; }
+  .stage { min-height: 200px; padding: 10px; }
+  .seg button { font-size: 11.5px; padding: 8px 4px; }
+  .sig-wrap canvas { height: 200px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="/portfolio/" aria-label="Kim Yihyung — 포트폴리오" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="View in English" aria-label="View in English">
+        <span class="lt on" data-lt="ko">KO</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="en">EN</span>
+      </button>
+      <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← 도구 전체</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="eyebrow">StampSnap · 도장 · 서명 · 투명 PNG · 업로드 0</span></p>
+      <h1 data-i18n-html="h1">이름 석 자로 도장 하나,<br><span class="soft">손끝으로 서명 하나.</span><br><span class="gold">배경은 비어 있는 채로.</span></h1>
+      <p class="lede" data-i18n-html="lede">
+        원형 막도장·타원형·사각 인감을 <strong>투명 배경</strong>으로 만들고, 손서명 패드에서는
+        <strong>속도에 따라 굵기가 변하는 선</strong>으로 사인합니다. 인주 네 색과
+        <strong>번짐·노이즈 질감</strong>까지 조절해 <strong>512·1024 PNG</strong>로 바로 내려받습니다.
+      </p>
+      <div class="badge-row">
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillUp">업로드 0바이트</b></span>
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillNet">외부 요청 0건</b></span>
+        <span class="pill" data-i18n="pillAlpha">알파 채널 실측</span>
+        <span class="pill" data-i18n="pillSize">512 · 1024 PNG</span>
+      </div>
+    </section>
+
+    <div class="tabs" role="tablist" aria-label="도장 또는 서명" data-i18n-aria="tabAria">
+      <button class="tab" id="tabStamp" type="button" role="tab" aria-selected="true" aria-controls="panelStamp" data-tab="stamp">
+        <span data-i18n="tabStamp">도장 만들기</span><span class="n">01</span>
+      </button>
+      <button class="tab" id="tabSign" type="button" role="tab" aria-selected="false" aria-controls="panelSign" data-tab="sign">
+        <span data-i18n="tabSign">손서명</span><span class="n">02</span>
+      </button>
+    </div>
+
+    <!-- ══════════ 도장 ══════════ -->
+    <section id="panelStamp" role="tabpanel" aria-labelledby="tabStamp">
+      <div class="work">
+        <div class="card panel">
+          <div class="field">
+            <label for="stampName" data-i18n="nameLabel">이름 · 1~6자</label>
+            <div class="input-row">
+              <input class="input" id="stampName" type="text" maxlength="6" value="홍길동" autocomplete="off"
+                     spellcheck="false" aria-label="도장에 새길 이름" data-i18n-aria="nameAria">
+              <span class="count" id="nameCount">3/6</span>
+            </div>
+            <p class="hint" data-i18n="nameHint">한글·한자·영문 모두 됩니다. 두 글자면 성과 이름이 한 줄에, 네 글자부터는 두 줄로 나눠 새깁니다.</p>
+          </div>
+
+          <div class="field">
+            <span class="lbl" data-i18n="shapeLabel">모양</span>
+            <div class="seg" id="shapeSeg" role="group" aria-label="도장 모양" data-i18n-aria="shapeAria">
+              <button type="button" data-shape="circle" aria-pressed="true" data-i18n="shapeCircle">원형 막도장</button>
+              <button type="button" data-shape="ellipse" aria-pressed="false" data-i18n="shapeEllipse">타원형</button>
+              <button type="button" data-shape="square" aria-pressed="false" data-i18n="shapeSquare">사각 인감</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="lbl" data-i18n="fontLabel">서체</span>
+            <div class="seg" id="fontSeg" role="group" aria-label="서체" data-i18n-aria="fontAria">
+              <button type="button" data-font="myeongjo" aria-pressed="true" data-i18n="fontMyeongjo">명조</button>
+              <button type="button" data-font="gakjin" aria-pressed="false" data-i18n="fontGakjin">전통각진체</button>
+              <button type="button" data-font="gothic" aria-pressed="false" data-i18n="fontGothic">고딕</button>
+            </div>
+            <p class="hint" id="fontHint" data-i18n="fontHint">서체는 기기에 깔린 글꼴을 씁니다 — 없으면 다음 후보로 넘어갑니다(명조 → 바탕 → Noto Serif KR).</p>
+          </div>
+
+          <div class="field">
+            <span class="lbl" data-i18n="borderLabel">테두리 굵기</span>
+            <div class="range">
+              <input id="border" type="range" min="2" max="18" step="1" value="8" aria-label="테두리 굵기">
+              <b id="borderVal">8</b>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="lbl" data-i18n="inkLabel">인주 색</span>
+            <div class="swatches" id="inkSw" role="group" aria-label="인주 색" data-i18n-aria="inkAria"></div>
+          </div>
+
+          <div class="field">
+            <span class="lbl" data-i18n="bleedLabel">살짝 번짐 · 0이면 깨끗하게</span>
+            <div class="range">
+              <input id="bleed" type="range" min="0" max="100" step="1" value="26" aria-label="번짐">
+              <b id="bleedVal">26</b>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="lbl" data-i18n="noiseLabel">미세 노이즈 · 종이 섬유 자국</span>
+            <div class="range">
+              <input id="noise" type="range" min="0" max="100" step="1" value="34" aria-label="노이즈">
+              <b id="noiseVal">34</b>
+            </div>
+          </div>
+        </div>
+
+        <aside class="side">
+          <div class="card panel">
+            <div class="calc-head" style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
+              <h3 data-i18n="prevHead">미리보기</h3>
+              <div class="preview-toggles" id="bgToggles" role="group" aria-label="배경" data-i18n-aria="bgAria">
+                <button type="button" data-bg="checker" aria-pressed="true" data-i18n="bgChecker">투명</button>
+                <button type="button" data-bg="paper" aria-pressed="false" data-i18n="bgPaper">흰 종이</button>
+                <button type="button" data-bg="dark" aria-pressed="false" data-i18n="bgDark">검은 종이</button>
+              </div>
+            </div>
+            <div class="stage bg-checker" id="stage">
+              <canvas id="seal" width="512" height="512" aria-label="도장 미리보기" data-i18n-aria="sealAria"></canvas>
+            </div>
+
+            <div class="report" id="report">
+              <div class="rep-item is-ok" id="rCorner"><b>0</b><span data-i18n="rCorner">모서리 알파</span></div>
+              <div class="rep-item" id="rInk"><b>—</b><span data-i18n="rInk">잉크 픽셀</span></div>
+              <div class="rep-item" id="rSoft"><b>—</b><span data-i18n="rSoft">반투명 픽셀</span></div>
+            </div>
+
+            <div class="field">
+              <span class="lbl" data-i18n="sizeLabel">내보낼 크기</span>
+              <div class="seg" id="sizeSeg" role="group" aria-label="내보낼 크기" data-i18n-aria="sizeAria">
+                <button type="button" data-size="512" aria-pressed="true">512 × 512</button>
+                <button type="button" data-size="1024" aria-pressed="false">1024 × 1024</button>
+              </div>
+            </div>
+
+            <button class="btn btn--primary btn--block" id="dlStamp" type="button" data-i18n="dlStamp">투명 PNG 내려받기</button>
+            <p class="status" id="stStatus" aria-live="polite"></p>
+            <p class="hint" data-i18n="dlHint">배경이 지워진 PNG입니다. 흰 종이에 얹으면 인주가 찍힌 것처럼 보이고, 어두운 문서에는 흰색이 아니라 투명으로 들어갑니다.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ══════════ 서명 ══════════ -->
+    <section id="panelSign" role="tabpanel" aria-labelledby="tabSign" hidden>
+      <div class="work">
+        <div class="card panel">
+          <div class="sig-wrap">
+            <canvas id="sigPad" aria-label="손서명 패드" data-i18n-aria="sigAria"></canvas>
+          </div>
+          <div class="sig-tools">
+            <div class="seg" id="sigColorSeg" role="group" aria-label="잉크 색" style="flex:1 1 200px" data-i18n-aria="sigColorAria">
+              <button type="button" data-sigink="black" aria-pressed="true" data-i18n="inkBlack">흑</button>
+              <button type="button" data-sigink="blue" aria-pressed="false" data-i18n="inkBlue">청</button>
+              <button type="button" data-sigink="red" aria-pressed="false" data-i18n="inkRed">적</button>
+            </div>
+            <button class="btn btn--sm eraser" id="eraser" type="button" aria-pressed="false" data-i18n="eraser">지우개</button>
+            <button class="btn btn--sm" id="undo" type="button" data-i18n="undo">실행취소</button>
+            <button class="btn btn--sm" id="clearSig" type="button" data-i18n="clearSig">초기화</button>
+          </div>
+          <div class="field">
+            <span class="lbl" data-i18n="sigWidthLabel">선 굵기</span>
+            <div class="range">
+              <input id="sigWidth" type="range" min="1" max="10" step="0.5" value="3.5" aria-label="선 굵기">
+              <b id="sigWidthVal">3.5</b>
+            </div>
+          </div>
+          <p class="hint" data-i18n="sigHint">마우스·손가락·펜 모두 됩니다. 펜은 필압을, 마우스는 움직인 속도를 굵기로 씁니다 — 빨리 그으면 얇아집니다.</p>
+        </div>
+
+        <aside class="side">
+          <div class="card panel">
+            <h3 data-i18n="sigPrevHead">서명 미리보기 · 투명 배경</h3>
+            <div class="stage bg-checker" id="sigStage" style="min-height:170px">
+              <canvas id="sigPreview" width="512" height="256" aria-label="서명 미리보기" data-i18n-aria="sigPrevAria"></canvas>
+            </div>
+            <div class="report">
+              <div class="rep-item is-ok" id="sCorner"><b>0</b><span data-i18n="rCorner">모서리 알파</span></div>
+              <div class="rep-item" id="sInk"><b>—</b><span data-i18n="rInk">잉크 픽셀</span></div>
+              <div class="rep-item" id="sStrokes"><b>0</b><span data-i18n="rStrokes">획</span></div>
+            </div>
+            <div class="field">
+              <span class="lbl" data-i18n="sizeLabel">내보낼 크기</span>
+              <div class="seg" id="sizeSeg2" role="group" aria-label="내보낼 크기" data-i18n-aria="sizeAria">
+                <button type="button" data-size="512" aria-pressed="true">512</button>
+                <button type="button" data-size="1024" aria-pressed="false">1024</button>
+              </div>
+            </div>
+            <button class="btn btn--primary btn--block" id="dlSig" type="button" data-i18n="dlSig">서명 PNG 내려받기</button>
+            <p class="status" id="sigStatus" aria-live="polite"></p>
+            <p class="hint" data-i18n="sigDlHint">선 굵기와 비율을 그대로 키워 내보냅니다. 좌우 여백은 투명하게 남습니다.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ══════════ 함께 쓰기 ══════════ -->
+    <section class="section" aria-labelledby="useTitle">
+      <div class="sec-head">
+        <h2 id="useTitle" data-i18n="useHead">서류에 얹는 순서</h2>
+        <span data-i18n="useNote">LocalPDF · FileForge와 함께</span>
+      </div>
+      <div class="notes">
+        <div class="note">
+          <h3><span>01</span><span data-i18n="u1h">도장은 PNG로, 배경은 비운 채로</span></h3>
+          <p data-i18n-html="u1h2">여기서 만든 PNG는 배경이 투명합니다. 한글·워드·구글 문서에 그림으로 넣고 <b>텍스트 뒤로 보내기</b>를 하면 종이 위에 찍은 것처럼 겹칩니다. JPG로 다시 저장하면 투명도가 사라지니 PNG 그대로 쓰세요.</p>
+        </div>
+        <div class="note">
+          <h3><span>02</span><span data-i18n="u2h">스캔본에 서명한다면</span></h3>
+          <ol>
+            <li data-i18n="u2a">종이에 서명해 스캔하거나, 여기서 서명 PNG를 만듭니다.</li>
+            <li data-i18n="u2b">스캔이 여러 장이면 <a href="/portfolio/tools/file-converter/">FileForge</a>에서 이미지를 한 PDF로 묶습니다.</li>
+            <li data-i18n="u2c">순서 정리·페이지 추출·회전은 <a href="/portfolio/tools/local-pdf/">LocalPDF</a>에서 마무리합니다.</li>
+          </ol>
+        </div>
+        <div class="note">
+          <h3><span>03</span><span data-i18n="u3h">LocalPDF가 하는 일과 안 하는 일</span></h3>
+          <p data-i18n-html="u3h2">LocalPDF는 <b>병합·분할·페이지 추출·회전</b>을 브라우저 안에서 처리합니다. 이미 만들어 둔 도장을 기존 PDF 위에 얹는 기능은 없으므로, <b>서명·도장이 들어간 상태로 PDF를 먼저 완성한 뒤</b> LocalPDF로 묶는 순서가 안전합니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ 원리 ══════════ -->
+    <section class="section" aria-labelledby="howTitle">
+      <div class="sec-head">
+        <h2 id="howTitle" data-i18n="howHead">질감과 투명도는 이렇게 만듭니다</h2>
+        <span data-i18n="howNote">보이는 대로 계산합니다</span>
+      </div>
+      <div class="notes">
+        <div class="note">
+          <h3><span>01</span><span data-i18n="h1h">번짐은 같은 그림을 한 번 더</span></h3>
+          <p data-i18n-html="h1p">도장을 한 번 그린 뒤 <b>0.6~1.4% 키운 사본</b>을 낮은 알파로 겹칩니다. 잉크가 종이 섬유를 따라 살짝 번진 것과 같은 번짐이 테두리와 획 바깥에만 생기고, 가운데는 진하게 남습니다. 슬라이더가 0이면 겹치지 않아 칼로 그은 듯 깨끗합니다.</p>
+        </div>
+        <div class="note">
+          <h3><span>02</span><span data-i18n="h2h">노이즈는 픽셀 단위로</span></h3>
+          <p data-i18n-html="h2p">잉크가 닿은 픽셀의 <b>알파만</b> 흔듭니다 — 색은 건드리지 않으므로 인주 색이 탁해지지 않습니다. 난수는 이름·모양·서체·색·굵기로 만든 <b>고정 씨앗</b>을 쓰기 때문에, 같은 설정이면 다시 그려도 같은 무늬가 나옵니다.</p>
+        </div>
+        <div class="note">
+          <h3><span>03</span><span data-i18n="h3h">알파는 읽어서 보고합니다</span></h3>
+          <p data-i18n-html="h3p">내려받기 전에 캔버스의 <b>getImageData</b>로 실제 값을 읽습니다. 모서리는 <b>0</b>(완전 투명), 잉크 픽셀은 알파가 0보다 큰 픽셀, 반투명 픽셀은 1~254 사이입니다. 숫자가 이상하면 화면에서 바로 보이므로, 빈 파일을 내려받고 나서 알게 되는 일이 없습니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="faqTitle">
+      <div class="sec-head">
+        <h2 id="faqTitle" data-i18n="faqTitle">자주 묻는 질문</h2>
+        <span data-i18n="faqNote">효력 · 투명도 · 선 굵기</span>
+      </div>
+      <div class="faq">
+        <details class="qa">
+          <summary data-i18n="q1">만든 도장을 실제 서류에 써도 되나요?</summary>
+          <div class="a" data-i18n-html="a1">여기서 나오는 것은 <b>이미지 파일</b>입니다. 법적 효력이 있는 인감증명이나 전자서명(공동인증서·금융인증서)과는 다른 것이므로, 계약서·관공서 서류처럼 효력이 문제되는 곳에는 정해진 절차를 쓰셔야 합니다. 내부 문서, 스캔본 정리, 초안 표시, 시안 작업처럼 이미지가 필요한 자리에 쓰는 도구입니다.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q2">정말 투명한 파일인가요?</summary>
+          <div class="a" data-i18n-html="a2">네. 캔버스에는 배경을 칠하지 않고 도장만 그린 뒤 PNG로 인코딩하므로 알파 채널이 그대로 남습니다. 미리보기 뒤의 체크무늬는 장식이 아니라 실제로 비어 있는 자리이고, 내려받기 전에 모서리 알파가 <b>0</b>인지 읽어 화면에 표시합니다.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q3">서명 선 굵기는 무엇으로 정해지나요?</summary>
+          <div class="a" data-i18n-html="a3">펜이면 <b>필압</b>, 마우스나 손가락이면 <b>포인터 속도</b>입니다. 빨리 그으면 얇고 천천히 그으면 두꺼워져 실제 사인 같은 강약이 생깁니다. 점 사이는 이차 곡선으로 이어 각지지 않게 했습니다.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q4">파일이 어디로 전송되나요?</summary>
+          <div class="a" data-i18n-html="a4">어디로도 가지 않습니다. 서버도, 분석 도구도, 저장소도 없습니다. 이름과 획은 이 탭의 캔버스에서만 쓰이고 탭을 닫으면 사라집니다. 화면 아래 외부 요청 수는 <b>0</b>에서 움직이지 않습니다.</div>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span data-i18n="footCopy">© 2026 Kim Yihyung · 브라우저에서, 브라우저를 위해 만들었습니다.</span>
+    <span class="net"><span data-i18n="footNet">외부 요청</span> <b id="netCount">0</b></span>
+    <span class="foot-links">
+      <a href="/portfolio/" data-i18n="footP1">포트폴리오</a>
+      <a href="/portfolio/tools/" data-i18n="footP2">도구 전체</a>
+      <a href="https://github.com/kimyihyung/portfolio" target="_blank" rel="noopener" data-i18n="footP3">소스</a>
+    </span>
+    <span class="mono" data-i18n="mono">업로드 없음 · 추적 없음</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ═════════════════════ language ═════════════════════ */
+  var I18N = {
+    ko: {
+      docTitle: 'StampSnap — 무업로드 도장·전자서명 만들기 (투명 PNG) | Kim Yihyung',
+      brandAria: 'Kim Yihyung — 포트폴리오',
+      back: '← 도구 전체',
+      eyebrow: 'StampSnap · 도장 · 서명 · 투명 PNG · 업로드 0',
+      h1: '이름 석 자로 도장 하나,<br><span class="soft">손끝으로 서명 하나.</span><br><span class="gold">배경은 비어 있는 채로.</span>',
+      lede: '원형 막도장·타원형·사각 인감을 <strong>투명 배경</strong>으로 만들고, 손서명 패드에서는 <strong>속도에 따라 굵기가 변하는 선</strong>으로 사인합니다. 인주 네 색과 <strong>번짐·노이즈 질감</strong>까지 조절해 <strong>512·1024 PNG</strong>로 바로 내려받습니다.',
+      pillUp: '업로드 0바이트', pillNet: '외부 요청 0건', pillAlpha: '알파 채널 실측', pillSize: '512 · 1024 PNG',
+      tabAria: '도장 또는 서명', tabStamp: '도장 만들기', tabSign: '손서명',
+      nameLabel: '이름 · 1~6자', nameAria: '도장에 새길 이름',
+      nameHint: '한글·한자·영문 모두 됩니다. 두 글자면 성과 이름이 한 줄에, 네 글자부터는 두 줄로 나눠 새깁니다.',
+      shapeLabel: '모양', shapeAria: '도장 모양',
+      shapeCircle: '원형 막도장', shapeEllipse: '타원형', shapeSquare: '사각 인감',
+      fontLabel: '서체', fontAria: '서체',
+      fontMyeongjo: '명조', fontGakjin: '전통각진체', fontGothic: '고딕',
+      fontHint: '서체는 기기에 깔린 글꼴을 씁니다 — 없으면 다음 후보로 넘어갑니다(명조 → 바탕 → Noto Serif KR).',
+      borderLabel: '테두리 굵기', inkLabel: '인주 색', inkAria: '인주 색',
+      bleedLabel: '살짝 번짐 · 0이면 깨끗하게', noiseLabel: '미세 노이즈 · 종이 섬유 자국',
+      prevHead: '미리보기', bgAria: '배경', bgChecker: '투명', bgPaper: '흰 종이', bgDark: '검은 종이',
+      sealAria: '도장 미리보기',
+      rCorner: '모서리 알파', rInk: '잉크 픽셀', rSoft: '반투명 픽셀', rStrokes: '획',
+      sizeLabel: '내보낼 크기', sizeAria: '내보낼 크기',
+      dlStamp: '투명 PNG 내려받기', dlHint: '배경이 지워진 PNG입니다. 흰 종이에 얹으면 인주가 찍힌 것처럼 보이고, 어두운 문서에는 흰색이 아니라 투명으로 들어갑니다.',
+      sigAria: '손서명 패드', sigColorAria: '잉크 색', inkBlack: '흑', inkBlue: '청', inkRed: '적',
+      eraser: '지우개', undo: '실행취소', clearSig: '초기화', sigWidthLabel: '선 굵기',
+      sigHint: '마우스·손가락·펜 모두 됩니다. 펜은 필압을, 마우스는 움직인 속도를 굵기로 씁니다 — 빨리 그으면 얇아집니다.',
+      sigPrevHead: '서명 미리보기 · 투명 배경', sigPrevAria: '서명 미리보기',
+      dlSig: '서명 PNG 내려받기', sigDlHint: '획에 맞춰 잘라 내보냅니다 — 빈 여백 없이, 비율과 굵기는 그대로. 배경은 투명합니다.',
+      useHead: '서류에 얹는 순서', useNote: 'LocalPDF · FileForge와 함께',
+      u1h: '도장은 PNG로, 배경은 비운 채로',
+      u1h2: '여기서 만든 PNG는 배경이 투명합니다. 한글·워드·구글 문서에 그림으로 넣고 <b>텍스트 뒤로 보내기</b>를 하면 종이 위에 찍은 것처럼 겹칩니다. JPG로 다시 저장하면 투명도가 사라지니 PNG 그대로 쓰세요.',
+      u2h: '스캔본에 서명한다면',
+      u2a: '종이에 서명해 스캔하거나, 여기서 서명 PNG를 만듭니다.',
+      u2b: '스캔이 여러 장이면 FileForge에서 이미지를 한 PDF로 묶습니다.',
+      u2c: '순서 정리·페이지 추출·회전은 LocalPDF에서 마무리합니다.',
+      u3h: 'LocalPDF가 하는 일과 안 하는 일',
+      u3h2: 'LocalPDF는 <b>병합·분할·페이지 추출·회전</b>을 브라우저 안에서 처리합니다. 이미 만들어 둔 도장을 기존 PDF 위에 얹는 기능은 없으므로, <b>서명·도장이 들어간 상태로 PDF를 먼저 완성한 뒤</b> LocalPDF로 묶는 순서가 안전합니다.',
+      howHead: '질감과 투명도는 이렇게 만듭니다', howNote: '보이는 대로 계산합니다',
+      h1h: '번짐은 같은 그림을 한 번 더',
+      h1p: '도장을 한 번 그린 뒤 <b>0.6~1.4% 키운 사본</b>을 낮은 알파로 겹칩니다. 잉크가 종이 섬유를 따라 살짝 번진 것과 같은 번짐이 테두리와 획 바깥에만 생기고, 가운데는 진하게 남습니다. 슬라이더가 0이면 겹치지 않아 칼로 그은 듯 깨끗합니다.',
+      h2h: '노이즈는 픽셀 단위로',
+      h2p: '잉크가 닿은 픽셀의 <b>알파만</b> 흔듭니다 — 색은 건드리지 않으므로 인주 색이 탁해지지 않습니다. 난수는 이름·모양·서체·색·굵기로 만든 <b>고정 씨앗</b>을 쓰기 때문에, 같은 설정이면 다시 그려도 같은 무늬가 나옵니다.',
+      h3h: '알파는 읽어서 보고합니다',
+      h3p: '내려받기 전에 캔버스의 <b>getImageData</b>로 실제 값을 읽습니다. 모서리는 <b>0</b>(완전 투명), 잉크 픽셀은 알파가 0보다 큰 픽셀, 반투명 픽셀은 1~254 사이입니다. 숫자가 이상하면 화면에서 바로 보이므로, 빈 파일을 내려받고 나서 알게 되는 일이 없습니다.',
+      faqTitle: '자주 묻는 질문', faqNote: '효력 · 투명도 · 선 굵기',
+      q1: '만든 도장을 실제 서류에 써도 되나요?',
+      a1: '여기서 나오는 것은 <b>이미지 파일</b>입니다. 법적 효력이 있는 인감증명이나 전자서명(공동인증서·금융인증서)과는 다른 것이므로, 계약서·관공서 서류처럼 효력이 문제되는 곳에는 정해진 절차를 쓰셔야 합니다. 내부 문서, 스캔본 정리, 초안 표시, 시안 작업처럼 이미지가 필요한 자리에 쓰는 도구입니다.',
+      q2: '정말 투명한 파일인가요?',
+      a2: '네. 캔버스에는 배경을 칠하지 않고 도장만 그린 뒤 PNG로 인코딩하므로 알파 채널이 그대로 남습니다. 미리보기 뒤의 체크무늬는 장식이 아니라 실제로 비어 있는 자리이고, 내려받기 전에 모서리 알파가 <b>0</b>인지 읽어 화면에 표시합니다.',
+      q3: '서명 선 굵기는 무엇으로 정해지나요?',
+      a3: '펜이면 <b>필압</b>, 마우스나 손가락이면 <b>포인터 속도</b>입니다. 빨리 그으면 얇고 천천히 그으면 두꺼워져 실제 사인 같은 강약이 생깁니다. 점 사이는 이차 곡선으로 이어 각지 않게 했습니다.',
+      q4: '파일이 어디로 전송되나요?',
+      a4: '어디로도 가지 않습니다. 서버도, 분석 도구도, 저장소도 없습니다. 이름과 획은 이 탭의 캔버스에서만 쓰이고 탭을 닫으면 사라집니다. 화면 아래 외부 요청 수는 <b>0</b>에서 움직이지 않습니다.',
+      footCopy: '© 2026 Kim Yihyung · 브라우저에서, 브라우저를 위해 만들었습니다.',
+      footNet: '외부 요청', footP1: '포트폴리오', footP2: '도구 전체', footP3: '소스',
+      mono: '업로드 없음 · 추적 없음', toggleTo: 'View in English',
+      /* inks */
+      ink1: '전통 주홍', ink2: '진적', ink3: '청인', ink4: '흑인',
+      /* dynamic */
+      stReady: '이름을 고치면 바로 다시 그립니다.',
+      stSaved: '{name} · {size} · 알파 확인 완료',
+      stNoName: '이름을 한 글자 이상 넣어 주세요.',
+      stSavedSig: '{name} · {w}×{h} · 알파 확인 완료',
+      stNoSig: '아직 획이 없습니다 — 먼저 서명해 주세요.',
+      stUndo: '마지막 획을 지웠습니다.',
+      stNothing: '지울 획이 없습니다.',
+      stClear: '패드를 비웠습니다.',
+      stEraseOn: '지우개 켜짐 — 획을 문질러 지우세요.',
+      stEraseOff: '지우개 꺼짐 — 다시 잉크로 그립니다.',
+      px: '픽셀', pct: '잉크 {v}%',
+      inkPixels: '{n}',
+      sigInk: '{v}%'
+    },
+    en: {
+      docTitle: 'StampSnap — Korean Name Seal & Signature Maker, Transparent PNG | Kim Yihyung',
+      brandAria: 'Kim Yihyung — portfolio',
+      back: '← All tools',
+      eyebrow: 'StampSnap · seal · signature · transparent PNG · zero upload',
+      h1: 'A seal from your name,<br><span class="soft">a signature from your hand.</span><br><span class="gold">The background stays empty.</span>',
+      lede: 'Make a round dojang, an oval seal or a square ingam with a <strong>transparent background</strong>, or sign on the pad where the line <strong>thins as you move faster</strong>. Four ink colours, a bleed and a grain you can dial, and a <strong>512 or 1024 PNG</strong> at the end.',
+      pillUp: '0 bytes uploaded', pillNet: '0 external requests', pillAlpha: 'alpha measured', pillSize: '512 · 1024 PNG',
+      tabAria: 'Seal or signature', tabStamp: 'Seal', tabSign: 'Signature',
+      nameLabel: 'Name · 1–6 characters', nameAria: 'Name to engrave',
+      nameHint: 'Hangul, Hanja or Latin. Two characters sit on one line; four or more split into two.',
+      shapeLabel: 'Shape', shapeAria: 'Seal shape',
+      shapeCircle: 'Round dojang', shapeEllipse: 'Oval', shapeSquare: 'Square ingam',
+      fontLabel: 'Typeface', fontAria: 'Typeface',
+      fontMyeongjo: 'Myeongjo', fontGakjin: 'Angular', fontGothic: 'Gothic',
+      fontHint: 'Typefaces come from the device — each falls back to the next candidate (Myeongjo → Batang → Noto Serif KR).',
+      borderLabel: 'Border weight', inkLabel: 'Ink colour', inkAria: 'Ink colour',
+      bleedLabel: 'Bleed · 0 for a clean cut', noiseLabel: 'Grain · paper fibre',
+      prevHead: 'Preview', bgAria: 'Backdrop', bgChecker: 'Transparent', bgPaper: 'Paper', bgDark: 'Dark',
+      sealAria: 'Seal preview',
+      rCorner: 'corner alpha', rInk: 'ink pixels', rSoft: 'soft pixels', rStrokes: 'strokes',
+      sizeLabel: 'Export size', sizeAria: 'Export size',
+      dlStamp: 'Download transparent PNG', dlHint: 'The background is erased. On white paper it reads as ink; on a dark document it stays transparent, not white.',
+      sigAria: 'Signature pad', sigColorAria: 'Ink colour', inkBlack: 'Black', inkBlue: 'Blue', inkRed: 'Red',
+      eraser: 'Eraser', undo: 'Undo', clearSig: 'Clear', sigWidthLabel: 'Line weight',
+      sigHint: 'Mouse, finger or pen. A pen gives pressure; a mouse gives speed — move fast and the line thins.',
+      sigPrevHead: 'Signature · transparent', sigPrevAria: 'Signature preview',
+      dlSig: 'Download signature PNG', sigDlHint: 'Cropped to the strokes — no dead margins, the weight and proportions scale as they are. The background stays transparent.',
+      useHead: 'Putting it on a document', useNote: 'with LocalPDF · FileForge',
+      u1h: 'A PNG, with the background left empty',
+      u1h2: 'The PNG is transparent. Drop it into Hangul, Word or Docs as a picture and send it behind the text, and it sits on the page like a stamp. Re-saving as JPG throws the transparency away — keep it PNG.',
+      u2h: 'Signing a scan',
+      u2a: 'Sign on paper and scan it, or make the signature PNG here.',
+      u2b: 'For a multi-page scan, FileForge binds the images into one PDF.',
+      u2c: 'Reordering, page extraction and rotation finish in LocalPDF.',
+      u3h: 'What LocalPDF does and does not do',
+      u3h2: 'LocalPDF merges, splits, extracts and rotates pages in the browser. It does not stamp an image onto an existing PDF page, so finish the document <b>with the seal and signature already in it</b>, then bring it to LocalPDF to bind.',
+      howHead: 'How the texture and the alpha are made', howNote: 'computed, then measured',
+      h1h: 'Bleed is the same drawing, once more',
+      h1p: 'The seal is drawn once, then a copy scaled <b>0.6–1.4% larger</b> is laid over it at low alpha. Ink spreads along the fibre at the rim and around the strokes while the centre stays dense. At 0 there is no second pass, so the edge is knife-clean.',
+      h2h: 'Grain is per pixel',
+      h2p: 'Only the <b>alpha</b> of inked pixels is disturbed — the colour is untouched, so the ink never turns muddy. The noise uses a <b>fixed seed</b> built from the name, shape, typeface, colour and weight, so the same settings always draw the same grain.',
+      h3h: 'Alpha is read, then reported',
+      h3p: 'Before you download, the canvas is read back with <b>getImageData</b>: the corner is <b>0</b> (fully transparent), ink pixels are those with alpha above 0, and soft pixels sit between 1 and 254. If a number looks wrong you see it on screen instead of finding it after the download.',
+      faqTitle: 'Questions', faqNote: 'legal · transparency · weight',
+      q1: 'Can I use the seal on a real document?',
+      a1: 'What comes out is an <b>image file</b>. It is not the legally registered seal certificate or a qualified electronic signature, so for contracts and government filings use the procedure those require. It is for internal documents, tidying scans, marking drafts and design mockups.',
+      q2: 'Is the file really transparent?',
+      a2: 'Yes. Nothing is painted behind the seal, so the PNG keeps its alpha channel. The checkerboard is not decoration — it is where the file is empty — and the corner alpha is read and shown as <b>0</b> before you download.',
+      q3: 'What decides the line weight?',
+      a3: 'Pen <b>pressure</b> where there is one, pointer <b>speed</b> otherwise. Faster draws thinner and slower draws heavier, which is what gives a signature its stress. Points are joined with quadratic curves so nothing turns square.',
+      q4: 'Where does the file go?',
+      a4: 'Nowhere. There is no server, no analytics and no storage; the name and the strokes live on this tab\'s canvas and vanish when it closes. The external request counter in the footer stays at <b>0</b>.',
+      footCopy: '© 2026 Kim Yihyung · Built in the browser, for the browser.',
+      footNet: 'external requests', footP1: 'Portfolio', footP2: 'All tools', footP3: 'Source',
+      mono: 'NO UPLOADS · NO TRACKING', toggleTo: '한국어로 보기',
+      ink1: 'Vermilion', ink2: 'Deep red', ink3: 'Blue (cheong-in)', ink4: 'Black',
+      stReady: 'Rename it and the seal is drawn again.',
+      stSaved: '{name} · {size} · alpha verified',
+      stNoName: 'Type at least one character.',
+      stSavedSig: '{name} · {w}×{h} · alpha verified',
+      stNoSig: 'No strokes yet — sign first.',
+      stUndo: 'Last stroke removed.',
+      stNothing: 'Nothing to undo.',
+      stClear: 'Pad cleared.',
+      stEraseOn: 'Eraser on — rub a stroke away.',
+      stEraseOff: 'Eraser off — drawing in ink again.',
+      px: 'px', pct: 'ink {v}%',
+      inkPixels: '{n}',
+      sigInk: '{v}%'
+    }
+  };
+
+  var INKS = [
+    { id: 'vermilion', hex: '#c8342a', key: 'ink1' },
+    { id: 'deep', hex: '#8e2230', key: 'ink2' },
+    { id: 'blue', hex: '#1f3c88', key: 'ink3' },
+    { id: 'black', hex: '#1a1a1a', key: 'ink4' }
+  ];
+  var SIG_INKS = { black: '#141414', blue: '#1b3a8c', red: '#b02020' };
+
+  var FONTS = {
+    myeongjo: '"Batang", "바탕", "NanumMyeongjo", "AppleMyungjo", "Noto Serif CJK KR", "Noto Serif KR", serif',
+    gakjin: '"GungSeo", "궁서", "HY엽서M", "Noto Serif CJK KR", "Batang", serif',
+    gothic: '"Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans CJK KR", "Noto Sans KR", system-ui, sans-serif'
+  };
+
+  var state = {
+    lang: 'ko', tab: 'stamp',
+    name: '홍길동', shape: 'circle', font: 'myeongjo',
+    border: 8, ink: 0, bleed: 26, noise: 34, size: 512,
+    bg: 'checker', report: null,
+    sig: { color: 'black', width: 3.5, erase: false, strokes: [], drawing: false, cur: null },
+    sigReport: null
+  };
+  var LANG_KEY = 'stampsnap.lang';
+  var SHARED_KEY = 'kyh.lang';
+
+  function $(id) { return document.getElementById(id); }
+  function t(key) {
+    var d = I18N[state.lang] || I18N.ko;
+    if (d[key] != null) return d[key];
+    return I18N.ko[key] != null ? I18N.ko[key] : '';
+  }
+  function fmt(s, o) {
+    return String(s).replace(/\{(\w+)\}/g, function (m, k) { return o[k] != null ? o[k] : m; });
+  }
+  function readLang(k) {
+    try { var v = localStorage.getItem(k); return v === 'ko' || v === 'en' ? v : ''; } catch (e) { return ''; }
+  }
+  function initialLang() {
+    var q = '';
+    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
+    if (q === 'ko' || q === 'en') return q;
+    return readLang(SHARED_KEY) || readLang(LANG_KEY) || 'ko';
+  }
+  function ink() { return INKS[state.ink].hex; }
+  function num(v, a, b, d) { var n = parseFloat(v); return isNaN(n) ? d : Math.max(a, Math.min(b, n)); }
+
+  /* ═════════════════════ deterministic noise ═════════════════════ */
+  function hashSeed(str) {
+    var h = 2166136261;
+    for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = (h * 16777619) >>> 0; }
+    return h >>> 0;
+  }
+  function rng(seed) {
+    var s = seed >>> 0;
+    return function () {
+      s = (s + 0x6D2B79F5) >>> 0;
+      var x = s;
+      x = Math.imul(x ^ (x >>> 15), x | 1);
+      x ^= x + Math.imul(x ^ (x >>> 7), x | 61);
+      return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function seedString(S) {
+    return [state.name, state.shape, state.font, state.ink, state.border, state.bleed, state.noise, S].join('|');
+  }
+
+  /* ═════════════════════ seal drawing ═════════════════════ */
+  function sealGeometry(S) {
+    var bw = S * state.border / 220;
+    if (state.shape === 'circle') return { bw: bw, kind: 'circle', r: S * 0.46 - bw / 2 };
+    if (state.shape === 'ellipse') return { bw: bw, kind: 'ellipse', rx: S * 0.47 - bw / 2, ry: S * 0.36 - bw / 2 };
+    return { bw: bw, kind: 'square', x: S * 0.07 + bw / 2, y: S * 0.07 + bw / 2, w: S * 0.86 - bw, h: S * 0.86 - bw };
+  }
+
+  function drawOutline(ctx, S, g) {
+    ctx.lineWidth = g.bw;
+    ctx.strokeStyle = ink();
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    if (g.kind === 'circle') {
+      ctx.arc(S / 2, S / 2, g.r, 0, Math.PI * 2);
+    } else if (g.kind === 'ellipse') {
+      if (ctx.ellipse) ctx.ellipse(S / 2, S / 2, g.rx, g.ry, 0, 0, Math.PI * 2);
+      else { ctx.save(); ctx.translate(S / 2, S / 2); ctx.scale(1, g.ry / g.rx); ctx.arc(0, 0, g.rx, 0, Math.PI * 2); ctx.restore(); }
+    } else {
+      ctx.rect(g.x, g.y, g.w, g.h);
+    }
+    ctx.stroke();
+  }
+
+  function textBox(S, g, rows) {
+    var pad = g.bw + S * 0.045;
+    if (g.kind === 'circle') {
+      /* 한 줄이면 폭이 한계, 두 줄부터는 모서리가 원을 넘지 않는 것이 한계다 */
+      var side = (g.r - g.bw * 0.5) * ((rows || 1) > 1 ? 1.40 : 1.62);
+      return { x: S / 2 - side / 2, y: S / 2 - side / 2, w: side, h: side };
+    }
+    if (g.kind === 'ellipse') {
+      return { x: S / 2 - g.rx + pad * 0.4, y: S / 2 - g.ry + pad * 0.3, w: (g.rx - pad * 0.4) * 2, h: (g.ry - pad * 0.3) * 2 };
+    }
+    return { x: g.x + pad * 0.6, y: g.y + pad * 0.6, w: g.w - pad * 1.2, h: g.h - pad * 1.2 };
+  }
+
+  function drawName(ctx, S, g) {
+    var chars = String(state.name || '').split('').filter(function (c) { return c !== ' '; });
+    if (!chars.length) return;
+    var cols, rows;
+    if (state.shape === 'square') {
+      if (chars.length <= 1) { cols = 1; rows = 1; }
+      else if (chars.length <= 3) { cols = 1; rows = chars.length; }
+      else { cols = 2; rows = Math.ceil(chars.length / 2); }
+    } else if (state.shape === 'ellipse') {
+      cols = chars.length; rows = 1;
+    } else {
+      if (chars.length <= 3) { cols = chars.length; rows = 1; }
+      else { cols = 2; rows = Math.ceil(chars.length / 2); }
+    }
+    var box = textBox(S, g, rows);
+    var cellW = box.w / cols, cellH = box.h / rows;
+    var size = Math.min(cellW * (state.shape === 'square' ? 0.86 : 0.9), cellH * (state.shape === 'square' ? 0.9 : 0.82));
+    if (state.shape === 'circle' && rows > 1) size *= 0.94;
+    var track = state.font === 'gakjin' ? 0.96 : 1;
+    ctx.fillStyle = ink();
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = (state.font === 'gakjin' ? '700 ' : '600 ') + Math.round(size) + 'px ' + FONTS[state.font];
+
+    /* square ingam reads top-to-bottom, right column first — the traditional order */
+    var k = 0;
+    for (var r = 0; r < rows; r++) {
+      for (var c = 0; c < cols; c++) {
+        if (k >= chars.length) break;
+        var col = (state.shape === 'square' && cols > 1) ? (cols - 1 - c) : c;
+        var cx = box.x + cellW * (col + 0.5);
+        var cy = box.y + cellH * (r + 0.5);
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.scale(track, 1);
+        ctx.fillText(chars[k], 0, 0);
+        ctx.restore();
+        k++;
+      }
+    }
+  }
+
+  function applyTexture(cv, S) {
+    var ctx = cv.getContext('2d');
+    var bleed = state.bleed / 100;
+    if (bleed > 0.001) {
+      var copy = document.createElement('canvas');
+      copy.width = S; copy.height = S;
+      copy.getContext('2d').drawImage(cv, 0, 0);
+      ctx.save();
+      ctx.globalAlpha = 0.42 * bleed;
+      var dOut = S * (0.006 + 0.008 * bleed);
+      ctx.drawImage(copy, -dOut, -dOut, S + dOut * 2, S + dOut * 2);
+      ctx.globalAlpha = 0.22 * bleed;
+      var dIn = S * 0.0025;
+      ctx.drawImage(copy, dIn, dIn, S - dIn * 2, S - dIn * 2);
+      ctx.restore();
+    }
+    var grain = state.noise / 100;
+    if (grain <= 0.001) return;
+    var data = ctx.getImageData(0, 0, S, S);
+    var px = data.data;
+    var rand = rng(hashSeed(seedString(S)));
+    var p = 0.06 + grain * 0.42;
+    for (var i = 3; i < px.length; i += 4) {
+      var a = px[i];
+      if (a === 0) continue;
+      if (rand() < p) {
+        var f = 0.45 + rand() * 0.55;
+        px[i] = Math.max(0, Math.round(a * f));
+      }
+    }
+    ctx.putImageData(data, 0, 0);
+  }
+
+  function renderSeal(canvas, S, forExport) {
+    canvas.width = S; canvas.height = S;
+    var ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, S, S);
+    var g = sealGeometry(S);
+    drawOutline(ctx, S, g);
+    drawName(ctx, S, g);
+    /* texture on a scratch canvas so bleed never eats the border twice */
+    var scratch = document.createElement('canvas');
+    scratch.width = S; scratch.height = S;
+    var sc = scratch.getContext('2d');
+    drawOutline(sc, S, g);
+    drawName(sc, S, g);
+    applyTexture(scratch, S);
+    ctx.clearRect(0, 0, S, S);
+    ctx.drawImage(scratch, 0, 0);
+    return alphaStats(canvas);
+  }
+
+  function alphaStats(canvas) {
+    var S = canvas.width;
+    var ctx = canvas.getContext('2d');
+    var data = ctx.getImageData(0, 0, S, S).data;
+    var inkPx = 0, softPx = 0, minA = 255;
+    for (var i = 3; i < data.length; i += 4) {
+      var a = data[i];
+      if (a > 0) { inkPx++; if (a < 255) softPx++; if (a < minA) minA = a; }
+    }
+    var corners = [];
+    [[0, 0], [S - 1, 0], [0, S - 1], [S - 1, S - 1]].forEach(function (c) {
+      corners.push(data[(c[1] * S + c[0]) * 4 + 3]);
+    });
+    return {
+      size: S,
+      inkPixels: inkPx,
+      softPixels: softPx,
+      inkRatio: Math.round(inkPx / (S * S) * 1000) / 10,
+      corners: corners,
+      cornerMax: Math.max.apply(null, corners),
+      hasAlpha: minA < 255,
+      empty: inkPx === 0
+    };
+  }
+
+  function paintReport() {
+    var r = state.report;
+    if (!r) return;
+    $('rCorner').querySelector('b').textContent = String(r.cornerMax);
+    $('rCorner').className = 'rep-item ' + (r.cornerMax === 0 ? 'is-ok' : 'is-warn');
+    $('rInk').querySelector('b').textContent = r.inkPixels.toLocaleString();
+    $('rInk').className = 'rep-item ' + (r.inkPixels > 0 ? '' : 'is-warn');
+    $('rSoft').querySelector('b').textContent = r.softPixels.toLocaleString();
+    $('rSoft').className = 'rep-item';
+  }
+
+  function rerender() {
+    state.report = renderSeal($('seal'), 512, false);
+    paintReport();
+    if (state.tab === 'stamp') setStatus($('stStatus'), t('stReady'), false);
+  }
+
+  /* ═════════════════════ signature pad ═════════════════════ */
+  var pad = $('sigPad'), pctx = pad.getContext('2d'), padDpr = 1;
+
+  function sizePad() {
+    var rect = pad.getBoundingClientRect();
+    if (!rect.width) return;
+    padDpr = Math.min(2, window.devicePixelRatio || 1);
+    pad.width = Math.round(rect.width * padDpr);
+    pad.height = Math.round(rect.height * padDpr);
+    pctx.setTransform(padDpr, 0, 0, padDpr, 0, 0);
+    paintPad();
+  }
+
+  function paintPad() {
+    var w = pad.width / padDpr, h = pad.height / padDpr;
+    pctx.clearRect(0, 0, w, h);
+    drawStrokes(pctx, 1, 1);
+  }
+
+  /* Strokes are kept in CSS pixels of the pad; the same list is redrawn at any
+     scale for the export, so weight and shape survive the resize. */
+  function drawStrokes(ctx, scale, lineScale) {
+    var strokes = state.sig.strokes;
+    for (var i = 0; i < strokes.length; i++) {
+      drawStroke(ctx, strokes[i], scale, lineScale);
+    }
+  }
+
+  function drawStroke(ctx, st, scale, lineScale) {
+    var pts = st.pts;
+    if (!pts.length) return;
+    ctx.save();
+    ctx.globalCompositeOperation = st.erase ? 'destination-out' : 'source-over';
+    ctx.strokeStyle = st.color;
+    ctx.fillStyle = st.color;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    if (pts.length === 1) {
+      var r0 = (pts[0].w * lineScale) / 2;
+      ctx.beginPath();
+      ctx.arc(pts[0].x * scale, pts[0].y * scale, r0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+      return;
+    }
+    for (var i = 1; i < pts.length; i++) {
+      var a = pts[i - 1], b = pts[i];
+      var c = (i + 1 < pts.length) ? pts[i + 1] : b;
+      var mx = (b.x + c.x) / 2, my = (b.y + c.y) / 2;
+      ctx.lineWidth = Math.max(0.4, ((a.w + b.w) / 2) * lineScale);
+      ctx.beginPath();
+      ctx.moveTo(a.x * scale, a.y * scale);
+      ctx.quadraticCurveTo(b.x * scale, b.y * scale, mx * scale, my * scale);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function pointerPos(e) {
+    var rect = pad.getBoundingClientRect();
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+  }
+
+  var lastPt = null, lastT = 0;
+
+  function startStroke(e) {
+    if (e.button != null && e.button !== 0) return;
+    pad.setPointerCapture && pad.setPointerCapture(e.pointerId);
+    var p = pointerPos(e);
+    lastPt = p; lastT = performance.now();
+    var w = state.sig.width * (state.sig.erase ? 2.2 : 1);
+    var st = {
+      color: state.sig.erase ? 'rgba(0,0,0,1)' : SIG_INKS[state.sig.color],
+      erase: state.sig.erase,
+      pts: [{ x: p.x, y: p.y, w: w }]
+    };
+    state.sig.strokes.push(st);
+    state.sig.cur = st;
+    state.sig.drawing = true;
+    paintPad();
+    updateSigReport();
+  }
+
+  function moveStroke(e) {
+    if (!state.sig.drawing || !state.sig.cur) return;
+    var p = pointerPos(e);
+    var now = performance.now();
+    var dt = Math.max(1, now - lastT);
+    var dx = p.x - lastPt.x, dy = p.y - lastPt.y;
+    var speed = Math.sqrt(dx * dx + dy * dy) / dt;   /* px per ms */
+    var pressure = (e.pointerType === 'pen' && e.pressure > 0) ? e.pressure : null;
+    var base = state.sig.width * (state.sig.erase ? 2.2 : 1);
+    var w;
+    if (pressure != null) {
+      w = base * (0.45 + pressure * 1.25);
+    } else {
+      /* fast = thin, slow = thick: the same cue a real signature carries */
+      w = base * (1.35 - Math.min(1, speed / 1.6) * 0.95);
+    }
+    w = Math.max(base * 0.22, w);
+    state.sig.cur.pts.push({ x: p.x, y: p.y, w: w });
+    lastPt = p; lastT = now;
+    paintPad();
+  }
+
+  function endStroke() {
+    if (!state.sig.drawing) return;
+    state.sig.drawing = false;
+    state.sig.cur = null;
+    updateSigReport();
+  }
+
+  function sigBBox() {
+    var minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    state.sig.strokes.forEach(function (st) {
+      if (st.erase) return;
+      st.pts.forEach(function (p) {
+        if (p.x < minX) minX = p.x;
+        if (p.y < minY) minY = p.y;
+        if (p.x > maxX) maxX = p.x;
+        if (p.y > maxY) maxY = p.y;
+      });
+    });
+    if (minX === Infinity) return null;
+    return { x: minX, y: minY, w: Math.max(1, maxX - minX), h: Math.max(1, maxY - minY) };
+  }
+
+  /* A signature is cropped to its own strokes with a small margin: a PNG of a
+     wide, mostly empty pad is unusable when it is pasted into a document. */
+  function sigCrop() {
+    var b = sigBBox();
+    if (!b) return null;
+    var m = Math.max(b.w, b.h) * 0.06 + 6;
+    return { x: b.x - m, y: b.y - m, w: b.w + m * 2, h: b.h + m * 2 };
+  }
+
+  function renderSig(canvas, targetW) {
+    var crop = sigCrop();
+    var W = targetW;
+    if (!crop) { canvas.width = W; canvas.height = Math.round(W * 0.4); canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height); return alphaStats(canvas); }
+    var H = Math.max(1, Math.round(W * (crop.h / crop.w)));
+    canvas.width = W; canvas.height = H;
+    var ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, W, H);
+    var scale = W / crop.w;
+    ctx.save();
+    ctx.scale(scale, scale);
+    ctx.translate(-crop.x, -crop.y);
+    drawStrokes(ctx, 1, 1);
+    ctx.restore();
+    return alphaStats(canvas);
+  }
+
+  function renderSigPreview() {
+    var cv = $('sigPreview');
+    var st = renderSig(cv, 512);
+    state.sigReport = {
+      strokes: state.sig.strokes.length,
+      inkPixels: st.inkPixels,
+      cornerMax: st.cornerMax,
+      size: cv.width + 'x' + cv.height,
+      hasAlpha: st.hasAlpha,
+      empty: st.empty,
+      ratio: st.inkRatio
+    };
+    paintSigReport();
+  }
+
+  function paintSigReport() {
+    var r = state.sigReport;
+    if (!r) return;
+    $('sCorner').querySelector('b').textContent = String(r.cornerMax);
+    $('sCorner').className = 'rep-item ' + (r.cornerMax === 0 ? 'is-ok' : 'is-warn');
+    $('sInk').querySelector('b').textContent = r.inkPixels ? r.inkPixels.toLocaleString() : '—';
+    $('sStrokes').querySelector('b').textContent = String(r.strokes || 0);
+  }
+
+  function updateSigReport() {
+    if (state.sig.strokes.length) renderSigPreview();
+    else { state.sigReport = { strokes: 0, inkPixels: 0, cornerMax: 0 }; paintSigReport(); }
+  }
+
+  /* ═════════════════════ download ═════════════════════ */
+  function downloadBlob(blob, name) {
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+  }
+  function safeName(s) {
+    return String(s || 'stamp').replace(/[\\/:*?"<>|]+/g, '').slice(0, 12) || 'stamp';
+  }
+  function setStatus(el, msg, warn) {
+    el.textContent = msg;
+    el.className = 'status ' + (warn ? 'is-warn' : 'is-ok');
+  }
+
+  function exportStamp() {
+    var S = state.size;
+    var cv = document.createElement('canvas');
+    var st = renderSeal(cv, S, true);
+    if (st.empty) { setStatus($('stStatus'), t('stNoName'), true); return; }
+    var name = 'stamp-' + safeName(state.name) + '-' + S + '.png';
+    cv.toBlob(function (b) {
+      downloadBlob(b, name);
+      setStatus($('stStatus'), fmt(t('stSaved'), { name: name, size: S + '×' + S }), false);
+    }, 'image/png');
+  }
+
+  function exportSignature() {
+    var S = state.size;
+    var cv = document.createElement('canvas');
+    var st = renderSig(cv, S);
+    if (st.empty) { setStatus($('sigStatus'), t('stNoSig'), true); return; }
+    var name = 'signature-' + S + '.png';
+    cv.toBlob(function (b) {
+      downloadBlob(b, name);
+      setStatus($('sigStatus'), fmt(t('stSavedSig'), { name: name, w: cv.width, h: cv.height }), false);
+    }, 'image/png');
+  }
+
+  /* ═════════════════════ UI wiring ═════════════════════ */
+  function paintInks() {
+    var host = $('inkSw');
+    var html = '';
+    INKS.forEach(function (ik, i) {
+      html += '<button class="sw" type="button" data-ink="' + i + '" aria-pressed="' + (state.ink === i) + '">' +
+        '<i style="background:' + ik.hex + '"></i>' + t(ik.key) + '</button>';
+    });
+    host.innerHTML = html;
+  }
+
+  function setPressed(host, attr, val) {
+    var nodes = host.querySelectorAll('button');
+    for (var i = 0; i < nodes.length; i++) {
+      nodes[i].setAttribute('aria-pressed', nodes[i].getAttribute(attr) === String(val) ? 'true' : 'false');
+    }
+  }
+
+  var rerenderTimer = null;
+  function queueRender() {
+    if (rerenderTimer) clearTimeout(rerenderTimer);
+    rerenderTimer = setTimeout(function () { rerenderTimer = null; rerender(); }, 60);
+  }
+
+  $('stampName').addEventListener('input', function () {
+    var v = this.value;
+    if (v.length > 6) { v = v.slice(0, 6); this.value = v; }
+    state.name = v;
+    $('nameCount').textContent = v.length + '/6';
+    queueRender();
+  });
+  $('shapeSeg').addEventListener('click', function (e) {
+    var b = e.target.closest('.seg button') || e.target.closest('button');
+    if (!b || !b.getAttribute('data-shape')) return;
+    state.shape = b.getAttribute('data-shape');
+    setPressed($('shapeSeg'), 'data-shape', state.shape);
+    rerender();
+  });
+  $('fontSeg').addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b || !b.getAttribute('data-font')) return;
+    state.font = b.getAttribute('data-font');
+    setPressed($('fontSeg'), 'data-font', state.font);
+    rerender();
+  });
+  $('border').addEventListener('input', function () {
+    state.border = num(this.value, 2, 18, 8);
+    $('borderVal').textContent = String(state.border);
+    queueRender();
+  });
+  $('bleed').addEventListener('input', function () {
+    state.bleed = num(this.value, 0, 100, 26);
+    $('bleedVal').textContent = String(state.bleed);
+    queueRender();
+  });
+  $('noise').addEventListener('input', function () {
+    state.noise = num(this.value, 0, 100, 34);
+    $('noiseVal').textContent = String(state.noise);
+    queueRender();
+  });
+  $('inkSw').addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b || !b.getAttribute('data-ink')) return;
+    state.ink = parseInt(b.getAttribute('data-ink'), 10) || 0;
+    paintInks();
+    rerender();
+  });
+  $('bgToggles').addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b || !b.getAttribute('data-bg')) return;
+    state.bg = b.getAttribute('data-bg');
+    setPressed($('bgToggles'), 'data-bg', state.bg);
+    $('stage').className = 'stage bg-' + state.bg;
+  });
+  function bindSize(host) {
+    host.addEventListener('click', function (e) {
+      var b = e.target.closest('button');
+      if (!b || !b.getAttribute('data-size')) return;
+      state.size = parseInt(b.getAttribute('data-size'), 10) === 1024 ? 1024 : 512;
+      document.querySelectorAll('#sizeSeg button, #sizeSeg2 button').forEach(function (x) {
+        x.setAttribute('aria-pressed', x.getAttribute('data-size') === String(state.size) ? 'true' : 'false');
+      });
+    });
+  }
+  bindSize($('sizeSeg'));
+  bindSize($('sizeSeg2'));
+
+  $('dlStamp').addEventListener('click', exportStamp);
+  $('dlSig').addEventListener('click', exportSignature);
+
+  /* tabs */
+  function showTab(which) {
+    state.tab = which === 'sign' ? 'sign' : 'stamp';
+    $('tabStamp').setAttribute('aria-selected', String(state.tab === 'stamp'));
+    $('tabSign').setAttribute('aria-selected', String(state.tab === 'sign'));
+    $('panelStamp').hidden = state.tab !== 'stamp';
+    $('panelSign').hidden = state.tab !== 'sign';
+    if (state.tab === 'sign') { sizePad(); renderSigPreview(); }
+  }
+  $('tabStamp').addEventListener('click', function () { showTab('stamp'); });
+  $('tabSign').addEventListener('click', function () { showTab('sign'); });
+
+  /* signature pad events */
+  pad.addEventListener('pointerdown', function (e) { e.preventDefault(); startStroke(e); });
+  pad.addEventListener('pointermove', function (e) { if (state.sig.drawing) { e.preventDefault(); moveStroke(e); } });
+  pad.addEventListener('pointerup', function (e) { e.preventDefault(); endStroke(); });
+  pad.addEventListener('pointercancel', function () { endStroke(); });
+  pad.addEventListener('pointerleave', function () { if (state.sig.drawing) endStroke(); });
+
+  $('sigColorSeg').addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b || !b.getAttribute('data-sigink')) return;
+    state.sig.color = b.getAttribute('data-sigink');
+    setPressed($('sigColorSeg'), 'data-sigink', state.sig.color);
+    if (state.sig.erase) { state.sig.erase = false; $('eraser').setAttribute('aria-pressed', 'false'); }
+  });
+  $('sigWidth').addEventListener('input', function () {
+    state.sig.width = num(this.value, 1, 10, 3.5);
+    $('sigWidthVal').textContent = state.sig.width.toFixed(1);
+  });
+  $('eraser').addEventListener('click', function () {
+    state.sig.erase = !state.sig.erase;
+    this.setAttribute('aria-pressed', String(state.sig.erase));
+    setStatus($('sigStatus'), state.sig.erase ? t('stEraseOn') : t('stEraseOff'), false);
+  });
+  $('undo').addEventListener('click', function () {
+    if (!state.sig.strokes.length) { setStatus($('sigStatus'), t('stNothing'), true); return; }
+    state.sig.strokes.pop();
+    paintPad(); updateSigReport();
+    setStatus($('sigStatus'), t('stUndo'), false);
+  });
+  $('clearSig').addEventListener('click', function () {
+    state.sig.strokes = [];
+    paintPad(); updateSigReport(); renderSigPreview();
+    setStatus($('sigStatus'), t('stClear'), false);
+  });
+
+  window.addEventListener('resize', function () {
+    if (state.tab === 'sign') { sizePad(); renderSigPreview(); }
+  });
+
+  /* ═════════════════════ language ═════════════════════ */
+  function setMeta(sel, attr, val) {
+    var el = document.querySelector(sel);
+    if (el) el.setAttribute(attr, val);
+  }
+  function applyLang(lang) {
+    state.lang = lang === 'en' ? 'en' : 'ko';
+    document.documentElement.setAttribute('lang', state.lang);
+    document.title = t('docTitle');
+    setMeta('meta[property="og:title"]', 'content', t('docTitle').split('|')[0].trim());
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var v = t(nodes[i].getAttribute('data-i18n'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-html'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-aria'));
+      if (v) nodes[i].setAttribute('aria-label', v);
+    }
+    var lt = $('langToggle');
+    if (lt) {
+      var spans = lt.querySelectorAll('[data-lt]');
+      for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
+      lt.setAttribute('aria-label', t('toggleTo'));
+      lt.setAttribute('title', t('toggleTo'));
+    }
+    paintInks();
+    paintReport();
+    try {
+      localStorage.setItem(LANG_KEY, state.lang);
+      localStorage.setItem(SHARED_KEY, state.lang);
+    } catch (e) { /* storage may be blocked */ }
+  }
+  $('langToggle').addEventListener('click', function () {
+    applyLang(state.lang === 'ko' ? 'en' : 'ko');
+  });
+
+  /* ═════════════════════ boot ═════════════════════ */
+  $('nameCount').textContent = state.name.length + '/6';
+  $('borderVal').textContent = String(state.border);
+  $('bleedVal').textContent = String(state.bleed);
+  $('noiseVal').textContent = String(state.noise);
+  $('sigWidthVal').textContent = state.sig.width.toFixed(1);
+  paintInks();
+  applyLang(initialLang());
+  rerender();
+  sizePad();
+
+  /* read-only / test hook */
+  window.StampSnap = {
+    version: '1.0',
+    state: function () {
+      return {
+        name: state.name, shape: state.shape, font: state.font, border: state.border,
+        ink: state.ink, inkHex: ink(), bleed: state.bleed, noise: state.noise,
+        size: state.size, bg: state.bg, tab: state.tab,
+        report: state.report, sigReport: state.sigReport, lang: state.lang
+      };
+    },
+    shapes: function () { return ['circle', 'ellipse', 'square']; },
+    fonts: function () { return ['myeongjo', 'gakjin', 'gothic']; },
+    inks: function () { return INKS.map(function (i) { return i.hex; }); },
+    setName: function (v) { state.name = String(v || '').slice(0, 6); $('stampName').value = state.name; $('nameCount').textContent = state.name.length + '/6'; rerender(); },
+    setShape: function (s) { state.shape = s; setPressed($('shapeSeg'), 'data-shape', s); rerender(); },
+    setFont: function (f) { state.font = f; setPressed($('fontSeg'), 'data-font', f); rerender(); },
+    setInk: function (i) { state.ink = i; paintInks(); rerender(); },
+    setBorder: function (v) { state.border = num(v, 2, 18, 8); $('border').value = String(state.border); rerender(); },
+    setBleed: function (v) { state.bleed = num(v, 0, 100, 0); $('bleed').value = String(state.bleed); rerender(); },
+    setNoise: function (v) { state.noise = num(v, 0, 100, 0); $('noise').value = String(state.noise); rerender(); },
+    setSize: function (s) { state.size = (Number(s) === 1024) ? 1024 : 512; },
+    setBg: function (b) { state.bg = b; setPressed($('bgToggles'), 'data-bg', b); $('stage').className = 'stage bg-' + b; },
+    tab: function (w) { showTab(w); },
+    alphaReport: function (size) {
+      var cv = document.createElement('canvas');
+      return renderSeal(cv, Number(size) || state.size, true);
+    },
+    exportDataUrl: function (size) {
+      var cv = document.createElement('canvas');
+      renderSeal(cv, Number(size) || state.size, true);
+      return cv.toDataURL('image/png');
+    },
+    liveAlpha: function () { return alphaStats($('seal')); },
+    /* signature */
+    sigState: function () {
+      return { strokes: state.sig.strokes.length, color: state.sig.color, width: state.sig.width,
+               erase: state.sig.erase, report: state.sigReport, bbox: sigBBox(),
+               padW: Math.round(pad.width / padDpr), padH: Math.round(pad.height / padDpr) };
+    },
+    sigPoints: function () { return state.sig.strokes.map(function (s) { return s.pts.length; }); },
+    sigWidths: function () {
+      var out = [];
+      state.sig.strokes.forEach(function (s) { s.pts.forEach(function (p) { out.push(Math.round(p.w * 100) / 100); }); });
+      return out;
+    },
+    sigSet: function (o) {
+      if (o.color) { state.sig.color = o.color; setPressed($('sigColorSeg'), 'data-sigink', o.color); }
+      if (o.width) { state.sig.width = num(o.width, 1, 10, 3.5); $('sigWidth').value = String(state.sig.width); }
+      if (o.erase != null) { state.sig.erase = !!o.erase; $('eraser').setAttribute('aria-pressed', String(state.sig.erase)); }
+    },
+    sigUndo: function () { state.sig.strokes.pop(); paintPad(); updateSigReport(); renderSigPreview(); },
+    sigClear: function () { state.sig.strokes = []; paintPad(); updateSigReport(); renderSigPreview(); },
+    sigAlphaReport: function (size) {
+      var cv = document.createElement('canvas');
+      return renderSig(cv, Number(size) || state.size);
+    },
+    sigExportDataUrl: function (size) {
+      var cv = document.createElement('canvas');
+      renderSig(cv, Number(size) || state.size);
+      return cv.toDataURL('image/png');
+    },
+    lang: function () { return state.lang; },
+    setLang: function (l) { applyLang(l); }
+  };
+})();
+</script>
+</body>
+</html>
