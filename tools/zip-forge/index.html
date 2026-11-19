@@ -368,6 +368,22 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
   .bignum b { font-size: 20px; }
   .drop { padding: 20px 12px; }
 }
+
+/* the file list and the entry list are controls, not reference data: on a phone
+   they stack and drop the method column so no button falls outside the frame */
+@media (max-width: 560px) {
+  #fileWrap table.ref { min-width: 0; }
+  #fileWrap thead { display: none; }
+  #fileWrap tbody tr { display: grid; grid-template-columns: minmax(0,1fr) auto auto; align-items: center; gap: 5px 6px; padding: 9px 10px; border-bottom: 1px solid rgba(255,255,255,.07); }
+  #fileWrap tbody tr:last-child { border-bottom: 0; }
+  #fileWrap tbody td { border: 0; padding: 0; white-space: normal; }
+  #fileWrap tbody td.name { grid-column: 1 / -1; font-weight: 650; word-break: break-all; }
+  #fileWrap tbody td.num { grid-column: 1; color: var(--muted2); }
+  #zipWrap table.ref { min-width: 0; }
+  #zipWrap th:nth-child(4), #zipWrap td:nth-child(4) { display: none; }
+  #zipWrap th, #zipWrap td { padding: 7px 6px; font-size: 11.4px; }
+  #zipWrap td.name { max-width: none; }
+}
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
@@ -503,7 +519,7 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
               <div class="stat is-ok"><span class="k" data-i18n="stRatio">Packed</span><span class="v" id="zRatio">—</span><span class="s" data-i18n="stRatioSub">of the unpacked size</span></div>
             </div>
 
-            <div class="tblwrap">
+            <div class="tblwrap" id="zipWrap">
               <table class="ref">
                 <thead>
                   <tr>
