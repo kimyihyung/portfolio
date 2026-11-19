@@ -1,0 +1,1332 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="color-scheme" content="dark"/>
+<link rel="icon" href="data:,">
+<title>3D 별자리 관측</title>
+<style>
+:root{
+  --bg:#050914; --bg2:#0a1128; --panel:rgba(10,17,40,.82); --panel2:rgba(16,26,56,.92);
+  --line:rgba(148,178,255,.18); --line2:rgba(148,178,255,.28);
+  --text:#eef2ff; --sub:#a8b6d8; --muted:#7d8db3;
+  --gold:#f2c96b; --gold2:#ffe3a3; --cyan:#7dd8ff; --violet:#b9a7ff;
+  --good:#6ee7a0; --radius:18px; --dockH:174px;
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", "Malgun Gothic", sans-serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:var(--font);background:var(--bg);color:var(--text);overflow:hidden;-webkit-font-smoothing:antialiased;overscroll-behavior:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+.search{-webkit-user-select:text;user-select:text}
+.panel,.detail,.dock,.chip,.quest,.compass,.hintbar{-webkit-backdrop-filter:blur(16px)}
+button,select,input{font-family:inherit}
+button{min-height:40px}
+#sky{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+#sky:active{cursor:grabbing}
+.vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 42%, transparent 55%, rgba(2,4,12,.55) 100%)}
+.topbar{position:fixed;top:0;left:0;right:0;padding:calc(14px + env(safe-area-inset-top)) 16px 0;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;z-index:5}
+.topbar>*{pointer-events:auto}
+.titlebox h1{margin:0;font-size:22px;letter-spacing:-.02em;font-weight:800;line-height:1.1}
+.titlebox h1 span{color:var(--gold)}
+.titlebox p{margin:5px 0 0;color:var(--sub);font-size:13px;line-height:1.45}
+.top-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.chip{border:1px solid var(--line);background:rgba(8,13,32,.72);backdrop-filter:blur(14px);color:var(--text);border-radius:999px;padding:0 14px;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:6px;cursor:pointer;transition:.18s}
+.chip:hover{border-color:var(--line2);background:rgba(20,32,68,.85)}
+.chip.on{background:var(--gold);color:#1a1405;border-color:transparent}
+.chip:focus-visible,.btn:focus-visible,.modebtn:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+
+.layout{position:fixed;inset:0;pointer-events:none;z-index:4}
+.panel{position:absolute;top:92px;left:16px;width:336px;max-height:calc(100dvh - 210px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:20px;backdrop-filter:blur(18px);padding:16px;pointer-events:auto;scrollbar-width:thin}
+.panel::-webkit-scrollbar{width:5px}.panel::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:99px}
+.panel h2{margin:0;font-size:15px}
+.panel .desc{color:var(--sub);font-size:13px;line-height:1.6;margin:6px 0 12px}
+.search{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:12px;color:var(--text);padding:11px 12px;font-size:14px;min-height:44px}
+.search::placeholder{color:var(--muted)}
+.seasonrow{display:flex;gap:6px;margin:10px 0 12px;flex-wrap:wrap}
+.seasonrow button{flex:1;border:1px solid var(--line);background:transparent;color:var(--sub);border-radius:999px;font-size:12.5px;font-weight:700;padding:0 6px;cursor:pointer;min-height:36px}
+.seasonrow button.on{background:#eef2ff;color:#0a1128;border-color:transparent}
+.clist{display:flex;flex-direction:column;gap:8px}
+.citem{width:100%;text-align:left;border:1px solid var(--line);background:rgba(255,255,255,.03);border-radius:14px;padding:11px 12px;color:var(--text);cursor:pointer;display:flex;gap:11px;align-items:center;transition:.15s}
+.citem:hover{background:rgba(255,255,255,.07)}
+.citem.sel{border-color:rgba(242,201,107,.65);background:rgba(242,201,107,.09)}
+.citem.done{border-color:rgba(110,231,160,.4)}
+.citem .dot{width:38px;height:38px;border-radius:11px;flex:none;display:grid;place-items:center;font-size:19px;background:radial-gradient(circle at 35% 30%, #22356e, #0d1738);border:1px solid var(--line)}
+.citem b{font-size:14px;display:block}
+.citem small{color:var(--muted);font-size:12px;display:block;margin-top:1px}
+.citem .badge{margin-left:auto;flex:none;font-size:11px;font-weight:800;padding:4px 8px;border-radius:99px;background:rgba(110,231,160,.16);color:var(--good)}
+.citem .badge.no{background:rgba(255,255,255,.07);color:var(--muted)}
+
+.detail{position:absolute;top:92px;right:16px;width:344px;max-height:calc(100dvh - 210px);overflow:auto;background:var(--panel2);border:1px solid var(--line);border-radius:20px;backdrop-filter:blur(18px);padding:18px;pointer-events:auto;z-index:8}
+.detail .closeBtn{position:absolute;top:10px;right:10px;width:38px;height:38px;min-height:38px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--text);font-size:16px;cursor:pointer}
+.detail .kicker{font-size:11px;letter-spacing:.14em;font-weight:800;color:var(--gold);text-transform:uppercase}
+.detail h2{margin:6px 0 2px;font-size:22px;letter-spacing:-.02em}
+.detail .en{color:var(--muted);font-size:13px}
+.detail p{color:#cdd8f5;font-size:14px;line-height:1.75;margin:12px 0}
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.meta div{background:rgba(255,255,255,.045);border:1px solid var(--line);border-radius:12px;padding:10px 11px}
+.meta small{color:var(--muted);font-size:11px;display:block}
+.meta b{font-size:13.5px}
+.starlist{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.starlist button{display:flex;justify-content:space-between;gap:8px;text-align:left;background:transparent;border:1px solid var(--line);color:var(--text);border-radius:11px;padding:9px 11px;font-size:13px;cursor:pointer;min-height:40px;align-items:center}
+.starlist button:hover{background:rgba(255,255,255,.06)}
+.starlist span{color:var(--muted);font-size:12px}
+.btn{border:0;border-radius:12px;padding:0 16px;font-weight:800;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px;transition:.15s}
+.btn-gold{background:var(--gold);color:#1c1503}.btn-gold:hover{background:var(--gold2)}
+.btn-ghost{background:rgba(255,255,255,.07);color:var(--text);border:1px solid var(--line)}
+.btn-ghost:hover{background:rgba(255,255,255,.12)}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.btnrow .btn{flex:1}
+
+.dock{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom));z-index:6;width:min(860px,calc(100vw - 24px));background:var(--panel);border:1px solid var(--line);border-radius:20px;backdrop-filter:blur(20px);padding:12px}
+.modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.modebtn{border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--sub);border-radius:14px;padding:10px 8px;cursor:pointer;text-align:center;min-height:56px}
+.modebtn b{display:block;color:var(--text);font-size:14px}
+.modebtn small{font-size:11.5px}
+.modebtn.on{border-color:rgba(242,201,107,.7);background:rgba(242,201,107,.1)}
+.modebtn.on b{color:var(--gold2)}
+.dockrow{display:flex;gap:10px;align-items:center;margin-top:11px;flex-wrap:wrap}
+.dockrow label{font-size:12px;color:var(--muted);font-weight:700;white-space:nowrap}
+input[type=range]{flex:1;min-width:110px;accent-color:var(--gold);height:36px;cursor:pointer}
+.toggles{display:flex;gap:6px;flex-wrap:wrap}
+.tgl{border:1px solid var(--line);background:transparent;color:var(--sub);border-radius:999px;padding:0 12px;font-size:12.5px;font-weight:700;cursor:pointer;min-height:36px}
+.tgl.on{background:#eef2ff;color:#0a1128;border-color:transparent}
+.scorebar{display:flex;gap:14px;align-items:center;font-size:13px;color:var(--sub)}
+.scorebar b{color:var(--text)}
+
+.quest{position:fixed;top:92px;left:50%;transform:translateX(-50%);z-index:6;width:min(520px,calc(100vw - 32px));background:linear-gradient(135deg, rgba(38,30,8,.92), rgba(12,18,44,.94));border:1px solid rgba(242,201,107,.45);border-radius:18px;padding:15px 17px;backdrop-filter:blur(16px);text-align:center}
+.quest small{color:var(--gold);font-weight:800;letter-spacing:.1em;font-size:11px}
+.quest h3{margin:5px 0 4px;font-size:19px}
+.quest p{margin:0;color:var(--sub);font-size:13px;line-height:1.55}
+.quest .btn{margin-top:11px}
+
+.toast{position:fixed;left:50%;bottom:calc(var(--dockH) + 24px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(16px);z-index:20;background:#101c42;border:1px solid var(--line2);color:var(--text);padding:12px 18px;border-radius:999px;font-size:14px;font-weight:700;opacity:0;pointer-events:none;transition:.3s;box-shadow:0 18px 50px rgba(0,0,0,.5);max-width:calc(100vw - 32px);text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.hintbar{position:fixed;left:368px;bottom:calc(var(--dockH) + 22px + env(safe-area-inset-bottom));z-index:5;color:rgba(220,230,255,.75);font-size:12px;background:rgba(5,9,20,.55);border:1px solid rgba(148,178,255,.12);padding:8px 12px;border-radius:999px;backdrop-filter:blur(8px);pointer-events:none}
+.compass{position:fixed;right:16px;bottom:calc(var(--dockH) + 22px + env(safe-area-inset-bottom));z-index:5;width:64px;height:64px;border-radius:50%;background:rgba(8,13,32,.7);border:1px solid var(--line);backdrop-filter:blur(10px);display:grid;place-items:center;pointer-events:none}
+.compass .needle{transition:transform .1s linear;text-align:center;line-height:1}
+.compass .needle b{color:#ff7d7d;font-size:15px;display:block}
+.compass .needle span{font-size:9px;color:var(--muted);letter-spacing:.08em}
+.hidden{display:none !important}
+.sheetHandle{display:none}
+.panelhead{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.panelToggle{display:none;border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--text);border-radius:999px;padding:0 14px;font-size:12.5px;font-weight:700;cursor:pointer;align-items:center;justify-content:center;flex:none}
+
+@media (max-width:900px){
+  /* 상단바: 제목 줄 + 버튼 줄로 쌓아 노치·좁은 폭에서도 안 겹치게 */
+  .topbar{flex-direction:column;gap:8px;padding:calc(10px + env(safe-area-inset-top)) 12px 0}
+  .titlebox p{display:none}
+  .titlebox h1{font-size:19px}
+  .top-actions{display:flex;flex-wrap:nowrap;gap:6px;width:100%;justify-content:flex-start}
+  .top-actions .chip{flex:1 1 0;min-width:0;justify-content:center;padding:0 6px;font-size:11.5px;min-height:44px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  /* 도감·상세: 도크 실측 높이(--dockH) 바로 위에 붙는 바텀시트 */
+  .panel{top:auto;bottom:calc(var(--dockH) + 22px + env(safe-area-inset-bottom));left:10px;right:10px;width:auto;max-height:38dvh;padding:13px}
+  .panelToggle{display:inline-flex;min-height:40px}
+  .panel.collapsed{max-height:none}
+  .panel.collapsed .desc,.panel.collapsed .search,.panel.collapsed .seasonrow,.panel.collapsed .clist{display:none}
+  .detail{top:auto;bottom:calc(var(--dockH) + 22px + env(safe-area-inset-bottom));left:10px;right:10px;width:auto;max-height:48dvh;padding:15px}
+  .detail .closeBtn{width:44px;height:44px;min-height:44px}
+  /* 퀴즈 상자: 상단바(약 84px)와 나침반 아래로 내려 서로 안 겹치게 */
+  .quest{top:calc(env(safe-area-inset-top) + 158px);padding:13px 14px}
+  .quest h3{font-size:17px}
+  .hintbar{display:none}
+  .compass{bottom:auto;top:calc(env(safe-area-inset-top) + 100px);right:12px;width:48px;height:48px}
+  .toast{bottom:calc(var(--dockH) + 24px + env(safe-area-inset-bottom));font-size:13.5px;padding:11px 15px}
+  /* 하단 도크 압축: 모드 설명 숨김, 점수는 한 줄 전체로 */
+  .dock{padding:10px;width:calc(100vw - 16px);border-radius:16px;bottom:calc(8px + env(safe-area-inset-bottom))}
+  .modebtn{min-height:48px;padding:8px 4px}
+  .modebtn small{display:none}
+  .modebtn b{font-size:13.5px}
+  .dockrow{gap:8px;margin-top:9px}
+  .dockrow label{font-size:11.5px}
+  input[type=range]{height:44px;min-width:90px}
+  .scorebar{flex:1 1 100%;justify-content:space-between;font-size:12.5px}
+  .tgl{min-height:40px;padding:0 11px}
+  .seasonrow button{min-height:40px}
+  .search{font-size:16px} /* iOS 포커스 자동 확대 방지 */
+  .citem{min-height:52px}
+  .btn{min-height:44px}
+  .starlist button{min-height:44px}
+}
+@media (max-width:380px){
+  .top-actions .chip{font-size:11px;padding:0 4px}
+  .modebtn b{font-size:12.5px}
+  .tgl{padding:0 9px;font-size:12px}
+}
+@media (max-height:540px) and (orientation:landscape){
+  .topbar{flex-direction:row;padding-top:calc(8px + env(safe-area-inset-top))}
+  .top-actions{width:auto}
+  .panel{top:64px;bottom:auto;left:10px;right:auto;width:300px;max-height:calc(100dvh - var(--dockH) - 84px)}
+  .detail{top:64px;bottom:auto;right:10px;left:auto;width:310px;max-height:calc(100dvh - var(--dockH) - 84px)}
+  .quest{top:64px}
+  .compass{top:auto;bottom:calc(var(--dockH) + 24px + env(safe-area-inset-bottom));right:12px}
+}
+@media (prefers-reduced-motion: reduce){ *{transition:none !important} }
+</style>
+</head>
+<body>
+<canvas id="sky" aria-label="드래그해서 돌려볼 수 있는 3D 밤하늘"></canvas>
+<div class="vignette"></div>
+
+<header class="topbar">
+  <div class="titlebox">
+    <h1><span class="yh-ko">3D <span>별자리</span> 관측</span><span class="yh-en">3D Constellation Observatory</span></h1>
+    <p>밤하늘을 돌려보며 진짜 별자리 15개를 찾는 관측소예요</p>
+  </div>
+  <div class="top-actions">
+    <button class="chip" id="tourBtn" type="button">✦ 자동 투어</button>
+    <button class="chip" id="soundBtn" type="button" aria-pressed="false">♪ 잔잔한 소리 켜기</button>
+    <button class="chip" id="resetViewBtn" type="button">⌂ 북쪽으로</button>
+  </div>
+</header>
+
+<div class="quest hidden" id="questBox" role="status">
+  <small id="questStep">별자리 찾기</small>
+  <h3 id="questTitle"></h3>
+  <p id="questDesc"></p>
+  <button class="btn btn-gold" id="questHintBtn" type="button">힌트 보기</button>
+  <button class="btn btn-ghost" id="questSkipBtn" type="button">건너뛰기</button>
+</div>
+
+<div class="layout">
+  <!-- 목록 패널 -->
+  <aside class="panel" id="listPanel" aria-label="별자리 목록">
+    <div class="panelhead"><h2>별자리 도감 <span style="color:var(--muted);font-weight:600;font-size:12px" id="foundCount"></span></h2><button class="panelToggle" id="panelToggle" type="button" aria-expanded="true" aria-controls="listPanel">접기</button></div>
+    <p class="desc">별자리를 누르면 그쪽 하늘로 천천히 이동해요. 하늘에서 별을 눌러도 정보를 볼 수 있어요.</p>
+    <input class="search" id="searchInput" type="search" placeholder="별자리·별 이름 검색 (예: 오리온, 직녀)" autocomplete="off"/>
+    <div class="seasonrow" id="seasonRow" role="group" aria-label="계절 필터">
+      <button type="button" data-season="all" class="on">전체</button>
+      <button type="button" data-season="봄">봄</button>
+      <button type="button" data-season="여름">여름</button>
+      <button type="button" data-season="가을">가을</button>
+      <button type="button" data-season="겨울">겨울</button>
+      <button type="button" data-season="연중">연중</button>
+    </div>
+    <div class="clist" id="clist"></div>
+  </aside>
+
+  <!-- 상세 패널 -->
+  <section class="detail hidden" id="detailPanel" aria-live="polite"></section>
+</div>
+
+<div class="hintbar">드래그 회전 · 스크롤/핀치 확대 · 별 클릭 정보</div>
+<div class="compass" aria-hidden="true"><div class="needle" id="needle"><b>N</b><span class="yh-cmp-ko">북</span></div></div>
+
+<div class="dock">
+  <div class="modes" role="tablist" aria-label="관측 모드">
+    <button class="modebtn on" data-mode="free" type="button" role="tab" aria-selected="true"><b>자유 관측</b><small>하늘을 마음껏 둘러보기</small></button>
+    <button class="modebtn" data-mode="find" type="button" role="tab" aria-selected="false"><b>별자리 찾기</b><small>미션을 따라 하늘에서 찾기</small></button>
+    <button class="modebtn" data-mode="quiz" type="button" role="tab" aria-selected="false"><b>이름 맞히기</b><small>모양만 보고 퀴즈 풀기</small></button>
+  </div>
+  <div class="dockrow">
+    <label for="timeRange">시각</label>
+    <input type="range" id="timeRange" min="0" max="1439" value="1260" step="5" aria-label="관측 시각"/>
+    <b id="timeLabel" style="font-size:13px;min-width:52px">21:00</b>
+    <div class="scorebar"><span>찾은 별자리 <b id="scoreFound">0 / 15</b></span><span>퀴즈 점수 <b id="scoreQuiz">0</b></span></div>
+  </div>
+  <div class="dockrow toggles">
+    <button class="tgl on" data-tgl="lines" type="button">연결선</button>
+    <button class="tgl on" data-tgl="labels" type="button">이름표</button>
+    <button class="tgl on" data-tgl="milky" type="button">은하수</button>
+    <button class="tgl on" data-tgl="grid" type="button">방위 눈금</button>
+    <button class="tgl" data-tgl="spin" type="button">느린 회전</button>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+"use strict";
+/* YH: EN 모드에서 고유명·설명을 영어로 내기 위한 도우미 */
+function YHEN(){ try{ return !!(window.YH && YH.lang && YH.lang()==='en'); }catch(e){ return false; } }
+function YHT(s){ if(!YHEN()) return s; try{ return (window.YH.lookup && YH.lookup(s)) || s; }catch(e){ return s; } }
+function YHD(c,k){ if(YHEN() && window.YH_EN && window.YH_EN[c.id] && window.YH_EN[c.id][k]) return window.YH_EN[c.id][k]; return c[k]; }
+function YHB(b){ if(!YHEN()) return b; var m=/^(\d+)월 밤 10시$/.exec(b); if(!m) return b; var M=['January','February','March','April','May','June','July','August','September','October','November','December']; return '10 pm in '+(M[+m[1]-1]||b); }
+
+/* ============ 실제 별 데이터 (적경 시, 적위 도, 등급) ============ */
+var C = [
+{id:"uma",name:"큰곰자리",en:"Ursa Major",icon:"🐻",season:"연중",best:"4월 밤 10시",starsN:7,
+ desc:"북두칠성을 품은 큰 별자리예요. 국자 모양의 일곱 별이 북쪽 하늘에서 가장 찾기 쉬운 길잡이랍니다.",
+ story:"그리스 신화에서 제우스의 사랑을 받은 님프 칼리스토가 곰으로 변한 모습이라고 전해져요. 북두칠성의 손잡이 끝에서 봄의 대곡선을 따라가면 목동자리 아르크투루스와 처녀자리 스피카를 만날 수 있어요.",
+ stars:[["두베",11.062,61.75,1.8],["메라크",11.031,56.38,2.4],["페크다",11.897,53.69,2.4],["메그레즈",12.257,57.03,3.3],["알리오트",12.901,55.96,1.8],["미자르",13.399,54.93,2.3],["알카이드",13.792,49.31,1.9]],
+ lines:[[0,1],[1,2],[2,3],[3,0],[3,4],[4,5],[5,6]]},
+{id:"umi",name:"작은곰자리",en:"Ursa Minor",icon:"🧭",season:"연중",best:"6월 밤 10시",starsN:7,
+ desc:"꼬리 끝에 현재의 북극성 폴라리스가 빛나는 작은 국자예요. 지구 자전축이 가리키는 방향이라 밤새 거의 움직이지 않아요.",
+ story:"큰곰 칼리스토의 아들 아르카스가 변한 모습이라는 이야기가 있어요. 옛 뱃사람들은 이 별자리로 북쪽을 확인하며 항해했답니다.",
+ stars:[["폴라리스 · 북극성",2.530,89.26,2.0],["일둔",17.536,86.59,4.4],["엡실론",16.766,82.04,4.2],["제타",15.734,77.79,4.3],["코카브",14.845,74.16,2.1],["페르카드",15.345,71.83,3.0],["델타 아크",17.536,86.59,4.4]],
+ lines:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,3]]},
+{id:"cas",name:"카시오페이아자리",en:"Cassiopeia",icon:"👑",season:"연중",best:"11월 밤 10시",starsN:5,
+ desc:"W자 모양이 또렷한 북쪽 하늘의 여왕 자리예요. 북두칠성과 북극성을 사이에 두고 마주 보고 있어서, 북두칠성이 지면 카시오페이아가 떠올라요.",
+ story:"자신의 미모를 뽐내다 바다의 신 포세이돈의 노여움을 산 에티오피아 왕비 카시오페이아의 자리예요. 의자에 앉은 모습으로 그려진답니다.",
+ stars:[["카프",0.153,59.15,2.3],["셰다르",0.675,56.54,2.2],["감마",0.945,60.72,2.5],["루크바",1.430,60.24,2.7],["세긴",1.906,63.67,3.4]],
+ lines:[[0,1],[1,2],[2,3],[3,4]]},
+{id:"ori",name:"오리온자리",en:"Orion",icon:"🏹",season:"겨울",best:"1월 밤 10시",starsN:8,
+ desc:"겨울 하늘의 왕이에요. 나란히 선 세 별 '삼태성'과 붉은 베텔게우스, 푸른 리겔의 대비가 한눈에 들어와요.",
+ story:"바다의 신의 아들인 사냥꾼 오리온의 모습이에요. 어깨의 베텔게우스는 곧 폭발할 적색초거성으로, 우리 태양보다 수백 배 크답니다. 허리띠 아래 오리온 대성운에서는 지금도 새 별이 태어나고 있어요.",
+ stars:[["베텔게우스",5.919,7.41,0.5],["벨라트릭스",5.418,6.35,1.6],["알니타크",5.679,-1.94,1.9],["알닐람",5.604,-1.20,1.7],["민타카",5.533,-0.30,2.2],["사이프",5.796,-9.67,2.1],["리겔",5.242,-8.20,0.1],["메이사",5.585,9.93,3.3]],
+ lines:[[7,0],[7,1],[0,2],[1,4],[2,3],[3,4],[2,5],[4,6],[5,6]]},
+{id:"cyg",name:"백조자리",en:"Cygnus",icon:"🦢",season:"여름",best:"9월 밤 10시",starsN:6,
+ desc:"은하수 위를 나는 백조, '북십자성'으로도 불려요. 꼬리의 데네브는 여름의 대삼각형 한 꼭짓점이에요.",
+ story:"제우스가 백조로 변해 스파르타의 왕비 레다를 찾아간 이야기에서 왔어요. 부리의 알비레오는 주황과 파랑이 나란히 빛나는 이중성으로 망원경 관측의 명소예요.",
+ stars:[["데네브",20.690,45.28,1.3],["사드르",20.370,40.26,2.2],["제나",20.770,33.96,2.5],["델타",19.749,45.13,2.9],["알비레오",19.512,27.96,3.1],["엡실론",20.770,33.96,2.5]],
+ lines:[[0,3],[3,1],[1,4],[1,2]]},
+{id:"lyr",name:"거문고자리",en:"Lyra",icon:"🎵",season:"여름",best:"8월 밤 10시",starsN:5,
+ desc:"작지만 밝은 직녀성 베가가 이끄는 자리예요. 베가는 여름의 대삼각형의 한 별이자, 약 1만 2천 년 뒤의 북극성이에요.",
+ story:"음악가 오르페우스의 하프(리라)가 하늘에 오른 자리예요. 칠월칠석 견우와 직녀 이야기의 직녀가 바로 베가랍니다.",
+ stars:[["베가 · 직녀성",18.616,38.78,0.0],["셸리아크",18.835,33.36,3.5],["술라파트",18.982,32.69,3.2],["델타",18.908,36.90,4.3],["제타",18.746,37.61,4.4]],
+ lines:[[0,4],[4,3],[3,2],[2,1],[1,4]]},
+{id:"sco",name:"전갈자리",en:"Scorpius",icon:"🦂",season:"여름",best:"7월 밤 10시",starsN:9,
+ desc:"남쪽 낮은 하늘에 S자로 길게 휘어진 전갈 모양이 압권이에요. 심장의 붉은 안타레스는 '화성의 라이벌'이라는 뜻이에요.",
+ story:"오리온을 쏘아 죽인 전갈의 자리라서, 전갈이 뜨면 오리온은 도망가듯 진다고 해요. 그래서 두 별자리는 하늘의 정반대에 있답니다.",
+ stars:[["아크라브",16.090,-19.80,2.6],["웨이",16.836,-34.29,2.3],["안타레스",16.490,-26.43,1.1],["타우",16.598,-28.22,2.8],["엡실론",16.836,-34.29,2.3],["시그마",16.353,-25.59,2.9],["파이",15.980,-26.11,2.9],["샤울라",17.560,-37.10,1.6],["레사트",17.621,-37.30,2.7]],
+ lines:[[6,0],[0,5],[5,2],[2,3],[3,1],[1,7],[7,8]]},
+{id:"leo",name:"사자자리",en:"Leo",icon:"🦁",season:"봄",best:"4월 밤 10시",starsN:6,
+ desc:"물음표를 뒤집은 듯한 '사자의 낫'이 특징인 봄의 대표 별자리예요. 가장 밝은 레굴루스는 '작은 왕'이라는 뜻이에요.",
+ story:"헤라클레스가 맨손으로 물리친 네메아의 사자예요. 매년 11월 이 자리에서 사자자리 유성우가 쏟아진답니다.",
+ stars:[["레굴루스",10.139,11.97,1.4],["에타",10.122,16.77,3.5],["알기에바",10.333,19.84,2.1],["조스마",11.235,20.52,2.6],["라스 엘라세드",9.763,23.77,3.0],["데네볼라",11.817,14.57,2.1]],
+ lines:[[4,2],[2,0],[0,1],[1,3],[3,5],[5,0]]},
+{id:"gem",name:"쌍둥이자리",en:"Gemini",icon:"👬",season:"겨울",best:"2월 밤 10시",starsN:6,
+ desc:"나란히 선 두 형제 카스토르와 폴룩스가 이끄는 겨울 별자리예요. 폴룩스 주위에서는 실제 외계행성이 발견됐어요.",
+ story:"제우스의 쌍둥이 아들 디오스쿠로이 형제의 자리예요. 형 카스토르는 사실 여섯 별이 모인 육중성이랍니다.",
+ stars:[["카스토르",7.576,31.89,1.6],["폴룩스",7.755,28.03,1.1],["알헤나",6.628,16.40,1.9],["와사트",7.333,21.98,3.5],["메브수타",6.732,25.13,3.0],["테자트",6.382,22.51,2.9]],
+ lines:[[4,0],[0,1],[1,3],[3,2],[5,4]]},
+{id:"tau",name:"황소자리",en:"Taurus",icon:"🐂",season:"겨울",best:"1월 밤 10시",starsN:6,
+ desc:"V자 얼굴과 붉은 눈 알데바란, 등에 업은 플레이아데스 성단(좀생이별)이 겨울 하늘의 보석이에요.",
+ story:"제우스가 황소로 변해 에우로파를 업고 바다를 건넌 자리예요. 플레이아데스는 맨눈으로도 대여섯 별이 모인 게 보이는 가까운 성단이랍니다.",
+ stars:[["알데바란",4.599,16.51,0.9],["엘나트",5.438,28.61,1.7],["알키오네 · 플레이아데스",3.790,24.11,2.9],["프리마 히아두스",4.329,15.87,3.7],["아인",4.476,19.18,3.5],["제타",5.627,21.14,3.0]],
+ lines:[[3,0],[0,4],[4,1],[0,5]]},
+{id:"per",name:"페르세우스자리",en:"Perseus",icon:"⚔️",season:"가을",best:"12월 밤 10시",starsN:5,
+ desc:"메두사를 물리친 영웅의 자리예요. '악마의 별' 알골은 며칠 간격으로 어두워졌다 밝아지는 식변광성으로 유명해요.",
+ story:"안드로메다를 구한 영웅 페르세우스의 자리예요. 매년 8월 중순, 이 자리에서 페르세우스자리 유성우가 절정을 이룬답니다.",
+ stars:[["미르파크",3.405,49.86,1.8],["알골",3.136,40.96,2.1],["감마",3.079,53.51,2.9],["델타",3.715,47.79,3.0],["로",3.090,38.84,3.4]],
+ lines:[[2,0],[0,3],[0,1],[1,4]]},
+{id:"and",name:"안드로메다자리",en:"Andromeda",icon:"🌌",season:"가을",best:"11월 밤 10시",starsN:4,
+ desc:"가을의 대사각형에서 뻗어 나가는 자리예요. 이 안에 우리 은하와 이웃한 안드로메다 은하가 맨눈으로도 희미하게 보여요.",
+ story:"바다 괴물에게 제물로 바쳐질 뻔한 공주 안드로메다의 자리예요. 안드로메다 은하는 250만 광년 떨어져 있어, 지금 보는 빛은 인류가 돌도끼를 쓰던 시절의 빛이랍니다.",
+ stars:[["알페라츠",0.139,29.09,2.1],["미라크",1.162,35.62,2.1],["알마크",2.065,42.33,2.3],["델타",0.657,30.86,3.3]],
+ lines:[[3,0],[0,1],[1,2]]},
+{id:"boo",name:"목동자리",en:"Boötes",icon:"🌟",season:"봄",best:"6월 밤 10시",starsN:6,
+ desc:"연 모양의 자리 한가운데 주황빛 아르크투루스가 빛나요. 북반구에서 시리우스 다음으로 밝은 별이에요.",
+ story:"곰을 지키는 목동의 자리예요. 봄의 대곡선을 따라 북두칠성 손잡이에서 아르크투루스, 스피카로 이어지는 길은 봄 하늘 산책의 정석 코스랍니다.",
+ stars:[["아르크투루스",14.261,19.18,-0.1],["에타",13.911,18.40,2.7],["엡실론",14.749,27.07,2.4],["델타",15.258,33.31,3.5],["베타",15.032,40.39,3.5],["로",14.578,30.37,3.6]],
+ lines:[[0,1],[1,5],[5,2],[2,4],[4,3],[3,2],[2,0]]},
+{id:"vir",name:"처녀자리",en:"Virgo",icon:"🌾",season:"봄",best:"5월 밤 10시",starsN:6,
+ desc:"하늘에서 두 번째로 큰 별자리예요. 가장 밝은 스피카는 '보리의 이삭'이라는 뜻으로, 쌍안경 없이도 푸른빛이 또렷해요.",
+ story:"정의의 여신 아스트라이아, 혹은 풍요의 여신 데메테르의 모습으로 그려져요. 이 자리에는 수천 개의 은하가 모인 처녀자리 은하단이 있답니다.",
+ stars:[["스피카",13.420,-11.16,1.0],["자비야바",11.852,1.76,3.6],["포리마",12.694,-1.45,2.7],["아우바",12.926,10.96,3.0],["빈데미아트릭스",13.036,10.96,2.9],["헤제",13.578,-0.59,3.4]],
+ lines:[[1,2],[2,5],[5,0],[2,3],[3,4]]},
+{id:"dra",name:"용자리",en:"Draco",icon:"🐉",season:"연중",best:"7월 밤 10시",starsN:6,
+ desc:"큰곰과 작은곰 사이를 구불구불 감아 도는 긴 별자리예요. 옛 이집트 시대에는 이 자리의 투반이 북극성이었어요.",
+ story:"황금 사과나무를 지키던 용 라돈의 자리예요. 피라미드가 세워지던 시절 항해자와 천문학자들은 투반을 북쪽의 기준으로 삼았답니다.",
+ stars:[["투반",14.073,64.38,3.7],["라스타반",17.507,52.30,2.8],["엘타닌",17.943,51.49,2.2],["알타이",17.161,65.04,3.1],["에다식",15.415,57.96,3.3],["지아우스",17.145,56.87,3.8]],
+ lines:[[4,0],[0,3],[3,5],[5,1],[1,2]]}
+];
+
+/* ============ 상태 ============ */
+var canvas=document.getElementById('sky'), ctx=canvas.getContext('2d');
+var W=0,H=0,DPR=1;
+var yaw=0.6, pitch=0.62, targetYaw=yaw, targetPitch=pitch, fov=1.0, targetFov=1.0;
+var mode='free', show={lines:true,labels:true,milky:true,grid:true,spin:false};
+var selected=null, selectedStar=null, found={}, quizScore=0, foundCount=0;
+var questQueue=[], questIdx=0, quizTarget=null, quizAnswered=false;
+var dragging=false,lastX=0,lastY=0,pinchD=0, moved=0;
+var animTarget=null, meteors=[], twPhase=Math.random()*1000;
+var audioCtx=null, audioOn=false, audioNodes=[];
+
+/* 배경별 (절차 생성, 고정 시드) */
+var bgStars=[], bgSeed=42;
+function rnd(){ bgSeed=(bgSeed*1664525+1013904223)>>>0; return bgSeed/4294967296; }
+for(var i=0;i<1100;i++){
+  var u=rnd()*2-1, th=rnd()*Math.PI*2, r=Math.sqrt(1-u*u);
+  bgStars.push({x:r*Math.cos(th),y:u,z:r*Math.sin(th),m:2.6+rnd()*3.4,s:rnd()*Math.PI*2, warm:rnd()});
+}
+/* 은하수 먼지 */
+var milkyDots=[];
+for(var j=0;j<420;j++){
+  var t=rnd()*Math.PI*2, spread=(rnd()+rnd()+rnd()-1.5)*0.16;
+  // 은하 중심면: 법선 벡터 근사 (은경 방향 단순화)
+  var bx=Math.cos(t), by=0.42*Math.sin(t)+spread, bz=Math.sin(t)*0.9+spread*0.6;
+  var bl=Math.sqrt(bx*bx+by*by+bz*bz);
+  milkyDots.push({x:bx/bl,y:by/bl,z:bz/bl,a:0.25+rnd()*0.75,r:18+rnd()*46});
+}
+
+function raDecToVec(raH,decD){
+  var ra=raH/24*Math.PI*2, dec=decD*Math.PI/180;
+  return {x:Math.cos(dec)*Math.sin(ra), y:Math.sin(dec), z:Math.cos(dec)*Math.cos(ra)};
+}
+C.forEach(function(c){ c.vec=c.stars.map(function(s){return raDecToVec(s[1],s[2]);});
+  var cx=0,cy=0,cz=0; c.vec.forEach(function(v){cx+=v.x;cy+=v.y;cz+=v.z;});
+  var l=Math.sqrt(cx*cx+cy*cy+cz*cz); c.center={x:cx/l,y:cy/l,z:cz/l}; });
+
+var _timeMins=1260;
+function siderealOffset(){
+  return (_timeMins-1260)/240*Math.PI*2/4 + (_timeMins/1439)*0.6; // 시각에 따라 하늘이 회전
+}
+var _cy=1,_sy=0,_cp=1,_sp=0;
+function updateRot(){
+  var a=yaw+siderealOffset();
+  _cy=Math.cos(a); _sy=Math.sin(a); _cp=Math.cos(pitch); _sp=Math.sin(pitch);
+}
+function rotate(v){
+  var x1=v.x*_cy - v.z*_sy, z1=v.x*_sy + v.z*_cy;
+  var y2=v.y*_cp - z1*_sp, z2=v.y*_sp + z1*_cp;
+  return {x:x1,y:y2,z:z2};
+}
+/* 방위 눈금 점 (한 번만 계산) */
+var gridLines=[];
+for(var _gi=-60;_gi<=60;_gi+=30){ var _line=[]; for(var _ga=0;_ga<=360;_ga+=6){ _line.push(raDecToVec(_ga/15,_gi)); } gridLines.push(_line); }
+function project(v){
+  var r=rotate(v);
+  if(r.z < -0.92) return null;
+  var f=(Math.min(W,H)*0.92)*fov;
+  var s=f/(2.35+r.z*0.9);
+  return {x:W/2+r.x*s, y:H/2-r.y*s, z:r.z, s:s};
+}
+function resize(){
+  DPR=Math.min(window.devicePixelRatio||1,2);
+  W=window.innerWidth; H=window.innerHeight;
+  canvas.width=W*DPR; canvas.height=H*DPR;
+  canvas.style.width=W+'px'; canvas.style.height=H+'px';
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+}
+/* 하단 도크의 실제 높이를 재서 CSS 변수로 공유 (폰마다 도크 높이가 달라 고정값이면 패널·토스트가 겹치거나 뜨는 문제 방지) */
+var _dockH=174;
+function syncDockH(){
+  var d=document.querySelector('.dock'); if(!d) return;
+  _dockH=d.offsetHeight+14;
+  document.documentElement.style.setProperty('--dockH',_dockH+'px');
+}
+window.addEventListener('resize',function(){ resize(); syncDockH(); if(window.innerWidth>900){ document.getElementById('listPanel').style.display=''; } });
+window.addEventListener('orientationchange',function(){ setTimeout(function(){ resize(); syncDockH(); },120); });
+resize();
+
+/* 글로우 스프라이트 (매 프레임 그라디언트 생성 방지 - 성능 최적화) */
+var glowSprite=document.createElement('canvas'); glowSprite.width=glowSprite.height=128;
+(function(){ var gc=glowSprite.getContext('2d'); var gg=gc.createRadialGradient(64,64,0,64,64,64);
+  gg.addColorStop(0,'rgba(255,255,255,1)'); gg.addColorStop(0.35,'rgba(210,226,255,0.42)'); gg.addColorStop(1,'rgba(210,226,255,0)');
+  gc.fillStyle=gg; gc.fillRect(0,0,128,128); })();
+function magSize(m){ return Math.max(1.1, 4.6 - m*0.95); }
+function starColor(warm){ return warm>0.82?'255,214,150':(warm<0.18?'165,205,255':'238,243,255'); }
+
+function drawSky(now){
+  updateRot();
+  // 배경 그라디언트
+  var g=ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'#030612'); g.addColorStop(0.55,'#07102a'); g.addColorStop(1,'#0d1836');
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  // 지평선 빛
+  var hg=ctx.createRadialGradient(W/2,H*1.02,10,W/2,H*1.02,H*0.55);
+  hg.addColorStop(0,'rgba(64,90,160,0.20)'); hg.addColorStop(1,'rgba(64,90,160,0)');
+  ctx.fillStyle=hg; ctx.fillRect(0,0,W,H);
+
+  if(show.milky){
+    ctx.save(); ctx.globalCompositeOperation='lighter';
+    milkyDots.forEach(function(d){ var p=project(d); if(!p) return;
+      var rad=d.r*p.s/900*8+ d.r*0.35;
+      ctx.globalAlpha=0.10*d.a*Math.max(0,(p.z*0.5+0.6));
+      ctx.drawImage(glowSprite,p.x-rad,p.y-rad,rad*2,rad*2); });
+    ctx.globalAlpha=1;
+    ctx.restore();
+  }
+  if(show.grid){
+    ctx.save(); ctx.strokeStyle='rgba(140,170,255,0.07)'; ctx.lineWidth=1;
+    gridLines.forEach(function(line){ ctx.beginPath(); var started=false;
+      line.forEach(function(v){ var p=project(v); if(!p){started=false;return;} if(!started){ctx.moveTo(p.x,p.y);started=true;} else ctx.lineTo(p.x,p.y); }); ctx.stroke(); });
+    ctx.restore();
+    // 방위 글자
+    ctx.fillStyle='rgba(190,205,245,0.55)'; ctx.font='700 12px sans-serif'; ctx.textAlign='center';
+    [['북',0],['동',90],['남',180],['서',270]].forEach(function(d){
+      var v=raDecToVec(d[1]/15,-8); var p=project(v); if(p&&p.z>-0.4){ ctx.fillText(YHT(d[0]),p.x,H-_dockH-34);} });
+  }
+  // 배경별
+  bgStars.forEach(function(s,idx){
+    var p=project(s); if(!p) return;
+    var tw=0.72+0.28*Math.sin(now/700+s.s*7);
+    var a=Math.max(0,(p.z+0.55)/1.55)*tw;
+    if(a<=0.02) return;
+    ctx.fillStyle='rgba('+starColor(s.warm)+','+(a*0.85).toFixed(3)+')';
+    ctx.beginPath(); ctx.arc(p.x,p.y,magSize(s.m)*0.52,0,7); ctx.fill();
+  });
+  // 별자리 선
+  C.forEach(function(c){
+    var isSel=selected===c, isQuiz=(mode==='quiz'&&quizTarget===c);
+    if(!show.lines && !isSel && !isQuiz) return;
+    if(mode==='quiz' && quizTarget && c!==quizTarget && !isSel) return;
+    var pts=c.vec.map(project);
+    ctx.save();
+    ctx.strokeStyle=isSel?'rgba(242,201,107,0.95)':(isQuiz?'rgba(125,216,255,0.95)':'rgba(150,185,255,0.38)');
+    ctx.lineWidth=isSel||isQuiz?2:1.2;
+    ctx.shadowBlur=(isSel||isQuiz)?10:0; ctx.shadowColor=isSel?'rgba(242,201,107,.7)':'rgba(125,216,255,.7)';
+    ctx.beginPath(); var pen=false;
+    c.lines.forEach(function(L){
+      var a=pts[L[0]], b=pts[L[1]]; if(!a||!b){pen=false;return;}
+      ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); pen=true; });
+    ctx.stroke(); ctx.restore();
+  });
+  // 이름표 + 별
+  ctx.textAlign='center';
+  C.forEach(function(c){
+    c.vec.forEach(function(v,idx){
+      var p=project(v); if(!p) return;
+      var s=c.stars[idx], m=s[3];
+      var tw=0.82+0.18*Math.sin(now/480+idx*1.7+c.name.length);
+      var r=magSize(m)*tw;
+      var isSelStar=selectedStar&&selectedStar.c===c&&selectedStar.i===idx;
+      // 글로우 (스프라이트)
+      ctx.globalAlpha=0.55*tw;
+      ctx.drawImage(glowSprite,p.x-r*4.2,p.y-r*4.2,r*8.4,r*8.4);
+      ctx.globalAlpha=1;
+      ctx.fillStyle='#f4f7ff'; ctx.beginPath(); ctx.arc(p.x,p.y,r,0,7); ctx.fill();
+      if(m<1.2){ // 밝은 별 십자 빛줄기
+        ctx.strokeStyle='rgba(230,240,255,0.5)'; ctx.lineWidth=1;
+        ctx.beginPath(); ctx.moveTo(p.x-r*3.4,p.y); ctx.lineTo(p.x+r*3.4,p.y); ctx.moveTo(p.x,p.y-r*3.4); ctx.lineTo(p.x,p.y+r*3.4); ctx.stroke(); }
+      if(isSelStar){ ctx.strokeStyle='#f2c96b'; ctx.lineWidth=2; ctx.beginPath(); ctx.arc(p.x,p.y,r+7+2*Math.sin(now/300),0,7); ctx.stroke(); }
+      c._pts=c._pts||[]; c._pts[idx]=p;
+    });
+    if(show.labels){
+      var cp=project(c.center);
+      if(cp && cp.z>-0.2){
+        var dim=(mode==='quiz'&&quizTarget===c);
+        ctx.font=(selected===c?'800 14px':'600 12px')+' sans-serif';
+        ctx.fillStyle=selected===c?'rgba(255,227,163,0.98)':'rgba(195,210,245,0.78)';
+        ctx.fillText(dim?'? ? ?':YHT(c.name), cp.x, cp.y-16);
+      }
+    }
+  });
+  // 유성
+  if(Math.random()<0.0035 && meteors.length<2){
+    meteors.push({x:Math.random()*W*0.7+W*0.15,y:Math.random()*H*0.3+20,vx:-(4+Math.random()*4),vy:3+Math.random()*2,life:1});
+  }
+  meteors=meteors.filter(function(m){return m.life>0;});
+  meteors.forEach(function(m){
+    m.x+=m.vx; m.y+=m.vy; m.life-=0.016;
+    var grad=ctx.createLinearGradient(m.x,m.y,m.x-m.vx*9,m.y-m.vy*9);
+    grad.addColorStop(0,'rgba(255,255,255,'+(0.9*m.life).toFixed(2)+')'); grad.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.strokeStyle=grad; ctx.lineWidth=2; ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(m.x,m.y); ctx.lineTo(m.x-m.vx*9,m.y-m.vy*9); ctx.stroke();
+  });
+  // 땅 실루엣
+  ctx.fillStyle='#04060f';
+  ctx.beginPath(); ctx.moveTo(0,H);
+  for(var x=0;x<=W;x+=40){ ctx.lineTo(x, H-26 - Math.sin(x*0.011+2)*9 - Math.sin(x*0.003)*7); }
+  ctx.lineTo(W,H); ctx.closePath(); ctx.fill();
+}
+
+function frame(now){
+  // 부드러운 보간
+  yaw+=(targetYaw-yaw)*0.07; pitch+=(targetPitch-pitch)*0.07; fov+=(targetFov-fov)*0.09;
+  pitch=Math.max(-0.15,Math.min(1.45,pitch));
+  if(show.spin && !dragging && !animTarget){ targetYaw+=0.0006; }
+  if(animTarget){
+    animTarget.t+=0.022;
+    var e=1-Math.pow(1-Math.min(animTarget.t,1),3);
+    targetYaw=animTarget.fy+(animTarget.ty-animTarget.fy)*e;
+    targetPitch=animTarget.fp+(animTarget.tp-animTarget.fp)*e;
+    if(animTarget.t>=1) animTarget=null;
+  }
+  drawSky(now||0);
+  var needle=document.getElementById('needle');
+  var deg=(-(yaw+siderealOffset())*180/Math.PI)%360;
+  needle.style.transform='rotate('+deg.toFixed(1)+'deg)';
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/* ============ 카메라 이동 ============ */
+function flyTo(c){
+  // 별자리 중심이 화면 중앙에 오도록 목표 각도 계산 (반복 탐색)
+  var best=null,bd=1e9;
+  for(var ty=-Math.PI*2;ty<Math.PI*2;ty+=0.12){
+    for(var tp=-0.1;tp<1.45;tp+=0.12){
+      var syaw=yaw,spitch=pitch,sOff=0;
+      var cy=Math.cos(ty+ (0)), sy=Math.sin(ty);
+      // rotate 수식을 목표 각도로 근사 평가
+      var off=siderealOffset();
+      var cyy=Math.cos(ty+off), syy=Math.sin(ty+off);
+      var x1=c.center.x*cyy - c.center.z*syy, z1=c.center.x*syy + c.center.z*cyy;
+      var cp=Math.cos(tp), sp=Math.sin(tp);
+      var y2=c.center.y*cp - z1*sp, z2=c.center.y*sp + z1*cp;
+      var d=x1*x1+y2*y2+(z2<0?2:0);
+      if(d<bd){bd=d;best={ty:ty,tp:tp};}
+    }
+  }
+  if(best){ animTarget={fy:targetYaw,fp:targetPitch,ty:best.ty,tp:best.tp,t:0}; }
+}
+
+/* ============ 상호작용 ============ */
+function ptr(e){ return e.touches? {x:e.touches[0].clientX,y:e.touches[0].clientY} : {x:e.clientX,y:e.clientY}; }
+var downX=0, downY=0;
+canvas.addEventListener('pointerdown',function(e){ dragging=true; moved=0; downX=e.clientX; downY=e.clientY; var p=ptr(e); lastX=p.x; lastY=p.y;
+  if(tourTimer) stopTour();
+  try{ canvas.setPointerCapture(e.pointerId); }catch(err){} });
+canvas.addEventListener('pointermove',function(e){ if(!dragging) return; var p=ptr(e);
+  var dx=p.x-lastX, dy=p.y-lastY; moved+=Math.abs(dx)+Math.abs(dy);
+  targetYaw-=dx*0.0042; targetPitch+=dy*0.0032;
+  targetPitch=Math.max(-0.15,Math.min(1.45,targetPitch));
+  animTarget=null; lastX=p.x; lastY=p.y; });
+/* 탭 판정: 누적 이동량이 아니라 '누른 지점→뗀 지점' 직선거리로 판단 (손떨림·미세 이동에 클릭이 씹히지 않도록), 허용 범위도 12px로 완화 */
+canvas.addEventListener('pointerup',function(e){ var was=dragging; dragging=false; if(!was) return;
+  if(Math.hypot(e.clientX-downX, e.clientY-downY)<12){ handleTap(e.clientX,e.clientY); } });
+canvas.addEventListener('pointercancel',function(){ dragging=false; pinchD=0; });
+canvas.addEventListener('wheel',function(e){ e.preventDefault(); targetFov=Math.max(0.55,Math.min(2.4,targetFov*(e.deltaY>0?0.92:1.09))); },{passive:false});
+canvas.addEventListener('touchmove',function(e){ if(e.touches.length===2){ e.preventDefault();
+  var d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
+  if(pinchD) targetFov=Math.max(0.55,Math.min(2.4,targetFov*d/pinchD));
+  pinchD=d; } },{passive:false});
+canvas.addEventListener('touchend',function(){ pinchD=0; });
+
+function handleTap(mx,my){
+  var bestStar=null,bd=44;
+  C.forEach(function(c){ if(!c._pts) return; c._pts.forEach(function(p,i){ if(!p) return;
+    var d=Math.hypot(p.x-mx,p.y-my); if(d<bd){bd=d;bestStar={c:c,i:i};} }); });
+  if(bestStar){
+    /* 찾기 모드: 목표 별자리의 별을 눌러도 성공으로 인정 (중심점만 인정하면 눌러도 반응이 없는 것처럼 느껴짐) */
+    if(mode==='find' && questQueue[questIdx]===bestStar.c){ completeQuest(); return; }
+    selectConstellation(bestStar.c,false); selectedStar=bestStar; showStarInfo(bestStar); return; }
+  // 별자리 중심 근처 탭
+  var bestC=null,bcd=90;
+  C.forEach(function(c){ var p=project(c.center); if(!p) return; var d=Math.hypot(p.x-mx,p.y-my); if(d<bcd){bcd=d;bestC=c;} });
+  if(bestC){
+    if(mode==='find' && questQueue[questIdx]===bestC){ completeQuest(); return; }
+    if(mode==='quiz' && quizTarget){ return; }
+    selectConstellation(bestC,false);
+  }
+}
+
+/* ============ UI: 목록 ============ */
+var seasonFilter='all';
+function renderList(){
+  var q=document.getElementById('searchInput').value.trim();
+  var el=document.getElementById('clist'); el.innerHTML='';
+  C.filter(function(c){
+    if(seasonFilter!=='all'&&c.season!==seasonFilter) return false;
+    if(q && c.name.indexOf(q)<0 && c.en.toLowerCase().indexOf(q.toLowerCase())<0 && !c.stars.some(function(s){return s[0].indexOf(q)>=0;})) return false;
+    return true;
+  }).forEach(function(c){
+    var b=document.createElement('button'); b.type='button'; b.className='citem'+(selected===c?' sel':'')+(found[c.id]?' done':'');
+    b.innerHTML='<span class="dot">'+c.icon+'</span><span><b>'+YHT(c.name)+'</b><small>'+(YHEN()?'':c.en+' · ')+YHT(c.season)+' · '+(YHEN()? c.starsN+' stars' : '별 '+c.starsN+'개')+'</small></span>'+(found[c.id]?'<span class="badge">'+(YHEN()?'Found ✓':'찾음 ✓')+'</span>':'<span class="badge no">'+(YHEN()?'Not yet':'미발견')+'</span>');
+    b.addEventListener('click',function(){ stopTour(); selectConstellation(c,true); collapseListOnMobile(); });
+    el.appendChild(b);
+  });
+  if(!el.children.length) el.innerHTML='<p style="color:var(--muted);font-size:13px;margin:4px 2px">검색 결과가 없어요. 다른 이름으로 찾아보세요.</p>';
+  document.getElementById('foundCount').textContent='· '+foundCount+'개 발견';
+  document.getElementById('scoreFound').textContent=foundCount+' / '+C.length;
+}
+document.getElementById('searchInput').addEventListener('input',renderList);
+/* 폰 전용: 도감 패널 접기/펼치기 (접으면 밤하늘이 온전히 보인다) */
+function setListCollapsed(on){
+  var p=document.getElementById('listPanel'); p.classList.toggle('collapsed',on);
+  var t=document.getElementById('panelToggle');
+  if(t){ t.textContent=on?'펼치기':'접기'; t.setAttribute('aria-expanded',String(!on)); }
+}
+function collapseListOnMobile(){ if(window.innerWidth<=900) setListCollapsed(true); }
+document.getElementById('panelToggle').addEventListener('click',function(){
+  setListCollapsed(!document.getElementById('listPanel').classList.contains('collapsed'));
+});
+document.getElementById('seasonRow').addEventListener('click',function(e){
+  var b=e.target.closest('button'); if(!b) return;
+  seasonFilter=b.dataset.season;
+  this.querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b);});
+  renderList();
+});
+
+function selectConstellation(c,fly){
+  selected=c; selectedStar=null;
+  if(fly) flyTo(c);
+  showDetail(c); renderList();
+  if(mode==='find' && questQueue[questIdx]===c){ /* 목록 클릭은 찾기로 치지 않음 - 하늘에서 눌러야 함 */ }
+}
+function showDetail(c){
+  var p=document.getElementById('detailPanel'); p.classList.remove('hidden');
+  if(window.innerWidth<=900){ document.getElementById('listPanel').style.display='none'; }
+  var starsHtml=c.stars.map(function(s,i){ return '<button type="button" data-i="'+i+'"><span>'+YHT(s[0])+'</span><span>'+s[3].toFixed(1)+(YHEN()?' mag':'등급')+'</span></button>'; }).join('');
+  p.innerHTML='<button class="closeBtn" id="dClose" type="button" aria-label="'+(YHEN()?'Close details':'상세 닫기')+'">✕</button><div class="kicker">'+(YHEN()? 'A '+YHT(c.season)+' constellation' : c.season+'의 별자리 · '+c.en)+'</div><h2>'+c.icon+' '+YHT(c.name)+'</h2><div class="en">'+(YHEN()? 'Best seen · '+YHB(c.best) : '가장 보기 좋은 때 · '+c.best)+'</div>'
+    +'<p>'+YHD(c,'desc')+'</p><p style="color:var(--sub)">'+YHD(c,'story')+'</p>'
+    +'<div class="meta"><div><small>'+(YHEN()?'Main stars':'구성 별')+'</small><b>'+(YHEN()? c.starsN : c.starsN+'개')+'</b></div><div><small>'+(YHEN()?'Status':'발견 상태')+'</small><b>'+(found[c.id]?(YHEN()?'Found ✓':'찾음 ✓'):(YHEN()?'Not found yet':'아직 못 찾음'))+'</b></div></div>'
+    +'<h3 style="margin:14px 0 4px;font-size:14px">'+(YHEN()?'Main stars (tap to show)':'대표 별 (누르면 표시돼요)')+'</h3><div class="starlist">'+starsHtml+'</div>'
+    +'<div class="btnrow"><button class="btn btn-gold" id="dFly" type="button">'+(YHEN()?'Go to this constellation':'이 별자리로 이동')+'</button>'
+    +(found[c.id]?'':'<button class="btn btn-ghost" id="dFound" type="button">'+(YHEN()?'Found it in the sky':'하늘에서 찾았어요')+'</button>')+'</div>';
+  p.querySelector('#dClose').addEventListener('click',function(){ p.classList.add('hidden'); document.getElementById('listPanel').style.display=''; });
+  p.querySelector('#dFly').addEventListener('click',function(){ flyTo(c); });
+  var df=p.querySelector('#dFound'); if(df) df.addEventListener('click',function(){ markFound(c); showDetail(c); });
+  p.querySelectorAll('.starlist button').forEach(function(b){ b.addEventListener('click',function(){
+    selectedStar={c:c,i:+b.dataset.i}; showStarInfo(selectedStar); }); });
+}
+function showStarInfo(sel){
+  var s=sel.c.stars[sel.i];
+  toast(YHEN()? YHT(sel.c.name)+' · '+YHT(s[0])+' — apparent magnitude '+s[3].toFixed(1) : sel.c.name+' · '+s[0]+' — 겉보기 등급 '+s[3].toFixed(1));
+}
+function markFound(c){
+  if(!found[c.id]){ found[c.id]=true; foundCount++; toast(YHEN()? '🎉 Found '+YHT(c.name)+'! ('+foundCount+'/'+C.length+')' : '🎉 '+c.name+'을(를) 발견했어요! ('+foundCount+'/'+C.length+')'); }
+  renderList();
+}
+
+/* ============ 모드 ============ */
+document.querySelectorAll('.modebtn').forEach(function(b){ b.addEventListener('click',function(){ stopTour(); setMode(b.dataset.mode); }); });
+function setMode(m){
+  mode=m;
+  document.querySelectorAll('.modebtn').forEach(function(x){ var on=x.dataset.mode===m; x.classList.toggle('on',on); x.setAttribute('aria-selected',on); });
+  document.getElementById('questBox').classList.add('hidden');
+  if(m==='find') startFind();
+  if(m==='quiz') startQuiz();
+  if(m==='free'){ toast('자유 관측 모드예요. 하늘을 드래그해 둘러보세요.'); }
+}
+function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j2=Math.floor(Math.random()*(i+1)); var t=a[i];a[i]=a[j2];a[j2]=t; } return a; }
+function startFind(){
+  var rest=C.filter(function(c){return !found[c.id];});
+  questQueue=shuffle((rest.length?rest:C).slice()); questIdx=0; showQuest();
+}
+function showQuest(){
+  var c=questQueue[questIdx]; if(!c){ document.getElementById('questBox').classList.add('hidden'); toast('모든 별자리를 다 찾았어요! 대단해요 🌌'); setMode('free'); return; }
+  var box=document.getElementById('questBox'); box.classList.remove('hidden');
+  document.getElementById('questStep').textContent=(YHEN()?'Find · ':'별자리 찾기 · ')+(questIdx+1)+' / '+questQueue.length;
+  document.getElementById('questTitle').textContent=YHEN()? 'Find '+YHT(c.name) : c.icon+' '+c.name+'을(를) 찾아보세요';
+  document.getElementById('questDesc').textContent=YHEN()? YHD(c,'desc')+' Turn the sky and tap this constellation to succeed.' : c.desc+' 하늘을 돌려서 이 별자리를 누르면 성공이에요.';
+  document.getElementById('questHintBtn').onclick=function(){
+    document.getElementById('questDesc').textContent=YHEN()? 'Hint: best at '+YHB(c.best)+', a '+YHT(c.season)+' constellation. Tapping it in the list shows where it is.' : '힌트: '+c.best+'에 가장 잘 보이고, '+c.season+' 별자리예요. 목록에서 눌러 위치를 확인해도 좋아요.';
+    flyTo(c); };
+  document.getElementById('questSkipBtn').onclick=function(){ questIdx++; showQuest(); };
+}
+function completeQuest(){
+  var c=questQueue[questIdx]; markFound(c); selectConstellation(c,false);
+  questIdx++; setTimeout(function(){ if(mode==='find') showQuest(); },650);
+}
+function startQuiz(){
+  quizAnswered=false;
+  quizTarget=C[Math.floor(Math.random()*C.length)];
+  flyTo(quizTarget);
+  var box=document.getElementById('questBox'); box.classList.remove('hidden');
+  document.getElementById('questStep').textContent='이름 맞히기 퀴즈';
+  document.getElementById('questTitle').textContent='이 모양, 무슨 별자리일까요?';
+  var opts=shuffle([quizTarget].concat(shuffle(C.filter(function(c){return c!==quizTarget;})).slice(0,3)));
+  document.getElementById('questDesc').innerHTML=opts.map(function(o){ return '<button type="button" class="btn btn-ghost" style="margin:3px;min-height:42px" data-q="'+o.id+'">'+YHT(o.name)+'</button>'; }).join('');
+  box.querySelectorAll('[data-q]').forEach(function(b){ b.addEventListener('click',function(){
+    if(quizAnswered) return; quizAnswered=true;
+    if(b.dataset.q===quizTarget.id){ quizScore+=10; document.getElementById('scoreQuiz').textContent=quizScore; markFound(quizTarget);
+      toast(YHEN()? 'Correct! It is '+YHT(quizTarget.name)+'. +10' : '정답! '+quizTarget.name+'예요. +10점'); selectConstellation(quizTarget,false); }
+    else { quizScore=Math.max(0,quizScore-3); document.getElementById('scoreQuiz').textContent=quizScore;
+      toast(YHEN()? 'Not quite. It was '+YHT(quizTarget.name)+'.' : '아쉬워요. 정답은 '+quizTarget.name+'이었어요.'); selectConstellation(quizTarget,false); }
+    setTimeout(function(){ if(mode==='quiz') startQuiz(); },1800);
+  }); });
+}
+
+/* ============ 하단 컨트롤 ============ */
+var timeRange=document.getElementById('timeRange'), timeLabel=document.getElementById('timeLabel');
+function fmtTime(m){ var h=Math.floor(m/60), mm=m%60; return (h<10?'0':'')+h+':'+(mm<10?'0':'')+mm; }
+timeRange.addEventListener('input',function(){ _timeMins=+this.value; timeLabel.textContent=fmtTime(+this.value); });
+timeLabel.textContent=fmtTime(+timeRange.value);
+document.querySelectorAll('.tgl').forEach(function(b){ b.addEventListener('click',function(){
+  var k=b.dataset.tgl; show[k]=!show[k]; b.classList.toggle('on',show[k]); }); });
+document.getElementById('resetViewBtn').addEventListener('click',function(){ animTarget={fy:targetYaw,fp:targetPitch,ty:0.6,tp:0.62,t:0}; targetFov=1; toast('북쪽 하늘로 돌아왔어요.'); });
+
+/* 자동 투어 */
+var tourTimer=null, tourIdx=0;
+function stopTour(){
+  if(!tourTimer) return;
+  clearInterval(tourTimer); tourTimer=null;
+  var btn=document.getElementById('tourBtn'); btn.classList.remove('on'); btn.textContent='✦ 자동 투어';
+}
+document.getElementById('tourBtn').addEventListener('click',function(){
+  var btn=this;
+  if(tourTimer){ stopTour(); return; }
+  btn.classList.add('on'); btn.textContent='■ 투어 멈추기';
+  var go=function(){ var c=C[tourIdx%C.length]; tourIdx++; selectConstellation(c,true); };
+  go(); tourTimer=setInterval(go,5200);
+  toast('자동 투어를 시작해요. 별자리를 하나씩 찾아가요.');
+});
+
+/* 잔잔한 소리 (WebAudio 앰비언트 패드, 외부 파일 없음) */
+document.getElementById('soundBtn').addEventListener('click',function(){
+  var btn=this;
+  if(!audioCtx){
+    try{
+      audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+      var master=audioCtx.createGain(); master.gain.value=0.0; master.connect(audioCtx.destination);
+      [196,246.9,293.7,392].forEach(function(f,i){
+        var o=audioCtx.createOscillator(); o.type='sine'; o.frequency.value=f;
+        var gn=audioCtx.createGain(); gn.gain.value=0.028;
+        var lfo=audioCtx.createOscillator(); lfo.frequency.value=0.05+i*0.017;
+        var lg=audioCtx.createGain(); lg.gain.value=0.012; lfo.connect(lg); lg.connect(gn.gain);
+        o.connect(gn); gn.connect(master); o.start(); lfo.start(); audioNodes.push(o,lfo);
+      });
+      audioNodes.master=master;
+    }catch(e){ toast('이 브라우저에서는 소리를 재생할 수 없어요.'); return; }
+  }
+  if(audioCtx.state==='suspended') audioCtx.resume();
+  audioOn=!audioOn;
+  if(audioNodes.master) audioNodes.master.gain.linearRampToValueAtTime(audioOn?0.55:0.0, audioCtx.currentTime+1.2);
+  btn.classList.toggle('on',audioOn); btn.setAttribute('aria-pressed',audioOn);
+  btn.textContent=audioOn?'♪ 소리 끄기':'♪ 잔잔한 소리 켜기';
+});
+
+/* 토스트 */
+var toastTimer=null;
+function toast(msg){
+  var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer=setTimeout(function(){ t.classList.remove('show'); },2600);
+}
+
+/* 키보드 */
+window.addEventListener('keydown',function(e){
+  var step=0.14;
+  if(e.key==='ArrowLeft'){ targetYaw+=step; } else if(e.key==='ArrowRight'){ targetYaw-=step; }
+  else if(e.key==='ArrowUp'){ targetPitch=Math.min(1.45,targetPitch+0.08); } else if(e.key==='ArrowDown'){ targetPitch=Math.max(-0.15,targetPitch-0.08); }
+  else if(e.key==='Escape'){ document.getElementById('detailPanel').classList.add('hidden'); document.getElementById('listPanel').style.display=''; selected=null; renderList(); }
+});
+
+/* 초기값 */
+syncDockH();
+window.addEventListener('load',syncDockH);
+setTimeout(syncDockH,350);
+renderList();
+selectConstellation(C[3],false); // 오리온으로 시작 (겨울 대표)
+setTimeout(function(){ toast('밤하늘에 오신 걸 환영해요. 드래그해서 하늘을 돌려보세요.'); },600);
+</script>
+
+<script>
+/* English text for the constellation detail panel (loaded by build.py for the constellation game). */
+window.YH_EN = {
+  uma: {
+    desc: 'The Great Bear carries the Big Dipper — seven stars that are the easiest signpost in the northern sky.',
+    story: 'In Greek myth it is the nymph Callisto, turned into a bear. Follow the Dipper\u2019s handle along the spring arc and you reach Arcturus in Boötes, then Spica in Virgo.'
+  },
+  umi: {
+    desc: 'A small dipper whose tail tip is Polaris, the pole star the whole sky turns around.',
+    story: 'The Little Bear is Arcas, son of Callisto, set in the sky beside his mother. Sailors steered by these stars long before there were compasses.'
+  },
+  cas: {
+    desc: 'A bright W of five stars, the queen of the northern sky, facing the Big Dipper across Polaris.',
+    story: 'Cassiopeia boasted of her beauty and angered Poseidon, and is shown seated on her throne. When the Dipper sinks low, the W of Cassiopeia rises in its place.'
+  },
+  ori: {
+    desc: 'The hunter of winter: three belt stars in a row, red Betelgeuse on one shoulder and blue Rigel on the other.',
+    story: 'Orion strides across the winter sky. Betelgeuse is a red supergiant hundreds of times the size of the Sun, and new stars are being born in the Orion Nebula below his belt.'
+  },
+  cyg: {
+    desc: 'A swan flying down the Milky Way, also called the Northern Cross; Deneb in its tail is a corner of the Summer Triangle.',
+    story: 'Zeus took the form of a swan to visit Leda, queen of Sparta. Albireo in the beak is a famous double star, one orange and one blue side by side.'
+  },
+  lyr: {
+    desc: 'A small parallelogram of stars led by Vega, one of the brightest stars in the sky.',
+    story: 'The lyre of Orpheus, placed in the sky. Vega is the Weaving Girl of the Korean Chilseok tale, meeting the Cowherd across the Milky Way once a year.'
+  },
+  sco: {
+    desc: 'A long S-curve low in the south, with red Antares at its heart.',
+    story: 'The scorpion that killed Orion — the two sit on opposite sides of the sky, so one sets as the other rises. Antares means \u201crival of Mars\u201d, for its colour.'
+  },
+  leo: {
+    desc: 'The lion of spring, marked by the backwards question mark of the Sickle and the bright star Regulus.',
+    story: 'The Nemean lion killed by Heracles. Regulus means \u201clittle king\u201d, and every November the Leonid meteors pour out of this part of the sky.'
+  },
+  gem: {
+    desc: 'The twins Castor and Pollux, two bright stars side by side in the winter sky.',
+    story: 'The Dioscuri, twin sons of Zeus. Castor is really six stars bound together, and a real planet has been found around Pollux.'
+  },
+  tau: {
+    desc: 'The bull\u2019s V-shaped face with red Aldebaran as its eye and the Pleiades on its back.',
+    story: 'Zeus became a bull to carry Europa across the sea. The Pleiades cluster on the bull\u2019s shoulder shows five or six stars to the naked eye.'
+  },
+  per: {
+    desc: 'The hero Perseus, between Andromeda and Cassiopeia, home of the August Perseid meteors.',
+    story: 'Perseus rescued Andromeda from the sea monster, and the two constellations sit side by side in the sky. The Perseid shower peaks here every August.'
+  },
+  and: {
+    desc: 'The princess Andromeda, chained to a rock, with the Andromeda Galaxy visible to the naked eye.',
+    story: 'Andromeda was to be sacrificed to a sea monster before Perseus saved her. Her galaxy is 2.5 million light years away — that light left when humans were using stone axes.'
+  },
+  boo: {
+    desc: 'The herdsman, a kite-shaped constellation with orange Arcturus at its base.',
+    story: 'Bo\u00f6tes drives the bears around the pole. Follow the arc of the Dipper\u2019s handle to Arcturus, the brightest star of the northern spring and summer sky.'
+  },
+  vir: {
+    desc: 'The maiden of spring, led by blue-white Spica at the end of the spring arc.',
+    story: 'Astraea, goddess of justice, or Demeter of the harvest. The Virgo Cluster here holds thousands of galaxies, and Spica means \u201cear of barley\u201d.'
+  },
+  dra: {
+    desc: 'A long dragon winding between the two bears, with Thuban once the pole star.',
+    story: 'Draco guarded the golden apples of the Hesperides. When the pyramids were built, Thuban stood at the pole and was the reference for Egyptian astronomers.'
+  }
+};
+
+</script>
+
+<!-- YH game shell: EN|KO, HUD hide (H), YH mark -->
+<script>window.YH_GAME = {
+  slug: 'constellation',
+  title: { ko: '3D 별자리 관측 — 밤하늘 15별자리 · Kim Yihyung', en: '3D Constellation Observatory — fifteen real constellations · Kim Yihyung' },
+  bar: {
+    target: '.top-actions',
+    css: '' +
+      '#yhBar{background:rgba(10,16,34,.62);border-color:rgba(148,178,255,.26);color:#e6edff;' +
+      'box-shadow:0 8px 24px rgba(3,7,20,.5)}' +
+      '#yhBar .yh-lang{background:rgba(160,190,255,.12)}' +
+      '#yhBar .yh-lang button.on{background:rgba(160,190,255,.3)}' +
+      'html[lang="en"] .yh-ko{display:none !important}' +
+      '.yh-en{display:none}' +
+      'html[lang="en"] .yh-en{display:inline}' +
+      'html[lang="en"] .yh-cmp-ko{display:none}' +
+      '@media (max-width:560px){#yhBar{height:30px;padding-right:5px;gap:4px}' +
+      '#yhBar .yh-brand{display:none}#yhBar .yh-lang button{padding:4px 5px;min-width:21px}' +
+      '#yhBar .yh-hud{padding:0 5px;height:24px}#yhBar .yh-hud .yh-k{display:none}}'
+  },
+  hud: ['.titlebox', '.top-actions .chip', '#questBox', '#listPanel', '#detailPanel', '.hintbar', '.compass', '.dock'],
+  dict: {
+    /* ---- chrome ---- */
+    '별자리': 'Constellation',
+    '관측': 'Observatory',
+    '밤하늘을 돌려보며 진짜 별자리 15개를 찾는 관측소예요': 'An observatory where you turn the real night sky and find fifteen constellations',
+    '3D 밤하늘을 드래그해서 돌려볼 수 있는 3D 밤하늘': 'A 3D night sky you can drag to turn',
+    '드래그해서 돌려볼 수 있는 3D 밤하늘': 'A 3D night sky you can turn by dragging',
+    '✦ 자동 투어': '✦ Auto tour',
+    '■ 투어 멈추기': '■ Stop tour',
+    '♪ 잔잔한 소리 켜기': '♪ Ambient sound',
+    '♪ 소리 끄기': '♪ Sound off',
+    '⌂ 북쪽으로': '⌂ Face north',
+
+    /* ---- quest box ---- */
+    '별자리 찾기': 'Find a constellation',
+    '이름 맞히기 퀴즈': 'Name that constellation',
+    '이 모양, 무슨 별자리일까요?': 'Which constellation is this?',
+    '힌트 보기': 'Show a hint',
+    '건너뛰기': 'Skip',
+    '힌트:': 'Hint: ',
+
+    /* ---- list panel ---- */
+    '별자리 목록': 'Constellation list',
+    '별자리 도감': 'Constellation guide',
+    '접기': 'Collapse',
+    '펼치기': 'Expand',
+    '별자리를 누르면 그쪽 하늘로 천천히 이동해요. 하늘에서 별을 눌러도 정보를 볼 수 있어요.':
+      'Tap a constellation to glide to that part of the sky. Tap a star up there for its details too.',
+    '별자리·별 이름 검색 (예: 오리온, 직녀)': 'Search a constellation or star (e.g. Orion)',
+    '계절 필터': 'Season filter',
+    '전체': 'All',
+    '봄': 'Spring',
+    '여름': 'Summer',
+    '가을': 'Autumn',
+    '겨울': 'Winter',
+    '연중': 'All year',
+    '검색 결과가 없어요. 다른 이름으로 찾아보세요.': 'Nothing matched. Try another name.',
+    '찾음 ✓': 'Found ✓',
+    '미발견': 'Not yet',
+
+    /* ---- detail panel ---- */
+    '상세 닫기': 'Close details',
+    '가장 보기 좋은 때 ·': 'Best seen · ',
+    '구성 별': 'Main stars',
+    '발견 상태': 'Status',
+    '아직 못 찾음': 'Not found yet',
+    '대표 별 (누르면 표시돼요)': 'Main stars (tap to show)',
+    '이 별자리로 이동': 'Go to this constellation',
+    '하늘에서 찾았어요': 'Found it in the sky',
+
+    /* ---- bottom dock ---- */
+    '드래그 회전 · 스크롤/핀치 확대 · 별 클릭 정보': 'Drag to turn · scroll or pinch to zoom · tap a star for details',
+    '관측 모드': 'Observation mode',
+    '자유 관측': 'Free sky',
+    '하늘을 마음껏 둘러보기': 'Look around freely',
+    '미션을 따라 하늘에서 찾기': 'Follow missions in the sky',
+    '이름 맞히기': 'Name that shape',
+    '모양만 보고 퀴즈 풀기': 'Quiz yourself on the shape',
+    '시각': 'Time',
+    '관측 시각': 'Observation time',
+    '찾은 별자리': 'Found ',
+    '퀴즈 점수': 'Quiz ',
+    '연결선': 'Lines',
+    '이름표': 'Labels',
+    '은하수': 'Milky Way',
+    '방위 눈금': 'Grid',
+    '느린 회전': 'Slow spin',
+
+    /* ---- toasts ---- */
+    '모든 별자리를 다 찾았어요! 대단해요 🌌': 'You found every constellation! Wonderful 🌌',
+    '자유 관측 모드예요. 하늘을 드래그해 둘러보세요.': 'Free sky mode — drag to look around.',
+    '자동 투어를 시작해요. 별자리를 하나씩 찾아가요.': 'Starting the tour, one constellation at a time.',
+    '북쪽 하늘로 돌아왔어요.': 'Back to the northern sky.',
+    '이 브라우저에서는 소리를 재생할 수 없어요.': 'This browser cannot play sound.',
+    '밤하늘에 오신 걸 환영해요. 드래그해서 하늘을 돌려보세요.': 'Welcome to the night sky. Drag to turn it.',
+
+    /* ---- constellation names ---- */
+    '큰곰자리': 'Ursa Major',
+    '작은곰자리': 'Ursa Minor',
+    '카시오페이아자리': 'Cassiopeia',
+    '오리온자리': 'Orion',
+    '백조자리': 'Cygnus',
+    '거문고자리': 'Lyra',
+    '전갈자리': 'Scorpius',
+    '사자자리': 'Leo',
+    '쌍둥이자리': 'Gemini',
+    '황소자리': 'Taurus',
+    '페르세우스자리': 'Perseus',
+    '안드로메다자리': 'Andromeda',
+    '목동자리': 'Boötes',
+    '처녀자리': 'Virgo',
+    '용자리': 'Draco',
+
+    /* ---- star names ---- */
+    '감마': 'Gamma', '데네볼라': 'Denebola', '데네브': 'Deneb', '델타': 'Delta',
+    '델타 아크': 'Delta Arc', '두베': 'Dubhe', '라스 엘라세드': 'Ras Elased', '라스타반': 'Rastaban',
+    '레굴루스': 'Regulus', '레사트': 'Rasalas', '로': 'Rho', '루크바': 'Ruchbah',
+    '리겔': 'Rigel', '메그레즈': 'Megrez', '메라크': 'Merak', '메브수타': 'Mebsuta',
+    '메이사': 'Meissa', '미라크': 'Mirach', '미르파크': 'Mirfak', '미자르': 'Mizar',
+    '민타카': 'Mintaka', '베가 · 직녀성': 'Vega · Weaving Girl', '베타': 'Beta',
+    '베텔게우스': 'Betelgeuse', '벨라트릭스': 'Bellatrix', '빈데미아트릭스': 'Vindemiatrix',
+    '사드르': 'Sadr', '사이프': 'Saiph', '샤울라': 'Shaula', '세긴': 'Segin',
+    '셰다르': 'Schedar', '셸리아크': 'Sheliak', '술라파트': 'Sulafat', '스피카': 'Spica',
+    '시그마': 'Sigma', '아르크투루스': 'Arcturus', '아우바': 'Auva', '아인': 'Ain',
+    '아크라브': 'Acrab', '안타레스': 'Antares', '알골': 'Algol', '알기에바': 'Algieba',
+    '알니타크': 'Alnitak', '알닐람': 'Alnilam', '알데바란': 'Aldebaran', '알리오트': 'Alioth',
+    '알마크': 'Almach', '알비레오': 'Albireo', '알카이드': 'Alkaid',
+    '알키오네 · 플레이아데스': 'Alcyone · Pleiades', '알타이': 'Altair', '알페라츠': 'Alpheratz',
+    '알헤나': 'Alhena', '에다식': 'Edasich', '에타': 'Eta', '엘나트': 'Elnath',
+    '엘타닌': 'Eltanin', '엡실론': 'Epsilon', '와사트': 'Wasat', '웨이': 'Wei',
+    '일둔': 'Yildun', '자비야바': 'Zavijava', '제나': 'Zena', '제타': 'Zeta',
+    '조스마': 'Zosma', '지아우스': 'Jiaus', '카스토르': 'Castor', '카프': 'Caph',
+    '코카브': 'Kochab', '타우': 'Tau', '테자트': 'Tejat', '투반': 'Thuban',
+    '파이': 'Phi', '페르카드': 'Pherkad', '페크다': 'Phecda', '포리마': 'Porrima',
+    '폴라리스 · 북극성': 'Polaris · North Star', '폴룩스': 'Pollux',
+    '프리마 히아두스': 'Prima Hyadum', '헤제': 'Heze'
+  },
+  after: function (api) {
+    /* Re-render the list and the open detail panel in the new language, so
+       the row text (season, star count) and the description follow EN|KO. */
+    api.onLang(function (lang) {
+      try {
+        if (window.renderList) window.renderList();
+        if (window.selected && window.showDetail) window.showDetail(window.selected);
+      } catch (e) {}
+    });
+  },
+  rules: [
+    [/^별자리 찾기 · (\d+) \/ (\d+)$/, function (m) { return 'Find · ' + m[1] + ' / ' + m[2]; }],
+    [/^(\d+)월 밤 10시$/, function (m) {
+      var M = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      return '10 pm in ' + (M[+m[1] - 1] || m[0]);
+    }],
+    [/^([\d.]+)등급$/, function (m) { return m[1] + ' mag'; }],
+    [/^· (\d+)개 발견$/, function (m) { return '· ' + m[1] + ' found'; }],
+    [/^(\d+)개$/, function (m) { return m[1] + ' stars'; }],
+    [/^🎉 (.+)을\(를\) 발견했어요! \((\d+)\/(\d+)\)$/, function (m) { return '🎉 Found ' + m[1] + '! (' + m[2] + '/' + m[3] + ')'; }],
+    [/^정답! (.+)예요\. \+10점$/, function (m) { return 'Correct! It is ' + m[1] + '. +10'; }],
+    [/^아쉬워요\. 정답은 (.+)이었어요\.$/, function (m) { return 'Not quite. It was ' + m[1] + '.'; }],
+    [/^(.+) · (.+) — 겉보기 등급 ([\d.]+)$/, function (m) { return m[1] + ' · ' + m[2] + ' — apparent magnitude ' + m[3]; }],
+    [/^(.+) — 겉보기 등급 ([\d.]+)$/, function (m) { return m[1] + ' — apparent magnitude ' + m[2]; }]
+  ]
+};</script>
+<script>
+/* ============================================================
+   YH game shell — shared UI layer
+   EN | KO one-tap switch · HUD hide (H) · YH mark
+   Injected by build.py; reads window.YH_GAME for per-game config.
+   ============================================================ */
+(function () {
+  'use strict';
+  var CFG = window.YH_GAME;
+  if (!CFG) return;
+
+  var LANG_KEY = 'yh.lang';
+  var lang = 'ko';
+  try { var saved = localStorage.getItem(LANG_KEY); if (saved === 'en' || saved === 'ko') lang = saved; } catch (e) {}
+
+  /* ---------------- dictionary ---------------- */
+  var DICT = CFG.dict || {};
+  var RULES = CFG.rules || [];
+
+  function lookup(str) {
+    if (Object.prototype.hasOwnProperty.call(DICT, str)) return DICT[str];
+    for (var i = 0; i < RULES.length; i++) {
+      var m = str.match(RULES[i][0]);
+      if (m) {
+        try {
+          var out = RULES[i][1](m);
+          return polish(out);
+        } catch (e) { return null; }
+      }
+    }
+    return null;
+  }
+  /* A template can pull a Korean name out of the original string ("청팀 차례");
+     replace any known words left inside the produced sentence. */
+  function polish(str) {
+    if (typeof str !== 'string' || !/[\uac00-\ud7a3]/.test(str)) return str;
+    for (var k in DICT) {
+      if (k.length > 1 && str.indexOf(k) >= 0) str = str.split(k).join(DICT[k]);
+    }
+    var extra = CFG.polish || [];
+    for (var i = 0; i < extra.length; i++) str = str.replace(extra[i][0], extra[i][1]);
+    return str;
+  }
+  function t(ko) { return lang === 'en' ? (lookup(ko) || ko) : ko; }
+
+  /* ---------------- text node translation ---------------- */
+  var SKIP = 'script,style,noscript,#yhBar,#yhBrand';
+  var observer = null;
+  var muting = 0;
+
+  function isSkipped(node) {
+    var el = node.nodeType === 1 ? node : node.parentNode;
+    while (el && el !== document.body) {
+      if (el.id === 'yhBar' || el.id === 'yhBrand') return true;
+      var tag = el.tagName;
+      if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'NOSCRIPT' || tag === 'TEXTAREA') return true;
+      el = el.parentNode;
+    }
+    return false;
+  }
+
+  function translateNode(node) {
+    if (!node || node.nodeType !== 3) return;
+    if (isSkipped(node)) return;
+    var raw = node.nodeValue;
+    if (!raw) return;
+    if (lang === 'ko') {
+      if (node.__yhKo !== undefined && node.nodeValue !== node.__yhKo) {
+        muting++; node.nodeValue = node.__yhKo; muting--;
+      }
+      return;
+    }
+    var m = /^(\s*)([\s\S]*?)(\s*)$/.exec(raw);
+    var key = m[2];
+    if (!key) return;
+    /* English (or already-translated) text never needs a lookup: this also
+       stops a rule that maps English to itself from looping forever. */
+    if (!/[\uac00-\ud7a3]/.test(key)) return;
+    var en = lookup(key);
+    if (en === null || en === undefined) return;
+    if (node.__yhKo !== raw) node.__yhKo = raw;
+    muting++;
+    node.nodeValue = m[1] + en + m[3];
+    muting--;
+  }
+
+  function translateValue(el, name) {
+    if (!el || el.nodeType !== 1) return;
+    if (el.closest && el.closest('#yhBar,#yhBrand')) return;
+    var value = el.getAttribute(name);
+    if (!value) return;
+    if (lang === 'ko') {
+      var store = el.__yhAttr || (el.__yhAttr = {});
+      if (store[name] !== undefined && value !== store[name]) el.setAttribute(name, store[name]);
+      return;
+    }
+    if (!/[\uac00-\ud7a3]/.test(value)) return;
+    var en = lookup(value.trim());
+    if (!en) return;
+    var store2 = el.__yhAttr || (el.__yhAttr = {});
+    if (store2[name] !== value) store2[name] = value;
+    el.setAttribute(name, en);
+  }
+
+  var ATTRS = ['aria-label', 'title', 'placeholder', 'alt'];
+
+  function walk(root) {
+    if (!root) return;
+    if (root.nodeType === 3) { translateNode(root); return; }
+    if (root.nodeType !== 1) return;
+    if (isSkipped(root)) return;
+    for (var i = 0; i < ATTRS.length; i++) translateValue(root, ATTRS[i]);
+    var tw = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+    var node;
+    while ((node = tw.nextNode())) translateNode(node);
+    if (root.querySelectorAll) {
+      var all = root.querySelectorAll('[aria-label],[title],[placeholder],[alt]');
+      for (var j = 0; j < all.length; j++) {
+        for (var k = 0; k < ATTRS.length; k++) translateValue(all[j], ATTRS[k]);
+      }
+    }
+  }
+
+  function startObserver() {
+    if (observer) return;
+    observer = new MutationObserver(function (muts) {
+      if (muting) return;
+      for (var i = 0; i < muts.length; i++) {
+        var mu = muts[i];
+        if (mu.type === 'characterData') translateNode(mu.target);
+        else if (mu.type === 'childList') {
+          for (var j = 0; j < mu.addedNodes.length; j++) walk(mu.addedNodes[j]);
+        } else if (mu.type === 'attributes') translateValue(mu.target, mu.attributeName);
+      }
+    });
+    observer.observe(document.body, {
+      subtree: true, childList: true, characterData: true,
+      attributes: true, attributeFilter: ATTRS
+    });
+  }
+
+  /* ---------------- language switch ---------------- */
+  var langHooks = [];
+  function setLang(next, silent) {
+    if (next !== 'en' && next !== 'ko') return;
+    lang = next;
+    try { localStorage.setItem(LANG_KEY, next); } catch (e) {}
+    document.documentElement.lang = next;
+    if (CFG.title && CFG.title[next]) document.title = CFG.title[next];
+    walk(document.body);
+    var btns = document.querySelectorAll('#yhBar [data-yh-l]');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].classList.toggle('on', btns[i].getAttribute('data-yh-l') === next);
+      btns[i].setAttribute('aria-pressed', btns[i].getAttribute('data-yh-l') === next ? 'true' : 'false');
+    }
+    var hudBtn = document.getElementById('yhHudBtn');
+    if (hudBtn) {
+      hudBtn.setAttribute('aria-label', next === 'en' ? 'Hide the HUD (H)' : 'HUD 숨기기 (H)');
+      hudBtn.setAttribute('title', hudHidden
+        ? (next === 'en' ? 'Show the HUD (H)' : 'HUD 다시 보기 (H)')
+        : (next === 'en' ? 'Hide the HUD (H)' : 'HUD 숨기기 (H)'));
+    }
+    var brand = document.getElementById('yhBrand');
+    if (brand) brand.setAttribute('title', next === 'en' ? 'Kim Yihyung · YH — back to the portfolio' : 'Kim Yihyung · YH — 포트폴리오로');
+    for (var h = 0; h < langHooks.length; h++) { try { langHooks[h](next); } catch (e) {} }
+    if (!silent && window.dispatchEvent) {
+      try { window.dispatchEvent(new CustomEvent('yh:lang', { detail: { lang: next } })); } catch (e) {}
+    }
+  }
+
+  /* ---------------- HUD hide (cinema) ---------------- */
+  var hudHidden = false;
+  var hudStore = [];
+  function setHud(show) {
+    /* 두 번 연속 숨김이 들어와도 첫 번째에 저장한 원래 값을 유지한다. */
+    if (hudHidden === !show) { if (show === false) return; }
+    hudHidden = !show;
+    var sels = CFG.hud || [];
+    if (show) {
+      for (var i = 0; i < hudStore.length; i++) {
+        var it = hudStore[i];
+        it.el.style.opacity = it.op;
+        it.el.style.pointerEvents = it.pe;
+        it.el.style.visibility = it.vis;
+      }
+      hudStore = [];
+    } else {
+      hudStore = [];
+      for (var s = 0; s < sels.length; s++) {
+        var list = document.querySelectorAll(sels[s]);
+        for (var n = 0; n < list.length; n++) {
+          var el = list[n];
+          if (!el || el === barEl || (barEl && barEl.contains(el))) continue;
+          hudStore.push({
+            el: el,
+            op: el.style.opacity || '', pe: el.style.pointerEvents || '', vis: el.style.visibility || ''
+          });
+          el.style.transition = 'opacity .28s ease';
+          el.style.opacity = '0';
+          el.style.pointerEvents = 'none';
+        }
+      }
+    }
+    var btn = document.getElementById('yhHudBtn');
+    if (btn) {
+      btn.classList.toggle('on', !show);
+      btn.setAttribute('aria-pressed', show ? 'false' : 'true');
+      btn.setAttribute('title', show ? (lang === 'en' ? 'Hide HUD (H)' : 'HUD 숨기기 (H)') : (lang === 'en' ? 'Show HUD (H)' : 'HUD 다시 보기 (H)'));
+    }
+    document.body.classList.toggle('yh-cinema', !show);
+  }
+
+  /* ---------------- shell markup ---------------- */
+  var barEl = null;
+  function buildBar() {
+    var bar = document.createElement('div');
+    bar.id = 'yhBar';
+    bar.setAttribute('role', 'group');
+    bar.setAttribute('aria-label', 'View options');
+    bar.innerHTML =
+      '<span class="yh-brand" id="yhBrand" title="Kim Yihyung · YH"><b>YH</b></span>' +
+      '<span class="yh-lang" role="group" aria-label="Language">' +
+      '<button type="button" data-yh-l="ko">KO</button>' +
+      '<button type="button" data-yh-l="en">EN</button></span>' +
+      '<button type="button" class="yh-hud" id="yhHudBtn" aria-pressed="false" title="HUD 숨기기 (H)">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>' +
+      '<span class="yh-k">H</span></button>';
+    var target = CFG.bar && CFG.bar.target ? document.querySelector(CFG.bar.target) : null;
+    if (target) {
+      bar.className = 'yh-inrow';
+      target.appendChild(bar);
+    } else {
+      bar.className = 'yh-floating';
+      document.body.appendChild(bar);
+    }
+    barEl = bar;
+    if (CFG.bar && CFG.bar.css) {
+      var extra = document.createElement('style');
+      extra.textContent = CFG.bar.css;
+      document.head.appendChild(extra);
+    }
+    bar.addEventListener('click', function (e) {
+      var b = e.target.closest('button');
+      if (!b) return;
+      e.preventDefault();
+      e.stopPropagation();
+      b.blur();
+      if (b.hasAttribute('data-yh-l')) setLang(b.getAttribute('data-yh-l'));
+      else if (b.id === 'yhHudBtn') setHud(hudHidden);
+    });
+    bar.addEventListener('pointerdown', function (e) { e.stopPropagation(); });
+  }
+
+  function buildStyle() {
+    var css = '' +
+      '#yhBar{pointer-events:auto;display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 8px 0 0;border-radius:999px;' +
+      'background:rgba(127,127,127,.16);border:1px solid rgba(127,127,127,.34);color:inherit;' +
+      'backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-family:inherit;line-height:1;' +
+      'user-select:none;-webkit-user-select:none;flex:none;z-index:60}' +
+      '.yh-floating{position:fixed;right:10px;top:calc(env(safe-area-inset-top) + 10px)}' +
+      '#yhBar .yh-brand{display:inline-flex;align-items:center;justify-content:center;width:30px;height:26px;margin-left:3px;' +
+      'border-radius:8px;background:linear-gradient(150deg,rgba(120,200,255,.32),rgba(180,140,255,.26));' +
+      'border:1px solid rgba(127,127,127,.34)}' +
+      '#yhBar .yh-brand b{font-size:10.5px;font-weight:800;letter-spacing:.06em}' +
+      '#yhBar .yh-lang{display:inline-flex;padding:2px;border-radius:999px;background:rgba(127,127,127,.14)}' +
+      '#yhBar .yh-lang button{border:0;background:transparent;color:inherit;opacity:.55;font:inherit;font-size:10.5px;' +
+      'font-weight:800;letter-spacing:.05em;padding:5px 7px;border-radius:999px;cursor:pointer;min-width:26px}' +
+      '#yhBar .yh-lang button.on{opacity:1;background:rgba(127,127,127,.30)}' +
+      '#yhBar .yh-hud{display:inline-flex;align-items:center;gap:3px;height:28px;min-height:26px;padding:0 7px;border-radius:999px;' +
+      'border:1px solid rgba(127,127,127,.34);background:transparent;color:inherit;opacity:.7;cursor:pointer;font:inherit}' +
+      '#yhBar .yh-hud svg{width:13px;height:13px}' +
+      '#yhBar .yh-hud .yh-k{font-size:9.5px;font-weight:800;letter-spacing:.04em}' +
+      '#yhBar .yh-hud.on{opacity:1;background:rgba(127,127,127,.26)}' +
+      '#yhBar button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}' +
+      'body.yh-cinema{cursor:none}' +
+      '@media (max-width:420px){#yhBar{height:32px;gap:4px;padding-right:6px}#yhBar .yh-brand{width:27px;height:24px}' +
+      '#yhBar .yh-lang button{padding:5px 6px;min-width:24px;min-height:26px}#yhBar .yh-hud{padding:0 6px;height:26px}}';
+    var st = document.createElement('style');
+    st.id = 'yhStyle';
+    st.textContent = css;
+    document.head.appendChild(st);
+  }
+
+  /* ---------------- boot ---------------- */
+  function boot() {
+    buildStyle();
+    document.documentElement.lang = lang;
+    if (CFG.title && CFG.title[lang]) document.title = CFG.title[lang];
+    buildBar();
+    setLang(lang, true);
+    if (CFG.initialLang && lang !== CFG.initialLang) setLang(CFG.initialLang, true);
+    startObserver();
+    document.addEventListener('keydown', function (e) {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      var tag = (e.target && e.target.tagName) || '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || (e.target && e.target.isContentEditable)) return;
+      if (e.key === 'h' || e.key === 'H') {
+        e.preventDefault();
+        setHud(hudHidden);
+      }
+    }, true);
+    if (CFG.after) { try { CFG.after({ t: t, lang: lang, setLang: setLang, onLang: function (f) { langHooks.push(f); }, setHud: setHud }); } catch (e) { console.warn('YH after', e); } }
+  }
+
+  window.YH = {
+    t: t, lookup: lookup, lang: function () { return lang; }, setLang: setLang,
+    onLang: function (f) { langHooks.push(f); }, walk: function (r) { walk(r || document.body); },
+    setHud: setHud, hidden: function () { return hudHidden; }
+  };
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
+</script>
+</body>
+</html>
