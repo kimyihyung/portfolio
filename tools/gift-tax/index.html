@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0b0d">
+<title>GiftTax — 2026 증여세·혼인출산 공제 계산기 | Kim Yihyung</title>
+<meta name="description" content="2026년 상속세 및 증여세법 기준 증여세 계산기. 증여자 관계별 기본 공제(배우자 6억·직계존속 5천만·직계비속 5천만·기타친족 1천만)에 혼인·출산 공제 1억을 더하고, 10년 합산·기납부세액·세대생략 할증·신고세액공제 3%까지 반영해 과세표준과 납부할 세액을 구간별로 보여 줍니다. 입력값은 저장되지 않습니다.">
+<meta name="keywords" content="증여세 계산기, 증여세 계산, 혼인공제, 출산공제, 증여재산공제, 직계존속 공제, 배우자 공제, 10년 합산, 세대생략 할증, 신고세액공제, 2026 증여세율, 사전증여, gift tax korea">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/gift-tax/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b0d'/%3E%3Cpath d='M6 14h20v12H6z' fill='none' stroke='%23e5b45c' stroke-width='2.2' stroke-linejoin='round'/%3E%3Cpath d='M16 14v12M16 14c-4 0-6-2-6-4s3-2 6 4c3-6 6-4 6-4s-2 4-6 4z' fill='none' stroke='%237fd6a0' stroke-width='2.1' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/gift-tax/">
+<meta property="og:title" content="GiftTax — 증여세·혼인출산 공제, 2026년 기준">
+<meta property="og:description" content="부모에게 1억 5천만원을 받으면 세액이 0원이 되는 이유까지. 관계별 공제·10년 합산·세대생략 할증·신고세액공제 3%를 한 화면에서 계산합니다.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="GiftTax — 증여세와 혼인·출산 공제 계산기">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="GiftTax — 증여세·혼인출산 공제, 2026년 기준">
+<meta name="twitter:description" content="직계존속 1.5억 + 혼인·출산 공제 = 0원, 공제 없이 1억 = 970만원. 5구간 누진세율과 구간별 내역까지.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "GiftTax — 2026 증여세·혼인출산 공제 계산기",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/gift-tax/",
+      "description": "대한민국 상속세 및 증여세법(2026년 시행) 기준으로 증여세를 계산한다. 증여자 관계별 증여재산공제(배우자 6억원, 직계존속 성년 5천만원·미성년 2천만원, 직계비속 5천만원, 기타친족 1천만원)에 혼인·출산 증여재산 공제 1억원을 더하고, 10년 이내 동일인 증여 합산과 기납부세액, 세대생략 할증(30%·미성년 20억 초과 40%), 신고세액공제 3%를 반영해 과세표준·산출세액·납부할 세액·실효세율과 5구간 누진세율 내역을 보여 준다. 모든 계산은 브라우저에서 수행하며 입력값을 전송하거나 저장하지 않는다.",
+      "featureList": [
+        "증여자 관계별 기본 공제 5종 (10년 합산 기준)",
+        "혼인·출산 증여재산 공제 최대 1억원 (기본 공제와 합산)",
+        "10년 이내 동일인 증여 합산과 기납부세액 차감",
+        "세대생략 할증 30%, 미성년 20억 초과 시 40%",
+        "신고세액공제 3% 반영",
+        "5구간 누진세율(10·20·30·40·50%) 구간별 내역표",
+        "실효세율과 카카오톡 요약 복사",
+        "100% 브라우저 계산: 업로드 0바이트, 외부 요청 0건"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "KRW" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "GiftTax", "item": "https://kimyihyung.github.io/portfolio/tools/gift-tax/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "부모에게 1억 5천만원을 받으면 증여세가 0원인가요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "혼인신고일 전후 2년 이내이거나 자녀 출생일부터 2년 이내에 직계존속에게 받은 재산이라면 그렇습니다. 직계존속 기본 공제 5천만원에 혼인·출산 증여재산 공제 1억원이 더해져 1억 5천만원까지 공제되기 때문입니다. 다만 두 공제는 같은 사람에게서 받은 증여를 10년 합산해 한 번만 적용되고, 혼인·출산 공제는 평생 1억원이 한도입니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "혼인·출산 공제는 부모에게만 되나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "직계존속, 즉 부모와 조부모에게 받은 재산만 해당합니다. 배우자나 형제자매, 삼촌에게 받은 증여는 혼인·출산 공제 대상이 아닙니다. 조부모에게 받아도 직계존속이므로 적용되지만, 그 경우 수증자가 손자녀라 세대생략 할증이 함께 붙을 수 있습니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "10년 합산은 어떻게 계산하나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "증여일 전 10년 이내에 같은 사람에게서 받은 증여재산가액을 이번 증여에 더해 과세표준을 구하고, 그렇게 계산된 산출세액에서 이미 낸 세액을 뺍니다. 직계존속이 증여자이면 그 배우자도 같은 사람으로 보므로, 아버지와 어머니에게 나눠 받은 돈도 한 사람에게 받은 것으로 합산됩니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "세대생략 할증은 언제 붙나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "할아버지·할머니가 손자녀에게, 또는 조부모가 증여한 재산을 부모를 건너뛰고 손자녀가 받을 때 산출세액의 30%가 더 붙습니다. 수증자가 미성년자이고 증여재산가액이 20억원을 넘으면 40%가 됩니다. 부모가 자녀에게 주는 증여에는 붙지 않습니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "신고세액공제 3%는 무엇인가요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "증여세 과세표준을 신고기한(증여일이 속하는 달의 말일부터 3개월) 안에 신고하면 산출세액의 3%를 공제받습니다. 세대생략 할증액도 포함해 계산합니다. 기한을 넘기면 이 공제가 사라지고 무신고 가산세 20%와 납부지연 가산세가 붙으므로, 실제 차이는 3%보다 훨씬 큽니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "이 결과를 신고에 그대로 써도 되나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "모의계산입니다. 부담부증여(채무인수), 비상장주식 감정평가, 가업승계 특례, 공익법인 출연, 재해손실 공제, 신고기한 연장 등은 반영하지 않습니다. 금액이 크거나 재산 종류가 복잡하면 세무사 확인을 거치세요." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+:root {
+  --bg: #0b0b0d;
+  --bg2: #0e0e11;
+  --panel: #141311;
+  --panel2: #1b1917;
+  --line: rgba(255,255,255,.09);
+  --line2: rgba(255,255,255,.18);
+  --ink: #f7f2e9;
+  --muted: #a9a29a;
+  --muted2: #7d766e;
+  --accent: #e5b45c;
+  --accent2: #f3cf85;
+  --accent-dim: rgba(229,180,92,.12);
+  --on-accent: #1d1503;
+  --ok: #7fd6a0;
+  --warn: #ffa06b;
+  --bad: #ff7d7d;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  line-height: 1.6;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(110% 55% at 50% -18%, rgba(229,180,92,.13), transparent 62%),
+    radial-gradient(60% 40% at 100% 2%, rgba(229,180,92,.05), transparent 60%);
+  background-repeat: no-repeat;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  word-break: keep-all;
+}
+::selection { background: var(--accent); color: var(--on-accent); }
+a { color: inherit; }
+button, input, select, textarea { font-family: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+.wrap { width: 100%; max-width: 1220px; margin: 0 auto; padding: 0 20px 48px; }
+
+/* ---------- topbar ---------- */
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0 12px; }
+.brand { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: var(--ink); min-width: 0; }
+.mark {
+  min-width: 28px; height: 22px; padding: 0 6px; border-radius: 7px; flex: none;
+  border: 1px solid rgba(229,180,92,.45); background: var(--accent-dim);
+  display: grid; place-items: center; font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: var(--accent);
+}
+.brand-txt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.top-actions { display: inline-flex; align-items: center; gap: 9px; flex: none; }
+.lang-toggle {
+  appearance: none; border: 1px solid var(--line); background: var(--panel); color: var(--muted2);
+  height: 34px; padding: 0 11px; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px;
+  cursor: pointer; font-size: 11px; font-weight: 700; letter-spacing: .06em; line-height: 1;
+  transition: color .2s, border-color .2s, transform .15s;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.94); }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
+.topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
+
+/* ---------- hero ---------- */
+.hero { padding: 22px 0 18px; max-width: 900px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; margin: 0 0 14px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent);
+  border: 1px solid rgba(229,180,92,.28); background: rgba(229,180,92,.06); padding: 6px 11px; border-radius: 999px;
+}
+.eyebrow .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+h1 { margin: 0 0 14px; font-size: clamp(26px, 4.2vw, 42px); line-height: 1.18; letter-spacing: -.035em; font-weight: 800; }
+h1 .soft { color: var(--muted); }
+h1 .gold { color: var(--accent); }
+.lede { margin: 0 0 16px; color: var(--muted); font-size: 15px; max-width: 800px; line-height: 1.7; }
+.lede strong { color: var(--ink); font-weight: 600; }
+.lede code { font-family: var(--mono); font-size: .92em; color: var(--accent); }
+
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--panel); font-size: 11.5px; color: var(--muted);
+  font-family: var(--mono); letter-spacing: .02em;
+}
+.pill b { color: var(--ink); font-weight: 700; }
+.pill--live { border-color: rgba(127,214,160,.32); background: rgba(127,214,160,.07); color: #a6e6c4; }
+.pill--live b { color: #bff3d8; }
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px rgba(127,214,160,.14); }
+
+/* ---------- layout ---------- */
+.work { display: grid; grid-template-columns: minmax(0,1fr) 336px; gap: 16px; align-items: start; margin-top: 6px; }
+@media (max-width: 1060px) { .work { grid-template-columns: minmax(0,1fr); } }
+
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); min-width: 0; }
+.panel { padding: 16px; display: grid; gap: 13px; min-width: 0; }
+.panel h3 { margin: 0; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted2); font-family: var(--mono); font-weight: 700; }
+.side { display: grid; gap: 12px; min-width: 0; }
+@media (min-width: 1061px) { .side { position: sticky; top: 14px; } }
+
+.btn {
+  appearance: none; cursor: pointer; border-radius: 11px; border: 1px solid var(--line2);
+  background: var(--panel2); color: var(--ink); font-size: 13px; font-weight: 650;
+  padding: 10px 16px; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  transition: transform .12s, border-color .2s, background .2s, opacity .2s; text-decoration: none;
+}
+.btn:hover { border-color: rgba(255,255,255,.3); }
+.btn:active { transform: scale(.98); }
+.btn:disabled { opacity: .42; cursor: not-allowed; }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 750; }
+.btn--primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.btn--ghost { background: transparent; }
+.btn--sm { padding: 7px 11px; font-size: 12px; border-radius: 9px; }
+.btn--block { width: 100%; }
+
+/* ---------- tabs ---------- */
+.tabs { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 6px; margin-bottom: 4px; }
+.tabs button {
+  appearance: none; cursor: pointer; text-align: left; min-width: 0;
+  display: grid; gap: 2px; padding: 10px 12px; border-radius: 12px;
+  border: 1px solid var(--line); background: var(--panel2); color: var(--muted);
+  transition: border-color .2s, background .2s, color .2s;
+}
+.tabs button:hover { border-color: var(--line2); }
+.tabs button b { font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; color: var(--muted2); font-weight: 700; }
+.tabs button span { font-size: 13px; font-weight: 700; color: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tabs button[aria-selected="true"] { border-color: rgba(229,180,92,.5); background: linear-gradient(180deg, rgba(229,180,92,.14), rgba(229,180,92,.03)); color: var(--ink); }
+.tabs button[aria-selected="true"] b { color: var(--accent); }
+@media (max-width: 560px) {
+  .tabs button { padding: 9px 9px; }
+  .tabs button span { font-size: 11.5px; white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.25; }
+}
+
+.tabpanel { display: grid; gap: 13px; min-width: 0; }
+.calc-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.calc-head h2 { margin: 0; font-size: 16.5px; letter-spacing: -.02em; }
+.calc-head span { font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted2); }
+
+/* ---------- inputs ---------- */
+.fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; min-width: 0; }
+@media (max-width: 560px) { .fields { grid-template-columns: minmax(0,1fr); } }
+.field { display: grid; gap: 5px; padding: 9px 11px 8px; border: 1px solid var(--line); border-radius: 11px; background: var(--panel2); min-width: 0; }
+.field label { font-size: 10.5px; font-family: var(--mono); letter-spacing: .04em; color: var(--muted2); display: flex; align-items: baseline; justify-content: space-between; gap: 6px; min-width: 0; }
+.field label > span:first-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.field label > i { flex: none; white-space: nowrap; font-style: normal; font-size: 9.5px; color: var(--muted2); opacity: .85; }
+.field-row { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.field input {
+  appearance: none; border: 0; background: transparent; color: var(--ink);
+  font-size: 15.5px; font-weight: 700; padding: 0; width: 100%; min-width: 0; line-height: 1.4;
+  font-family: var(--mono); letter-spacing: -.02em;
+}
+.field input:focus { outline: none; }
+.field:focus-within { border-color: rgba(229,180,92,.6); }
+.field .suffix { font-size: 11px; color: var(--muted2); flex: none; font-family: var(--mono); }
+.field .read { margin: 0; font-size: 10.5px; color: var(--muted2); font-family: var(--mono); letter-spacing: .01em; min-height: 14px; overflow-wrap: anywhere; word-break: keep-all; }
+.field--wide { grid-column: 1 / -1; }
+
+.sel {
+  appearance: none; -webkit-appearance: none; width: 100%; cursor: pointer;
+  border: 1px solid var(--line); background: var(--panel2); color: var(--ink);
+  border-radius: 10px; font-size: 13px; font-weight: 650; padding: 9px 30px 9px 11px; min-width: 0;
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted2) 50%), linear-gradient(135deg, var(--muted2) 50%, transparent 50%);
+  background-position: calc(100% - 16px) 55%, calc(100% - 11px) 55%;
+  background-size: 5px 5px, 5px 5px; background-repeat: no-repeat;
+}
+.sel option { background: #141311; color: var(--ink); }
+
+.chip-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  appearance: none; cursor: pointer; border-radius: 9px; border: 1px solid var(--line);
+  background: var(--panel2); color: var(--muted); font-size: 11.5px; font-weight: 650; padding: 6px 10px;
+  font-family: var(--mono); letter-spacing: -.01em;
+}
+.chip:hover { border-color: var(--line2); color: var(--ink); }
+.chip[aria-pressed="true"] { border-color: rgba(229,180,92,.5); background: var(--accent-dim); color: var(--accent); }
+
+.chk-list { display: grid; gap: 8px; }
+.chk { display: flex; align-items: flex-start; gap: 9px; font-size: 12.2px; color: var(--muted); cursor: pointer; min-width: 0; line-height: 1.45; }
+.chk input { appearance: none; -webkit-appearance: none; width: 16px; height: 16px; margin-top: 2px; flex: none; border-radius: 5px; border: 1px solid var(--line2); background: var(--panel2); cursor: pointer; position: relative; }
+.chk input:checked { background: var(--accent); border-color: var(--accent); }
+.chk input:checked::after { content: ""; position: absolute; left: 4.5px; top: 1.5px; width: 5px; height: 8px; border: 2px solid var(--on-accent); border-top: 0; border-left: 0; transform: rotate(42deg); }
+.chk input:disabled { opacity: .4; cursor: not-allowed; }
+.chk b { color: var(--ink); font-weight: 650; }
+.chk.is-off { opacity: .5; }
+
+/* ---------- results ---------- */
+.statgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)); gap: 8px; min-width: 0; }
+.stat { padding: 10px 12px; border-radius: 11px; border: 1px solid var(--line); background: var(--panel2); min-width: 0; display: grid; gap: 2px; }
+.stat .k { font-size: 9.5px; font-family: var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted2); }
+.stat .v { font-family: var(--mono); font-size: 15px; font-weight: 700; letter-spacing: -.02em; color: var(--ink); overflow-wrap: anywhere; }
+.stat .s { font-size: 10.5px; color: var(--muted2); overflow-wrap: anywhere; }
+.stat.is-on { border-color: rgba(229,180,92,.4); background: rgba(229,180,92,.07); }
+.stat.is-on .v { color: var(--accent); }
+.stat.is-ok { border-color: rgba(127,214,160,.34); background: rgba(127,214,160,.06); }
+.stat.is-ok .v { color: #a6e6c4; }
+.stat.is-warn { border-color: rgba(255,160,107,.34); background: rgba(255,160,107,.05); }
+.stat.is-warn .v { color: #ffc2a3; }
+
+.bignum { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 3px 10px; padding: 11px 12px; border-radius: 10px; border: 1px solid rgba(229,180,92,.24); background: rgba(229,180,92,.07); min-width: 0; }
+.bignum b { font-family: var(--mono); font-size: clamp(19px, 4.6vw, 25px); line-height: 1.1; font-weight: 700; letter-spacing: -.03em; color: var(--accent); overflow-wrap: anywhere; }
+.bignum span { font-size: 10.5px; color: var(--muted); font-family: var(--mono); letter-spacing: .04em; }
+.bignum.is-zero { border-color: rgba(127,214,160,.34); background: rgba(127,214,160,.08); }
+.bignum.is-zero b { color: #b7f0d0; }
+
+.kv { display: grid; gap: 5px; margin: 0; padding: 0; list-style: none; }
+.kv li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 10px; font-size: 12.2px; color: var(--muted); }
+.kv li b { color: var(--ink); font-family: var(--mono); font-weight: 650; font-size: 12.2px; text-align: right; overflow-wrap: anywhere; }
+.kv li.is-key { border-top: 1px solid rgba(255,255,255,.1); padding-top: 5px; margin-top: 2px; }
+.kv li.is-key b { color: var(--accent); }
+.kv li.minus b { color: #a6e6c4; }
+
+.verdict { margin: 0; padding: 11px 13px; border-radius: 11px; border: 1px solid rgba(229,180,92,.28); background: rgba(229,180,92,.06); font-size: 13px; color: var(--muted); line-height: 1.6; }
+.verdict b { color: var(--accent); font-family: var(--mono); font-weight: 700; }
+.verdict.is-ok { border-color: rgba(127,214,160,.3); background: rgba(127,214,160,.06); }
+.verdict.is-ok b { color: #b7f0d0; }
+
+.caveat { margin: 0; font-size: 11.5px; color: var(--muted2); line-height: 1.65; }
+.caveat b { color: var(--muted); font-weight: 600; }
+.caveat code { font-family: var(--mono); color: var(--accent); font-size: .95em; }
+
+.note-box { padding: 12px 13px; border: 1px solid var(--line); border-radius: 11px; background: var(--panel2); display: grid; gap: 6px; }
+.note-box h4 { margin: 0; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; font-family: var(--mono); color: var(--accent); font-weight: 700; }
+.note-box p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.65; }
+.note-box b { color: var(--ink); font-weight: 600; }
+.note-box code { font-family: var(--mono); font-size: .94em; color: var(--accent); }
+
+.status { min-height: 16px; margin: 0; font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
+.status.is-ok { color: var(--ok); }
+.status.is-warn { color: var(--warn); }
+.status.is-bad { color: var(--bad); }
+.row-actions { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+
+/* ---------- tables ---------- */
+.tblwrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-sm); -webkit-overflow-scrolling: touch; min-width: 0; }
+table.ref { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 460px; font-size: 12.4px; }
+table.ref th, table.ref td { padding: 8px 11px; text-align: left; border-bottom: 1px solid rgba(255,255,255,.07); }
+table.ref th { background: #171614; color: var(--muted); font-weight: 700; font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+table.ref td { color: var(--ink); font-family: var(--mono); white-space: nowrap; }
+table.ref td.kr { font-family: var(--font); white-space: normal; word-break: keep-all; color: var(--muted); }
+table.ref td.num, table.ref th.num { text-align: right; }
+table.ref tr:last-child td { border-bottom: 0; }
+table.ref tbody tr.is-on td { background: rgba(229,180,92,.1); color: var(--accent); }
+table.ref tbody tr.is-on td.kr { color: var(--accent2); }
+table.ref tbody tr.is-on td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+table.ref tbody tr.is-empty td { color: var(--muted2); }
+.tbl-note { margin: 8px 0 0; font-size: 11.4px; color: var(--muted2); line-height: 1.6; }
+.tbl-note b { color: var(--muted); font-weight: 600; }
+
+/* ---------- sections ---------- */
+.section { margin-top: 40px; scroll-margin-top: 18px; }
+.sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 12px; border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 16px; }
+.sec-head h2 { margin: 0; font-size: 17px; letter-spacing: -.02em; }
+.sec-head span { font-family: var(--mono); font-size: 11px; color: var(--muted2); letter-spacing: .06em; text-transform: uppercase; }
+
+.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+.note { padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel); min-width: 0; }
+.note h3 { margin: 0 0 8px; font-size: 14px; display: flex; gap: 8px; align-items: baseline; }
+.note h3 span { font-family: var(--mono); font-size: 10.5px; color: var(--accent); letter-spacing: .1em; }
+.note p { margin: 0; font-size: 12.7px; color: var(--muted); line-height: 1.7; }
+.note p + p { margin-top: 7px; }
+.note b { color: var(--ink); font-weight: 600; }
+.note code { font-family: var(--mono); font-size: .94em; color: var(--accent); }
+
+.faq { display: grid; gap: 8px; }
+details.qa { border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); overflow: hidden; }
+details.qa summary { cursor: pointer; padding: 13px 44px 13px 15px; font-size: 13.5px; font-weight: 600; list-style: none; position: relative; }
+details.qa summary::-webkit-details-marker { display: none; }
+details.qa summary::after { content: "+"; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--accent); font-family: var(--mono); font-size: 15px; }
+details.qa[open] summary::after { content: "−"; }
+details.qa .a { padding: 0 15px 14px; font-size: 12.7px; color: var(--muted); line-height: 1.72; }
+details.qa .a b { color: var(--ink); font-weight: 600; }
+details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: .95em; }
+
+.foot { margin-top: 34px; padding-top: 14px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--muted2); }
+.foot-links { display: inline-flex; flex-wrap: wrap; gap: 12px; }
+.foot-links a { text-decoration: none; color: var(--muted); border-bottom: 1px solid transparent; }
+.foot-links a:hover { color: var(--ink); border-bottom-color: var(--line2); }
+.foot .net { font-family: var(--mono); letter-spacing: .02em; }
+.foot .net b { color: var(--ok); }
+
+@media (max-width: 640px) {
+  .wrap { padding: 0 14px 36px; }
+  .topbar { padding: 14px 0 8px; }
+  .brand-txt { font-size: 12px; letter-spacing: .1em; }
+  .hero { padding: 14px 0 10px; }
+  h1 { font-size: 25px; letter-spacing: -.03em; }
+  .eyebrow { font-size: 9.5px; letter-spacing: .12em; }
+  .lede { font-size: 14px; line-height: 1.68; }
+  .panel { padding: 13px; }
+  .field { padding: 8px 10px 7px; }
+  .field input { font-size: 14.5px; }
+  .sec-head h2 { font-size: 16px; }
+  .btn { padding: 10px 13px; }
+  table.ref th, table.ref td { padding: 7px 9px; }
+  .bignum b { font-size: 20px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="/portfolio/" aria-label="Kim Yihyung — 포트폴리오" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="View in English" aria-label="View in English">
+        <span class="lt on" data-lt="ko">KO</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="en">EN</span>
+      </button>
+      <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← 도구 전체</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="eyebrow">GiftTax · 증여세 · 혼인출산 공제 · 업로드 0</span></p>
+      <h1 data-i18n-html="h1">증여세,<br><span class="soft">공제까지 넣어서.</span><br><span class="gold">2026년 기준으로.</span></h1>
+      <p class="lede" data-i18n-html="lede">
+        부모에게 <strong>1억 5천만원</strong>을 받으면 세액이 <strong>0원</strong>이 되는 이유부터,
+        같은 돈을 공제 없이 받으면 <strong>970만원</strong>이 되는 계산까지. 관계별 공제·10년 합산·세대생략 할증·신고세액공제까지
+        한 화면에서 계산하고, <strong>구간별로 어디서 세금이 붙는지</strong> 확인합니다. 입력한 금액은 저장되지 않습니다.
+      </p>
+      <div class="badge-row">
+        <span class="pill"><b data-i18n="pillLaw">2026년 시행</b><span>·</span><span data-i18n="pillDate">확인일 2026-11-19</span></span>
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillUp">업로드 0바이트</b></span>
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillNet">외부 요청 0건</b></span>
+        <span class="pill" data-i18n="pillCite">상증세법 §53 · §56 · §57 · §69</span>
+      </div>
+    </section>
+
+    <section class="work" aria-label="증여세 계산기" data-i18n-aria="workAria">
+      <div class="card panel">
+        <div class="tabs" role="tablist" aria-label="화면" data-i18n-aria="tabAria">
+          <button type="button" role="tab" id="tab-calc" data-tab="calc" aria-selected="true" aria-controls="panel-calc">
+            <b>01</b><span data-i18n="tab1">증여세 계산</span>
+          </button>
+          <button type="button" role="tab" id="tab-ref" data-tab="ref" aria-selected="false" aria-controls="panel-ref" tabindex="-1">
+            <b>02</b><span data-i18n="tab2">공제·세율 기준표</span>
+          </button>
+        </div>
+
+        <!-- ── 01 calculator ── -->
+        <section class="tabpanel" id="panel-calc" role="tabpanel" aria-labelledby="tab-calc">
+          <div class="calc-head">
+            <h2 data-i18n="cTitle">누가 누구에게 얼마를</h2>
+            <span data-i18n="cNote">10년 합산 · 2026년 세법</span>
+          </div>
+
+          <div class="fields">
+            <div class="field field--wide">
+              <label for="relation"><span data-i18n="fRel">증여자와의 관계</span><i data-i18n="fRelHint">공제 한도를 정합니다</i></label>
+              <select class="sel" id="relation" aria-label="증여자와의 관계" data-i18n-aria="fRelAria">
+                <option value="asc" data-i18n="relAsc">직계존속 — 부모·조부모</option>
+                <option value="desc" data-i18n="relDesc">직계비속 — 자녀·손자녀</option>
+                <option value="spouse" data-i18n="relSpouse">배우자</option>
+                <option value="other" data-i18n="relOther">기타친족 — 6촌 이내 혈족·4촌 이내 인척</option>
+                <option value="none" data-i18n="relNone">그 외 — 공제 없음</option>
+              </select>
+              <p class="read" id="relRead">—</p>
+            </div>
+
+            <div class="field field--wide">
+              <label for="gift"><span data-i18n="fGift">이번 증여재산가액</span><i data-i18n="fGiftHint">시가 기준</i></label>
+              <div class="field-row">
+                <input id="gift" type="text" inputmode="numeric" value="150,000,000" autocomplete="off" aria-label="이번 증여재산가액" data-i18n-aria="fGiftAria">
+                <span class="suffix" data-i18n="won">원</span>
+              </div>
+              <div class="chip-wrap" id="giftChips">
+                <button class="chip" type="button" data-amt="50000000">5천만</button>
+                <button class="chip" type="button" data-amt="100000000">1억</button>
+                <button class="chip" type="button" data-amt="150000000">1.5억</button>
+                <button class="chip" type="button" data-amt="300000000">3억</button>
+                <button class="chip" type="button" data-amt="500000000">5억</button>
+                <button class="chip" type="button" data-amt="1000000000">10억</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="prior"><span data-i18n="fPrior">10년 이내 같은 사람에게 받은 증여</span><i data-i18n="fPriorHint">합산</i></label>
+              <div class="field-row">
+                <input id="prior" type="text" inputmode="numeric" value="0" autocomplete="off" aria-label="10년 이내 합산할 증여재산가액" data-i18n-aria="fPriorAria">
+                <span class="suffix" data-i18n="won">원</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="paid"><span data-i18n="fPaid">그 증여에 이미 낸 세액</span><i data-i18n="fPaidHint">기납부세액</i></label>
+              <div class="field-row">
+                <input id="paid" type="text" inputmode="numeric" value="0" autocomplete="off" aria-label="기납부세액" data-i18n-aria="fPaidAria">
+                <span class="suffix" data-i18n="won">원</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="chk-list">
+            <label class="chk" for="minor"><input type="checkbox" id="minor"><span data-i18n-html="chkMinor"><b>수증자가 미성년자</b> — 직계존속 공제가 2,000만원으로 줄고, 20억 초과 증여는 세대생략 할증이 40%가 됩니다.</span></label>
+            <label class="chk" for="marriage"><input type="checkbox" id="marriage"><span data-i18n-html="chkMarriage"><b>혼인·출산 공제 1억원</b> — 직계존속에게서 혼인신고일 전후 2년, 또는 출생일부터 2년 이내에 받았습니다.</span></label>
+            <label class="chk" for="skip"><input type="checkbox" id="skip"><span data-i18n-html="chkSkip"><b>세대생략 할증 30%</b> — 조부모가 손자녀에게처럼 한 세대를 건너뛴 증여입니다.</span></label>
+            <label class="chk" for="filing"><input type="checkbox" id="filing" checked><span data-i18n-html="chkFiling"><b>신고세액공제 3%</b> — 신고기한(증여일이 속한 달의 말일부터 3개월) 안에 신고합니다.</span></label>
+          </div>
+
+          <div class="bignum" id="bigBox"><b id="bigVal">—</b><span data-i18n="bigCap">납부할 증여세</span></div>
+
+          <div class="statgrid">
+            <div class="stat"><span class="k" data-i18n="stGift">증여재산가액</span><span class="v" id="stGift">—</span><span class="s" data-i18n="stGiftSub">이번 증여</span></div>
+            <div class="stat is-ok"><span class="k" data-i18n="stDed">공제 합계</span><span class="v" id="stDed">—</span><span class="s" id="stDedSub">—</span></div>
+            <div class="stat"><span class="k" data-i18n="stBase">과세표준</span><span class="v" id="stBase">—</span><span class="s" data-i18n="stBaseSub">세율을 매기는 금액</span></div>
+            <div class="stat"><span class="k" data-i18n="stRaw">산출세액</span><span class="v" id="stRaw">—</span><span class="s" data-i18n="stRawSub">할증 전</span></div>
+          </div>
+
+          <ul class="kv" id="stepList"></ul>
+
+          <div class="tblwrap">
+            <table class="ref">
+              <thead>
+                <tr>
+                  <th data-i18n="thBand">구간</th>
+                  <th class="num" data-i18n="thPortion">이 경우 금액</th>
+                  <th data-i18n="thRate">세율</th>
+                  <th class="num" data-i18n="thTax">세액</th>
+                </tr>
+              </thead>
+              <tbody id="bandRows"></tbody>
+            </table>
+          </div>
+          <p class="tbl-note" data-i18n="bandNote">구간별 세액의 합은 누진공제를 적용한 산출세액과 같습니다. 어느 구간에서 세금이 무거워지는지 눈으로 확인하세요.</p>
+
+          <p class="verdict" id="verdict">—</p>
+        </section>
+
+        <!-- ── 02 reference ── -->
+        <section class="tabpanel" id="panel-ref" role="tabpanel" aria-labelledby="tab-ref" hidden>
+          <div class="calc-head">
+            <h2 data-i18n="refTitle">공제 한도와 세율</h2>
+            <span data-i18n="refNote">상속세 및 증여세법</span>
+          </div>
+
+          <h3 style="margin:0;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;font-family:var(--mono);color:var(--muted2)" data-i18n="refDedHead">증여재산공제 · 10년 합산</h3>
+          <div class="tblwrap">
+            <table class="ref">
+              <thead>
+                <tr><th data-i18n="thRel">증여자</th><th class="num" data-i18n="thLimit">공제 한도</th><th data-i18n="thLaw">근거</th></tr>
+              </thead>
+              <tbody>
+                <tr><td class="kr" data-i18n="rSpouse">배우자</td><td class="num">6억원</td><td>§53①1</td></tr>
+                <tr><td class="kr" data-i18n="rAscAdult">직계존속 · 수증자 성년</td><td class="num">5,000만원</td><td>§53①2</td></tr>
+                <tr><td class="kr" data-i18n="rAscMinor">직계존속 · 수증자 미성년</td><td class="num">2,000만원</td><td>§53①2</td></tr>
+                <tr><td class="kr" data-i18n="rDesc">직계비속</td><td class="num">5,000만원</td><td>§53①3</td></tr>
+                <tr><td class="kr" data-i18n="rOther">기타친족 (6촌 이내 혈족·4촌 이내 인척)</td><td class="num">1,000만원</td><td>§53①4</td></tr>
+                <tr><td class="kr" data-i18n="rMarriage">혼인·출산 증여재산 공제 (직계존속)</td><td class="num">+1억원</td><td>§53의2</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="tbl-note" data-i18n-html="refDedNote">공제는 <b>10년 이내 같은 증여자</b>에게서 받은 증여를 합쳐 한 번 적용합니다. 직계존속이 증여자이면 그 배우자도 같은 사람으로 봅니다. 혼인·출산 공제는 평생 1억원이 한도이고, 기본 공제와 별도로 더해져 최대 1억 5,000만원이 됩니다.</p>
+
+          <h3 style="margin:8px 0 0;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;font-family:var(--mono);color:var(--muted2)" data-i18n="refRateHead">증여세율 · 5구간</h3>
+          <div class="tblwrap">
+            <table class="ref">
+              <thead>
+                <tr><th data-i18n="thBase">과세표준</th><th data-i18n="thRate2">세율</th><th class="num" data-i18n="thProg">누진공제</th></tr>
+              </thead>
+              <tbody>
+                <tr><td class="kr">1억원 이하</td><td>10%</td><td class="num">0원</td></tr>
+                <tr><td class="kr">1억원 초과 ~ 5억원 이하</td><td>20%</td><td class="num">1,000만원</td></tr>
+                <tr><td class="kr">5억원 초과 ~ 10억원 이하</td><td>30%</td><td class="num">6,000만원</td></tr>
+                <tr><td class="kr">10억원 초과 ~ 30억원 이하</td><td>40%</td><td class="num">1억 6,000만원</td></tr>
+                <tr><td class="kr">30억원 초과</td><td>50%</td><td class="num">4억 6,000만원</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="tbl-note" data-i18n="refRateNote">산출세액 = 과세표준 × 세율 − 누진공제. 여기에 세대생략 할증(30%·미성년 20억 초과 40%)을 더하고, 신고세액공제 3%와 기납부세액을 뺍니다.</p>
+
+          <div class="note-box">
+            <h4 data-i18n="refOrderHead">계산 순서</h4>
+            <p data-i18n-html="refOrder">① 증여재산가액 + 10년 이내 합산액 − 공제 = <b>과세표준</b> ② 과세표준 × 세율 − 누진공제 = <b>산출세액</b> ③ 세대생략 할증 (+) ④ 신고세액공제 3% (−) ⑤ 기납부세액 (−) = <b>납부할 세액</b></p>
+          </div>
+        </section>
+      </div>
+
+      <aside class="side">
+        <div class="card panel">
+          <h3 data-i18n="sumTitle">요약</h3>
+          <p class="status" id="sumHead">—</p>
+          <button class="btn btn--primary btn--block btn--sm" type="button" id="copyBtn" data-i18n="copyBtn">카카오톡 요약 복사</button>
+          <p class="status" id="copyStatus"></p>
+          <div class="note-box">
+            <h4 data-i18n="discHead">면책</h4>
+            <p data-i18n="disclaimer">본 계산기는 2026년 현행 세법 기준 모의계산입니다. 채무인수(부담부증여), 감정평가, 가업승계 특례, 공익법인 출연, 재해손실 공제, 신고기한 연장은 반영하지 않습니다. 실제 신고 전에는 세무사 확인을 거치세요.</p>
+          </div>
+        </div>
+
+        <div class="card panel">
+          <h3 data-i18n="tipTitle">알아 두면 좋은 것</h3>
+          <div class="note-box">
+            <h4 data-i18n="tip1k">10년이 기준</h4>
+            <p data-i18n="tip1">증여세는 10년 단위로 다시 시작합니다. 같은 사람에게 10년이 지나 다시 증여하면 공제도 다시 적용됩니다.</p>
+          </div>
+          <div class="note-box">
+            <h4 data-i18n="tip2k">신고기한</h4>
+            <p data-i18n="tip2">증여일이 속한 달의 말일부터 3개월입니다. 기한을 넘기면 3% 공제가 사라지고 무신고 가산세 20%가 붙습니다.</p>
+          </div>
+          <div class="note-box">
+            <h4 data-i18n="tip3k">부모 합산</h4>
+            <p data-i18n="tip3">아버지와 어머니에게 나눠 받아도 직계존속의 배우자는 같은 사람으로 보아 하나로 합산됩니다.</p>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" id="how">
+      <div class="sec-head">
+        <h2 data-i18n="howTitle">세금이 붙는 지점</h2>
+        <span data-i18n="howNote">숫자로 보는 구조</span>
+      </div>
+      <div class="notes">
+        <div class="note">
+          <h3><span>01</span><b data-i18n="n1t">공제가 먼저</b></h3>
+          <p data-i18n="n1b">증여세는 받은 금액 전체에 매기지 않습니다. 관계별 공제를 뺀 과세표준에만 세율이 붙습니다. 직계존속 5,000만원 + 혼인·출산 1억원이면 1억 5,000만원까지는 과세표준이 0원입니다.</p>
+        </div>
+        <div class="note">
+          <h3><span>02</span><b data-i18n="n2t">10%의 벽</b></h3>
+          <p data-i18n="n2b">과세표준 1억원까지는 10%입니다. 1억원을 넘으면 넘는 부분부터 20%가 붙고, 누진공제 1,000만원이 함께 적용됩니다. 1억원과 1억 100만원의 차이가 100만원이 아니라 그보다 작은 이유입니다.</p>
+        </div>
+        <div class="note">
+          <h3><span>03</span><b data-i18n="n3t">3%의 크기</b></h3>
+          <p data-i18n="n3b">산출세액 1,000만원이면 신고세액공제로 30만원이 줄어 970만원이 됩니다. 3%는 작아 보이지만, 기한을 넘기면 이 30만원에 무신고 가산세 200만원이 더해집니다.</p>
+        </div>
+        <div class="note">
+          <h3><span>04</span><b data-i18n="n4t">실효세율</b></h3>
+          <p data-i18n="n4b">납부할 세액을 증여재산가액으로 나눈 값입니다. 공제가 클수록 실효세율은 급격히 낮아지므로, 같은 1억원도 누가 누구에게 주느냐에 따라 부담이 달라집니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="sec-head">
+        <h2 data-i18n="faqTitle">자주 묻는 것</h2>
+        <span data-i18n="faqNote">여섯 가지</span>
+      </div>
+      <div class="faq">
+        <details class="qa">
+          <summary data-i18n="q1">부모에게 1억 5천만원을 받으면 증여세가 0원인가요?</summary>
+          <div class="a" data-i18n-html="a1">혼인신고일 전후 2년 이내이거나 자녀 출생일부터 2년 이내에 직계존속에게 받은 재산이라면 그렇습니다. 기본 공제 5,000만원에 혼인·출산 공제 1억원이 더해져 <b>1억 5,000만원까지 공제</b>됩니다. 두 공제는 같은 사람에게서 받은 증여를 10년 합산해 한 번만 적용되고, 혼인·출산 공제는 평생 1억원이 한도입니다.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q2">혼인·출산 공제는 부모에게만 되나요?</summary>
+          <div class="a" data-i18n-html="a2"><b>직계존속</b>, 즉 부모와 조부모에게 받은 재산만 해당합니다. 배우자·형제자매·삼촌에게 받은 증여는 대상이 아닙니다. 조부모에게 받으면 직계존속이므로 적용되지만, 수증자가 손자녀라 <b>세대생략 할증</b>이 함께 붙을 수 있습니다.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q3">10년 합산은 어떻게 계산하나요?</summary>
+          <div class="a" data-i18n-html="a3">증여일 전 10년 이내에 같은 사람에게서 받은 증여재산가액을 이번 증여에 더해 과세표준을 구하고, 그 산출세액에서 이미 낸 세액을 뺍니다. <b>직계존속이 증여자이면 그 배우자도 같은 사람</b>으로 보므로 아버지·어머니에게 나눠 받은 돈은 합산됩니다.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q4">세대생략 할증은 언제 붙나요?</summary>
+          <div class="a" data-i18n-html="a4">조부모가 손자녀에게 주는 것처럼 <b>한 세대를 건너뛴 증여</b>에 산출세액의 30%가 더 붙습니다. 수증자가 미성년자이고 증여재산가액이 20억원을 넘으면 40%입니다. 부모가 자녀에게 주는 증여에는 붙지 않습니다.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q5">신고세액공제 3%는 무엇인가요?</summary>
+          <div class="a" data-i18n-html="a5">과세표준을 신고기한(증여일이 속한 달의 말일부터 3개월) 안에 신고하면 산출세액의 3%를 공제받습니다. 세대생략 할증액도 포함해 계산합니다. 기한을 넘기면 공제가 사라지고 <b>무신고 가산세 20%</b>와 납부지연 가산세가 붙습니다.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q6">이 결과를 신고에 그대로 써도 되나요?</summary>
+          <div class="a" data-i18n-html="a6">모의계산입니다. <b>부담부증여(채무인수), 비상장주식 감정평가, 가업승계 특례, 공익법인 출연, 재해손실 공제, 신고기한 연장</b>은 반영하지 않습니다. 금액이 크거나 재산 종류가 복잡하면 세무사 확인을 거치세요.</div>
+        </details>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <span data-i18n="footCopy">© 2026 Kim Yihyung · 브라우저에서, 브라우저를 위해.</span>
+      <span class="net"><span data-i18n="footNet">외부 요청</span> <b id="netCount">0</b></span>
+      <span class="foot-links">
+        <a href="/portfolio/" data-i18n="footP1">포트폴리오</a>
+        <a href="/portfolio/tools/" data-i18n="footP2">도구 전체</a>
+        <a href="https://github.com/kimyihyung/portfolio" target="_blank" rel="noopener" data-i18n="footP3">소스</a>
+      </span>
+      <span class="mono" data-i18n="mono">업로드 없음 · 추적 없음</span>
+    </footer>
+  </main>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* ═════════════════════ 법령 상수 (2026년 시행) ═════════════════════ */
+  var DEDUCTION = {
+    spouse: 600000000,
+    ascAdult: 50000000,
+    ascMinor: 20000000,
+    desc: 50000000,
+    other: 10000000,
+    none: 0
+  };
+  var MARRIAGE_DEDUCTION = 100000000;
+  var SURCHARGE = { normal: 0.30, minorHigh: 0.40, minorThreshold: 2000000000 };
+  var FILING_CREDIT = 0.03;
+  var BANDS = [
+    { upTo: 100000000, rate: 0.10, prog: 0 },
+    { upTo: 500000000, rate: 0.20, prog: 10000000 },
+    { upTo: 1000000000, rate: 0.30, prog: 60000000 },
+    { upTo: 3000000000, rate: 0.40, prog: 160000000 },
+    { upTo: Infinity, rate: 0.50, prog: 460000000 }
+  ];
+
+  var I18N = {
+    ko: {
+      docTitle: 'GiftTax — 2026 증여세·혼인출산 공제 계산기 | Kim Yihyung',
+      brandAria: 'Kim Yihyung — 포트폴리오',
+      back: '← 도구 전체',
+      eyebrow: 'GiftTax · 증여세 · 혼인출산 공제 · 업로드 0',
+      h1: '증여세,<br><span class="soft">공제까지 넣어서.</span><br><span class="gold">2026년 기준으로.</span>',
+      lede: '부모에게 <strong>1억 5천만원</strong>을 받으면 세액이 <strong>0원</strong>이 되는 이유부터, 같은 돈을 공제 없이 받으면 <strong>970만원</strong>이 되는 계산까지. 관계별 공제·10년 합산·세대생략 할증·신고세액공제까지 한 화면에서 계산하고, <strong>구간별로 어디서 세금이 붙는지</strong> 확인합니다. 입력한 금액은 저장되지 않습니다.',
+      pillLaw: '2026년 시행',
+      pillDate: '확인일 2026-11-19',
+      pillUp: '업로드 0바이트',
+      pillNet: '외부 요청 0건',
+      pillCite: '상증세법 §53 · §56 · §57 · §69',
+      workAria: '증여세 계산기',
+      tabAria: '화면',
+      tab1: '증여세 계산',
+      tab2: '공제·세율 기준표',
+      cTitle: '누가 누구에게 얼마를',
+      cNote: '10년 합산 · 2026년 세법',
+      fRel: '증여자와의 관계',
+      fRelHint: '공제 한도를 정합니다',
+      fRelAria: '증여자와의 관계',
+      relAsc: '직계존속 — 부모·조부모',
+      relDesc: '직계비속 — 자녀·손자녀',
+      relSpouse: '배우자',
+      relOther: '기타친족 — 6촌 이내 혈족·4촌 이내 인척',
+      relNone: '그 외 — 공제 없음',
+      fGift: '이번 증여재산가액',
+      fGiftHint: '시가 기준',
+      fGiftAria: '이번 증여재산가액',
+      fPrior: '10년 이내 같은 사람에게 받은 증여',
+      fPriorHint: '합산',
+      fPriorAria: '10년 이내 합산할 증여재산가액',
+      fPaid: '그 증여에 이미 낸 세액',
+      fPaidHint: '기납부세액',
+      fPaidAria: '기납부세액',
+      won: '원',
+      chkMinor: '<b>수증자가 미성년자</b> — 직계존속 공제가 2,000만원으로 줄고, 20억 초과 증여는 세대생략 할증이 40%가 됩니다.',
+      chkMarriage: '<b>혼인·출산 공제 1억원</b> — 직계존속에게서 혼인신고일 전후 2년, 또는 출생일부터 2년 이내에 받았습니다.',
+      chkSkip: '<b>세대생략 할증 30%</b> — 조부모가 손자녀에게처럼 한 세대를 건너뛴 증여입니다.',
+      chkFiling: '<b>신고세액공제 3%</b> — 신고기한(증여일이 속한 달의 말일부터 3개월) 안에 신고합니다.',
+      bigCap: '납부할 증여세',
+      stGift: '증여재산가액',
+      stGiftSub: '이번 증여',
+      stDed: '공제 합계',
+      stBase: '과세표준',
+      stBaseSub: '세율을 매기는 금액',
+      stRaw: '산출세액',
+      stRawSub: '할증 전',
+      thBand: '구간',
+      thPortion: '이 경우 금액',
+      thRate: '세율',
+      thTax: '세액',
+      bandNote: '구간별 세액의 합은 누진공제를 적용한 산출세액과 같습니다. 어느 구간에서 세금이 무거워지는지 눈으로 확인하세요.',
+      refTitle: '공제 한도와 세율',
+      refNote: '상속세 및 증여세법',
+      refDedHead: '증여재산공제 · 10년 합산',
+      thRel: '증여자',
+      thLimit: '공제 한도',
+      thLaw: '근거',
+      rSpouse: '배우자',
+      rAscAdult: '직계존속 · 수증자 성년',
+      rAscMinor: '직계존속 · 수증자 미성년',
+      rDesc: '직계비속',
+      rOther: '기타친족 (6촌 이내 혈족·4촌 이내 인척)',
+      rMarriage: '혼인·출산 증여재산 공제 (직계존속)',
+      refDedNote: '공제는 <b>10년 이내 같은 증여자</b>에게서 받은 증여를 합쳐 한 번 적용합니다. 직계존속이 증여자이면 그 배우자도 같은 사람으로 봅니다. 혼인·출산 공제는 평생 1억원이 한도이고, 기본 공제와 별도로 더해져 최대 1억 5,000만원이 됩니다.',
+      refRateHead: '증여세율 · 5구간',
+      thBase: '과세표준',
+      thRate2: '세율',
+      thProg: '누진공제',
+      refRateNote: '산출세액 = 과세표준 × 세율 − 누진공제. 여기에 세대생략 할증(30%·미성년 20억 초과 40%)을 더하고, 신고세액공제 3%와 기납부세액을 뺍니다.',
+      refOrderHead: '계산 순서',
+      refOrder: '① 증여재산가액 + 10년 이내 합산액 − 공제 = <b>과세표준</b> ② 과세표준 × 세율 − 누진공제 = <b>산출세액</b> ③ 세대생략 할증 (+) ④ 신고세액공제 3% (−) ⑤ 기납부세액 (−) = <b>납부할 세액</b>',
+      sumTitle: '요약',
+      copyBtn: '카카오톡 요약 복사',
+      discHead: '면책',
+      disclaimer: '본 계산기는 2026년 현행 세법 기준 모의계산입니다. 채무인수(부담부증여), 감정평가, 가업승계 특례, 공익법인 출연, 재해손실 공제, 신고기한 연장은 반영하지 않습니다. 실제 신고 전에는 세무사 확인을 거치세요.',
+      tipTitle: '알아 두면 좋은 것',
+      tip1k: '10년이 기준',
+      tip1: '증여세는 10년 단위로 다시 시작합니다. 같은 사람에게 10년이 지나 다시 증여하면 공제도 다시 적용됩니다.',
+      tip2k: '신고기한',
+      tip2: '증여일이 속한 달의 말일부터 3개월입니다. 기한을 넘기면 3% 공제가 사라지고 무신고 가산세 20%가 붙습니다.',
+      tip3k: '부모 합산',
+      tip3: '아버지와 어머니에게 나눠 받아도 직계존속의 배우자는 같은 사람으로 보아 하나로 합산됩니다.',
+      howTitle: '세금이 붙는 지점',
+      howNote: '숫자로 보는 구조',
+      n1t: '공제가 먼저', n1b: '증여세는 받은 금액 전체에 매기지 않습니다. 관계별 공제를 뺀 과세표준에만 세율이 붙습니다. 직계존속 5,000만원 + 혼인·출산 1억원이면 1억 5,000만원까지는 과세표준이 0원입니다.',
+      n2t: '10%의 벽', n2b: '과세표준 1억원까지는 10%입니다. 1억원을 넘으면 넘는 부분부터 20%가 붙고, 누진공제 1,000만원이 함께 적용됩니다.',
+      n3t: '3%의 크기', n3b: '산출세액 1,000만원이면 신고세액공제로 30만원이 줄어 970만원이 됩니다. 3%는 작아 보이지만, 기한을 넘기면 이 30만원에 무신고 가산세 200만원이 더해집니다.',
+      n4t: '실효세율', n4b: '납부할 세액을 증여재산가액으로 나눈 값입니다. 공제가 클수록 실효세율은 급격히 낮아지므로, 같은 1억원도 누가 누구에게 주느냐에 따라 부담이 달라집니다.',
+      faqTitle: '자주 묻는 것', faqNote: '여섯 가지',
+      q1: '부모에게 1억 5천만원을 받으면 증여세가 0원인가요?',
+      a1: '혼인신고일 전후 2년 이내이거나 자녀 출생일부터 2년 이내에 직계존속에게 받은 재산이라면 그렇습니다. 기본 공제 5,000만원에 혼인·출산 공제 1억원이 더해져 <b>1억 5,000만원까지 공제</b>됩니다. 두 공제는 같은 사람에게서 받은 증여를 10년 합산해 한 번만 적용되고, 혼인·출산 공제는 평생 1억원이 한도입니다.',
+      q2: '혼인·출산 공제는 부모에게만 되나요?',
+      a2: '<b>직계존속</b>, 즉 부모와 조부모에게 받은 재산만 해당합니다. 배우자·형제자매·삼촌에게 받은 증여는 대상이 아닙니다. 조부모에게 받으면 직계존속이므로 적용되지만, 수증자가 손자녀라 <b>세대생략 할증</b>이 함께 붙을 수 있습니다.',
+      q3: '10년 합산은 어떻게 계산하나요?',
+      a3: '증여일 전 10년 이내에 같은 사람에게서 받은 증여재산가액을 이번 증여에 더해 과세표준을 구하고, 그 산출세액에서 이미 낸 세액을 뺍니다. <b>직계존속이 증여자이면 그 배우자도 같은 사람</b>으로 보므로 아버지·어머니에게 나눠 받은 돈은 합산됩니다.',
+      q4: '세대생략 할증은 언제 붙나요?',
+      a4: '조부모가 손자녀에게 주는 것처럼 <b>한 세대를 건너뛴 증여</b>에 산출세액의 30%가 더 붙습니다. 수증자가 미성년자이고 증여재산가액이 20억원을 넘으면 40%입니다. 부모가 자녀에게 주는 증여에는 붙지 않습니다.',
+      q5: '신고세액공제 3%는 무엇인가요?',
+      a5: '과세표준을 신고기한(증여일이 속한 달의 말일부터 3개월) 안에 신고하면 산출세액의 3%를 공제받습니다. 세대생략 할증액도 포함해 계산합니다. 기한을 넘기면 공제가 사라지고 <b>무신고 가산세 20%</b>와 납부지연 가산세가 붙습니다.',
+      q6: '이 결과를 신고에 그대로 써도 되나요?',
+      a6: '모의계산입니다. <b>부담부증여(채무인수), 비상장주식 감정평가, 가업승계 특례, 공익법인 출연, 재해손실 공제, 신고기한 연장</b>은 반영하지 않습니다. 금액이 크거나 재산 종류가 복잡하면 세무사 확인을 거치세요.',
+      footCopy: '© 2026 Kim Yihyung · 브라우저에서, 브라우저를 위해.',
+      footNet: '외부 요청',
+      footP1: '포트폴리오', footP2: '도구 전체', footP3: '소스',
+      mono: '업로드 없음 · 추적 없음',
+      toggleTo: 'View in English',
+
+      /* runtime */
+      relReadAsc: '직계존속 기본 공제 {x}',
+      relReadDesc: '직계비속 기본 공제 {x}',
+      relReadSpouse: '배우자 기본 공제 {x}',
+      relReadOther: '기타친족 기본 공제 {x}',
+      relReadNone: '공제 없음 — 받은 금액 전부가 과세 대상입니다',
+      dedParts: '기본 {a} + 혼인·출산 {b}',
+      dedBasicOnly: '기본 공제만',
+      dedNone: '공제 없음',
+      stepGift: '증여재산가액',
+      stepPrior: '10년 이내 합산',
+      stepDed: '증여재산공제',
+      stepBase: '과세표준',
+      stepRaw: '산출세액',
+      stepSur: '세대생략 할증 ({r})',
+      stepCredit: '신고세액공제 3%',
+      stepPaid: '기납부세액',
+      stepPayable: '납부할 세액',
+      stepEff: '실효세율',
+      effSub: '납부세액 ÷ 증여재산가액',
+      bandLabel: '1억 이하',
+      bandLabel2: '1억~5억',
+      bandLabel3: '5억~10억',
+      bandLabel4: '10억~30억',
+      bandLabel5: '30억 초과',
+      bandNone: '해당 없음',
+      verdictZero: '공제 한도 안입니다. 과세표준이 <b>0원</b>이라 낼 증여세가 없습니다.',
+      verdictMarriage: '혼인·출산 공제 덕분에 과세표준이 <b>{x}</b> 줄었습니다.',
+      verdictNormal: '과세표준 <b>{b}</b>에 {r} 세율이 적용되어 산출세액 <b>{t}</b>. 신고기한 안에 신고하면 <b>{c}</b>을 공제받습니다.',
+      verdictPaid: '10년 합산으로 산출된 세액에서 이미 낸 <b>{p}</b>을 빼고 남은 금액이 이번 납부액입니다.',
+      verdictSkip: '세대생략 할증 <b>{s}</b>이 더해졌습니다.',
+      sumLine: '{rel} · {gift} · 납부 {pay}',
+      sumHeadZero: '납부할 세액 0원 — 공제 한도 안입니다.',
+      sumHeadNormal: '납부할 세액 {pay} · 실효세율 {eff}',
+      copied: '요약을 복사했습니다.',
+      copyFail: '복사하지 못했습니다. 아래 요약을 직접 선택해 주세요.',
+      copyTitle: '[증여세 모의계산 · 2026]',
+      copyRel: '관계',
+      copyGift: '증여재산가액',
+      copyPrior: '10년 이내 합산',
+      copyDed: '공제',
+      copyBase: '과세표준',
+      copyRaw: '산출세액',
+      copySur: '세대생략 할증',
+      copyCredit: '신고세액공제 3%',
+      copyPaid: '기납부세액',
+      copyPay: '납부할 세액',
+      copyEff: '실효세율',
+      copyFoot: '— GiftTax, 브라우저에서만 계산',
+      marriageOff: '혼인·출산 공제는 직계존속에게서 받은 증여에만 해당합니다.',
+      nowon: '원'
+    },
+    en: {
+      docTitle: 'GiftTax — Korea Gift Tax &amp; Marriage Deduction Calculator 2026 | Kim Yihyung',
+      brandAria: 'Kim Yihyung — portfolio',
+      back: '← All tools',
+      eyebrow: 'GiftTax · gift tax · marriage deduction · 0 uploads',
+      h1: 'Korean gift tax,<br><span class="soft">with every deduction.</span><br><span class="gold">On the 2026 rules.</span>',
+      lede: 'Why a 150-million-won gift from a parent comes to <strong>zero</strong> with the marriage deduction, and the same gift without it comes to <strong>9.7 million won</strong>. Deductions by relationship, ten-year aggregation, the generation-skipping surcharge and the 3% filing credit, worked out and broken down bracket by bracket. Nothing you type is stored.',
+      pillLaw: '2026 rules',
+      pillDate: 'checked 2026-11-19',
+      pillUp: '0 bytes uploaded',
+      pillNet: '0 external requests',
+      pillCite: 'Inheritance &amp; Gift Tax Act §53 · §56 · §57 · §69',
+      workAria: 'Korean gift tax calculator',
+      tabAria: 'View',
+      tab1: 'Calculate',
+      tab2: 'Deductions &amp; rates',
+      cTitle: 'Who gives what to whom',
+      cNote: 'ten-year aggregation · 2026 law',
+      fRel: 'Relationship to the donor',
+      fRelHint: 'sets the deduction',
+      fRelAria: 'Relationship to the donor',
+      relAsc: 'Lineal ascendant — parent, grandparent',
+      relDesc: 'Lineal descendant — child, grandchild',
+      relSpouse: 'Spouse',
+      relOther: 'Other relatives — within 6 degrees of blood, 4 of marriage',
+      relNone: 'Anyone else — no deduction',
+      fGift: 'This gift',
+      fGiftHint: 'market value',
+      fGiftAria: 'This gift amount',
+      fPrior: 'Gifts from the same person in the last 10 years',
+      fPriorHint: 'aggregated',
+      fPriorAria: 'Gifts in the last ten years to aggregate',
+      fPaid: 'Tax already paid on those gifts',
+      fPaidHint: 'credit for prior tax',
+      fPaidAria: 'Tax already paid',
+      won: 'KRW',
+      chkMinor: '<b>The recipient is a minor</b> — a lineal ascendant deduction drops to 20 million won, and the surcharge becomes 40% above 2 billion won.',
+      chkMarriage: '<b>Marriage or childbirth deduction, 100 million won</b> — received from a lineal ascendant within two years either side of the marriage registration, or two years from a birth.',
+      chkSkip: '<b>Generation-skipping surcharge 30%</b> — a grandparent giving to a grandchild, skipping a generation.',
+      chkFiling: '<b>3% filing credit</b> — the return is filed within three months from the end of the month of the gift.',
+      bigCap: 'gift tax due',
+      stGift: 'Gift',
+      stGiftSub: 'this transfer',
+      stDed: 'Deductions',
+      stBase: 'Tax base',
+      stBaseSub: 'what the rate applies to',
+      stRaw: 'Tax before surcharge',
+      stRawSub: 'computed tax',
+      thBand: 'Bracket',
+      thPortion: 'Amount here',
+      thRate: 'Rate',
+      thTax: 'Tax',
+      bandNote: 'The bracket column sums to the same tax as base × rate − progressive deduction, so you can see where the burden starts to bend.',
+      refTitle: 'Deductions and rates',
+      refNote: 'Inheritance and Gift Tax Act',
+      refDedHead: 'Gift deduction · per 10 years',
+      thRel: 'Donor',
+      thLimit: 'Limit',
+      thLaw: 'Article',
+      rSpouse: 'Spouse',
+      rAscAdult: 'Lineal ascendant · adult recipient',
+      rAscMinor: 'Lineal ascendant · minor recipient',
+      rDesc: 'Lineal descendant',
+      rOther: 'Other relatives (within 6 degrees of blood, 4 of marriage)',
+      rMarriage: 'Marriage / childbirth deduction (lineal ascendant)',
+      refDedNote: 'The deduction applies <b>once per donor per ten years</b>, and a lineal ascendant’s spouse counts as the same donor. The marriage deduction is capped at 100 million won for life and is added on top, so the ceiling is 150 million won.',
+      refRateHead: 'Rates · five brackets',
+      thBase: 'Tax base',
+      thRate2: 'Rate',
+      thProg: 'Progressive deduction',
+      refRateNote: 'Tax = base × rate − progressive deduction. Add the generation-skipping surcharge (30%, or 40% above 2 billion won for a minor), subtract the 3% filing credit and any tax already paid.',
+      refOrderHead: 'The order',
+      refOrder: '① gift + ten-year total − deductions = <b>tax base</b> ② base × rate − progressive deduction = <b>computed tax</b> ③ surcharge (+) ④ 3% filing credit (−) ⑤ prior tax (−) = <b>tax due</b>',
+      sumTitle: 'Summary',
+      copyBtn: 'Copy a KakaoTalk summary',
+      discHead: 'Caveat',
+      disclaimer: 'A simulation on the law in force for 2026. Debt-assumed gifts, appraisals, family-business succession relief, public-interest donations, disaster relief and filing extensions are not modelled. Check with a tax accountant before filing.',
+      tipTitle: 'Worth knowing',
+      tip1k: 'Ten years, then again',
+      tip1: 'The clock restarts every ten years. A second gift from the same person after ten years gets the deduction again.',
+      tip2k: 'The deadline',
+      tip2: 'Three months from the end of the month of the gift. Miss it and the 3% credit disappears and a 20% penalty for not filing is added.',
+      tip3k: 'Both parents count as one',
+      tip3: 'Money from a father and a mother is aggregated, because the spouse of a lineal ascendant is treated as the same donor.',
+      howTitle: 'Where the tax actually bites',
+      howNote: 'the shape in numbers',
+      n1t: 'Deduction first', n1b: 'Gift tax is not charged on the whole amount. Only the base left after the matching deduction is taxed. Fifty million plus the hundred-million marriage deduction means the first 150 million is untaxed.',
+      n2t: 'The 10% wall', n2b: 'Up to 100 million the rate is 10%. Above it, 20% applies from the excess, and the 10-million progressive deduction softens the step — which is why 100 million and 101 million differ by less than a million.',
+      n3t: 'What 3% is worth', n3b: 'On a 10-million computed tax the credit is 300,000 won, leaving 9.7 million. Small — but miss the deadline and a 2-million penalty is added on top of losing it.',
+      n4t: 'Effective rate', n4b: 'Tax due divided by the gift. A larger deduction pulls the effective rate down sharply, so the same 100 million costs different amounts depending on who gives it to whom.',
+      faqTitle: 'Frequently asked', faqNote: 'six answers',
+      q1: 'Is a 150-million gift from a parent really untaxed?',
+      a1: 'Yes, when it is received from a lineal ascendant within two years either side of a marriage registration or two years from a birth. The 50-million basic deduction plus the 100-million marriage deduction covers <b>up to 150 million won</b>. Both apply once per donor per ten years, and the marriage deduction is capped at 100 million for life.',
+      q2: 'Does the marriage deduction cover anyone?',
+      a2: 'Only <b>lineal ascendants</b> — parents and grandparents. A spouse, a sibling or an uncle does not qualify. A grandparent does, but since the recipient is a grandchild the <b>generation-skipping surcharge</b> can apply on top.',
+      q3: 'How does the ten-year aggregation work?',
+      a3: 'Gifts from the same person in the ten years before this one are added to the base, the tax is computed on the total, and tax already paid is subtracted. A lineal ascendant’s spouse counts as the same donor, so money from a father and a mother is aggregated.',
+      q4: 'When does the generation-skipping surcharge apply?',
+      a4: 'When a generation is skipped — a grandparent giving to a grandchild. 30% is added to the computed tax, and 40% when the recipient is a minor and the gift is above 2 billion won. A gift from a parent to a child is not affected.',
+      q5: 'What is the 3% filing credit?',
+      a5: 'File the return within three months from the end of the month of the gift (the statutory deadline) and 3% of the computed tax, surcharge included, is credited. Miss the deadline and the credit is gone, with a <b>20% penalty for failure to file</b> and interest on top.',
+      q6: 'Can I file using this number?',
+      a6: 'This is a simulation. <b>Debt-assumed gifts, unlisted-share appraisals, family-business succession relief, public-interest donations, disaster relief and filing extensions</b> are not modelled. For a large or complicated estate, confirm with a tax accountant.',
+      footCopy: '© 2026 Kim Yihyung · for the browser, in the browser.',
+      footNet: 'Outbound requests',
+      footP1: 'Portfolio', footP2: 'All tools', footP3: 'Source',
+      mono: 'no upload · no tracking',
+      toggleTo: '한국어로 보기',
+
+      relReadAsc: 'Lineal ascendant deduction {x}',
+      relReadDesc: 'Lineal descendant deduction {x}',
+      relReadSpouse: 'Spouse deduction {x}',
+      relReadOther: 'Other-relatives deduction {x}',
+      relReadNone: 'No deduction — the whole gift is taxable',
+      dedParts: 'basic {a} + marriage {b}',
+      dedBasicOnly: 'basic deduction only',
+      dedNone: 'no deduction',
+      stepGift: 'Gift',
+      stepPrior: 'Gifts in the last 10 years',
+      stepDed: 'Gift deduction',
+      stepBase: 'Tax base',
+      stepRaw: 'Computed tax',
+      stepSur: 'Generation-skipping surcharge ({r})',
+      stepCredit: '3% filing credit',
+      stepPaid: 'Tax already paid',
+      stepPayable: 'Tax due',
+      stepEff: 'Effective rate',
+      effSub: 'tax due ÷ gift',
+      bandLabel: 'up to 100M',
+      bandLabel2: '100M–500M',
+      bandLabel3: '500M–1B',
+      bandLabel4: '1B–3B',
+      bandLabel5: 'over 3B',
+      bandNone: 'not reached',
+      verdictZero: 'Inside the deduction. The tax base is <b>zero</b>, so no gift tax is due.',
+      verdictMarriage: 'The marriage deduction alone takes <b>{x}</b> off the base.',
+      verdictNormal: 'A base of <b>{b}</b> at {r} gives <b>{t}</b>; filing on time credits <b>{c}</b>.',
+      verdictPaid: 'Tax already paid, <b>{p}</b>, is subtracted from the aggregated tax, and the remainder is what this gift adds.',
+      verdictSkip: 'A generation-skipping surcharge of <b>{s}</b> was added.',
+      sumLine: '{rel} · {gift} · due {pay}',
+      sumHeadZero: 'Tax due 0 — inside the deduction.',
+      sumHeadNormal: 'Tax due {pay} · effective rate {eff}',
+      copied: 'Summary copied.',
+      copyFail: 'Could not copy. Select the summary text instead.',
+      copyTitle: '[Gift tax simulation · 2026]',
+      copyRel: 'Relationship',
+      copyGift: 'Gift',
+      copyPrior: 'Aggregated from the last 10 years',
+      copyDed: 'Deductions',
+      copyBase: 'Tax base',
+      copyRaw: 'Computed tax',
+      copySur: 'Generation-skipping surcharge',
+      copyCredit: '3% filing credit',
+      copyPaid: 'Tax already paid',
+      copyPay: 'Tax due',
+      copyEff: 'Effective rate',
+      copyFoot: '— GiftTax, computed in the browser only',
+      marriageOff: 'The marriage deduction applies only to gifts from a lineal ascendant.',
+      nowon: 'KRW'
+    }
+  };
+
+  var LANG_KEY = 'gifttax.lang';
+  var SHARED_KEY = 'kyh.lang';
+  var state = {
+    lang: 'ko',
+    rel: 'asc',
+    gift: 150000000,
+    prior: 0,
+    paid: 0,
+    minor: false,
+    marriage: false,
+    skip: false,
+    filing: true,
+    tab: 'calc',
+    last: null
+  };
+
+  function t(key) {
+    var d = I18N[state.lang] || I18N.ko;
+    return d[key] != null ? d[key] : (I18N.ko[key] != null ? I18N.ko[key] : key);
+  }
+  function fmt(s, o) {
+    return String(s).replace(/\{(\w+)\}/g, function (m, k) { return (o && o[k] != null) ? o[k] : m; });
+  }
+  function readLang(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function initialLang() {
+    var q = '';
+    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
+    if (q === 'ko' || q === 'en') return q;
+    var stored = readLang(SHARED_KEY) || readLang(LANG_KEY);
+    return (stored === 'ko' || stored === 'en') ? stored : 'ko';
+  }
+  function setMeta(sel, attr, val) { var el = document.querySelector(sel); if (el) el.setAttribute(attr, val); }
+
+  /* ═════════════════════ number helpers ═════════════════════ */
+  function parseNum(v) {
+    var s = String(v == null ? '' : v).replace(/[^\d]/g, '');
+    if (!s) return 0;
+    var n = Number(s);
+    return isFinite(n) ? Math.min(n, 1e15) : 0;
+  }
+  function group(n) {
+    try { return Number(n).toLocaleString(state.lang === 'ko' ? 'ko-KR' : 'en-US'); }
+    catch (e) { return String(n); }
+  }
+  function won(n) { return group(Math.round(n)); }
+  function shortWon(n) {
+    var abs = Math.abs(n);
+    if (state.lang === 'ko') {
+      if (abs >= 100000000) {
+        var eok = Math.floor(abs / 100000000);
+        var rest = abs % 100000000;
+        if (rest === 0) return group(eok) + '억원';
+        return group(eok) + '억 ' + group(rest / 10000) + '만원';
+      }
+      if (abs >= 10000) {
+        var man = Math.floor(abs / 10000);
+        var rem = abs % 10000;
+        return group(man) + '만' + (rem ? ' ' + group(rem) + '원' : '원');
+      }
+      return won(n) + '원';
+    }
+    if (abs >= 1000000000) return group(Math.round(n / 10000000) / 100) + ' billion KRW';
+    if (abs >= 1000000) return group(Math.round(n / 100000) / 10) + ' million KRW';
+    return won(n) + ' KRW';
+  }
+  function pctStr(v) { return (v * 100).toFixed(1) + '%'; }
+
+  /* ═════════════════════ the calculation ═════════════════════ */
+  function deductionFor(rel, minor, marriage) {
+    var base;
+    if (rel === 'spouse') base = DEDUCTION.spouse;
+    else if (rel === 'asc') base = minor ? DEDUCTION.ascMinor : DEDUCTION.ascAdult;
+    else if (rel === 'desc') base = DEDUCTION.desc;
+    else if (rel === 'other') base = DEDUCTION.other;
+    else base = 0;
+    var extra = (marriage && rel === 'asc') ? MARRIAGE_DEDUCTION : 0;
+    return { base: base, extra: extra, total: base + extra };
+  }
+
+  function calc() {
+    var d = deductionFor(state.rel, state.minor, state.marriage);
+    var aggregate = state.gift + state.prior;
+    var taxBase = Math.max(0, aggregate - d.total);
+
+    var band = BANDS[0], i;
+    for (i = 0; i < BANDS.length; i++) {
+      if (taxBase <= BANDS[i].upTo) { band = BANDS[i]; break; }
+      band = BANDS[i];
+    }
+    var rawTax = taxBase > 0 ? Math.max(0, taxBase * band.rate - band.prog) : 0;
+
+    var surRate = 0;
+    if (state.skip && taxBase > 0) {
+      surRate = (state.minor && state.gift > SURCHARGE.minorThreshold) ? SURCHARGE.minorHigh : SURCHARGE.normal;
+    }
+    var surcharge = Math.round(rawTax * surRate);
+    var withSurcharge = rawTax + surcharge;
+    var credit = state.filing ? Math.round(withSurcharge * FILING_CREDIT) : 0;
+    var paid = Math.min(state.paid, withSurcharge);
+    var payable = Math.max(0, withSurcharge - credit - paid);
+
+    var cuts = [], prev = 0;
+    for (i = 0; i < BANDS.length; i++) {
+      var top = Math.min(taxBase, BANDS[i].upTo);
+      var portion = Math.max(0, top - prev);
+      cuts.push({ rate: BANDS[i].rate, portion: portion, tax: Math.round(portion * BANDS[i].rate) });
+      prev = Math.min(taxBase, BANDS[i].upTo);
+      if (taxBase <= BANDS[i].upTo) { for (var j = i + 1; j < BANDS.length; j++) cuts.push({ rate: BANDS[j].rate, portion: 0, tax: 0 }); break; }
+    }
+
+    return {
+      rel: state.rel,
+      minor: state.minor,
+      marriage: state.marriage && state.rel === 'asc',
+      skip: state.skip,
+      filing: state.filing,
+      gift: state.gift,
+      prior: state.prior,
+      aggregate: aggregate,
+      dedBase: d.base,
+      dedExtra: d.extra,
+      deduction: d.total,
+      taxBase: taxBase,
+      rawTax: rawTax,
+      surRate: surRate,
+      surcharge: surcharge,
+      withSurcharge: withSurcharge,
+      credit: credit,
+      paid: paid,
+      payable: payable,
+      effective: state.gift > 0 ? payable / state.gift : 0,
+      bands: cuts
+    };
+  }
+
+  /* ═════════════════════ render ═════════════════════ */
+  function relLabel(rel) {
+    if (rel === 'asc') return state.lang === 'ko' ? '직계존속' : 'lineal ascendant';
+    if (rel === 'desc') return state.lang === 'ko' ? '직계비속' : 'lineal descendant';
+    if (rel === 'spouse') return state.lang === 'ko' ? '배우자' : 'spouse';
+    if (rel === 'other') return state.lang === 'ko' ? '기타친족' : 'other relatives';
+    return state.lang === 'ko' ? '그 외' : 'unrelated';
+  }
+
+  function renderAll() {
+    var r = calc();
+    state.last = r;
+
+    /* relation readout */
+    var key = state.rel === 'asc' ? (state.minor ? 'relReadAsc' : 'relReadAsc')
+      : state.rel === 'desc' ? 'relReadDesc' : state.rel === 'spouse' ? 'relReadSpouse'
+        : state.rel === 'other' ? 'relReadOther' : 'relReadNone';
+    var readEl = $('relRead');
+    if (state.rel === 'none') readEl.textContent = fmt(t(key), { x: won(0) });
+    else readEl.textContent = fmt(t(key), { x: shortWon(r.dedBase) });
+
+    /* marriage checkbox availability */
+    var mBox = $('marriage');
+    var mLabel = mBox.closest('.chk');
+    var marriageOK = state.rel === 'asc';
+    mBox.disabled = !marriageOK;
+    if (!marriageOK && state.marriage) { state.marriage = false; mBox.checked = false; r = calc(); state.last = r; }
+    mLabel.classList.toggle('is-off', !marriageOK);
+    mLabel.title = marriageOK ? '' : t('marriageOff');
+    $('minor').closest('.chk').classList.toggle('is-off', state.rel !== 'asc');
+
+    /* big number */
+    $('bigVal').textContent = won(r.payable) + (state.lang === 'ko' ? '원' : ' KRW');
+    $('bigBox').classList.toggle('is-zero', r.payable === 0);
+
+    /* stats */
+    $('stGift').textContent = won(r.gift);
+    $('stDed').textContent = won(r.deduction);
+    $('stDedSub').textContent = r.dedExtra
+      ? fmt(t('dedParts'), { a: shortWon(r.dedBase), b: shortWon(r.dedExtra) })
+      : (r.dedBase ? t('dedBasicOnly') : t('dedNone'));
+    $('stBase').textContent = won(r.taxBase);
+    $('stRaw').textContent = won(r.rawTax);
+
+    /* step list */
+    var rows = [];
+    rows.push('<li><span>' + t('stepGift') + '</span><b>' + won(r.gift) + '</b></li>');
+    if (r.prior > 0) rows.push('<li><span>' + t('stepPrior') + '</span><b>' + won(r.prior) + '</b></li>');
+    rows.push('<li class="minus"><span>' + t('stepDed') + '</span><b>−' + won(r.deduction) + '</b></li>');
+    rows.push('<li class="is-key"><span>' + t('stepBase') + '</span><b>' + won(r.taxBase) + '</b></li>');
+    rows.push('<li><span>' + t('stepRaw') + '</span><b>' + won(r.rawTax) + '</b></li>');
+    if (r.surcharge > 0) rows.push('<li><span>' + fmt(t('stepSur'), { r: pctStr(r.surRate) }) + '</span><b>+' + won(r.surcharge) + '</b></li>');
+    if (r.credit > 0) rows.push('<li class="minus"><span>' + t('stepCredit') + '</span><b>−' + won(r.credit) + '</b></li>');
+    if (r.paid > 0) rows.push('<li class="minus"><span>' + t('stepPaid') + '</span><b>−' + won(r.paid) + '</b></li>');
+    rows.push('<li class="is-key"><span>' + t('stepPayable') + '</span><b>' + won(r.payable) + '</b></li>');
+    rows.push('<li><span>' + t('stepEff') + '</span><b>' + pctStr(r.effective) + '</b></li>');
+    $('stepList').innerHTML = rows.join('');
+
+    /* band table */
+    var labels = [t('bandLabel'), t('bandLabel2'), t('bandLabel3'), t('bandLabel4'), t('bandLabel5')];
+    var brs = '';
+    r.bands.forEach(function (b, idx) {
+      var on = b.portion > 0 ? ' class="is-on"' : ' class="is-empty"';
+      brs += '<tr' + on + '><td class="kr">' + labels[idx] + '</td><td class="num">' + (b.portion > 0 ? won(b.portion) : t('bandNone')) + '</td><td>' + pctStr(b.rate) + '</td><td class="num">' + (b.portion > 0 ? won(b.tax) : '—') + '</td></tr>';
+    });
+    $('bandRows').innerHTML = brs;
+
+    /* verdict */
+    var v;
+    if (r.payable === 0 && r.taxBase === 0) {
+      v = t('verdictZero');
+      if (r.dedExtra) v += ' ' + fmt(t('verdictMarriage'), { x: shortWon(r.dedExtra) });
+      $('verdict').className = 'verdict is-ok';
+    } else {
+      v = fmt(t('verdictNormal'), { b: shortWon(r.taxBase), r: pctStr((r.bands.filter(function (b) { return b.portion > 0; }).slice(-1)[0] || { rate: 0 }).rate), t: shortWon(r.rawTax), c: shortWon(r.credit) });
+      if (r.surcharge > 0) v += ' ' + fmt(t('verdictSkip'), { s: shortWon(r.surcharge) });
+      if (r.paid > 0) v += ' ' + fmt(t('verdictPaid'), { p: shortWon(r.paid) });
+      $('verdict').className = 'verdict';
+    }
+    $('verdict').innerHTML = v;
+
+    /* summary in the side */
+    $('sumHead').textContent = r.payable === 0
+      ? t('sumHeadZero')
+      : fmt(t('sumHeadNormal'), { pay: shortWon(r.payable), eff: pctStr(r.effective) });
+  }
+
+  /* ═════════════════════ inputs ═════════════════════ */
+  function syncInputs() {
+    $('gift').value = group(state.gift);
+    $('prior').value = group(state.prior);
+    $('paid').value = group(state.paid);
+    $('relation').value = state.rel;
+    $('minor').checked = state.minor;
+    $('marriage').checked = state.marriage;
+    $('skip').checked = state.skip;
+    $('filing').checked = state.filing;
+  }
+
+  $('relation').addEventListener('change', function () {
+    state.rel = $('relation').value;
+    renderAll();
+  });
+
+  [['gift', 'gift'], ['prior', 'prior'], ['paid', 'paid']].forEach(function (pair) {
+    var el = $(pair[0]);
+    el.addEventListener('input', function () {
+      state[pair[1]] = parseNum(el.value);
+      renderAll();
+    });
+    el.addEventListener('blur', function () { el.value = group(state[pair[1]]); });
+  });
+
+  $('giftChips').addEventListener('click', function (ev) {
+    var btn = ev.target.closest('button[data-amt]');
+    if (!btn) return;
+    state.gift = Number(btn.getAttribute('data-amt'));
+    $('gift').value = group(state.gift);
+    var chips = $('giftChips').querySelectorAll('button');
+    for (var i = 0; i < chips.length; i++) {
+      chips[i].setAttribute('aria-pressed', chips[i] === btn ? 'true' : 'false');
+    }
+    renderAll();
+  });
+
+  $('minor').addEventListener('change', function () { state.minor = $('minor').checked; renderAll(); });
+  $('marriage').addEventListener('change', function () { state.marriage = $('marriage').checked; renderAll(); });
+  $('skip').addEventListener('change', function () { state.skip = $('skip').checked; renderAll(); });
+  $('filing').addEventListener('change', function () { state.filing = $('filing').checked; renderAll(); });
+
+  /* ═════════════════════ copy ═════════════════════ */
+  function summaryText() {
+    var r = state.last || calc();
+    var cur = state.lang === 'ko' ? '원' : ' KRW';
+    var L = [];
+    L.push(t('copyTitle'));
+    L.push(t('copyRel') + ': ' + relLabel(r.rel) + (r.minor ? (state.lang === 'ko' ? ' · 수증자 미성년' : ' · minor') : ''));
+    L.push(t('copyGift') + ': ' + won(r.gift) + cur);
+    if (r.prior > 0) L.push(t('copyPrior') + ': ' + won(r.prior) + cur);
+    L.push(t('copyDed') + ': ' + won(r.deduction) + cur + (r.dedExtra ? ' (' + fmt(t('dedParts'), { a: won(r.dedBase), b: won(r.dedExtra) }) + ')' : ''));
+    L.push(t('copyBase') + ': ' + won(r.taxBase) + cur);
+    L.push(t('copyRaw') + ': ' + won(r.rawTax) + cur);
+    if (r.surcharge > 0) L.push(t('copySur') + ' (' + pctStr(r.surRate) + '): +' + won(r.surcharge) + cur);
+    L.push(t('copyCredit') + ': −' + won(r.credit) + cur);
+    if (r.paid > 0) L.push(t('copyPaid') + ': −' + won(r.paid) + cur);
+    L.push(t('copyPay') + ': ' + won(r.payable) + cur);
+    L.push(t('copyEff') + ': ' + pctStr(r.effective));
+    L.push(t('copyFoot'));
+    return L.join('\n');
+  }
+
+  $('copyBtn').addEventListener('click', function () {
+    var text = summaryText();
+    var done = function (ok) {
+      var el = $('copyStatus');
+      el.textContent = ok ? t('copied') : t('copyFail');
+      el.className = 'status' + (ok ? ' is-ok' : ' is-warn');
+      setTimeout(function () { el.textContent = ''; }, 3200);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { done(true); }, function () { fallbackCopy(text, done); });
+    } else {
+      fallbackCopy(text, done);
+    }
+  });
+  function fallbackCopy(text, done) {
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      done(ok);
+    } catch (e) { done(false); }
+  }
+
+  /* ═════════════════════ tabs ═════════════════════ */
+  function switchTab(name) {
+    state.tab = name;
+    var tabs = document.querySelectorAll('.tabs button');
+    for (var i = 0; i < tabs.length; i++) {
+      var on = tabs[i].getAttribute('data-tab') === name;
+      tabs[i].setAttribute('aria-selected', on ? 'true' : 'false');
+      tabs[i].tabIndex = on ? 0 : -1;
+    }
+    $('panel-calc').hidden = name !== 'calc';
+    $('panel-ref').hidden = name !== 'ref';
+  }
+  document.querySelector('.tabs').addEventListener('click', function (ev) {
+    var btn = ev.target.closest('button[data-tab]');
+    if (btn) switchTab(btn.getAttribute('data-tab'));
+  });
+  document.querySelector('.tabs').addEventListener('keydown', function (ev) {
+    if (ev.key !== 'ArrowRight' && ev.key !== 'ArrowLeft') return;
+    var next = state.tab === 'calc' ? 'ref' : 'calc';
+    switchTab(next);
+    var btn = document.querySelector('.tabs button[data-tab="' + next + '"]');
+    if (btn) btn.focus();
+  });
+
+  /* ═════════════════════ language ═════════════════════ */
+  function applyLang(lang) {
+    state.lang = lang === 'en' ? 'en' : 'ko';
+    document.documentElement.setAttribute('lang', state.lang);
+    document.title = t('docTitle').replace(/&amp;/g, '&');
+    setMeta('meta[property="og:title"]', 'content', t('docTitle').split('|')[0].replace(/&amp;/g, '&').trim());
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var v = t(nodes[i].getAttribute('data-i18n'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-html'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-aria'));
+      if (v) nodes[i].setAttribute('aria-label', v);
+    }
+    var lt = $('langToggle');
+    if (lt) {
+      var spans = lt.querySelectorAll('[data-lt]');
+      for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
+      lt.setAttribute('aria-label', t('toggleTo'));
+      lt.setAttribute('title', t('toggleTo'));
+    }
+    document.querySelectorAll('.suffix').forEach(function (el) { el.textContent = t('won'); });
+    syncInputs();
+    renderAll();
+    try { localStorage.setItem(LANG_KEY, state.lang); localStorage.setItem(SHARED_KEY, state.lang); } catch (e) { /* blocked */ }
+  }
+  $('langToggle').addEventListener('click', function () {
+    applyLang(state.lang === 'ko' ? 'en' : 'ko');
+  });
+
+  /* ═════════════════════ boot ═════════════════════ */
+  $('netCount').textContent = '0';
+  syncInputs();
+  applyLang(initialLang());
+  switchTab('calc');
+
+  /* test hook */
+  window.GiftTax = {
+    version: '1.0',
+    consts: { DEDUCTION: DEDUCTION, MARRIAGE_DEDUCTION: MARRIAGE_DEDUCTION, BANDS: BANDS },
+    calc: function () { return JSON.parse(JSON.stringify(calc())); },
+    set: function (o) {
+      if (o.rel != null) state.rel = o.rel;
+      if (o.gift != null) state.gift = Number(o.gift);
+      if (o.prior != null) state.prior = Number(o.prior);
+      if (o.paid != null) state.paid = Number(o.paid);
+      if (o.minor != null) state.minor = !!o.minor;
+      if (o.marriage != null) state.marriage = !!o.marriage;
+      if (o.skip != null) state.skip = !!o.skip;
+      if (o.filing != null) state.filing = !!o.filing;
+      syncInputs();
+      renderAll();
+      return JSON.parse(JSON.stringify(calc()));
+    },
+    summary: function () { return summaryText(); },
+    lang: function () { return state.lang; }
+  };
+})();
+</script>
+</body>
+</html>

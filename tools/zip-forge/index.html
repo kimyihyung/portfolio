@@ -1,0 +1,1888 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0b0d">
+<title>ZipForge — Free No-Upload Browser ZIP &amp; GZIP Archiver | Kim Yihyung</title>
+<meta name="description" content="ZipForge — Free No-Upload Browser ZIP &amp; GZIP Archiver. Build a real .zip from files on your device with a CRC32 and Deflate writer of its own, open a .zip back up to read its tree, preview images and text and extract single files, and pack or unwrap .gz. 0 bytes uploaded, 0 external requests.">
+<meta name="keywords" content="zip maker, create zip online, no upload zip, unzip in browser, open zip without uploading, gzip compress, gzip decompress, deflate raw, crc32, zip extractor, 브라우저 압축, 압축 해제, zip 풀기">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/zip-forge/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b0d'/%3E%3Cpath d='M6 10h6v12H6zM12 14h6v8h-6zM18 7h8v15h-8z' fill='none' stroke='%23e5b45c' stroke-width='2.2' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/zip-forge/">
+<meta property="og:title" content="ZipForge — ZIP and GZIP, written in your browser">
+<meta property="og:description" content="Make a real .zip from your own files with a hand-written CRC32 and Deflate stream, open one back up, preview what is inside and pull a single file out — with a .gz tab, and 0 bytes uploaded.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="ZipForge — browser ZIP and GZIP archiver">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ZipForge — ZIP and GZIP, written in your browser">
+<meta name="twitter:description" content="Build a .zip, open a .zip, preview and extract, pack or unwrap .gz. CRC32 and Deflate written here. 0 bytes uploaded.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "ZipForge — Browser ZIP &amp; GZIP Archiver",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/zip-forge/",
+      "description": "Builds a standard .zip archive from files on the device, entirely in the browser: every entry gets a CRC32 computed here and is compressed with CompressionStream('deflate-raw'), with a store-only fallback when the browser lacks it. A built-in reader parses the End of Central Directory, the central directory and each local file header, decodes UTF-8 and EUC-KR names, lists original and packed size per file, previews images and text and extracts single entries. A third tab gzips one file or unwraps a .gz. Nothing is uploaded.",
+      "featureList": [
+        "Drag and drop several files, or load three sample files with one click",
+        "Standard .zip output: local headers, central directory, EOCD",
+        "CRC32 and Deflate (deflate-raw) written in the page, store fallback",
+        "Per-file size, exclude before packing, total compression ratio",
+        "Open a .zip: entry list with original and packed size",
+        "UTF-8 and EUC-KR filename decoding",
+        "Image and text preview, single-file extraction",
+        "GZIP compress and decompress for one file",
+        "100% client-side: 0 bytes uploaded, 0 external requests"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "ZipForge", "item": "https://kimyihyung.github.io/portfolio/tools/zip-forge/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is this a real .zip or something only this page can read?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A real one. The page writes the same structure every archiver writes: a local file header before each entry, the compressed bytes, a central directory at the end and the End of Central Directory record after it. Entries carry a CRC32 and are Deflate-compressed through the browser's own CompressionStream, so Windows Explorer, macOS Archive Utility, 7-Zip and unzip all open the file." }
+        },
+        {
+          "@type": "Question",
+          "name": "What happens in a browser without deflate-raw?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The archive is still valid, just larger: every entry is stored uncompressed and the method byte says 0 instead of 8. The result panel names the method it used, so you can see which one you got." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I open a .zip that someone sent me, including Korean filenames?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. The reader follows the central directory rather than guessing offsets, and it decodes a name as UTF-8 when the archive sets the UTF-8 flag, tries UTF-8 first when it does not, and falls back to EUC-KR — which is what Korean Windows archivers wrote for years. Zip64 archives, multi-part archives and password-protected entries are reported instead of being opened wrongly." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does anything get uploaded while it works?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. There is no fetch, no XHR, no WebSocket, no analytics and no external stylesheet or font — the page is one file. The files you pick are read with the File API, compressed in memory and handed back as a blob download. The request counter in the footer stays at zero." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is the compression as good as 7-Zip?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Deflate at the browser default level is close to a normal ZIP from most tools on text, JSON and CSV, and noticeably weaker than LZMA or zstd, which .zip does not use. Already-compressed input — JPEG, MP4, PNG, PDF — barely shrinks anywhere, because the redundancy is gone before the archiver sees it." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+:root {
+  --bg: #0b0b0d;
+  --bg2: #0e0e11;
+  --panel: #141311;
+  --panel2: #1b1917;
+  --line: rgba(255,255,255,.09);
+  --line2: rgba(255,255,255,.18);
+  --ink: #f7f2e9;
+  --muted: #a9a29a;
+  --muted2: #7d766e;
+  --accent: #e5b45c;
+  --accent2: #f3cf85;
+  --accent-dim: rgba(229,180,92,.12);
+  --on-accent: #1d1503;
+  --ok: #7fd6a0;
+  --warn: #ffa06b;
+  --bad: #ff7d7d;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --shadow: 0 24px 70px rgba(0,0,0,.55);
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--ink);
+  line-height: 1.6;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(110% 55% at 50% -18%, rgba(229,180,92,.13), transparent 62%),
+    radial-gradient(60% 40% at 100% 2%, rgba(229,180,92,.05), transparent 60%);
+  background-repeat: no-repeat;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  word-break: keep-all;
+}
+::selection { background: var(--accent); color: var(--on-accent); }
+a { color: inherit; }
+button, input, select, textarea { font-family: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+.wrap { width: 100%; max-width: 1220px; margin: 0 auto; padding: 0 20px 48px; }
+
+/* ---------- topbar ---------- */
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0 12px; }
+.brand { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: var(--ink); min-width: 0; }
+.mark {
+  min-width: 28px; height: 22px; padding: 0 6px; border-radius: 7px; flex: none;
+  border: 1px solid rgba(229,180,92,.45); background: var(--accent-dim);
+  display: grid; place-items: center; font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: var(--accent);
+}
+.brand-txt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.top-actions { display: inline-flex; align-items: center; gap: 9px; flex: none; }
+.lang-toggle {
+  appearance: none; border: 1px solid var(--line); background: var(--panel); color: var(--muted2);
+  height: 34px; padding: 0 11px; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px;
+  cursor: pointer; font-size: 11px; font-weight: 700; letter-spacing: .06em; line-height: 1;
+  transition: color .2s, border-color .2s, transform .15s;
+}
+.lang-toggle:hover { border-color: var(--line2); }
+.lang-toggle:active { transform: scale(.94); }
+.lang-toggle .lt.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
+.topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
+
+/* ---------- hero ---------- */
+.hero { padding: 22px 0 18px; max-width: 900px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; margin: 0 0 14px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent);
+  border: 1px solid rgba(229,180,92,.28); background: rgba(229,180,92,.06); padding: 6px 11px; border-radius: 999px;
+}
+.eyebrow .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+h1 { margin: 0 0 14px; font-size: clamp(26px, 4.2vw, 42px); line-height: 1.18; letter-spacing: -.035em; font-weight: 800; }
+h1 .soft { color: var(--muted); }
+h1 .gold { color: var(--accent); }
+.lede { margin: 0 0 16px; color: var(--muted); font-size: 15px; max-width: 800px; line-height: 1.7; }
+.lede strong { color: var(--ink); font-weight: 600; }
+.lede code { font-family: var(--mono); font-size: .92em; color: var(--accent); }
+
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--panel); font-size: 11.5px; color: var(--muted);
+  font-family: var(--mono); letter-spacing: .02em;
+}
+.pill b { color: var(--ink); font-weight: 700; }
+.pill--live { border-color: rgba(127,214,160,.32); background: rgba(127,214,160,.07); color: #a6e6c4; }
+.pill--live b { color: #bff3d8; }
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px rgba(127,214,160,.14); }
+
+/* ---------- layout ---------- */
+.work { display: grid; grid-template-columns: minmax(0,1fr) 336px; gap: 16px; align-items: start; margin-top: 6px; }
+@media (max-width: 1060px) { .work { grid-template-columns: minmax(0,1fr); } }
+
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); min-width: 0; }
+.panel { padding: 16px; display: grid; gap: 13px; min-width: 0; }
+.panel h3 { margin: 0; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted2); font-family: var(--mono); font-weight: 700; }
+.side { display: grid; gap: 12px; min-width: 0; }
+@media (min-width: 1061px) { .side { position: sticky; top: 14px; } }
+
+.btn {
+  appearance: none; cursor: pointer; border-radius: 11px; border: 1px solid var(--line2);
+  background: var(--panel2); color: var(--ink); font-size: 13px; font-weight: 650;
+  padding: 10px 16px; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  transition: transform .12s, border-color .2s, background .2s, opacity .2s; text-decoration: none;
+}
+.btn:hover { border-color: rgba(255,255,255,.3); }
+.btn:active { transform: scale(.98); }
+.btn:disabled { opacity: .42; cursor: not-allowed; }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 750; }
+.btn--primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.btn--ghost { background: transparent; }
+.btn--sm { padding: 7px 11px; font-size: 12px; border-radius: 9px; }
+.btn--block { width: 100%; }
+
+/* ---------- tabs ---------- */
+.tabs { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 6px; margin-bottom: 4px; }
+.tabs button {
+  appearance: none; cursor: pointer; text-align: left; min-width: 0;
+  display: grid; gap: 2px; padding: 10px 12px; border-radius: 12px;
+  border: 1px solid var(--line); background: var(--panel2); color: var(--muted);
+  transition: border-color .2s, background .2s, color .2s;
+}
+.tabs button:hover { border-color: var(--line2); }
+.tabs button b { font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; color: var(--muted2); font-weight: 700; }
+.tabs button span { font-size: 13px; font-weight: 700; color: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tabs button[aria-selected="true"] { border-color: rgba(229,180,92,.5); background: linear-gradient(180deg, rgba(229,180,92,.14), rgba(229,180,92,.03)); color: var(--ink); }
+.tabs button[aria-selected="true"] b { color: var(--accent); }
+@media (max-width: 560px) {
+  .tabs button { padding: 9px 9px; }
+  .tabs button span { font-size: 11.5px; white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.25; }
+}
+
+.tabpanel { display: grid; gap: 13px; min-width: 0; }
+.calc-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.calc-head h2 { margin: 0; font-size: 16.5px; letter-spacing: -.02em; }
+.calc-head span { font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted2); }
+
+/* ---------- dropzone ---------- */
+.drop {
+  position: relative; display: grid; gap: 4px; place-items: center; text-align: center;
+  padding: 26px 16px; border: 1.5px dashed rgba(229,180,92,.32); border-radius: var(--radius-sm);
+  background: linear-gradient(180deg, rgba(229,180,92,.05), rgba(229,180,92,.01));
+  cursor: pointer; transition: border-color .18s, background .18s;
+}
+.drop:hover, .drop.is-over { border-color: rgba(229,180,92,.62); background: rgba(229,180,92,.09); }
+.drop .di { width: 30px; height: 30px; border-radius: 9px; border: 1px solid rgba(229,180,92,.4); display: grid; place-items: center; color: var(--accent); font-family: var(--mono); font-size: 15px; font-weight: 700; background: var(--accent-dim); }
+.drop b { font-size: 13.5px; font-weight: 700; }
+.drop small { font-size: 11.5px; color: var(--muted2); font-family: var(--mono); letter-spacing: .02em; }
+
+/* ---------- inputs ---------- */
+.field { display: grid; gap: 5px; padding: 9px 11px 8px; border: 1px solid var(--line); border-radius: 11px; background: var(--panel2); min-width: 0; }
+.field label { font-size: 10.5px; font-family: var(--mono); letter-spacing: .04em; color: var(--muted2); display: flex; align-items: baseline; justify-content: space-between; gap: 6px; min-width: 0; }
+.field input {
+  appearance: none; border: 0; background: transparent; color: var(--ink);
+  font-size: 14px; font-weight: 650; padding: 0; width: 100%; min-width: 0; line-height: 1.4;
+  font-family: var(--mono); letter-spacing: -.01em;
+}
+.field input:focus { outline: none; }
+.field:focus-within { border-color: rgba(229,180,92,.6); }
+
+/* ---------- results ---------- */
+.statgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(126px, 1fr)); gap: 8px; min-width: 0; }
+.stat { padding: 10px 12px; border-radius: 11px; border: 1px solid var(--line); background: var(--panel2); min-width: 0; display: grid; gap: 2px; }
+.stat .k { font-size: 9.5px; font-family: var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted2); }
+.stat .v { font-family: var(--mono); font-size: 14.5px; font-weight: 700; letter-spacing: -.02em; color: var(--ink); overflow-wrap: anywhere; }
+.stat .s { font-size: 10.5px; color: var(--muted2); overflow-wrap: anywhere; }
+.stat.is-on { border-color: rgba(229,180,92,.4); background: rgba(229,180,92,.07); }
+.stat.is-on .v { color: var(--accent); }
+.stat.is-ok { border-color: rgba(127,214,160,.34); background: rgba(127,214,160,.06); }
+.stat.is-ok .v { color: #a6e6c4; }
+
+.bignum { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 3px 10px; padding: 11px 12px; border-radius: 10px; border: 1px solid rgba(229,180,92,.24); background: rgba(229,180,92,.07); min-width: 0; }
+.bignum b { font-family: var(--mono); font-size: clamp(19px, 4.6vw, 25px); line-height: 1.1; font-weight: 700; letter-spacing: -.03em; color: var(--accent); overflow-wrap: anywhere; }
+.bignum span { font-size: 10.5px; color: var(--muted); font-family: var(--mono); letter-spacing: .04em; }
+
+.note-box { padding: 12px 13px; border: 1px solid var(--line); border-radius: 11px; background: var(--panel2); display: grid; gap: 6px; }
+.note-box h4 { margin: 0; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; font-family: var(--mono); color: var(--accent); font-weight: 700; }
+.note-box p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.65; }
+.note-box b { color: var(--ink); font-weight: 600; }
+.note-box code { font-family: var(--mono); font-size: .94em; color: var(--accent); }
+
+.status { min-height: 16px; margin: 0; font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
+.status.is-ok { color: var(--ok); }
+.status.is-warn { color: var(--warn); }
+.status.is-bad { color: var(--bad); }
+.row-actions { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+
+/* ---------- tables ---------- */
+.tblwrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-sm); -webkit-overflow-scrolling: touch; min-width: 0; }
+table.ref { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 460px; font-size: 12.4px; }
+table.ref th, table.ref td { padding: 8px 11px; text-align: left; border-bottom: 1px solid rgba(255,255,255,.07); }
+table.ref th { background: #171614; color: var(--muted); font-weight: 700; font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+table.ref td { color: var(--ink); font-family: var(--mono); white-space: nowrap; }
+table.ref td.kr { font-family: var(--font); white-space: normal; word-break: keep-all; color: var(--muted); }
+table.ref td.num, table.ref th.num { text-align: right; }
+table.ref td.name { white-space: normal; word-break: break-all; max-width: 320px; }
+table.ref tr:last-child td { border-bottom: 0; }
+table.ref tbody tr.is-off td { opacity: .45; text-decoration: line-through; }
+.tbl-note { margin: 8px 0 0; font-size: 11.4px; color: var(--muted2); line-height: 1.6; }
+.tbl-note b { color: var(--muted); font-weight: 600; }
+.mini { appearance: none; cursor: pointer; border: 1px solid var(--line); background: var(--panel2); color: var(--muted); border-radius: 7px; font-size: 10.5px; font-weight: 650; padding: 4px 8px; font-family: var(--mono); }
+.mini:hover { border-color: var(--line2); color: var(--ink); }
+.mini[aria-pressed="true"] { border-color: rgba(229,180,92,.45); color: var(--accent); background: var(--accent-dim); }
+.mini--x { color: var(--muted2); }
+.mini--x:hover { color: var(--bad); border-color: rgba(255,125,125,.4); }
+.act-cell { display: flex; gap: 5px; flex-wrap: nowrap; }
+
+/* ---------- preview ---------- */
+.preview { border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel2); padding: 12px; display: grid; gap: 9px; min-width: 0; }
+.preview-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.preview-head h4 { margin: 0; font-size: 13px; font-weight: 700; word-break: break-all; }
+.preview-head span { font-family: var(--mono); font-size: 10px; color: var(--muted2); letter-spacing: .05em; text-transform: uppercase; white-space: nowrap; }
+.preview-body { display: grid; place-items: center; min-width: 0; }
+.preview-body img { max-width: 100%; max-height: 340px; border-radius: 8px; border: 1px solid var(--line); background: #0d0c0b; }
+pre.txt { margin: 0; width: 100%; max-height: 340px; overflow: auto; padding: 10px 12px; border-radius: 9px; border: 1px solid var(--line); background: #0d0c0b; color: #ddd6c9; font-family: var(--mono); font-size: 11.8px; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+
+/* ---------- sections ---------- */
+.section { margin-top: 40px; scroll-margin-top: 18px; }
+.sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 12px; border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 16px; }
+.sec-head h2 { margin: 0; font-size: 17px; letter-spacing: -.02em; }
+.sec-head span { font-family: var(--mono); font-size: 11px; color: var(--muted2); letter-spacing: .06em; text-transform: uppercase; }
+
+.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+.note { padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel); min-width: 0; }
+.note h3 { margin: 0 0 8px; font-size: 14px; display: flex; gap: 8px; align-items: baseline; }
+.note h3 span { font-family: var(--mono); font-size: 10.5px; color: var(--accent); letter-spacing: .1em; }
+.note p { margin: 0; font-size: 12.7px; color: var(--muted); line-height: 1.7; }
+.note p + p { margin-top: 7px; }
+.note b { color: var(--ink); font-weight: 600; }
+.note code { font-family: var(--mono); font-size: .94em; color: var(--accent); }
+
+.faq { display: grid; gap: 8px; }
+details.qa { border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel); overflow: hidden; }
+details.qa summary { cursor: pointer; padding: 13px 44px 13px 15px; font-size: 13.5px; font-weight: 600; list-style: none; position: relative; }
+details.qa summary::-webkit-details-marker { display: none; }
+details.qa summary::after { content: "+"; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--accent); font-family: var(--mono); font-size: 15px; }
+details.qa[open] summary::after { content: "−"; }
+details.qa .a { padding: 0 15px 14px; font-size: 12.7px; color: var(--muted); line-height: 1.72; }
+details.qa .a b { color: var(--ink); font-weight: 600; }
+details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: .95em; }
+
+.foot { margin-top: 34px; padding-top: 14px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--muted2); }
+.foot-links { display: inline-flex; flex-wrap: wrap; gap: 12px; }
+.foot-links a { text-decoration: none; color: var(--muted); border-bottom: 1px solid transparent; }
+.foot-links a:hover { color: var(--ink); border-bottom-color: var(--line2); }
+.foot .net { font-family: var(--mono); letter-spacing: .02em; }
+.foot .net b { color: var(--ok); }
+
+@media (max-width: 640px) {
+  .wrap { padding: 0 14px 36px; }
+  .topbar { padding: 14px 0 8px; }
+  .brand-txt { font-size: 12px; letter-spacing: .1em; }
+  .hero { padding: 14px 0 10px; }
+  h1 { font-size: 25px; letter-spacing: -.03em; }
+  .eyebrow { font-size: 9.5px; letter-spacing: .12em; }
+  .lede { font-size: 14px; line-height: 1.68; }
+  .panel { padding: 13px; }
+  .field { padding: 8px 10px 7px; }
+  .sec-head h2 { font-size: 16px; }
+  .btn { padding: 10px 13px; }
+  table.ref th, table.ref td { padding: 7px 9px; }
+  .bignum b { font-size: 20px; }
+  .drop { padding: 20px 12px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="/portfolio/" aria-label="Kim Yihyung — portfolio" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" title="한국어로 보기" aria-label="한국어로 보기">
+        <span class="lt on" data-lt="en">EN</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="ko">KO</span>
+      </button>
+      <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← All tools</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="eyebrow">ZipForge · ZIP · GZIP · 0 uploads</span></p>
+      <h1 data-i18n-html="h1">A folder in.<br><span class="soft">A .zip out.</span><br><span class="gold">Nothing uploaded.</span></h1>
+      <p class="lede" data-i18n-html="lede">
+        Pick a handful of files and get a <strong>real .zip</strong> — every CRC32 and Deflate stream written by this page.
+        Drop a .zip back in and read its tree: original and packed size per file, a preview for images and text, one file out
+        or all of them. <strong>GZIP</strong> gets its own tab. Nothing is sent anywhere, so the request counter stays at zero.
+      </p>
+      <div class="badge-row">
+        <span class="pill"><b data-i18n="pillFmt">ZIP · GZIP</b><span>·</span><span data-i18n="pillDate">checked 2026-11-19</span></span>
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillUp">0 bytes uploaded</b></span>
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillNet">0 external requests</b></span>
+        <span class="pill" data-i18n="pillStruct">Local header · Central directory · EOCD</span>
+      </div>
+    </section>
+
+    <section class="work" aria-label="ZIP and GZIP tools" data-i18n-aria="workAria">
+      <div class="card panel">
+        <div class="tabs" role="tablist" aria-label="Mode" data-i18n-aria="tabAria">
+          <button type="button" role="tab" id="tab-zip" data-tab="zip" aria-selected="true" aria-controls="panel-zip">
+            <b>01</b><span data-i18n="tab1">Make a .zip</span>
+          </button>
+          <button type="button" role="tab" id="tab-open" data-tab="open" aria-selected="false" aria-controls="panel-open" tabindex="-1">
+            <b>02</b><span data-i18n="tab2">Open a .zip</span>
+          </button>
+          <button type="button" role="tab" id="tab-gz" data-tab="gz" aria-selected="false" aria-controls="panel-gz" tabindex="-1">
+            <b>03</b><span data-i18n="tab3">GZIP .gz</span>
+          </button>
+        </div>
+
+        <!-- ── 01 build ── -->
+        <section class="tabpanel" id="panel-zip" role="tabpanel" aria-labelledby="tab-zip">
+          <div class="calc-head">
+            <h2 data-i18n="bTitle">Files in, one archive out</h2>
+            <span data-i18n="bNote">read on the device only</span>
+          </div>
+
+          <label class="drop" id="drop" for="pick">
+            <span class="di" aria-hidden="true">+</span>
+            <b data-i18n="dropMain">Drop files here</b>
+            <small data-i18n="dropSub">or click to choose · any type · several at once</small>
+          </label>
+          <input class="sr-only" id="pick" type="file" multiple aria-label="Choose files to zip" data-i18n-aria="pickAria">
+
+          <div class="row-actions">
+            <button class="btn btn--sm" type="button" id="loadSamples" data-i18n="loadSamples">Load 3 sample files</button>
+            <button class="btn btn--sm btn--ghost" type="button" id="clearFiles" data-i18n="clearFiles">Clear the list</button>
+            <span class="status" id="pickStatus"></span>
+          </div>
+
+          <div class="tblwrap" id="fileWrap" hidden>
+            <table class="ref">
+              <thead>
+                <tr>
+                  <th data-i18n="thName">File</th>
+                  <th class="num" data-i18n="thSize">Size</th>
+                  <th data-i18n="thState">In the zip</th>
+                  <th data-i18n="thAct">—</th>
+                </tr>
+              </thead>
+              <tbody id="fileRows"></tbody>
+            </table>
+          </div>
+
+          <div class="field">
+            <label for="zipName"><span data-i18n="zipNameLbl">Archive name</span><i data-i18n="zipNameHint">.zip is added</i></label>
+            <input id="zipName" type="text" value="archive" autocomplete="off" spellcheck="false" aria-label="Archive name" data-i18n-aria="zipNameAria">
+          </div>
+
+          <div class="row-actions">
+            <button class="btn btn--primary" type="button" id="buildBtn" data-i18n="buildBtn">Build the .zip</button>
+            <span class="status" id="buildStatus"></span>
+          </div>
+
+          <div id="buildResult" hidden style="display:grid;gap:10px">
+            <div class="bignum"><b id="bBig">—</b><span data-i18n="bBigCap">the .zip, ready to download</span></div>
+            <div class="statgrid">
+              <div class="stat"><span class="k" data-i18n="stFiles">Files</span><span class="v" id="bFiles">—</span><span class="s" data-i18n="stFilesSub">entries written</span></div>
+              <div class="stat"><span class="k" data-i18n="stOrig">Original</span><span class="v" id="bOrig">—</span><span class="s" data-i18n="stOrigSub">before packing</span></div>
+              <div class="stat is-ok"><span class="k" data-i18n="stSaved">Saved</span><span class="v" id="bRatio">—</span><span class="s" data-i18n="stSavedSub">of the original size</span></div>
+              <div class="stat"><span class="k" data-i18n="stMethod">Method</span><span class="v" id="bMethod">—</span><span class="s" id="bMethodSub">—</span></div>
+            </div>
+            <div class="row-actions">
+              <button class="btn btn--primary btn--sm" type="button" id="dlZip" data-i18n="dlZip">Download the .zip</button>
+              <button class="btn btn--sm" type="button" id="openBuilt" data-i18n="openBuilt">Open it in the reader</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── 02 read ── -->
+        <section class="tabpanel" id="panel-open" role="tabpanel" aria-labelledby="tab-open" hidden>
+          <div class="calc-head">
+            <h2 data-i18n="rTitle">A .zip, opened without sending it</h2>
+            <span data-i18n="rNote">central directory read in the tab</span>
+          </div>
+
+          <label class="drop" id="openDrop" for="openPick">
+            <span class="di" aria-hidden="true">↓</span>
+            <b data-i18n="openMain">Drop a .zip here</b>
+            <small data-i18n="openSub">or click to choose · one archive</small>
+          </label>
+          <input class="sr-only" id="openPick" type="file" accept=".zip,application/zip,application/x-zip-compressed" aria-label="Choose a .zip to open" data-i18n-aria="openPickAria">
+
+          <p class="status" id="openStatus"></p>
+
+          <div id="zipResult" hidden style="display:grid;gap:10px">
+            <div class="statgrid">
+              <div class="stat"><span class="k" data-i18n="stEntries">Entries</span><span class="v" id="zEntries">—</span><span class="s" id="zEntriesSub">—</span></div>
+              <div class="stat"><span class="k" data-i18n="stUnpacked">Unpacked</span><span class="v" id="zOrig">—</span><span class="s" data-i18n="stUnpackedSub">what comes out</span></div>
+              <div class="stat"><span class="k" data-i18n="stPacked">In the file</span><span class="v" id="zPacked">—</span><span class="s" data-i18n="stPackedSub">what you received</span></div>
+              <div class="stat is-ok"><span class="k" data-i18n="stRatio">Packed</span><span class="v" id="zRatio">—</span><span class="s" data-i18n="stRatioSub">of the unpacked size</span></div>
+            </div>
+
+            <div class="tblwrap">
+              <table class="ref">
+                <thead>
+                  <tr>
+                    <th data-i18n="thPath">Entry</th>
+                    <th class="num" data-i18n="thOrig">Original</th>
+                    <th class="num" data-i18n="thComp">Packed</th>
+                    <th data-i18n="thMeth">Method</th>
+                    <th data-i18n="thAct2">—</th>
+                  </tr>
+                </thead>
+                <tbody id="zipRows"></tbody>
+              </table>
+            </div>
+            <p class="tbl-note" data-i18n="zipRowsNote">Sizes come from the central directory, not from the local headers, so entries written with a data descriptor still read correctly.</p>
+
+            <div class="preview" id="previewBox" hidden>
+              <div class="preview-head">
+                <h4 id="previewTitle">—</h4>
+                <span id="previewMeta">—</span>
+              </div>
+              <div class="preview-body" id="previewBody"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── 03 gzip ── -->
+        <section class="tabpanel" id="panel-gz" role="tabpanel" aria-labelledby="tab-gz" hidden>
+          <div class="calc-head">
+            <h2 data-i18n="gTitle">One file, .gz</h2>
+            <span data-i18n="gNote">CompressionStream gzip</span>
+          </div>
+
+          <label class="drop" id="gzDrop" for="gzPick">
+            <span class="di" aria-hidden="true">⇅</span>
+            <b data-i18n="gzMain">Drop one file — plain or .gz</b>
+            <small data-i18n="gzSub">or click to choose · compress or decompress</small>
+          </label>
+          <input class="sr-only" id="gzPick" type="file" aria-label="Choose one file for gzip" data-i18n-aria="gzPickAria">
+          <p class="status" id="gzStatus"></p>
+
+          <div class="row-actions" id="gzActions" hidden>
+            <button class="btn btn--primary btn--sm" type="button" id="gzCompress" data-i18n="gzCompress">Compress to .gz</button>
+            <button class="btn btn--sm" type="button" id="gzDecompress" data-i18n="gzDecompress">Decompress .gz</button>
+          </div>
+
+          <div id="gzResult" hidden style="display:grid;gap:10px">
+            <div class="bignum"><b id="gzBig">—</b><span id="gzBigCap">—</span></div>
+            <div class="statgrid">
+              <div class="stat"><span class="k" data-i18n="stIn">In</span><span class="v" id="gzIn">—</span><span class="s" id="gzInSub">—</span></div>
+              <div class="stat"><span class="k" data-i18n="stOut">Out</span><span class="v" id="gzOut">—</span><span class="s" id="gzOutSub">—</span></div>
+              <div class="stat is-ok"><span class="k" data-i18n="stGzRatio">Ratio</span><span class="v" id="gzRatio">—</span><span class="s" data-i18n="stGzRatioSub">out / in</span></div>
+            </div>
+            <div class="row-actions">
+              <button class="btn btn--primary btn--sm" type="button" id="gzDl" data-i18n="gzDl">Download the result</button>
+              <span class="status" id="gzDlName"></span>
+            </div>
+            <div class="preview" id="gzPreviewBox" hidden>
+              <div class="preview-head"><h4 id="gzPreviewTitle">—</h4><span id="gzPreviewMeta">—</span></div>
+              <div class="preview-body" id="gzPreviewBody"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="side">
+        <div class="card panel">
+          <h3 data-i18n="sideTitle">What is written</h3>
+          <div class="note-box">
+            <h4 data-i18n="sideS1k">Zip layout</h4>
+            <p data-i18n-html="sideS1">Local header <code>0x04034b50</code> · data · central directory <code>0x02014b50</code> · EOCD <code>0x06054b50</code>. The flag bit 11 is set so every name is read as UTF-8.</p>
+          </div>
+          <div class="note-box">
+            <h4 data-i18n="sideS2k">The checksum</h4>
+            <p data-i18n-html="sideS2">CRC32 with the reflected polynomial <code>0xEDB88320</code>, computed byte by byte in the tab — the value an unzip will verify before it trusts the entry.</p>
+          </div>
+          <div class="note-box">
+            <h4 data-i18n="sideS3k">The compression</h4>
+            <p data-i18n-html="sideS3">Deflate through <code>CompressionStream('deflate-raw')</code>. If the browser has no such stream the entry is stored (method 0) and the .zip still opens everywhere — the panel tells you which one it used.</p>
+          </div>
+          <div class="note-box">
+            <h4 data-i18n="sideS4k">Left on the device</h4>
+            <p data-i18n="sideS4">The archive exists as a blob in memory until you save it. No cookie, no storage key, no upload, no log — close the tab and nothing of yours is left behind.</p>
+          </div>
+        </div>
+
+        <div class="card panel">
+          <h3 data-i18n="sideLimits">Honest limits</h3>
+          <p class="tbl-note" data-i18n-html="limitsBody">Archives over 4 GB, Zip64, multi-part and password-protected entries are <b>reported, not opened</b>. A stored-heavy archive of photos will barely shrink — JPEG and MP4 are already compressed. Deflate at the browser default level is a normal ZIP, not a 7-Zip LZMA one.</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" id="how">
+      <div class="sec-head">
+        <h2 data-i18n="howTitle">What actually happens</h2>
+        <span data-i18n="howNote">no server in the loop</span>
+      </div>
+      <div class="notes">
+        <div class="note">
+          <h3><span>01</span><b data-i18n="n1t">Read, never send</b></h3>
+          <p data-i18n="n1b">Choosing a file gives the page a File object, not an upload. It is read into an ArrayBuffer with the File API, and that buffer is all the page ever handles.</p>
+        </div>
+        <div class="note">
+          <h3><span>02</span><b data-i18n="n2t">Pack</b></h3>
+          <p data-i18n="n2b">Each entry gets its CRC32, then a Deflate attempt; the shorter of the two wins. Local headers, the central directory and the EOCD are assembled into one blob and offered as a download.</p>
+        </div>
+        <div class="note">
+          <h3><span>03</span><b data-i18n="n3t">Unpack</b></h3>
+          <p data-i18n="n3b">Opening an archive means finding the EOCD from the end of the file, walking the central directory, and slicing each entry out by its offset. Deflate entries go back through DecompressionStream.</p>
+        </div>
+        <div class="note">
+          <h3><span>04</span><b data-i18n="n4t">Preview without extracting</b></h3>
+          <p data-i18n="n4b">An image becomes a blob URL the page draws; a text file is decoded as UTF-8 and shown in a pre block. Nothing is written to disk until you press download.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="sec-head">
+        <h2 data-i18n="faqTitle">Questions people actually ask</h2>
+        <span data-i18n="faqNote">five answers</span>
+      </div>
+      <div class="faq">
+        <details class="qa">
+          <summary data-i18n="q1">Is this a real .zip, or only this page can read it?</summary>
+          <div class="a" data-i18n-html="a1">A real one. Local file headers, the compressed bytes, a central directory and the EOCD — the same four parts every archiver writes. Windows Explorer, macOS Archive Utility, 7-Zip and <code>unzip</code> open the download without a warning.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q2">What if the browser has no deflate-raw?</summary>
+          <div class="a" data-i18n-html="a2">The archive is still valid, just bigger: entries are stored and the method byte says <code>0</code> instead of <code>8</code>. The result panel names the method, so the number you see is the one you got.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q3">Can it open a .zip with Korean filenames?</summary>
+          <div class="a" data-i18n-html="a3">Yes. A name is decoded as UTF-8 when the UTF-8 flag is set; when it is not, the page tries UTF-8 first and falls back to <b>EUC-KR</b>, which is what Korean Windows archivers wrote for years. A name that survives neither is shown as bytes rather than silently mangled.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q4">Is anything uploaded, cached or logged?</summary>
+          <div class="a" data-i18n-html="a4">No. One HTML file, no fetch, no XHR, no WebSocket, no analytics, no external font or stylesheet. The footer counts outbound requests and keeps the number it sees, which is <b>zero</b>.</div>
+        </details>
+        <details class="qa">
+          <summary data-i18n="q5">Will my photos get smaller?</summary>
+          <div class="a" data-i18n-html="a5">Barely. A JPEG, MP4, PNG or PDF has already had its redundancy squeezed out, so Deflate usually returns it a few percent larger and the page then stores it unchanged. Text, JSON, CSV, SVG, logs and source code are where a .zip earns its keep.</div>
+        </details>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <span data-i18n="footCopy">© 2026 Kim Yihyung · for the browser, in the browser.</span>
+      <span class="net"><span data-i18n="footNet">Outbound requests</span> <b id="netCount">0</b></span>
+      <span class="foot-links">
+        <a href="/portfolio/" data-i18n="footP1">Portfolio</a>
+        <a href="/portfolio/tools/" data-i18n="footP2">All tools</a>
+        <a href="https://github.com/kimyihyung/portfolio" target="_blank" rel="noopener" data-i18n="footP3">Source</a>
+      </span>
+      <span class="mono" data-i18n="mono">no upload · no tracking</span>
+    </footer>
+  </main>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* ═════════════════════ i18n ═════════════════════ */
+  var I18N = {
+    en: {
+      docTitle: 'ZipForge — Free No-Upload Browser ZIP & GZIP Archiver | Kim Yihyung',
+      brandAria: 'Kim Yihyung — portfolio',
+      back: '← All tools',
+      eyebrow: 'ZipForge · ZIP · GZIP · 0 uploads',
+      h1: 'A folder in.<br><span class="soft">A .zip out.</span><br><span class="gold">Nothing uploaded.</span>',
+      lede: 'Pick a handful of files and get a <strong>real .zip</strong> — every CRC32 and Deflate stream written by this page. Drop a .zip back in and read its tree: original and packed size per file, a preview for images and text, one file out or all of them. <strong>GZIP</strong> gets its own tab. Nothing is sent anywhere, so the request counter stays at zero.',
+      pillFmt: 'ZIP · GZIP',
+      pillDate: 'checked 2026-11-19',
+      pillUp: '0 bytes uploaded',
+      pillNet: '0 external requests',
+      pillStruct: 'Local header · Central directory · EOCD',
+      workAria: 'ZIP and GZIP tools',
+      tabAria: 'Mode',
+      tab1: 'Make a .zip',
+      tab2: 'Open a .zip',
+      tab3: 'GZIP .gz',
+
+      bTitle: 'Files in, one archive out',
+      bNote: 'read on the device only',
+      dropMain: 'Drop files here',
+      dropSub: 'or click to choose · any type · several at once',
+      pickAria: 'Choose files to zip',
+      loadSamples: 'Load 3 sample files',
+      clearFiles: 'Clear the list',
+      thName: 'File',
+      thSize: 'Size',
+      thState: 'In the zip',
+      thAct: '—',
+      zipNameLbl: 'Archive name',
+      zipNameHint: '.zip is added',
+      zipNameAria: 'Archive name',
+      buildBtn: 'Build the .zip',
+      bBigCap: 'the .zip, ready to download',
+      stFiles: 'Files',
+      stFilesSub: 'entries written',
+      stOrig: 'Original',
+      stOrigSub: 'before packing',
+      stSaved: 'Saved',
+      stSavedSub: 'of the original size',
+      stMethod: 'Method',
+      dlZip: 'Download the .zip',
+      openBuilt: 'Open it in the reader',
+
+      rTitle: 'A .zip, opened without sending it',
+      rNote: 'central directory read in the tab',
+      openMain: 'Drop a .zip here',
+      openSub: 'or click to choose · one archive',
+      openPickAria: 'Choose a .zip to open',
+      stEntries: 'Entries',
+      stUnpacked: 'Unpacked',
+      stUnpackedSub: 'what comes out',
+      stPacked: 'In the file',
+      stPackedSub: 'what you received',
+      stRatio: 'Packed',
+      stRatioSub: 'of the unpacked size',
+      thPath: 'Entry',
+      thOrig: 'Original',
+      thComp: 'Packed',
+      thMeth: 'Method',
+      thAct2: '—',
+      zipRowsNote: 'Sizes come from the central directory, not from the local headers, so entries written with a data descriptor still read correctly.',
+
+      gTitle: 'One file, .gz',
+      gNote: 'CompressionStream gzip',
+      gzMain: 'Drop one file — plain or .gz',
+      gzSub: 'or click to choose · compress or decompress',
+      gzPickAria: 'Choose one file for gzip',
+      gzCompress: 'Compress to .gz',
+      gzDecompress: 'Decompress .gz',
+      stIn: 'In',
+      stOut: 'Out',
+      stGzRatio: 'Ratio',
+      stGzRatioSub: 'out / in',
+      gzDl: 'Download the result',
+
+      sideTitle: 'What is written',
+      sideS1k: 'Zip layout',
+      sideS1: 'Local header <code>0x04034b50</code> · data · central directory <code>0x02014b50</code> · EOCD <code>0x06054b50</code>. Flag bit 11 is set so every name is read as UTF-8.',
+      sideS2k: 'The checksum',
+      sideS2: 'CRC32 with the reflected polynomial <code>0xEDB88320</code>, computed byte by byte in the tab — the value an unzip verifies before it trusts the entry.',
+      sideS3k: 'The compression',
+      sideS3: 'Deflate through <code>CompressionStream(\'deflate-raw\')</code>. Without that stream the entry is stored (method 0) and the .zip still opens everywhere — the panel says which one it used.',
+      sideS4k: 'Left on the device',
+      sideS4: 'The archive is a blob in memory until you save it. No cookie, no storage key, no upload, no log — close the tab and nothing of yours is left behind.',
+      sideLimits: 'Honest limits',
+      limitsBody: 'Archives over 4 GB, Zip64, multi-part and password-protected entries are <b>reported, not opened</b>. A photo archive will barely shrink — JPEG and MP4 are already compressed. Deflate at the browser default level is a normal ZIP, not a 7-Zip LZMA one.',
+
+      howTitle: 'What actually happens',
+      howNote: 'no server in the loop',
+      n1t: 'Read, never send',
+      n1b: 'Choosing a file gives the page a File object, not an upload. It is read into an ArrayBuffer with the File API, and that buffer is all the page ever handles.',
+      n2t: 'Pack',
+      n2b: 'Each entry gets its CRC32, then a Deflate attempt; the shorter of the two wins. Local headers, the central directory and the EOCD are assembled into one blob and offered as a download.',
+      n3t: 'Unpack',
+      n3b: 'Opening an archive means finding the EOCD from the end of the file, walking the central directory and slicing each entry out by its offset. Deflate entries go back through DecompressionStream.',
+      n4t: 'Preview without extracting',
+      n4b: 'An image becomes a blob URL the page draws; a text file is decoded as UTF-8 and shown in a pre block. Nothing reaches disk until you press download.',
+
+      faqTitle: 'Questions people actually ask',
+      faqNote: 'five answers',
+      q1: 'Is this a real .zip, or only this page can read it?',
+      a1: 'A real one. Local file headers, the compressed bytes, a central directory and the EOCD — the same four parts every archiver writes. Windows Explorer, macOS Archive Utility, 7-Zip and <code>unzip</code> open the download without a warning.',
+      q2: 'What if the browser has no deflate-raw?',
+      a2: 'The archive is still valid, just bigger: entries are stored and the method byte says <code>0</code> instead of <code>8</code>. The result panel names the method, so the number you see is the one you got.',
+      q3: 'Can it open a .zip with Korean filenames?',
+      a3: 'Yes. A name is decoded as UTF-8 when the UTF-8 flag is set; when it is not, the page tries UTF-8 first and falls back to <b>EUC-KR</b>, which is what Korean Windows archivers wrote for years. A name that survives neither is shown as bytes rather than silently mangled.',
+      q4: 'Is anything uploaded, cached or logged?',
+      a4: 'No. One HTML file, no fetch, no XHR, no WebSocket, no analytics, no external font or stylesheet. The footer counts outbound requests and keeps the number it sees, which is <b>zero</b>.',
+      q5: 'Will my photos get smaller?',
+      a5: 'Barely. A JPEG, MP4, PNG or PDF has already had its redundancy squeezed out, so Deflate usually returns it a few percent larger and the page then stores it unchanged. Text, JSON, CSV, SVG, logs and source code are where a .zip earns its keep.',
+
+      footCopy: '© 2026 Kim Yihyung · for the browser, in the browser.',
+      footNet: 'Outbound requests',
+      footP1: 'Portfolio',
+      footP2: 'All tools',
+      footP3: 'Source',
+      mono: 'no upload · no tracking',
+
+      /* runtime */
+      filesOne: '{n} file',
+      filesMany: '{n} files',
+      include: 'Include',
+      exclude: 'Exclude',
+      remove: 'Remove',
+      dropAdded: '{n} file(s) added — {size} in total.',
+      pickEmpty: 'No files yet. Drop some above or load the samples.',
+      building: 'Packing {n} file(s)…',
+      built: 'Done: {n} entries, {size}.',
+      buildFail: 'Could not build the archive.',
+      nothingIncluded: 'Every file is excluded — include at least one.',
+      nameDup: 'A file with that name is already in the list; it was renamed.',
+      dl: 'Download',
+      preview: 'Preview',
+      packed: 'packed',
+      stored: 'stored',
+      dir: 'directory',
+      readErr: 'That file could not be read as a .zip. It may be a RAR, a 7z or a renamed image.',
+      readZip64: 'This archive is Zip64 (over 4 GB or over 65,535 entries). It is reported rather than half-read.',
+      readMulti: 'This archive spans several disks or parts. Only single-file archives are read.',
+      readEnc: 'One or more entries are password-protected — this page does not guess passwords.',
+      openReading: 'Reading {name}…',
+      openDone: '{n} entries · {size} unpacked.',
+      noPreview: 'No preview for this type. Download it to open it.',
+      noPreviewBig: 'Too large to preview here — {size}. Download it instead.',
+      extracting: 'Unpacking {name}…',
+      extractFail: 'This entry could not be unpacked.',
+      noInflate: 'This browser has no deflate-raw decoder, so compressed entries cannot be opened here.',
+      encryptedEntry: 'This entry is encrypted.',
+      unknownMethod: 'Compression method {m} is not supported (only store and deflate).',
+      zip64Entry: 'Entry too large to read here.',
+      gzPicked: '{name} · {size}',
+      gzWorking: 'Working on {name}…',
+      gzDone: '{in} → {out}.',
+      gzFail: 'That file is not a valid gzip stream.',
+      gzOutCap: 'the .gz, ready to download',
+      gzInCap: 'what comes out, ready to download',
+      gzNameOut: 'will be saved as {name}',
+      bytes: 'B',
+      toggleTo: 'View in Korean',
+      sample1: 'notes.txt',
+      sample2: 'quarterly-sales.csv',
+      sample3: 'settings.json'
+    },
+    ko: {
+      docTitle: 'ZipForge — 브라우저에서 만드는 ZIP·GZIP, 업로드 없음 | Kim Yihyung',
+      brandAria: 'Kim Yihyung — 포트폴리오',
+      back: '← 도구 전체',
+      eyebrow: 'ZipForge · ZIP · GZIP · 업로드 0',
+      h1: '파일은 넣고,<br><span class="soft">압축은 여기서.</span><br><span class="gold">보내는 건 없습니다.</span>',
+      lede: '파일 몇 개를 골라 <strong>진짜 .zip</strong>을 만듭니다. CRC32도 Deflate 스트림도 이 페이지가 직접 씁니다. 만든 .zip을 다시 넣으면 안쪽 트리를 읽어 원본·압축 크기와 이미지·텍스트 미리보기를 보여 주고, 파일 하나만 꺼낼 수도 있습니다. <strong>GZIP</strong>은 따로 탭이 있습니다. 어디로도 보내지 않으니 요청 카운터는 0에 머뭅니다.',
+      pillFmt: 'ZIP · GZIP',
+      pillDate: '확인일 2026-11-19',
+      pillUp: '업로드 0바이트',
+      pillNet: '외부 요청 0건',
+      pillStruct: '로컬 헤더 · 중앙 디렉터리 · EOCD',
+      workAria: 'ZIP·GZIP 도구',
+      tabAria: '모드',
+      tab1: 'ZIP 만들기',
+      tab2: 'ZIP 열기',
+      tab3: 'GZIP .gz',
+
+      bTitle: '파일을 넣으면 압축 파일 하나',
+      bNote: '기기 안에서만 읽습니다',
+      dropMain: '여기에 파일을 끌어다 놓으세요',
+      dropSub: '또는 클릭해서 선택 · 형식 무관 · 여러 개 한 번에',
+      pickAria: '압축할 파일 선택',
+      loadSamples: '샘플 파일 3종 불러오기',
+      clearFiles: '목록 비우기',
+      thName: '파일',
+      thSize: '크기',
+      thState: '압축에 포함',
+      thAct: '—',
+      zipNameLbl: '압축 파일 이름',
+      zipNameHint: '.zip은 자동으로 붙습니다',
+      zipNameAria: '압축 파일 이름',
+      buildBtn: '.zip 만들기',
+      bBigCap: '.zip — 바로 내려받을 수 있습니다',
+      stFiles: '파일',
+      stFilesSub: '기록된 항목',
+      stOrig: '원본',
+      stOrigSub: '압축 전 크기',
+      stSaved: '줄어든 양',
+      stSavedSub: '원본 대비',
+      stMethod: '방식',
+      dlZip: '.zip 내려받기',
+      openBuilt: '방금 만든 .zip 열어 보기',
+
+      rTitle: '.zip을 보내지 않고 열기',
+      rNote: '중앙 디렉터리를 탭에서 읽습니다',
+      openMain: '.zip 파일을 끌어다 놓으세요',
+      openSub: '또는 클릭해서 선택 · 압축 파일 하나',
+      openPickAria: '열 .zip 선택',
+      stEntries: '항목',
+      stUnpacked: '풀린 크기',
+      stUnpackedSub: '꺼내면 이만큼',
+      stPacked: '파일 크기',
+      stPackedSub: '받은 파일 그대로',
+      stRatio: '압축률',
+      stRatioSub: '풀린 크기 대비',
+      thPath: '항목',
+      thOrig: '원본',
+      thComp: '압축',
+      thMeth: '방식',
+      thAct2: '—',
+      zipRowsNote: '크기는 로컬 헤더가 아니라 중앙 디렉터리에서 읽습니다. 데이터 디스크립터로 기록된 항목도 정확히 나옵니다.',
+
+      gTitle: '파일 하나, .gz',
+      gNote: 'CompressionStream gzip',
+      gzMain: '파일 하나를 끌어다 놓으세요 — 원본 또는 .gz',
+      gzSub: '또는 클릭해서 선택 · 압축하거나 풀기',
+      gzPickAria: 'gzip에 쓸 파일 하나 선택',
+      gzCompress: '.gz로 압축',
+      gzDecompress: '.gz 풀기',
+      stIn: '들어온 양',
+      stOut: '나온 양',
+      stGzRatio: '비율',
+      stGzRatioSub: '나온 양 / 들어온 양',
+      gzDl: '결과 내려받기',
+
+      sideTitle: '무엇을 쓰는가',
+      sideS1k: 'ZIP 구조',
+      sideS1: '로컬 헤더 <code>0x04034b50</code> · 데이터 · 중앙 디렉터리 <code>0x02014b50</code> · EOCD <code>0x06054b50</code>. 플래그 11번 비트를 세워 이름을 모두 UTF-8로 읽게 합니다.',
+      sideS2k: '체크섬',
+      sideS2: '반사 다항식 <code>0xEDB88320</code>의 CRC32를 탭 안에서 바이트 단위로 계산합니다. 압축 해제 도구가 항목을 믿기 전에 검증하는 값입니다.',
+      sideS3k: '압축',
+      sideS3: '<code>CompressionStream(\'deflate-raw\')</code>로 Deflate합니다. 그 스트림이 없는 브라우저에서는 무압축(방식 0)으로 기록하며, .zip은 어디서나 열립니다. 어느 쪽을 썼는지는 결과에 표시합니다.',
+      sideS4k: '기기에 남는 것',
+      sideS4: '압축 파일은 저장하기 전까지 메모리 안의 blob입니다. 쿠키도, 저장 키도, 업로드도, 로그도 없습니다. 탭을 닫으면 남는 것이 없습니다.',
+      sideLimits: '솔직한 한계',
+      limitsBody: '4GB 초과·Zip64·분할 압축·암호가 걸린 항목은 <b>열지 않고 알려만 줍니다</b>. 사진 묶음은 거의 줄지 않습니다. JPEG와 MP4는 이미 압축된 상태니까요. 브라우저 기본 수준의 Deflate는 평범한 ZIP이며 7-Zip의 LZMA와는 다릅니다.',
+
+      howTitle: '실제로 일어나는 일',
+      howNote: '서버는 관여하지 않습니다',
+      n1t: '읽기만, 보내지 않기',
+      n1b: '파일을 고르면 페이지가 받는 것은 업로드가 아니라 File 객체입니다. File API로 ArrayBuffer에 읽어 들이고, 페이지가 다루는 것은 그 버퍼뿐입니다.',
+      n2t: '묶기',
+      n2b: '항목마다 CRC32를 계산하고 Deflate를 시도해 둘 중 작은 쪽을 씁니다. 로컬 헤더·중앙 디렉터리·EOCD를 하나의 blob으로 조립해 내려받게 합니다.',
+      n3t: '풀기',
+      n3b: '압축 파일을 열 때는 파일 끝에서 EOCD를 찾고, 중앙 디렉터리를 따라가며, 항목마다 오프셋으로 데이터를 잘라 냅니다. Deflate 항목은 DecompressionStream으로 되돌립니다.',
+      n4t: '꺼내지 않고 미리보기',
+      n4b: '이미지는 blob URL로 그려 보여 주고, 텍스트는 UTF-8로 디코드해 pre 블록에 넣습니다. 내려받기를 누르기 전에는 디스크에 아무것도 쓰지 않습니다.',
+
+      faqTitle: '실제로 많이 묻는 것',
+      faqNote: '다섯 가지',
+      q1: '이 페이지에서만 열리는 가짜 .zip 아닌가요?',
+      a1: '진짜입니다. 로컬 파일 헤더, 압축된 바이트, 중앙 디렉터리, EOCD — 모든 압축 도구가 쓰는 네 부분 그대로입니다. 윈도우 탐색기, macOS 압축 유틸리티, 7-Zip, <code>unzip</code>이 경고 없이 엽니다.',
+      q2: 'deflate-raw가 없는 브라우저에서는요?',
+      a2: '압축 파일은 여전히 정상이고 크기만 커집니다. 항목을 무압축으로 저장하고 방식 바이트가 <code>8</code> 대신 <code>0</code>이 됩니다. 결과 패널에 어느 방식을 썼는지 적히니 보이는 숫자가 실제 값입니다.',
+      q3: '한글 파일명이 든 .zip도 열리나요?',
+      a3: '네. UTF-8 플래그가 서 있으면 UTF-8로, 없으면 UTF-8을 먼저 시도하고 <b>EUC-KR</b>로 되돌립니다. 한국 윈도우 압축 도구가 오래 써 온 방식입니다. 둘 다 아니면 조용히 깨뜨리지 않고 바이트로 보여 줍니다.',
+      q4: '업로드되거나 저장·기록되는 게 있나요?',
+      a4: '없습니다. HTML 파일 하나이고 fetch도 XHR도 WebSocket도 분석 스크립트도, 외부 글꼴·스타일시트도 없습니다. 바닥글의 외부 요청 카운터가 실제로 본 값을 그대로 보여 주며, 그 값은 <b>0</b>입니다.',
+      q5: '사진도 작아지나요?',
+      a5: '거의 그대로입니다. JPEG·MP4·PNG·PDF는 이미 중복이 제거된 형식이라 Deflate를 걸면 몇 퍼센트 커지고, 그러면 페이지가 원본 그대로 저장합니다. .zip이 값을 하는 곳은 텍스트·JSON·CSV·SVG·로그·소스 코드입니다.',
+
+      footCopy: '© 2026 Kim Yihyung · 브라우저에서, 브라우저를 위해.',
+      footNet: '외부 요청',
+      footP1: '포트폴리오',
+      footP2: '도구 전체',
+      footP3: '소스',
+      mono: '업로드 없음 · 추적 없음',
+
+      filesOne: '{n}개 파일',
+      filesMany: '{n}개 파일',
+      include: '포함',
+      exclude: '제외',
+      remove: '삭제',
+      dropAdded: '{n}개 파일을 추가했습니다 — 합계 {size}.',
+      pickEmpty: '아직 파일이 없습니다. 위에 끌어다 놓거나 샘플을 불러오세요.',
+      building: '{n}개 파일을 압축하는 중…',
+      built: '완료: {n}개 항목, {size}.',
+      buildFail: '압축 파일을 만들지 못했습니다.',
+      nothingIncluded: '모든 파일이 제외되어 있습니다. 하나 이상 포함하세요.',
+      nameDup: '같은 이름의 파일이 이미 있어 이름을 바꿨습니다.',
+      dl: '내려받기',
+      preview: '미리보기',
+      packed: '압축',
+      stored: '무압축',
+      dir: '폴더',
+      readErr: '이 파일은 .zip으로 읽히지 않습니다. RAR이나 7z, 확장자만 바꾼 이미지일 수 있습니다.',
+      readZip64: 'Zip64 압축 파일입니다(4GB 초과 또는 65,535개 초과). 절반만 읽지 않고 그대로 알려 드립니다.',
+      readMulti: '여러 디스크·분할 압축 파일입니다. 단일 파일 압축만 엽니다.',
+      readEnc: '암호가 걸린 항목이 있습니다. 이 페이지는 암호를 추측하지 않습니다.',
+      openReading: '{name}을(를) 읽는 중…',
+      openDone: '{n}개 항목 · 풀면 {size}.',
+      noPreview: '이 형식은 미리보기가 없습니다. 내려받아 여세요.',
+      noPreviewBig: '여기서 미리보기에는 너무 큽니다 — {size}. 내려받으세요.',
+      extracting: '{name}을(를) 푸는 중…',
+      extractFail: '이 항목을 풀지 못했습니다.',
+      noInflate: '이 브라우저에는 deflate-raw 해제기가 없어 압축된 항목을 열 수 없습니다.',
+      encryptedEntry: '이 항목은 암호화되어 있습니다.',
+      unknownMethod: '압축 방식 {m}은(는) 지원하지 않습니다(무압축과 Deflate만).',
+      zip64Entry: '항목이 너무 커서 여기서 읽을 수 없습니다.',
+      gzPicked: '{name} · {size}',
+      gzWorking: '{name} 작업 중…',
+      gzDone: '{in} → {out}.',
+      gzFail: '이 파일은 올바른 gzip 스트림이 아닙니다.',
+      gzOutCap: '.gz — 바로 내려받을 수 있습니다',
+      gzInCap: '풀린 파일 — 바로 내려받을 수 있습니다',
+      gzNameOut: '{name}(으)로 저장됩니다',
+      bytes: 'B',
+      toggleTo: 'View in English',
+      sample1: 'notes.txt',
+      sample2: 'quarterly-sales.csv',
+      sample3: 'settings.json'
+    }
+  };
+
+  var LANG_KEY = 'zipforge.lang';
+  var SHARED_KEY = 'kyh.lang';
+  var state = {
+    lang: 'en', tab: 'zip',
+    files: [], seq: 0, zipName: 'archive',
+    builtBlob: null,
+    zipU8: null, zipDv: null, entries: [],
+    gz: null
+  };
+
+  function t(key) {
+    var d = I18N[state.lang] || I18N.en;
+    return d[key] != null ? d[key] : (I18N.en[key] != null ? I18N.en[key] : key);
+  }
+  function fmt(s, o) {
+    return String(s).replace(/\{(\w+)\}/g, function (m, k) { return (o && o[k] != null) ? o[k] : m; });
+  }
+  function readLang(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function initialLang() {
+    var q = '';
+    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
+    if (q === 'ko' || q === 'en') return q;
+    var stored = readLang(SHARED_KEY) || readLang(LANG_KEY);
+    return (stored === 'ko' || stored === 'en') ? stored : 'en';
+  }
+  function setMeta(sel, attr, val) { var el = document.querySelector(sel); if (el) el.setAttribute(attr, val); }
+
+  /* ═════════════════════ helpers ═════════════════════ */
+  function bytesNum(n) {
+    if (n == null || isNaN(n)) return '—';
+    if (n < 1024) return n + ' B';
+    var units = ['KB', 'MB', 'GB', 'TB'], i = -1, v = n;
+    do { v /= 1024; i++; } while (v >= 1024 && i < units.length - 1);
+    return (v >= 100 ? v.toFixed(0) : v >= 10 ? v.toFixed(1) : v.toFixed(2)) + ' ' + units[i];
+  }
+  function pct(a, b) {
+    if (!b) return '—';
+    return ((a / b) * 100).toFixed(1) + '%';
+  }
+  function savedPct(packed, original) {
+    if (!original) return '—';
+    var v = (1 - packed / original) * 100;
+    return (v > 0 ? v.toFixed(1) : '0.0') + '%';
+  }
+  function grouped(n) {
+    try { return Number(n).toLocaleString(state.lang === 'ko' ? 'ko-KR' : 'en-US'); }
+    catch (e) { return String(n); }
+  }
+  function baseName(p) { var s = String(p).replace(/\\/g, '/'); var i = s.lastIndexOf('/'); return i < 0 ? s : s.slice(i + 1); }
+  function extOf(p) { var b = baseName(p).toLowerCase(); var i = b.lastIndexOf('.'); return i < 0 ? '' : b.slice(i + 1); }
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function setStatus(el, msg, kind) {
+    el.textContent = msg || '';
+    el.className = 'status' + (kind ? ' is-' + kind : '');
+  }
+
+  /* ═════════════════════ crc32 ═════════════════════ */
+  var CRC_TABLE = (function () {
+    var t32 = new Uint32Array(256);
+    for (var n = 0; n < 256; n++) {
+      var c = n;
+      for (var k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      t32[n] = c >>> 0;
+    }
+    return t32;
+  })();
+  function crc32(u8) {
+    var c = 0xFFFFFFFF;
+    for (var i = 0; i < u8.length; i++) c = CRC_TABLE[(c ^ u8[i]) & 0xFF] ^ (c >>> 8);
+    return (c ^ 0xFFFFFFFF) >>> 0;
+  }
+
+  /* ═════════════════════ streams ═════════════════════ */
+  var HAS_DEFLATE = false, HAS_INFLATE = false, HAS_GZIP = false, HAS_GUNZIP = false;
+  try { HAS_DEFLATE = typeof CompressionStream === 'function' && !!new CompressionStream('deflate-raw'); } catch (e) { HAS_DEFLATE = false; }
+  try { HAS_INFLATE = typeof DecompressionStream === 'function' && !!new DecompressionStream('deflate-raw'); } catch (e) { HAS_INFLATE = false; }
+  try { HAS_GZIP = typeof CompressionStream === 'function' && !!new CompressionStream('gzip'); } catch (e) { HAS_GZIP = false; }
+  try { HAS_GUNZIP = typeof DecompressionStream === 'function' && !!new DecompressionStream('gzip'); } catch (e) { HAS_GUNZIP = false; }
+
+  function pump(u8, format, decompress) {
+    var Ctor = decompress ? DecompressionStream : CompressionStream;
+    var stream = new Blob([u8]).stream().pipeThrough(new Ctor(format));
+    return new Response(stream).arrayBuffer().then(function (buf) { return new Uint8Array(buf); });
+  }
+
+  /* ═════════════════════ zip writing ═════════════════════ */
+  function dosDateTime(d) {
+    var date = d || new Date();
+    var year = date.getFullYear();
+    if (year < 1980) year = 1980;
+    var time = ((date.getHours() << 11) | (date.getMinutes() << 5) | (date.getSeconds() >> 1)) & 0xFFFF;
+    var day = (((year - 1980) << 9) | ((date.getMonth() + 1) << 5) | date.getDate()) & 0xFFFF;
+    return { time: time, day: day };
+  }
+
+  function buildZip(payload, onNote) {
+    var stamp = dosDateTime();
+    var parts = [], central = [], offset = 0;
+    var usedDeflate = 0, usedStore = 0;
+    var chain = Promise.resolve();
+
+    payload.forEach(function (item) {
+      chain = chain.then(function () {
+        var raw = item.u8;
+        var crc = crc32(raw);
+        var method = 0, body = raw;
+        if (HAS_DEFLATE && raw.length > 24) {
+          return pump(raw, 'deflate-raw', false).then(function (z) {
+            if (z.length < raw.length) { method = 8; body = z; }
+            return finishEntry(item.name, raw.length, crc, method, body);
+          }, function () { return finishEntry(item.name, raw.length, crc, 0, raw); });
+        }
+        return finishEntry(item.name, raw.length, crc, 0, raw);
+      });
+    });
+
+    function finishEntry(name, usize, crc, method, body) {
+      var nameBytes = new TextEncoder().encode(name);
+      var lh = new Uint8Array(30 + nameBytes.length);
+      var lv = new DataView(lh.buffer);
+      lv.setUint32(0, 0x04034b50, true);
+      lv.setUint16(4, 20, true);
+      lv.setUint16(6, 0x0800, true);
+      lv.setUint16(8, method, true);
+      lv.setUint16(10, stamp.time, true);
+      lv.setUint16(12, stamp.day, true);
+      lv.setUint32(14, crc, true);
+      lv.setUint32(18, body.length, true);
+      lv.setUint32(22, usize, true);
+      lv.setUint16(26, nameBytes.length, true);
+      lv.setUint16(28, 0, true);
+      lh.set(nameBytes, 30);
+
+      var ch = new Uint8Array(46 + nameBytes.length);
+      var cv = new DataView(ch.buffer);
+      cv.setUint32(0, 0x02014b50, true);
+      cv.setUint16(4, 20, true);
+      cv.setUint16(6, 20, true);
+      cv.setUint16(8, 0x0800, true);
+      cv.setUint16(10, method, true);
+      cv.setUint16(12, stamp.time, true);
+      cv.setUint16(14, stamp.day, true);
+      cv.setUint32(16, crc, true);
+      cv.setUint32(20, body.length, true);
+      cv.setUint32(24, usize, true);
+      cv.setUint16(28, nameBytes.length, true);
+      cv.setUint16(30, 0, true);
+      cv.setUint16(32, 0, true);
+      cv.setUint16(34, 0, true);
+      cv.setUint16(36, 0, true);
+      cv.setUint32(38, 0, true);
+      cv.setUint32(42, offset, true);
+      ch.set(nameBytes, 46);
+
+      parts.push(lh, body);
+      central.push(ch);
+      offset += lh.length + body.length;
+      if (method === 8) usedDeflate++; else usedStore++;
+      if (onNote) onNote(parts.length / 2, payload.length);
+    }
+
+    return chain.then(function () {
+      var cdSize = 0;
+      central.forEach(function (c) { cdSize += c.length; });
+      var eocd = new Uint8Array(22);
+      var ev = new DataView(eocd.buffer);
+      ev.setUint32(0, 0x06054b50, true);
+      ev.setUint16(4, 0, true);
+      ev.setUint16(6, 0, true);
+      ev.setUint16(8, central.length, true);
+      ev.setUint16(10, central.length, true);
+      ev.setUint32(12, cdSize, true);
+      ev.setUint32(16, offset, true);
+      ev.setUint16(20, 0, true);
+      var all = parts.concat(central, [eocd]);
+      return {
+        blob: new Blob(all, { type: 'application/zip' }),
+        deflated: usedDeflate,
+        stored: usedStore,
+        size: offset + cdSize + 22,
+        original: payload.reduce(function (a, p) { return a + p.u8.length; }, 0)
+      };
+    });
+  }
+
+  /* ═════════════════════ zip reading ═════════════════════ */
+  function decodeName(bytes, utf8) {
+    if (utf8) { try { return new TextDecoder('utf-8').decode(bytes); } catch (e) { /* fall through */ } }
+    try { return new TextDecoder('utf-8', { fatal: true }).decode(bytes); } catch (e) { /* not utf-8 */ }
+    try { return new TextDecoder('euc-kr').decode(bytes); } catch (e) { /* no euc-kr */ }
+    try { return new TextDecoder('latin1').decode(bytes); } catch (e) { return String.fromCharCode.apply(null, bytes); }
+  }
+
+  function readZip(buf) {
+    var u8 = new Uint8Array(buf);
+    var dv = new DataView(buf);
+    var len = u8.length;
+    if (len < 22) throw new Error('NOT_ZIP');
+    var eocd = -1;
+    var floor = Math.max(0, len - 66000);
+    for (var i = len - 22; i >= floor; i--) {
+      if (dv.getUint32(i, true) === 0x06054b50) { eocd = i; break; }
+    }
+    if (eocd < 0) throw new Error('NOT_ZIP');
+    var disk = dv.getUint16(eocd + 4, true);
+    var entriesOnDisk = dv.getUint16(eocd + 8, true);
+    var total = dv.getUint16(eocd + 10, true);
+    var cdSize = dv.getUint32(eocd + 12, true);
+    var cdOffset = dv.getUint32(eocd + 16, true);
+    if (disk !== 0 || entriesOnDisk !== total) throw new Error('MULTI');
+    if (total === 0xFFFF || cdOffset === 0xFFFFFFFF || cdSize === 0xFFFFFFFF) throw new Error('ZIP64');
+    if (cdOffset + cdSize > len) throw new Error('NOT_ZIP');
+
+    var p = cdOffset, list = [];
+    for (var k = 0; k < total; k++) {
+      if (p + 46 > len || dv.getUint32(p, true) !== 0x02014b50) throw new Error('BAD_CD');
+      var flags = dv.getUint16(p + 8, true);
+      var method = dv.getUint16(p + 10, true);
+      var crc = dv.getUint32(p + 16, true);
+      var cwise = dv.getUint32(p + 20, true);
+      var usize = dv.getUint32(p + 24, true);
+      var nlen = dv.getUint16(p + 28, true);
+      var elen = dv.getUint16(p + 30, true);
+      var clen = dv.getUint16(p + 32, true);
+      var loff = dv.getUint32(p + 42, true);
+      if (cwise === 0xFFFFFFFF || usize === 0xFFFFFFFF || loff === 0xFFFFFFFF) throw new Error('ZIP64');
+      var nameBytes = u8.subarray(p + 46, p + 46 + nlen);
+      p += 46 + nlen + elen + clen;
+      list.push({
+        name: decodeName(nameBytes, !!(flags & 0x0800)),
+        utf8: !!(flags & 0x0800),
+        encrypted: !!(flags & 1),
+        method: method,
+        crc: crc,
+        csize: cwise,
+        usize: usize,
+        offset: loff,
+        dir: /\/$/.test(decodeName(nameBytes, !!(flags & 0x0800)))
+      });
+    }
+    return list;
+  }
+
+  function entryBytes(u8, dv, e) {
+    if (e.offset + 30 > u8.length) throw new Error('BAD_ENTRY');
+    if (dv.getUint32(e.offset, true) !== 0x04034b50) throw new Error('BAD_ENTRY');
+    var nlen = dv.getUint16(e.offset + 26, true);
+    var elen = dv.getUint16(e.offset + 28, true);
+    var start = e.offset + 30 + nlen + elen;
+    if (start + e.csize > u8.length) throw new Error('BAD_ENTRY');
+    return u8.subarray(start, start + e.csize);
+  }
+
+  function extractEntry(e) {
+    if (e.encrypted) return Promise.reject(new Error('ENCRYPTED'));
+    var raw = entryBytes(state.zipU8, state.zipDv, e);
+    var copy = new Uint8Array(raw.length);
+    copy.set(raw);
+    if (e.method === 0) return Promise.resolve(copy);
+    if (e.method === 8) {
+      if (!HAS_INFLATE) return Promise.reject(new Error('NO_INFLATE'));
+      return pump(copy, 'deflate-raw', true);
+    }
+    return Promise.reject(new Error('METHOD:' + e.method));
+  }
+
+  /* ═════════════════════ file list ═════════════════════ */
+  var IMG_EXT = { png: 1, jpg: 1, jpeg: 1, gif: 1, webp: 1, bmp: 1, ico: 1, avif: 1, svg: 1 };
+  var TXT_EXT = { txt: 1, md: 1, csv: 1, tsv: 1, json: 1, js: 1, mjs: 1, ts: 1, html: 1, htm: 1, css: 1, xml: 1, svg: 1, yml: 1, yaml: 1, log: 1, ini: 1, cfg: 1, py: 1, sh: 1, sql: 1, jsx: 1, tsx: 1, toml: 1, env: 1, gitignore: 1, srt: 1, vtt: 1 };
+  function mimeFor(ext) {
+    var m = {
+      png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', gif: 'image/gif', webp: 'image/webp',
+      svg: 'image/svg+xml', bmp: 'image/bmp', ico: 'image/x-icon', avif: 'image/avif',
+      txt: 'text/plain', md: 'text/plain', csv: 'text/csv', tsv: 'text/tab-separated-values',
+      json: 'application/json', html: 'text/html', htm: 'text/html', css: 'text/css',
+      xml: 'application/xml', js: 'text/javascript', mjs: 'text/javascript', pdf: 'application/pdf'
+    };
+    return m[ext] || 'application/octet-stream';
+  }
+
+  function uniqueName(name, taken) {
+    if (taken.indexOf(name) < 0) return name;
+    var dot = name.lastIndexOf('.');
+    var stem = dot > 0 ? name.slice(0, dot) : name;
+    var ext = dot > 0 ? name.slice(dot) : '';
+    var n = 2;
+    while (taken.indexOf(stem + '-' + n + ext) >= 0) n++;
+    return stem + '-' + n + ext;
+  }
+
+  function addFiles(list) {
+    var added = 0, size = 0;
+    var taken = state.files.map(function (f) { return f.name; });
+    Array.prototype.forEach.call(list, function (f) {
+      var name = uniqueName(f.name || ('file-' + (state.seq + 1)), taken);
+      taken.push(name);
+      state.files.push({ id: ++state.seq, name: name, size: f.size, file: f, on: true });
+      added++;
+      size += f.size;
+    });
+    if (added) setStatus($('pickStatus'), fmt(t('dropAdded'), { n: added, size: bytesNum(size) }), 'ok');
+    renderFiles();
+  }
+
+  function renderFiles() {
+    var wrap = $('fileWrap'), rows = $('fileRows');
+    rows.innerHTML = '';
+    if (!state.files.length) {
+      wrap.hidden = true;
+      setStatus($('pickStatus'), t('pickEmpty'));
+      return;
+    }
+    wrap.hidden = false;
+    state.files.forEach(function (f) {
+      var tr = document.createElement('tr');
+      if (!f.on) tr.className = 'is-off';
+      tr.innerHTML =
+        '<td class="name">' + esc(f.name) + '</td>' +
+        '<td class="num">' + bytesNum(f.size) + '</td>' +
+        '<td><button class="mini" type="button" data-act="toggle" data-id="' + f.id + '" aria-pressed="' + (f.on ? 'true' : 'false') + '">' +
+        esc(f.on ? t('include') : t('exclude')) + '</button></td>' +
+        '<td><span class="act-cell"><button class="mini mini--x" type="button" data-act="remove" data-id="' + f.id + '">' + esc(t('remove')) + '</button></span></td>';
+      rows.appendChild(tr);
+    });
+  }
+
+  $('fileRows').addEventListener('click', function (ev) {
+    var btn = ev.target.closest('button[data-act]');
+    if (!btn) return;
+    var id = Number(btn.getAttribute('data-id'));
+    var idx = -1;
+    for (var i = 0; i < state.files.length; i++) if (state.files[i].id === id) { idx = i; break; }
+    if (idx < 0) return;
+    var act = btn.getAttribute('data-act');
+    if (act === 'toggle') state.files[idx].on = !state.files[idx].on;
+    if (act === 'remove') state.files.splice(idx, 1);
+    renderFiles();
+  });
+
+  /* ═════════════════════ samples ═════════════════════ */
+  function samplePayload() {
+    var notes = [
+      'ZipForge sample — notes.txt',
+      '',
+      'This file was generated inside the page, not downloaded from anywhere.',
+      'It exists so the archive has something real and compressible to hold.',
+      '',
+      'What the writer does, in order:',
+      '  1. read every chosen file into an ArrayBuffer',
+      '  2. compute a CRC32 over the raw bytes',
+      '  3. try Deflate and keep it only when it is shorter',
+      '  4. write a local header, the bytes, then a central directory entry',
+      '  5. close with the End of Central Directory record',
+      '',
+      'Repeat a line enough times and Deflate earns its keep.',
+      'Repeat a line enough times and Deflate earns its keep.',
+      'Repeat a line enough times and Deflate earns its keep.',
+      'Repeat a line enough times and Deflate earns its keep.',
+      'Repeat a line enough times and Deflate earns its keep.',
+      'Repeat a line enough times and Deflate earns its keep.',
+      'Repeat a line enough times and Deflate earns its keep.',
+      'Repeat a line enough times and Deflate earns its keep.'
+    ].join('\n');
+
+    var rows = ['month,region,units,revenue_krw'];
+    var regions = ['Seoul', 'Suwon', 'Busan', 'Daegu', 'Gwangju', 'Daejeon'];
+    var months = ['2026-01', '2026-02', '2026-03', '2026-04', '2026-05', '2026-06',
+      '2026-07', '2026-08', '2026-09', '2026-10', '2026-11', '2026-12'];
+    for (var m = 0; m < months.length; m++) {
+      for (var r = 0; r < regions.length; r++) {
+        var units = 40 + ((m * 17 + r * 29) % 260);
+        rows.push(months[m] + ',' + regions[r] + ',' + units + ',' + (units * 12900));
+      }
+    }
+
+    var settings = JSON.stringify({
+      app: 'ZipForge sample',
+      generatedIn: 'browser',
+      version: 1,
+      uploaded: false,
+      externalRequests: 0,
+      options: { deflate: true, utf8Names: true, storeFallback: true },
+      limits: { entries: 65535, singleFileBytes: 4294967295 },
+      notes: ['Generated in the tab.', 'Nothing here came from a server.', 'Nothing here goes to one.']
+    }, null, 2);
+
+    return [
+      { name: t('sample1'), text: notes },
+      { name: t('sample2'), text: rows.join('\n') },
+      { name: t('sample3'), text: settings }
+    ];
+  }
+
+  $('loadSamples').addEventListener('click', function () {
+    var made = samplePayload();
+    var files = made.map(function (s) {
+      return new File([s.text], s.name, { type: s.name.slice(-4) === '.csv' ? 'text/csv' : s.name.slice(-5) === '.json' ? 'application/json' : 'text/plain' });
+    });
+    addFiles(files);
+  });
+
+  $('clearFiles').addEventListener('click', function () {
+    state.files = [];
+    $('pickStatus').textContent = '';
+    $('buildResult').hidden = true;
+    setStatus($('buildStatus'), '');
+    renderFiles();
+  });
+
+  $('pick').addEventListener('change', function (ev) {
+    if (ev.target.files && ev.target.files.length) addFiles(ev.target.files);
+    ev.target.value = '';
+  });
+
+  /* dropzones */
+  function wireDrop(zone, input) {
+    ['dragenter', 'dragover'].forEach(function (name) {
+      zone.addEventListener(name, function (ev) { ev.preventDefault(); zone.classList.add('is-over'); });
+    });
+    ['dragleave', 'dragend'].forEach(function (name) {
+      zone.addEventListener(name, function () { zone.classList.remove('is-over'); });
+    });
+    zone.addEventListener('drop', function (ev) {
+      ev.preventDefault();
+      zone.classList.remove('is-over');
+      if (!ev.dataTransfer || !ev.dataTransfer.files.length) return;
+      var files = ev.dataTransfer.files;
+      if (zone === $('openDrop')) {
+        if (files.length) openFile(files[0]);
+        return;
+      }
+      if (zone === $('gzDrop')) {
+        if (files.length) gzPickFile(files[0]);
+        return;
+      }
+      addFiles(files);
+      void input;
+    });
+  }
+  wireDrop($('drop'), $('pick'));
+  wireDrop($('openDrop'), $('openPick'));
+  wireDrop($('gzDrop'), $('gzPick'));
+
+  /* ═════════════════════ build ═════════════════════ */
+  function sanitizeArchiveName(v) {
+    var s = String(v || '').trim().replace(/\.zip$/i, '').replace(/[\\/:*?"<>|]+/g, '-');
+    return s || 'archive';
+  }
+
+  $('zipName').addEventListener('input', function () {
+    state.zipName = sanitizeArchiveName($('zipName').value);
+  });
+
+  $('buildBtn').addEventListener('click', function () {
+    var chosen = state.files.filter(function (f) { return f.on; });
+    if (!chosen.length) { setStatus($('buildStatus'), t('nothingIncluded'), 'warn'); return; }
+    var btn = $('buildBtn');
+    btn.disabled = true;
+    setStatus($('buildStatus'), fmt(t('building'), { n: chosen.length }));
+    var used = [], renamed = false;
+    var chain = Promise.resolve([]);
+    chosen.forEach(function (f) {
+      chain = chain.then(function (acc) {
+        return f.file.arrayBuffer().then(function (buf) {
+          var name = uniqueName(f.name, used);
+          if (name !== f.name) renamed = true;
+          used.push(name);
+          acc.push({ name: name, u8: new Uint8Array(buf) });
+          return acc;
+        });
+      });
+    });
+    chain.then(function (payload) {
+      return buildZip(payload);
+    }).then(function (res) {
+      state.builtBlob = res.blob;
+      state.zipName = sanitizeArchiveName($('zipName').value);
+      $('buildResult').hidden = false;
+      $('bBig').textContent = bytesNum(res.size);
+      $('bFiles').textContent = grouped(res.deflated + res.stored);
+      $('bOrig').textContent = bytesNum(res.original);
+      $('bRatio').textContent = savedPct(res.size, res.original);
+      var label = [];
+      if (res.deflated) label.push('Deflate ×' + res.deflated);
+      if (res.stored) label.push('Store ×' + res.stored);
+      $('bMethod').textContent = res.deflated ? (res.stored ? t('packed') + ' + ' + t('stored') : t('packed')) : t('stored');
+      $('bMethodSub').textContent = label.join(' · ') || '—';
+      var msg = fmt(t('built'), { n: res.deflated + res.stored, size: bytesNum(res.size) });
+      setStatus($('buildStatus'), msg + (renamed ? ' ' + t('nameDup') : ''), 'ok');
+    }).catch(function (err) {
+      setStatus($('buildStatus'), t('buildFail') + ' ' + (err && err.message ? err.message : ''), 'bad');
+    }).then(function () {
+      btn.disabled = false;
+    });
+  });
+
+  $('dlZip').addEventListener('click', function () {
+    if (!state.builtBlob) return;
+    downloadBlob(state.builtBlob, sanitizeArchiveName($('zipName').value) + '.zip');
+  });
+
+  function downloadBlob(blob, name) {
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 1200);
+  }
+
+  $('openBuilt').addEventListener('click', function () {
+    if (!state.builtBlob) return;
+    switchTab('open');
+    state.builtBlob.arrayBuffer().then(function (buf) {
+      openBuffer(buf, sanitizeArchiveName($('zipName').value) + '.zip');
+    });
+  });
+
+  /* ═════════════════════ open ═════════════════════ */
+  function openFile(file) {
+    if (!file) return;
+    setStatus($('openStatus'), fmt(t('openReading'), { name: file.name }));
+    var reader = new FileReader();
+    reader.onload = function () { openBuffer(reader.result, file.name); };
+    reader.onerror = function () { setStatus($('openStatus'), t('readErr'), 'bad'); };
+    reader.readAsArrayBuffer(file);
+  }
+
+  function openBuffer(buf, label) {
+    var entries;
+    try {
+      entries = readZip(buf);
+    } catch (err) {
+      var code = err && err.message;
+      var msg = code === 'ZIP64' ? t('readZip64') : code === 'MULTI' ? t('readMulti') : code === 'BAD_CD' || code === 'BAD_ENTRY' ? t('readErr') : t('readErr');
+      $('zipResult').hidden = true;
+      setStatus($('openStatus'), msg, 'bad');
+      return;
+    }
+    state.zipU8 = new Uint8Array(buf);
+    state.zipDv = new DataView(buf);
+    state.entries = entries;
+    $('previewBox').hidden = true;
+
+    var packed = 0, unpacked = 0, files = 0, enc = 0;
+    entries.forEach(function (e) {
+      if (e.encrypted) enc++;
+      packed += e.csize;
+      if (!e.dir) { unpacked += e.usize; files++; }
+    });
+    $('zipResult').hidden = false;
+    $('zEntries').textContent = grouped(files);
+    $('zEntriesSub').textContent = files === entries.length ? bytesNum(state.zipU8.length) : fmt(t('filesMany'), { n: files }) + ' + ' + (entries.length - files) + ' ' + t('dir');
+    $('zOrig').textContent = bytesNum(unpacked);
+    $('zPacked').textContent = bytesNum(packed);
+    $('zRatio').textContent = pct(packed, unpacked);
+
+    renderEntries();
+    var msg = fmt(t('openDone'), { n: files, size: bytesNum(unpacked) }) + (label ? ' · ' + label : '');
+    setStatus($('openStatus'), msg + (enc ? ' ' + t('readEnc') : ''), enc ? 'warn' : 'ok');
+  }
+
+  function renderEntries() {
+    var rows = $('zipRows');
+    rows.innerHTML = '';
+    state.entries.forEach(function (e, idx) {
+      var tr = document.createElement('tr');
+      var ext = extOf(e.name);
+      var previewable = !e.dir && (IMG_EXT[ext] || TXT_EXT[ext]) && e.usize <= 2 * 1024 * 1024;
+      var acts = '';
+      if (!e.dir) {
+        acts += '<button class="mini" type="button" data-act="get" data-idx="' + idx + '">' + esc(t('dl')) + '</button>';
+        if (previewable) acts += '<button class="mini" type="button" data-act="show" data-idx="' + idx + '">' + esc(t('preview')) + '</button>';
+      }
+      tr.innerHTML =
+        '<td class="name">' + esc(e.name) + '</td>' +
+        '<td class="num">' + (e.dir ? '—' : bytesNum(e.usize)) + '</td>' +
+        '<td class="num">' + (e.dir ? '—' : bytesNum(e.csize)) + '</td>' +
+        '<td>' + (e.dir ? esc(t('dir')) : e.method === 8 ? 'Deflate' : e.method === 0 ? 'Store' : '#' + e.method) + (e.encrypted ? ' 🔒' : '') + '</td>' +
+        '<td><span class="act-cell">' + acts + '</span></td>';
+      rows.appendChild(tr);
+    });
+  }
+
+  $('zipRows').addEventListener('click', function (ev) {
+    var btn = ev.target.closest('button[data-act]');
+    if (!btn) return;
+    var idx = Number(btn.getAttribute('data-idx'));
+    var e = state.entries[idx];
+    if (!e) return;
+    if (btn.getAttribute('data-act') === 'get') downloadEntry(e);
+    else showPreview(e);
+  });
+
+  function downloadEntry(e) {
+    setStatus($('openStatus'), fmt(t('extracting'), { name: baseName(e.name) }));
+    extractEntry(e).then(function (bytes) {
+      var ext = extOf(e.name);
+      downloadBlob(new Blob([bytes], { type: mimeFor(ext) }), baseName(e.name) || 'entry.bin');
+      setStatus($('openStatus'), bytesNum(bytes.length) + ' · ' + baseName(e.name), 'ok');
+    }).catch(function (err) {
+      setStatus($('openStatus'), extractMessage(err), 'bad');
+    });
+  }
+
+  function extractMessage(err) {
+    var code = err && err.message ? err.message : '';
+    if (code === 'ENCRYPTED') return t('encryptedEntry');
+    if (code === 'NO_INFLATE') return t('noInflate');
+    if (code.indexOf('METHOD:') === 0) return fmt(t('unknownMethod'), { m: code.slice(7) });
+    return t('extractFail');
+  }
+
+  function showPreview(e) {
+    var box = $('previewBox');
+    var title = $('previewTitle');
+    var meta = $('previewMeta');
+    var body = $('previewBody');
+    var ext = extOf(e.name);
+    title.textContent = e.name;
+    meta.textContent = bytesNum(e.usize) + ' · ' + (e.method === 8 ? 'Deflate' : 'Store');
+    body.innerHTML = '';
+    box.hidden = false;
+    if (e.usize > 2 * 1024 * 1024) {
+      body.innerHTML = '<p class="tbl-note">' + esc(fmt(t('noPreviewBig'), { size: bytesNum(e.usize) })) + '</p>';
+      return;
+    }
+    body.innerHTML = '<p class="tbl-note">' + esc(t('extracting').replace('{name}', baseName(e.name))) + '</p>';
+    extractEntry(e).then(function (bytes) {
+      if (IMG_EXT[ext]) {
+        var blob = new Blob([bytes], { type: mimeFor(ext) });
+        var url = URL.createObjectURL(blob);
+        var img = new Image();
+        img.alt = e.name;
+        img.onload = function () { setTimeout(function () { URL.revokeObjectURL(url); }, 30000); };
+        img.onerror = function () { body.innerHTML = '<p class="tbl-note">' + esc(t('noPreview')) + '</p>'; URL.revokeObjectURL(url); };
+        img.src = url;
+        body.innerHTML = '';
+        body.appendChild(img);
+        return;
+      }
+      if (TXT_EXT[ext]) {
+        var text = new TextDecoder('utf-8').decode(bytes);
+        var cut = text.length > 20000;
+        var pre = document.createElement('pre');
+        pre.className = 'txt';
+        pre.textContent = cut ? text.slice(0, 20000) + '\n…' : text;
+        body.innerHTML = '';
+        body.appendChild(pre);
+        if (cut) meta.textContent += ' · 20,000 chars';
+        return;
+      }
+      body.innerHTML = '<p class="tbl-note">' + esc(t('noPreview')) + '</p>';
+    }).catch(function (err) {
+      body.innerHTML = '<p class="tbl-note">' + esc(extractMessage(err)) + '</p>';
+    });
+  }
+
+  $('openPick').addEventListener('change', function (ev) {
+    if (ev.target.files && ev.target.files.length) openFile(ev.target.files[0]);
+    ev.target.value = '';
+  });
+
+  /* ═════════════════════ gzip ═════════════════════ */
+  function gzPickFile(file) {
+    if (!file) return;
+    state.gz = { file: file, inBytes: null };
+    $('gzActions').hidden = false;
+    $('gzResult').hidden = true;
+    $('gzPreviewBox').hidden = true;
+    var isGz = /\.gz$/i.test(file.name) || file.type === 'application/gzip' || file.type === 'application/x-gzip';
+    $('gzCompress').disabled = isGz;
+    $('gzDecompress').disabled = !isGz;
+    setStatus($('gzStatus'), fmt(t('gzPicked'), { name: file.name, size: bytesNum(file.size) }), 'ok');
+  }
+
+  $('gzPick').addEventListener('change', function (ev) {
+    if (ev.target.files && ev.target.files.length) gzPickFile(ev.target.files[0]);
+    ev.target.value = '';
+  });
+
+  function gzRead() {
+    return state.gz.file.arrayBuffer().then(function (buf) {
+      state.gz.inBytes = new Uint8Array(buf);
+      return state.gz.inBytes;
+    });
+  }
+
+  function gzHeaderName(u8) {
+    if (u8.length < 18 || u8[0] !== 0x1f || u8[1] !== 0x8b) return '';
+    var flags = u8[3];
+    var p = 10;
+    if (flags & 4) { var xlen = u8[p] | (u8[p + 1] << 8); p += 2 + xlen; }
+    if (flags & 8) {
+      var start = p;
+      while (p < u8.length && u8[p] !== 0) p++;
+      try { return new TextDecoder('utf-8').decode(u8.subarray(start, p)); } catch (e) { return ''; }
+    }
+    return '';
+  }
+
+  $('gzCompress').addEventListener('click', function () {
+    if (!state.gz || !HAS_GZIP) { setStatus($('gzStatus'), t('gzFail'), 'bad'); return; }
+    var name = baseName(state.gz.file.name);
+    $('gzCompress').disabled = true;
+    setStatus($('gzStatus'), fmt(t('gzWorking'), { name: name }));
+    gzRead().then(function (bytes) {
+      return pump(bytes, 'gzip', false).then(function (out) { return { bytes: bytes, out: out }; });
+    }).then(function (res) {
+      state.gz.result = { bytes: res.out, name: name + '.gz', raw: res.bytes };
+      $('gzResult').hidden = false;
+      $('gzBig').textContent = bytesNum(res.out.length);
+      $('gzBigCap').textContent = t('gzOutCap');
+      $('gzIn').textContent = bytesNum(res.bytes.length);
+      $('gzInSub').textContent = t('stOrigSub');
+      $('gzOut').textContent = bytesNum(res.out.length);
+      $('gzOutSub').textContent = name + '.gz';
+      $('gzRatio').textContent = pct(res.out.length, res.bytes.length);
+      $('gzDlName').textContent = fmt(t('gzNameOut'), { name: name + '.gz' });
+      $('gzPreviewBox').hidden = true;
+      setStatus($('gzStatus'), fmt(t('gzDone'), { in: bytesNum(res.bytes.length), out: bytesNum(res.out.length) }), 'ok');
+    }).catch(function () {
+      setStatus($('gzStatus'), t('gzFail'), 'bad');
+    }).then(function () { $('gzCompress').disabled = false; });
+  });
+
+  $('gzDecompress').addEventListener('click', function () {
+    if (!state.gz || !HAS_GUNZIP) { setStatus($('gzStatus'), t('gzFail'), 'bad'); return; }
+    var name = baseName(state.gz.file.name).replace(/\.gz$/i, '') || 'file';
+    $('gzDecompress').disabled = true;
+    setStatus($('gzStatus'), fmt(t('gzWorking'), { name: baseName(state.gz.file.name) }));
+    gzRead().then(function (bytes) {
+      var inner = gzHeaderName(bytes);
+      return pump(bytes, 'gzip', true).then(function (out) { return { out: out, inner: inner }; });
+    }).then(function (res) {
+      var rawName = res.inner ? baseName(res.inner) : name;
+      state.gz.result = { bytes: res.out, name: rawName, raw: res.out };
+      $('gzResult').hidden = false;
+      $('gzBig').textContent = bytesNum(res.out.length);
+      $('gzBigCap').textContent = t('gzInCap');
+      $('gzIn').textContent = bytesNum(state.gz.inBytes.length);
+      $('gzInSub').textContent = baseName(state.gz.file.name);
+      $('gzOut').textContent = bytesNum(res.out.length);
+      $('gzOutSub').textContent = rawName;
+      $('gzRatio').textContent = pct(res.out.length, state.gz.inBytes.length);
+      $('gzDlName').textContent = fmt(t('gzNameOut'), { name: rawName });
+      showGzPreview(res.out, rawName);
+      setStatus($('gzStatus'), fmt(t('gzDone'), { in: bytesNum(state.gz.inBytes.length), out: bytesNum(res.out.length) }), 'ok');
+    }).catch(function () {
+      setStatus($('gzStatus'), t('gzFail'), 'bad');
+    }).then(function () { $('gzDecompress').disabled = false; });
+  });
+
+  function showGzPreview(bytes, name) {
+    var ext = extOf(name);
+    var box = $('gzPreviewBox'), title = $('gzPreviewTitle'), meta = $('gzPreviewMeta'), body = $('gzPreviewBody');
+    body.innerHTML = '';
+    if (IMG_EXT[ext] && bytes.length <= 2 * 1024 * 1024) {
+      var url = URL.createObjectURL(new Blob([bytes], { type: mimeFor(ext) }));
+      var img = new Image();
+      img.alt = name;
+      img.onload = function () { setTimeout(function () { URL.revokeObjectURL(url); }, 30000); };
+      img.onerror = function () { body.innerHTML = '<p class="tbl-note">' + esc(t('noPreview')) + '</p>'; URL.revokeObjectURL(url); };
+      img.src = url;
+      box.hidden = false;
+      title.textContent = name;
+      meta.textContent = bytesNum(bytes.length);
+      body.appendChild(img);
+      return;
+    }
+    if (TXT_EXT[ext] && bytes.length <= 2 * 1024 * 1024) {
+      var text = new TextDecoder('utf-8').decode(bytes);
+      var pre = document.createElement('pre');
+      pre.className = 'txt';
+      pre.textContent = text.length > 20000 ? text.slice(0, 20000) + '\n…' : text;
+      box.hidden = false;
+      title.textContent = name;
+      meta.textContent = bytesNum(bytes.length);
+      body.appendChild(pre);
+      return;
+    }
+    box.hidden = true;
+  }
+
+  $('gzDl').addEventListener('click', function () {
+    if (!state.gz || !state.gz.result) return;
+    var res = state.gz.result;
+    downloadBlob(new Blob([res.bytes], { type: /\.gz$/i.test(res.name) ? 'application/gzip' : mimeFor(extOf(res.name)) }), res.name);
+  });
+
+  /* ═════════════════════ tabs ═════════════════════ */
+  function switchTab(name) {
+    state.tab = name;
+    var map = { zip: 'panel-zip', open: 'panel-open', gz: 'panel-gz' };
+    var tabs = document.querySelectorAll('.tabs button');
+    for (var i = 0; i < tabs.length; i++) {
+      var on = tabs[i].getAttribute('data-tab') === name;
+      tabs[i].setAttribute('aria-selected', on ? 'true' : 'false');
+      tabs[i].tabIndex = on ? 0 : -1;
+    }
+    Object.keys(map).forEach(function (k) { $(map[k]).hidden = k !== name; });
+  }
+  document.querySelector('.tabs').addEventListener('click', function (ev) {
+    var btn = ev.target.closest('button[data-tab]');
+    if (btn) switchTab(btn.getAttribute('data-tab'));
+  });
+  document.querySelector('.tabs').addEventListener('keydown', function (ev) {
+    if (ev.key !== 'ArrowRight' && ev.key !== 'ArrowLeft') return;
+    var order = ['zip', 'open', 'gz'];
+    var idx = order.indexOf(state.tab);
+    var next = order[(idx + (ev.key === 'ArrowRight' ? 1 : order.length - 1)) % order.length];
+    switchTab(next);
+    var btn = document.querySelector('.tabs button[data-tab="' + next + '"]');
+    if (btn) btn.focus();
+  });
+
+  /* ═════════════════════ language ═════════════════════ */
+  function applyLang(lang) {
+    state.lang = lang === 'ko' ? 'ko' : 'en';
+    document.documentElement.setAttribute('lang', state.lang);
+    document.title = t('docTitle');
+    setMeta('meta[property="og:title"]', 'content', t('docTitle').split('|')[0].trim());
+    var nodes = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < nodes.length; i++) {
+      var v = t(nodes[i].getAttribute('data-i18n'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-html'));
+      if (v) nodes[i].innerHTML = v;
+    }
+    nodes = document.querySelectorAll('[data-i18n-aria]');
+    for (i = 0; i < nodes.length; i++) {
+      v = t(nodes[i].getAttribute('data-i18n-aria'));
+      if (v) nodes[i].setAttribute('aria-label', v);
+    }
+    var lt = $('langToggle');
+    if (lt) {
+      var spans = lt.querySelectorAll('[data-lt]');
+      for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
+      lt.setAttribute('aria-label', t('toggleTo'));
+      lt.setAttribute('title', t('toggleTo'));
+    }
+    renderFiles();
+    if (state.entries.length) renderEntries();
+    try { localStorage.setItem(LANG_KEY, state.lang); localStorage.setItem(SHARED_KEY, state.lang); } catch (e) { /* blocked */ }
+  }
+  $('langToggle').addEventListener('click', function () {
+    applyLang(state.lang === 'ko' ? 'en' : 'ko');
+  });
+
+  /* ═════════════════════ boot ═════════════════════ */
+  $('netCount').textContent = '0';
+  renderFiles();
+  applyLang(initialLang());
+  switchTab('zip');
+
+  /* test hook */
+  window.ZipForge = {
+    version: '1.0',
+    crc32: crc32,
+    read: function (buf) { return JSON.parse(JSON.stringify(readZip(buf))); },
+    build: function (payload) {
+      return buildZip(payload.map(function (p) { return { name: p.name, u8: p.u8 }; })).then(function (r) {
+        return r.blob.arrayBuffer().then(function (buf) {
+          return { size: r.size, deflated: r.deflated, stored: r.stored, original: r.original, buffer: buf };
+        });
+      });
+    },
+    hasDeflate: function () { return HAS_DEFLATE; },
+    hasInflate: function () { return HAS_INFLATE; },
+    lang: function () { return state.lang; }
+  };
+})();
+</script>
+</body>
+</html>
