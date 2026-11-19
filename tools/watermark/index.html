@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0b0d">
+<title>WaterMark — Batch Photo Watermarker, Zero Uploads | Kim Yihyung</title>
+<meta name="description" content="Stamp text or a logo onto twenty photos at once in your browser: nine anchor points or a diagonal tile, size, colour, opacity, rotation and shadow, then export JPEG, PNG or WebP — plus a ZIP of the whole set. Every pixel stays on your device.">
+<meta name="keywords" content="watermark, add watermark to photo, batch watermark, photo watermark online, no upload watermark, logo overlay, copyright watermark, tile watermark, 워터마크, 사진 워터마크, 이미지 워터마크, 일괄 워터마크, 로고 넣기, 透かし, 浮水印">
+<link rel="canonical" href="https://kimyihyung.github.io/portfolio/tools/watermark/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b0d'/%3E%3Cpath d='M8 24V8h3v16z' fill='%23e5b45c'/%3E%3Cpath d='M14 8h4.5c3.6 0 5.5 1.9 5.5 4.6 0 2.2-1.2 3.6-3 4.2L24.5 24h-3.4l-2.9-6.6H17V24h-3z' fill='%237fd6a0'/%3E%3Ccircle cx='10' cy='8' r='2.4' fill='%23e5b45c'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="Kim Yihyung">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kimyihyung.github.io/portfolio/tools/watermark/">
+<meta property="og:title" content="WaterMark — stamp text or a logo onto twenty photos at once">
+<meta property="og:description" content="Nine anchor points or a diagonal tile, size, colour, opacity, rotation and shadow — then JPEG, PNG, WebP or a ZIP of the whole set. Nothing is uploaded.">
+<meta property="og:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="WaterMark — batch photo watermarker in the browser">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="WaterMark — batch photo watermarker, zero uploads">
+<meta name="twitter:description" content="Text or logo, nine anchors or tiled, straight out as JPEG · PNG · WebP or one ZIP — all in the browser.">
+<meta name="twitter:image" content="https://kimyihyung.github.io/portfolio/assets/img/og/tools.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "WaterMark — Batch Photo Watermarker",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any (web browser)",
+      "url": "https://kimyihyung.github.io/portfolio/tools/watermark/",
+      "description": "Watermarks up to twenty images in one pass inside the browser. Text or a transparent logo is drawn on a canvas at nine anchor points or repeated as a diagonal tile, with size as a share of the image width, colour, opacity, rotation, an optional shadow and a margin, then the result is re-encoded to JPEG, PNG or WebP and handed over one file at a time or as a store-only ZIP. Re-encoding drops the camera's EXIF, GPS and device metadata. No file is uploaded and nothing about the image leaves the device.",
+      "featureList": [
+        "Twenty images at a time, each previewed before export",
+        "Text watermark: any string, five families, three weights",
+        "Logo watermark from a transparent PNG, JPG or WebP",
+        "Nine anchor points or a tiled diagonal repeat",
+        "Size as a share of width, colour, opacity, rotation, shadow, margin",
+        "JPEG, PNG or WebP out, quality under your control, name suffix",
+        "One file at a time or a store-only ZIP written in the tab",
+        "EXIF, GPS and device metadata dropped by the re-encode",
+        "0 bytes uploaded, 0 external requests"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "isPartOf": { "@type": "WebPage", "url": "https://kimyihyung.github.io/portfolio/tools/" },
+      "author": { "@type": "Person", "name": "Kim Yihyung", "url": "https://kimyihyung.github.io/portfolio/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://kimyihyung.github.io/portfolio/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://kimyihyung.github.io/portfolio/tools/" },
+        { "@type": "ListItem", "position": 3, "name": "WaterMark", "item": "https://kimyihyung.github.io/portfolio/tools/watermark/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Are my photos uploaded to a server?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. The files are read with the browser's own file API into memory, drawn on a canvas and encoded again in the tab. The page makes no network request at all, so no image, name or watermark string ever leaves the device." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does the watermark survive the export at full resolution?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. The export re-draws the watermark on a canvas the size of the original image, so a 4000-pixel photo comes out as a 4000-pixel photo. Size is set as a share of the image width, which keeps the mark the same relative weight at every resolution." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is the camera metadata removed from the exported file?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Re-encoding through a canvas writes a fresh JPEG, PNG or WebP, so EXIF, GPS coordinates, the camera model and the capture time are not carried over. That is usually the point of posting a watermarked copy, but keep the original if you need the metadata." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+:root {
+  --bg: #0b0b0d; --panel: #141311; --panel2: #1b1917;
+  --line: rgba(255,255,255,.09); --line2: rgba(255,255,255,.18);
+  --ink: #f7f2e9; --muted: #a9a29a; --muted2: #7d766e;
+  --accent: #e5b45c; --accent2: #f3cf85; --accent-dim: rgba(229,180,92,.12);
+  --on-accent: #1d1503; --ok: #7fd6a0; --warn: #ffa06b; --bad: #ff7d7d;
+  --radius: 18px;
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+html { -webkit-text-size-adjust: 100%; }
+html, body { margin: 0; padding: 0; }
+body {
+  min-height: 100vh; font-family: var(--font); color: var(--ink); line-height: 1.6;
+  background-color: var(--bg);
+  background-image: radial-gradient(110% 55% at 50% -18%, rgba(229,180,92,.13), transparent 62%),
+                    radial-gradient(60% 40% at 100% 2%, rgba(229,180,92,.05), transparent 60%);
+  background-repeat: no-repeat; -webkit-font-smoothing: antialiased; overflow-x: hidden; word-break: keep-all;
+}
+::selection { background: var(--accent); color: var(--on-accent); }
+button, input, select, textarea { font-family: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); border: 0; }
+.wrap { width: 100%; max-width: 1220px; margin: 0 auto; padding: 0 20px 48px; }
+
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0 12px; }
+.brand { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: var(--ink); min-width: 0; }
+.mark { min-width: 28px; height: 22px; padding: 0 6px; border-radius: 7px; flex: none; border: 1px solid rgba(229,180,92,.45); background: var(--accent-dim); display: grid; place-items: center; font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: var(--accent); }
+.brand-txt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.top-actions { display: inline-flex; align-items: center; gap: 9px; flex: none; }
+.lang-toggle { appearance: none; border: 1px solid var(--line); background: var(--panel); color: var(--muted2); height: 34px; padding: 0 11px; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: .06em; line-height: 1; }
+.lang-toggle button { appearance: none; background: none; border: 0; color: var(--muted2); cursor: pointer; padding: 2px 1px; font-size: 11px; font-weight: 700; letter-spacing: .06em; }
+.lang-toggle button.on { color: var(--accent); }
+.lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
+.topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
+
+.hero { padding: 22px 0 18px; max-width: 900px; }
+.eyebrow { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 14px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); border: 1px solid rgba(229,180,92,.28); background: rgba(229,180,92,.06); padding: 6px 11px; border-radius: 999px; }
+.eyebrow .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+h1 { margin: 0 0 14px; font-size: clamp(25px, 4.2vw, 40px); line-height: 1.18; letter-spacing: -.035em; font-weight: 800; }
+h1 .soft { color: var(--muted); }
+h1 .gold { color: var(--accent); }
+.lede { margin: 0 0 16px; color: var(--muted); font-size: 15px; max-width: 800px; line-height: 1.7; }
+.lede strong { color: var(--ink); font-weight: 600; }
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; }
+.pill { display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); font-size: 11.5px; color: var(--muted); font-family: var(--mono); letter-spacing: .02em; }
+.pill b { color: var(--ink); font-weight: 700; }
+.pill--live { border-color: rgba(127,214,160,.32); background: rgba(127,214,160,.07); color: #a6e6c4; }
+.pill--live b { color: #bff3d8; }
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px rgba(127,214,160,.14); }
+
+.work { display: grid; grid-template-columns: minmax(0,1fr) 312px; gap: 16px; align-items: start; margin-top: 6px; }
+@media (max-width: 1060px) { .work { grid-template-columns: minmax(0,1fr); } }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); min-width: 0; }
+.panel { padding: 16px; display: grid; gap: 13px; min-width: 0; }
+.panel h3 { margin: 0; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted2); font-family: var(--mono); font-weight: 700; }
+.side { display: grid; gap: 12px; min-width: 0; }
+@media (min-width: 1061px) { .side { position: sticky; top: 14px; } }
+
+.btn { appearance: none; cursor: pointer; border-radius: 11px; border: 1px solid var(--line2); background: var(--panel2); color: var(--ink); font-size: 13px; font-weight: 650; padding: 10px 16px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; text-decoration: none; }
+.btn:hover { border-color: rgba(255,255,255,.3); }
+.btn:active { transform: scale(.99); }
+.btn:disabled { opacity: .42; cursor: not-allowed; }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 750; }
+.btn--primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.btn--ghost { background: transparent; }
+.btn--sm { padding: 7px 11px; font-size: 12px; border-radius: 9px; }
+.btn--block { width: 100%; }
+
+.tabs { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 6px; }
+.tabs button { appearance: none; cursor: pointer; text-align: left; min-width: 0; display: grid; gap: 2px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel2); color: var(--muted); }
+.tabs button b { font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; color: var(--muted2); font-weight: 700; }
+.tabs button span { font-size: 13px; font-weight: 700; color: inherit; }
+.tabs button[aria-selected="true"] { border-color: rgba(229,180,92,.5); background: linear-gradient(180deg, rgba(229,180,92,.14), rgba(229,180,92,.03)); color: var(--ink); }
+.tabs button[aria-selected="true"] b { color: var(--accent); }
+
+.drop { border: 1.5px dashed rgba(229,180,92,.32); border-radius: 14px; padding: 22px 16px; text-align: center; background: linear-gradient(180deg, rgba(229,180,92,.05), transparent); display: grid; gap: 8px; justify-items: center; }
+.drop.is-over { border-color: var(--accent); background: rgba(229,180,92,.1); }
+.drop h2 { margin: 0; font-size: 15px; font-weight: 750; }
+.drop p { margin: 0; font-size: 12.5px; color: var(--muted); }
+.drop .row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 4px; }
+.fine { font-size: 11.5px; color: var(--muted2); }
+
+.files { display: grid; gap: 8px; }
+.files-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.files-bar .n { font-family: var(--mono); font-size: 11px; color: var(--muted2); }
+.strip { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+.thumb { appearance: none; cursor: pointer; flex: none; width: 92px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel2); padding: 5px; display: grid; gap: 4px; text-align: left; }
+.thumb img { width: 100%; height: 62px; object-fit: cover; border-radius: 6px; background: #000; display: block; }
+.thumb .nm { font-size: 9.5px; color: var(--muted2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--mono); }
+.thumb[aria-pressed="true"] { border-color: rgba(229,180,92,.6); background: rgba(229,180,92,.1); }
+
+.pv { position: relative; border-radius: 12px; border: 1px solid var(--line); overflow: hidden; background:
+  linear-gradient(45deg, #17161a 25%, transparent 25%) 0 0/16px 16px,
+  linear-gradient(45deg, transparent 75%, #17161a 75%) 0 0/16px 16px,
+  linear-gradient(45deg, transparent 75%, #17161a 75%) 8px 8px/16px 16px,
+  linear-gradient(45deg, #17161a 25%, #101013 25%) 8px 8px/16px 16px; }
+.pv canvas { display: block; width: 100%; max-width: 100%; height: auto; }
+.pv .empty { padding: 42px 14px; text-align: center; color: var(--muted2); font-size: 12.5px; }
+.pv-cap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px; font-family: var(--mono); font-size: 10.5px; color: var(--muted2); }
+
+.fields { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
+@media (max-width: 620px) { .fields { grid-template-columns: minmax(0,1fr); } }
+.field { display: grid; gap: 5px; min-width: 0; }
+.field > label { font-size: 11.5px; color: var(--muted); display: flex; justify-content: space-between; gap: 6px; }
+.field > label i { font-style: normal; color: var(--muted2); font-family: var(--mono); font-size: 10.5px; }
+.field--wide { grid-column: 1 / -1; }
+textarea.inp { resize: vertical; min-height: 48px; line-height: 1.45; }
+.inp, .sel { width: 100%; appearance: none; border: 1px solid var(--line); background: var(--panel2); border-radius: 10px; padding: 9px 11px; font-size: 13px; min-width: 0; }
+.inp[type="color"] { padding: 3px; height: 38px; cursor: pointer; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; padding: 3px; gap: 3px; background: var(--panel2); width: 100%; }
+.seg button { flex: 1; appearance: none; border: 0; background: transparent; color: var(--muted); border-radius: 7px; padding: 6px 8px; font-size: 12px; font-weight: 650; cursor: pointer; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: rgba(229,180,92,.16); color: var(--accent); }
+.range-row { display: flex; align-items: center; gap: 9px; }
+.range-row input[type="range"] { flex: 1; min-width: 0; accent-color: var(--accent); }
+.range-row output { font-family: var(--mono); font-size: 11.5px; color: var(--accent); min-width: 42px; text-align: right; }
+.pos9 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 5px; max-width: 168px; }
+.pos9 button { appearance: none; cursor: pointer; border: 1px solid var(--line); background: var(--panel2); border-radius: 8px; height: 30px; display: grid; place-items: center; }
+.pos9 button span { width: 6px; height: 6px; border-radius: 50%; background: var(--muted2); }
+.pos9 button[aria-pressed="true"] { border-color: rgba(229,180,92,.6); background: rgba(229,180,92,.12); }
+.pos9 button[aria-pressed="true"] span { background: var(--accent); }
+.chk { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; color: var(--muted); }
+.chk input { margin: 2px 0 0; accent-color: var(--accent); }
+
+.stats { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 9px; }
+.stat { border: 1px solid var(--line); border-radius: 12px; padding: 10px 11px; display: grid; gap: 2px; min-width: 0; }
+.stat .k { font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted2); font-family: var(--mono); }
+.stat .v { font-size: 15px; font-weight: 750; overflow-wrap: anywhere; }
+.status { font-size: 12px; color: var(--muted); min-height: 18px; }
+.status.is-ok { color: var(--ok); }
+.status.is-warn { color: var(--warn); }
+
+.guide { display: grid; gap: 12px; }
+.guide article { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; background: var(--panel2); }
+.guide h3 { margin: 0 0 6px; font-size: 13px; letter-spacing: 0; text-transform: none; color: var(--ink); font-family: inherit; }
+.guide p { margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.7; }
+.guide code { font-family: var(--mono); font-size: .92em; color: var(--accent); }
+
+.faq { margin-top: 26px; display: grid; gap: 10px; max-width: 900px; }
+.faq h2 { font-size: 15px; margin: 0 0 2px; letter-spacing: -.01em; }
+.faq details { border: 1px solid var(--line); border-radius: 12px; background: var(--panel); padding: 11px 14px; }
+.faq summary { cursor: pointer; font-size: 13px; font-weight: 650; }
+.faq p { margin: 8px 0 0; font-size: 12.5px; color: var(--muted); line-height: 1.7; }
+
+.foot { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-top: 30px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--muted2); }
+.foot .net b { color: var(--ok); font-family: var(--mono); }
+.foot-links { display: inline-flex; gap: 12px; flex-wrap: wrap; }
+.foot-links a { color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; }
+.foot-links a:hover { color: var(--ink); border-bottom-color: var(--line2); }
+.mono { font-family: var(--mono); }
+
+@media (max-width: 520px) {
+  .wrap { padding-left: 16px; padding-right: 16px; }
+  .tabs button { padding: 9px 9px; }
+  .tabs button span { font-size: 12px; }
+  .stats { grid-template-columns: minmax(0,1fr); }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="/portfolio/" aria-label="Kim Yihyung — portfolio" data-i18n-aria="brandAria">
+      <span class="mark" aria-hidden="true">YH</span>
+      <span class="brand-txt">Kim Yihyung</span>
+    </a>
+    <div class="top-actions">
+      <div class="lang-toggle" id="langToggle" role="group" aria-label="Language · 언어 · 言語 · 語言">
+        <button class="lt" type="button" data-lang="ko" aria-pressed="false">KO</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt on" type="button" data-lang="en" aria-pressed="true">EN</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lang="ja" aria-pressed="false">JA</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lang="zh-Hant" aria-pressed="false">繁中</button>
+      </div>
+      <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← All tools</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="eyebrow">WaterMark · batch watermark · 0 uploads</span></p>
+      <h1 data-i18n-html="h1">Your name on twenty photos,<br><span class="soft">before a single byte</span><br><span class="gold">leaves the tab.</span></h1>
+      <p class="lede" data-i18n-html="lede">
+        Text or a transparent logo, <strong>nine anchor points or a diagonal tile</strong>, size as a share of the width,
+        colour, opacity, rotation and a shadow that keeps it readable on white. Then out as
+        <strong>JPEG, PNG or WebP</strong> at the original resolution — or <strong>one ZIP</strong> for the whole set.
+      </p>
+      <div class="badge-row">
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillUp">0 bytes uploaded</b></span>
+        <span class="pill pill--live"><span class="dot" aria-hidden="true"></span><b data-i18n="pillNet">No file leaves the device</b></span>
+        <span class="pill" data-i18n="pillType">JPG · PNG · WebP → JPG · PNG · WebP</span>
+      </div>
+    </section>
+
+    <section class="work" aria-label="Watermarker" data-i18n-aria="workAria">
+      <div class="card panel">
+        <div class="tabs" role="tablist" aria-label="Screens" data-i18n-aria="tabAria">
+          <button type="button" role="tab" id="tab-wm" data-tab="wm" aria-selected="true" aria-controls="panel-wm">
+            <b>01</b><span data-i18n="tab1">Watermark</span>
+          </button>
+          <button type="button" role="tab" id="tab-guide" data-tab="guide" aria-selected="false" aria-controls="panel-guide" tabindex="-1">
+            <b>02</b><span data-i18n="tab2">How it works</span>
+          </button>
+        </div>
+
+        <section class="tabpanel" id="panel-wm" role="tabpanel" aria-labelledby="tab-wm">
+          <div class="drop" id="drop">
+            <h2 data-i18n="dropTitle">Drop photos here</h2>
+            <p data-i18n="dropHint">JPG · PNG · WebP · AVIF · up to twenty at a time</p>
+            <div class="row">
+              <button class="btn btn--primary btn--sm" type="button" id="pickBtn" data-i18n="dropCta">Choose files</button>
+              <button class="btn btn--sm btn--ghost" type="button" id="sampleBtn" data-i18n="sampleCta">Try with a sample</button>
+            </div>
+            <p class="fine" data-i18n="maxNote">Nothing is sent anywhere — the bytes are read straight into this tab.</p>
+            <input type="file" id="fileInput" accept="image/*" multiple class="sr-only" tabindex="-1">
+          </div>
+
+          <div class="files" id="filesBox" hidden>
+            <div class="files-bar">
+              <h3 data-i18n="filesHead">Files</h3>
+              <div class="files-bar">
+                <span class="n" id="fileCount">0</span>
+                <button class="btn btn--sm btn--ghost" type="button" id="clearBtn" data-i18n="clearAll">Clear</button>
+              </div>
+            </div>
+            <div class="strip" id="strip" role="group" aria-label="Loaded images" data-i18n-aria="filesAria"></div>
+          </div>
+
+          <div class="pv" id="pv">
+            <div class="empty" id="pvEmpty" data-i18n="prevEmpty">The preview appears here.</div>
+            <canvas id="canvas" width="16" height="9" hidden></canvas>
+          </div>
+          <div class="pv-cap">
+            <span id="pvInfo">—</span>
+            <span data-i18n="pvNote">Full resolution on export · EXIF stripped</span>
+          </div>
+
+          <div class="fields">
+            <div class="field field--wide">
+              <label><span data-i18n="modeLabel">Mark</span></label>
+              <div class="seg" id="modeSeg" role="group" aria-label="Mark type" data-i18n-aria="modeLabel">
+                <button type="button" data-mode="text" aria-pressed="true" data-i18n="modeTxt">Text</button>
+                <button type="button" data-mode="logo" aria-pressed="false" data-i18n="modeLogo">Logo image</button>
+              </div>
+            </div>
+
+            <div class="field field--wide" id="textRow">
+              <label for="wmText"><span data-i18n="fText">Watermark text</span><i data-i18n="fTextHint">one or two lines</i></label>
+              <textarea class="inp" id="wmText" rows="2" spellcheck="false" aria-label="Watermark text" data-i18n-aria="fText">© 2026 Studio</textarea>
+            </div>
+
+            <div class="field field--wide" id="logoRow" hidden>
+              <label><span data-i18n="logoPick">Logo image</span><i data-i18n="logoHint">transparent PNG works best</i></label>
+              <div class="row" style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="btn btn--sm" type="button" id="logoBtn" data-i18n="logoCta">Choose a logo</button>
+                <button class="btn btn--sm btn--ghost" type="button" id="logoClear" data-i18n="logoClear">Remove</button>
+                <span class="fine" id="logoName">—</span>
+              </div>
+              <input type="file" id="logoInput" accept="image/*" class="sr-only" tabindex="-1">
+            </div>
+
+            <div class="field" id="fontField">
+              <label for="fontSel"><span data-i18n="fFont">Typeface</span></label>
+              <select class="sel" id="fontSel">
+                <option value="sans" data-i18n="fontSans">Sans</option>
+                <option value="serif" data-i18n="fontSerif">Serif</option>
+                <option value="mono" data-i18n="fontMono">Mono</option>
+                <option value="wide" data-i18n="fontWide">Wide spacing</option>
+              </select>
+            </div>
+
+            <div class="field" id="weightField">
+              <label for="weightSel"><span data-i18n="fWeight">Weight</span></label>
+              <select class="sel" id="weightSel">
+                <option value="400" data-i18n="wNormal">Regular</option>
+                <option value="700" selected data-i18n="wBold">Bold</option>
+                <option value="900" data-i18n="wBlack">Black</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="sizeRange"><span data-i18n="fSize">Size</span><i data-i18n="fSizeHint">of image width</i></label>
+              <div class="range-row">
+                <input id="sizeRange" type="range" min="1" max="24" step="0.5" value="5" aria-label="Size" data-i18n-aria="fSize">
+                <output id="sizeOut">5%</output>
+              </div>
+            </div>
+
+            <div class="field" id="colorField">
+              <label for="colorPick"><span data-i18n="fColor">Colour</span></label>
+              <input class="inp" id="colorPick" type="color" value="#ffffff" aria-label="Colour" data-i18n-aria="fColor">
+            </div>
+
+            <div class="field">
+              <label for="opacityRange"><span data-i18n="fOpacity">Opacity</span></label>
+              <div class="range-row">
+                <input id="opacityRange" type="range" min="5" max="100" step="1" value="70" aria-label="Opacity" data-i18n-aria="fOpacity">
+                <output id="opacityOut">70%</output>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="angleRange"><span data-i18n="fAngle">Rotation</span></label>
+              <div class="range-row">
+                <input id="angleRange" type="range" min="-90" max="90" step="1" value="0" aria-label="Rotation" data-i18n-aria="fAngle">
+                <output id="angleOut">0°</output>
+              </div>
+            </div>
+
+            <div class="field">
+              <label><span data-i18n="fLayout">Layout</span></label>
+              <div class="seg" id="layoutSeg" role="group" aria-label="Layout" data-i18n-aria="fLayout">
+                <button type="button" data-layout="grid" aria-pressed="true" data-i18n="layGrid">One mark</button>
+                <button type="button" data-layout="tile" aria-pressed="false" data-i18n="layTile">Tile</button>
+              </div>
+            </div>
+
+            <div class="field" id="posField">
+              <label><span data-i18n="fPos">Position</span></label>
+              <div class="pos9" id="pos9" role="group" aria-label="Position" data-i18n-aria="fPos">
+                <button type="button" data-pos="tl" aria-pressed="false" aria-label="Top left"><span></span></button>
+                <button type="button" data-pos="tc" aria-pressed="false" aria-label="Top centre"><span></span></button>
+                <button type="button" data-pos="tr" aria-pressed="false" aria-label="Top right"><span></span></button>
+                <button type="button" data-pos="ml" aria-pressed="false" aria-label="Middle left"><span></span></button>
+                <button type="button" data-pos="c" aria-pressed="true" aria-label="Centre"><span></span></button>
+                <button type="button" data-pos="mr" aria-pressed="false" aria-label="Middle right"><span></span></button>
+                <button type="button" data-pos="bl" aria-pressed="false" aria-label="Bottom left"><span></span></button>
+                <button type="button" data-pos="bc" aria-pressed="false" aria-label="Bottom centre"><span></span></button>
+                <button type="button" data-pos="br" aria-pressed="false" aria-label="Bottom right"><span></span></button>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="marginRange"><span data-i18n="fMargin">Margin</span><i data-i18n="fMarginHint">edge to mark</i></label>
+              <div class="range-row">
+                <input id="marginRange" type="range" min="0" max="12" step="0.5" value="3" aria-label="Margin" data-i18n-aria="fMargin">
+                <output id="marginOut">3%</output>
+              </div>
+            </div>
+
+            <div class="field" id="gapField" hidden>
+              <label for="gapRange"><span data-i18n="fGap">Gap</span><i data-i18n="fGapHint">between tiles</i></label>
+              <div class="range-row">
+                <input id="gapRange" type="range" min="0" max="40" step="1" value="14" aria-label="Gap" data-i18n-aria="fGap">
+                <output id="gapOut">14%</output>
+              </div>
+            </div>
+
+            <div class="field field--wide">
+              <label class="chk" for="shadowChk"><input type="checkbox" id="shadowChk" checked><span data-i18n="fShadow">Drop shadow behind the mark, so it reads on white and on black.</span></label>
+            </div>
+          </div>
+
+          <div class="fields">
+            <div class="field">
+              <label for="fmtSel"><span data-i18n="fFormat">Output format</span></label>
+              <select class="sel" id="fmtSel">
+                <option value="keep" data-i18n="fmtKeep">Keep the original</option>
+                <option value="jpeg" data-i18n="fmtJpeg">JPEG</option>
+                <option value="png" data-i18n="fmtPng">PNG</option>
+                <option value="webp" data-i18n="fmtWebp">WebP</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="qualityRange"><span data-i18n="fQuality">Quality</span></label>
+              <div class="range-row">
+                <input id="qualityRange" type="range" min="50" max="100" step="1" value="92" aria-label="Quality" data-i18n-aria="fQuality">
+                <output id="qualityOut">92</output>
+              </div>
+            </div>
+            <div class="field">
+              <label for="suffix"><span data-i18n="fSuffix">Name suffix</span></label>
+              <input class="inp" id="suffix" type="text" value="-wm" autocomplete="off" aria-label="Name suffix" data-i18n-aria="fSuffix">
+            </div>
+            <div class="field">
+              <label><span data-i18n="fOut">Output</span><i id="outShape">—</i></label>
+              <span class="fine" id="outNote" data-i18n="outNote">Same pixel size as the source</span>
+            </div>
+          </div>
+
+          <div class="actions" style="display:flex;flex-wrap:wrap;gap:8px">
+            <button class="btn btn--primary" type="button" id="btnAll" data-i18n="btnAll" disabled>Watermark all &amp; ZIP</button>
+            <button class="btn" type="button" id="btnOne" data-i18n="btnThis" disabled>Download this one</button>
+          </div>
+          <p class="status" id="status" role="status" aria-live="polite"></p>
+        </section>
+
+        <section class="tabpanel" id="panel-guide" role="tabpanel" aria-labelledby="tab-guide" hidden>
+          <div class="guide">
+            <article>
+              <h3 data-i18n="g1h">Where the watermark is drawn</h3>
+              <p data-i18n-html="g1p">Each export re-draws the mark on a canvas the size of the original, so nothing is scaled down on the way out. The size is a <code>share of the image width</code>, which is why a 4000-pixel photo and a 600-pixel screenshot get a mark of the same visual weight.</p>
+            </article>
+            <article>
+              <h3 data-i18n="g2h">One mark or a tile</h3>
+              <p data-i18n-html="g2p"><code>One mark</code> puts a single stamp at the anchor you pick, offset by the margin. <code>Tile</code> repeats it across the whole frame on a diagonal grid — the version that survives a crop, at the cost of looking like a stock preview.</p>
+            </article>
+            <article>
+              <h3 data-i18n="g3h">The shadow is not decoration</h3>
+              <p data-i18n-html="g3p">White text vanishes on a white shirt and black text vanishes on a dark wall. The shadow draws the same string behind itself in translucent black, which keeps the mark legible over almost any photo without a solid plate.</p>
+            </article>
+            <article>
+              <h3 data-i18n="g4h">What leaves the file</h3>
+              <p data-i18n-html="g4p">Every export is encoded again by the browser, so <code>EXIF</code>, GPS coordinates, the camera model and the capture time do not come along. Keep the original if you still need that data — the copy here is the one meant for posting.</p>
+            </article>
+          </div>
+        </section>
+      </div>
+
+      <aside class="side">
+        <div class="card panel">
+          <h3 data-i18n="stHead">This session</h3>
+          <div class="stats">
+            <div class="stat"><span class="k" data-i18n="stCount">Images</span><span class="v" id="stCount">0</span></div>
+            <div class="stat"><span class="k" data-i18n="stIn">Source size</span><span class="v" id="stIn">0 KB</span></div>
+            <div class="stat"><span class="k" data-i18n="stOut">Output</span><span class="v" id="stOut">—</span></div>
+            <div class="stat"><span class="k" data-i18n="stExif">Metadata</span><span class="v" data-i18n="stExifVal">stripped</span></div>
+          </div>
+          <p class="fine" data-i18n="stNote">Sizes are read from the files you picked; nothing is measured on a server.</p>
+        </div>
+        <div class="card panel">
+          <h3 data-i18n="tipsHead">Before you post</h3>
+          <p class="fine" data-i18n="tip1">A mark at 4–7% of the width is visible without swallowing the photo.</p>
+          <p class="fine" data-i18n="tip2">Put the mark over a busy corner, not the sky — that is where a crop would cut it.</p>
+          <p class="fine" data-i18n="tip3">For a client proof, tile at 20–30% opacity so the image still reads.</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="faq">
+      <h2 data-i18n="faqH">Questions that come up</h2>
+      <details>
+        <summary data-i18n="faqQ1">Are my photos uploaded anywhere?</summary>
+        <p data-i18n="faqA1">No. Files are read with the browser's own file API, drawn on a canvas and encoded again inside the tab. The page makes no network request at all, so no image, filename or watermark string leaves the device.</p>
+      </details>
+      <details>
+        <summary data-i18n="faqQ2">Does the export keep the original resolution?</summary>
+        <p data-i18n="faqA2">Yes. The canvas is created at the source pixel size and only the encoding changes, so a 4000×3000 photo comes back at 4000×3000 with the mark on it.</p>
+      </details>
+      <details>
+        <summary data-i18n="faqQ3">Why does the ZIP come out without compression?</summary>
+        <p data-i18n="faqA3">JPEG and WebP are already compressed, so a second pass mostly costs time. The archive is written store-only in the tab — one file to download instead of twenty.</p>
+      </details>
+    </section>
+
+    <footer class="foot">
+      <span data-i18n="footCopy">© 2026 Kim Yihyung · built in the browser, for the browser</span>
+      <span class="net"><span data-i18n="footNet">External requests</span> <b id="netCount">0</b></span>
+      <span class="foot-links">
+        <a href="/portfolio/" data-i18n="footP1">Portfolio</a>
+        <a href="/portfolio/tools/" data-i18n="footP2">All tools</a>
+        <a href="https://github.com/kimyihyung/portfolio" target="_blank" rel="noopener" data-i18n="footP3">Source</a>
+      </span>
+      <span class="mono" data-i18n="mono">no upload · no tracking</span>
+    </footer>
+  </main>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var LANG_KEY = 'watermark.lang';
+  var SHARED_KEY = 'kyh.lang';
+  var MAX_FILES = 20;
+
+  var I18N = {
+    en: {
+      docTitle: 'WaterMark — Batch Photo Watermarker, Zero Uploads | Kim Yihyung',
+      metaDesc: 'Stamp text or a logo onto twenty photos at once in your browser: nine anchor points or a diagonal tile, size, colour, opacity, rotation and shadow, then export JPEG, PNG or WebP — plus a ZIP of the whole set. Every pixel stays on your device.',
+      brandAria: 'Kim Yihyung — portfolio',
+      back: '← All tools',
+      eyebrow: 'WaterMark · batch watermark · 0 uploads',
+      h1: 'Your name on twenty photos,<br><span class="soft">before a single byte</span><br><span class="gold">leaves the tab.</span>',
+      lede: 'Text or a transparent logo, <strong>nine anchor points or a diagonal tile</strong>, size as a share of the width, colour, opacity, rotation and a shadow that keeps it readable on white. Then out as <strong>JPEG, PNG or WebP</strong> at the original resolution — or <strong>one ZIP</strong> for the whole set.',
+      pillUp: '0 bytes uploaded',
+      pillNet: 'No file leaves the device',
+      pillType: 'JPG · PNG · WebP → JPG · PNG · WebP',
+      workAria: 'Watermarker',
+      tabAria: 'Screens',
+      tab1: 'Watermark',
+      tab2: 'How it works',
+      dropTitle: 'Drop photos here',
+      dropHint: 'JPG · PNG · WebP · AVIF · up to twenty at a time',
+      dropCta: 'Choose files',
+      sampleCta: 'Try with a sample',
+      maxNote: 'Nothing is sent anywhere — the bytes are read straight into this tab.',
+      filesHead: 'Files',
+      filesAria: 'Loaded images',
+      clearAll: 'Clear',
+      prevEmpty: 'The preview appears here.',
+      pvNote: 'Full resolution on export · EXIF stripped',
+      modeLabel: 'Mark',
+      modeTxt: 'Text',
+      modeLogo: 'Logo image',
+      fText: 'Watermark text',
+      fTextHint: 'one or two lines',
+      logoPick: 'Logo image',
+      logoHint: 'transparent PNG works best',
+      logoCta: 'Choose a logo',
+      logoClear: 'Remove',
+      fFont: 'Typeface',
+      fontSans: 'Sans',
+      fontSerif: 'Serif',
+      fontMono: 'Mono',
+      fontWide: 'Wide spacing',
+      fWeight: 'Weight',
+      wNormal: 'Regular',
+      wBold: 'Bold',
+      wBlack: 'Black',
+      fSize: 'Size',
+      fSizeHint: 'of image width',
+      fColor: 'Colour',
+      fOpacity: 'Opacity',
+      fAngle: 'Rotation',
+      fLayout: 'Layout',
+      layGrid: 'One mark',
+      layTile: 'Tile',
+      fPos: 'Position',
+      fMargin: 'Margin',
+      fMarginHint: 'edge to mark',
+      fGap: 'Gap',
+      fGapHint: 'between tiles',
+      fShadow: 'Drop shadow behind the mark, so it reads on white and on black.',
+      fFormat: 'Output format',
+      fmtKeep: 'Keep the original',
+      fmtJpeg: 'JPEG',
+      fmtPng: 'PNG',
+      fmtWebp: 'WebP',
+      fQuality: 'Quality',
+      fSuffix: 'Name suffix',
+      fOut: 'Output',
+      outNote: 'Same pixel size as the source',
+      btnAll: 'Watermark all & ZIP',
+      btnThis: 'Download this one',
+      stHead: 'This session',
+      stCount: 'Images',
+      stIn: 'Source size',
+      stOut: 'Output',
+      stExif: 'Metadata',
+      stExifVal: 'stripped',
+      stNote: 'Sizes are read from the files you picked; nothing is measured on a server.',
+      tipsHead: 'Before you post',
+      tip1: 'A mark at 4–7% of the width is visible without swallowing the photo.',
+      tip2: 'Put the mark over a busy corner, not the sky — that is where a crop would cut it.',
+      tip3: 'For a client proof, tile at 20–30% opacity so the image still reads.',
+      g1h: 'Where the watermark is drawn',
+      g1p: 'Each export re-draws the mark on a canvas the size of the original, so nothing is scaled down on the way out. The size is a <code>share of the image width</code>, which is why a 4000-pixel photo and a 600-pixel screenshot get a mark of the same visual weight.',
+      g2h: 'One mark or a tile',
+      g2p: '<code>One mark</code> puts a single stamp at the anchor you pick, offset by the margin. <code>Tile</code> repeats it across the whole frame on a diagonal grid — the version that survives a crop, at the cost of looking like a stock preview.',
+      g3h: 'The shadow is not decoration',
+      g3p: 'White text vanishes on a white shirt and black text vanishes on a dark wall. The shadow draws the same string behind itself in translucent black, which keeps the mark legible over almost any photo without a solid plate.',
+      g4h: 'What leaves the file',
+      g4p: 'Every export is encoded again by the browser, so <code>EXIF</code>, GPS coordinates, the camera model and the capture time do not come along. Keep the original if you still need that data — the copy here is the one meant for posting.',
+      faqH: 'Questions that come up',
+      faqQ1: 'Are my photos uploaded anywhere?',
+      faqA1: "No. Files are read with the browser's own file API, drawn on a canvas and encoded again inside the tab. Nothing about the image, its filename or the watermark text is ever sent anywhere.",
+      faqQ2: 'Does the export keep the original resolution?',
+      faqA2: 'Yes. The canvas is created at the source pixel size and only the encoding changes, so a 4000×3000 photo comes back at 4000×3000 with the mark on it.',
+      faqQ3: 'Why does the ZIP come out without compression?',
+      faqA3: 'JPEG and WebP are already compressed, so a second pass mostly costs time. The archive is written store-only in the tab — one file to download instead of twenty.',
+      footCopy: '© 2026 Kim Yihyung · built in the browser, for the browser',
+      footNet: 'External requests',
+      footP1: 'Portfolio',
+      footP2: 'All tools',
+      footP3: 'Source',
+      mono: 'no upload · no tracking',
+      stReady: 'Ready.',
+      stWorking: 'Working…',
+      stDone: 'Saved.',
+      stNoFiles: 'Add at least one image first.',
+      stZip: 'ZIP ready.',
+      stLogoMissing: 'Pick a logo image, or switch back to text.',
+      stTooMany: 'Only the first twenty images were kept.',
+      stFail: 'That file could not be read as an image.'
+    },
+    ko: {
+      docTitle: 'WaterMark — 사진 일괄 워터마크, 업로드 0 | Kim Yihyung',
+      metaDesc: '사진 스무 장에 텍스트나 로고를 한 번에 찍습니다. 9분면 위치 또는 대각선 타일, 크기·색·불투명도·회전·그림자까지 조절하고 원본 해상도 그대로 JPEG·PNG·WebP 또는 ZIP 한 개로 내보냅니다. 픽셀은 기기를 떠나지 않습니다.',
+      brandAria: 'Kim Yihyung — 포트폴리오',
+      back: '← 도구 전체',
+      eyebrow: 'WaterMark · 일괄 워터마크 · 업로드 0',
+      h1: '사진 스무 장에 이름을,<br><span class="soft">단 1바이트도</span><br><span class="gold">밖으로 나가기 전에.</span>',
+      lede: '텍스트 또는 투명 로고, <strong>9분면 위치나 대각선 타일</strong>, 가로폭 대비 크기, 색, 불투명도, 회전, 흰 배경에서도 읽히는 그림자까지. 원본 해상도 그대로 <strong>JPEG·PNG·WebP</strong>로, 또는 전체를 <strong>ZIP 하나</strong>로 내보냅니다.',
+      pillUp: '업로드 0바이트',
+      pillNet: '파일 전송 0건',
+      pillType: 'JPG · PNG · WebP → JPG · PNG · WebP',
+      workAria: '워터마크 도구',
+      tabAria: '화면',
+      tab1: '워터마크',
+      tab2: '원리와 기준',
+      dropTitle: '사진을 여기에 놓으세요',
+      dropHint: 'JPG · PNG · WebP · AVIF · 한 번에 20장까지',
+      dropCta: '파일 선택',
+      sampleCta: '샘플로 체험',
+      maxNote: '어디로도 전송하지 않습니다 — 파일은 이 탭 안에서만 읽힙니다.',
+      filesHead: '파일',
+      filesAria: '불러온 이미지',
+      clearAll: '전체 지우기',
+      prevEmpty: '미리보기가 여기에 나옵니다.',
+      pvNote: '내보낼 때 원본 해상도 · EXIF 제거',
+      modeLabel: '표시',
+      modeTxt: '텍스트',
+      modeLogo: '로고 이미지',
+      fText: '워터마크 문구',
+      fTextHint: '한두 줄',
+      logoPick: '로고 이미지',
+      logoHint: '배경이 투명한 PNG가 가장 깔끔합니다',
+      logoCta: '로고 선택',
+      logoClear: '지우기',
+      fFont: '글꼴',
+      fontSans: '고딕',
+      fontSerif: '명조',
+      fontMono: '고정폭',
+      fontWide: '자간 넓게',
+      fWeight: '굵기',
+      wNormal: '보통',
+      wBold: '굵게',
+      wBlack: '아주 굵게',
+      fSize: '크기',
+      fSizeHint: '가로폭 대비',
+      fColor: '색',
+      fOpacity: '불투명도',
+      fAngle: '회전',
+      fLayout: '배치',
+      layGrid: '한 곳에',
+      layTile: '타일',
+      fPos: '위치',
+      fMargin: '여백',
+      fMarginHint: '가장자리에서',
+      fGap: '간격',
+      fGapHint: '타일 사이',
+      fShadow: '그림자를 넣어 흰 배경에서도 검은 배경에서도 읽히게 합니다.',
+      fFormat: '출력 형식',
+      fmtKeep: '원본 그대로',
+      fmtJpeg: 'JPEG',
+      fmtPng: 'PNG',
+      fmtWebp: 'WebP',
+      fQuality: '품질',
+      fSuffix: '파일명 접미사',
+      fOut: '출력',
+      outNote: '원본과 같은 픽셀 크기',
+      btnAll: '전체 워터마크 후 ZIP',
+      btnThis: '이 이미지만 저장',
+      stHead: '이번 작업',
+      stCount: '이미지',
+      stIn: '원본 용량',
+      stOut: '출력',
+      stExif: '메타데이터',
+      stExifVal: '제거됨',
+      stNote: '용량은 고른 파일에서 직접 읽습니다. 서버에서 재는 값이 아닙니다.',
+      tipsHead: '올리기 전에',
+      tip1: '가로폭의 4~7%면 사진을 가리지 않으면서 눈에 띕니다.',
+      tip2: '하늘보다는 복잡한 구석에 두세요. 잘라내도 살아남는 자리입니다.',
+      tip3: '클라이언트 시안이면 불투명도 20~30%로 타일을 깔아야 사진이 살아 있습니다.',
+      g1h: '워터마크를 그리는 자리',
+      g1p: '내보낼 때마다 원본 크기의 캔버스에 다시 그립니다. 그래서 내려받는 과정에서 작아지지 않습니다. 크기를 <code>가로폭 대비</code>로 정하기 때문에 4000픽셀 사진과 600픽셀 스크린숏이 같은 비중으로 보입니다.',
+      g2h: '한 곳에, 또는 타일로',
+      g2p: '<code>한 곳에</code>는 고른 모서리에 도장 하나를, 여백만큼 띄워 찍습니다. <code>타일</code>은 대각선 격자로 화면 전체에 반복합니다. 잘라내도 살아남지만 미리보기 느낌이 납니다.',
+      g3h: '그림자는 장식이 아닙니다',
+      g3p: '흰 글씨는 흰 셔츠에서, 검은 글씨는 어두운 벽에서 사라집니다. 그림자는 같은 글자를 반투명 검정으로 뒤에 한 번 더 그려, 판을 깔지 않고도 거의 모든 사진 위에서 읽히게 합니다.',
+      g4h: '파일에서 빠지는 것',
+      g4p: '내보낼 때 브라우저가 다시 인코딩하므로 <code>EXIF</code>, GPS 좌표, 카메라 기종, 촬영 시각이 따라오지 않습니다. 그 정보가 필요하면 원본을 보관하세요. 여기서 나오는 것은 게시용 사본입니다.',
+      faqH: '자주 나오는 질문',
+      faqQ1: '사진이 어딘가로 업로드되나요?',
+      faqA1: '아니요. 브라우저 파일 API로 읽어 캔버스에 그리고 탭 안에서 다시 인코딩합니다. 이미지와 파일명, 워터마크 문구는 어디로도 전송되지 않습니다.',
+      faqQ2: '내보내면 해상도가 줄어드나요?',
+      faqA2: '아니요. 원본 픽셀 크기로 캔버스를 만들어 인코딩만 바꿉니다. 4000×3000 사진은 워터마크가 찍힌 4000×3000으로 나옵니다.',
+      faqQ3: 'ZIP은 왜 압축되지 않나요?',
+      faqA3: 'JPEG와 WebP는 이미 압축된 형식이라 다시 압축하면 시간만 듭니다. 탭 안에서 무압축으로 묶어, 스무 번 내려받는 대신 한 번에 받습니다.',
+      footCopy: '© 2026 Kim Yihyung · 브라우저에서, 브라우저를 위해',
+      footNet: '외부 요청',
+      footP1: '포트폴리오',
+      footP2: '도구 전체',
+      footP3: '소스',
+      mono: '업로드 없음 · 추적 없음',
+      stReady: '준비되었습니다.',
+      stWorking: '작업 중…',
+      stDone: '저장했습니다.',
+      stNoFiles: '이미지를 먼저 추가하세요.',
+      stZip: 'ZIP이 준비되었습니다.',
+      stLogoMissing: '로고 이미지를 고르거나 텍스트로 돌아가세요.',
+      stTooMany: '앞의 20장만 불러왔습니다.',
+      stFail: '이 파일은 이미지로 읽을 수 없습니다.'
+    },
+    ja: {
+      docTitle: 'WaterMark — 写真の一括ウォーターマーク、アップロード 0 | Kim Yihyung',
+      metaDesc: '写真 20 枚にテキストやロゴをまとめて入れます。9 か所のアンカーまたは斜めのタイル、サイズ・色・不透明度・回転・影まで調整し、元の解像度のまま JPEG・PNG・WebP、または ZIP 1 個で書き出します。ピクセルは端末から出ません。',
+      brandAria: 'Kim Yihyung — ポートフォリオ',
+      back: '← ツール一覧',
+      eyebrow: 'WaterMark · 一括ウォーターマーク · アップロード 0',
+      h1: '写真 20 枚に名前を、<br><span class="soft">1 バイトも</span><br><span class="gold">外に出る前に。</span>',
+      lede: 'テキストまたは透過ロゴ、<strong>9 か所のアンカーか斜めのタイル</strong>、幅に対するサイズ、色、不透明度、回転、白い背景でも読める影まで。元の解像度のまま <strong>JPEG・PNG・WebP</strong>、または全体を <strong>ZIP 1 個</strong>で書き出します。',
+      pillUp: 'アップロード 0 バイト',
+      pillNet: 'ファイル送信 0 件',
+      pillType: 'JPG · PNG · WebP → JPG · PNG · WebP',
+      workAria: 'ウォーターマークツール',
+      tabAria: '画面',
+      tab1: 'ウォーターマーク',
+      tab2: '仕組みと基準',
+      dropTitle: 'ここに写真をドロップ',
+      dropHint: 'JPG · PNG · WebP · AVIF · 一度に 20 枚まで',
+      dropCta: 'ファイルを選ぶ',
+      sampleCta: 'サンプルで試す',
+      maxNote: 'どこにも送信しません — ファイルはこのタブ内だけで読みます。',
+      filesHead: 'ファイル',
+      filesAria: '読み込んだ画像',
+      clearAll: 'すべて消す',
+      prevEmpty: 'ここにプレビューが出ます。',
+      pvNote: '書き出しは元の解像度 · EXIF を除去',
+      modeLabel: 'マーク',
+      modeTxt: 'テキスト',
+      modeLogo: 'ロゴ画像',
+      fText: 'ウォーターマークの文字',
+      fTextHint: '1〜2 行',
+      logoPick: 'ロゴ画像',
+      logoHint: '背景が透過の PNG が最適です',
+      logoCta: 'ロゴを選ぶ',
+      logoClear: '外す',
+      fFont: '書体',
+      fontSans: 'ゴシック',
+      fontSerif: '明朝',
+      fontMono: '等幅',
+      fontWide: '字間を広く',
+      fWeight: '太さ',
+      wNormal: '標準',
+      wBold: '太字',
+      wBlack: '極太',
+      fSize: 'サイズ',
+      fSizeHint: '幅に対して',
+      fColor: '色',
+      fOpacity: '不透明度',
+      fAngle: '回転',
+      fLayout: '配置',
+      layGrid: '1 か所',
+      layTile: 'タイル',
+      fPos: '位置',
+      fMargin: '余白',
+      fMarginHint: '端から',
+      fGap: '間隔',
+      fGapHint: 'タイル同士',
+      fShadow: '影を付けて、白い背景でも暗い背景でも読めるようにします。',
+      fFormat: '出力形式',
+      fmtKeep: '元のまま',
+      fmtJpeg: 'JPEG',
+      fmtPng: 'PNG',
+      fmtWebp: 'WebP',
+      fQuality: '品質',
+      fSuffix: 'ファイル名の接尾辞',
+      fOut: '出力',
+      outNote: '元と同じピクセルサイズ',
+      btnAll: 'すべてに入れて ZIP',
+      btnThis: 'この 1 枚を保存',
+      stHead: 'この作業',
+      stCount: '画像',
+      stIn: '元の容量',
+      stOut: '出力',
+      stExif: 'メタデータ',
+      stExifVal: '除去',
+      stNote: '容量は選んだファイルから直接読みます。サーバーで測った値ではありません。',
+      tipsHead: '投稿する前に',
+      tip1: '幅の 4〜7% なら写真を隠さずに目立ちます。',
+      tip2: '空より込み入った隅に置いてください。トリミングでも残る位置です。',
+      tip3: 'クライアント確認用なら不透明度 20〜30% のタイルが写真を生かします。',
+      g1h: 'ウォーターマークを描く場所',
+      g1p: '書き出すたびに元のサイズのキャンバスへ描き直すので、途中で小さくなりません。サイズを<code>幅に対する割合</code>で決めるため、4000 ピクセルの写真も 600 ピクセルのスクリーンショットも同じ見え方になります。',
+      g2h: '1 か所か、タイルか',
+      g2p: '<code>1 か所</code>は選んだ隅に、余白だけ空けて 1 個押します。<code>タイル</code>は斜めの格子で画面全体に繰り返します。トリミングに強い代わりに、素材の見本のような見た目になります。',
+      g3h: '影は飾りではありません',
+      g3p: '白い文字は白いシャツで、黒い文字は暗い壁で消えます。影は同じ文字を半透明の黒で後ろにもう一度描き、板を敷かずにほぼどんな写真の上でも読めるようにします。',
+      g4h: 'ファイルから外れるもの',
+      g4p: '書き出しのたびにブラウザーが再エンコードするため、<code>EXIF</code>、GPS 座標、カメラ機種、撮影時刻は付いてきません。その情報が必要なら元ファイルを残してください。ここで出るのは投稿用の複製です。',
+      faqH: 'よくある質問',
+      faqQ1: '写真はどこかにアップロードされますか？',
+      faqA1: 'いいえ。ブラウザーのファイル API で読み、キャンバスに描き、タブ内で再エンコードします。画像・ファイル名・ウォーターマークの文字列がどこかへ送られることはありません。',
+      faqQ2: '書き出すと解像度は下がりますか？',
+      faqA2: 'いいえ。元のピクセルサイズでキャンバスを作り、変わるのはエンコードだけです。4000×3000 の写真はマークの入った 4000×3000 で出ます。',
+      faqQ3: 'ZIP が無圧縮なのはなぜですか？',
+      faqA3: 'JPEG と WebP はすでに圧縮済みで、もう一度かけると時間だけかかります。タブ内で無圧縮にまとめ、20 回ダウンロードする代わりに 1 回で受け取ります。',
+      footCopy: '© 2026 Kim Yihyung · ブラウザーで、ブラウザーのために',
+      footNet: '外部リクエスト',
+      footP1: 'ポートフォリオ',
+      footP2: 'ツール一覧',
+      footP3: 'ソース',
+      mono: 'アップロードなし · 追跡なし',
+      stReady: '準備できました。',
+      stWorking: '処理中…',
+      stDone: '保存しました。',
+      stNoFiles: '先に画像を追加してください。',
+      stZip: 'ZIP の準備ができました。',
+      stLogoMissing: 'ロゴ画像を選ぶか、テキストに戻してください。',
+      stTooMany: '先頭の 20 枚だけ読み込みました。',
+      stFail: 'このファイルは画像として読めません。'
+    },
+    'zh-Hant': {
+      docTitle: 'WaterMark — 照片批次浮水印，零上傳 | Kim Yihyung',
+      metaDesc: '一次在二十張照片上壓上文字或標誌：九個定位點或斜向平鋪，尺寸、顏色、不透明度、旋轉與陰影都能調，再以原始解析度輸出 JPEG、PNG、WebP，或整批打包成一個 ZIP。像素不離開你的裝置。',
+      brandAria: 'Kim Yihyung — 作品集',
+      back: '← 所有工具',
+      eyebrow: 'WaterMark · 批次浮水印 · 零上傳',
+      h1: '在二十張照片上署名，<br><span class="soft">在一個位元組</span><br><span class="gold">離開分頁之前。</span>',
+      lede: '文字或透明標誌、<strong>九個定位點或斜向平鋪</strong>、以寬度為基準的尺寸、顏色、不透明度、旋轉，以及讓白底也看得清的陰影。再以原始解析度輸出 <strong>JPEG、PNG、WebP</strong>，或整批打包成 <strong>一個 ZIP</strong>。',
+      pillUp: '上傳 0 位元組',
+      pillNet: '檔案不上傳',
+      pillType: 'JPG · PNG · WebP → JPG · PNG · WebP',
+      workAria: '浮水印工具',
+      tabAria: '畫面',
+      tab1: '浮水印',
+      tab2: '原理與基準',
+      dropTitle: '把照片放到這裡',
+      dropHint: 'JPG · PNG · WebP · AVIF · 一次最多二十張',
+      dropCta: '選擇檔案',
+      sampleCta: '用範例試試',
+      maxNote: '不會傳到任何地方 — 檔案只在這個分頁裡讀取。',
+      filesHead: '檔案',
+      filesAria: '已載入的圖片',
+      clearAll: '全部清除',
+      prevEmpty: '預覽會顯示在這裡。',
+      pvNote: '輸出維持原始解析度 · 移除 EXIF',
+      modeLabel: '標記',
+      modeTxt: '文字',
+      modeLogo: '標誌圖片',
+      fText: '浮水印文字',
+      fTextHint: '一至兩行',
+      logoPick: '標誌圖片',
+      logoHint: '透明背景 PNG 效果最好',
+      logoCta: '選擇標誌',
+      logoClear: '移除',
+      fFont: '字體',
+      fontSans: '黑體',
+      fontSerif: '明體',
+      fontMono: '等寬',
+      fontWide: '加寬字距',
+      fWeight: '字重',
+      wNormal: '標準',
+      wBold: '粗體',
+      wBlack: '特粗',
+      fSize: '尺寸',
+      fSizeHint: '相對寬度',
+      fColor: '顏色',
+      fOpacity: '不透明度',
+      fAngle: '旋轉',
+      fLayout: '排列',
+      layGrid: '單一位置',
+      layTile: '平鋪',
+      fPos: '位置',
+      fMargin: '邊距',
+      fMarginHint: '距邊緣',
+      fGap: '間距',
+      fGapHint: '平鋪之間',
+      fShadow: '加上陰影，讓白底與暗底都讀得清楚。',
+      fFormat: '輸出格式',
+      fmtKeep: '保持原樣',
+      fmtJpeg: 'JPEG',
+      fmtPng: 'PNG',
+      fmtWebp: 'WebP',
+      fQuality: '品質',
+      fSuffix: '檔名後綴',
+      fOut: '輸出',
+      outNote: '與來源相同的像素尺寸',
+      btnAll: '全部壓上並打包 ZIP',
+      btnThis: '只存這一張',
+      stHead: '本次作業',
+      stCount: '圖片',
+      stIn: '原始容量',
+      stOut: '輸出',
+      stExif: '中繼資料',
+      stExifVal: '已移除',
+      stNote: '容量直接從你選的檔案讀取，不是伺服器量的。',
+      tipsHead: '發布之前',
+      tip1: '寬度的 4–7% 就看得到，又不會吃掉照片。',
+      tip2: '放在複雜的角落而不是天空，裁切後才留得住。',
+      tip3: '給客戶看的樣稿，用 20–30% 不透明度平鋪，照片才還讀得出來。',
+      g1h: '浮水印畫在哪裡',
+      g1p: '每次輸出都在原始尺寸的畫布上重畫一次，所以過程中不會被縮小。尺寸以<code>寬度比例</code>決定，因此 4000 像素的照片與 600 像素的截圖，看起來的比重相同。',
+      g2h: '單一位置或平鋪',
+      g2p: '<code>單一位置</code>在你選的角落，留出邊距後壓一個。<code>平鋪</code>以斜向格線鋪滿整個畫面：裁切也帶不走，代價是看起來像素材預覽。',
+      g3h: '陰影不是裝飾',
+      g3p: '白字在白襯衫上、黑字在暗牆上都會消失。陰影把同一串字以半透明黑再畫一次在後面，不必鋪底片也能在幾乎任何照片上讀得清楚。',
+      g4h: '檔案裡少了什麼',
+      g4p: '每次輸出都由瀏覽器重新編碼，所以 <code>EXIF</code>、GPS 座標、相機型號與拍攝時間都不會跟過來。若還需要那些資料，請保留原檔；這裡產出的是要發布的副本。',
+      faqH: '常見問題',
+      faqQ1: '照片會被上傳到哪裡嗎？',
+      faqA1: '不會。檔案由瀏覽器自身的檔案 API 讀入、畫在畫布上，並在分頁內重新編碼。圖片、檔名與浮水印文字都不會送到任何地方。',
+      faqQ2: '輸出會降低解析度嗎？',
+      faqA2: '不會。畫布以原始像素尺寸建立，變的只有編碼方式。4000×3000 的照片出來仍是帶有標記的 4000×3000。',
+      faqQ3: '為什麼 ZIP 沒有壓縮？',
+      faqA3: 'JPEG 與 WebP 本身已壓縮，再壓一次只花時間。壓縮檔在分頁內以僅儲存方式寫成，讓你一次下載而不是二十次。',
+      footCopy: '© 2026 Kim Yihyung · 在瀏覽器裡，為瀏覽器而做',
+      footNet: '外部請求',
+      footP1: '作品集',
+      footP2: '所有工具',
+      footP3: '原始碼',
+      mono: '不上傳 · 不追蹤',
+      stReady: '準備好了。',
+      stWorking: '處理中…',
+      stDone: '已儲存。',
+      stNoFiles: '請先加入圖片。',
+      stZip: 'ZIP 已備妥。',
+      stLogoMissing: '請選擇標誌圖片，或切回文字。',
+      stTooMany: '只載入了前二十張。',
+      stFail: '這個檔案讀不成圖片。'
+    }
+  };
+
+  var state = {
+    lang: 'en',
+    files: [],
+    active: 0,
+    mode: 'text',
+    layout: 'grid',
+    pos: 'c',
+    text: '© 2026 Studio',
+    font: 'sans',
+    weight: 700,
+    size: 5,
+    color: '#ffffff',
+    opacity: 70,
+    angle: 0,
+    margin: 3,
+    gap: 14,
+    shadow: true,
+    fmt: 'keep',
+    quality: 92,
+    suffix: '-wm',
+    logo: null,
+    logoName: ''
+  };
+
+  var FONT_MAP = {
+    sans: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif',
+    serif: '"Iowan Old Style", Georgia, "Times New Roman", "Nanum Myeongjo", serif',
+    mono: 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace',
+    wide: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", system-ui, sans-serif'
+  };
+
+  function t(key) {
+    var d = I18N[state.lang] || I18N.en;
+    return d[key] != null ? d[key] : (I18N.en[key] != null ? I18N.en[key] : key);
+  }
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  /* ───────────── CRC32 + store-only ZIP ───────────── */
+  var CRC_TABLE = (function () {
+    var table = new Uint32Array(256), c, n, k;
+    for (n = 0; n < 256; n++) {
+      c = n;
+      for (k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      table[n] = c >>> 0;
+    }
+    return table;
+  })();
+  function crc32(bytes) {
+    var c = 0xFFFFFFFF;
+    for (var i = 0; i < bytes.length; i++) c = CRC_TABLE[(c ^ bytes[i]) & 0xFF] ^ (c >>> 8);
+    return (c ^ 0xFFFFFFFF) >>> 0;
+  }
+  function buildZip(entries) {
+    /* entries: [{name, bytes}] — store only, no compression */
+    var enc = new TextEncoder();
+    var chunks = [], central = [], offset = 0;
+    entries.forEach(function (e) {
+      var name = enc.encode(e.name);
+      var crc = crc32(e.bytes);
+      var size = e.bytes.length;
+      var local = new Uint8Array(30 + name.length);
+      var dv = new DataView(local.buffer);
+      dv.setUint32(0, 0x04034b50, true);
+      dv.setUint16(4, 20, true);
+      dv.setUint16(6, 0x0800, true);       // UTF-8 names
+      dv.setUint16(8, 0, true);            // store
+      dv.setUint16(10, 0, true);
+      dv.setUint16(12, 0, true);
+      dv.setUint32(14, crc, true);
+      dv.setUint32(18, size, true);
+      dv.setUint32(22, size, true);
+      dv.setUint16(26, name.length, true);
+      dv.setUint16(28, 0, true);
+      local.set(name, 30);
+      chunks.push(local, e.bytes);
+      var cd = new Uint8Array(46 + name.length);
+      var cv = new DataView(cd.buffer);
+      cv.setUint32(0, 0x02014b50, true);
+      cv.setUint16(4, 20, true);
+      cv.setUint16(6, 20, true);
+      cv.setUint16(8, 0x0800, true);
+      cv.setUint16(10, 0, true);
+      cv.setUint16(12, 0, true);
+      cv.setUint16(14, 0, true);
+      cv.setUint32(16, crc, true);
+      cv.setUint32(20, size, true);
+      cv.setUint32(24, size, true);
+      cv.setUint16(28, name.length, true);
+      cv.setUint16(30, 0, true);
+      cv.setUint16(32, 0, true);
+      cv.setUint16(34, 0, true);
+      cv.setUint16(36, 0, true);
+      cv.setUint32(38, 0, true);
+      cv.setUint32(42, offset, true);
+      cd.set(name, 46);
+      central.push(cd);
+      offset += local.length + size;
+    });
+    var cdSize = central.reduce(function (a, c) { return a + c.length; }, 0);
+    var end = new Uint8Array(22);
+    var ev = new DataView(end.buffer);
+    ev.setUint32(0, 0x06054b50, true);
+    ev.setUint16(8, entries.length, true);
+    ev.setUint16(10, entries.length, true);
+    ev.setUint32(12, cdSize, true);
+    ev.setUint32(16, offset, true);
+    var all = chunks.concat(central, [end]);
+    var total = all.reduce(function (a, c) { return a + c.length; }, 0);
+    var out = new Uint8Array(total), pos = 0;
+    all.forEach(function (c) { out.set(c, pos); pos += c.length; });
+    return out;
+  }
+
+  /* ───────────── reading files ───────────── */
+  function human(n) {
+    if (n < 1024) return n + ' B';
+    if (n < 1048576) return (n / 1024).toFixed(n < 10240 ? 1 : 0) + ' KB';
+    return (n / 1048576).toFixed(1) + ' MB';
+  }
+
+  function extFor(fmt, sourceType) {
+    if (fmt === 'jpeg') return { mime: 'image/jpeg', ext: 'jpg' };
+    if (fmt === 'png') return { mime: 'image/png', ext: 'png' };
+    if (fmt === 'webp') return { mime: 'image/webp', ext: 'webp' };
+    var type = sourceType || 'image/jpeg';
+    if (type.indexOf('png') > -1) return { mime: 'image/png', ext: 'png' };
+    if (type.indexOf('webp') > -1) return { mime: 'image/webp', ext: 'webp' };
+    if (type.indexOf('gif') > -1) return { mime: 'image/png', ext: 'png' };
+    return { mime: 'image/jpeg', ext: 'jpg' };
+  }
+
+  function baseName(name) {
+    return String(name || 'image').replace(/\.[^.]+$/, '').replace(/[\\/:*?"<>|]+/g, '_').slice(0, 60) || 'image';
+  }
+
+  function loadBitmap(blob) {
+    if (typeof createImageBitmap === 'function') {
+      return createImageBitmap(blob, { imageOrientation: 'from-image' }).catch(function () {
+        return createImageBitmap(blob);
+      }).catch(function () {
+        return loadElement(blob);
+      });
+    }
+    return loadElement(blob);
+  }
+  function loadElement(blob) {
+    return new Promise(function (resolve, reject) {
+      var url = URL.createObjectURL(blob);
+      var img = new Image();
+      img.onload = function () { URL.revokeObjectURL(url); resolve(img); };
+      img.onerror = function () { URL.revokeObjectURL(url); reject(new Error('decode')); };
+      img.src = url;
+    });
+  }
+
+  function addBlobs(items) {
+    var room = MAX_FILES - state.files.length;
+    var sliced = items.slice(0, Math.max(0, room));
+    if (!sliced.length) return Promise.resolve();
+    setStatus(items.length > sliced.length ? t('stTooMany') : t('stWorking'), '');
+    return sliced.reduce(function (chain, item) {
+      return chain.then(function () {
+        return loadBitmap(item.blob).then(function (bmp) {
+          state.files.push({
+            name: item.name,
+            size: item.size,
+            type: item.type || (item.blob && item.blob.type) || 'image/jpeg',
+            bmp: bmp,
+            url: item.previewUrl || ''
+          });
+        }).catch(function () { failed = true; });
+      });
+    }, Promise.resolve()).then(function () {
+      state.active = Math.max(0, state.files.length - sliced.length);
+      renderStrip();
+      renderPreview();
+      updateStats();
+      setStatus(t('stReady'), 'is-ok');
+    });
+  }
+  var failed = false;
+
+  function sampleBlobs() {
+    var out = [];
+    var specs = [
+      { w: 1400, h: 933, c1: '#20303c', c2: '#c8b48a', label: '#1' },
+      { w: 1080, h: 1350, c1: '#3a2030', c2: '#9fb6c4', label: '#2' },
+      { w: 1600, h: 900, c1: '#12261e', c2: '#d7b06a', label: '#3' }
+    ];
+    return Promise.all(specs.map(function (s, i) {
+      var cv = document.createElement('canvas');
+      cv.width = s.w; cv.height = s.h;
+      var cx = cv.getContext('2d');
+      var g = cx.createLinearGradient(0, 0, s.w, s.h);
+      g.addColorStop(0, s.c1); g.addColorStop(1, s.c2);
+      cx.fillStyle = g; cx.fillRect(0, 0, s.w, s.h);
+      for (var k = 0; k < 26; k++) {
+        cx.globalAlpha = 0.06 + (k % 4) * 0.03;
+        cx.fillStyle = k % 2 ? '#ffffff' : '#000000';
+        cx.beginPath();
+        cx.arc((k * 137) % s.w, (k * 271) % s.h, (k % 5 + 1) * s.w * 0.015, 0, Math.PI * 2);
+        cx.fill();
+      }
+      cx.globalAlpha = 0.5;
+      cx.fillStyle = '#ffffff';
+      cx.font = '600 ' + Math.round(s.w * 0.03) + 'px system-ui, sans-serif';
+      cx.fillText('sample photo ' + s.label + ' · ' + s.w + '×' + s.h, s.w * 0.05, s.h * 0.94);
+      return new Promise(function (resolve) {
+        cv.toBlob(function (blob) {
+          resolve({ name: 'sample-' + (i + 1) + '.jpg', size: blob.size, type: 'image/jpeg', blob: blob });
+        }, 'image/jpeg', 0.9);
+      });
+    }));
+  }
+
+  /* ───────────── drawing ───────────── */
+  function drawMark(ctx, w, h, scaleNote) {
+    var rad = state.angle * Math.PI / 180;
+    ctx.save();
+    ctx.globalAlpha = Math.max(0.02, state.opacity / 100);
+    if (state.mode === 'logo') {
+      if (!state.logo) { ctx.restore(); return; }
+      var lw = w * state.size / 100 * 6;                 // logo default is 6× the text size
+      lw = Math.min(lw, w * 0.9);
+      var lh = lw * state.logo.height / state.logo.width;
+      if (state.layout === 'tile') {
+        var pad = lw * state.gap / 100;
+        var stepX = lw + pad, stepY = lh + pad;
+        var diag = Math.sqrt(w * w + h * h);
+        ctx.translate(w / 2, h / 2);
+        ctx.rotate(rad);
+        var row = 0;
+        for (var y = -diag / 2; y < diag / 2; y += stepY, row++) {
+          var shift = (row % 2) ? stepX / 2 : 0;
+          for (var x = -diag / 2 - stepX; x < diag / 2 + stepX; x += stepX) {
+            ctx.drawImage(state.logo, x + shift, y, lw, lh);
+          }
+        }
+      } else {
+        var p = anchorXY(w, h, lw, lh, state.margin / 100);
+        ctx.translate(p.x, p.y);
+        ctx.rotate(rad);
+        if (state.shadow) { ctx.shadowColor = 'rgba(0,0,0,0.45)'; ctx.shadowBlur = lw * 0.06; ctx.shadowOffsetY = lw * 0.02; }
+        ctx.drawImage(state.logo, -lw / 2, -lh / 2, lw, lh);
+      }
+      ctx.restore();
+      return;
+    }
+
+    var text = state.text || '';
+    if (!text) { ctx.restore(); return; }
+    var lines = text.split(/\n/).slice(0, 2);
+    var fs = Math.max(8, w * state.size / 100);
+    var family = FONT_MAP[state.font] || FONT_MAP.sans;
+    ctx.font = state.weight + ' ' + fs + 'px ' + family;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = state.color;
+    if (state.font === 'wide') {
+      try { ctx.letterSpacing = (fs * 0.18).toFixed(2) + 'px'; } catch (err) { /* older engines */ }
+    }
+    var lh = fs * 1.18;
+    var boxW = 0;
+    lines.forEach(function (ln) { boxW = Math.max(boxW, ctx.measureText(ln).width); });
+    var boxH = lh * lines.length;
+
+    function stamp(cx, cy) {
+      if (state.shadow) {
+        ctx.shadowColor = 'rgba(0,0,0,0.55)';
+        ctx.shadowBlur = fs * 0.22;
+        ctx.shadowOffsetY = fs * 0.05;
+      }
+      lines.forEach(function (ln, i) {
+        ctx.fillText(ln, cx, cy - boxH / 2 + lh * (i + 0.5));
+      });
+      ctx.shadowColor = 'transparent';
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetY = 0;
+    }
+
+    if (state.layout === 'tile') {
+      var pad = fs * state.gap / 100 * 4;
+      var stepX2 = boxW + pad, stepY2 = boxH + pad;
+      var diag2 = Math.sqrt(w * w + h * h);
+      ctx.translate(w / 2, h / 2);
+      ctx.rotate(rad);
+      var row2 = 0;
+      for (var yy = -diag2 / 2; yy < diag2 / 2; yy += stepY2, row2++) {
+        var shift2 = (row2 % 2) ? stepX2 / 2 : 0;
+        for (var xx = -diag2 / 2 - stepX2; xx < diag2 / 2 + stepX2; xx += stepX2) {
+          stamp(xx + shift2, yy + boxH / 2);
+        }
+      }
+    } else {
+      var pt = anchorXY(w, h, boxW, boxH, state.margin / 100);
+      ctx.translate(pt.x, pt.y);
+      ctx.rotate(rad);
+      stamp(0, 0);
+    }
+    ctx.restore();
+  }
+
+  function anchorXY(w, h, bw, bh, mPct) {
+    var mx = w * mPct, my = h * mPct;
+    var xs = { l: mx + bw / 2, c: w / 2, r: w - mx - bw / 2 };
+    var ys = { t: my + bh / 2, m: h / 2, b: h - my - bh / 2 };
+    var key = state.pos;
+    var xk = key.length === 2 ? key[1] : 'c';
+    var yk = key.length === 2 ? key[0] : 'c';
+    if (key === 'c') { xk = 'c'; yk = 'm'; }
+    return { x: xs[xk] != null ? xs[xk] : w / 2, y: ys[yk] != null ? ys[yk] : h / 2 };
+  }
+
+  function currentFile() { return state.files[state.active] || null; }
+
+  /* ───────────── preview ───────────── */
+  function renderPreview() {
+    var cv = $('canvas'), f = currentFile();
+    if (!f) {
+      cv.hidden = true;
+      $('pvEmpty').hidden = false;
+      $('pvInfo').textContent = '—';
+      return;
+    }
+    $('pvEmpty').hidden = true;
+    cv.hidden = false;
+    var maxW = Math.max(240, $('pv').clientWidth || 640);
+    var maxH = Math.min(460, Math.round(maxW * 0.78));
+    var scale = Math.min(maxW / f.bmp.width, maxH / f.bmp.height, 1);
+    var w = Math.max(1, Math.round(f.bmp.width * scale));
+    var h = Math.max(1, Math.round(f.bmp.height * scale));
+    cv.width = w; cv.height = h;
+    var ctx = cv.getContext('2d');
+    ctx.clearRect(0, 0, w, h);
+    ctx.drawImage(f.bmp, 0, 0, w, h);
+    drawMark(ctx, w, h, scale);
+    $('pvInfo').textContent = f.bmp.width + '×' + f.bmp.height + ' · ' + f.name;
+  }
+
+  function renderStrip() {
+    var box = $('filesBox'), strip = $('strip');
+    $('fileCount').textContent = state.files.length + ' / ' + MAX_FILES;
+    if (!state.files.length) { box.hidden = true; strip.innerHTML = ''; return; }
+    box.hidden = false;
+    strip.innerHTML = '';
+    state.files.forEach(function (f, i) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'thumb';
+      b.setAttribute('aria-pressed', i === state.active ? 'true' : 'false');
+      b.title = f.name + ' · ' + human(f.size);
+      var src = f.url || thumbUrl(f);
+      b.innerHTML = '<img alt="" src="' + src + '"><span class="nm">' + esc(f.name) + '</span>';
+      b.addEventListener('click', function () { state.active = i; renderStrip(); renderPreview(); });
+      strip.appendChild(b);
+    });
+  }
+
+  var thumbCache = new WeakMap();
+  function thumbUrl(f) {
+    if (thumbCache.has(f)) return thumbCache.get(f);
+    var cv = document.createElement('canvas');
+    var s = Math.min(1, 120 / Math.max(f.bmp.width, f.bmp.height));
+    cv.width = Math.max(1, Math.round(f.bmp.width * s));
+    cv.height = Math.max(1, Math.round(f.bmp.height * s));
+    cv.getContext('2d').drawImage(f.bmp, 0, 0, cv.width, cv.height);
+    var url = cv.toDataURL('image/jpeg', 0.7);
+    thumbCache.set(f, url);
+    return url;
+  }
+
+  function updateStats() {
+    var inBytes = state.files.reduce(function (a, f) { return a + f.size; }, 0);
+    $('stCount').textContent = String(state.files.length);
+    $('stIn').textContent = human(inBytes);
+    var f = currentFile();
+    var fmt = extFor(state.fmt, f && f.type);
+    $('stOut').textContent = state.files.length ? fmt.ext.toUpperCase() : '—';
+    $('outShape').textContent = f ? (f.bmp.width + '×' + f.bmp.height + ' · ' + fmt.ext.toUpperCase()) : '—';
+    $('btnAll').disabled = !state.files.length;
+    $('btnOne').disabled = !state.files.length;
+  }
+
+  /* ───────────── export ───────────── */
+  function renderFull(f) {
+    var cv = document.createElement('canvas');
+    cv.width = f.bmp.width;
+    cv.height = f.bmp.height;
+    var ctx = cv.getContext('2d');
+    ctx.drawImage(f.bmp, 0, 0);
+    drawMark(ctx, cv.width, cv.height, 1);
+    return cv;
+  }
+
+  function encode(cv, fmt, sourceType) {
+    var target = extFor(fmt, sourceType);
+    var q = target.ext === 'png' ? undefined : state.quality / 100;
+    return new Promise(function (resolve) {
+      cv.toBlob(function (blob) { resolve({ blob: blob, ext: target.ext, mime: target.mime }); }, target.mime, q);
+    });
+  }
+
+  function saveBlob(blob, name) {
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+  }
+
+  $('btnOne').addEventListener('click', function () {
+    var f = currentFile();
+    if (!f) { setStatus(t('stNoFiles'), 'is-warn'); return; }
+    if (state.mode === 'logo' && !state.logo) { setStatus(t('stLogoMissing'), 'is-warn'); return; }
+    setStatus(t('stWorking'), '');
+    var cv = renderFull(f);
+    encode(cv, state.fmt, f.type).then(function (out) {
+      if (!out.blob) { setStatus(t('stFail'), 'is-warn'); return; }
+      saveBlob(out.blob, baseName(f.name) + state.suffix + '.' + out.ext);
+      setStatus(t('stDone') + ' · ' + human(out.blob.size), 'is-ok');
+    });
+  });
+
+  $('btnAll').addEventListener('click', function () {
+    if (!state.files.length) { setStatus(t('stNoFiles'), 'is-warn'); return; }
+    if (state.mode === 'logo' && !state.logo) { setStatus(t('stLogoMissing'), 'is-warn'); return; }
+    setStatus(t('stWorking'), '');
+    var entries = [];
+    var chain = state.files.reduce(function (c, f) {
+      return c.then(function () {
+        var cv = renderFull(f);
+        return encode(cv, state.fmt, f.type).then(function (out) {
+          return out.blob.arrayBuffer().then(function (buf) {
+            entries.push({ name: baseName(f.name) + state.suffix + '.' + out.ext, bytes: new Uint8Array(buf) });
+          });
+        });
+      });
+    }, Promise.resolve());
+    chain.then(function () {
+      var zip = buildZip(entries);
+      var blob = new Blob([zip], { type: 'application/zip' });
+      var stamp = new Date().toISOString().slice(0, 10);
+      saveBlob(blob, 'watermark-' + stamp + '.zip');
+      setStatus(t('stZip') + ' · ' + entries.length + ' · ' + human(blob.size), 'is-ok');
+    }).catch(function () { setStatus(t('stFail'), 'is-warn'); });
+  });
+
+  /* ───────────── input wiring ───────────── */
+  function setStatus(msg, cls) {
+    var el = $('status');
+    el.textContent = msg || '';
+    el.className = 'status' + (cls ? ' ' + cls : '');
+  }
+
+  $('pickBtn').addEventListener('click', function () { $('fileInput').click(); });
+  $('fileInput').addEventListener('change', function (ev) {
+    var files = Array.prototype.slice.call(ev.target.files || []);
+    if (!files.length) return;
+    addBlobs(files.map(function (f) { return { name: f.name, size: f.size, type: f.type, blob: f }; }));
+    ev.target.value = '';
+  });
+
+  $('sampleBtn').addEventListener('click', function () {
+    sampleBlobs().then(function (items) { return addBlobs(items); });
+  });
+
+  $('clearBtn').addEventListener('click', function () {
+    state.files = [];
+    state.active = 0;
+    renderStrip(); renderPreview(); updateStats();
+    setStatus('', '');
+  });
+
+  var drop = $('drop');
+  ['dragenter', 'dragover'].forEach(function (ev) {
+    drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add('is-over'); });
+  });
+  ['dragleave', 'drop'].forEach(function (ev) {
+    drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove('is-over'); });
+  });
+  drop.addEventListener('drop', function (e) {
+    var list = e.dataTransfer && e.dataTransfer.files;
+    if (!list || !list.length) return;
+    var imgs = Array.prototype.slice.call(list).filter(function (f) { return /^image\//.test(f.type); });
+    if (!imgs.length) { setStatus(t('stFail'), 'is-warn'); return; }
+    addBlobs(imgs.map(function (f) { return { name: f.name, size: f.size, type: f.type, blob: f }; }));
+  });
+
+  $('logoBtn').addEventListener('click', function () { $('logoInput').click(); });
+  $('logoInput').addEventListener('change', function (ev) {
+    var f = ev.target.files && ev.target.files[0];
+    ev.target.value = '';
+    if (!f) return;
+    loadBitmap(f).then(function (bmp) {
+      state.logo = bmp;
+      state.logoName = f.name;
+      $('logoName').textContent = f.name;
+      renderPreview();
+    }).catch(function () { setStatus(t('stFail'), 'is-warn'); });
+  });
+  $('logoClear').addEventListener('click', function () {
+    state.logo = null; state.logoName = '';
+    $('logoName').textContent = '—';
+    renderPreview();
+  });
+
+  function bindSeg(id, key, attr) {
+    var box = $(id);
+    box.addEventListener('click', function (ev) {
+      var b = ev.target.closest('button');
+      if (!b) return;
+      var val = b.getAttribute('data-' + attr);
+      state[key] = val;
+      Array.prototype.forEach.call(box.querySelectorAll('button'), function (x) {
+        x.setAttribute('aria-pressed', x === b ? 'true' : 'false');
+      });
+      afterChange();
+    });
+  }
+  bindSeg('modeSeg', 'mode', 'mode');
+  bindSeg('layoutSeg', 'layout', 'layout');
+  bindSeg('pos9', 'pos', 'pos');
+
+  function afterChange() {
+    var isLogo = state.mode === 'logo';
+    $('logoRow').hidden = !isLogo;
+    $('textRow').hidden = isLogo;
+    $('fontField').hidden = isLogo;
+    $('weightField').hidden = isLogo;
+    $('colorField').hidden = isLogo;
+    $('gapField').hidden = state.layout !== 'tile';
+    $('posField').style.opacity = state.layout === 'tile' ? '0.45' : '1';
+    renderPreview();
+    updateStats();
+  }
+
+  $('wmText').addEventListener('input', function () { state.text = $('wmText').value; renderPreview(); });
+  $('fontSel').addEventListener('change', function () { state.font = $('fontSel').value; renderPreview(); });
+  $('weightSel').addEventListener('change', function () { state.weight = Number($('weightSel').value); renderPreview(); });
+  $('colorPick').addEventListener('input', function () { state.color = $('colorPick').value; renderPreview(); });
+  $('sizeRange').addEventListener('input', function () {
+    state.size = Number($('sizeRange').value);
+    $('sizeOut').textContent = state.size + '%';
+    renderPreview();
+  });
+  $('opacityRange').addEventListener('input', function () {
+    state.opacity = Number($('opacityRange').value);
+    $('opacityOut').textContent = state.opacity + '%';
+    renderPreview();
+  });
+  $('angleRange').addEventListener('input', function () {
+    state.angle = Number($('angleRange').value);
+    $('angleOut').textContent = state.angle + '°';
+    renderPreview();
+  });
+  $('marginRange').addEventListener('input', function () {
+    state.margin = Number($('marginRange').value);
+    $('marginOut').textContent = state.margin + '%';
+    renderPreview();
+  });
+  $('gapRange').addEventListener('input', function () {
+    state.gap = Number($('gapRange').value);
+    $('gapOut').textContent = state.gap + '%';
+    renderPreview();
+  });
+  $('shadowChk').addEventListener('change', function () { state.shadow = $('shadowChk').checked; renderPreview(); });
+  $('fmtSel').addEventListener('change', function () { state.fmt = $('fmtSel').value; updateStats(); });
+  $('qualityRange').addEventListener('input', function () {
+    state.quality = Number($('qualityRange').value);
+    $('qualityOut').textContent = String(state.quality);
+  });
+  $('suffix').addEventListener('input', function () { state.suffix = $('suffix').value; });
+
+  /* ───────────── tabs ───────────── */
+  function switchTab(name) {
+    var on = name === 'wm';
+    $('panel-wm').hidden = !on;
+    $('panel-guide').hidden = on;
+    Array.prototype.forEach.call(document.querySelectorAll('.tabs button'), function (b) {
+      var sel = b.getAttribute('data-tab') === name;
+      b.setAttribute('aria-selected', sel ? 'true' : 'false');
+      b.tabIndex = sel ? 0 : -1;
+    });
+  }
+  document.querySelector('.tabs').addEventListener('click', function (ev) {
+    var b = ev.target.closest('button[data-tab]');
+    if (b) switchTab(b.getAttribute('data-tab'));
+  });
+  document.querySelector('.tabs').addEventListener('keydown', function (ev) {
+    if (ev.key !== 'ArrowRight' && ev.key !== 'ArrowLeft') return;
+    var next = document.querySelector('.tabs button[aria-selected="false"]');
+    if (next) { switchTab(next.getAttribute('data-tab')); next.focus(); }
+  });
+
+  /* ───────────── language ───────────── */
+  var LANGS4 = ['ko', 'en', 'ja', 'zh-Hant'];
+  function normLang(v) {
+    v = String(v == null ? '' : v).toLowerCase().replace(/_/g, '-');
+    if (v === 'ko' || v === 'ko-kr' || v === 'kr') return 'ko';
+    if (v === 'ja' || v === 'ja-jp' || v === 'jp') return 'ja';
+    if (v === 'zh-hant' || v === 'zh-tw' || v === 'zh' || v === 'tw' || v === 'zh-hk') return 'zh-Hant';
+    if (v === 'en' || v === 'en-us' || v === 'en-gb') return 'en';
+    return '';
+  }
+  function loc4() {
+    return state.lang === 'ko' ? 'ko_KR' : state.lang === 'ja' ? 'ja_JP' : state.lang === 'zh-Hant' ? 'zh_TW' : 'en_US';
+  }
+  function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function initialLang() {
+    var f = (typeof window.__FORCED_LANG__ !== 'undefined' && window.__FORCED_LANG__) ? window.__FORCED_LANG__ : '';
+    if (f && normLang(f)) return normLang(f);
+    var q = '';
+    try { q = new URLSearchParams(location.search).get('lang') || ''; } catch (e) { q = ''; }
+    if (q && normLang(q)) return normLang(q);
+    var stored = lsGet(SHARED_KEY) || lsGet(LANG_KEY);
+    if (stored && normLang(stored)) return normLang(stored);
+    var h = normLang(document.documentElement.getAttribute('lang'));
+    if (h) return h;
+    return 'en';
+  }
+  function setMeta(sel, attr, val) {
+    var el = document.querySelector(sel);
+    if (el) el.setAttribute(attr, val);
+  }
+  function syncLangUI() {
+    Array.prototype.forEach.call(document.querySelectorAll('[data-lang]'), function (b) {
+      var on = b.getAttribute('data-lang') === state.lang;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+
+  function applyLang(lang) {
+    state.lang = normLang(lang) || 'en';
+    document.documentElement.setAttribute('lang', state.lang);
+    document.title = t('docTitle').replace(/&amp;/g, '&');
+    var md = t('metaDesc');
+    if (md && md !== 'metaDesc') {
+      setMeta('meta[name="description"]', 'content', md);
+      setMeta('meta[property="og:description"]', 'content', md);
+      setMeta('meta[name="twitter:description"]', 'content', md);
+    }
+    setMeta('meta[property="og:title"]', 'content', t('docTitle').split('|')[0].replace(/&amp;/g, '&').trim());
+    setMeta('meta[property="og:locale"]', 'content', loc4());
+    Array.prototype.forEach.call(document.querySelectorAll('[data-i18n]'), function (n) {
+      var v = t(n.getAttribute('data-i18n'));
+      if (v) n.innerHTML = v;
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-html]'), function (n) {
+      var v = t(n.getAttribute('data-i18n-html'));
+      if (v) n.innerHTML = v;
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-aria]'), function (n) {
+      var v = t(n.getAttribute('data-i18n-aria'));
+      if (v) n.setAttribute('aria-label', v);
+    });
+    syncLangUI();
+    try { localStorage.setItem(LANG_KEY, state.lang); localStorage.setItem(SHARED_KEY, state.lang); } catch (e) { /* blocked */ }
+  }
+  $('langToggle').addEventListener('click', function (ev) {
+    var b = ev.target.closest('[data-lang]');
+    if (b) applyLang(b.getAttribute('data-lang'));
+  });
+
+  /* ───────────── boot ───────────── */
+  $('netCount').textContent = '0';
+  afterChange();
+  updateStats();
+  applyLang(initialLang());
+  switchTab('wm');
+
+  var resizeTimer = 0;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(renderPreview, 120);
+  });
+
+  /* test hook */
+  window.WaterMark = {
+    version: '1.0',
+    state: state,
+    addSamples: function () { return sampleBlobs().then(function (i) { return addBlobs(i); }).then(function () { return state.files.length; }); },
+    set: function (o) {
+      Object.keys(o || {}).forEach(function (k) {
+        if (k === 'text') { state.text = o.text; $('wmText').value = o.text; }
+        else if (k === 'size') { state.size = o.size; $('sizeRange').value = o.size; $('sizeOut').textContent = o.size + '%'; }
+        else if (k === 'opacity') { state.opacity = o.opacity; $('opacityRange').value = o.opacity; $('opacityOut').textContent = o.opacity + '%'; }
+        else if (k === 'angle') { state.angle = o.angle; $('angleRange').value = o.angle; $('angleOut').textContent = o.angle + '°'; }
+        else if (k === 'margin') { state.margin = o.margin; $('marginRange').value = o.margin; $('marginOut').textContent = o.margin + '%'; }
+        else if (k === 'gap') { state.gap = o.gap; $('gapRange').value = o.gap; $('gapOut').textContent = o.gap + '%'; }
+        else state[k] = o[k];
+      });
+      if (o && o.mode) Array.prototype.forEach.call(document.querySelectorAll('#modeSeg button'), function (b) {
+        b.setAttribute('aria-pressed', b.getAttribute('data-mode') === state.mode ? 'true' : 'false');
+      });
+      if (o && o.layout) Array.prototype.forEach.call(document.querySelectorAll('#layoutSeg button'), function (b) {
+        b.setAttribute('aria-pressed', b.getAttribute('data-layout') === state.layout ? 'true' : 'false');
+      });
+      if (o && o.pos) Array.prototype.forEach.call(document.querySelectorAll('#pos9 button'), function (b) {
+        b.setAttribute('aria-pressed', b.getAttribute('data-pos') === state.pos ? 'true' : 'false');
+      });
+      afterChange();
+    },
+    renderFull: function (i) {
+      var f = state.files[i || 0];
+      if (!f) return null;
+      var cv = renderFull(f);
+      return { w: cv.width, h: cv.height, dataUrl: cv.toDataURL('image/png') };
+    },
+    zipSize: function () {
+      var entries = state.files.map(function (f, i) {
+        var cv = renderFull(f);
+        var data = cv.toDataURL('image/png');
+        return { name: 'x' + i + '.png', bytes: new Uint8Array(4) };
+      });
+      return buildZip(entries).length;
+    },
+    crc32: function (str) { return crc32(new TextEncoder().encode(str)); },
+    lang: function () { return state.lang; },
+    count: function () { return state.files.length; }
+  };
+})();
+</script>
+</body>
+</html>
