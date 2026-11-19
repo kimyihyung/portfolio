@@ -353,7 +353,7 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
 .foot .net b { color: var(--ok); }
 
 @media (max-width: 640px) {
-  .wrap { padding: 0 14px 36px; }
+  .wrap { padding: 0 16px 36px; }
   .topbar { padding: 14px 0 8px; }
   .brand-txt { font-size: 12px; letter-spacing: .1em; }
   .hero { padding: 14px 0 10px; }
@@ -385,6 +385,22 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
   #zipWrap td.name { max-width: none; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* ═══ 4-language switch: KO | EN | JA | 繁中 ═══ */
+.lang-toggle { padding: 0 3px; gap: 0; cursor: default; }
+.lang-toggle .lt {
+  appearance: none; -webkit-appearance: none; border: 0; background: transparent; color: var(--muted2);
+  height: 100%; padding: 0 6px; margin: 0; font-family: inherit; font-size: 11px; font-weight: 700;
+  letter-spacing: .02em; line-height: 1; cursor: pointer; border-radius: 8px;
+  transition: color .15s, background .15s;
+}
+.lang-toggle .lt:hover { color: var(--ink); }
+.lang-toggle .lt.on { color: var(--accent); }
+@media (max-width: 430px) {
+  .lang-toggle { height: 30px; }
+  .lang-toggle .lt { padding: 0 4px; font-size: 10px; }
+}
+:lang(ja) body, :lang(zh-Hant) body { word-break: normal; overflow-wrap: break-word; line-break: strict; }
 </style>
 </head>
 <body>
@@ -396,11 +412,15 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       <span class="brand-txt">Kim Yihyung</span>
     </a>
     <div class="top-actions">
-      <button class="lang-toggle" id="langToggle" type="button" title="한국어로 보기" aria-label="한국어로 보기">
-        <span class="lt on" data-lt="en">EN</span>
+      <div class="lang-toggle" id="langToggle" role="group" aria-label="Language · 언어 · 言語 · 語言">
+        <button class="lt" type="button" data-lang="ko" aria-pressed="false">KO</button>
         <span class="lsep" aria-hidden="true">|</span>
-        <span class="lt" data-lt="ko">KO</span>
-      </button>
+        <button class="lt on" type="button" data-lang="en" aria-pressed="true">EN</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lang="ja" aria-pressed="false">JA</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lang="zh-Hant" aria-pressed="false">繁中</button>
+      </div>
       <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← All tools</a>
     </div>
   </header>
@@ -689,6 +709,8 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
   var I18N = {
     en: {
       docTitle: 'ZipForge — Free No-Upload Browser ZIP & GZIP Archiver | Kim Yihyung',
+      metaTitle: "ZipForge — Free No-Upload Browser ZIP & GZIP Archiver",
+      metaDesc: "Build a real .zip from local files with a CRC32 and Deflate writer of its own, open an archive back up to read its central directory, preview images and text and extract single entries, and gzip or unwrap one file — zero uploads.",
       brandAria: 'Kim Yihyung — portfolio',
       back: '← All tools',
       eyebrow: 'ZipForge · ZIP · GZIP · 0 uploads',
@@ -853,6 +875,8 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
     },
     ko: {
       docTitle: 'ZipForge — 브라우저에서 만드는 ZIP·GZIP, 업로드 없음 | Kim Yihyung',
+      metaTitle: "ZipForge — 브라우저에서 만드는 ZIP·GZIP, 업로드 없음",
+      metaDesc: "파일을 골라 진짜 .zip을 만듭니다. CRC32도 Deflate 스트림도 이 페이지가 직접 쓰고, 만든 .zip을 다시 넣으면 내부 구조와 항목별 원본·압축 크기, 이미지·텍스트 미리보기를 보여 주며 하나만 꺼낼 수도 있습니다. GZIP은 별도 탭. 어디로도 보내지 않습니다.",
       brandAria: 'Kim Yihyung — 포트폴리오',
       back: '← 도구 전체',
       eyebrow: 'ZipForge · ZIP · GZIP · 업로드 0',
@@ -1013,7 +1037,321 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       sample1: 'notes.txt',
       sample2: 'quarterly-sales.csv',
       sample3: 'settings.json'
-    }
+    },
+      ja: {
+        docTitle: "ZipForge — ブラウザで作るZIP・GZIP、アップロードなし | Kim Yihyung",
+        metaTitle: "ZipForge — ブラウザで作るZIP・GZIP、アップロードなし",
+        metaDesc: "ファイルを選んで本物の.zipを作ります。CRC32もDeflateストリームもこのページが直接書きます。作った.zipを戻せば中身のツリーを読み、元サイズと圧縮サイズ、画像・テキストのプレビューを表示し、1つだけ取り出すこともできます。GZIPは別タブ。どこにも送信しません。",
+        brandAria: "Kim Yihyung — ポートフォリオ",
+        back: "← ツール一覧",
+        eyebrow: "ZipForge · ZIP · GZIP · アップロード0",
+        h1: "ファイルを入れて、<br><span class=\"soft\">圧縮はここで。</span><br><span class=\"gold\">送るものはありません。</span>",
+        lede: "ファイルをいくつか選んで<strong>本物の.zip</strong>を作ります。CRC32もDeflateストリームもこのページが直接書きます。作った.zipを戻せば内側のツリーを読み、ファイルごとの元サイズ・圧縮サイズと画像・テキストのプレビューを表示し、1つだけ取り出すこともできます。<strong>GZIP</strong>は専用タブです。どこにも送らないのでリクエストカウンタは0のままです。",
+        pillFmt: "ZIP · GZIP",
+        pillDate: "確認日 2026-11-19",
+        pillUp: "アップロード0バイト",
+        pillNet: "外部リクエスト0件",
+        pillStruct: "ローカルヘッダー · 中央ディレクトリ · EOCD",
+        workAria: "ZIP・GZIPツール",
+        tabAria: "モード",
+        tab1: "ZIPを作る",
+        tab2: "ZIPを開く",
+        tab3: "GZIP .gz",
+        bTitle: "ファイルを入れると圧縮ファイル1つ",
+        bNote: "端末の中だけで読みます",
+        dropMain: "ここにファイルをドラッグしてください",
+        dropSub: "またはクリックして選択 · 形式は問いません · 複数まとめて",
+        pickAria: "圧縮するファイルを選択",
+        loadSamples: "サンプルファイル3種を読み込む",
+        clearFiles: "一覧を空にする",
+        thName: "ファイル",
+        thSize: "サイズ",
+        thState: "圧縮に含める",
+        thAct: "—",
+        zipNameLbl: "圧縮ファイル名",
+        zipNameHint: ".zipは自動で付きます",
+        zipNameAria: "圧縮ファイル名",
+        buildBtn: ".zipを作る",
+        bBigCap: ".zip — すぐダウンロードできます",
+        stFiles: "ファイル",
+        stFilesSub: "記録した項目",
+        stOrig: "元サイズ",
+        stOrigSub: "圧縮前のサイズ",
+        stSaved: "減った量",
+        stSavedSub: "元サイズ比",
+        stMethod: "方式",
+        dlZip: ".zipをダウンロード",
+        openBuilt: "今作った.zipを開いてみる",
+        rTitle: ".zipを送らずに開く",
+        rNote: "中央ディレクトリをタブ内で読みます",
+        openMain: ".zipファイルをドラッグしてください",
+        openSub: "またはクリックして選択 · 圧縮ファイル1つ",
+        openPickAria: "開く.zipを選択",
+        stEntries: "項目",
+        stUnpacked: "展開後のサイズ",
+        stUnpackedSub: "取り出すとこれだけ",
+        stPacked: "ファイルサイズ",
+        stPackedSub: "受け取ったファイルそのまま",
+        stRatio: "圧縮率",
+        stRatioSub: "展開後のサイズ比",
+        thPath: "項目",
+        thOrig: "元サイズ",
+        thComp: "圧縮",
+        thMeth: "方式",
+        thAct2: "—",
+        zipRowsNote: "サイズはローカルヘッダーではなく中央ディレクトリから読みます。データディスクリプタで記録された項目も正確に出ます。",
+        gTitle: "ファイル1つ、.gz",
+        gNote: "CompressionStream gzip",
+        gzMain: "ファイルを1つドラッグしてください — 元ファイルまたは.gz",
+        gzSub: "またはクリックして選択 · 圧縮するか展開するか",
+        gzPickAria: "gzipに使うファイルを1つ選択",
+        gzCompress: ".gzに圧縮",
+        gzDecompress: ".gzを展開",
+        stIn: "入った量",
+        stOut: "出た量",
+        stGzRatio: "比率",
+        stGzRatioSub: "出た量 / 入った量",
+        gzDl: "結果をダウンロード",
+        sideTitle: "何を書いているか",
+        sideS1k: "ZIPの構造",
+        sideS1: "ローカルヘッダー <code>0x04034b50</code> · データ · 中央ディレクトリ <code>0x02014b50</code> · EOCD <code>0x06054b50</code>。フラグ11ビット目を立てて名前をすべてUTF-8で読ませます。",
+        sideS2k: "チェックサム",
+        sideS2: "反射多項式 <code>0xEDB88320</code> のCRC32をタブの中でバイト単位で計算します。展開ツールが項目を信じる前に検証する値です。",
+        sideS3k: "圧縮",
+        sideS3: "<code>CompressionStream('deflate-raw')</code> でDeflateします。そのストリームがないブラウザでは無圧縮（方式0）で記録し、.zipはどこでも開けます。どちらを使ったかは結果に表示します。",
+        sideS4k: "端末に残るもの",
+        sideS4: "圧縮ファイルは保存するまでメモリ内のblobです。クッキーも、保存キーも、アップロードも、ログもありません。タブを閉じれば何も残りません。",
+        sideLimits: "正直な限界",
+        limitsBody: "4GB超・Zip64・分割圧縮・暗号化された項目は<b>開かずに知らせるだけ</b>です。写真の束はほとんど縮みません。JPEGとMP4はすでに圧縮されているからです。ブラウザ既定レベルのDeflateは普通のZIPで、7-ZipのLZMAとは違います。",
+        howTitle: "実際に起きること",
+        howNote: "サーバーは関与しません",
+        n1t: "読むだけ、送らない",
+        n1b: "ファイルを選ぶとページが受け取るのはアップロードではなくFileオブジェクトです。File APIでArrayBufferに読み込み、ページが扱うのはそのバッファだけです。",
+        n2t: "まとめる",
+        n2b: "項目ごとにCRC32を計算しDeflateを試して小さい方を採ります。ローカルヘッダー・中央ディレクトリ・EOCDを1つのblobに組み立ててダウンロードさせます。",
+        n3t: "展開する",
+        n3b: "圧縮ファイルを開くときはファイル末尾からEOCDを探し、中央ディレクトリをたどり、項目ごとにオフセットでデータを切り出します。Deflate項目はDecompressionStreamで戻します。",
+        n4t: "取り出さずにプレビュー",
+        n4b: "画像はblob URLで描いて見せ、テキストはUTF-8でデコードしてpreブロックに入れます。ダウンロードを押すまでディスクには何も書きません。",
+        faqTitle: "実際によくある質問",
+        faqNote: "5つ",
+        q1: "このページでしか開けない偽の.zipではありませんか？",
+        a1: "本物です。ローカルファイルヘッダー、圧縮されたバイト、中央ディレクトリ、EOCD — すべての圧縮ツールが使う4つの部分そのままです。Windowsエクスプローラー、macOSのアーカイブユーティリティ、7-Zip、<code>unzip</code>が警告なしで開きます。",
+        q2: "deflate-rawがないブラウザでは？",
+        a2: "圧縮ファイルは正常なままでサイズだけ大きくなります。項目を無圧縮で保存し、方式バイトが <code>8</code> ではなく <code>0</code> になります。結果パネルにどちらの方式を使ったか書かれるので、見える数字が実際の値です。",
+        q3: "韓国語のファイル名が入った.zipも開けますか？",
+        a3: "開けます。UTF-8フラグが立っていればUTF-8で、なければUTF-8を先に試して<b>EUC-KR</b>に戻します。韓国のWindows用圧縮ツールが長く使ってきた方式です。どちらでもない場合は黙って壊さずバイトで見せます。",
+        q4: "アップロードや保存・記録されるものはありますか？",
+        a4: "ありません。HTMLファイル1つで、fetchもXHRもWebSocketも分析スクリプトも、外部フォント・スタイルシートもありません。フッターの外部リクエストカウンタが実際に見た値そのものを示し、その値は<b>0</b>です。",
+        q5: "写真も小さくなりますか？",
+        a5: "ほとんど変わりません。JPEG・MP4・PNG・PDFはすでに重複が除かれた形式なので、Deflateを掛けると数%大きくなり、その場合はページが元のまま保存します。.zipが価値を持つのはテキスト・JSON・CSV・SVG・ログ・ソースコードです。",
+        footCopy: "© 2026 Kim Yihyung · ブラウザで、ブラウザのために。",
+        footNet: "外部リクエスト",
+        footP1: "ポートフォリオ",
+        footP2: "ツール一覧",
+        footP3: "ソース",
+        mono: "アップロードなし · 追跡なし",
+        filesOne: "{n}個のファイル",
+        filesMany: "{n}個のファイル",
+        include: "含める",
+        exclude: "除く",
+        remove: "削除",
+        dropAdded: "{n}個のファイルを追加しました — 合計 {size}。",
+        pickEmpty: "まだファイルがありません。上にドラッグするかサンプルを読み込んでください。",
+        building: "{n}個のファイルを圧縮中…",
+        built: "完了: {n}個の項目、{size}。",
+        buildFail: "圧縮ファイルを作れませんでした。",
+        nothingIncluded: "すべてのファイルが除外されています。1つ以上含めてください。",
+        nameDup: "同じ名前のファイルがすでにあったため名前を変えました。",
+        dl: "ダウンロード",
+        preview: "プレビュー",
+        packed: "圧縮",
+        stored: "無圧縮",
+        dir: "フォルダ",
+        readErr: "このファイルは.zipとして読めません。RARや7z、拡張子だけ変えた画像かもしれません。",
+        readZip64: "Zip64の圧縮ファイルです（4GB超または65,535項目超）。半分だけ読むのではなく、そのままお知らせします。",
+        readMulti: "複数ディスク・分割圧縮のファイルです。単一ファイルの圧縮のみ開きます。",
+        readEnc: "暗号化された項目があります。このページはパスワードを推測しません。",
+        openReading: "{name} を読み込み中…",
+        openDone: "{n}個の項目 · 展開すると {size}。",
+        noPreview: "この形式はプレビューがありません。ダウンロードして開いてください。",
+        noPreviewBig: "ここでのプレビューには大きすぎます — {size}。ダウンロードしてください。",
+        extracting: "{name} を展開中…",
+        extractFail: "この項目を展開できませんでした。",
+        noInflate: "このブラウザにはdeflate-rawの解凍がないため、圧縮された項目を開けません。",
+        encryptedEntry: "この項目は暗号化されています。",
+        unknownMethod: "圧縮方式 {m} には対応していません（無圧縮とDeflateのみ）。",
+        zip64Entry: "項目が大きすぎてここでは読めません。",
+        gzPicked: "{name} · {size}",
+        gzWorking: "{name} を処理中…",
+        gzDone: "{in} → {out}。",
+        gzFail: "このファイルは正しいgzipストリームではありません。",
+        gzOutCap: ".gz — すぐダウンロードできます",
+        gzInCap: "展開したファイル — すぐダウンロードできます",
+        gzNameOut: "{name} として保存されます",
+        bytes: "B",
+        toggleTo: "言語を切り替え",
+        sample1: "notes.txt",
+        sample2: "quarterly-sales.csv",
+        sample3: "settings.json",
+      },
+      "zh-Hant": {
+        docTitle: "ZipForge — 在瀏覽器裡製作 ZIP・GZIP，不上傳 | Kim Yihyung",
+        metaTitle: "ZipForge — 在瀏覽器裡製作 ZIP・GZIP，不上傳",
+        metaDesc: "選幾個檔案就做出真正的 .zip，CRC32 與 Deflate 串流都由這個頁面自己寫。把做好的 .zip 放回來就能讀出內部結構、每個檔案的原始與壓縮大小、圖片與文字預覽，也可以只取出一個檔案。GZIP 另有分頁，任何東西都不會送出。",
+        brandAria: "Kim Yihyung — 作品集",
+        back: "← 所有工具",
+        eyebrow: "ZipForge · ZIP · GZIP · 零上傳",
+        h1: "檔案放進來，<br><span class=\"soft\">壓縮在這裡完成。</span><br><span class=\"gold\">沒有東西被送出。</span>",
+        lede: "選幾個檔案就做出<strong>真正的 .zip</strong>，CRC32 與 Deflate 串流都由這個頁面自己寫。把做好的 .zip 放回來，就能讀出內部結構、每個檔案的原始與壓縮大小、圖片與文字預覽，也可以只取出一個檔案。<strong>GZIP</strong> 有獨立分頁。什麼都不送出，所以請求計數一直停在 0。",
+        pillFmt: "ZIP · GZIP",
+        pillDate: "確認日 2026-11-19",
+        pillUp: "零位元組上傳",
+        pillNet: "零次外部請求",
+        pillStruct: "本機標頭 · 中央目錄 · EOCD",
+        workAria: "ZIP・GZIP 工具",
+        tabAria: "模式",
+        tab1: "製作 ZIP",
+        tab2: "開啟 ZIP",
+        tab3: "GZIP .gz",
+        bTitle: "檔案放進來，輸出一個壓縮檔",
+        bNote: "只在裝置內讀取",
+        dropMain: "把檔案拖到這裡",
+        dropSub: "或點一下選擇 · 格式不拘 · 可一次多個",
+        pickAria: "選擇要壓縮的檔案",
+        loadSamples: "載入 3 個範例檔案",
+        clearFiles: "清空清單",
+        thName: "檔案",
+        thSize: "大小",
+        thState: "納入壓縮",
+        thAct: "—",
+        zipNameLbl: "壓縮檔名",
+        zipNameHint: ".zip 會自動加上",
+        zipNameAria: "壓縮檔名",
+        buildBtn: "製作 .zip",
+        bBigCap: ".zip — 可以直接下載",
+        stFiles: "檔案",
+        stFilesSub: "寫入的項目",
+        stOrig: "原始",
+        stOrigSub: "壓縮前大小",
+        stSaved: "減少的量",
+        stSavedSub: "相對原始大小",
+        stMethod: "方式",
+        dlZip: "下載 .zip",
+        openBuilt: "開啟剛做好的 .zip",
+        rTitle: "不送出也能開啟 .zip",
+        rNote: "中央目錄在這個分頁裡讀取",
+        openMain: "把 .zip 檔案拖進來",
+        openSub: "或點一下選擇 · 一個壓縮檔",
+        openPickAria: "選擇要開啟的 .zip",
+        stEntries: "項目",
+        stUnpacked: "解開後大小",
+        stUnpackedSub: "取出來會有這麼多",
+        stPacked: "檔案大小",
+        stPackedSub: "收到的檔案原樣",
+        stRatio: "壓縮率",
+        stRatioSub: "相對解開後大小",
+        thPath: "項目",
+        thOrig: "原始",
+        thComp: "壓縮",
+        thMeth: "方式",
+        thAct2: "—",
+        zipRowsNote: "大小取自中央目錄而不是本機標頭，所以用資料描述器寫入的項目也能正確顯示。",
+        gTitle: "一個檔案，.gz",
+        gNote: "CompressionStream gzip",
+        gzMain: "拖進一個檔案 — 原檔或 .gz",
+        gzSub: "或點一下選擇 · 壓縮或解開",
+        gzPickAria: "選擇一個要做 gzip 的檔案",
+        gzCompress: "壓縮成 .gz",
+        gzDecompress: "解開 .gz",
+        stIn: "進來的大小",
+        stOut: "出去的大小",
+        stGzRatio: "比例",
+        stGzRatioSub: "出去 / 進來",
+        gzDl: "下載結果",
+        sideTitle: "寫了什麼",
+        sideS1k: "ZIP 結構",
+        sideS1: "本機標頭 <code>0x04034b50</code> · 資料 · 中央目錄 <code>0x02014b50</code> · EOCD <code>0x06054b50</code>。設定旗標第 11 位元，讓所有檔名以 UTF-8 讀取。",
+        sideS2k: "檢查碼",
+        sideS2: "以反射多項式 <code>0xEDB88320</code> 在分頁裡逐位元組計算 CRC32。這是解壓工具在信任項目之前驗證的值。",
+        sideS3k: "壓縮",
+        sideS3: "用 <code>CompressionStream('deflate-raw')</code> 做 Deflate。沒有這個串流的瀏覽器則以不壓縮（方式 0）寫入，.zip 在任何地方都能開啟。用了哪一種會顯示在結果裡。",
+        sideS4k: "留在裝置上的東西",
+        sideS4: "壓縮檔在你儲存之前只是記憶體裡的 blob。沒有 cookie、沒有儲存鍵、沒有上傳、沒有記錄。關掉分頁就什麼都不留。",
+        sideLimits: "誠實的界限",
+        limitsBody: "超過 4GB、Zip64、分割壓縮、加密的項目<b>只會告知，不會開啟</b>。照片打包幾乎不會變小，因為 JPEG 與 MP4 早已壓縮過。瀏覽器預設等級的 Deflate 是普通的 ZIP，和 7-Zip 的 LZMA 不同。",
+        howTitle: "實際發生的事",
+        howNote: "沒有伺服器介入",
+        n1t: "只讀取，不送出",
+        n1b: "選檔案時，頁面拿到的是 File 物件而不是上傳。用 File API 讀進 ArrayBuffer，頁面處理的只有那個緩衝區。",
+        n2t: "打包",
+        n2b: "每個項目計算 CRC32 並嘗試 Deflate，取較小的一邊。本機標頭、中央目錄與 EOCD 組成一個 blob 供下載。",
+        n3t: "解開",
+        n3b: "開啟壓縮檔時從檔尾尋找 EOCD，沿著中央目錄走，依位移切出每個項目的資料。Deflate 項目以 DecompressionStream 還原。",
+        n4t: "不取出也能預覽",
+        n4b: "圖片以 blob URL 畫出來，文字以 UTF-8 解碼放進 pre 區塊。按下下載之前，磁碟上不會寫入任何東西。",
+        faqTitle: "真的常被問的問題",
+        faqNote: "五個回答",
+        q1: "這不是只有這個頁面能開的假 .zip 嗎？",
+        a1: "是真的。本機檔案標頭、壓縮後的位元組、中央目錄、EOCD — 和所有壓縮工具寫的四個部分完全相同。Windows 檔案總管、macOS 壓縮工具、7-Zip、<code>unzip</code> 都能無警告開啟。",
+        q2: "瀏覽器沒有 deflate-raw 怎麼辦？",
+        a2: "壓縮檔仍然正常，只是變大：項目以不壓縮儲存，方式位元組由 <code>8</code> 變成 <code>0</code>。結果面板會寫出用了哪一種，看到的數字就是實際值。",
+        q3: "含韓文檔名的 .zip 也能開嗎？",
+        a3: "可以。有 UTF-8 旗標就以 UTF-8 解碼，沒有時先試 UTF-8 再退回 <b>EUC-KR</b>，那是韓國 Windows 壓縮工具長年使用的方式。兩者都不成立時不會默默弄壞，而是以位元組顯示。",
+        q4: "有任何上傳、快取或記錄嗎？",
+        a4: "沒有。只有一個 HTML 檔，沒有 fetch、沒有 XHR、沒有 WebSocket、沒有分析腳本，也沒有外部字型或樣式表。頁尾的外部請求計數忠實顯示它看到的數值，就是 <b>0</b>。",
+        q5: "照片也會變小嗎？",
+        a5: "幾乎不變。JPEG、MP4、PNG、PDF 已經是去掉重複的格式，套上 Deflate 通常會大幾個百分比，這時頁面就原樣儲存。.zip 真正有價值的是文字、JSON、CSV、SVG、記錄檔與原始碼。",
+        footCopy: "© 2026 Kim Yihyung · 在瀏覽器裡，為瀏覽器而做。",
+        footNet: "外部請求",
+        footP1: "作品集",
+        footP2: "所有工具",
+        footP3: "原始碼",
+        mono: "不上傳 · 不追蹤",
+        filesOne: "{n} 個檔案",
+        filesMany: "{n} 個檔案",
+        include: "納入",
+        exclude: "排除",
+        remove: "刪除",
+        dropAdded: "已加入 {n} 個檔案 — 合計 {size}。",
+        pickEmpty: "還沒有檔案。把檔案拖到上方或載入範例。",
+        building: "正在壓縮 {n} 個檔案…",
+        built: "完成：{n} 個項目，{size}。",
+        buildFail: "無法製作壓縮檔。",
+        nothingIncluded: "所有檔案都被排除，請至少納入一個。",
+        nameDup: "已有同名檔案，已自動改名。",
+        dl: "下載",
+        preview: "預覽",
+        packed: "壓縮",
+        stored: "不壓縮",
+        dir: "資料夾",
+        readErr: "這個檔案無法當成 .zip 讀取，可能是 RAR、7z 或只是改了副檔名的圖片。",
+        readZip64: "這是 Zip64 壓縮檔（超過 4GB 或 65,535 個項目）。不會只讀一半，而是直接告知。",
+        readMulti: "這是多磁碟・分割壓縮檔，只開啟單一檔案壓縮。",
+        readEnc: "有加密的項目。這個頁面不猜密碼。",
+        openReading: "正在讀取 {name}…",
+        openDone: "{n} 個項目 · 解開後 {size}。",
+        noPreview: "這個格式沒有預覽，請下載後開啟。",
+        noPreviewBig: "太大，無法在這裡預覽 — {size}。請下載。",
+        extracting: "正在解開 {name}…",
+        extractFail: "無法解開這個項目。",
+        noInflate: "這個瀏覽器沒有 deflate-raw 解壓器，無法開啟壓縮的項目。",
+        encryptedEntry: "這個項目已加密。",
+        unknownMethod: "不支援壓縮方式 {m}（僅支援不壓縮與 Deflate）。",
+        zip64Entry: "項目太大，無法在這裡讀取。",
+        gzPicked: "{name} · {size}",
+        gzWorking: "正在處理 {name}…",
+        gzDone: "{in} → {out}。",
+        gzFail: "這個檔案不是有效的 gzip 串流。",
+        gzOutCap: ".gz — 可以直接下載",
+        gzInCap: "解開的檔案 — 可以直接下載",
+        gzNameOut: "會存成 {name}",
+        bytes: "B",
+        toggleTo: "切換語言",
+        sample1: "notes.txt",
+        sample2: "quarterly-sales.csv",
+        sample3: "settings.json",
+      }
   };
 
   var LANG_KEY = 'zipforge.lang';
@@ -1034,13 +1372,6 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
     return String(s).replace(/\{(\w+)\}/g, function (m, k) { return (o && o[k] != null) ? o[k] : m; });
   }
   function readLang(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
-  function initialLang() {
-    var q = '';
-    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
-    if (q === 'ko' || q === 'en') return q;
-    var stored = readLang(SHARED_KEY) || readLang(LANG_KEY);
-    return (stored === 'ko' || stored === 'en') ? stored : 'en';
-  }
   function setMeta(sel, attr, val) { var el = document.querySelector(sel); if (el) el.setAttribute(attr, val); }
 
   /* ═════════════════════ helpers ═════════════════════ */
@@ -1061,7 +1392,7 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
     return (v > 0 ? v.toFixed(1) : '0.0') + '%';
   }
   function grouped(n) {
-    try { return Number(n).toLocaleString(state.lang === 'ko' ? 'ko-KR' : 'en-US'); }
+    try { return Number(n).toLocaleString(loc4()); }
     catch (e) { return String(n); }
   }
   function baseName(p) { var s = String(p).replace(/\\/g, '/'); var i = s.lastIndexOf('/'); return i < 0 ? s : s.slice(i + 1); }
@@ -1841,10 +2172,61 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
   });
 
   /* ═════════════════════ language ═════════════════════ */
+  var DEFAULT_LANG = 'en';
+  /* ═══ 4-language switch (ko · en · ja · zh-Hant) ═══ */
+  var LANGS4 = ['ko', 'en', 'ja', 'zh-Hant'];
+  function normLang(v) {
+    v = String(v == null ? '' : v).toLowerCase().replace(/_/g, '-');
+    if (v === 'ko' || v === 'ko-kr' || v === 'kr') return 'ko';
+    if (v === 'ja' || v === 'ja-jp' || v === 'jp') return 'ja';
+    if (v === 'zh-hant' || v === 'zh-tw' || v === 'zh' || v === 'tw' || v === 'zh-hk') return 'zh-Hant';
+    if (v === 'en' || v === 'en-us' || v === 'en-gb') return 'en';
+    return '';
+  }
+  function loc4() { return state.lang === 'ko' ? 'ko-KR' : state.lang === 'ja' ? 'ja-JP' : state.lang === 'zh-Hant' ? 'zh-TW' : 'en-US'; }
+  function lsGet4(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function initialLang() {
+    var f = (typeof window.__FORCED_LANG__ !== 'undefined' && window.__FORCED_LANG__) ? window.__FORCED_LANG__ : '';
+    if (f && normLang(f)) return normLang(f);
+    var q = '';
+    try { q = new URLSearchParams(location.search).get('lang') || ''; } catch (e) { q = ''; }
+    if (q && normLang(q)) return normLang(q);
+    var stored = lsGet4(typeof SHARED_KEY !== 'undefined' ? SHARED_KEY : 'kyh.lang') || lsGet4(typeof LANG_KEY !== 'undefined' ? LANG_KEY : '');
+    if (stored && normLang(stored)) return normLang(stored);
+    var h = normLang(document.documentElement.getAttribute('lang'));
+    if (h) return h;
+    return typeof DEFAULT_LANG !== 'undefined' ? DEFAULT_LANG : 'ko';
+  }
+  function syncLangUI() {
+    var lt = document.getElementById('langToggle');
+    if (!lt) return;
+    var btns = lt.querySelectorAll('[data-lang]');
+    for (var i = 0; i < btns.length; i++) {
+      var on = btns[i].getAttribute('data-lang') === state.lang;
+      btns[i].classList.toggle('on', on);
+      btns[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+  }
+  function bindLangToggle() {
+    var lt = document.getElementById('langToggle');
+    if (!lt) return;
+    lt.addEventListener('click', function (ev) {
+      var t4 = ev.target.closest('[data-lang]');
+      if (!t4) return;
+      applyLang(t4.getAttribute('data-lang'));
+    });
+  }
+
   function applyLang(lang) {
-    state.lang = lang === 'ko' ? 'ko' : 'en';
+    state.lang = normLang(lang) || 'en';
     document.documentElement.setAttribute('lang', state.lang);
     document.title = t('docTitle');
+    var _md4 = t('metaDesc');
+    if (_md4 && _md4 !== 'metaDesc') {
+      var _mde = document.querySelector('meta[name="description"]'); if (_mde) _mde.setAttribute('content', _md4);
+      var _ode = document.querySelector('meta[property="og:description"]'); if (_ode) _ode.setAttribute('content', _md4);
+      var _tde = document.querySelector('meta[name="twitter:description"]'); if (_tde) _tde.setAttribute('content', _md4);
+    }
     setMeta('meta[property="og:title"]', 'content', t('docTitle').split('|')[0].trim());
     var nodes = document.querySelectorAll('[data-i18n]');
     for (var i = 0; i < nodes.length; i++) {
@@ -1863,17 +2245,15 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
     }
     var lt = $('langToggle');
     if (lt) {
-      var spans = lt.querySelectorAll('[data-lt]');
-      for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
-      lt.setAttribute('aria-label', t('toggleTo'));
-      lt.setAttribute('title', t('toggleTo'));
+      syncLangUI();
     }
     renderFiles();
     if (state.entries.length) renderEntries();
     try { localStorage.setItem(LANG_KEY, state.lang); localStorage.setItem(SHARED_KEY, state.lang); } catch (e) { /* blocked */ }
   }
-  $('langToggle').addEventListener('click', function () {
-    applyLang(state.lang === 'ko' ? 'en' : 'ko');
+  $('langToggle').addEventListener('click', function (ev) {
+    var _t4 = ev.target.closest('[data-lang]');
+    if (_t4) applyLang(_t4.getAttribute('data-lang'));
   });
 
   /* ═════════════════════ boot ═════════════════════ */

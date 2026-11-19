@@ -489,6 +489,22 @@ button, input, select, textarea { font-family: inherit; color: inherit; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
 }
+
+/* ═══ 4-language switch: KO | EN | JA | 繁中 ═══ */
+.lang-toggle { padding: 0 3px; gap: 0; cursor: default; }
+.lang-toggle .lt {
+  appearance: none; -webkit-appearance: none; border: 0; background: transparent; color: var(--muted2);
+  height: 100%; padding: 0 6px; margin: 0; font-family: inherit; font-size: 11px; font-weight: 700;
+  letter-spacing: .02em; line-height: 1; cursor: pointer; border-radius: 8px;
+  transition: color .15s, background .15s;
+}
+.lang-toggle .lt:hover { color: var(--ink); }
+.lang-toggle .lt.on { color: var(--accent); }
+@media (max-width: 430px) {
+  .lang-toggle { height: 30px; }
+  .lang-toggle .lt { padding: 0 4px; font-size: 10px; }
+}
+:lang(ja) body, :lang(zh-Hant) body { word-break: normal; overflow-wrap: break-word; line-break: strict; }
 </style>
 </head>
 <body>
@@ -500,11 +516,15 @@ button, input, select, textarea { font-family: inherit; color: inherit; }
       <span class="brand-txt">Kim Yihyung</span>
     </a>
     <div class="top-actions">
-      <button class="lang-toggle" id="langToggle" type="button" title="View in Korean" aria-label="View in Korean">
-        <span class="lt on" data-lt="en">EN</span>
+      <div class="lang-toggle" id="langToggle" role="group" aria-label="Language · 언어 · 言語 · 語言">
+        <button class="lt" type="button" data-lang="ko" aria-pressed="false">KO</button>
         <span class="lsep" aria-hidden="true">|</span>
-        <span class="lt" data-lt="ko">KO</span>
-      </button>
+        <button class="lt on" type="button" data-lang="en" aria-pressed="true">EN</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lang="ja" aria-pressed="false">JA</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lang="zh-Hant" aria-pressed="false">繁中</button>
+      </div>
       <a class="back" href="../" data-i18n="backTools">← Tools</a>
     </div>
   </header>
@@ -695,6 +715,9 @@ window.addEventListener('unhandledrejection', function (e) {
   var I18N = {
     en: {
       docTitle: 'DiffForge — Zero-Upload JSON & Text Diff, JSON ↔ CSV Converter | Kim Yihyung',
+      metaTitle: "DiffForge — Zero-Upload JSON & Text Diff, JSON ↔ CSV Converter",
+      phFirst: "Paste the first version here…",
+      phSecond: "Paste the second version here…",
       metaDesc: 'Compare two texts, JSON documents or CSV files side by side and see added, removed and changed lines or keys; format, minify, sort keys and convert JSON ↔ CSV — all in your browser with zero uploads and zero external requests.',
       ogTitle: 'DiffForge — Zero-Upload JSON & Text Diff, JSON ↔ CSV Converter',
       ogDesc: 'Paste two versions and see every added, removed and changed line or key. Format, minify, sort keys, convert JSON ↔ CSV — nothing leaves the tab.',
@@ -823,6 +846,9 @@ window.addEventListener('unhandledrejection', function (e) {
     },
     ko: {
       docTitle: 'DiffForge — 업로드 없는 JSON·텍스트 비교, JSON ↔ CSV 변환 | 김이형',
+      metaTitle: "DiffForge — 업로드 없는 JSON·텍스트 비교, JSON ↔ CSV 변환",
+      phFirst: "첫 번째 판을 붙여 넣으세요…",
+      phSecond: "두 번째 판을 붙여 넣으세요…",
       metaDesc: '텍스트·JSON·CSV 두 판을 나란히 비교해 추가·삭제·변경된 줄과 키를 표시하고, 포맷·압축·키 정렬과 JSON ↔ CSV 변환까지 브라우저 안에서 처리합니다. 업로드 0바이트, 외부 요청 0건.',
       ogTitle: 'DiffForge — 업로드 없는 JSON·텍스트 비교, JSON ↔ CSV 변환',
       ogDesc: '두 판을 붙여 넣고 추가·삭제·변경된 줄이나 키를 확인하세요. 포맷·압축·키 정렬, JSON ↔ CSV 변환까지 탭 안에서 끝납니다.',
@@ -948,7 +974,243 @@ window.addEventListener('unhandledrejection', function (e) {
       reportMode: '방식',
       reportSummary: '요약',
       reportNoChange: '동일'
-    }
+    },
+      ja: {
+        docTitle: "DiffForge — アップロードなしのJSON・テキスト比較、JSON ↔ CSV変換 | Kim Yihyung",
+        metaTitle: "DiffForge — アップロードなしのJSON・テキスト比較、JSON ↔ CSV変換",
+        metaDesc: "テキスト・JSON・CSVの2版を並べて比較し、追加・削除・変更された行やキーを表示します。フォーマット・圧縮・キー整列、JSON ↔ CSV変換までブラウザの中で処理します。アップロード0バイト、外部リクエスト0件。",
+        ogTitle: "DiffForge — アップロードなしのJSON・テキスト比較、JSON ↔ CSV変換",
+        ogDesc: "2つの版を貼り付けて、追加・削除・変更された行やキーを確認。フォーマット・圧縮・キー整列、JSON ↔ CSV変換までタブの中で完結します。",
+        brandAria: "Kim Yihyung — ポートフォリオ",
+        backTools: "← ツール",
+        toggleTo: "言語を切り替え",
+        pillLive: "アップロード0バイト · 外部リクエスト0件",
+        pillLocal: "ブラウザの中で<b>100%ローカル</b>",
+        pillFmt: "<b>JSON ↔ CSV</b> · フォーマット · 圧縮 · キー整列",
+        pillDiff: "<b>行</b>または<b>構造</b>で比較",
+        h1: "何が変わったかだけ。<br><span class=\"dim\">アップロードはなしで。</span>",
+        lede: "文書の2つの版を貼り付けてください。テキストを行単位で比較するか、両側を解析して<b>JSONのキーと配列の位置</b>で比較できます。追加・削除・変更された行が色と数字で整理され、それぞれの版をフォーマット・圧縮・キー整列したり、<b>JSONとCSV</b>の間で変換したりできます。アップロードも、CDNから読み込むライブラリもありません。",
+        modeAria: "比較の方式",
+        modeAuto: "自動",
+        modeLines: "行",
+        modeJson: "JSON",
+        ignoreWs: "行末の空白を無視",
+        ignoreCase: "大文字小文字を無視",
+        indentLabel: "インデント",
+        typedLabel: "CSVの値の型を推論",
+        swap: "⇄ 左右を入れ替え",
+        clearAll: "両方を空にする",
+        leftTitle: "左 · 原本",
+        rightTitle: "右 · 変更版",
+        exJson: "JSONの例",
+        exCsv: "CSVの例",
+        clearOne: "空にする",
+        format: "フォーマット",
+        minify: "圧縮",
+        sortKeys: "キー整列",
+        toCsv: "→ CSV",
+        toJson: "→ JSON",
+        copy: "コピー",
+        download: "↓",
+        resTitle: "結果",
+        sumAdd: "追加",
+        sumDel: "削除",
+        sumChg: "変更",
+        sumSame: "同一",
+        copyReport: "結果をコピー",
+        dlJson: "↓ .json",
+        dlCsv: "↓ .csv",
+        emptyBoth: "<b>文書2つ、比較1つ。</b>両方に内容を貼り付けるか、上のJSON・CSVの例ボタンを押してみてください。",
+        emptyOne: "<b>片側が空です。</b>両方を埋めると比較が始まります。",
+        sameBoth: "<b>違いはありません。</b>2つの文書の値は同じです。",
+        modeUsedLines: "行単位で比較",
+        modeUsedJson: "JSON構造で比較",
+        modeTooBig: "変更行が多すぎるため位置基準で比較",
+        kindEmpty: "空",
+        kindJson: "JSON",
+        kindJsonArray: "JSON配列 · {n}",
+        kindCsv: "CSV · {r}×{c}",
+        kindText: "テキスト · {n}行",
+        kindJsonErr: "JSONエラー · {line}行{col}列",
+        kindUnknown: "解析できず",
+        footLines: "{n}行 · {c}文字",
+        footNoBom: "アップロードなし · 保存なし",
+        footCsvDelim: "区切り文字 {d}",
+        footJsonOk: "文法は正常",
+        errNothing: "変換する内容がありません。",
+        errJsonForCsv: "CSVに変えるにはJSON配列かオブジェクトが必要です。先にJSONのエラーを直してください。",
+        errCsvForJson: "この版にはJSONまたはCSVの内容が必要です。",
+        copied: "コピーしました。",
+        copyFail: "ブラウザがクリップボードへのアクセスを拒否しました。選択して直接コピーしてください。",
+        dlDone: "{name} を保存しました。",
+        convertedCsv: "CSVに変換しました。",
+        convertedJson: "JSONに変換しました。",
+        formatted: "フォーマットしました。",
+        minified: "圧縮しました。",
+        sorted: "キーを整列しました。",
+        cleared: "空にしました。",
+        exLoaded: "例を読み込みました。",
+        swapped: "左右を入れ替えました。",
+        jsonLeft: "左",
+        jsonRight: "右",
+        colLineL: "左の行",
+        colLineR: "右の行",
+        colType: "種類",
+        colLeft: "左",
+        colRight: "右",
+        colPath: "パス",
+        colBefore: "以前",
+        colAfter: "以後",
+        headLeft: "左",
+        headRight: "右",
+        rows: "{n}行",
+        linesN: "{n}行",
+        linesOne: "{n}行",
+        truncated: "全体{total}行のうち{n}行まで表示します。",
+        n1t: "何もタブを離れません",
+        n1: "2つの版は普通のテキスト欄で、解析と比較はこのページのJavaScriptが行います。下のカウンタはこのサイトの外に出たリクエスト数で、0のままです — APIの応答も顧客名簿もその場に残ります。",
+        n2t: "行の比較と構造の比較",
+        n2: "行の比較は書かれたとおりのテキストを比べるので、インデントだけ変わっても変更に見えます。構造の比較は両側を先に解析してキーと配列の位置を比べるので、全体を整列し直したあとでも $.orders[2].total が変わったことを見つけます。",
+        n3t: "結果をどこに使うか",
+        n3: "レポートをチケットに貼るか、レビュー用の.json・表計算用の.csvで受け取ってください。それぞれの版も、今入っている形式のままコピー・ダウンロードを別に用意しています。",
+        faqTitle: "よくある質問",
+        q1: "貼り付けではなくファイルを比較できますか？",
+        a1: "ファイルの内容を開いてコピーし、貼り付けてください。ファイル選択はあえて置いていません — 貼り付けた版はディスクに何も残さず、比較にはふつう変わった部分だけで足ります。",
+        q2: "どれくらい大きな文書まで扱えますか？",
+        a2: "両側が似ていれば前後の同じ部分を先に切り取るので速いです。一度に変わった行が約2 500行を超えると位置基準で対応づける方式に切り替わり、速い代わりに粗くなります。JSON構造の比較はメモリの許す範囲で動きます。",
+        q3: "CSVを入れたのにJSONオブジェクトの配列になるのはなぜ？",
+        a3: "1行目を列名として読み、以降の各行をそのキーを持つオブジェクトにします。先頭の0や長いIDが残るように値は文字列のままにし、数値・true/false・nullに変えるには「CSVの値の型を推論」をオンにしてください。",
+        caveat: "<strong>参考。</strong>書式の違いはふつうデータの違いではありません。構造の比較が何も報告しなければ、2つの文書の値は同じで見た目だけが違います。先頭に0が付くIDを表計算に移す前に、CSV変換の結果を確認してください。",
+        lic: "第三者ライブラリは使いません。比較、JSONフォーマッタ、CSVの読み書きはすべてこのページのコードです。すべてのファイルはページと一緒にこのサイトからのみ届き、CDNは使いません。",
+        foot1: "アップロード0 · サーバー0 · クッキー0",
+        netLabel: "このページが送った外部リクエスト",
+        back: "← ポートフォリオ",
+        footTools: "ツール一覧",
+        reportTitle: "DiffForge 比較結果",
+        reportMode: "方式",
+        reportSummary: "要約",
+        reportNoChange: "同一",
+        phFirst: "最初の版をここに貼り付けてください…",
+        phSecond: "2つ目の版をここに貼り付けてください…",
+      },
+      "zh-Hant": {
+        docTitle: "DiffForge — 不上傳的 JSON・文字比對，JSON ↔ CSV 轉換 | Kim Yihyung",
+        metaTitle: "DiffForge — 不上傳的 JSON・文字比對，JSON ↔ CSV 轉換",
+        metaDesc: "把文字、JSON、CSV 的兩個版本並排比對，標出新增、刪除、變更的行與鍵；格式化、壓縮、鍵排序與 JSON ↔ CSV 轉換也都在瀏覽器內完成。零位元組上傳、零次外部請求。",
+        ogTitle: "DiffForge — 不上傳的 JSON・文字比對，JSON ↔ CSV 轉換",
+        ogDesc: "貼上兩個版本，看清楚新增、刪除、變更的行或鍵。格式化、壓縮、鍵排序與 JSON ↔ CSV 轉換都在分頁裡完成。",
+        brandAria: "Kim Yihyung — 作品集",
+        backTools: "← 工具",
+        toggleTo: "切換語言",
+        pillLive: "零位元組上傳 · 零次外部請求",
+        pillLocal: "瀏覽器內 <b>100% 本機</b>",
+        pillFmt: "<b>JSON ↔ CSV</b> · 格式化 · 壓縮 · 鍵排序",
+        pillDiff: "<b>逐行</b>或<b>結構</b>比對",
+        h1: "只看哪裡變了。<br><span class=\"dim\">不用上傳。</span>",
+        lede: "把文件的兩個版本貼進來。可以逐行比對文字，也可以解析兩側後以 <b>JSON 鍵與陣列位置</b>比對。新增、刪除、變更的行以顏色和數字整理，任一邊都能格式化、壓縮、鍵排序，或在 <b>JSON 與 CSV</b> 之間轉換。沒有上傳，也沒有從 CDN 載入的程式庫。",
+        modeAria: "比對方式",
+        modeAuto: "自動",
+        modeLines: "逐行",
+        modeJson: "JSON",
+        ignoreWs: "忽略行尾空白",
+        ignoreCase: "忽略大小寫",
+        indentLabel: "縮排",
+        typedLabel: "推斷 CSV 值型別",
+        swap: "⇄ 左右互換",
+        clearAll: "兩邊都清空",
+        leftTitle: "左 · 原始",
+        rightTitle: "右 · 變更版",
+        exJson: "JSON 範例",
+        exCsv: "CSV 範例",
+        clearOne: "清空",
+        format: "格式化",
+        minify: "壓縮",
+        sortKeys: "鍵排序",
+        toCsv: "→ CSV",
+        toJson: "→ JSON",
+        copy: "複製",
+        download: "↓",
+        resTitle: "結果",
+        sumAdd: "新增",
+        sumDel: "刪除",
+        sumChg: "變更",
+        sumSame: "相同",
+        copyReport: "複製結果",
+        dlJson: "↓ .json",
+        dlCsv: "↓ .csv",
+        emptyBoth: "<b>兩份文件，一次比對。</b>在兩邊貼上內容，或按上方的 JSON・CSV 範例按鈕。",
+        emptyOne: "<b>一邊是空的。</b>兩邊都填好就會開始比對。",
+        sameBoth: "<b>沒有差異。</b>兩份文件的值相同。",
+        modeUsedLines: "逐行比對",
+        modeUsedJson: "以 JSON 結構比對",
+        modeTooBig: "變更行太多，改以位置為準比對",
+        kindEmpty: "空白",
+        kindJson: "JSON",
+        kindJsonArray: "JSON 陣列 · {n}",
+        kindCsv: "CSV · {r}×{c}",
+        kindText: "文字 · {n} 行",
+        kindJsonErr: "JSON 錯誤 · 第 {line} 行第 {col} 欄",
+        kindUnknown: "無法解析",
+        footLines: "{n} 行 · {c} 字元",
+        footNoBom: "不上傳 · 不儲存",
+        footCsvDelim: "分隔符 {d}",
+        footJsonOk: "語法正常",
+        errNothing: "沒有可轉換的內容。",
+        errJsonForCsv: "要轉成 CSV 需要 JSON 陣列或物件，請先修正 JSON 錯誤。",
+        errCsvForJson: "這一邊需要 JSON 或 CSV 內容。",
+        copied: "已複製。",
+        copyFail: "瀏覽器拒絕剪貼簿存取，請選取後自行複製。",
+        dlDone: "已儲存 {name}。",
+        convertedCsv: "已轉成 CSV。",
+        convertedJson: "已轉成 JSON。",
+        formatted: "已格式化。",
+        minified: "已壓縮。",
+        sorted: "已排序鍵。",
+        cleared: "已清空。",
+        exLoaded: "已載入範例。",
+        swapped: "已左右互換。",
+        jsonLeft: "左",
+        jsonRight: "右",
+        colLineL: "左行",
+        colLineR: "右行",
+        colType: "類型",
+        colLeft: "左",
+        colRight: "右",
+        colPath: "路徑",
+        colBefore: "之前",
+        colAfter: "之後",
+        headLeft: "左",
+        headRight: "右",
+        rows: "{n} 列",
+        linesN: "{n} 行",
+        linesOne: "{n} 行",
+        truncated: "顯示全部 {total} 列中的前 {n} 列。",
+        n1t: "沒有任何東西離開分頁",
+        n1: "兩邊只是普通的文字方塊，解析與比對由這個頁面的 JavaScript 執行。下方的計數器統計往這個網站以外送出的請求，一直是 0 — API 回應或客戶清單都留在原地。",
+        n2t: "逐行比對與結構比對",
+        n2: "逐行比對直接比文字，所以只是重新縮排也會顯示為變更。結構比對先解析兩邊再比鍵與陣列位置，因此即使整體重新排過，也能找出 $.orders[2].total 變了。",
+        n3t: "結果怎麼用",
+        n3: "把報告貼進工單，或下載成給審閱者的 .json、給試算表的 .csv。兩邊也各自保留目前格式的複製與下載。",
+        faqTitle: "常見問題",
+        q1: "可以比對檔案而不是貼上的文字嗎？",
+        a1: "請開啟檔案內容複製後貼上。這裡刻意不放檔案選擇 — 貼上的內容不在磁碟留下任何東西，而比對通常只需要變動的部分。",
+        q2: "能處理多大的文件？",
+        a2: "兩邊相近時會先切掉前後相同的部分，所以很快。一次變更的行超過約 2 500 行，就會改成以位置配對，速度快但較粗略。JSON 結構比對只受記憶體限制。",
+        q3: "為什麼貼上 CSV 會變成 JSON 物件陣列？",
+        a3: "第一列讀成欄位名稱，之後每一列變成帶有那些鍵的物件。值保持字串，讓開頭的 0 或長 ID 不會消失；要轉成數字、true/false、null，請勾選「推斷 CSV 值型別」。",
+        caveat: "<strong>提醒。</strong>格式差異通常不是資料差異：結構比對若什麼都沒報，兩份文件的值相同，只是長得不一樣。把開頭為 0 的 ID 貼進試算表之前，請先確認 CSV 轉換結果。",
+        lic: "不使用第三方程式庫。比對、JSON 格式化、CSV 讀寫都是這個頁面的程式碼。所有檔案都隨頁面由這個網站提供，不使用 CDN。",
+        foot1: "零上傳 · 零伺服器 · 零 cookie",
+        netLabel: "這個頁面送出的外部請求",
+        back: "← 作品集",
+        footTools: "所有工具",
+        reportTitle: "DiffForge 比對結果",
+        reportMode: "方式",
+        reportSummary: "摘要",
+        reportNoChange: "相同",
+        phFirst: "請貼上第一個版本…",
+        phSecond: "請貼上第二個版本…",
+      }
   };
 
   function t(key) {
@@ -1831,8 +2093,53 @@ window.addEventListener('unhandledrejection', function (e) {
   }
 
   /* ─────────────────────────── 언어 ─────────────────────────── */
+  var DEFAULT_LANG = 'en';
+  /* ═══ 4-language switch (ko · en · ja · zh-Hant) ═══ */
+  var LANGS4 = ['ko', 'en', 'ja', 'zh-Hant'];
+  function normLang(v) {
+    v = String(v == null ? '' : v).toLowerCase().replace(/_/g, '-');
+    if (v === 'ko' || v === 'ko-kr' || v === 'kr') return 'ko';
+    if (v === 'ja' || v === 'ja-jp' || v === 'jp') return 'ja';
+    if (v === 'zh-hant' || v === 'zh-tw' || v === 'zh' || v === 'tw' || v === 'zh-hk') return 'zh-Hant';
+    if (v === 'en' || v === 'en-us' || v === 'en-gb') return 'en';
+    return '';
+  }
+  function loc4() { return state.lang === 'ko' ? 'ko-KR' : state.lang === 'ja' ? 'ja-JP' : state.lang === 'zh-Hant' ? 'zh-TW' : 'en-US'; }
+  function lsGet4(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function initialLang() {
+    var f = (typeof window.__FORCED_LANG__ !== 'undefined' && window.__FORCED_LANG__) ? window.__FORCED_LANG__ : '';
+    if (f && normLang(f)) return normLang(f);
+    var q = '';
+    try { q = new URLSearchParams(location.search).get('lang') || ''; } catch (e) { q = ''; }
+    if (q && normLang(q)) return normLang(q);
+    var stored = lsGet4(typeof SHARED_KEY !== 'undefined' ? SHARED_KEY : 'kyh.lang') || lsGet4(typeof LANG_KEY !== 'undefined' ? LANG_KEY : '');
+    if (stored && normLang(stored)) return normLang(stored);
+    var h = normLang(document.documentElement.getAttribute('lang'));
+    if (h) return h;
+    return typeof DEFAULT_LANG !== 'undefined' ? DEFAULT_LANG : 'ko';
+  }
+  function syncLangUI() {
+    var lt = document.getElementById('langToggle');
+    if (!lt) return;
+    var btns = lt.querySelectorAll('[data-lang]');
+    for (var i = 0; i < btns.length; i++) {
+      var on = btns[i].getAttribute('data-lang') === state.lang;
+      btns[i].classList.toggle('on', on);
+      btns[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+  }
+  function bindLangToggle() {
+    var lt = document.getElementById('langToggle');
+    if (!lt) return;
+    lt.addEventListener('click', function (ev) {
+      var t4 = ev.target.closest('[data-lang]');
+      if (!t4) return;
+      applyLang(t4.getAttribute('data-lang'));
+    });
+  }
+
   function applyLang(lang) {
-    state.lang = lang === 'ko' ? 'ko' : 'en';
+    state.lang = normLang(lang) || 'en';
     document.documentElement.setAttribute('lang', state.lang);
 
     document.title = t('docTitle');
@@ -1860,26 +2167,22 @@ window.addEventListener('unhandledrejection', function (e) {
       if (v) nodes[i].setAttribute('aria-label', v);
     }
 
-    var spans = document.querySelectorAll('#langToggle [data-lt]');
-    for (i = 0; i < spans.length; i++) {
-      spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
-    }
-    var lt = $('langToggle');
-    lt.setAttribute('title', t('toggleTo'));
-    lt.setAttribute('aria-label', t('toggleTo'));
+      syncLangUI();
 
     var ph = document.querySelectorAll('.editor textarea');
-    if (ph[0]) ph[0].placeholder = state.lang === 'ko' ? '첫 번째 판을 붙여 넣으세요…' : 'Paste the first version here…';
-    if (ph[1]) ph[1].placeholder = state.lang === 'ko' ? '두 번째 판을 붙여 넣으세요…' : 'Paste the second version here…';
+    if (ph[0]) ph[0].placeholder = t('phFirst');
+    if (ph[1]) ph[1].placeholder = t('phSecond');
 
     render();
   }
 
   /* ─────────────────────────── 연결 ─────────────────────────── */
   function bind() {
-    $('langToggle').addEventListener('click', function () {
-      var next = state.lang === 'ko' ? 'en' : 'ko';
-      try { localStorage.setItem(LANG_KEY, next); } catch (e) {}
+    $('langToggle').addEventListener('click', function (ev) {
+      var _t4 = ev.target.closest('[data-lang]');
+      if (!_t4) return;
+      var next = normLang(_t4.getAttribute('data-lang'));
+      try { localStorage.setItem(LANG_KEY, next); localStorage.setItem('kyh.lang', next); } catch (e) {}
       applyLang(next);
     });
 
@@ -2008,7 +2311,7 @@ window.addEventListener('unhandledrejection', function (e) {
     bind();
     syncGutter('L');
     syncGutter('R');
-    applyLang(readLang() || 'en');
+    applyLang(initialLang());
     window.__dfReady = true;
   }
 

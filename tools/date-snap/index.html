@@ -342,7 +342,7 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
 .foot .net b { color: var(--ok); }
 
 @media (max-width: 640px) {
-  .wrap { padding: 0 14px 36px; }
+  .wrap { padding: 0 16px 36px; }
   .topbar { padding: 14px 0 8px; }
   .brand-txt { font-size: 12px; letter-spacing: .1em; }
   .hero { padding: 16px 0 12px; }
@@ -354,6 +354,22 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
   .result { flex-direction: column; align-items: flex-start; gap: 6px; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* ═══ 4-language switch: KO | EN | JA | 繁中 ═══ */
+.lang-toggle { padding: 0 3px; gap: 0; cursor: default; }
+.lang-toggle .lt {
+  appearance: none; -webkit-appearance: none; border: 0; background: transparent; color: var(--muted2);
+  height: 100%; padding: 0 6px; margin: 0; font-family: inherit; font-size: 11px; font-weight: 700;
+  letter-spacing: .02em; line-height: 1; cursor: pointer; border-radius: 8px;
+  transition: color .15s, background .15s;
+}
+.lang-toggle .lt:hover { color: var(--ink); }
+.lang-toggle .lt.on { color: var(--accent); }
+@media (max-width: 430px) {
+  .lang-toggle { height: 30px; }
+  .lang-toggle .lt { padding: 0 4px; font-size: 10px; }
+}
+:lang(ja) body, :lang(zh-Hant) body { word-break: normal; overflow-wrap: break-word; line-break: strict; }
 </style>
 </head>
 <body>
@@ -365,11 +381,15 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
       <span class="brand-txt">Kim Yihyung</span>
     </a>
     <div class="top-actions">
-      <button class="lang-toggle" id="langToggle" type="button" title="View in English" aria-label="View in English">
-        <span class="lt on" data-lt="ko">KO</span>
+      <div class="lang-toggle" id="langToggle" role="group" aria-label="Language · 언어 · 言語 · 語言">
+        <button class="lt on" type="button" data-lang="ko" aria-pressed="true">KO</button>
         <span class="lsep" aria-hidden="true">|</span>
-        <span class="lt" data-lt="en">EN</span>
-      </button>
+        <button class="lt" type="button" data-lang="en" aria-pressed="false">EN</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lang="ja" aria-pressed="false">JA</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lang="zh-Hant" aria-pressed="false">繁中</button>
+      </div>
       <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← 도구 전체</a>
     </div>
   </header>
@@ -602,6 +622,10 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
   var I18N = {
     ko: {
       docTitle: 'DateSnap — 디데이·영업일·만나이 계산기 | Kim Yihyung',
+      metaTitle: "DateSnap — 디데이·영업일·만나이 계산기",
+      metaDesc: "기준일 하나로 디데이와 100일·1000일·1~5주년 날짜를 뽑고, 주말과 2026년 공휴일(노동절·제헌절 포함)을 뺀 실제 영업일 수와 영업일 N일 뒤 날짜를 세며, 만나이·연나이·띠·다음 생일까지 한 화면에서 계산합니다. 입력한 날짜는 브라우저를 떠나지 않습니다.",
+      copyOk: "클립보드에 복사했습니다.",
+      copyFail: "복사에 실패했습니다 — 요약을 직접 선택해 복사해 주세요.",
       brandAria: 'Kim Yihyung — 포트폴리오',
       back: '← 도구 전체',
       eyebrow: 'DateSnap · 디데이 · 영업일 · 만나이 · 업로드 0',
@@ -686,6 +710,10 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
     },
     en: {
       docTitle: 'DateSnap — D-day, Business Day & Korean Age Calculator | Kim Yihyung',
+      metaTitle: "DateSnap — D-day, Business Day & Korean Age Calculator",
+      metaDesc: "One base date gives the 100th, 1000th day and the 1st-5th anniversary, the real business-day count with weekends and the 2026 Korean public holidays removed, the date N business days away, and Korean age with the next birthday — all in the browser, with zero uploads.",
+      copyOk: "Copied to the clipboard.",
+      copyFail: "Copy failed — select the summary and copy it by hand.",
       brandAria: 'Kim Yihyung — portfolio',
       back: '← All tools',
       eyebrow: 'DateSnap · D-day · business days · Korean age · zero upload',
@@ -767,7 +795,383 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
       sumBirth: 'Date of birth', sumIntl: 'Age', sumYear: 'Calendar age', sumCount: 'Counting age', sumZodiac: 'Zodiac', sumNextBday: 'Next birthday',
       sumFoot: 'DateSnap · calculated in the browser · 0 bytes uploaded',
       sumEmpty: 'Nothing to show yet.'
-    }
+    },
+      ja: {
+        docTitle: "DateSnap — Dデイ・営業日・韓国式年齢の計算機 | Kim Yihyung",
+        metaTitle: "DateSnap — Dデイ・営業日・韓国式年齢の計算機",
+        metaDesc: "基準日をひとつ入れるだけで、100日・1000日・1〜5周年の日付、週末と2026年の韓国の祝日（勤労者の日・制憲節を含む）を除いた実際の営業日数、生年月日からの韓国式年齢（満年齢・年齢・干支）と次の誕生日までを1画面で計算します。入力した日付はブラウザの外に出ません。",
+        brandAria: "Kim Yihyung — ポートフォリオ",
+        back: "← ツール一覧",
+        eyebrow: "DateSnap · Dデイ · 営業日 · 韓国式年齢 · アップロード0",
+        h1: "日付の計算は間違えやすい。<br><span class=\"soft\">100日も、営業日も、年齢も。</span><br><span class=\"gold\">1画面でまとめて。</span>",
+        lede: "基準日をひとつ入れると<strong>100日・200日・300日・500日・1000日</strong>と<strong>1〜5周年</strong>の日付が出て、週末と<strong>2026年の祝日（勤労者の日・制憲節を含む）</strong>を除いた実際の<strong>営業日</strong>を数え、生年月日から<strong>満年齢・年齢・干支・次の誕生日</strong>まで計算します。入力した日付はこのタブから出ません。",
+        pillUp: "アップロード0バイト",
+        pillNet: "外部リクエスト0件",
+        pill2026: "2026年の祝日を反映",
+        pillCopy: "カカオトーク用の要約をコピー",
+        calcAria: "日付計算機",
+        tabAria: "計算の種類",
+        tabDday: "Dデイ・記念日",
+        tabBiz: "営業日",
+        tabAge: "韓国式年齢",
+        dHead: "Dデイ・記念日",
+        dHeadNote: "基準日ひとつで",
+        dBaseLbl: "基準日（始めた日）",
+        todayLbl: "今日",
+        convLbl: "数え方",
+        convAria: "数え方",
+        convIncl: "初日を含む",
+        convZero: "0日基準",
+        dNote: "<b>初日を含む</b>は始めた日を1日目として数えます。100日目は基準日+99日になり、<b>0日基準</b>なら+100日です。下のカードには両方の日付が並んでいます。",
+        msHead: "100日から5周年まで",
+        msNote: "両方の慣習を併記",
+        bHead: "営業日の計算",
+        bHeadNote: "週末＋2026年の祝日を除外",
+        bFromLbl: "開始日",
+        bToLbl: "終了日",
+        bSatLbl: "土曜日も営業日として数える",
+        bHolLbl: "祝日を除く",
+        bHolHead: "期間内の祝日",
+        bRevHead: "営業日N日後はいつか",
+        bRevNote: "開始日の翌日を1日目",
+        bNLbl: "営業日数",
+        bNUnit: "営業日",
+        bRevOutLbl: "到着する日",
+        aHead: "満年齢・年齢",
+        aHeadNote: "2023年から満年齢が基準",
+        aBirthLbl: "生年月日",
+        aTodayLbl: "基準日",
+        aNote: "<b>満年齢</b>は誕生日が来るたびに1歳、<b>年齢</b>は年が変わるごとに1歳、<b>数え年</b>は生まれた年を1歳として数えます。2023年6月28日から法令・行政では満年齢を使うため、書類に書く年齢は満年齢です。",
+        sumHead: "要約 — カカオトークに貼り付け",
+        copyBtn: "要約をコピー",
+        sumFoot: "DateSnap · ブラウザで計算 · アップロード0",
+        nowHead: "今日の基準",
+        nowDate: "今日",
+        nowWeek: "曜日",
+        nowDay: "今年の何日目",
+        nowLeft: "今年の残り日数",
+        nowBiz: "今月の残り営業日",
+        nowNext: "次の祝日",
+        howTitle: "数え方はこうなります",
+        howNote: "規定と暦のとおり",
+        n1h: "初日を含む数え方と0日基準",
+        n1p: "記念日の慣習はふたつに分かれるため、両方を計算します。<b>初日を含む</b>は始めた日を1日目と数えるので100日目は基準日+99日、<b>0日基準</b>は始めた日を0として100日目は基準日+100日です。カードごとに両方の日付を書いてあるので、相手と使う慣習が違えばその場で確認できます。",
+        n2h: "営業日から除く日",
+        n2p: "土日と<b>2026年の韓国の法定祝日</b>を除きます — 勤労者の日（5/1）と制憲節（7/17）が2026年から新たに入り、週末と重なった祝日は<b>代替休日</b>に移された日付まで反映しています。元日と顕忠日は代替休日がありません。政府がその都度決める<b>臨時休日</b>は入っていないため、それが絡む月は1〜2日ずれることがあります。",
+        n3h: "満年齢と干支",
+        n3p: "満年齢は誕生日が過ぎたかどうかだけを見ればよいので、<b>（基準年 − 生年）</b>から誕生日がまだ来ていなければ1を引きます。2月29日生まれは平年では2月28日を誕生日として扱います。干支は生まれた年の<b>十二支</b>で決めました（2026年は午）。伝統的には旧正月で干支が変わるため、1〜2月初めの生まれはひとつ前の干支になることがあります。",
+        faqTitle: "よくある質問",
+        faqNote: "Dデイ · 営業日 · 年齢",
+        q1: "100日は初日を含めて数えますか？",
+        a1: "慣習が分かれるため、DateSnapは両方を計算します。<b>初日を含む</b>は始めた日を1日目とするので100日目は基準日+99日、<b>0日基準</b>は100日後が基準日+100日です。画面上部の切り替えで両方の日付を行き来でき、記念日のカードには両方の値が並びます。",
+        q2: "営業日から除く祝日はどこまでですか？",
+        a2: "「公官庁の公休日に関する規定」に沿った2026年の法定祝日と代替休日です。2026年から新たに祝日になった<b>勤労者の日（5月1日）</b>と<b>制憲節（7月17日）</b>も入っており、6月3日の地方選挙日のような任期満了で確定した選挙日も含みます。政府が別に定める臨時休日は入っていません。",
+        q3: "満年齢と年齢はどう違いますか？",
+        a3: "満年齢は誕生日が来るたびに1歳増える国際的な基準で、年齢（年齢式）は年が変わると1歳増える計算です。2023年6月28日から法令と行政では満年齢を使うため、書類に書く年齢は満年齢です。数え年は生まれた年を1歳とする昔の方式なので、参考として併記しています。",
+        q4: "営業日N日後はどう数えますか？",
+        a4: "<b>開始日の翌営業日を1日目</b>として数えます。開始日が金曜日で3営業日なら水曜日です。開始日がすでに週末や祝日なら、その次の営業日から数え始めます。契約書の「3営業日以内」のように開始日を含めて数える場合もあるので、相手が定めた基準があればそちらが優先です。",
+        footCopy: "© 2026 Kim Yihyung · ブラウザの中で、ブラウザのために。",
+        footNet: "外部リクエスト",
+        footP1: "ポートフォリオ",
+        footP2: "ツール一覧",
+        footP3: "ソース",
+        mono: "アップロードなし · 追跡なし",
+        toggleTo: "言語を切り替え",
+        nA: "—",
+        dayUnit: "日",
+        yearUnit: "年",
+        monthUnit: "か月",
+        ymd: "{y}年{m}か月{d}日",
+        dToday: "今日はD+{n}",
+        dTodayZero: "今日はD+{n}",
+        dPast: "今日はD{n}",
+        dSame: "ちょうど今日が基準日です",
+        dBasisIncl: "{n}日目",
+        dBasisZero: "{n}日経過",
+        bothCounts: "初日を含む {a}日目 · 0日基準 {b}日",
+        altOther: "もう一方の数え方",
+        dBaseFmt: "{date}（{week}）開始",
+        dTodayIs: "今日 {date}（{week}）",
+        dBad: "基準日を入れてください。",
+        dBigIncl: "{n}日目",
+        dBigZero: "D+{n}",
+        dMIncl: "{n}日目",
+        dMZero: "{n}日後",
+        dMYears: "{n}周年",
+        stReady: "日付を入れるとすぐ計算します。",
+        msPast: "{n}日経過",
+        msLeft: "D-{n}",
+        msToday: "今日",
+        bBig: "{n}営業日",
+        bBigUnit: "営業日",
+        bTotal: "合計日数",
+        bWeekend: "週末を除く",
+        bHolOut: "祝日を除く",
+        bFirst: "最初の営業日",
+        bLast: "最後の営業日",
+        bMetaFrom: "{a} → {b}",
+        bNoHols: "期間内に祝日はありません",
+        bBadRange: "終了日が開始日より前です — 2つの日付を入れ替えます",
+        bRevSame: "開始日が営業日なら、その日を1日目とみなすこともあります。",
+        bRev: "{date}（{week}）",
+        bRevPast: "開始日と同じ日",
+        aBig: "満{n}歳",
+        aBigUnit: "歳",
+        aIntl: "満年齢",
+        aYear: "年齢（年齢式）",
+        aCount: "数え年",
+        aZodiac: "干支",
+        aNextBday: "次の誕生日",
+        aBdayWeek: "生まれた曜日",
+        aDays: "生きてきた日数",
+        aUntil: "次の誕生日まで",
+        aTodayBday: "今日が誕生日です",
+        aBdayFmt: "{date}（{week}）",
+        wd0: "日",
+        wd1: "月",
+        wd2: "火",
+        wd3: "水",
+        wd4: "木",
+        wd5: "金",
+        wd6: "土",
+        z0: "子（ね）",
+        z1: "丑（うし）",
+        z2: "寅（とら）",
+        z3: "卯（う）",
+        z4: "辰（たつ）",
+        z5: "巳（み）",
+        z6: "午（うま）",
+        z7: "未（ひつじ）",
+        z8: "申（さる）",
+        z9: "酉（とり）",
+        z10: "戌（いぬ）",
+        z11: "亥（い）",
+        dlDateFormat: "{y}/{m}/{d}",
+        holNewyear: "元日",
+        holSeollal: "ソルラル（旧正月）連休",
+        holMar1: "三一節",
+        holLabor: "勤労者の日",
+        holChildren: "こどもの日",
+        holBuddha: "釈迦誕生日",
+        holElection: "地方選挙日",
+        holMemorial: "顕忠日",
+        holConstitution: "制憲節",
+        holLiberation: "光復節",
+        holChuseok: "チュソク（秋夕）連休",
+        holGaecheon: "開天節",
+        holHangeul: "ハングルの日",
+        holChristmas: "クリスマス",
+        subTag: "（代替）",
+        sumDdayHead: "Dデイ・記念日",
+        sumBizHead: "営業日",
+        sumAgeHead: "韓国式年齢",
+        sumBase: "基準日",
+        sumToday: "今日",
+        sumConv: "数え方",
+        sumMilestones: "記念日",
+        sumBizRange: "期間",
+        sumBizTotal: "合計日数",
+        sumBizWeekend: "週末を除く",
+        sumBizHol: "祝日を除く",
+        sumBizRev: "営業日{n}日後",
+        sumBirth: "生年月日",
+        sumIntl: "満年齢",
+        sumYear: "年齢（年齢式）",
+        sumCount: "数え年",
+        sumZodiac: "干支",
+        sumNextBday: "次の誕生日",
+        sumEmpty: "値がありません。",
+        copyOk: "クリップボードにコピーしました。",
+        copyFail: "コピーできませんでした — 要約を選択して手動でコピーしてください。",
+      },
+      "zh-Hant": {
+        docTitle: "DateSnap — D-Day・工作日・韓國年齡計算器 | Kim Yihyung",
+        metaTitle: "DateSnap — D-Day・工作日・韓國年齡計算器",
+        metaDesc: "只要輸入一個基準日，就能算出100日、1000日與1～5週年的日期，扣除週末與2026年韓國國定假日（含勞動節、制憲節）後的實際工作天數，並從生日算出滿年齡、年歲、生肖與下一個生日，全部在同一個畫面完成。輸入的日期不會離開瀏覽器。",
+        brandAria: "Kim Yihyung — 作品集",
+        back: "← 所有工具",
+        eyebrow: "DateSnap · D-Day · 工作日 · 韓國年齡 · 零上傳",
+        h1: "日期計算很容易出錯。<br><span class=\"soft\">100日、工作日、年齡都一樣。</span><br><span class=\"gold\">在同一個畫面一次算完。</span>",
+        lede: "輸入一個基準日，就會算出<strong>100日、200日、300日、500日、1000日</strong>與<strong>1～5週年</strong>的日期，扣除週末與<strong>2026年國定假日（含勞動節、制憲節）</strong>後計算實際<strong>工作天數</strong>，並用生日算出<strong>滿年齡、年歲、生肖與下一個生日</strong>。輸入的日期不會離開這個分頁。",
+        pillUp: "零位元組上傳",
+        pillNet: "零次外部請求",
+        pill2026: "已納入2026年假日",
+        pillCopy: "複製KakaoTalk摘要",
+        calcAria: "日期計算器",
+        tabAria: "計算種類",
+        tabDday: "D-Day・紀念日",
+        tabBiz: "工作日",
+        tabAge: "韓國年齡",
+        dHead: "D-Day・紀念日",
+        dHeadNote: "只要一個基準日",
+        dBaseLbl: "基準日（開始的那一天）",
+        todayLbl: "今天",
+        convLbl: "計算方式",
+        convAria: "計算方式",
+        convIncl: "含第1日",
+        convZero: "以0日為準",
+        dNote: "<b>含第1日</b>會把開始的那一天算成第1日，所以第100日是基準日+99日；以<b>0日為準</b>則是+100日。下方每張卡片都同時列出兩個日期。",
+        msHead: "從100日到5週年",
+        msNote: "兩種慣例並列",
+        bHead: "工作日計算",
+        bHeadNote: "扣除週末＋2026年假日",
+        bFromLbl: "開始日",
+        bToLbl: "結束日",
+        bSatLbl: "星期六也算工作日",
+        bHolLbl: "扣除國定假日",
+        bHolHead: "期間內的假日",
+        bRevHead: "N個工作日後是哪一天",
+        bRevNote: "從開始日的隔天算第1日",
+        bNLbl: "工作日數",
+        bNUnit: "工作日",
+        bRevOutLbl: "抵達日期",
+        aHead: "滿年齡・年歲",
+        aHeadNote: "2023年起以滿年齡為準",
+        aBirthLbl: "出生年月日",
+        aTodayLbl: "基準日",
+        aNote: "<b>滿年齡</b>是每過一次生日加一歲，<b>年歲</b>是每逢新年加一歲，<b>虛歲</b>則把出生那年算作一歲。2023年6月28日起法令與行政都用滿年齡，所以文件上寫的是滿年齡。",
+        sumHead: "摘要 — 貼到KakaoTalk",
+        copyBtn: "複製摘要",
+        sumFoot: "DateSnap · 在瀏覽器中計算 · 零上傳",
+        nowHead: "以今天為準",
+        nowDate: "今天",
+        nowWeek: "星期",
+        nowDay: "今年的第幾天",
+        nowLeft: "今年剩下幾天",
+        nowBiz: "本月剩下工作日",
+        nowNext: "下一個國定假日",
+        howTitle: "這樣計算",
+        howNote: "依規定與曆法",
+        n1h: "含第1日與以0日為準",
+        n1p: "紀念日的慣例分成兩種，所以兩種都算。<b>含第1日</b>把開始那天算作第1日，第100日就是基準日+99日；<b>以0日為準</b>把開始那天當作0，第100日是基準日+100日。每張卡片都同時寫了兩個日期，和對方慣例不同時可以當場確認。",
+        n2h: "工作日要扣掉的日子",
+        n2p: "扣掉星期六、日與<b>2026年韓國法定假日</b>——勞動節（5/1）與制憲節（7/17）從2026年新列入，與週末重疊的假日也反映到<b>補假</b>的日期。元旦與顯忠日沒有補假。政府臨時指定的<b>臨時公休日</b>不在其中，遇到那個月份可能差一兩天。",
+        n3h: "滿年齡與生肖",
+        n3p: "滿年齡只要看生日過了沒有，用<b>（基準年 − 出生年）</b>，生日還沒到就減1。2月29日出生的人在平年以2月28日為生日。生肖依出生年的<b>十二地支</b>決定（2026年是馬）。傳統上以農曆新年為準換生肖，所以1月至2月初出生的人可能相差一個生肖。",
+        faqTitle: "常見問題",
+        faqNote: "D-Day · 工作日 · 年齡",
+        q1: "100日有含第一天嗎？",
+        a1: "慣例不一，DateSnap兩種都算。<b>含第1日</b>把開始那天算作第1日，第100日是基準日+99日；<b>以0日為準</b>則第100日是基準日+100日。畫面上方的切換可以往返兩種日期，紀念日卡片也同時列出兩個數值。",
+        q2: "工作日扣掉的假日到哪裡為止？",
+        a2: "依《公官廳公休日相關規定》的2026年法定假日與補假，包括2026年新指定的<b>勞動節（5月1日）</b>與<b>制憲節（7月17日）</b>，也包含6月3日地方選舉日這種任期屆滿而確定的選舉日。政府另行指定的臨時公休日不在其中。",
+        q3: "滿年齡和年歲有什麼不同？",
+        a3: "滿年齡是每過一次生日加一歲的國際標準，年歲是每逢新年加一歲的算法。2023年6月28日起法令與行政都採滿年齡，所以文件上的年齡是滿年齡。虛歲是把出生那年算作一歲的舊方式，僅供參考。",
+        q4: "N個工作日後怎麼算？",
+        a4: "以<b>開始日的下一個工作日為第1日</b>計算。開始日是星期五、算3個工作日就是星期三。開始日若已是週末或假日，就從之後第一個工作日開始算。合約的「3個工作日內」有時會把開始日算進去，對方若有明定的基準，以對方的為準。",
+        footCopy: "© 2026 Kim Yihyung · 在瀏覽器裡，為瀏覽器而做。",
+        footNet: "外部請求",
+        footP1: "作品集",
+        footP2: "所有工具",
+        footP3: "原始碼",
+        mono: "不上傳 · 不追蹤",
+        toggleTo: "切換語言",
+        nA: "—",
+        dayUnit: "日",
+        yearUnit: "年",
+        monthUnit: "個月",
+        ymd: "{y}年{m}個月{d}日",
+        dToday: "今天是D+{n}",
+        dTodayZero: "今天是D+{n}",
+        dPast: "今天是D{n}",
+        dSame: "今天正好是基準日",
+        dBasisIncl: "第{n}日",
+        dBasisZero: "已過{n}日",
+        bothCounts: "含第1日 第{a}日 · 以0日為準 {b}日",
+        altOther: "另一種算法",
+        dBaseFmt: "{date}（{week}）開始",
+        dTodayIs: "今天 {date}（{week}）",
+        dBad: "請輸入基準日。",
+        dBigIncl: "第{n}日",
+        dBigZero: "D+{n}",
+        dMIncl: "第{n}日",
+        dMZero: "{n}天後",
+        dMYears: "{n}週年",
+        stReady: "輸入日期就會立刻計算。",
+        msPast: "已過{n}日",
+        msLeft: "D-{n}",
+        msToday: "今天",
+        bBig: "{n}個工作日",
+        bBigUnit: "工作日",
+        bTotal: "總天數",
+        bWeekend: "扣除週末",
+        bHolOut: "扣除假日",
+        bFirst: "第一個工作日",
+        bLast: "最後一個工作日",
+        bMetaFrom: "{a} → {b}",
+        bNoHols: "期間內沒有國定假日",
+        bBadRange: "結束日早於開始日 — 為您互換兩個日期",
+        bRevSame: "開始日若是工作日，也有把當天算作第1日的做法。",
+        bRev: "{date}（{week}）",
+        bRevPast: "與開始日同一天",
+        aBig: "滿{n}歲",
+        aBigUnit: "歲",
+        aIntl: "滿年齡",
+        aYear: "年歲",
+        aCount: "虛歲",
+        aZodiac: "生肖",
+        aNextBday: "下一個生日",
+        aBdayWeek: "出生星期",
+        aDays: "活過的天數",
+        aUntil: "距下一個生日",
+        aTodayBday: "今天就是生日",
+        aBdayFmt: "{date}（{week}）",
+        wd0: "週日",
+        wd1: "週一",
+        wd2: "週二",
+        wd3: "週三",
+        wd4: "週四",
+        wd5: "週五",
+        wd6: "週六",
+        z0: "鼠",
+        z1: "牛",
+        z2: "虎",
+        z3: "兔",
+        z4: "龍",
+        z5: "蛇",
+        z6: "馬",
+        z7: "羊",
+        z8: "猴",
+        z9: "雞",
+        z10: "狗",
+        z11: "豬",
+        dlDateFormat: "{y}/{m}/{d}",
+        holNewyear: "元旦",
+        holSeollal: "農曆新年連假",
+        holMar1: "三一節",
+        holLabor: "勞動節",
+        holChildren: "兒童節",
+        holBuddha: "佛誕日",
+        holElection: "地方選舉日",
+        holMemorial: "顯忠日",
+        holConstitution: "制憲節",
+        holLiberation: "光復節",
+        holChuseok: "秋夕連假",
+        holGaecheon: "開天節",
+        holHangeul: "韓文節",
+        holChristmas: "聖誕節",
+        subTag: "（補假）",
+        sumDdayHead: "D-Day・紀念日",
+        sumBizHead: "工作日",
+        sumAgeHead: "韓國年齡",
+        sumBase: "基準日",
+        sumToday: "今天",
+        sumConv: "計算方式",
+        sumMilestones: "紀念日",
+        sumBizRange: "期間",
+        sumBizTotal: "總天數",
+        sumBizWeekend: "扣除週末",
+        sumBizHol: "扣除假日",
+        sumBizRev: "{n}個工作日後",
+        sumBirth: "出生年月日",
+        sumIntl: "滿年齡",
+        sumYear: "年歲",
+        sumCount: "虛歲",
+        sumZodiac: "生肖",
+        sumNextBday: "下一個生日",
+        sumEmpty: "尚無數值。",
+        copyOk: "已複製到剪貼簿。",
+        copyFail: "複製失敗 — 請選取摘要後手動複製。",
+      }
   };
 
   var LANG_KEY = 'datesnap.lang';
@@ -872,14 +1276,16 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
   function wd(d) { return d.getUTCDay(); }
   function weekdayName(d) { return t('wd' + wd(d)); }
   function dstr(d) {
-    return state.lang === 'ko'
-      ? d.getUTCFullYear() + '. ' + (d.getUTCMonth() + 1) + '. ' + d.getUTCDate() + '.'
-      : d.getUTCFullYear() + '-' + pad2(d.getUTCMonth() + 1) + '-' + pad2(d.getUTCDate());
+    var Y = d.getUTCFullYear(), M = d.getUTCMonth() + 1, D = d.getUTCDate();
+    if (state.lang === 'ko') return Y + '. ' + M + '. ' + D + '.';
+    if (state.lang === 'ja' || state.lang === 'zh-Hant') return Y + '\u5e74' + M + '\u6708' + D + '\u65e5';
+    return Y + '-' + pad2(M) + '-' + pad2(D);
   }
   function dstrShort(d) {
-    return state.lang === 'ko'
-      ? (d.getUTCMonth() + 1) + '월 ' + d.getUTCDate() + '일'
-      : d.getUTCDate() + ' ' + ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getUTCMonth()];
+    var M = d.getUTCMonth() + 1, D = d.getUTCDate();
+    if (state.lang === 'ko') return M + '\uc6d4 ' + D + '\uc77c';
+    if (state.lang === 'ja' || state.lang === 'zh-Hant') return M + '\u6708' + D + '\u65e5';
+    return D + ' ' + ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getUTCMonth()];
   }
   function fullDate(d) { return dstr(d) + ' (' + weekdayName(d) + ')'; }
   function isHoliday(d) { return !!HOLMAP[ymd(d)]; }
@@ -1113,7 +1519,7 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
     var y = d.getUTCFullYear();
     var start = mk(y, 1, 1), end = mk(y, 12, 31);
     $('nowDate').textContent = dstr(d);
-    $('nowWeek').textContent = weekdayName(d) + (state.lang === 'ko' ? '요일' : '');
+    $('nowWeek').textContent = weekdayName(d) + (state.lang === 'ko' ? '\uc694\uc77c' : state.lang === 'ja' ? '\u66dc\u65e5' : '');
     $('nowDay').textContent = (daysBetween(start, d) + 1) + t('dayUnit');
     $('nowLeft').textContent = daysBetween(d, end) + t('dayUnit');
     var mEnd = mk(y, d.getUTCMonth() + 1, new Date(Date.UTC(y, d.getUTCMonth() + 1, 0)).getUTCDate());
@@ -1256,30 +1662,74 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
 
   $('copySum').addEventListener('click', function () {
     copyText(summaryText()).then(function () {
-      $('sumStatus').textContent = state.lang === 'ko' ? '클립보드에 복사했습니다.' : 'Copied to the clipboard.';
+      $('sumStatus').textContent = t('copyOk');
       $('sumStatus').className = 'status is-ok';
     }, function () {
-      $('sumStatus').textContent = state.lang === 'ko' ? '복사에 실패했습니다 — 요약을 직접 선택해 복사해 주세요.' : 'Copy failed — select the summary and copy it by hand.';
+      $('sumStatus').textContent = t('copyFail');
       $('sumStatus').className = 'status is-warn';
     });
   });
 
   /* ═════════════════════ language ═════════════════════ */
   function readLang(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
-  function initialLang() {
-    var q = '';
-    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
-    if (q === 'ko' || q === 'en') return q;
-    return readLang(SHARED_KEY) || readLang(LANG_KEY) || 'ko';
-  }
   function setMeta(sel, attr, val) {
     var el = document.querySelector(sel);
     if (el) el.setAttribute(attr, val);
   }
+  var DEFAULT_LANG = 'ko';
+  /* ═══ 4-language switch (ko · en · ja · zh-Hant) ═══ */
+  var LANGS4 = ['ko', 'en', 'ja', 'zh-Hant'];
+  function normLang(v) {
+    v = String(v == null ? '' : v).toLowerCase().replace(/_/g, '-');
+    if (v === 'ko' || v === 'ko-kr' || v === 'kr') return 'ko';
+    if (v === 'ja' || v === 'ja-jp' || v === 'jp') return 'ja';
+    if (v === 'zh-hant' || v === 'zh-tw' || v === 'zh' || v === 'tw' || v === 'zh-hk') return 'zh-Hant';
+    if (v === 'en' || v === 'en-us' || v === 'en-gb') return 'en';
+    return '';
+  }
+  function lsGet4(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function initialLang() {
+    var f = (typeof window.__FORCED_LANG__ !== 'undefined' && window.__FORCED_LANG__) ? window.__FORCED_LANG__ : '';
+    if (f && normLang(f)) return normLang(f);
+    var q = '';
+    try { q = new URLSearchParams(location.search).get('lang') || ''; } catch (e) { q = ''; }
+    if (q && normLang(q)) return normLang(q);
+    var stored = lsGet4(typeof SHARED_KEY !== 'undefined' ? SHARED_KEY : 'kyh.lang') || lsGet4(typeof LANG_KEY !== 'undefined' ? LANG_KEY : '');
+    if (stored && normLang(stored)) return normLang(stored);
+    var h = normLang(document.documentElement.getAttribute('lang'));
+    if (h) return h;
+    return typeof DEFAULT_LANG !== 'undefined' ? DEFAULT_LANG : 'ko';
+  }
+  function syncLangUI() {
+    var lt = document.getElementById('langToggle');
+    if (!lt) return;
+    var btns = lt.querySelectorAll('[data-lang]');
+    for (var i = 0; i < btns.length; i++) {
+      var on = btns[i].getAttribute('data-lang') === state.lang;
+      btns[i].classList.toggle('on', on);
+      btns[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+  }
+  function bindLangToggle() {
+    var lt = document.getElementById('langToggle');
+    if (!lt) return;
+    lt.addEventListener('click', function (ev) {
+      var t4 = ev.target.closest('[data-lang]');
+      if (!t4) return;
+      applyLang(t4.getAttribute('data-lang'));
+    });
+  }
+
   function applyLang(lang) {
-    state.lang = lang === 'en' ? 'en' : 'ko';
+    state.lang = normLang(lang) || 'ko';
     document.documentElement.setAttribute('lang', state.lang);
     document.title = t('docTitle');
+    var _md4 = t('metaDesc');
+    if (_md4 && _md4 !== 'metaDesc') {
+      var _mde = document.querySelector('meta[name="description"]'); if (_mde) _mde.setAttribute('content', _md4);
+      var _ode = document.querySelector('meta[property="og:description"]'); if (_ode) _ode.setAttribute('content', _md4);
+      var _tde = document.querySelector('meta[name="twitter:description"]'); if (_tde) _tde.setAttribute('content', _md4);
+    }
     setMeta('meta[property="og:title"]', 'content', t('docTitle').split('|')[0].trim());
     var nodes = document.querySelectorAll('[data-i18n]');
     for (var i = 0; i < nodes.length; i++) {
@@ -1298,16 +1748,14 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
     }
     var lt = $('langToggle');
     if (lt) {
-      var spans = lt.querySelectorAll('[data-lt]');
-      for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
-      lt.setAttribute('aria-label', t('toggleTo'));
-      lt.setAttribute('title', t('toggleTo'));
+      syncLangUI();
     }
     paintAll();
     try { localStorage.setItem(LANG_KEY, state.lang); localStorage.setItem(SHARED_KEY, state.lang); } catch (e) { /* blocked */ }
   }
-  $('langToggle').addEventListener('click', function () {
-    applyLang(state.lang === 'ko' ? 'en' : 'ko');
+  $('langToggle').addEventListener('click', function (ev) {
+    var _t4 = ev.target.closest('[data-lang]');
+    if (_t4) applyLang(_t4.getAttribute('data-lang'));
   });
 
   /* ═════════════════════ boot ═════════════════════ */

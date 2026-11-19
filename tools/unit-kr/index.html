@@ -161,6 +161,9 @@ button, input, select, textarea { font-family: inherit; color: inherit; }
 .lang-toggle:active { transform: scale(.94); }
 .lang-toggle .lt.on { color: var(--accent); }
 .lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.lang-toggle .lt { appearance: none; border: 0; background: none; color: inherit; font: inherit; letter-spacing: inherit; line-height: 1; padding: 1px 0; cursor: pointer; transition: color .2s; }
+.lang-toggle .lt:hover { color: var(--ink); }
+.lang-toggle .lt:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 .topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
 .topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
 
@@ -349,7 +352,7 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
 .foot .net b { color: var(--ok); }
 
 @media (max-width: 640px) {
-  .wrap { padding: 0 14px 36px; }
+  .wrap { padding: 0 16px 36px; }
   .topbar { padding: 14px 0 8px; }
   .brand-txt { font-size: 12px; letter-spacing: .1em; }
   .hero { padding: 16px 0 12px; }
@@ -370,11 +373,15 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
       <span class="brand-txt">Kim Yihyung</span>
     </a>
     <div class="top-actions">
-      <button class="lang-toggle" id="langToggle" type="button" title="View in English" aria-label="View in English">
-        <span class="lt on" data-lt="ko">KO</span>
+      <div class="lang-toggle" id="langToggle" role="group" aria-label="Language">
+        <button class="lt" type="button" data-lt="ko" lang="ko">KO</button>
         <span class="lsep" aria-hidden="true">|</span>
-        <span class="lt" data-lt="en">EN</span>
-      </button>
+        <button class="lt" type="button" data-lt="en" lang="en">EN</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lt="ja" lang="ja">JA</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lt="zh-Hant" lang="zh-Hant">繁中</button>
+      </div>
       <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← 도구 전체</a>
     </div>
   </header>
@@ -690,6 +697,9 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
   /* ═════════════════════ language ═════════════════════ */
   var I18N = {
     ko: {
+      langLabel: '언어',
+      metaTitle: 'UnitKR — 한국 단위(평·근·돈) 변환기',
+      metaDesc: '실제로 쓰는 한국 단위 그대로 — 평과 ㎡, 자·치·간, 정육점과 청과의 근, 금의 돈, 되·말·소주병, 그리고 ℃ ↔ ℉까지. 참고표와 한 번에 복사하는 채팅 요약을 함께 제공하며 입력한 내용은 저장하지 않습니다.',
       docTitle: 'UnitKR — 평·근·돈·되 한국 단위 변환기 | Kim Yihyung',
       brandAria: 'Kim Yihyung — 포트폴리오',
       back: '← 도구 전체',
@@ -748,6 +758,9 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
       sumFoot: '단위 변환: UnitKR (kimyihyung.github.io/portfolio/tools/unit-kr)'
     },
     en: {
+      langLabel: 'Language',
+      metaTitle: 'UnitKR — Korean units (pyeong, geun, don) converter',
+      metaDesc: 'Korean units as they are actually used — pyeong and ㎡, ja·chi·gan, the geun of the butcher and of the produce stall, the don of gold, doe·mal·soju bottles and ℃ ↔ ℉ — plus a reference sheet and a one-tap chat summary. Nothing you type is stored.',
       docTitle: 'UnitKR — Korean Units (pyeong, geun, don) Converter | Kim Yihyung',
       brandAria: 'Kim Yihyung — portfolio',
       back: '← All tools',
@@ -804,11 +817,260 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
       sumArea: 'Area', sumLength: 'Length', sumMass: 'Weight', sumVolume: 'Volume', sumTemp: 'Temp',
       sumTail: 'meat 1 geun 600g · produce 1 geun 375g (400g in places) · gold 1 don 3.75g · 1 pyeong 3.305785㎡',
       sumFoot: 'Unit converter: UnitKR (kimyihyung.github.io/portfolio/tools/unit-kr)'
+    },
+    'ja': {
+      docTitle: 'UnitKR — 韓国の単位(坪・斤・돈)換算 | Kim Yihyung',
+      metaTitle: 'UnitKR — 韓国の単位(坪・斤・돈)換算',
+      metaDesc: '実際に使われている韓国の単位をそのまま換算します — 坪と㎡、자・치・간、精肉店と青果店の斤、金の돈、되・말・焼酎瓶、そして ℃ ↔ ℉。早見表とチャット用の要約付きで、入力した内容は保存しません。',
+      langLabel: '言語を切り替え',
+      brandAria: 'Kim Yihyung — ポートフォリオ',
+      back: '← ツール一覧',
+      eyebrow: 'UnitKR · 坪 · 斤 · 돈 · アップロードゼロ',
+      h1: '34坪は何㎡?<br><span class="soft">金1돈は何グラム?</span><br><span class="gold">このタブで答えが出ます。</span>',
+      lede: '実際に使われている韓国の単位をそのまま — <strong>坪と㎡</strong>、<strong>자・치・간</strong>、精肉店と青果店の<strong>斤(근)</strong>、金の<strong>돈</strong>、<strong>되・말・焼酎瓶</strong>、そして<strong>℃ ↔ ℉</strong> — 早見表とワンタップのチャット要約付き。入力した内容は保存しません。',
+      pillUp: 'アップロード 0 バイト',
+      pillNet: '外部リクエスト 0 件',
+      pillUnits: '坪 · 斤 · 돈',
+      pillCopy: 'チャット用の要約をコピー',
+      calcAria: '単位換算',
+      tabAria: '換算の種類',
+      tab1: '面積・長さ',
+      tab2: '重さ',
+      tab3: '体積・温度',
+      tab4: '早見表・コピー',
+      seg1Aria: '面積か長さ',
+      seg3Aria: '体積か温度',
+      segArea: '面積 · 坪',
+      segLength: '長さ · 자',
+      segVolume: '体積 · 料理',
+      segTemp: '温度 ℃ ↔ ℉',
+      fromLabel: '値',
+      toLabel: '結果',
+      valueAria: '値',
+      fromAria: '元の単位',
+      toAria: '変換後の単位',
+      swapAria: '単位を入れ替え',
+      eqHead: 'まとめて',
+      eqNote: 'クリックでコピー',
+      areaHead: '坪 ↔ ㎡',
+      areaNote: '1坪 = 3.305785 ㎡',
+      lengthHead: '자 · 치 · 간 ↔ cm · m',
+      lengthNote: '1자 = 30.303 cm',
+      massHead: '돈 · 냥 · 관 · 근 ↔ g · kg',
+      massNote: '金 1돈 = 3.75 g · 肉 1근 = 600 g',
+      volumeHead: '되 · 말 · 本 ↔ ml · L',
+      volumeNote: '1되 = 1.8039 L · 焼酎1本 = 360 ml',
+      tempHead: '摂氏 ↔ 華氏',
+      tempNote: '100℃ = 212℉',
+      areaCaveat: '韓国の物件表示では、<b>24坪</b>は延べ面積で語られ、<b>59㎡ や 84㎡</b> は専用面積なので、同じ家に2つの数字が付きます。ここでは入力した数字をそのまま換算します。',
+      lengthCaveat: '韓国の <b>1자 = 10/33 m</b>、<b>1치 = 1/10자</b>、<b>1간 = 6자</b>。インチ・フィート・ヤード・マイルは国際定義(1 in = 2.54 cm)を使います。',
+      massCaveat: '<b>肉の1근は600 g</b>(1근 = 16냥)、<b>青果の1근は慣習で375 g</b>、市場によっては<b>400 g</b>です。金は<b>1돈 3.75 g</b>。世界価格に使うトロイオンス(31.1034768 g)は、常用オンス(28.3495 g)とは別物です。',
+      volumeCaveat: '韓国の <b>1되 = 1.8039 L</b>、<b>1말 = 10되</b>、<b>1홉 = 1/10되</b>。韓国の計量カップはふつう<b>200 ml</b>、米国のカップは<b>240 ml</b>です。',
+      tempCaveat: '℉ = ℃ × 9 ÷ 5 + 32、℃ = (℉ − 32) × 5 ÷ 9。オーブンの<b>180℃ = 356℉</b>、体温<b>36.5℃ = 97.7℉</b>。',
+      refHead: '暮らしの韓国単位早見',
+      refNote: '市場 · 不動産 · 台所',
+      refA: '面積・長さ',
+      refB: '重さ・体積・温度',
+      r1: '24坪の住戸',
+      r2: '34坪の住戸',
+      r3: '59㎡(専用)',
+      r4: '84㎡(専用)',
+      r5: '1자',
+      r6: '1간(6자)',
+      r7: '1マイル',
+      r8: '金 1돈',
+      r9: '金 1냥',
+      r10: '肉 1근',
+      r11: '青果 1근',
+      r12: '焼酎1本',
+      r13: 'ビール1本',
+      r14: '米 1말',
+      r15: 'オーブン 180℃',
+      sumHead: 'チャット用の要約',
+      sumNote: '画面の値から',
+      copySum: 'チャット用の要約をコピー',
+      refreshSum: '今の値で更新',
+      sumCaveat: '上の3つのタブで変えた値がそのまま入り、数字を聞かれたときにメッセージへ貼れる形になります。',
+      nrHead: '数字の出どころ',
+      nrNote: '慣習も含めて',
+      n1h: '1坪は 400/121 ㎡',
+      n1p: '坪は<b>6자 × 6자</b>です。1자 = 10/33 m なので、1坪は <b>400/121 ㎡ = 3.3057851… ㎡</b> — 物件表示で使われる <b>3.305785</b> です。逆は㎡を <b>3.305785</b> で割ります。',
+      n2h: '근は1つではない',
+      n2p: '精肉店では<b>1근は600 g</b>。青果では慣習が<b>375 g — 3.75 kg の관の10分の1</b> — に落ち着き、一部の市場では<b>400 g</b> も使われます。どちらか確認してから計算すれば、数字は正直なままです。',
+      n3h: '金は돈、価格はトロイオンス',
+      n3p: '韓国の金は<b>돈(3.75 g)</b>と<b>냥(37.5 g)</b>で取引され、世界価格は<b>トロイオンス(31.1034768 g)</b>建てです。常用オンスは<b>28.3495 g</b>なので、混同すると価格が1割近くずれます。',
+      faqTitle: 'よくある質問',
+      faqNote: '坪 · 斤 · 돈 · 温度',
+      q1: '59㎡は何坪ですか?',
+      a1: '<b>59 ÷ 3.305785 = 17.85坪。</b> なお<b>24坪</b>の表示は延べ面積、<b>59㎡</b> は専用面積で、同じ家に2つの数字が付きます。契約書がどちらの面積かを確認してください。',
+      q2: 'なぜ肉の1근は600 gで、野菜は375 gなのですか?',
+      a2: '1근は<b>16냥</b>×37.5 g で600 g、精肉店はこれを守っています。青果では慣習が<b>375 g(3.75 kg の관の10分の1)</b>になり、一部では<b>400 g</b> です。店で確認すれば数字は合います。',
+      q3: '金1돈は何グラムですか?',
+      a3: '<b>3.75 g</b>です。1냥が37.5 gで、돈はその10分の1なので、金1kgは約<b>266.7돈</b>になります。',
+      q4: '韓国の자は日本の尺と同じですか?',
+      a4: '大きさは近いですが同じ単位ではありません。韓国の자は<b>10/33 m ≈ 30.303 cm</b>、中国の尺は約<b>33.3 cm</b>です。このページは韓国の定義を使います: <b>1자 = 30.303 cm、1치 = 3.0303 cm、1간 = 181.82 cm</b>。',
+      q5: '入力した内容は保存・送信されますか?',
+      a5: 'いいえ。換算はこのタブで動きます。サーバー呼び出しも解析も数字の保存もなく、このブラウザに残るのは言語の選択だけです。フッターが数えるページ自身の外部リクエストは <b>0</b> のままです。',
+      footCopy: '© 2026 Kim Yihyung · ブラウザで、ブラウザのために。',
+      footNet: '外部リクエスト',
+      footP1: 'ポートフォリオ',
+      footP2: 'ツール一覧',
+      footP3: 'ソース',
+      mono: 'アップロードなし · 追跡なし',
+      toggleTo: '言語を切り替え',
+      copied: 'コピーしました',
+      refreshDone: '今の値で更新しました',
+      sumTitle: '[UnitKR 韓国の単位のまとめ]',
+      sumArea: '面積',
+      sumLength: '長さ',
+      sumMass: '重さ',
+      sumVolume: '体積',
+      sumTemp: '温度',
+      sumTail: '肉 1근 600g · 青果 1근 375g(地域により400g) · 金 1돈 3.75g · 1坪 3.305785㎡',
+      sumFoot: '単位換算: UnitKR (kimyihyung.github.io/portfolio/tools/unit-kr)'
+    },
+    'zh-Hant': {
+      docTitle: 'UnitKR — 韓國單位(坪・斤・돈)換算 | Kim Yihyung',
+      metaTitle: 'UnitKR — 韓國單位(坪・斤・돈)換算',
+      metaDesc: '照韓國實際在用的單位換算 — 坪與㎡、자・치・간、肉舖與菜攤的斤、黃金的돈、되・말・燒酒瓶，以及 ℃ ↔ ℉。附速查表與一鍵聊天摘要，輸入的內容不會被儲存。',
+      langLabel: '切換語言',
+      brandAria: 'Kim Yihyung — 作品集',
+      back: '← 所有工具',
+      eyebrow: 'UnitKR · 坪 · 斤 · 돈 · 零上傳',
+      h1: '34 坪是幾㎡?<br><span class="soft">黃金 1돈是幾公克?</span><br><span class="gold">在這個分頁就有答案。</span>',
+      lede: '照韓國實際在用的單位來算 — <strong>坪與㎡</strong>、<strong>자・치・간</strong>、肉舖和菜攤的<strong>斤(근)</strong>、黃金的<strong>돈</strong>、<strong>되・말・燒酒瓶</strong>，還有<strong>℃ ↔ ℉</strong> — 附速查表與一鍵聊天摘要。輸入的內容不會被儲存。',
+      pillUp: '上傳 0 位元組',
+      pillNet: '外部請求 0 次',
+      pillUnits: '坪 · 斤 · 돈',
+      pillCopy: '複製聊天摘要',
+      calcAria: '單位換算',
+      tabAria: '換算類型',
+      tab1: '面積・長度',
+      tab2: '重量',
+      tab3: '體積・溫度',
+      tab4: '速查・複製',
+      seg1Aria: '面積或長度',
+      seg3Aria: '體積或溫度',
+      segArea: '面積 · 坪',
+      segLength: '長度 · 자',
+      segVolume: '體積 · 料理',
+      segTemp: '溫度 ℃ ↔ ℉',
+      fromLabel: '數值',
+      toLabel: '結果',
+      valueAria: '數值',
+      fromAria: '來源單位',
+      toAria: '目標單位',
+      swapAria: '交換單位',
+      eqHead: '一次全部',
+      eqNote: '點一下即複製',
+      areaHead: '坪 ↔ ㎡',
+      areaNote: '1 坪 = 3.305785 ㎡',
+      lengthHead: '자 · 치 · 간 ↔ cm · m',
+      lengthNote: '1자 = 30.303 cm',
+      massHead: '돈 · 냥 · 관 · 근 ↔ g · kg',
+      massNote: '黃金 1돈 = 3.75 g · 肉 1근 = 600 g',
+      volumeHead: '되 · 말 · 瓶 ↔ ml · L',
+      volumeNote: '1되 = 1.8039 L · 燒酒一瓶 = 360 ml',
+      tempHead: '攝氏 ↔ 華氏',
+      tempNote: '100℃ = 212℉',
+      areaCaveat: '韓國的不動產廣告裡，<b>24 坪</b>講的是總面積，<b>59㎡ 或 84㎡</b> 是專用面積，所以一個家會有兩個數字。這裡只換算你輸入的數字。',
+      lengthCaveat: '韓國 <b>1자 = 10/33 m</b>、<b>1치 = 1/10자</b>、<b>1간 = 6자</b>。英吋、英尺、碼、英里採國際定義(1 in = 2.54 cm)。',
+      massCaveat: '<b>肉的 1근 是 600 g</b>(1근 = 16냥)、<b>蔬菜的 1근 依慣例是 375 g</b>、有些市場用 <b>400 g</b>。黃金是<b>1돈 3.75 g</b>；國際金價用的金衡盎司(31.1034768 g)和常衡盎司(28.3495 g)不是同一個東西。',
+      volumeCaveat: '韓國 <b>1되 = 1.8039 L</b>、<b>1말 = 10되</b>、<b>1홉 = 1/10되</b>。韓國量杯通常是 <b>200 ml</b>，美國量杯是 <b>240 ml</b>。',
+      tempCaveat: '℉ = ℃ × 9 ÷ 5 + 32，℃ = (℉ − 32) × 5 ÷ 9。烤箱 <b>180℃ = 356℉</b>、體溫 <b>36.5℃ = 97.7℉</b>。',
+      refHead: '生活裡的韓國單位速查',
+      refNote: '市場 · 房地產 · 廚房',
+      refA: '面積・長度',
+      refB: '重量・體積・溫度',
+      r1: '24 坪住宅',
+      r2: '34 坪住宅',
+      r3: '59㎡(專用)',
+      r4: '84㎡(專用)',
+      r5: '1자',
+      r6: '1간(6자)',
+      r7: '1 英里',
+      r8: '黃金 1돈',
+      r9: '黃金 1냥',
+      r10: '肉 1근',
+      r11: '蔬菜 1근',
+      r12: '燒酒一瓶',
+      r13: '啤酒一瓶',
+      r14: '米 1말',
+      r15: '烤箱 180℃',
+      sumHead: '聊天摘要',
+      sumNote: '取自畫面上的數值',
+      copySum: '複製聊天摘要',
+      refreshSum: '用目前數值更新',
+      sumCaveat: '你在上面三個分頁改過的數值會原樣帶入，排成有人問你數字時可以直接貼上的樣子。',
+      nrHead: '數字從哪來',
+      nrNote: '慣例也算進去',
+      n1h: '1 坪是 400/121 ㎡',
+      n1p: '坪是<b>6자 × 6자</b>。1자 = 10/33 m，所以 1 坪是 <b>400/121 ㎡ = 3.3057851… ㎡</b> — 就是廣告上寫的 <b>3.305785</b>。反過來把㎡除以 <b>3.305785</b>。',
+      n2h: '근 不只一種',
+      n2p: '肉舖的<b>1근 是 600 g</b>。蔬菜的慣例落在<b>375 g — 3.75 kg 的관的十分之一</b>，有些市場還在用<b>400 g</b>。先問清楚是哪一種，算出來的數字才站得住。',
+      n3h: '黃金用돈，報價用金衡盎司',
+      n3p: '韓國的黃金以<b>돈(3.75 g)</b>與<b>냥(37.5 g)</b>交易，國際報價則以<b>金衡盎司(31.1034768 g)</b>計。常衡盎司是<b>28.3495 g</b>，兩者混用會讓價格差近一成。',
+      faqTitle: '常見問題',
+      faqNote: '坪 · 斤 · 돈 · 溫度',
+      q1: '59㎡ 是幾坪?',
+      a1: '<b>59 ÷ 3.305785 = 17.85 坪。</b> 要注意<b>24 坪</b>是總面積、<b>59㎡</b> 是專用面積，同一個家兩個數字。請確認契約寫的是哪一種。',
+      q2: '為什麼肉的 1근 是 600 g，蔬菜卻是 375 g?',
+      a2: '1근 是<b>16냥</b>×37.5 g = 600 g，肉舖沿用這個。蔬菜的慣例變成<b>375 g(3.75 kg 的관的十分之一)</b>，有些地方是<b>400 g</b>。到攤上問一聲，數字就對得上。',
+      q3: '黃金 1돈是幾公克?',
+      a3: '<b>3.75 g</b>。1냥 是 37.5 g，돈 是它的十分之一，所以一公斤黃金約 <b>266.7돈</b>。',
+      q4: '韓國的자跟日本的尺一樣嗎?',
+      a4: '大小接近但不是同一個單位。韓國的자是<b>10/33 m ≈ 30.303 cm</b>，中國的尺約<b>33.3 cm</b>。這個頁面用韓國的定義：<b>1자 = 30.303 cm、1치 = 3.0303 cm、1간 = 181.82 cm</b>。',
+      q5: '我輸入的內容會被儲存或傳送嗎?',
+      a5: '不會。換算在這個分頁裡跑。沒有伺服器呼叫、沒有分析、也不儲存數字 — 這個瀏覽器只留著語言選擇。頁尾統計的頁面自身外部請求一直是 <b>0</b>。',
+      footCopy: '© 2026 Kim Yihyung · 在瀏覽器裡，為瀏覽器而做。',
+      footNet: '外部請求',
+      footP1: '作品集',
+      footP2: '所有工具',
+      footP3: '原始碼',
+      mono: '不上傳 · 不追蹤',
+      toggleTo: '切換語言',
+      copied: '已複製',
+      refreshDone: '已用目前數值更新',
+      sumTitle: '[UnitKR 韓國單位摘要]',
+      sumArea: '面積',
+      sumLength: '長度',
+      sumMass: '重量',
+      sumVolume: '體積',
+      sumTemp: '溫度',
+      sumTail: '肉 1근 600g · 蔬菜 1근 375g(部分地區 400g) · 黃金 1돈 3.75g · 1 坪 3.305785㎡',
+      sumFoot: '單位換算: UnitKR (kimyihyung.github.io/portfolio/tools/unit-kr)'
     }
   };
 
   var LANG_KEY = 'unitkr.lang';
   var SHARED_KEY = 'kyh.lang';
+  var LANGS = ['ko', 'en', 'ja', 'zh-Hant'];
+  var DEFAULT_LANG = normLang(document.documentElement.getAttribute('lang')) || 'ko';
+  function normLang(v) {
+    var s = String(v == null ? '' : v).trim().toLowerCase().replace(/_/g, '-');
+    if (s === 'ko' || s === 'kr' || s === 'ko-kr') return 'ko';
+    if (s === 'en' || s === 'en-us' || s === 'en-gb' || s === 'en-au') return 'en';
+    if (s === 'ja' || s === 'jp' || s === 'ja-jp') return 'ja';
+    if (s === 'zh-hant' || s === 'zh-tw' || s === 'zh-hk' || s === 'zh-mo' || s === 'tw' || s === 'zh' || s === 'zh-hant-tw') return 'zh-Hant';
+    return '';
+  }
+  function setMeta(sel, attr, val) { var el = document.querySelector(sel); if (el && val != null) el.setAttribute(attr, val); }
+  function readStoredLang(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  /* read-only: per-language title/description for the static /en/ /ja/ /zh-tw/ builder.
+     A getter, so it is computed when read (the builder runs after this script). */
+  Object.defineProperty(window, '__I18N_META__', {
+    configurable: true,
+    get: function () {
+      var out = {};
+      var ogl = { ko: 'ko_KR', en: 'en_US', ja: 'ja_JP', 'zh-Hant': 'zh_TW' };
+      Object.keys(I18N || {}).forEach(function (lg) {
+        var d = I18N[lg] || {};
+        out[lg] = { htmlLang: lg, ogLocale: ogl[lg] || 'en_US',
+                    title: d.metaTitle || d.docTitle || '', description: d.metaDesc || '' };
+      });
+      return out;
+    }
+  });
 
   var state = {
     lang: 'ko',
@@ -830,12 +1092,13 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
   }
   function readLang(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function initialLang() {
-    var q = '';
-    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
-    if (q === 'ko' || q === 'en') return q;
-    var own = readLang(LANG_KEY);
-    if (own === 'ko' || own === 'en') return own;
-    return 'ko';
+    var l = normLang(window.__FORCED_LANG__);
+    if (l) return l;
+    try { l = normLang(new URLSearchParams(location.search).get('lang')); } catch (e) { l = ''; }
+    if (l) return l;
+    l = normLang(readStoredLang(SHARED_KEY)) || normLang(readStoredLang(LANG_KEY));
+    if (l) return l;
+    return normLang(document.documentElement.getAttribute('lang')) || DEFAULT_LANG;
   }
 
   /* ═════════════════════ units ═════════════════════ */
@@ -844,67 +1107,67 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
     area: {
       base: 'm2',
       units: [
-        { k: 'pyeong', f: 3.305785, ko: '평', en: 'pyeong' },
-        { k: 'm2', f: 1, ko: '㎡', en: '㎡' },
-        { k: 'ft2', f: 0.09290304, ko: '평방피트', en: 'ft²' }
+        { k: 'pyeong', f: 3.305785, ko: '평', en: 'pyeong', ja: '坪', zh: '坪' },
+        { k: 'm2', f: 1, ko: '㎡', en: '㎡', ja: '㎡', zh: '㎡' },
+        { k: 'ft2', f: 0.09290304, ko: '평방피트', en: 'ft²', ja: '平方フィート', zh: '平方英尺' }
       ]
     },
     length: {
       base: 'm',
       units: [
-        { k: 'ja', f: 0.3030303030, ko: '자', en: 'ja' },
-        { k: 'chi', f: 0.0303030303, ko: '치', en: 'chi' },
-        { k: 'gan', f: 1.8181818182, ko: '간', en: 'gan' },
-        { k: 'mm', f: 0.001, ko: 'mm', en: 'mm' },
-        { k: 'cm', f: 0.01, ko: 'cm', en: 'cm' },
-        { k: 'm', f: 1, ko: 'm', en: 'm' },
-        { k: 'km', f: 1000, ko: 'km', en: 'km' },
-        { k: 'in', f: 0.0254, ko: '인치', en: 'in' },
-        { k: 'ft', f: 0.3048, ko: '피트', en: 'ft' },
-        { k: 'yd', f: 0.9144, ko: '야드', en: 'yd' },
-        { k: 'mi', f: 1609.344, ko: '마일', en: 'mi' },
-        { k: 'ri', f: 392.727, ko: '리', en: 'ri' }
+        { k: 'ja', f: 0.3030303030, ko: '자', en: 'ja', ja: '자(尺)', zh: '자(尺)' },
+        { k: 'chi', f: 0.0303030303, ko: '치', en: 'chi', ja: '치(寸)', zh: '치(寸)' },
+        { k: 'gan', f: 1.8181818182, ko: '간', en: 'gan', ja: '간(間)', zh: '간(間)' },
+        { k: 'mm', f: 0.001, ko: 'mm', en: 'mm', ja: 'mm', zh: 'mm' },
+        { k: 'cm', f: 0.01, ko: 'cm', en: 'cm', ja: 'cm', zh: 'cm' },
+        { k: 'm', f: 1, ko: 'm', en: 'm', ja: 'm', zh: 'm' },
+        { k: 'km', f: 1000, ko: 'km', en: 'km', ja: 'km', zh: 'km' },
+        { k: 'in', f: 0.0254, ko: '인치', en: 'in', ja: 'インチ', zh: '英吋' },
+        { k: 'ft', f: 0.3048, ko: '피트', en: 'ft', ja: 'フィート', zh: '英尺' },
+        { k: 'yd', f: 0.9144, ko: '야드', en: 'yd', ja: 'ヤード', zh: '碼' },
+        { k: 'mi', f: 1609.344, ko: '마일', en: 'mi', ja: 'マイル', zh: '英里' },
+        { k: 'ri', f: 392.727, ko: '리', en: 'ri', ja: '리(里)', zh: '리(里)' }
       ]
     },
     mass: {
       base: 'g',
       units: [
-        { k: 'don', f: 3.75, ko: '돈', en: 'don' },
-        { k: 'nyang', f: 37.5, ko: '냥', en: 'nyang' },
-        { k: 'gwan', f: 3750, ko: '관', en: 'gwan' },
-        { k: 'g', f: 1, ko: 'g', en: 'g' },
-        { k: 'kg', f: 1000, ko: 'kg', en: 'kg' },
-        { k: 't', f: 1000000, ko: '톤', en: 't' },
-        { k: 'geun_meat', f: 600, ko: '근 (고기)', en: 'geun · meat', s: { ko: '근(고기)', en: 'geun·meat' } },
-        { k: 'geun_v375', f: 375, ko: '근 (채소 375g)', en: 'geun · produce 375g', s: { ko: '근(채소)', en: 'geun·veg' } },
-        { k: 'geun_v400', f: 400, ko: '근 (채소 400g)', en: 'geun · produce 400g', s: { ko: '근(채소400)', en: 'geun·veg400' } },
-        { k: 'lb', f: 453.59237, ko: '파운드', en: 'lb' },
-        { k: 'oz', f: 28.349523125, ko: '온스', en: 'oz' },
-        { k: 'ozt', f: 31.1034768, ko: '트로이온스', en: 'troy oz' }
+        { k: 'don', f: 3.75, ko: '돈', en: 'don', ja: '돈(匁)', zh: '돈(錢)' },
+        { k: 'nyang', f: 37.5, ko: '냥', en: 'nyang', ja: '냥(両)', zh: '냥(兩)' },
+        { k: 'gwan', f: 3750, ko: '관', en: 'gwan', ja: '관(貫)', zh: '관(貫)' },
+        { k: 'g', f: 1, ko: 'g', en: 'g', ja: 'g', zh: 'g' },
+        { k: 'kg', f: 1000, ko: 'kg', en: 'kg', ja: 'kg', zh: 'kg' },
+        { k: 't', f: 1000000, ko: '톤', en: 't', ja: 'トン', zh: '公噸' },
+        { k: 'geun_meat', f: 600, ko: '근 (고기)', en: 'geun · meat', s: { ko: '근(고기)', en: 'geun·meat', ja: '근·肉', zh: '근·肉' }, ja: '근·精肉 600g', zh: '근·肉 600g' },
+        { k: 'geun_v375', f: 375, ko: '근 (채소 375g)', en: 'geun · produce 375g', s: { ko: '근(채소)', en: 'geun·veg', ja: '근·菜', zh: '근·菜' }, ja: '근·青果 375g', zh: '근·菜 375g' },
+        { k: 'geun_v400', f: 400, ko: '근 (채소 400g)', en: 'geun · produce 400g', s: { ko: '근(채소400)', en: 'geun·veg400', ja: '근·菜400', zh: '근·菜400' }, ja: '근·青果 400g', zh: '근·菜 400g' },
+        { k: 'lb', f: 453.59237, ko: '파운드', en: 'lb', ja: 'ポンド', zh: '磅' },
+        { k: 'oz', f: 28.349523125, ko: '온스', en: 'oz', ja: 'オンス', zh: '盎司' },
+        { k: 'ozt', f: 31.1034768, ko: '트로이온스', en: 'troy oz', ja: 'トロイオンス', zh: '金衡盎司' }
       ]
     },
     volume: {
       base: 'ml',
       units: [
-        { k: 'ml', f: 1, ko: 'ml', en: 'ml' },
-        { k: 'l', f: 1000, ko: 'L', en: 'L' },
-        { k: 'cup200', f: 200, ko: '컵 (200ml)', en: 'cup 200ml', s: { ko: '컵200', en: 'cup200' } },
-        { k: 'cup240', f: 240, ko: '컵 (240ml US)', en: 'cup 240ml US', s: { ko: '컵240', en: 'cup240' } },
-        { k: 'hop', f: 180.39, ko: '홉', en: 'hop' },
-        { k: 'doe', f: 1803.9, ko: '되', en: 'doe' },
-        { k: 'mal', f: 18039, ko: '말', en: 'mal' },
-        { k: 'soju', f: 360, ko: '소주병 (360ml)', en: 'soju bottle 360ml', s: { ko: '소주병', en: 'soju' } },
-        { k: 'beer', f: 500, ko: '맥주병 (500ml)', en: 'beer bottle 500ml', s: { ko: '맥주병', en: 'beer' } },
-        { k: 'floz', f: 29.5735295625, ko: 'fl oz', en: 'fl oz' },
-        { k: 'gal', f: 3785.411784, ko: '갤런 (US)', en: 'US gal' }
+        { k: 'ml', f: 1, ko: 'ml', en: 'ml', ja: 'ml', zh: 'ml' },
+        { k: 'l', f: 1000, ko: 'L', en: 'L', ja: 'L', zh: 'L' },
+        { k: 'cup200', f: 200, ko: '컵 (200ml)', en: 'cup 200ml', s: { ko: '컵200', en: 'cup200', ja: 'カップ200', zh: '杯200' }, ja: 'カップ 200ml', zh: '杯 200ml' },
+        { k: 'cup240', f: 240, ko: '컵 (240ml US)', en: 'cup 240ml US', s: { ko: '컵240', en: 'cup240', ja: 'カップ240', zh: '杯240' }, ja: 'カップ 240ml(US)', zh: '杯 240ml(US)' },
+        { k: 'hop', f: 180.39, ko: '홉', en: 'hop', ja: '홉(合)', zh: '홉(合)' },
+        { k: 'doe', f: 1803.9, ko: '되', en: 'doe', ja: '되(升)', zh: '되(升)' },
+        { k: 'mal', f: 18039, ko: '말', en: 'mal', ja: '말(斗)', zh: '말(斗)' },
+        { k: 'soju', f: 360, ko: '소주병 (360ml)', en: 'soju bottle 360ml', s: { ko: '소주병', en: 'soju', ja: '焼酎瓶', zh: '燒酒瓶' }, ja: '焼酎瓶 360ml', zh: '燒酒瓶 360ml' },
+        { k: 'beer', f: 500, ko: '맥주병 (500ml)', en: 'beer bottle 500ml', s: { ko: '맥주병', en: 'beer', ja: 'ビール瓶', zh: '啤酒瓶' }, ja: 'ビール瓶 500ml', zh: '啤酒瓶 500ml' },
+        { k: 'floz', f: 29.5735295625, ko: 'fl oz', en: 'fl oz', ja: 'fl oz', zh: 'fl oz' },
+        { k: 'gal', f: 3785.411784, ko: '갤런 (US)', en: 'US gal', ja: 'ガロン(US)', zh: '加侖(US)' }
       ]
     },
     temp: {
       base: 'c',
       units: [
-        { k: 'c', ko: '℃', en: '℃' },
-        { k: 'f', ko: '℉', en: '℉' },
-        { k: 'k', ko: 'K', en: 'K' }
+        { k: 'c', ko: '℃', en: '℃', ja: '℃', zh: '℃' },
+        { k: 'f', ko: '℉', en: '℉', ja: '℉', zh: '℉' },
+        { k: 'k', ko: 'K', en: 'K', ja: 'K', zh: 'K' }
       ]
     }
   };
@@ -916,12 +1179,21 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
   }
   function unitLabel(pane, key, lang) {
     var u = unitOf(pane, key);
-    return (lang || state.lang) === 'en' ? (u.en || u.ko) : (u.ko || u.en);
+    var L = lang || state.lang;
+    if (L === 'en') return u.en || u.ko;
+    if (L === 'ja' && u.ja) return u.ja;
+    if (L === 'zh-Hant' && u.zh) return u.zh;
+    return u.ko || u.en;
   }
   function unitShort(pane, key, lang) {
     var u = unitOf(pane, key);
     var L = lang || state.lang;
-    if (u.s) return L === 'en' ? (u.s.en || u.s.ko) : (u.s.ko || u.s.en);
+    if (u.s) {
+      if (L === 'en') return u.s.en || u.s.ko;
+      if (L === 'ja' && u.s.ja) return u.s.ja;
+      if (L === 'zh-Hant' && u.s.zh) return u.s.zh;
+      return u.s.ko || u.s.en;
+    }
     return unitLabel(pane, key, L);
   }
 
@@ -1156,9 +1428,15 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
 
   /* ═════════════════════ language ═════════════════════ */
   function applyLang(lang) {
-    state.lang = lang === 'en' ? 'en' : 'ko';
+    state.lang = normLang(lang) || DEFAULT_LANG;
     document.documentElement.setAttribute('lang', state.lang);
     document.title = t('docTitle');
+    setMeta('meta[name="description"]', 'content', t('metaDesc'));
+    setMeta('meta[property="og:title"]', 'content', t('metaTitle'));
+    setMeta('meta[property="og:description"]', 'content', t('metaDesc'));
+    setMeta('meta[name="twitter:title"]', 'content', t('metaTitle'));
+    setMeta('meta[name="twitter:description"]', 'content', t('metaDesc'));
+    setMeta('meta[property="og:locale"]', 'content', state.lang === 'zh-Hant' ? 'zh_TW' : (state.lang === 'ja' ? 'ja_JP' : (state.lang === 'ko' ? 'ko_KR' : 'en_US')));
     var nodes = document.querySelectorAll('[data-i18n]');
     for (var i = 0; i < nodes.length; i++) {
       var v = t(nodes[i].getAttribute('data-i18n'));
@@ -1176,10 +1454,13 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
     }
     var lt = $('langToggle');
     if (lt) {
-      var spans = lt.querySelectorAll('[data-lt]');
-      for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
-      lt.setAttribute('aria-label', t('toggleTo'));
-      lt.setAttribute('title', t('toggleTo'));
+      var lbs = lt.querySelectorAll('[data-lt]');
+      for (i = 0; i < lbs.length; i++) {
+        var _on = lbs[i].getAttribute('data-lt') === state.lang;
+        lbs[i].classList.toggle('on', _on);
+        lbs[i].setAttribute('aria-pressed', _on ? 'true' : 'false');
+      }
+      lt.setAttribute('aria-label', t('langLabel'));
     }
     /* rebuild selects so unit names follow the language */
     var keys = Object.keys(PANES);
@@ -1268,9 +1549,14 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
     renderAll();
     toast(t('refreshDone'));
   });
-  $('langToggle').addEventListener('click', function () {
-    applyLang(state.lang === 'ko' ? 'en' : 'ko');
-  });
+  var ltRoot = $('langToggle');
+  if (ltRoot) {
+    ltRoot.addEventListener('click', function (ev) {
+      var b = ev.target && ev.target.closest ? ev.target.closest('[data-lt]') : null;
+      if (!b) return;
+      applyLang(b.getAttribute('data-lt'));
+    });
+  }
 
   /* ═════════════════════ boot ═════════════════════ */
   var keys = Object.keys(PANES);

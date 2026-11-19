@@ -157,6 +157,10 @@ button, input, select, textarea { font-family: inherit; color: inherit; }
 .lang-toggle:active { transform: scale(.94); }
 .lang-toggle .lt.on { color: var(--accent); }
 .lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+
+.lang-toggle .lt { cursor: pointer; padding: 0 2px; }
+.lang-toggle .lt:hover { color: var(--ink); }
+@media (max-width: 400px) { .lang-toggle { gap: 4px; padding: 0 7px; } .lang-toggle .lt { font-size: 9.5px; letter-spacing: .02em; } }
 .topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
 .topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
 
@@ -381,7 +385,7 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
 .foot .net b { color: var(--ok); }
 
 @media (max-width: 640px) {
-  .wrap { padding: 0 14px 36px; }
+  .wrap { padding: 0 16px 36px; }
   .topbar { padding: 14px 0 8px; }
   .brand-txt { font-size: 12px; letter-spacing: .1em; }
   .hero { padding: 16px 0 12px; }
@@ -413,10 +417,14 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       <span class="brand-txt">Kim Yihyung</span>
     </a>
     <div class="top-actions">
-      <button class="lang-toggle" id="langToggle" type="button" title="한국어로 보기" aria-label="한국어로 보기">
-        <span class="lt on" data-lt="en">EN</span>
-        <span class="lsep" aria-hidden="true">|</span>
+      <button class="lang-toggle" id="langToggle" type="button" title="Language" aria-label="Language">
         <span class="lt" data-lt="ko">KO</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="en">EN</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="ja">JA</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="zh-Hant">繁中</span>
       </button>
       <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← All tools</a>
     </div>
@@ -649,42 +657,83 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
   var I18N = {
     en: {
       docTitle: 'CsvLens — RFC 4180 CSV/TSV viewer, sort, stats & JSON · Markdown · BOM CSV export | Kim Yihyung',
-      brandAria: 'Kim Yihyung — portfolio', back: '← All tools',
+      brandAria: 'Kim Yihyung — portfolio',
+      back: '← All tools',
       eyebrow: 'CsvLens · CSV/TSV viewer · zero upload',
       h1: 'The CSV opens in this tab.<br><span class="soft">Quoted commas, line breaks, EUC-KR.</span><br><span class="gold">Nothing uploaded.</span>',
       lede: 'A comma inside a quoted field, a line break inside a cell, a doubled <code>""</code> — the parser follows <strong>RFC 4180</strong> instead of splitting on the delimiter and hoping. The delimiter is detected, the bytes are decoded as <strong>UTF-8 or EUC-KR</strong> in the browser, and the table underneath searches, sorts and counts every column. Then it leaves as JSON, a Markdown table, or a UTF-8 BOM CSV that Excel opens without breaking Korean.',
-      pillUp: '0 bytes uploaded', pillNet: '0 external requests', pillRfc: 'RFC 4180 parser', pillEnc: 'UTF-8 · EUC-KR',
-      workAria: 'CSV tools', srcAria: 'Source', srcTitle: '1 · Bring the table in', srcNote: 'read in memory · never sent',
-      srcFile: 'File', srcPaste: 'Paste text',
-      dropTitle: 'Drop a .csv or .tsv file', dropSub: 'It is read into this tab\'s memory and parsed here.',
-      chooseFile: 'Choose file', sampleCsv: 'Try a quoted CSV', sampleTsv: 'Try a TSV',
+      pillUp: '0 bytes uploaded',
+      pillNet: '0 external requests',
+      pillRfc: 'RFC 4180 parser',
+      pillEnc: 'UTF-8 · EUC-KR',
+      workAria: 'CSV tools',
+      srcAria: 'Source',
+      srcTitle: '1 · Bring the table in',
+      srcNote: 'read in memory · never sent',
+      srcFile: 'File',
+      srcPaste: 'Paste text',
+      dropTitle: 'Drop a .csv or .tsv file',
+      dropSub: 'It is read into this tab\'s memory and parsed here.',
+      chooseFile: 'Choose file',
+      sampleCsv: 'Try a quoted CSV',
+      sampleTsv: 'Try a TSV',
       noFile: 'No file yet — nothing has been read.',
-      pasteLabel: 'Paste CSV or TSV text', pastePh: 'name,city,note\n"Kim, Yihyung",Suwon,"Says ""hello"""',
-      parseBtn: 'Read the table', clearBtn: 'Clear',
-      encLabel: 'Encoding of the file', encUtf: 'UTF-8 (default)', encEuc: 'EUC-KR / CP949',
-      delimLabel: 'Delimiter', delimAuto: 'Auto-detect', delimComma: 'Comma ,', delimTab: 'Tab ⇥', delimSemi: 'Semicolon ;', delimPipe: 'Pipe |',
-      headerOn: 'First row is the header', badgeNoData: 'No table yet', badgeOk: '{r} rows × {c} cols',
-      sumHead: 'Table summary', sRows: 'Data rows', sCols: 'Columns', sDelim: 'Delimiter', sEnc: 'Encoding', sSize: 'Size',
+      pasteLabel: 'Paste CSV or TSV text',
+      pastePh: 'name,city,note\n"Kim, Yihyung",Suwon,"Says ""hello"""',
+      parseBtn: 'Read the table',
+      clearBtn: 'Clear',
+      encLabel: 'Encoding of the file',
+      encUtf: 'UTF-8 (default)',
+      encEuc: 'EUC-KR / CP949',
+      delimLabel: 'Delimiter',
+      delimAuto: 'Auto-detect',
+      delimComma: 'Comma ,',
+      delimTab: 'Tab ⇥',
+      delimSemi: 'Semicolon ;',
+      delimPipe: 'Pipe |',
+      headerOn: 'First row is the header',
+      badgeNoData: 'No table yet',
+      badgeOk: '{r} rows × {c} cols',
+      sumHead: 'Table summary',
+      sRows: 'Data rows',
+      sCols: 'Columns',
+      sDelim: 'Delimiter',
+      sEnc: 'Encoding',
+      sSize: 'Size',
       sumCaveat: 'Counts and exports cover every row, not only the rows drawn in the table.',
-      colHead: 'Columns', colEmpty: 'Load a table to see its columns.', statEmpty: 'Pick a column for its statistics.',
-      tableHead: '2 · Search, sort, read', tableNote: 'click a column name to sort',
-      qLabel: 'Search every column', qPh: 'Search every column…', countIdle: '<b>0</b> rows', countOf: '<b>{n}</b> of {t} rows match',
+      colHead: 'Columns',
+      colEmpty: 'Load a table to see its columns.',
+      statEmpty: 'Empty',
+      tableHead: '2 · Search, sort, read',
+      tableNote: 'click a column name to sort',
+      qLabel: 'Search every column',
+      qPh: 'Search every column…',
+      countIdle: '<b>0</b> rows',
+      countOf: '<b>{n}</b> of {t} rows match',
       tblEmpty: 'Nothing loaded yet — drop a file or paste text above.',
       tblNote: 'Showing the first {n} of {t} rows · statistics and exports still use all {t}.',
-      expHead: '3 · Take it out', expNote: 'JSON · Markdown · BOM CSV', expAria: 'Export format',
+      expHead: '3 · Take it out',
+      expNote: 'JSON · Markdown · BOM CSV',
+      expAria: 'Export format',
       expCaveatJson: 'A JSON array of objects keyed by the header row. Duplicate header names get a numeric suffix so no value is lost. Only a plain integer or decimal becomes a JSON number — a value like <code>04524</code>, <code>5,200,000</code> or <code>₩12,000</code> stays a string, because turning it into a number would drop the leading zero or change nothing readable.',
       expCaveatMd: 'A Markdown pipe table with a header separator row. A pipe inside a cell is escaped and a line break becomes <code><br></code>, so the table renders as written.',
       expCaveatCsv: 'The current rows as clean CSV: quoted only where needed, CRLF line endings, and a UTF-8 BOM in front.',
-      copyBtn: 'Copy', downloadBtn: 'Download', expIdle: 'Waiting for a table', expCopied: 'Copied — {n} KB of {f}', expSaved: 'Saved {name} ({n} KB).',
+      copyBtn: 'Copy',
+      downloadBtn: 'Download',
+      expIdle: 'Waiting for a table',
+      expCopied: 'Copied — {n} KB of {f}',
+      expSaved: 'Saved {name} ({n} KB).',
       csvCaveat: 'The CSV download starts with <code>EF BB BF</code> (the UTF-8 BOM) and uses CRLF line endings, which is what makes Excel read Korean instead of code-page mojibake. Fields are quoted only when they contain a delimiter, a quote or a line break, and doubled quotes are written back as <code>""</code>.',
-      howHead: 'How it reads a file', howNote: 'three details that decide correctness',
+      howHead: 'How it reads a file',
+      howNote: 'three details that decide correctness',
       n1t: 'Quotes win over delimiters',
       n1b: 'The parser walks the text character by character with a single piece of state: whether it is inside a quoted field. Inside, a comma is text, a line break is text, and <code>""</code> becomes one quote. Outside, a quote only opens a field when the field is still empty, which is why an apostrophe in <b>O\'Brien</b> does not swallow the rest of the row.',
       n2t: 'The delimiter is measured, not assumed',
       n2b: 'Four candidates — comma, tab, semicolon, pipe — are tried against the first rows and scored by how many fields they produce and how consistently they produce that count. A tie goes to the comma. The summary always shows which one won, and the picker beside it overrides it when a file is unusual.',
       n3t: 'Bytes before characters',
       n3b: 'A CSV has no encoding label, so the bytes are kept and decoded here with <code>TextDecoder</code>: UTF-8 by default, EUC-KR when an older Korean system wrote it. Switching encoding re-decodes the <b>original bytes</b>, so a wrong guess costs one click rather than a round trip through another converter.',
-      faqHead: 'Questions worth asking', faqNote: 'privacy · Excel · size',
+      faqHead: 'Questions worth asking',
+      faqNote: 'privacy · Excel · size',
       q1: 'Is my CSV uploaded anywhere?',
       a1: 'No. The file is read with the File API as bytes, decoded with <code>TextDecoder</code> and parsed in JavaScript in this tab. There is no server call, no analytics, no storage and no cookie, and the footer counts cross-origin requests with a <b>PerformanceObserver</b> and stays at 0 — the one honest way to show that instead of just asserting it. A CSV often carries customer names, salaries or prices, so a free viewer that uploads it is a real disclosure.',
       q2: 'Why does Excel break the Korean?',
@@ -693,10 +742,21 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       a3: 'Either the delimiter is not one of the four detected, or the detection guessed from the first rows and the rest of the file disagrees. The delimiter chip in the summary shows the guess and the picker forces another; the table redraws immediately. A fixed-width file with no delimiter is not CSV and needs a fixed-width split, which this page does not pretend to do.',
       q4: 'How big a file can it take?',
       a4: 'The table draws the first 500 matching rows to keep scrolling smooth, while the statistics and all three exports use <b>every</b> row — a 100,000-row file is workable. Past roughly 20 MB the tab itself becomes the limit rather than any quota, and the status line says so instead of freezing silently. Nothing is truncated in what you download.',
-      footCopy: '© 2026 Kim Yihyung · Built in the browser, for the browser.', footNet: 'external requests',
-      footP1: 'Portfolio', footP2: 'All tools', footP3: 'Source',
-      delimName: { ',': 'Comma', '\t': 'Tab', ';': 'Semicolon', '|': 'Pipe' },
-      uRows: 'rows', uCols: 'cols', uBytes: 'B', uChars: 'chars',
+      footCopy: '© 2026 Kim Yihyung · Built in the browser, for the browser.',
+      footNet: 'external requests',
+      footP1: 'Portfolio',
+      footP2: 'All tools',
+      footP3: 'Source',
+      delimName: {
+        ',': 'Comma',
+        '\t': 'Tab',
+        ';': 'Semicolon',
+        '|': 'Pipe'
+      },
+      uRows: 'rows',
+      uCols: 'cols',
+      uBytes: 'B',
+      uChars: 'chars',
       stReady: 'Ready — drop a file or paste text. Nothing leaves this tab.',
       stParsing: 'Reading the table…',
       stLoaded: '{n} rows × {c} columns · delimiter {d} · {enc}.',
@@ -710,51 +770,107 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       stCopyFail: 'Copy failed — select the text and copy it by hand.',
       stNoExport: 'Load a table first.',
       stSample: 'Sample loaded — note the quoted comma, the line break and the doubled quote in the last column.',
-      stSorted: 'Sorted by {c}, {d}.', stSortNone: 'Sort cleared.',
-      statTitle: 'Column {i} · {name}', statType: 'Type', statFilled: 'Values', statEmpty: 'Empty', statDistinct: 'Distinct',
-      statSum: 'Sum', statAvg: 'Average', statMin: 'Minimum', statMax: 'Maximum', statLen: 'Longest value',
-      tNumber: 'number', tText: 'text', tMixed: 'mixed', tEmpty: 'empty',
-      asc: 'ascending', desc: 'descending', sortHint: 'sort',
-      fileMeta: '{name} · {kb} KB · decoded as {enc}'
+      stSorted: 'Sorted by {c}, {d}.',
+      stSortNone: 'Sort cleared.',
+      statTitle: 'Column {i} · {name}',
+      statType: 'Type',
+      statFilled: 'Values',
+      statDistinct: 'Distinct',
+      statSum: 'Sum',
+      statAvg: 'Average',
+      statMin: 'Minimum',
+      statMax: 'Maximum',
+      statLen: 'Longest value',
+      tNumber: 'number',
+      tText: 'text',
+      tMixed: 'mixed',
+      tEmpty: 'empty',
+      asc: 'ascending',
+      desc: 'descending',
+      sortHint: 'sort',
+      fileMeta: '{name} · {kb} KB · decoded as {enc}',
+      colName: 'Column',
+      noMatch: 'No row matches that search.'
     },
     ko: {
       docTitle: 'CsvLens — CSV·TSV 표 열람·정렬·통계, JSON·Markdown·BOM CSV 내보내기 | Kim Yihyung',
-      brandAria: '김의형 — 포트폴리오', back: '← 모든 툴',
+      brandAria: '김의형 — 포트폴리오',
+      back: '← 모든 툴',
       eyebrow: 'CsvLens · CSV/TSV 열람 · 업로드 0바이트',
       h1: 'CSV는 이 탭에서만 열립니다.<br><span class="soft">따옴표 안 쉼표·줄바꿈, EUC-KR까지.</span><br><span class="gold">업로드는 0바이트.</span>',
       lede: '따옴표 안의 쉼표, 셀 안의 줄바꿈, 두 번 쓴 <code>""</code> — 구분자로 잘라 보고 맞기를 바라는 대신 <strong>RFC 4180</strong>대로 읽습니다. 구분자를 감지하고, 바이트를 <strong>UTF-8 또는 EUC-KR</strong>로 브라우저에서 직접 풀어 표로 만든 뒤, 모든 열을 검색·정렬·집계합니다. 내보내기는 JSON, Markdown 표, 그리고 엑셀에서 한글이 깨지지 않는 UTF-8 BOM CSV입니다.',
-      pillUp: '업로드 0바이트', pillNet: '외부 요청 0건', pillRfc: 'RFC 4180 파서', pillEnc: 'UTF-8 · EUC-KR',
-      workAria: 'CSV 도구', srcAria: '입력 방법', srcTitle: '1 · 표 가져오기', srcNote: '메모리에서만 읽음 · 전송 없음',
-      srcFile: '파일', srcPaste: '붙여넣기',
-      dropTitle: '.csv 또는 .tsv 파일을 떨어뜨리세요', dropSub: '이 탭의 메모리로 읽어 여기서 파싱합니다.',
-      chooseFile: '파일 선택', sampleCsv: '따옴표 포함 CSV 보기', sampleTsv: 'TSV 보기',
+      pillUp: '업로드 0바이트',
+      pillNet: '외부 요청 0건',
+      pillRfc: 'RFC 4180 파서',
+      pillEnc: 'UTF-8 · EUC-KR',
+      workAria: 'CSV 도구',
+      srcAria: '입력 방법',
+      srcTitle: '1 · 표 가져오기',
+      srcNote: '메모리에서만 읽음 · 전송 없음',
+      srcFile: '파일',
+      srcPaste: '붙여넣기',
+      dropTitle: '.csv 또는 .tsv 파일을 떨어뜨리세요',
+      dropSub: '이 탭의 메모리로 읽어 여기서 파싱합니다.',
+      chooseFile: '파일 선택',
+      sampleCsv: '따옴표 포함 CSV 보기',
+      sampleTsv: 'TSV 보기',
       noFile: '아직 파일이 없습니다 — 읽은 것도 없습니다.',
-      pasteLabel: 'CSV 또는 TSV 텍스트 붙여넣기', pastePh: '이름,도시,비고\n"김, 이형",수원,"""안녕"" 이라고 적음"',
-      parseBtn: '표로 읽기', clearBtn: '지우기',
-      encLabel: '파일 인코딩', encUtf: 'UTF-8 (기본)', encEuc: 'EUC-KR / CP949',
-      delimLabel: '구분자', delimAuto: '자동 감지', delimComma: '쉼표 ,', delimTab: '탭 ⇥', delimSemi: '세미콜론 ;', delimPipe: '파이프 |',
-      headerOn: '첫 행은 헤더', badgeNoData: '표 없음', badgeOk: '{r}행 × {c}열',
-      sumHead: '표 요약', sRows: '데이터 행', sCols: '열', sDelim: '구분자', sEnc: '인코딩', sSize: '크기',
+      pasteLabel: 'CSV 또는 TSV 텍스트 붙여넣기',
+      pastePh: '이름,도시,비고\n"김, 이형",수원,"""안녕"" 이라고 적음"',
+      parseBtn: '표로 읽기',
+      clearBtn: '지우기',
+      encLabel: '파일 인코딩',
+      encUtf: 'UTF-8 (기본)',
+      encEuc: 'EUC-KR / CP949',
+      delimLabel: '구분자',
+      delimAuto: '자동 감지',
+      delimComma: '쉼표 ,',
+      delimTab: '탭 ⇥',
+      delimSemi: '세미콜론 ;',
+      delimPipe: '파이프 |',
+      headerOn: '첫 행은 헤더',
+      badgeNoData: '표 없음',
+      badgeOk: '{r}행 × {c}열',
+      sumHead: '표 요약',
+      sRows: '데이터 행',
+      sCols: '열',
+      sDelim: '구분자',
+      sEnc: '인코딩',
+      sSize: '크기',
       sumCaveat: '집계와 내보내기는 표에 그려진 행이 아니라 전체 행을 대상으로 합니다.',
-      colHead: '열', colEmpty: '표를 불러오면 열이 표시됩니다.', statEmpty: '열을 고르면 통계가 나옵니다.',
-      tableHead: '2 · 검색하고 정렬해 읽기', tableNote: '열 이름을 누르면 정렬',
-      qLabel: '모든 열에서 검색', qPh: '모든 열에서 검색…', countIdle: '<b>0</b>행', countOf: '전체 {t}행 중 <b>{n}</b>행 일치',
+      colHead: '열',
+      colEmpty: '표를 불러오면 열이 표시됩니다.',
+      statEmpty: '빈 값',
+      tableHead: '2 · 검색하고 정렬해 읽기',
+      tableNote: '열 이름을 누르면 정렬',
+      qLabel: '모든 열에서 검색',
+      qPh: '모든 열에서 검색…',
+      countIdle: '<b>0</b>행',
+      countOf: '전체 {t}행 중 <b>{n}</b>행 일치',
       tblEmpty: '아직 표가 없습니다 — 위에 파일을 떨어뜨리거나 붙여넣으세요.',
       tblNote: '전체 {t}행 중 앞 {n}행만 표시 · 통계와 내보내기는 {t}행 전체 기준입니다.',
-      expHead: '3 · 꺼내 쓰기', expNote: 'JSON · Markdown · BOM CSV', expAria: '내보내기 형식',
+      expHead: '3 · 꺼내 쓰기',
+      expNote: 'JSON · Markdown · BOM CSV',
+      expAria: '내보내기 형식',
       expCaveatJson: '헤더 행을 키로 쓴 객체 배열입니다. 헤더 이름이 중복되면 숫자를 붙여 값이 사라지지 않게 합니다. 숫자로 바꾸는 것은 플레인 정수·소수뿐이며 <code>04524</code>·<code>5,200,000</code>·<code>₩12,000</code> 같은 값은 문자열로 남습니다 — 숫자로 바꾸면 앞자리 0이 사라지거나 읽을 수 없게 되기 때문입니다.',
       expCaveatMd: '헤더 구분선이 있는 Markdown 파이프 표입니다. 셀 안의 파이프는 이스케이프하고 줄바꿈은 <code><br></code>로 바꿔 적은 그대로 렌더되게 합니다.',
       expCaveatCsv: '현재 행을 깨끗한 CSV로 내보냅니다. 필요한 곳만 인용하고, 줄바꿈은 CRLF, 앞에는 UTF-8 BOM을 붙입니다.',
-      copyBtn: '복사', downloadBtn: '내려받기', expIdle: '표를 기다리는 중', expCopied: '{f} {n}KB 복사됨', expSaved: '{name} 저장됨 ({n}KB).',
+      copyBtn: '복사',
+      downloadBtn: '내려받기',
+      expIdle: '표를 기다리는 중',
+      expCopied: '{f} {n}KB 복사됨',
+      expSaved: '{name} 저장됨 ({n}KB).',
       csvCaveat: 'CSV 내려받기는 <code>EF BB BF</code>(UTF-8 BOM)로 시작하고 줄바꿈은 CRLF입니다. 엑셀이 코드페이지로 잘못 짚지 않고 한글을 UTF-8로 읽게 하는 부분이 여기입니다. 인용은 구분자·따옴표·줄바꿈이 들어간 필드에만 하고, 두 번 쓴 따옴표는 <code>""</code>로 되돌려 씁니다.',
-      howHead: '파일을 읽는 방식', howNote: '정확성을 가르는 세 가지',
+      howHead: '파일을 읽는 방식',
+      howNote: '정확성을 가르는 세 가지',
       n1t: '따옴표가 구분자보다 먼저다',
       n1b: '파서는 "지금 인용된 필드 안인가"라는 상태 하나만 들고 글자를 하나씩 지나갑니다. 안에서는 쉼표도 줄바꿈도 글자이고 <code>""</code>는 따옴표 한 개가 됩니다. 밖에서는 필드가 비어 있을 때만 따옴표가 필드를 열기 때문에, <b>O\'Brien</b>의 어퍼스트로피가 행 전체를 삼키지 않습니다.',
       n2t: '구분자는 가정하지 않고 재본다',
       n2b: '쉼표·탭·세미콜론·파이프 네 후보를 앞쪽 행들에 적용해, 만들어내는 필드 수와 그 수가 얼마나 일정한지로 점수를 냅니다. 동점이면 쉼표입니다. 어떤 구분자가 이겼는지는 요약에 항상 표시하고, 옆의 선택기로 언제든 바꿀 수 있습니다.',
       n3t: '글자보다 바이트가 먼저',
       n3b: 'CSV에는 인코딩 표시가 없으므로 바이트를 그대로 들고 있다가 <code>TextDecoder</code>로 풉니다. 기본은 UTF-8, 오래된 국내 시스템이 쓴 파일은 EUC-KR입니다. 인코딩을 바꾸면 <b>원본 바이트</b>를 다시 풀기 때문에, 잘못 짚어도 다른 변환기를 거칠 필요 없이 클릭 한 번이면 됩니다.',
-      faqHead: '물어볼 만한 것들', faqNote: '프라이버시 · 엑셀 · 크기',
+      faqHead: '물어볼 만한 것들',
+      faqNote: '프라이버시 · 엑셀 · 크기',
       q1: 'CSV가 어딘가로 업로드되나요?',
       a1: '아니요. File API로 바이트만 읽어 <code>TextDecoder</code>로 풀고 이 탭의 자바스크립트에서 파싱합니다. 서버 호출도, 분석 도구도, 저장소도, 쿠키도 없으며 바닥글의 교차 출처 요청 카운터는 <b>PerformanceObserver</b>로 세어 0에 머뭅니다. 주장이 아니라 측정으로 보이는 방식입니다. CSV에는 고객 이름·급여·단가가 들어 있는 경우가 많아, 무료 뷰어가 파일을 올린다면 그건 사소한 문제가 아니라 실제 유출입니다.',
       q2: '엑셀에서 한글이 왜 깨지나요?',
@@ -763,10 +879,21 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       a3: '감지하는 네 구분자가 아니거나, 앞 행에서 감지한 구분자와 파일 뒤쪽이 어긋난 경우입니다. 요약의 구분자 표시로 무엇으로 감지됐는지 보고 선택기로 바꾸면 표가 바로 다시 그려집니다. 구분자가 아예 없는 고정폭 파일은 CSV가 아니며 고정폭 분할이 필요합니다 — 이 페이지는 그걸 하는 척하지 않습니다.',
       q4: '얼마나 큰 파일까지 되나요?',
       a4: '표는 스크롤을 부드럽게 유지하려고 일치하는 앞 500행만 그리지만, 통계와 세 가지 내보내기는 <b>전체 행</b>을 씁니다. 10만 행 파일도 다룰 수 있습니다. 대략 20MB를 넘으면 할당량이 아니라 탭 자체가 한계가 되는데, 조용히 멈추지 않고 상태 줄에 알립니다. 내려받는 파일에서 잘리는 값은 없습니다.',
-      footCopy: '© 2026 김의형 · 브라우저에서, 브라우저를 위해.', footNet: '외부 요청',
-      footP1: '포트폴리오', footP2: '모든 툴', footP3: '소스',
-      delimName: { ',': '쉼표', '\t': '탭', ';': '세미콜론', '|': '파이프' },
-      uRows: '행', uCols: '열', uBytes: 'B', uChars: '자',
+      footCopy: '© 2026 김의형 · 브라우저에서, 브라우저를 위해.',
+      footNet: '외부 요청',
+      footP1: '포트폴리오',
+      footP2: '모든 툴',
+      footP3: '소스',
+      delimName: {
+        ',': '쉼표',
+        '\t': '탭',
+        ';': '세미콜론',
+        '|': '파이프'
+      },
+      uRows: '행',
+      uCols: '열',
+      uBytes: 'B',
+      uChars: '자',
       stReady: '준비됨 — 파일을 떨어뜨리거나 붙여넣으세요. 이 탭을 벗어나는 것은 없습니다.',
       stParsing: '표를 읽는 중…',
       stLoaded: '{n}행 × {c}열 · 구분자 {d} · {enc}.',
@@ -780,14 +907,304 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       stCopyFail: '복사에 실패했습니다 — 글자를 선택해 직접 복사하세요.',
       stNoExport: '표를 먼저 불러오세요.',
       stSample: '샘플을 불러왔습니다 — 마지막 열의 따옴표 안 쉼표·줄바꿈·두 번 쓴 따옴표를 보세요.',
-      stSorted: '{c} 열 기준 {d} 정렬.', stSortNone: '정렬을 풀었습니다.',
-      statTitle: '{i}번 열 · {name}', statType: '형식', statFilled: '값 있음', statEmpty: '빈 값', statDistinct: '고유값',
-      statSum: '합계', statAvg: '평균', statMin: '최소', statMax: '최대', statLen: '가장 긴 값',
-      tNumber: '숫자', tText: '문자', tMixed: '혼합', tEmpty: '비어 있음',
-      asc: '오름차순', desc: '내림차순', sortHint: '정렬',
-      fileMeta: '{name} · {kb}KB · {enc}로 해독'
+      stSorted: '{c} 열 기준 {d} 정렬.',
+      stSortNone: '정렬을 풀었습니다.',
+      statTitle: '{i}번 열 · {name}',
+      statType: '형식',
+      statFilled: '값 있음',
+      statDistinct: '고유값',
+      statSum: '합계',
+      statAvg: '평균',
+      statMin: '최소',
+      statMax: '최대',
+      statLen: '가장 긴 값',
+      tNumber: '숫자',
+      tText: '문자',
+      tMixed: '혼합',
+      tEmpty: '비어 있음',
+      asc: '오름차순',
+      desc: '내림차순',
+      sortHint: '정렬',
+      fileMeta: '{name} · {kb}KB · {enc}로 해독',
+      colName: '열 이름',
+      noMatch: '일치하는 행이 없습니다.'
+    },
+    ja: {
+      docTitle: 'CsvLens — RFC 4180 準拠の CSV/TSV ビューア・並べ替え・統計・JSON／Markdown／BOM CSV 出力 | Kim Yihyung',
+      brandAria: 'Kim Yihyung — ポートフォリオ',
+      back: '← ツール一覧',
+      eyebrow: 'CsvLens · CSV/TSV ビューア · アップロード 0',
+      h1: 'CSV はこのタブで開きます。<br><span class="soft">引用符の中のカンマも、改行も、EUC-KR も。</span><br><span class="gold">アップロードは 0 バイト。</span>',
+      lede: '引用されたフィールドの中のカンマ、セルの中の改行、二重に書かれた <code>""</code> — 区切り文字で切って祈るのではなく <strong>RFC 4180</strong> に従って読みます。区切り文字を判定し、バイトを<strong>UTF-8 または EUC-KR</strong> としてブラウザーで復号して表にし、すべての列を検索・並べ替え・集計します。出力は JSON、Markdown の表、そして Excel で韓国語が崩れない UTF-8 BOM 付き CSV です。',
+      pillUp: 'アップロード 0 バイト',
+      pillNet: '外部リクエスト 0 件',
+      pillRfc: 'RFC 4180 パーサー',
+      pillEnc: 'UTF-8 · EUC-KR',
+      workAria: 'CSV ツール',
+      srcAria: '入力方法',
+      srcTitle: '1 · 表を持ち込む',
+      srcNote: 'メモリーで読む · 送信なし',
+      srcFile: 'ファイル',
+      srcPaste: '貼り付け',
+      dropTitle: '.csv または .tsv ファイルを落としてください',
+      dropSub: 'このタブのメモリーに読み込み、ここで解析します。',
+      chooseFile: 'ファイルを選ぶ',
+      sampleCsv: '引用符入りの CSV を試す',
+      sampleTsv: 'TSV を試す',
+      noFile: 'まだファイルがありません — 読んだものもありません。',
+      pasteLabel: 'CSV または TSV のテキストを貼り付け',
+      pastePh: 'name,city,note\n"Kim, Yihyung",Suwon,"Says ""hello"""',
+      parseBtn: '表として読む',
+      clearBtn: '消去',
+      encLabel: 'ファイルの文字コード',
+      encUtf: 'UTF-8（既定）',
+      encEuc: 'EUC-KR / CP949',
+      delimLabel: '区切り文字',
+      delimAuto: '自動判定',
+      delimComma: 'カンマ ,',
+      delimTab: 'タブ ⇥',
+      delimSemi: 'セミコロン ;',
+      delimPipe: 'パイプ |',
+      headerOn: '先頭行はヘッダー',
+      badgeNoData: '表なし',
+      badgeOk: '{r} 行 × {c} 列',
+      sumHead: '表の概要',
+      sRows: 'データ行',
+      sCols: '列',
+      sDelim: '区切り文字',
+      sEnc: '文字コード',
+      sSize: 'サイズ',
+      sumCaveat: '集計と出力は、表に描かれた行ではなく全行が対象です。',
+      colHead: '列',
+      colEmpty: '表を読み込むと列が表示されます。',
+      statEmpty: '空',
+      tableHead: '2 · 検索し、並べ替えて読む',
+      tableNote: '列名を押すと並べ替え',
+      qLabel: 'すべての列を検索',
+      qPh: 'すべての列を検索…',
+      countIdle: '<b>0</b> 行',
+      countOf: '全 {t} 行のうち <b>{n}</b> 行が一致',
+      tblEmpty: 'まだ表がありません — 上にファイルを落とすか貼り付けてください。',
+      tblNote: '全 {t} 行のうち先頭 {n} 行を表示 · 統計と出力は {t} 行すべてが対象です。',
+      expHead: '3 · 持ち出す',
+      expNote: 'JSON · Markdown · BOM CSV',
+      expAria: '出力形式',
+      expCaveatJson: 'ヘッダー行をキーにしたオブジェクトの配列です。ヘッダー名が重複すると数値を付けて値を失わないようにします。数値化するのは素の整数と小数だけで、<code>04524</code>、<code>5,200,000</code>、<code>₩12,000</code> のような値は文字列のまま残します — 数値にすると先頭の 0 が消えたり読めなくなったりするからです。',
+      expCaveatMd: 'ヘッダー区切り行のある Markdown パイプ表です。セル内のパイプはエスケープし、改行は <code><br></code> にして書いたままに描画されるようにします。',
+      expCaveatCsv: '現在の行をきれいな CSV で出力します。必要な箇所だけ引用し、改行は CRLF、先頭に UTF-8 BOM を付けます。',
+      copyBtn: 'コピー',
+      downloadBtn: '保存',
+      expIdle: '表を待っています',
+      expCopied: 'コピーしました — {f} {n} KB',
+      expSaved: '{name} を保存しました（{n} KB）。',
+      csvCaveat: 'CSV のダウンロードは <code>EF BB BF</code>（UTF-8 BOM）で始まり、改行は CRLF です。Excel がコードページで誤読せず韓国語を UTF-8 として読むのはこのためです。引用は区切り文字・引用符・改行を含むフィールドにだけ付け、二重の引用符は <code>""</code> として書き戻します。',
+      howHead: 'ファイルの読み方',
+      howNote: '正しさを決める三つの点',
+      n1t: '引用符は区切り文字より先',
+      n1b: 'パーサーは「いま引用されたフィールドの中か」という状態ひとつだけを持って一文字ずつ進みます。中ではカンマも改行も文字で、<code>""</code> は引用符一つになります。外ではフィールドが空のときだけ引用符がフィールドを開くので、<b>O\'Brien</b> のアポストロフィが行の残りを飲み込むことはありません。',
+      n2t: '区切り文字は仮定せず測る',
+      n2b: 'カンマ・タブ・セミコロン・パイプの四候補を先頭の行に当て、生まれるフィールド数とその数の安定度で採点します。同点ならカンマです。どれが勝ったかは概要に常に表示し、隣の選択でいつでも上書きできます。',
+      n3t: '文字より先にバイト',
+      n3b: 'CSV には文字コードの表示がないので、バイトをそのまま持ち <code>TextDecoder</code> で復号します。既定は UTF-8、古い国内システムが書いたファイルは EUC-KR です。文字コードを変えると<b>元のバイト</b>から復号し直すので、推測を外しても別の変換器を経ずにクリック一回で済みます。',
+      faqHead: '聞く価値のあること',
+      faqNote: 'プライバシー · Excel · サイズ',
+      q1: 'CSV はどこかにアップロードされますか？',
+      a1: 'いいえ。ファイルは File API でバイトとして読み、<code>TextDecoder</code> で復号し、このタブの JavaScript で解析します。サーバー呼び出しも、解析も、保存も、クッキーもなく、フッターのクロスオリジン要求カウンターは <b>PerformanceObserver</b> で数えて 0 のままです。CSV には顧客名・給与・単価が入っていることが多く、無料ビューアがファイルを送るならそれは些細な問題ではなく実際の漏えいです。',
+      q2: 'Excel で韓国語が崩れるのはなぜ？',
+      a2: 'BOM がないと Excel は文字コードを推測し、韓国語の Windows ではローカルのコードページと解釈しがちで、UTF-8 の韓国語が文字化けします。ここの CSV は <code>EF BB BF</code> で始まり改行が CRLF なので、Excel は UTF-8 と認識します。逆の場合もあり、EUC-KR で書かれたファイルは UTF-8 を前提にしたビューアで崩れます — 文字コード選択がそのためのものです。',
+      q3: '全部が一列に入ってしまうのはなぜ？',
+      a3: '判定対象の四つにない区切り文字か、先頭行で判定した区切りと後半が食い違っているかです。概要の区切り表示で何と判定されたかを見て、選択で変えれば表はすぐ描き直されます。区切りがまったくない固定幅ファイルは CSV ではなく、固定幅の分割が必要です — このページはそれを装いません。',
+      q4: 'どれくらい大きいファイルまで扱えますか？',
+      a4: '表はスクロールを滑らかに保つため一致する先頭 500 行だけを描き、統計と三つの出力は<b>全行</b>を使います。10 万行のファイルも扱えます。およそ 20 MB を超えると割り当てではなくタブ自体が限界になり、黙って固まるのではなく状態行に表示します。ダウンロードする内容が切り詰められることはありません。',
+      footCopy: '© 2026 Kim Yihyung · ブラウザーの中で、ブラウザーのために。',
+      footNet: '外部リクエスト',
+      footP1: 'ポートフォリオ',
+      footP2: 'ツール一覧',
+      footP3: 'ソース',
+      delimName: {
+        '，': 'カンマ',
+        ',': 'カンマ',
+        '\t': 'タブ',
+        ';': 'セミコロン',
+        '|': 'パイプ'
+      },
+      uRows: '行',
+      uCols: '列',
+      uBytes: 'B',
+      uChars: '文字',
+      stReady: '準備完了 — ファイルを落とすか貼り付けてください。このタブから出るものはありません。',
+      stParsing: '表を読み込み中…',
+      stLoaded: '{n} 行 × {c} 列 · 区切り {d} · {enc}。',
+      stNoData: '貼り付け欄にまだ CSV テキストがありません。',
+      stNoRows: 'このバイトからは行が生まれませんでした — CSV ですか？',
+      stBig: 'このファイルは {n} MB です。描画に少し時間がかかります。',
+      stEncFail: 'このファイルを {enc} として復号できませんでした。別の文字コードを選んでください。',
+      stReadFail: 'このファイルをメモリーに読めませんでした。',
+      stCleared: '消去しました。',
+      stCopied: 'クリップボードにコピーしました。',
+      stCopyFail: 'コピーに失敗しました — 文字を選択して手動でコピーしてください。',
+      stNoExport: '先に表を読み込んでください。',
+      stSample: 'サンプルを読み込みました — 最後の列にある引用符内のカンマ、改行、二重の引用符を見てください。',
+      stSorted: '{c} 列で {d} に並べ替えました。',
+      stSortNone: '並べ替えを解除しました。',
+      statTitle: '{i} 番目の列 · {name}',
+      statType: '型',
+      statFilled: '値あり',
+      statDistinct: '異なり数',
+      statSum: '合計',
+      statAvg: '平均',
+      statMin: '最小',
+      statMax: '最大',
+      statLen: '最長の値',
+      tNumber: '数値',
+      tText: '文字',
+      tMixed: '混在',
+      tEmpty: '空',
+      asc: '昇順',
+      desc: '降順',
+      sortHint: '並べ替え',
+      fileMeta: '{name} · {kb} KB · {enc} として復号',
+      colName: '列名',
+      noMatch: 'その検索に一致する行はありません。'
+    },
+    'zh-Hant': {
+      docTitle: 'CsvLens — RFC 4180 CSV/TSV 檢視、排序、統計與 JSON／Markdown／BOM CSV 匯出 | Kim Yihyung',
+      brandAria: 'Kim Yihyung — 作品集',
+      back: '← 所有工具',
+      eyebrow: 'CsvLens · CSV/TSV 檢視 · 零上傳',
+      h1: 'CSV 只在這個分頁裡開啟。<br><span class="soft">引號裡的逗號、儲存格裡的換行、EUC-KR 也算。</span><br><span class="gold">上傳 0 位元組。</span>',
+      lede: '引號欄位裡的逗號、儲存格內的換行、重複寫成的 <code>""</code> — 這裡照 <strong>RFC 4180</strong> 解析，而不是用分隔符硬切再祈禱。系統會偵測分隔符，在瀏覽器裡以 <strong>UTF-8 或 EUC-KR</strong> 解碼，下方的表格能搜尋、排序並統計每一欄。最後可輸出 JSON、Markdown 表格，或讓 Excel 不弄壞韓文的 UTF-8 BOM CSV。',
+      pillUp: '上傳 0 位元組',
+      pillNet: '外部請求 0 次',
+      pillRfc: 'RFC 4180 解析器',
+      pillEnc: 'UTF-8 · EUC-KR',
+      workAria: 'CSV 工具',
+      srcAria: '輸入方式',
+      srcTitle: '1 · 把表格帶進來',
+      srcNote: '只在記憶體讀取 · 不傳送',
+      srcFile: '檔案',
+      srcPaste: '貼上',
+      dropTitle: '拖入 .csv 或 .tsv 檔案',
+      dropSub: '會讀進這個分頁的記憶體並在這裡解析。',
+      chooseFile: '選擇檔案',
+      sampleCsv: '試一份含引號的 CSV',
+      sampleTsv: '試一份 TSV',
+      noFile: '還沒有檔案 — 也還沒讀取任何內容。',
+      pasteLabel: '貼上 CSV 或 TSV 文字',
+      pastePh: 'name,city,note\n"Kim, Yihyung",Suwon,"Says ""hello"""',
+      parseBtn: '讀成表格',
+      clearBtn: '清除',
+      encLabel: '檔案編碼',
+      encUtf: 'UTF-8（預設）',
+      encEuc: 'EUC-KR / CP949',
+      delimLabel: '分隔符',
+      delimAuto: '自動偵測',
+      delimComma: '逗號 ,',
+      delimTab: '定位點 ⇥',
+      delimSemi: '分號 ;',
+      delimPipe: '豎線 |',
+      headerOn: '第一列是標頭',
+      badgeNoData: '尚無表格',
+      badgeOk: '{r} 列 × {c} 欄',
+      sumHead: '表格摘要',
+      sRows: '資料列',
+      sCols: '欄',
+      sDelim: '分隔符',
+      sEnc: '編碼',
+      sSize: '大小',
+      sumCaveat: '統計與匯出涵蓋所有資料列，不只是畫面上顯示的那些。',
+      colHead: '欄',
+      colEmpty: '載入表格後就會顯示欄位。',
+      statEmpty: '空值',
+      tableHead: '2 · 搜尋、排序、閱讀',
+      tableNote: '點欄名即可排序',
+      qLabel: '搜尋所有欄位',
+      qPh: '搜尋所有欄位…',
+      countIdle: '<b>0</b> 列',
+      countOf: '共 {t} 列中有 <b>{n}</b> 列符合',
+      tblEmpty: '尚無表格 — 請在上方拖入檔案或貼上文字。',
+      tblNote: '共 {t} 列，顯示前 {n} 列 · 統計與匯出仍以全部 {t} 列為準。',
+      expHead: '3 · 帶出去',
+      expNote: 'JSON · Markdown · BOM CSV',
+      expAria: '匯出格式',
+      expCaveatJson: '以標頭列為鍵的物件陣列。標頭名稱重複時會加上數字後綴，不會遺失任何值。只有單純的整數與小數會轉成 JSON 數字，像 <code>04524</code>、<code>5,200,000</code>、<code>₩12,000</code> 這樣的值仍保留為字串 — 轉成數字會丟掉前導零或讓人看不懂。',
+      expCaveatMd: '帶標頭分隔列的 Markdown 豎線表格。儲存格內的豎線會跳脫，換行轉成 <code><br></code>，因此表格會照寫的樣子呈現。',
+      expCaveatCsv: '把目前的資料列輸出成乾淨的 CSV：只在必要處加引號、使用 CRLF 換行，並在最前面加上 UTF-8 BOM。',
+      copyBtn: '複製',
+      downloadBtn: '下載',
+      expIdle: '等待表格',
+      expCopied: '已複製 — {f} {n} KB',
+      expSaved: '已儲存 {name}（{n} KB）。',
+      csvCaveat: 'CSV 下載以 <code>EF BB BF</code>（UTF-8 BOM）開頭並使用 CRLF 換行，Excel 因此會以 UTF-8 讀取韓文，而不是猜成代碼頁。只有含分隔符、引號或換行的欄位才加引號，重複的引號會寫回 <code>""</code>。',
+      howHead: '檔案的讀取方式',
+      howNote: '決定正確性的三個細節',
+      n1t: '引號優先於分隔符',
+      n1b: '解析器只帶著一個狀態逐字前進：是否位於引號欄位內。在引號內，逗號是文字、換行是文字，<code>""</code> 變成一個引號。在外頭，只有欄位還是空的時候引號才會開啟欄位，所以 <b>O\'Brien</b> 的撇號不會吞掉整列其餘內容。',
+      n2t: '分隔符用量的，不靠假設',
+      n2b: '把逗號、定位點、分號、豎線四個候選套在前幾列，依產生的欄位數與該數量的穩定度評分，同分時選逗號。摘要一定顯示哪一個勝出，旁邊的選單在遇到特殊檔案時可以覆寫。',
+      n3t: '先有位元組，才有字元',
+      n3b: 'CSV 沒有編碼標示，所以保留位元組，再用 <code>TextDecoder</code> 解碼：預設 UTF-8，舊系統寫出的檔案用 EUC-KR。切換編碼會從<b>原始位元組</b>重新解碼，猜錯只需按一下，不必繞到別的轉檔工具。',
+      faqHead: '值得一問的事',
+      faqNote: '隱私 · Excel · 大小',
+      q1: '我的 CSV 會被上傳嗎？',
+      a1: '不會。檔案以 File API 讀成位元組，用 <code>TextDecoder</code> 解碼，並在這個分頁的 JavaScript 裡解析。沒有伺服器呼叫、沒有分析、沒有儲存、沒有 Cookie，頁尾的跨來源請求計數器用 <b>PerformanceObserver</b> 統計並維持 0 — 這是證明而不是宣稱。CSV 常帶著客戶姓名、薪資或單價，免費檢視器若上傳檔案，那是真正的外洩。',
+      q2: 'Excel 為什麼會弄壞韓文？',
+      a2: '沒有 BOM 時 Excel 會猜編碼，在韓文 Windows 上常猜成本地代碼頁，UTF-8 的韓文就變成亂碼。這裡的 CSV 以 <code>EF BB BF</code> 開頭並使用 CRLF，Excel 因此認得 UTF-8。反過來也有問題：以 EUC-KR 寫的檔案在假設 UTF-8 的檢視器裡會壞掉，編碼選擇器就是為此存在。',
+      q3: '為什麼全部擠在同一欄？',
+      a3: '可能分隔符不在偵測的四種之中，或前幾列偵測出的分隔符與檔案後段不一致。摘要裡的分隔符標示會顯示判斷結果，用選單強制指定，表格就立刻重繪。完全沒有分隔符的定寬檔案不是 CSV，需要定寬切分 — 這個頁面不會假裝做得到。',
+      q4: '可以處理多大的檔案？',
+      a4: '表格只繪製符合的前 500 列以維持捲動順暢，統計與三種匯出則使用<b>每一列</b> — 10 萬列的檔案也處理得來。超過大約 20 MB 後，限制在分頁本身而不是配額，狀態列會說明，而不是默默卡住。下載的內容不會被截斷。',
+      footCopy: '© 2026 Kim Yihyung · 在瀏覽器裡打造，為瀏覽器而生。',
+      footNet: '外部請求',
+      footP1: '作品集',
+      footP2: '所有工具',
+      footP3: '原始碼',
+      delimName: {
+        ',': '逗號',
+        '\t': '定位點',
+        ';': '分號',
+        '|': '豎線'
+      },
+      uRows: '列',
+      uCols: '欄',
+      uBytes: 'B',
+      uChars: '字',
+      stReady: '準備完成 — 拖入檔案或貼上文字。沒有任何東西離開這個分頁。',
+      stParsing: '正在讀取表格…',
+      stLoaded: '{n} 列 × {c} 欄 · 分隔符 {d} · {enc}。',
+      stNoData: '貼上框中還沒有 CSV 文字。',
+      stNoRows: '這些位元組沒有產生任何列 — 這是 CSV 嗎？',
+      stBig: '這個檔案有 {n} MB，繪製可能需要一點時間。',
+      stEncFail: '無法以 {enc} 解碼這個檔案。請換另一種編碼。',
+      stReadFail: '無法把這個檔案讀進記憶體。',
+      stCleared: '已清除。',
+      stCopied: '已複製到剪貼簿。',
+      stCopyFail: '複製失敗 — 請選取文字手動複製。',
+      stNoExport: '請先載入表格。',
+      stSample: '已載入範例 — 注意最後一欄裡的引號逗號、換行與重複引號。',
+      stSorted: '{c} 欄 · {d}排序。',
+      stSortNone: '已取消排序。',
+      statTitle: '第 {i} 欄 · {name}',
+      statType: '型別',
+      statFilled: '有值',
+      statDistinct: '相異值',
+      statSum: '總和',
+      statAvg: '平均',
+      statMin: '最小',
+      statMax: '最大',
+      statLen: '最長值',
+      tNumber: '數字',
+      tText: '文字',
+      tMixed: '混合',
+      tEmpty: '空',
+      asc: '遞增',
+      desc: '遞減',
+      sortHint: '排序',
+      fileMeta: '{name} · {kb} KB · 以 {enc} 解碼',
+      colName: '欄位名稱',
+      noMatch: '沒有符合該搜尋的資料列。'
     }
-  };
+  };;
 
   var LANG_KEY = 'csvlens.lang';
   var SHARED_KEY = 'kyh.lang';
@@ -808,9 +1225,9 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
   }
   function fmtNum(n) {
     if (!isFinite(n)) return '—';
-    return (Math.round(n * 100) / 100).toLocaleString(state.lang === 'ko' ? 'ko-KR' : 'en-US');
+    return (Math.round(n * 100) / 100).toLocaleString(locTag());
   }
-  function fmtInt(n) { return Math.round(n).toLocaleString(state.lang === 'ko' ? 'ko-KR' : 'en-US'); }
+  function fmtInt(n) { return Math.round(n).toLocaleString(locTag()); }
   function encLabel() { return state.enc === 'euc-kr' ? 'EUC-KR' : 'UTF-8'; }
   function delimName(d) { return (t('delimName')[d] || d || '—'); }
 
@@ -977,7 +1394,7 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
         if (vb === '' && va !== '') return -1;
         var na = numOf(va), nb = numOf(vb);
         if (na !== null && nb !== null) return (na - nb) * dir || (a - b);
-        var cmp = va.localeCompare(vb, state.lang === 'ko' ? 'ko' : 'en', { numeric: true, sensitivity: 'base' });
+        var cmp = va.localeCompare(vb, locTag(), { numeric: true, sensitivity: 'base' });
         return cmp * dir || (a - b);
       });
     }
@@ -1017,12 +1434,12 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
     tbody.innerHTML = body;
     $('countChip').innerHTML = state.q.trim()
       ? fill(t('countOf'), { n: fmtInt(rows.length), t: fmtInt(data.length) })
-      : '<b>' + fmtInt(data.length) + '</b>' + (state.lang === 'ko' ? '' : ' ') + t('uRows');
+      : '<b>' + fmtInt(data.length) + '</b>' + (state.lang === 'en' ? ' ' : '') + t('uRows');
     if (rows.length > limit) {
       $('tblNote').hidden = false;
       $('tblNote').innerHTML = fill(t('tblNote'), { n: fmtInt(limit), t: fmtInt(data.length) });
     } else if (!rows.length) {
-      $('tblNote').hidden = false; $('tblNote').textContent = state.q.trim() ? (state.lang === 'ko' ? '일치하는 행이 없습니다.' : 'No row matches that search.') : '';
+      $('tblNote').hidden = false; $('tblNote').textContent = state.q.trim() ? t('noMatch') : '';
     } else {
       $('tblNote').hidden = true;
     }
@@ -1035,7 +1452,7 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
     $('sDelim').textContent = state.rows.length ? delimName(state.delim) : '—';
     $('sEnc').textContent = state.rows.length ? encLabel() : '—';
     $('sSize').textContent = state.rows.length
-      ? (state.bytes ? Math.max(1, Math.round(state.bytes / 1024)) + ' KB' : (state.text.length.toLocaleString() + (state.lang === 'ko' ? '' : ' ') + t('uChars')))
+      ? (state.bytes ? Math.max(1, Math.round(state.bytes / 1024)) + ' KB' : (state.text.length.toLocaleString() + (state.lang === 'en' ? ' ' : '') + t('uChars')))
       : '—';
 
     var list = $('colList');
@@ -1058,7 +1475,7 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
     var c = state.sel;
     if (c < 0 || c >= state.cols) { box.innerHTML = '<p class="empty">' + esc(t('statEmpty')) + '</p>'; return; }
     var st = state.stats[c];
-    var rowsHtml = '<li class="is-key"><span>' + esc(state.lang === 'ko' ? '열 이름' : 'Column') + '</span><b>' + esc(state.names[c]) + '</b></li>' +
+    var rowsHtml = '<li class="is-key"><span>' + esc(t('colName')) + '</span><b>' + esc(state.names[c]) + '</b></li>' +
       '<li><span>' + esc(t('statType')) + '</span><b>' + esc(st.type === 'number' ? t('tNumber') : st.type === 'mixed' ? t('tMixed') : st.type === 'empty' ? t('tEmpty') : t('tText')) + '</b></li>' +
       '<li><span>' + esc(t('statFilled')) + '</span><b>' + fmtInt(st.filled) + '</b></li>' +
       '<li><span>' + esc(t('statEmpty')) + '</span><b>' + fmtInt(st.empty) + '</b></li>' +
@@ -1243,9 +1660,32 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
 
   /* ═════════════════════ language ═════════════════════ */
   function setMeta(sel, attr, val) { var el = document.querySelector(sel); if (el) el.setAttribute(attr, val); }
+  /* ── four languages: KO · EN · JA · 繁中 ── */
+  var LANGS = ['ko', 'en', 'ja', 'zh-Hant'];
+  function normLang(l) {
+    var s = String(l == null ? '' : l).toLowerCase().replace(/_/g, '-');
+    if (s === 'zh-hant' || s === 'zh-tw' || s === 'zh-hk' || s === 'zh' || s === 'tw' || s === 'hant') return 'zh-Hant';
+    if (s === 'ja' || s === 'jp' || s === 'ja-jp') return 'ja';
+    if (s === 'ko' || s === 'kr' || s === 'ko-kr') return 'ko';
+    if (s === 'en' || s === 'en-us' || s === 'en-gb') return 'en';
+    return '';
+  }
+  function forcedLang() {
+    var f = window.__FORCED_LANG__;
+    if (f) return normLang(f);
+    var q = '';
+    try { q = String(new URLSearchParams(location.search).get('lang') || ''); } catch (e) { q = ''; }
+    return q ? normLang(q) : '';
+  }
+  function locTag(l) {
+    l = l || state.lang;
+    return l === 'ko' ? 'ko-KR' : l === 'ja' ? 'ja-JP' : l === 'zh-Hant' ? 'zh-TW' : 'en-US';
+  }
+
   function applyLang(lang) {
-    state.lang = lang === 'ko' ? 'ko' : 'en';
+    state.lang = normLang(lang) || 'en';
     document.documentElement.setAttribute('lang', state.lang);
+    try { document.dispatchEvent(new CustomEvent('opyeb:lang', { detail: state.lang })); } catch (e) { /* old engines */ }
     document.title = t('docTitle');
     setMeta('meta[property="og:title"]', 'content', state.lang === 'ko' ? 'CsvLens — CSV·TSV 표 열람·정렬·통계' : 'CsvLens — a CSV that stays in the tab');
     var nodes = document.querySelectorAll('[data-i18n]'), i, v;
@@ -1270,15 +1710,28 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
     try { localStorage.setItem(LANG_KEY, state.lang); localStorage.setItem(SHARED_KEY, state.lang); } catch (e) { }
   }
   function initialLang() {
-    var saved = null;
-    try { saved = localStorage.getItem(SHARED_KEY) || localStorage.getItem(LANG_KEY); } catch (e) { }
-    if (saved === 'ko' || saved === 'en') return saved;
-    var nav = (navigator.language || 'en').toLowerCase();
-    return nav.indexOf('ko') === 0 ? 'ko' : 'en';
+    var f = forcedLang();
+    if (f) return f;
+    var saved = '';
+    try { saved = localStorage.getItem(SHARED_KEY) || localStorage.getItem(LANG_KEY) || ''; } catch (e) { saved = ''; }
+    saved = normLang(saved);
+    if (saved) return saved;
+    return normLang(document.documentElement.getAttribute('lang')) || 'en';
   }
 
   /* ═════════════════════ events ═════════════════════ */
-  $('langToggle').addEventListener('click', function () { applyLang(state.lang === 'ko' ? 'en' : 'ko'); });
+  $('langToggle').addEventListener('click', function (e) {
+    var s = e.target && e.target.closest ? e.target.closest('[data-lt]') : null;
+    var next = s ? s.getAttribute('data-lt') : LANGS[(LANGS.indexOf(state.lang) + 1) % LANGS.length];
+    applyLang(next);
+  });
+  $('langToggle').addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var s = e.target && e.target.closest ? e.target.closest('[data-lt]') : null;
+    if (!s) return;
+    e.preventDefault();
+    applyLang(s.getAttribute('data-lt'));
+  });
 
   $('srcMode').addEventListener('click', function (e) {
     var b = e.target.closest('button[data-mode]');

@@ -157,6 +157,9 @@ button, input, select, textarea { font-family: inherit; color: inherit; }
 .lang-toggle:active { transform: scale(.94); }
 .lang-toggle .lt.on { color: var(--accent); }
 .lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.lang-toggle .lt { appearance: none; border: 0; background: none; color: inherit; font: inherit; letter-spacing: inherit; line-height: 1; padding: 1px 0; cursor: pointer; transition: color .2s; }
+.lang-toggle .lt:hover { color: var(--ink); }
+.lang-toggle .lt:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 .topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
 .topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
 
@@ -352,7 +355,7 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
 .foot .net b { color: var(--ok); }
 
 @media (max-width: 640px) {
-  .wrap { padding: 0 14px 36px; }
+  .wrap { padding: 0 16px 36px; }
   .topbar { padding: 14px 0 8px; }
   .brand-txt { font-size: 12px; letter-spacing: .1em; }
   .hero { padding: 16px 0 12px; }
@@ -380,11 +383,15 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       <span class="brand-txt">Kim Yihyung</span>
     </a>
     <div class="top-actions">
-      <button class="lang-toggle" id="langToggle" type="button" title="View in English" aria-label="View in English">
-        <span class="lt on" data-lt="ko">KO</span>
+      <div class="lang-toggle" id="langToggle" role="group" aria-label="Language">
+        <button class="lt" type="button" data-lt="ko" lang="ko">KO</button>
         <span class="lsep" aria-hidden="true">|</span>
-        <span class="lt" data-lt="en">EN</span>
-      </button>
+        <button class="lt" type="button" data-lt="en" lang="en">EN</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lt="ja" lang="ja">JA</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lt="zh-Hant" lang="zh-Hant">繁中</button>
+      </div>
       <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← 모든 툴</a>
     </div>
   </header>
@@ -667,6 +674,9 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
   /* ═════════════════════ language ═════════════════════ */
   var I18N = {
     ko: {
+      langLabel: '언어',
+      metaTitle: 'RetirePay — 퇴직금·연차수당·실업급여 계산(2026 기준)',
+      metaDesc: '퇴직금은 평균임금에서 시작합니다. 퇴직 전 3개월 임금에 연간 상여와 이미 지급한 연차수당의 3/12을 더해 그 3개월의 역일수로 나누고, 통상임금보다 낮으면 통상임금을 씁니다. 연차수당은 월 통상임금 ÷ 209 × 8, 실업급여는 2026년 최저임금 10,320원과 상한 68,100원·하한 66,048원으로 계산하고 근거 조문과 기준일을 함께 표시합니다.',
       docTitle: 'RetirePay — 퇴직금·연차수당·실업급여 계산기 (2026년 기준) | Kim Yihyung',
       brandAria: '김의형 — 포트폴리오', back: '← 모든 툴',
       eyebrow: 'RetirePay · 퇴직금 · 연차수당 · 실업급여 · 2026 기준',
@@ -744,6 +754,9 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       y: '년', m: '개월', d: '일', and: ' '
     },
     en: {
+      langLabel: 'Language',
+      metaTitle: 'RetirePay — severance, leave pay & job-seeker benefit calculator',
+      metaDesc: 'Korean severance starts from the average daily wage: three months of pay plus 3/12 of the annual bonus and leave pay, divided by the calendar days in those months, and the ordinary wage if that is higher. Leave pay is monthly ordinary wage ÷ 209 × 8; the 2026 benefit uses the 10,320 won minimum wage with a 68,100 cap and 66,048 floor.',
       docTitle: 'RetirePay — severance, unused leave pay & unemployment benefit calculator (2026 Korea) | Kim Yihyung',
       brandAria: 'Kim Yihyung — portfolio', back: '← All tools',
       eyebrow: 'RetirePay · severance · leave pay · job-seeker benefit · 2026 rules',
@@ -819,11 +832,345 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       rCapApplied: 'cap applied', rLowApplied: 'floor applied', rNone: 'between cap and floor', rBand: 'Band',
       rMonthly: 'Monthly equivalent (30 days)', sumTitle: 'Summary', sumFoot: 'estimate · 2026 rules',
       y: 'y', m: 'mo', d: 'd', and: ' '
+    },
+    'ja': {
+      docTitle: 'RetirePay — 退職金・未消化休暇手当・求職給付の計算(2026年 韓国) | Kim Yihyung',
+      metaTitle: 'RetirePay — 退職金・未消化休暇手当・求職給付の計算(2026年)',
+      metaDesc: '韓国の退職金は平均賃金から始まります。退職前3か月の賃金に年間賞与と既払いの未消化休暇手当の3/12を足し、その3か月の暦日数で割り、通常賃金より低ければ通常賃金を使います。未消化休暇手当は月の通常賃金 ÷ 209 × 8、求職給付は2026年の最低賃金 10,320ウォン・上限 68,100・下限 66,048 で計算します。根拠条文と基準日もページに明記しています。',
+      langLabel: '言語を切り替え',
+      brandAria: 'Kim Yihyung — ポートフォリオ',
+      back: '← ツール一覧',
+      eyebrow: 'RetirePay · 退職金 · 休暇手当 · 求職給付 · 2026年基準',
+      h1: '韓国の退職金の計算を、<span class="gold">法律が定めた順番で</span>。<br><span class="soft">平均賃金、通常賃金、3/12、給付日数。</span>',
+      lede: '退職金は<strong>平均日額賃金</strong>から始まります。3か月分の賃金に年間賞与と既払いの未消化休暇手当の <code>3/12</code> を足し、その3か月の暦日数で割ります — それが<strong>通常日額賃金</strong>を下回る場合は通常賃金を使います。未消化休暇手当は <code>月の通常賃金 ÷ 209 × 8</code>、求職給付は韓国の2026年最低賃金 <strong>10,320ウォン</strong>、上限 <strong>68,100</strong>、下限 <strong>66,048</strong> で計算します。基準日と、各数字の根拠条文もこのページに載せています。',
+      pillUp: 'アップロード 0 バイト',
+      pillNet: '外部リクエスト 0 件',
+      pillBase: '2026年基準 · 2026-11-18 確認',
+      pillLaw: '労働基準法 · 労働者退職給付保障法 · 雇用保険法',
+      workAria: '退職関連の計算',
+      tabAria: '計算機',
+      tab1: '退職金',
+      tab2: '休暇手当',
+      tab3: '求職給付',
+      sevTitle: '退職金の概算',
+      sevNote: '税引前 · 暦日数',
+      hireLabel: '入社日',
+      leaveLabel: '退職日(最後の勤務日)',
+      monthlyLabel: '月額賃金(基本給+手当)',
+      monthlyHelp: '3か月合計 × 3 を自動入力',
+      total3mLabel: '直近3か月の賃金(税引前)',
+      total3mHelp: '実際の額が違う場合は上書きしてください',
+      bonusLabel: '年間賞与の合計',
+      bonusHelp: '算入されるのは 3/12 だけです',
+      leavePayLabel: '既に支払われた未消化休暇手当',
+      leavePayHelp: '退職前に支給 · 3/12',
+      ordLabel: '月の通常賃金',
+      ordHelp: '通常日額 = 月額 ÷ 209 × 8',
+      resetBtn: '例の数字に戻す',
+      seveHint: '継続勤務1年未満には退職金の支給義務がありません(労働者退職給付保障法 第4条)。契約上の週所定労働時間が平均15時間未満の場合も同様です。退職によって初めて支払われることになった休暇手当は平均賃金に含めず、別に支給します。',
+      leaveTitle: '未消化休暇手当',
+      leaveNote: '209時間基準',
+      daysLabel: '未消化の休暇日数',
+      leaveHint: '通常日額 = 月の通常賃金 ÷ <b>209時間</b> × 8時間。209は週48時間(40+有給週休8)を52.14週で平均し、12か月に割った時間数です。有給休暇は常時5人以上の事業場が対象で、請求権は3年で時効になります。',
+      useOrdBtn: '退職金タブの通常賃金を使う',
+      unempTitle: '求職給付(구직급여)の概算',
+      unempNote: '2026-01-01 以降の離職が対象',
+      insYearLabel: '被保険期間(年)',
+      insMonthLabel: '被保険期間(月)',
+      ageLabel: '離職時の年齢',
+      avgDailyLabel: '離職前の平均日額賃金',
+      hoursLabel: '1日の契約労働時間',
+      hoursHelp: '下限の判定にのみ使用',
+      useAvgBtn: '退職金タブの平均日額賃金を使う',
+      disLabel: '障害者登録あり',
+      unempHint: '基本要件は、離職前18か月のうち被保険者期間180日以上、かつ自己都合でない離職であることです。受給期間は離職日の翌日から12か月で、その間に使わなかった日数は失われます。',
+      resHead: '概算',
+      copyBtn: 'カカオトークに貼れる要約をコピー',
+      calcCaveat: '税引前の概算です。退職所得課税は別で、実際の額は会社の規程と雇用センターの算定によります。',
+      basisHead: '基準値',
+      bMin: '最低賃金(2026)',
+      bHi: '給付上限',
+      bLo: '給付下限',
+      bCap: '基礎日額の上限',
+      bCheck: '確認日',
+      bMinV: '10,320ウォン',
+      bHiV: '68,100ウォン',
+      bLoV: '66,048ウォン',
+      bCapV: '113,500ウォン',
+      bCheckV: '2026-11-18',
+      basisCaveat: '最低賃金は雇用労働部告示第2025-47号(2025-08-05)、給付の上限と下限は改正雇用保険法施行令 第68条(2026-01-01 施行)によります。2026-01-01 より前の離職には旧来の上限 66,000ウォンが適用されます。',
+      bandHead: '給付日数 — 年齢と被保険期間',
+      bandNote: '雇用保険法 別表1',
+      thBand: '被保険期間',
+      thUnder50: '50歳未満',
+      thOver50: '50歳以上 · 障害者',
+      b1: '1年未満',
+      b2: '1年以上3年未満',
+      b3: '3年以上5年未満',
+      b4: '5年以上10年未満',
+      b5: '10年以上',
+      bandCaveat: '入力に合う行が強調されます。被保険期間は雇用保険の適用を受けていた期間で、直近18か月の180日が基本要件です。',
+      howHead: 'この計算式になる理由',
+      howNote: '3つの段階',
+      n1t: '割るのは90日ではなく暦日数',
+      n1b: '平均賃金は退職前3か月の<b>暦日数</b>で割ります — 89日から92日です。同じ900万ウォンでも89日なら101,124ウォン、92日なら97,826ウォンとなり、退職金は3%以上変わります。このページは退職日から実際の日数を数えます。',
+      n2t: '賞与と休暇手当は 3/12 だけ算入',
+      n2b: '年間賞与400万ウォンは <code>× 3/12</code> の100万ウォンとして入り、全額でも0でもありません。その3か月に賞与の支給がなかったという理由で0になることもありません。12か月を3か月に縮めるこの扱いが、雇用労働部の指針96の方法です。',
+      n3t: '通常賃金を下回れば通常賃金を採用',
+      n3b: '長期の無給欠勤があると、平均日額賃金が通常日額賃金を下回ることがあります。その場合、労働基準法 第2条第2項により通常賃金を平均賃金とみなします。結果カードにはどちらを適用したかが出ます。',
+      faqHead: 'つまずきやすいところ',
+      faqNote: '退職金 · 209 · 給付',
+      q1: '退職金はどの順番で計算しますか?',
+      a1: '① 3か月分の賃金に、年間賞与と既払いの未消化休暇手当の 3/12 を足します。② その3か月の暦日数で割って<b>平均日額賃金</b>を出します。③ 通常日額賃金と比べ、大きいほうを使います(労働基準法 第2条)。④ <code>平均日額賃金 × 30 × (継続勤務日数 ÷ 365)</code>。1年につき30日が法定の最低ラインです(労働者退職給付保障法 第4条)。',
+      q2: '209時間はどこから来た数字ですか?',
+      a2: '契約上の週40時間に有給の週休8時間を足すと週48時間、1年は365÷7≒52.14週なので2,502時間、その12分の1がおよそ<b>209時間</b>です。月の通常賃金を209で割って8を掛けると通常日額賃金になります。短時間労働者は基準時間数が変わるため、結果も変わります。',
+      q3: '2026年の上限と下限はいくらですか?',
+      a3: '2026-01-01 から日額上限は <b>68,100ウォン</b>、下限は <b>66,048ウォン</b>(1日8時間)です。下限は2026年最低賃金 10,320ウォン × 8 × 80%、上限は基礎日額上限 113,500ウォンの60%です。2026年は引き上げられた下限が旧上限 66,000ウォンを追い越した年で、上限もそれに合わせて引き上げられました — 2026-01-01 より前の離職には旧上限が残ります。',
+      q4: '会社や雇用センターの数字と違うときは?',
+      a4: 'ここに出るのは入力した数字からの概算です。実際の額は、どの手当が賃金に当たるか、3か月の間に除外期間(育児休業、病気休職、争議行為)が入らなかったか、どの手当が通常賃金に入るかで変わります。雇用労働部の退職金計算機と比べ、差が大きければ地域の労働官署か雇用センター(1350)に確認してください。',
+      footCopy: '© 2026 Kim Yihyung · ブラウザで、ブラウザのために。',
+      footNet: '外部リクエスト',
+      footP1: 'ポートフォリオ',
+      footP2: 'ツール一覧',
+      footP3: 'ソース',
+      uWon: 'ウォン',
+      uDay: '日',
+      uYear: '年',
+      uMonth: 'か月',
+      uAge: '歳',
+      uHour: '時間',
+      won: '{n}ウォン',
+      wonShort: '{n}ウォン',
+      days: '{n}日',
+      stReady: '値を変えると概算が更新されます。何もこのタブの外に出ません。',
+      stNoDates: '入社日と退職日を入力してください。',
+      stBadOrder: '退職日が入社日より前です。',
+      stUnder1y: '継続勤務1年未満 — 退職金の支給義務はありません。',
+      stSeverOk: '勤務 {d}日 · 平均日額賃金 {a} · {w}を適用。',
+      stAvgUsed: '平均日額賃金が通常賃金を下回ったため、通常賃金を適用しました。',
+      stOrdUsed: '平均賃金のほうが高いため、そちらを適用しました。',
+      stCopied: '要約をコピーしました — カカオトークやメモに貼り付けてください。',
+      stCopyFail: 'コピーできませんでした — 下の要約を選んで手動でコピーしてください。',
+      stLeaveOk: '1日 {a} × {d}日。',
+      stUnempOk: '1日 {a} × {d}日。',
+      stNoBenefit: '被保険期間1年未満の場合、表では120日です(180日の被保険者期間要件は別に判定します)。',
+      rSever: '退職金の概算',
+      rSeverRaw: '税引前',
+      rDays: '勤務日数',
+      rSpan: '勤務期間',
+      r3days: '3か月の暦日数',
+      rAvg: '平均日額賃金',
+      rOrd: '通常日額賃金',
+      rApplied: '適用した基準',
+      rBonus: '賞与の算入(3/12)',
+      rLeaveIn: '休暇手当の算入(3/12)',
+      rTotal: '3か月の賃金合計',
+      appliedAvg: '平均賃金',
+      appliedOrd: '通常賃金',
+      rFormula: '30日 × 勤務日数/365',
+      rLeave: '休暇手当の概算',
+      rDaily: '通常日額賃金',
+      rHourly: '時間単価換算',
+      rHours209: '月の基準時間数',
+      rUnemp: '給付総額の概算',
+      rDailyBenefit: '日額給付',
+      rBenefitDays: '給付日数',
+      rCapApplied: '上限を適用',
+      rLowApplied: '下限を適用',
+      rNone: '上限と下限の間',
+      rBand: '区分',
+      rMonthly: '月額換算(30日)',
+      sumTitle: '要約',
+      sumFoot: '概算 · 2026年基準',
+      y: '年',
+      m: 'か月',
+      d: '日',
+      and: ' '
+    },
+    'zh-Hant': {
+      docTitle: 'RetirePay — 退職金、特休未休工資與失業給付計算(2026 韓國) | Kim Yihyung',
+      metaTitle: 'RetirePay — 退職金、特休未休工資與失業給付計算(2026)',
+      metaDesc: '韓國退職金從平均工資算起：離職前三個月工資加上年終獎金與已付特休未休工資的 3/12，再除以那三個月的日曆天數；若低於通常工資，就用通常工資。特休未休工資是月通常工資 ÷ 209 × 8，失業給付以 2026 年最低工資 10,320 韓元、上限 68,100、下限 66,048 計算。頁面同時標明依據條文與基準日。',
+      langLabel: '切換語言',
+      brandAria: 'Kim Yihyung — 作品集',
+      back: '← 所有工具',
+      eyebrow: 'RetirePay · 退職金 · 特休工資 · 失業給付 · 2026 年基準',
+      h1: '韓國的退職金計算，<span class="gold">照法律規定的順序來</span>。<br><span class="soft">平均工資、通常工資、3/12、給付天數。</span>',
+      lede: '退職金從<strong>平均日工資</strong>開始。三個月工資加上年終獎金與已付特休未休工資的 <code>3/12</code>，除以那三個月的日曆天數 — 若低於<strong>通常日工資</strong>，就改用通常工資。特休未休工資是 <code>月通常工資 ÷ 209 × 8</code>；失業給付用韓國 2026 年最低工資 <strong>10,320 韓元</strong>、上限 <strong>68,100</strong>、下限 <strong>66,048</strong> 計算。基準日與每個數字背後的條文都寫在頁面上。',
+      pillUp: '上傳 0 位元組',
+      pillNet: '外部請求 0 次',
+      pillBase: '2026 年基準 · 2026-11-18 確認',
+      pillLaw: '勞動基準法 · 勞工退職給付保障法 · 就業保險法',
+      workAria: '退職相關計算',
+      tabAria: '計算機',
+      tab1: '退職金',
+      tab2: '特休工資',
+      tab3: '失業給付',
+      sevTitle: '退職金估算',
+      sevNote: '稅前 · 日曆天數',
+      hireLabel: '到職日',
+      leaveLabel: '離職日(最後上班日)',
+      monthlyLabel: '月薪資(本薪+津貼)',
+      monthlyHelp: '自動填入三個月合計 × 3',
+      total3mLabel: '最近三個月薪資(稅前)',
+      total3mHelp: '實際金額不同時請直接改寫',
+      bonusLabel: '年終獎金合計',
+      bonusHelp: '只計入 3/12',
+      leavePayLabel: '已支付的特休未休工資',
+      leavePayHelp: '離職前已發 · 3/12',
+      ordLabel: '月通常工資',
+      ordHelp: '通常日工資 = 月額 ÷ 209 × 8',
+      resetBtn: '回到範例數字',
+      seveHint: '連續工作未滿一年沒有退職金給付義務(勞工退職給付保障法 第4條)。約定每週平均工時未滿 15 小時也一樣。因為離職才首次到期的特休工資不計入平均工資，另行發給。',
+      leaveTitle: '特休未休工資',
+      leaveNote: '209 小時基準',
+      daysLabel: '未休完的特休天數',
+      leaveHint: '通常日工資 = 月通常工資 ÷ <b>209 小時</b> × 8 小時。209 是把每週 48 小時(40 + 8 小時有薪週休)以 52.14 週平均、再攤到 12 個月的小時數。有薪特休適用於常時僱用 5 人以上的事業場，請求權三年時效。',
+      useOrdBtn: '使用退職金分頁的通常工資',
+      unempTitle: '失業給付(구직급여)估算',
+      unempNote: '適用 2026-01-01 之後的離職',
+      insYearLabel: '投保年資(年)',
+      insMonthLabel: '投保年資(月)',
+      ageLabel: '離職時年齡',
+      avgDailyLabel: '離職前平均日工資',
+      hoursLabel: '每日約定工時',
+      hoursHelp: '只用於下限判斷',
+      useAvgBtn: '使用退職金分頁的平均日工資',
+      disLabel: '已登記身心障礙',
+      unempHint: '基本條件是離職前 18 個月內投保滿 180 天，且非自願離職。給付期間從離職次日起 12 個月，期間內沒用完的天數就失效。',
+      resHead: '估算',
+      copyBtn: '複製可貼到 KakaoTalk 的摘要',
+      calcCaveat: '這是稅前估算。退職所得課稅另外計算，實際金額依公司規章與僱用中心的核定。',
+      basisHead: '基準值',
+      bMin: '最低工資(2026)',
+      bHi: '給付上限',
+      bLo: '給付下限',
+      bCap: '基礎日額上限',
+      bCheck: '確認日',
+      bMinV: '10,320 韓元',
+      bHiV: '68,100 韓元',
+      bLoV: '66,048 韓元',
+      bCapV: '113,500 韓元',
+      bCheckV: '2026-11-18',
+      basisCaveat: '最低工資依僱用勞動部公告第 2025-47 號(2025-08-05)；給付上限與下限依修正後的就業保險法施行令 第68條(2026-01-01 施行)。2026-01-01 之前的離職仍適用舊上限 66,000 韓元。',
+      bandHead: '給付天數 — 年齡與投保年資',
+      bandNote: '就業保險法 附表1',
+      thBand: '投保年資',
+      thUnder50: '未滿 50 歲',
+      thOver50: '50 歲以上 · 身心障礙',
+      b1: '未滿 1 年',
+      b2: '1 年以上未滿 3 年',
+      b3: '3 年以上未滿 5 年',
+      b4: '5 年以上未滿 10 年',
+      b5: '10 年以上',
+      bandCaveat: '符合你輸入的那一列會標示出來。投保年資指受就業保險保障的期間，前 18 個月內滿 180 天是基本條件。',
+      howHead: '為什麼這樣算',
+      howNote: '三個步驟',
+      n1t: '除的是日曆天數，不是 90 天',
+      n1b: '平均工資除以離職前三個月的<b>日曆天數</b> — 89 到 92 天。同樣 900 萬韓元，89 天是 101,124 韓元、92 天是 97,826 韓元，退職金差 3% 以上。這個頁面從你的離職日實際數天數。',
+      n2t: '獎金與特休工資只算 3/12',
+      n2b: '年終獎金 400 萬韓元是以 <code>× 3/12</code> 的 100 萬韓元計入，不是全額，也不會因為那三個月沒發獎金就變 0。把 12 個月縮成 3 個月的這個做法，就是僱用勞動部指針 96 的方式。',
+      n3t: '低於通常工資時，通常工資優先',
+      n3b: '長期無薪缺勤可能讓平均日工資低於通常日工資。這時勞動基準法 第2條第2項把通常工資視為平均工資。結果卡會說明套用了哪一個。',
+      faqHead: '常見的出錯點',
+      faqNote: '退職金 · 209 · 給付',
+      q1: '退職金照什麼順序算?',
+      a1: '① 三個月工資加上年終獎金與已付特休未休工資的 3/12。② 除以那三個月的日曆天數，得到<b>平均日工資</b>。③ 與通常日工資比較，取較大的一個(勞動基準法 第2條)。④ <code>平均日工資 × 30 × (連續工作天數 ÷ 365)</code>。每年 30 天是法定最低(勞工退職給付保障法 第4條)。',
+      q2: '209 小時是怎麼來的?',
+      a2: '約定每週 40 小時加上 8 小時有薪週休，就是每週 48 小時；一年 365÷7≒52.14 週，共 2,502 小時，取其十二分之一約 <b>209 小時</b>。月通常工資除以 209 再乘 8，就是通常日工資。部分工時者的基準時數不同，結果也會不同。',
+      q3: '2026 年的上限與下限是多少?',
+      a3: '2026-01-01 起日額上限 <b>68,100 韓元</b>、下限 <b>66,048 韓元</b>(每日 8 小時)。下限是 2026 年最低工資 10,320 韓元 × 8 × 80%；上限是基礎日額上限 113,500 韓元的 60%。2026 年正是調升後的下限超過舊上限 66,000 韓元的一年，上限也跟著調高 — 2026-01-01 之前的離職仍用舊上限。',
+      q4: '跟公司或僱用中心算的不一樣怎麼辦?',
+      a4: '這裡是依你輸入的數字做的估算。實際金額取決於哪些津貼算工資、三個月內有沒有排除期間(育嬰留職停薪、病假、爭議行為)，以及哪些津貼屬於通常工資。可以跟僱用勞動部的退職金計算機比對，差距大就向當地勞動官署或僱用中心(1350)確認。',
+      footCopy: '© 2026 Kim Yihyung · 在瀏覽器裡，為瀏覽器而做。',
+      footNet: '外部請求',
+      footP1: '作品集',
+      footP2: '所有工具',
+      footP3: '原始碼',
+      uWon: '韓元',
+      uDay: '天',
+      uYear: '年',
+      uMonth: '個月',
+      uAge: '歲',
+      uHour: '小時',
+      won: '{n} 韓元',
+      wonShort: '{n} 韓元',
+      days: '{n} 天',
+      stReady: '改一個數字，估算就會更新。沒有任何東西離開這個分頁。',
+      stNoDates: '請輸入到職日與離職日。',
+      stBadOrder: '離職日早於到職日。',
+      stUnder1y: '連續工作未滿一年 — 沒有退職金給付義務。',
+      stSeverOk: '工作 {d} 天 · 平均日工資 {a} · 套用{w}。',
+      stAvgUsed: '平均日工資低於通常工資，因此套用通常工資。',
+      stOrdUsed: '平均工資較高，因此套用平均工資。',
+      stCopied: '已複製摘要 — 貼到 KakaoTalk 或記事本即可。',
+      stCopyFail: '複製失敗 — 請選取下方的摘要手動複製。',
+      stLeaveOk: '每日 {a} × {d} 天。',
+      stUnempOk: '每日 {a} × {d} 天。',
+      stNoBenefit: '投保未滿一年時，表上是 120 天(180 天投保條件另外判定)。',
+      rSever: '退職金估算',
+      rSeverRaw: '稅前',
+      rDays: '工作天數',
+      rSpan: '工作期間',
+      r3days: '三個月日曆天數',
+      rAvg: '平均日工資',
+      rOrd: '通常日工資',
+      rApplied: '套用基準',
+      rBonus: '獎金計入(3/12)',
+      rLeaveIn: '特休工資計入(3/12)',
+      rTotal: '三個月薪資合計',
+      appliedAvg: '平均工資',
+      appliedOrd: '通常工資',
+      rFormula: '30 天 × 工作天數/365',
+      rLeave: '特休工資估算',
+      rDaily: '通常日工資',
+      rHourly: '換算時薪',
+      rHours209: '每月基準時數',
+      rUnemp: '給付總額估算',
+      rDailyBenefit: '日額給付',
+      rBenefitDays: '給付天數',
+      rCapApplied: '套用上限',
+      rLowApplied: '套用下限',
+      rNone: '介於上限與下限之間',
+      rBand: '級距',
+      rMonthly: '換算月額(30 天)',
+      sumTitle: '摘要',
+      sumFoot: '估算 · 2026 年基準',
+      y: '年',
+      m: '個月',
+      d: '天',
+      and: ' '
     }
   };
 
   var LANG_KEY = 'retirepay.lang';
   var SHARED_KEY = 'kyh.lang';
+  var LANGS = ['ko', 'en', 'ja', 'zh-Hant'];
+  var DEFAULT_LANG = normLang(document.documentElement.getAttribute('lang')) || 'ko';
+  function normLang(v) {
+    var s = String(v == null ? '' : v).trim().toLowerCase().replace(/_/g, '-');
+    if (s === 'ko' || s === 'kr' || s === 'ko-kr') return 'ko';
+    if (s === 'en' || s === 'en-us' || s === 'en-gb' || s === 'en-au') return 'en';
+    if (s === 'ja' || s === 'jp' || s === 'ja-jp') return 'ja';
+    if (s === 'zh-hant' || s === 'zh-tw' || s === 'zh-hk' || s === 'zh-mo' || s === 'tw' || s === 'zh' || s === 'zh-hant-tw') return 'zh-Hant';
+    return '';
+  }
+  function readStoredLang(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  /* read-only: per-language title/description for the static /en/ /ja/ /zh-tw/ builder.
+     A getter, so it is computed when read (the builder runs after this script). */
+  Object.defineProperty(window, '__I18N_META__', {
+    configurable: true,
+    get: function () {
+      var out = {};
+      var ogl = { ko: 'ko_KR', en: 'en_US', ja: 'ja_JP', 'zh-Hant': 'zh_TW' };
+      Object.keys(I18N || {}).forEach(function (lg) {
+        var d = I18N[lg] || {};
+        out[lg] = { htmlLang: lg, ogLocale: ogl[lg] || 'en_US',
+                    title: d.metaTitle || d.docTitle || '', description: d.metaDesc || '' };
+      });
+      return out;
+    }
+  });
   var state = {
     lang: 'ko', tab: 'sever', disabled: false,
     sev: { hire: '2019-03-04', leave: '2026-09-30', monthly: 3000000, total3m: 9000000, bonus: 4000000, leavePay: 600000, ord: 2800000 },
@@ -1167,10 +1514,15 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
   /* ═════════════════════ language ═════════════════════ */
   function setMeta(sel, attr, val) { var el = document.querySelector(sel); if (el) el.setAttribute(attr, val); }
   function applyLang(lang) {
-    state.lang = lang === 'en' ? 'en' : 'ko';
+    state.lang = normLang(lang) || DEFAULT_LANG;
     document.documentElement.setAttribute('lang', state.lang);
     document.title = t('docTitle');
-    setMeta('meta[property="og:title"]', 'content', state.lang === 'ko' ? 'RetirePay — 퇴직금·연차수당·실업급여 계산 (2026 기준)' : 'RetirePay — severance, leave pay & benefit calculator');
+    setMeta('meta[name="description"]', 'content', t('metaDesc'));
+    setMeta('meta[property="og:title"]', 'content', t('metaTitle'));
+    setMeta('meta[property="og:description"]', 'content', t('metaDesc'));
+    setMeta('meta[name="twitter:title"]', 'content', t('metaTitle'));
+    setMeta('meta[name="twitter:description"]', 'content', t('metaDesc'));
+    setMeta('meta[property="og:locale"]', 'content', state.lang === 'zh-Hant' ? 'zh_TW' : (state.lang === 'ja' ? 'ja_JP' : (state.lang === 'ko' ? 'ko_KR' : 'en_US')));
     var nodes = document.querySelectorAll('[data-i18n]'), i, v;
     for (i = 0; i < nodes.length; i++) { v = t(nodes[i].getAttribute('data-i18n')); if (v) nodes[i].innerHTML = v; }
     nodes = document.querySelectorAll('[data-i18n-html]');
@@ -1181,22 +1533,35 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
     for (i = 0; i < nodes.length; i++) { v = t(nodes[i].getAttribute('data-i18n-ph')); if (v) nodes[i].setAttribute('placeholder', v); }
     var lt = $('langToggle');
     if (lt) {
-      var spans = lt.querySelectorAll('[data-lt]');
-      for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
-      lt.setAttribute('aria-label', state.lang === 'ko' ? 'View in English' : '한국어로 보기');
-      lt.setAttribute('title', state.lang === 'ko' ? 'View in English' : '한국어로 보기');
+      var lbs = lt.querySelectorAll('[data-lt]');
+      for (i = 0; i < lbs.length; i++) {
+        var _on = lbs[i].getAttribute('data-lt') === state.lang;
+        lbs[i].classList.toggle('on', _on);
+        lbs[i].setAttribute('aria-pressed', _on ? 'true' : 'false');
+      }
+      lt.setAttribute('aria-label', t('langLabel'));
     }
     paintResult();
     try { localStorage.setItem(LANG_KEY, state.lang); localStorage.setItem(SHARED_KEY, state.lang); } catch (e) { }
   }
   function initialLang() {
-    var saved = null;
-    try { saved = localStorage.getItem(SHARED_KEY) || localStorage.getItem(LANG_KEY); } catch (e) { }
-    if (saved === 'ko' || saved === 'en') return saved;
-    return 'ko';
+    var l = normLang(window.__FORCED_LANG__);
+    if (l) return l;
+    try { l = normLang(new URLSearchParams(location.search).get('lang')); } catch (e) { l = ''; }
+    if (l) return l;
+    l = normLang(readStoredLang(SHARED_KEY)) || normLang(readStoredLang(LANG_KEY));
+    if (l) return l;
+    return normLang(document.documentElement.getAttribute('lang')) || DEFAULT_LANG;
   }
 
-  $('langToggle').addEventListener('click', function () { applyLang(state.lang === 'ko' ? 'en' : 'ko'); });
+  var ltRoot = $('langToggle');
+  if (ltRoot) {
+    ltRoot.addEventListener('click', function (ev) {
+      var b = ev.target && ev.target.closest ? ev.target.closest('[data-lt]') : null;
+      if (!b) return;
+      applyLang(b.getAttribute('data-lt'));
+    });
+  }
 
   /* ═════════════════════ external request counter ═════════════════════ */
   var netCount = 0;

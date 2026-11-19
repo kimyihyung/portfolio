@@ -164,6 +164,10 @@ button, input, select, textarea { font-family: inherit; color: inherit; }
 .lang-toggle .lt { transition: color .18s ease; }
 .lang-toggle .lt.on { color: var(--accent); }
 .lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+
+.lang-toggle .lt { cursor: pointer; padding: 0 2px; }
+.lang-toggle .lt:hover { color: var(--ink); }
+@media (max-width: 400px) { .lang-toggle { gap: 4px; padding: 0 7px; } .lang-toggle .lt { font-size: 9.5px; letter-spacing: .02em; } }
 .back {
   font-size: 12px; color: var(--muted); text-decoration: none;
   border: 1px solid var(--line); border-radius: 8px;
@@ -468,10 +472,14 @@ input[type="range"]:disabled { opacity: .4; cursor: not-allowed; }
       <span class="brand-txt">Kim Yihyung</span>
     </a>
     <div class="top-actions">
-      <button class="lang-toggle" id="langToggle" type="button" title="View in Korean" aria-label="View in Korean">
-        <span class="lt on" data-lt="en">EN</span>
-        <span class="lsep" aria-hidden="true">|</span>
+      <button class="lang-toggle" id="langToggle" type="button" title="Language" aria-label="Language">
         <span class="lt" data-lt="ko">KO</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="en">EN</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="ja">JA</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="zh-Hant">繁中</span>
       </button>
       <a class="back" href="../" data-i18n="backTools">← Tools</a>
     </div>
@@ -739,18 +747,15 @@ window.addEventListener('unhandledrejection', function (e) {
       metaDesc: 'Turn an MP4, WebM or MOV clip into an animated GIF inside your browser: pick the in and out points, frames per second, width and palette, and download a GIF89a written by this page — zero uploads, zero external requests.',
       ogTitle: 'TinyGIF — Zero-Upload Video to GIF Converter',
       ogDesc: 'Pick a clip, a frame rate and a palette, and take a GIF89a away — encoded by JavaScript in the tab. 0 bytes uploaded, 0 external requests.',
-
       brandAria: 'Kim Yihyung — portfolio',
       backTools: '← Tools',
-      toggleTo: 'View in Korean',
-
+      toggleTo: 'Change language',
       pillLive: '0 bytes uploaded',
       pillLocal: 'In-browser <b>100% local</b>',
       pillOut: '<b>GIF89a</b> out · <b>MP4 · WebM · MOV</b> in',
       pillPal: '<b>Median cut</b> · <b>Floyd–Steinberg</b>',
       h1: 'Turn the clip.<br><span class="dim">Not the upload.</span>',
       lede: 'Drop a video and keep a few seconds of it as a looping GIF. Set the <b>in and out points</b>, the frame rate, the width and the palette, and the page pulls the frames out of the video, quantises them and writes the <b>GIF89a with its own LZW encoder</b>. No upload, no account, no library pulled from a CDN — the clip never leaves your device.',
-
       srcTitle: 'Source clip',
       videoAria: 'Source video preview',
       stillAria: 'Sample clip frame',
@@ -769,7 +774,6 @@ window.addEventListener('unhandledrejection', function (e) {
       demo2s: 'Bars',
       clearFile: 'Clear',
       srcHint: 'Scrub the clip above, then set the in and out points on the right.',
-
       resTitle: 'GIF result',
       gifAria: 'Generated GIF, looping',
       gifEmpty: '<b>No GIF yet.</b> The encoded loop plays here, at the size it will download.',
@@ -778,7 +782,6 @@ window.addEventListener('unhandledrejection', function (e) {
       chipDims: 'pixels',
       dlBtn: 'Download .gif',
       gifIdle: 'Load a clip, then press Make the GIF.',
-
       clipTitle: 'Clip',
       clipUnit: '15 s max',
       startLabel: 'In point',
@@ -789,29 +792,24 @@ window.addEventListener('unhandledrejection', function (e) {
       markIn: 'In at playhead',
       markOut: 'Out at playhead',
       clipHint: 'A GIF stores each frame almost on its own, so 2–6 seconds and 10 fps is the sweet spot. The clip is capped at 15 seconds.',
-
       framesTitle: 'Frames',
       fpsLabel: 'Frames per second',
       fpsAria: 'Frames per second',
       widthLabel: 'Width',
       widthAria: 'Output width in pixels',
-
       palTitle: 'Palette',
       colorsAria: 'Palette colour count',
       ditherLabel: 'Floyd–Steinberg dithering',
       ditherHint: 'Median cut picks one palette for the whole clip. Dithering trades banding for grain; switch it off for flat graphics, slides and screen recordings — the file also gets smaller.',
-
       convTitle: 'Convert',
       convBtn: 'Make the GIF',
       convIdle: 'Load a clip to enable the conversion.',
-
       n1t: 'Nothing leaves the tab',
       n1: 'The file is opened by this page with a local object URL, decoded by the browser\'s own video decoder, drawn into a canvas, and compressed here in JavaScript. The counter in the footer reports every request this page makes outside its own origin; it stays at zero.',
       n2t: 'Why the GIF is heavy',
       n2: 'A GIF keeps every frame almost on its own and caps a palette at 256 colours, so size grows with width × height × frames. Dropping to 480 px and 10 fps, or to 64 colours, is usually enough to bring a short clip down to a couple of megabytes.',
       n3t: 'Palette and dithering',
       n3: 'Median cut samples the clip, then splits the colour space into the palette you asked for, so a single palette serves every frame and colour stays steady. Floyd–Steinberg spreads the rounding error of each pixel into its neighbours — smoother gradients, more noise, a slightly bigger file.',
-
       faqTitle: 'Questions',
       q1: 'Which formats can be opened?',
       a1: 'Whatever the browser decodes: MP4 with H.264 everywhere, WebM in Chrome and Firefox, and MOV when its codec is supported. Safari on an iPhone does not decode WebM, and Chrome on Windows often cannot decode the HEVC inside an iPhone MOV — convert those first or use a desktop browser.',
@@ -819,16 +817,12 @@ window.addEventListener('unhandledrejection', function (e) {
       a2: 'Because a GIF is a poor fit for anything longer. Fifteen seconds at 720 px and 20 fps comes out as 298 frames and an 18 MB file, and the tab spends about half a minute writing it. GIF is good at short loops: two to six seconds keeps the file small and the wait short.',
       q3: 'Can the GIF be transparent?',
       a3: 'No. GIF transparency is a single on/off bit per pixel, which looks ragged on moving footage, so the frames are composited as they are. If the clip has an alpha channel it is flattened onto black.',
-
       caveat: '<strong>Note.</strong> Only convert clips you have the right to use. The page never modifies your file and never sends it anywhere — the GIF is a new file you download.',
       lic: 'No third-party library: decoding uses the browser\'s video element, and the median-cut quantiser, the Floyd–Steinberg dither, the LZW compressor and the GIF89a container are all written into this page. Everything is served from this site with the page, never from a CDN.',
-
       foot1: '0 uploads · 0 servers · 0 cookies',
       netLabel: 'external requests made by this page',
       back: '← Portfolio',
       footTools: 'All tools',
-
-      /* dynamic */
       metaIdle: 'no clip',
       metaClip: '{dur} · {w}×{h} · {size}',
       metaDemo: '{dur} · made here',
@@ -856,18 +850,15 @@ window.addEventListener('unhandledrejection', function (e) {
       metaDesc: 'MP4·WebM·MOV 클립을 브라우저 안에서 움직이는 GIF로 바꾸세요. 시작·끝 지점, 초당 프레임, 가로 해상도, 팔레트를 정하고 이 페이지가 직접 만든 GIF89a를 내려받으면 됩니다. 업로드 0바이트, 외부 요청 0건.',
       ogTitle: 'TinyGIF — 업로드 없는 영상→GIF 변환기',
       ogDesc: '클립과 프레임 레이트, 팔레트를 고르면 GIF89a가 탭 안에서 만들어진 채로 나옵니다. 업로드 0바이트, 외부 요청 0건.',
-
       brandAria: '김이형 — 포트폴리오',
       backTools: '← 도구',
-      toggleTo: '영어로 보기',
-
+      toggleTo: '언어 변경',
       pillLive: '업로드 0바이트',
       pillLocal: '브라우저 안에서 <b>100% 로컬</b>',
       pillOut: '<b>GIF89a</b> 내보내기 · <b>MP4 · WebM · MOV</b> 불러오기',
       pillPal: '<b>미디언 컷</b> · <b>플로이드–스타인버그</b>',
       h1: '클립만 바꿉니다.<br><span class="dim">업로드는 안 합니다.</span>',
       lede: '영상을 놓고 몇 초만 떼어 반복 재생되는 GIF로 만드세요. <b>시작·끝 지점</b>과 프레임 레이트, 가로 해상도, 팔레트를 정하면 페이지가 영상에서 프레임을 뽑아 색을 줄이고 <b>자체 LZW 인코더로 GIF89a를 씁니다</b>. 업로드도, 계정도, CDN에서 받아오는 라이브러리도 없습니다 — 클립은 기기를 떠나지 않습니다.',
-
       srcTitle: '원본 클립',
       videoAria: '원본 영상 미리보기',
       stillAria: '샘플 클립 화면',
@@ -886,7 +877,6 @@ window.addEventListener('unhandledrejection', function (e) {
       demo2s: '막대',
       clearFile: '비우기',
       srcHint: '위에서 구간을 확인한 뒤 오른쪽에서 시작·끝 지점을 잡으세요.',
-
       resTitle: 'GIF 결과',
       gifAria: '생성된 GIF 반복 재생',
       gifEmpty: '<b>아직 GIF가 없습니다.</b> 만들어진 루프가 내려받을 크기 그대로 여기서 재생됩니다.',
@@ -895,7 +885,6 @@ window.addEventListener('unhandledrejection', function (e) {
       chipDims: '픽셀',
       dlBtn: '.gif 내려받기',
       gifIdle: '클립을 불러온 뒤 GIF 만들기를 누르세요.',
-
       clipTitle: '구간',
       clipUnit: '최대 15초',
       startLabel: '시작 지점',
@@ -906,29 +895,24 @@ window.addEventListener('unhandledrejection', function (e) {
       markIn: '재생 위치를 시작으로',
       markOut: '재생 위치를 끝으로',
       clipHint: 'GIF는 프레임을 거의 하나씩 저장하므로 2~6초, 10 fps가 가장 좋습니다. 구간은 최대 15초까지입니다.',
-
       framesTitle: '프레임',
       fpsLabel: '초당 프레임',
       fpsAria: '초당 프레임',
       widthLabel: '가로 해상도',
       widthAria: '출력 가로 픽셀',
-
       palTitle: '팔레트',
       colorsAria: '팔레트 색 수',
       ditherLabel: '플로이드–스타인버그 디더링',
       ditherHint: '미디언 컷이 클립 전체에 쓸 팔레트 하나를 고릅니다. 디더링은 계단 현상을 입자로 바꾸고, 평면 그래픽·슬라이드·화면 녹화라면 끄는 편이 깔끔하고 파일도 작아집니다.',
-
       convTitle: '변환',
       convBtn: 'GIF 만들기',
       convIdle: '클립을 불러오면 변환할 수 있습니다.',
-
       n1t: '아무것도 탭을 떠나지 않습니다',
       n1: '파일은 이 페이지가 로컬 객체 URL로 열고, 브라우저 자체 영상 디코더가 해석한 뒤 캔버스에 그려 이 자바스크립트가 압축합니다. 아래 카운터는 이 페이지가 자기 사이트 밖으로 보낸 요청 수이며, 계속 0으로 남습니다.',
       n2t: 'GIF가 무거운 이유',
       n2: 'GIF는 프레임을 거의 하나씩 저장하고 팔레트가 256색으로 제한되므로 크기는 가로 × 세로 × 프레임에 비례합니다. 480 px·10 fps로 낮추거나 64색으로 줄이면 짧은 클립은 보통 1~2 MB 수준이 됩니다.',
       n3t: '팔레트와 디더링',
       n3: '미디언 컷이 클립에서 색을 뽑아 요청한 색 수만큼 공간을 나누므로, 팔레트 하나가 모든 프레임에 쓰여 색이 흔들리지 않습니다. 플로이드–스타인버그는 픽셀의 반올림 오차를 이웃으로 흩어 그라데이션을 매끄럽게 만들고, 대신 입자가 늘고 파일이 조금 커집니다.',
-
       faqTitle: '자주 묻는 질문',
       q1: '어떤 형식을 열 수 있나요?',
       a1: '브라우저가 해석하는 형식입니다. H.264 MP4는 어디서나 되고, WebM은 Chrome·Firefox, MOV는 그 코덱을 지원할 때 됩니다. 아이폰 Safari는 WebM을 해석하지 못하고, 윈도우 Chrome은 아이폰 MOV의 HEVC를 자주 못 엽니다 — 그런 파일은 먼저 변환하거나 데스크톱 브라우저를 쓰세요.',
@@ -936,15 +920,12 @@ window.addEventListener('unhandledrejection', function (e) {
       a2: '그보다 긴 영상에는 GIF가 맞지 않기 때문입니다. 720 px·20 fps로 15초면 프레임 298장, 파일 18 MB가 되고 탭이 인코딩에 30초 남짓을 씁니다. GIF는 짧은 루프에 어울리는 형식이라 2~6초가 가장 실용적입니다.',
       q3: 'GIF를 투명하게 만들 수 있나요?',
       a3: '안 됩니다. GIF의 투명도는 픽셀당 켜짐/꺼짐 한 비트뿐이라 움직이는 영상에서는 테두리가 거칠어집니다. 그래서 프레임은 있는 그대로 합성되며, 알파 채널이 있으면 검정 위에 눌러 담습니다.',
-
       caveat: '<strong>참고.</strong> 사용할 권리가 있는 클립만 변환하세요. 이 페이지는 원본 파일을 수정하지도, 어디로 보내지도 않습니다 — GIF는 새로 내려받는 파일입니다.',
       lic: '제3자 라이브러리를 쓰지 않습니다. 해석은 브라우저의 video 요소가, 미디언 컷 양자화·플로이드–스타인버그 디더·LZW 압축·GIF89a 컨테이너는 모두 이 페이지의 코드가 합니다. 모든 파일은 페이지와 함께 이 사이트에서만 오고 CDN을 쓰지 않습니다.',
-
       foot1: '업로드 0 · 서버 0 · 쿠키 0',
       netLabel: '이 페이지가 보낸 외부 요청',
       back: '← 포트폴리오',
       footTools: '도구 전체',
-
       metaIdle: '클립 없음',
       metaClip: '{dur} · {w}×{h} · {size}',
       metaDemo: '{dur} · 이 탭에서 생성',
@@ -966,8 +947,214 @@ window.addEventListener('unhandledrejection', function (e) {
       errEmpty: '읽을 수 있는 영상 파일로 보이지 않습니다.',
       errDuration: '그 클립의 길이를 읽지 못해 시작·끝 지점을 잡을 수 없습니다.',
       errSeek: '클립이 이동하지 않았습니다 — 브라우저가 프레임을 아직 준비하지 못했을 수 있습니다. 다시 시도해 주세요.'
+    },
+    ja: {
+      docTitle: 'TinyGIF — アップロード不要の動画→GIF 変換 | Kim Yihyung',
+      metaDesc: 'MP4・WebM・MOV のクリップをブラウザー内でアニメーション GIF に変換します。開始・終了位置、毎秒フレーム数、幅、パレットを決めて、このページが書き出した GIF89a を保存するだけ。アップロード 0、外部リクエスト 0。',
+      ogTitle: 'TinyGIF — アップロード不要の動画→GIF 変換',
+      ogDesc: 'クリップとフレームレート、パレットを選べば、GIF89a がタブの中で作られて出てきます。アップロード 0 バイト、外部リクエスト 0 件。',
+      brandAria: 'Kim Yihyung — ポートフォリオ',
+      backTools: '← ツール',
+      toggleTo: '言語を変更',
+      pillLive: 'アップロード 0 バイト',
+      pillLocal: 'ブラウザー内で <b>100% ローカル</b>',
+      pillOut: '<b>GIF89a</b> 出力 · <b>MP4 · WebM · MOV</b> 入力',
+      pillPal: '<b>メディアンカット</b> · <b>Floyd–Steinberg</b>',
+      h1: 'クリップを変える。<br><span class="dim">アップロードはしない。</span>',
+      lede: '動画を落として、数秒だけを繰り返し再生する GIF にします。<b>開始・終了位置</b>、フレームレート、幅、パレットを決めると、ページが動画からフレームを取り出し、色を減らして<b>自前の LZW エンコーダーで GIF89a を書き出します</b>。アップロードも、アカウントも、CDN から取ってくるライブラリもありません — クリップは端末を離れません。',
+      srcTitle: '元のクリップ',
+      videoAria: '元動画のプレビュー',
+      stillAria: 'サンプルクリップの画面',
+      videoEmpty: '<b>まだクリップがありません。</b>ファイルが入るとこの位置に動画が現れます。',
+      chipIn: '開始',
+      chipOut: '終了',
+      chipClip: '区間',
+      dropTitle: '動画クリップを落としてください',
+      dropNote: 'MP4 · WebM · MOV — このブラウザーが解釈できる形式なら何でも。アップロードはしません。',
+      pickFile: 'ファイルを選ぶ',
+      demo1: '軌道サンプル',
+      demo2: '棒グラフのサンプル',
+      demoNote: 'どちらのサンプルもこのタブの中で描いて録画します — ダウンロードするものも、送る先もありません。',
+      replaceFile: '差し替え',
+      demo1s: '軌道',
+      demo2s: '棒グラフ',
+      clearFile: '空にする',
+      srcHint: '上で区間を確認し、右側で開始・終了位置を決めてください。',
+      resTitle: 'GIF の結果',
+      gifAria: '生成された GIF（ループ再生）',
+      gifEmpty: '<b>まだ GIF がありません。</b>できたループが、保存するサイズのままここで再生されます。',
+      chipSize: 'サイズ',
+      chipFrames: 'フレーム',
+      chipDims: 'ピクセル',
+      dlBtn: '.gif を保存',
+      gifIdle: 'クリップを読み込んでから「GIF を作る」を押してください。',
+      clipTitle: '区間',
+      clipUnit: '最大 15 秒',
+      startLabel: '開始位置',
+      endLabel: '終了位置',
+      startAria: '開始位置（秒）',
+      endAria: '終了位置（秒）',
+      wholeClip: 'クリップ全体',
+      markIn: '再生位置を開始に',
+      markOut: '再生位置を終了に',
+      clipHint: 'GIF はフレームをほぼ一枚ずつ保存するので、2〜6 秒・10 fps が最適です。区間は最大 15 秒までです。',
+      framesTitle: 'フレーム',
+      fpsLabel: '毎秒フレーム数',
+      fpsAria: '毎秒フレーム数',
+      widthLabel: '幅',
+      widthAria: '出力幅（ピクセル）',
+      palTitle: 'パレット',
+      colorsAria: 'パレットの色数',
+      ditherLabel: 'Floyd–Steinberg ディザリング',
+      ditherHint: 'メディアンカットがクリップ全体で使うパレットを一つ選びます。ディザリングは階調の段差を粒子に変えます。フラットな図形・スライド・画面録画なら切ったほうがきれいで、ファイルも小さくなります。',
+      convTitle: '変換',
+      convBtn: 'GIF を作る',
+      convIdle: 'クリップを読み込むと変換できます。',
+      n1t: '何もタブから出ていきません',
+      n1: 'ファイルはこのページがローカルのオブジェクト URL として開き、ブラウザー自身の動画デコーダーが解釈してキャンバスに描き、この JavaScript が圧縮します。フッターのカウンターは、このページが自分のサイト外へ出したリクエストを数えており、0 のままです。',
+      n2t: 'GIF が重い理由',
+      n2: 'GIF はフレームをほぼ一枚ずつ保持し、パレットは 256 色までなので、サイズは幅 × 高さ × フレーム数に比例します。480 px・10 fps に下げるか 64 色に減らせば、短いクリップはたいてい 1〜2 MB に収まります。',
+      n3t: 'パレットとディザリング',
+      n3: 'メディアンカットはクリップから色を抽出し、指定した色数に色空間を分割するので、一つのパレットがすべてのフレームに使われ色が揺れません。Floyd–Steinberg は各画素の丸め誤差を隣へ散らしてグラデーションを滑らかにし、代わりに粒子が増えファイルが少し大きくなります。',
+      faqTitle: 'よくある質問',
+      q1: 'どの形式を開けますか？',
+      a1: 'ブラウザーが解釈できる形式です。H.264 の MP4 はどこでも、WebM は Chrome・Firefox、MOV はそのコーデックに対応していれば開けます。iPhone の Safari は WebM を解釈せず、Windows の Chrome は iPhone の MOV に入っている HEVC を開けないことがよくあります — その場合は先に変換するか、デスクトップのブラウザーを使ってください。',
+      q2: 'なぜ 15 秒までなのですか？',
+      a2: 'それより長いものには GIF が向かないからです。720 px・20 fps で 15 秒は 298 フレーム、18 MB になり、タブは書き出しに 30 秒ほどかかります。GIF は短いループに向く形式で、2〜6 秒が最も実用的です。',
+      q3: 'GIF を透過にできますか？',
+      a3: 'できません。GIF の透過は画素ごとにオン・オフの 1 ビットだけで、動く映像では縁がぎざぎざになります。そのためフレームはそのまま合成し、アルファチャンネルがあれば黒の上に重ねます。',
+      caveat: '<strong>ご注意。</strong> 使う権利のあるクリップだけを変換してください。このページは元のファイルを書き換えず、どこにも送りません — GIF は新しくダウンロードするファイルです。',
+      lic: '第三者のライブラリは使いません。デコードはブラウザーの video 要素が、メディアンカット量子化・Floyd–Steinberg ディザ・LZW 圧縮・GIF89a コンテナはすべてこのページのコードが担当します。ファイルはすべてページと一緒にこのサイトから届き、CDN は使いません。',
+      foot1: 'アップロード 0 · サーバー 0 · クッキー 0',
+      netLabel: 'このページが出した外部リクエスト',
+      back: '← ポートフォリオ',
+      footTools: 'ツール一覧',
+      metaIdle: 'クリップなし',
+      metaClip: '{dur} · {w}×{h} · {size}',
+      metaDemo: '{dur} · このタブで生成',
+      srcMetaLoaded: '{fps} fps · {w}×{h} → {frames} フレーム',
+      frameUnit: '{n} フレーム',
+      dimsHint: '出力 {w} × {h} px',
+      estLabel: '≈ {size}',
+      convReady: '{frames} フレーム · {w}×{h} · 約 {size}。',
+      progColors: '色を読み取り中 {i}/{n}',
+      progEncode: 'エンコード {p}%',
+      progDone: '完了',
+      gifReady: 'GIF 完成 — {size} · {frames} フレーム · {w}×{h} · {dur} ループ。',
+      gifBusy: '処理中…',
+      gifStale: 'この GIF を作った後に設定が変わりました — もう一度変換すると反映されます。',
+      gifFail: 'GIF を作れませんでした。区間を短くするか、幅を小さくしてみてください。',
+      demoWorking: 'タブの中でサンプルを録画しています…',
+      demoFail: 'このブラウザーではサンプルを録画できませんでした。',
+      errDecode: 'このブラウザーはその動画を開けませんでした。H.264 の MP4 かデスクトップのブラウザーで試してください。',
+      errEmpty: '読み取れる動画ファイルではないようです。',
+      errDuration: 'このクリップの長さが読めないため、開始・終了位置を決められません。',
+      errSeek: 'クリップが移動しませんでした — ブラウザーがまだフレームを用意できていない可能性があります。もう一度お試しください。'
+    },
+    'zh-Hant': {
+      docTitle: 'TinyGIF — 零上傳的影片轉 GIF 工具 | Kim Yihyung',
+      metaDesc: '在瀏覽器裡把 MP4、WebM 或 MOV 片段轉成動畫 GIF：選好進出點、每秒影格數、寬度與調色盤，下載由這個頁面寫出的 GIF89a。零上傳、零外部請求。',
+      ogTitle: 'TinyGIF — 零上傳的影片轉 GIF 工具',
+      ogDesc: '選好片段、影格率與調色盤，就能帶走一段在分頁裡編碼完成的 GIF89a。上傳 0 位元組，外部請求 0 次。',
+      brandAria: 'Kim Yihyung — 作品集',
+      backTools: '← 工具',
+      toggleTo: '變更語言',
+      pillLive: '上傳 0 位元組',
+      pillLocal: '瀏覽器內 <b>100% 本機</b>',
+      pillOut: '<b>GIF89a</b> 輸出 · <b>MP4 · WebM · MOV</b> 輸入',
+      pillPal: '<b>中位切分</b> · <b>Floyd–Steinberg</b>',
+      h1: '轉換的是片段。<br><span class="dim">不是上傳。</span>',
+      lede: '拖入影片，只留下幾秒鐘做成的循環 GIF。設定<b>進出點</b>、影格率、寬度與調色盤，頁面就會從影片取出影格、縮減色彩，並<b>用自帶的 LZW 編碼器寫出 GIF89a</b>。沒有上傳、沒有帳號、也不從 CDN 載入任何函式庫 — 片段不會離開你的裝置。',
+      srcTitle: '來源片段',
+      videoAria: '來源影片預覽',
+      stillAria: '範例片段畫面',
+      videoEmpty: '<b>尚未載入片段。</b>檔案一進來，影片就會出現在這裡。',
+      chipIn: '開始',
+      chipOut: '結束',
+      chipClip: '區間',
+      dropTitle: '拖入影片片段',
+      dropNote: 'MP4 · WebM · MOV — 只要這個瀏覽器解讀得了都行。不會上傳。',
+      pickFile: '選擇檔案',
+      demo1: '軌道範例',
+      demo2: '長條圖範例',
+      demoNote: '兩個範例都在這個分頁裡繪製並錄影 — 沒有東西要下載，也沒有地方要送出。',
+      replaceFile: '換一個',
+      demo1s: '軌道',
+      demo2s: '長條圖',
+      clearFile: '清空',
+      srcHint: '先在上方確認區間，再於右側設定進出點。',
+      resTitle: 'GIF 結果',
+      gifAria: '產生的 GIF，循環播放',
+      gifEmpty: '<b>尚無 GIF。</b>編碼完成的循環會以實際下載的尺寸在這裡播放。',
+      chipSize: '大小',
+      chipFrames: '影格',
+      chipDims: '像素',
+      dlBtn: '下載 .gif',
+      gifIdle: '載入片段後，按下「製作 GIF」。',
+      clipTitle: '區間',
+      clipUnit: '最多 15 秒',
+      startLabel: '進點',
+      endLabel: '出點',
+      startAria: '進點（秒）',
+      endAria: '出點（秒）',
+      wholeClip: '整段片段',
+      markIn: '以播放位置為進點',
+      markOut: '以播放位置為出點',
+      clipHint: 'GIF 幾乎逐格儲存影格，因此 2〜6 秒、10 fps 最合適。區間上限為 15 秒。',
+      framesTitle: '影格',
+      fpsLabel: '每秒影格數',
+      fpsAria: '每秒影格數',
+      widthLabel: '寬度',
+      widthAria: '輸出寬度（像素）',
+      palTitle: '調色盤',
+      colorsAria: '調色盤色數',
+      ditherLabel: 'Floyd–Steinberg 抖動',
+      ditherHint: '中位切分會為整段片段挑一組調色盤。抖動把色階斷層換成顆粒；若是平面圖形、簡報、螢幕錄影，關掉會更乾淨，檔案也更小。',
+      convTitle: '轉換',
+      convBtn: '製作 GIF',
+      convIdle: '載入片段後即可轉換。',
+      n1t: '沒有任何東西離開分頁',
+      n1: '檔案由這個頁面以本機物件 URL 開啟，瀏覽器自身的影片解碼器解讀、畫到畫布，再由這段 JavaScript 壓縮。頁尾的計數器統計這個頁面送往自身網域以外的請求，一直維持在 0。',
+      n2t: 'GIF 為什麼這麼大',
+      n2: 'GIF 幾乎逐格保存影格，調色盤上限 256 色，因此容量與寬 × 高 × 影格數成正比。降到 480 px、10 fps，或減到 64 色，短片段通常就能壓到 1〜2 MB。',
+      n3t: '調色盤與抖動',
+      n3: '中位切分從片段取樣，再把色彩空間切成你指定的色數，因此一組調色盤供所有影格使用，顏色不會閃動。Floyd–Steinberg 把每個像素的捨入誤差分散給鄰居 — 漸層更平滑，顆粒變多，檔案也略大。',
+      faqTitle: '常見問題',
+      q1: '可以開啟哪些格式？',
+      a1: '瀏覽器解讀得了的格式：H.264 的 MP4 到處都能開，WebM 在 Chrome 與 Firefox，MOV 則在其編碼受支援時。iPhone 的 Safari 不支援 WebM，Windows 的 Chrome 常常打不開 iPhone MOV 裡的 HEVC — 這類檔案請先轉檔，或改用桌面瀏覽器。',
+      q2: '為什麼最多只有 15 秒？',
+      a2: '因為更長的影片並不適合 GIF。720 px、20 fps 的 15 秒是 298 個影格、18 MB，分頁要花半分鐘左右寫出。GIF 適合短循環：2〜6 秒能讓檔案小、等待也短。',
+      q3: 'GIF 可以做成透明嗎？',
+      a3: '不行。GIF 的透明是每個像素一個開關位元，套在動態影像上邊緣會很毛躁，所以影格照原樣合成；若片段有透明通道，會壓在黑底上。',
+      caveat: '<strong>提醒。</strong> 只轉換你有權使用的片段。這個頁面不會修改你的檔案，也不會送到任何地方 — GIF 是你另外下載的新檔案。',
+      lic: '不使用第三方函式庫：解碼交給瀏覽器的 video 元素，中位切分量化、Floyd–Steinberg 抖動、LZW 壓縮與 GIF89a 容器全部寫在這個頁面裡。所有檔案都隨頁面從本站送出，絕不經過 CDN。',
+      foot1: '上傳 0 · 伺服器 0 · Cookie 0',
+      netLabel: '這個頁面送出的外部請求',
+      back: '← 作品集',
+      footTools: '所有工具',
+      metaIdle: '無片段',
+      metaClip: '{dur} · {w}×{h} · {size}',
+      metaDemo: '{dur} · 在此分頁產生',
+      srcMetaLoaded: '{fps} fps · {w}×{h} → {frames} 個影格',
+      frameUnit: '{n} 個影格',
+      dimsHint: '輸出 {w} × {h} px',
+      estLabel: '≈ {size}',
+      convReady: '{frames} 個影格 · {w}×{h} · 約 {size}。',
+      progColors: '讀取顏色 {i}/{n}',
+      progEncode: '編碼 {p}%',
+      progDone: '完成',
+      gifReady: 'GIF 完成 — {size} · {frames} 個影格 · {w}×{h} · {dur} 循環。',
+      gifBusy: '處理中…',
+      gifStale: '這張 GIF 產生後設定又改了 — 再轉換一次才會套用。',
+      gifFail: '無法製作 GIF。請縮短區間或降低寬度。',
+      demoWorking: '正在分頁裡錄製範例…',
+      demoFail: '這個瀏覽器無法錄製範例。',
+      errDecode: '這個瀏覽器打不開該影片。請改用 H.264 的 MP4，或桌面瀏覽器。',
+      errEmpty: '這看起來不是我們讀得懂的影片檔。',
+      errDuration: '讀不到這段影片的長度，因此無法設定進出點。',
+      errSeek: '影片沒有跳到指定位置 — 瀏覽器可能還沒準備好影格。請再試一次。'
     }
-  };
+  };;
 
   function t(key) {
     var d = I18N[state.lang] || I18N.en;
@@ -982,7 +1169,7 @@ window.addEventListener('unhandledrejection', function (e) {
   function readLang() {
     try {
       var v = localStorage.getItem(LANG_KEY);
-      return v === 'ko' || v === 'en' ? v : '';
+      return normLang(v);
     } catch (e) { return ''; }
   }
 
@@ -1856,9 +2043,28 @@ window.addEventListener('unhandledrejection', function (e) {
   }
 
   /* ─────────────────────────── 언어 적용 ─────────────────────────── */
+  /* ── four languages: KO · EN · JA · 繁中 ── */
+  var LANGS = ['ko', 'en', 'ja', 'zh-Hant'];
+  function normLang(l) {
+    var s = String(l == null ? '' : l).toLowerCase().replace(/_/g, '-');
+    if (s === 'zh-hant' || s === 'zh-tw' || s === 'zh-hk' || s === 'zh' || s === 'tw' || s === 'hant') return 'zh-Hant';
+    if (s === 'ja' || s === 'jp' || s === 'ja-jp') return 'ja';
+    if (s === 'ko' || s === 'kr' || s === 'ko-kr') return 'ko';
+    if (s === 'en' || s === 'en-us' || s === 'en-gb') return 'en';
+    return '';
+  }
+  function forcedLang() {
+    var f = window.__FORCED_LANG__;
+    if (f) return normLang(f);
+    var q = '';
+    try { q = String(new URLSearchParams(location.search).get('lang') || ''); } catch (e) { q = ''; }
+    return q ? normLang(q) : '';
+  }
+
   function applyLang(lang) {
-    state.lang = lang === 'ko' ? 'ko' : 'en';
+    state.lang = normLang(lang) || 'en';
     document.documentElement.setAttribute('lang', state.lang);
+    try { document.dispatchEvent(new CustomEvent('opyeb:lang', { detail: state.lang })); } catch (e) { /* old engines */ }
 
     document.title = t('docTitle');
     var md = document.querySelector('meta[name="description"]'); if (md) md.setAttribute('content', t('metaDesc'));
@@ -1937,11 +2143,18 @@ window.addEventListener('unhandledrejection', function (e) {
   }
 
   function bindUI() {
-    $('langToggle').addEventListener('click', function () {
-      var next = state.lang === 'ko' ? 'en' : 'ko';
-      try { localStorage.setItem(LANG_KEY, next); } catch (e) {}
-      applyLang(next);
-    });
+    $('langToggle').addEventListener('click', function (e) {
+    var s = e.target && e.target.closest ? e.target.closest('[data-lt]') : null;
+    var next = s ? s.getAttribute('data-lt') : LANGS[(LANGS.indexOf(state.lang) + 1) % LANGS.length];
+    applyLang(next);
+  });
+  $('langToggle').addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var s = e.target && e.target.closest ? e.target.closest('[data-lt]') : null;
+    if (!s) return;
+    e.preventDefault();
+    applyLang(s.getAttribute('data-lt'));
+  });
 
     $('pickFile').addEventListener('click', function () { $('fileInput').click(); });
     $('replaceFile').addEventListener('click', function () { $('fileInput').click(); });
@@ -2034,7 +2247,7 @@ window.addEventListener('unhandledrejection', function (e) {
   function init() {
     bindUI();
     state.dither = $('ditherChk').checked;
-    applyLang(readLang() || 'en');
+    applyLang(forcedLang() || readLang() || 'en');
     $('srcMeta').textContent = t('metaIdle');
     $('progWrap').hidden = true;
     /* 테스트 훅: 실측에서 생성 결과를 직접 확인할 수 있게 남긴다 */

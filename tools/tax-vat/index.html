@@ -127,6 +127,7 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   word-break: keep-all;
+  /* ja / zh-Hant: break between CJK characters; Korean keeps whole words */
 }
 ::selection { background: var(--accent); color: var(--on-accent); }
 a { color: inherit; }
@@ -156,6 +157,9 @@ button, input, select, textarea { font-family: inherit; color: inherit; }
 .lang-toggle:active { transform: scale(.94); }
 .lang-toggle .lt.on { color: var(--accent); }
 .lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.lang-toggle .lt { appearance: none; border: 0; background: none; color: inherit; font: inherit; letter-spacing: inherit; line-height: 1; padding: 1px 0; cursor: pointer; transition: color .2s; }
+.lang-toggle .lt:hover { color: var(--ink); }
+.lang-toggle .lt:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 .topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
 .topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
 
@@ -187,6 +191,8 @@ h1 .gold { color: var(--accent); }
 
 /* ---------- layout ---------- */
 .work { display: grid; grid-template-columns: minmax(0,1fr) 336px; gap: 16px; align-items: start; margin-top: 6px; }
+html:lang(ja) body, html:lang(zh-Hant) body, html[lang="ja"] body, html[lang="zh-Hant"] body { word-break: normal; }
+
 @media (max-width: 1060px) { .work { grid-template-columns: minmax(0,1fr); } }
 
 .card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); min-width: 0; }
@@ -383,7 +389,7 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
 .foot .net b { color: var(--ok); }
 
 @media (max-width: 640px) {
-  .wrap { padding: 0 14px 36px; }
+  .wrap { padding: 0 16px 36px; }
   .topbar { padding: 14px 0 8px; }
   .brand-txt { font-size: 12px; letter-spacing: .1em; }
   .hero { padding: 14px 0 10px; }
@@ -409,11 +415,15 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       <span class="brand-txt">Kim Yihyung</span>
     </a>
     <div class="top-actions">
-      <button class="lang-toggle" id="langToggle" type="button" title="View in English" aria-label="View in English">
-        <span class="lt on" data-lt="ko">KO</span>
+      <div class="lang-toggle" id="langToggle" role="group" aria-label="Language">
+        <button class="lt" type="button" data-lt="ko" lang="ko">KO</button>
         <span class="lsep" aria-hidden="true">|</span>
-        <span class="lt" data-lt="en">EN</span>
-      </button>
+        <button class="lt" type="button" data-lt="en" lang="en">EN</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lt="ja" lang="ja">JA</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lt="zh-Hant" lang="zh-Hant">繁中</button>
+      </div>
       <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← 도구 전체</a>
     </div>
   </header>
@@ -497,18 +507,18 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
             </div>
           </div>
 
-          <div class="chip-wrap" id="salesChips" role="group" aria-label="매출 빠른 입력">
-            <button class="chip" type="button" data-target="sales" data-val="30000000">3,000만</button>
-            <button class="chip" type="button" data-target="sales" data-val="48000000">4,800만</button>
-            <button class="chip" type="button" data-target="sales" data-val="60000000">6,000만</button>
-            <button class="chip" type="button" data-target="sales" data-val="80000000">8,000만</button>
-            <button class="chip" type="button" data-target="sales" data-val="104000000">1억 400만</button>
+          <div class="chip-wrap" id="salesChips" role="group" aria-label="매출 빠른 입력" data-i18n-aria="salesChipsAria">
+            <button class="chip" type="button" data-target="sales" data-val="30000000" data-i18n="ch30m">3,000만</button>
+            <button class="chip" type="button" data-target="sales" data-val="48000000" data-i18n="ch48m">4,800만</button>
+            <button class="chip" type="button" data-target="sales" data-val="60000000" data-i18n="ch60m">6,000만</button>
+            <button class="chip" type="button" data-target="sales" data-val="80000000" data-i18n="ch80m">8,000만</button>
+            <button class="chip" type="button" data-target="sales" data-val="104000000" data-i18n="ch104m">1억 400만</button>
           </div>
-          <div class="chip-wrap" id="buyChips" role="group" aria-label="매입 빠른 입력">
+          <div class="chip-wrap" id="buyChips" role="group" aria-label="매입 빠른 입력" data-i18n-aria="buyChipsAria">
             <button class="chip" type="button" data-target="purchase" data-val="0">0</button>
-            <button class="chip" type="button" data-target="purchase" data-val="10000000">1,000만</button>
-            <button class="chip" type="button" data-target="purchase" data-val="20000000">2,000만</button>
-            <button class="chip" type="button" data-target="purchase" data-val="30000000">3,000만</button>
+            <button class="chip" type="button" data-target="purchase" data-val="10000000" data-i18n="ch10m">1,000만</button>
+            <button class="chip" type="button" data-target="purchase" data-val="20000000" data-i18n="ch20m">2,000만</button>
+            <button class="chip" type="button" data-target="purchase" data-val="30000000" data-i18n="ch30m">3,000만</button>
           </div>
 
           <div class="statgrid">
@@ -569,7 +579,7 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
             </div>
             <div class="field">
               <label for="revRate"><span data-i18n="rRate">부가세율</span><i data-i18n="rRateNote">일반 10%</i></label>
-              <div class="seg" id="revRate" role="group" aria-label="부가세율">
+              <div class="seg" id="revRate" role="group" aria-label="부가세율" data-i18n-aria="revRateAria">
                 <button type="button" data-rate="0.1" aria-pressed="true">10%</button>
                 <button type="button" data-rate="0" aria-pressed="false" data-i18n="rRateZero">면세 0%</button>
               </div>
@@ -577,7 +587,7 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
             </div>
           </div>
 
-          <div class="chip-wrap" id="revChips" role="group" aria-label="빠른 입력">
+          <div class="chip-wrap" id="revChips" role="group" aria-label="빠른 입력" data-i18n-aria="revChipsAria">
             <button class="chip" type="button" data-val="11000">11,000</button>
             <button class="chip" type="button" data-val="110000">110,000</button>
             <button class="chip" type="button" data-val="1100000">1,100,000</button>
@@ -645,12 +655,12 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
             </div>
           </div>
 
-          <div class="chip-wrap" id="whChips" role="group" aria-label="빠른 입력">
-            <button class="chip" type="button" data-val="100000">10만</button>
-            <button class="chip" type="button" data-val="500000">50만</button>
-            <button class="chip" type="button" data-val="1000000">100만</button>
-            <button class="chip" type="button" data-val="3000000">300만</button>
-            <button class="chip" type="button" data-val="10000000">1,000만</button>
+          <div class="chip-wrap" id="whChips" role="group" aria-label="빠른 입력" data-i18n-aria="whChipsAria">
+            <button class="chip" type="button" data-val="100000" data-i18n="ch100k">10만</button>
+            <button class="chip" type="button" data-val="500000" data-i18n="ch500k">50만</button>
+            <button class="chip" type="button" data-val="1000000" data-i18n="ch1m">100만</button>
+            <button class="chip" type="button" data-val="3000000" data-i18n="ch3m">300만</button>
+            <button class="chip" type="button" data-val="10000000" data-i18n="ch10m">1,000만</button>
           </div>
 
           <div class="bignum"><b id="whNet">—</b><span data-i18n="wNetLbl">실수령액</span></div>
@@ -716,12 +726,12 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
             </tr>
           </thead>
           <tbody>
-            <tr data-rate="0.15"><td class="kr" data-i18n="oRetail">소매업 · 음식점업 · 재생용 재료수집</td><td class="num">15%</td><td class="num">1.5%</td><td class="num">150,000원</td></tr>
-            <tr data-rate="0.20"><td class="kr" data-i18n="oMake">제조업 · 농림어업 · 소화물 전문 운송</td><td class="num">20%</td><td class="num">2%</td><td class="num">200,000원</td></tr>
-            <tr data-rate="0.25"><td class="kr" data-i18n="oStay">숙박업</td><td class="num">25%</td><td class="num">2.5%</td><td class="num">250,000원</td></tr>
-            <tr data-rate="0.30"><td class="kr" data-i18n="oBuild">건설업 · 운수·창고업 · 정보통신업</td><td class="num">30%</td><td class="num">3%</td><td class="num">300,000원</td></tr>
-            <tr data-rate="0.30"><td class="kr" data-i18n="oOther">그 밖의 서비스업</td><td class="num">30%</td><td class="num">3%</td><td class="num">300,000원</td></tr>
-            <tr data-rate="0.40"><td class="kr" data-i18n="oFin">금융·보험 · 전문·과학·기술 · 부동산임대업</td><td class="num">40%</td><td class="num">4%</td><td class="num">400,000원</td></tr>
+            <tr data-rate="0.15"><td class="kr" data-i18n="oRetail">소매업 · 음식점업 · 재생용 재료수집</td><td class="num">15%</td><td class="num">1.5%</td><td class="num" data-i18n="ref150k">150,000원</td></tr>
+            <tr data-rate="0.20"><td class="kr" data-i18n="oMake">제조업 · 농림어업 · 소화물 전문 운송</td><td class="num">20%</td><td class="num">2%</td><td class="num" data-i18n="ref200k">200,000원</td></tr>
+            <tr data-rate="0.25"><td class="kr" data-i18n="oStay">숙박업</td><td class="num">25%</td><td class="num">2.5%</td><td class="num" data-i18n="ref250k">250,000원</td></tr>
+            <tr data-rate="0.30"><td class="kr" data-i18n="oBuild">건설업 · 운수·창고업 · 정보통신업</td><td class="num">30%</td><td class="num">3%</td><td class="num" data-i18n="ref300k">300,000원</td></tr>
+            <tr data-rate="0.30"><td class="kr" data-i18n="oOther">그 밖의 서비스업</td><td class="num">30%</td><td class="num">3%</td><td class="num" data-i18n="ref300k">300,000원</td></tr>
+            <tr data-rate="0.40"><td class="kr" data-i18n="oFin">금융·보험 · 전문·과학·기술 · 부동산임대업</td><td class="num">40%</td><td class="num">4%</td><td class="num" data-i18n="ref400k">400,000원</td></tr>
           </tbody>
         </table>
       </div>
@@ -805,6 +815,30 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
   /* ═════════════════════ language ═════════════════════ */
   var I18N = {
     ko: {
+      langLabel: '언어',
+      metaTitle: 'TaxVat — 부가가치세·간이과세·원천징수 계산(2026 기준)',
+      metaDesc: '매출 6,000만원·매입 2,000만원인 음식점은 일반과세로 약 364만원, 간이과세로 80만원의 부가가치세를 냅니다. 두 방식을 비교하고, 11만원을 10만+1만으로 나누고, 3.3%·8.8% 원천징수 후 얼마가 남는지 이 탭에서 확인합니다. 2026년 기준이며 입력한 내용은 저장하지 않습니다.',
+      ch30m: '3,000만',
+      ch48m: '4,800만',
+      ch60m: '6,000만',
+      ch80m: '8,000만',
+      ch104m: '1억 400만',
+      ch10m: '1,000만',
+      ch20m: '2,000만',
+      ch100k: '10만',
+      ch500k: '50만',
+      ch1m: '100만',
+      ch3m: '300만',
+      salesChipsAria: '매출 빠른 입력',
+      buyChipsAria: '매입 빠른 입력',
+      revRateAria: '부가세율',
+      revChipsAria: '빠른 입력',
+      whChipsAria: '빠른 입력',
+      ref150k: '150,000원',
+      ref200k: '200,000원',
+      ref250k: '250,000원',
+      ref300k: '300,000원',
+      ref400k: '400,000원',
       docTitle: 'TaxVat — 부가세·간이과세 비교·공급가액 역산·원천징수 3.3% 8.8% | Kim Yihyung',
       brandAria: 'Kim Yihyung — 포트폴리오',
       back: '← 도구 전체',
@@ -932,6 +966,30 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       whCopyLine: '세전 {g}원 · 소득세 {i}원 · 지방소득세 {l}원 · 실수령 {n}원'
     },
     en: {
+      langLabel: 'Language',
+      metaTitle: 'TaxVat — Korean VAT, simplified VAT and withholding calculator',
+      metaDesc: 'A restaurant with ₩60M of sales and ₩20M of purchases pays about ₩3.64M of VAT under the general regime and ₩800k under the simplified one. Compare both, split ₩110,000 into ₩100,000 + ₩10,000, and see what 3.3% or 8.8% withholding leaves — on 2026 Korean rules, in this tab.',
+      ch30m: '30M',
+      ch48m: '48M',
+      ch60m: '60M',
+      ch80m: '80M',
+      ch104m: '104M',
+      ch10m: '10M',
+      ch20m: '20M',
+      ch100k: '100k',
+      ch500k: '500k',
+      ch1m: '1M',
+      ch3m: '3M',
+      salesChipsAria: 'Sales quick fill',
+      buyChipsAria: 'Purchases quick fill',
+      revRateAria: 'VAT rate',
+      revChipsAria: 'Quick fill',
+      whChipsAria: 'Quick fill',
+      ref150k: '₩150,000',
+      ref200k: '₩200,000',
+      ref250k: '₩250,000',
+      ref300k: '₩300,000',
+      ref400k: '₩400,000',
       docTitle: 'TaxVat — Korean VAT, Simplified VAT and Withholding Calculator | Kim Yihyung',
       brandAria: 'Kim Yihyung — portfolio',
       back: '← All tools',
@@ -1057,11 +1115,489 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       whBoxOther: '60% of the payment is treated as expenses and 20% is applied to the remaining 40%. At ₩125,000 or less the taxable amount falls under the ₩50,000 floor and nothing is withheld.',
       whBoxOtherSmall: 'The payment is ₩125,000 or less, so the taxable amount is under ₩50,000 — the floor applies and income tax is ₩0.',
       whCopyLine: 'gross {g} · income tax {i} · local {l} · received {n}'
+    },
+    'ja': {
+      docTitle: 'TaxVat — 韓国の付加価値税・簡易課税・源泉徴収の計算 | Kim Yihyung',
+      metaTitle: 'TaxVat — 付加価値税・簡易課税・源泉徴収の計算(2026年)',
+      metaDesc: '売上6,000万ウォン・仕入2,000万ウォンの飲食店は、一般課税で約364万ウォン、簡易課税で80万ウォンの付加価値税になります。両方を比べ、11万ウォンを10万+1万に分け、3.3%・8.8%の源泉徴収後の手取りもこのタブで確認できます。2026年基準で、入力内容は保存しません。',
+      langLabel: '言語を切り替え',
+      brandAria: 'Kim Yihyung — ポートフォリオ',
+      back: '← ツール一覧',
+      eyebrow: 'TaxVat · 付加価値税 · 源泉徴収 · アップロードゼロ',
+      h1: 'いくら払うのか。<br><span class="soft">税抜きの金額はいくらか。</span><br><span class="gold">数字を入れてみる。</span>',
+      lede: '売上6,000万ウォン・仕入2,000万ウォンの飲食店なら、一般課税で約<strong>364万ウォン</strong>、簡易課税で<strong>80万ウォン</strong>の付加価値税になります。両方を比べ、<strong>11万ウォンを10万+1万</strong>に分け、3.3%や8.8%の源泉徴収後にいくら残るかも分かります — 2026年の韓国のルールに基づき、このタブの中で完結します。入力した内容は保存しません。',
+      pillRef: '2026年基準',
+      pillDate: '2026-11-18 確認',
+      pillUp: 'アップロード 0 バイト',
+      pillNet: '外部リクエスト 0 件',
+      pillLaw: '国税庁 · 付加価値税法施行令 第111条',
+      workAria: '税の計算',
+      tabAria: '計算機',
+      tab1: '一般 vs 簡易',
+      tab2: '付加価値税を分ける',
+      tab3: '源泉徴収 3.3 · 8.8',
+      cTitle: '同じ売上で、2つの課税方式',
+      cNote: '2026年 · 年間',
+      fSales: '売上(税込)',
+      unitIncl: '税込',
+      fSalesAria: '売上(付加価値税込み)',
+      fBuy: '仕入(税込)',
+      unitIncl2: '請求書・カード',
+      fBuyAria: '仕入(付加価値税込み)',
+      won: 'ウォン',
+      won2: 'ウォン',
+      won3: 'ウォン',
+      won4: 'ウォン',
+      fSector: '業種(付加価値率)',
+      unitRate: '率',
+      fSectorAria: '業種',
+      g15: '付加価値率 15%',
+      g20: '付加価値率 20%',
+      g25: '付加価値率 25%',
+      g30: '付加価値率 30%',
+      g40: '付加価値率 40%',
+      oRetail: '小売 · 飲食 · 再生資源',
+      oMake: '製造 · 農林水産 · 運送(宅配)',
+      oStay: '宿泊',
+      oBuild: '建設 · 運輸倉庫 · 情報通信',
+      oOther: 'その他のサービス',
+      oFin: '金融保険 · 専門科学技術 · 不動産賃貸',
+      kScale: '売上規模',
+      kExempt: '簡易課税の免税',
+      kGap: '差額',
+      hGeneral: '一般課税事業者',
+      gBadge: '税率 10%',
+      hSimple: '簡易課税事業者',
+      payLabel: '納付する付加価値税',
+      payLabel2: '納付する付加価値税',
+      kOutTax: '売上税額(総額 × 10/110)',
+      kInTax: '仕入税額(仕入 × 10/110)',
+      kEff: '実効負担率',
+      kSimpOut: '売上税額(総額 × 付加価値率 × 10%)',
+      kSimpCredit: '仕入控除(仕入 × 0.5%)',
+      kEff2: '実効負担率',
+      cmpFoot: 'ここで比べているのは付加価値税だけです。仕入はすべて<b>税計算書・事業者カード・現金領収証</b>があるものとしています。カード売上の控除(簡易課税は 1.3%)、電子申告控除、みなし仕入税額、既に納めた中間納付は含みません。方式は税額だけで決めるものではなく、還付、計算書の発行義務、申告の頻度も関わります。',
+      rTitle: '11万ウォンを供給価額と税に分ける',
+      rNote: '供給価額 ↔ 税 ↔ 合計',
+      rModeLbl: '何が分かっていますか?',
+      rModeAria: '起点',
+      rModeTotal: '合計(税込)',
+      rModeSupply: '供給価額',
+      rModeTax: '税額のみ',
+      rAria: '金額',
+      rRate: '付加価値税率',
+      rRateNote: '標準 10%',
+      rRateZero: '免税 0%',
+      rSupply: '供給価額',
+      rTax: '付加価値税',
+      rTotal: '合計(税込)',
+      rSupplyLbl: '供給価額',
+      copyBtn: '結果をコピー',
+      copyBtn2: '結果をコピー',
+      thTotal: '合計',
+      thSupply: '供給価額',
+      thTax: '付加価値税',
+      revFoot: '供給価額は合計を 1.1 で割って<b>ウォン単位に四捨五入</b>し、付加価値税は<b>合計 − 供給価額</b>とします。だから足すと必ず入力した額に戻ります。税計算書1枚では切り捨てのルールにより1ウォンずれることがあります。',
+      wTitle: '100万ウォンの3.3%は、967,000ウォン',
+      wNote: '総額 ↔ 手取り',
+      wKindLbl: '所得の種類',
+      wKindAria: '所得の種類',
+      wBiz: '事業所得 3.3%',
+      wOther: 'その他所得 8.8%',
+      wDirLbl: 'どちらが分かっていますか?',
+      wDirAria: '方向',
+      wDirGross: '税引前の金額',
+      wDirNet: '受け取る金額',
+      whAria: '金額',
+      wTrunc: '10ウォン未満を切り捨て',
+      wTruncNote: '一般的な実務',
+      wTruncOn: '10ウォン未満の端数を切り捨てる',
+      wNetLbl: '受け取る金額',
+      wGross: '税引前(支払額)',
+      wIncome: '所得税',
+      wLocal: '地方所得税',
+      wTax: '源泉徴収の合計',
+      wNet2: '受け取る金額',
+      wBoxH: '前提',
+      wFoot: '3.3% は<b>所得税3% + 地方所得税0.3%</b>です。8.8% は支払額の60%を必要経費とみなし、残り40%に<b>所得税20% + 地方2%</b>をかけます — 支払額の8.8%になります。2027-01-01 以降の支払から3%を2%に下げる法案が2026年に国会へ提出されましたが、2026-11-18 時点で成立しておらず、この計算機は3%を使っています。',
+      sideHead: 'この画面のルール',
+      sVat: '付加価値税率',
+      sRate: '業種別の付加価値率',
+      sSimpBase: '簡易課税の上限',
+      sSimpBaseV: '売上1億400万ウォン',
+      sExempt: '納付の免税',
+      sExemptV: '4,800万ウォン未満',
+      sCredit: '簡易課税の仕入控除',
+      sCreditV: '仕入の 0.5%',
+      sWithhold: '源泉徴収',
+      sideNote: '基準と限界',
+      sideDate: '2026-11-18 確認',
+      sideDateP: '付加価値税法施行令 <b>第111条</b>(業種別付加価値率)、<b>第69条</b>(納付の免税)、国税庁の簡易課税に関する質疑応答、所得税法 第129条に基づきます。',
+      sideEst: '概算であり助言ではありません',
+      sideEstP: '税法は毎年変わり、実際の額は<b>控除できない仕入税額、各種控除、既に納めた中間納付</b>で変わります。ここは仕組みを理解して規模を掴むためのものとして扱い、申告の前には Hometax の予習済みデータを使うか税務の専門家に確認してください。',
+      rateTitle: '簡易課税: 業種別の付加価値率',
+      rateNote: '2021-07-01 以降の供給分',
+      thSector: '業種',
+      thRate: '率',
+      thEff: '実効',
+      thPer10: '売上1,000万ウォンあたり',
+      rateFoot: '実効率 = 付加価値率 × 10%。仕入にはさらに <b>0.5%</b> が控除され、年間売上 <b>4,800万ウォン</b>未満は納付が免除されます(申告は必要)。専門・科学・技術のうち肖像・イベントの映像撮影は <b>30%</b> です。',
+      howTitle: '数字の組み立て方',
+      howNote: '式はそのまま',
+      n1h: '一般課税事業者',
+      n1p: '売上税額 = 総額 × <code>10/110</code>。仕入税額 = 仕入総額 × <code>10/110</code>。納付額 = 売上 − 仕入で、マイナスなら<b>還付</b>です。売上6,000万・仕入2,000万なら 5,454,545 − 1,818,182 = <b>3,636,363ウォン</b>。',
+      n1p2: 'すべての仕入が控除できるわけではありません。計算書のない仕入、事業用でない乗用車、接待交際費、免税売上に対応する仕入は除外されます。',
+      n2h: '簡易課税事業者',
+      n2p: '売上税額 = 総額 × 業種別付加価値率 × 10%。仕入控除 = 仕入総額 × <code>0.5%</code>。納付額 = 売上 − 控除で、<b>控除が余っても還付されず消えます</b>。同じ例(飲食・15%)なら 900,000 − 100,000 = <b>800,000ウォン</b>。',
+      n2p2: '年間売上 <b>4,800万ウォン</b>未満は納付が免除されますが、1月の申告は必要で、7月に納めた中間納付(前期納付額の半分、50万ウォン未満は省略)は別に精算します。',
+      n3h: '源泉徴収',
+      n3p: '事業所得 3.3% = 支払額に対する所得税3%に地方所得税0.3%を加えたもの。その他所得 8.8% = (支払額 − 60%のみなし経費) × 20% に地方2%を加えたもので、結果として支払額の8.8%になります。',
+      n3p2: 'その他所得には<b>1回ごとの下限</b>があります。課税対象(支払額の40%)が5万ウォン以下 — 支払額が<b>12万5,000ウォン以下</b> — なら所得税は源泉徴収されません。60%の経費控除がない賞与的な報酬は22%で課税されます。',
+      faqTitle: 'よくある質問',
+      faqNote: '方式 · 還付 · 源泉徴収',
+      q1: '自分が簡易課税事業者かどうかは分かりますか?',
+      a1: '<b>前年の売上</b>が <b>1億400万ウォン</b>未満の個人事業者は簡易課税事業者です。不動産賃貸と娯楽施設は <b>4,800万ウォン</b> が基準です。法人は常に一般課税で、鉱業・卸売業や一部の地域は簡易課税から除かれます。国税庁が毎年7月1日に区分を切り替えて通知します。',
+      q2: '簡易課税はなぜ還付されないのですか?',
+      a2: '仕入を全額控除せず、仕入総額の<b>0.5%</b>だけを控除するからです。売上税額を超えた控除はそのまま無視され、還付は生じません。開業時に内装へ大きく支出する場合は、仕入税額が還付される一般課税のほうが得なことがあります。',
+      q3: '3.3% と 8.8% は何が違いますか?',
+      a3: '<b>3.3%</b> は<b>事業所得</b> — 独立して<b>継続的に</b>提供するサービス — に対する源泉徴収で、所得税3%に地方税0.3%を加えたものです。<b>8.8%</b> は<b>その他所得</b>(単発の講演・助言・原稿)に適用され、60%を必要経費とみなして残り40%に20%をかけ、地方税を上乗せします。',
+      q4: '税込の合計から供給価額を出すには?',
+      a4: '合計を <b>1.1</b> で割ります。11万ウォンは供給価額10万ウォン + 税1万ウォン、110万ウォンは100万ウォン + 10万ウォンです。逆は供給価額に10%を足し、税額だけ分かっているなら10倍します。',
+      q5: 'この数字で申告できますか?',
+      a5: '参考値です。仕入はすべて控除可能として扱っており、<b>控除できない仕入税額</b>、カード売上の控除(簡易課税は1.3%、2026年末まで年1,000万ウォン上限)、電子申告控除、みなし仕入税額、<b>既に納めた中間納付</b>は反映していません。申告は Hometax の予習済みデータから行ってください。',
+      q6: '源泉徴収率は2027年に変わりますか?',
+      a6: '2026年8月に発表された政府案は、2027-01-01 以降の支払について事業所得の源泉徴収率を<b>3%から2%</b>に下げるものです。2026-11-18 時点では国会で審議中で成立しておらず、この計算機は2026年の支払に <b>3.3%</b> を使います。',
+      footCopy: '© 2026 Kim Yihyung · ブラウザで、ブラウザのために。',
+      footNet: '外部リクエスト',
+      footP1: 'ポートフォリオ',
+      footP2: 'ツール一覧',
+      footP3: 'ソース',
+      mono: 'アップロードなし · 追跡なし',
+      toggleTo: '言語を切り替え',
+      wonUnit: 'ウォン',
+      eok: '億',
+      salesRead: '供給価額 {s} · 税 {t}',
+      buyRead: '供給価額 {s} · 仕入税額 {t}',
+      sectorRead: '実効 {e} · 売上税額 = 総額 × {r} × 10%',
+      scaleUnder: '簡易課税が可能',
+      scaleOver: '上限超過',
+      scaleUnderS: '年1億400万ウォン未満',
+      scaleOverS: '年1億400万ウォン以上 — 一般課税',
+      exemptYes: '免税',
+      exemptNo: '免税なし',
+      exemptYesS: '申告は必要です',
+      exemptNoS: '4,800万ウォン以上',
+      gapLabel: '{x}',
+      genPayNote: '売上 − 仕入',
+      genRefund: '{x} の還付 — 一般課税だけが受けられます',
+      genNotePos: '売上税額から仕入税額を引いた額。',
+      simpNoteExempt: '売上が4,800万ウォン未満なので納付は免除です。計算された {x} は参考値です。',
+      simpNoteNoRefund: '売上税額を超えた控除は還付されません(控除 {x})。',
+      simpNotePos: '売上の {e} が実効負担率です。',
+      verdictSame: 'どちらの方式でも付加価値税は同じです。',
+      verdictGen: '一般課税のほうが <b>{x}</b> 少ない。',
+      verdictSimp: '簡易課税のほうが <b>{x}</b> 少ない。',
+      verdictGenS: '控除できる仕入が多いほど一般課税が有利です。',
+      verdictSimpS: '業種別の付加価値率が低いほど差が開きます。',
+      verdictOver: '売上が簡易課税の上限を超えているため、この比較は参考値です。',
+      revLblTotal: '合計金額',
+      revLblSupply: '供給価額',
+      revLblTax: '付加価値税',
+      revReadTotal: '合計から計算',
+      revReadSupply: '供給価額から計算',
+      revReadTax: '税額から計算',
+      revRateRead: '付加価値税率 {r}',
+      copied: 'コピーしました。',
+      copyFail: 'コピーできませんでした。',
+      revCopyLine: '供給価額 {s} · 税 {t} · 合計 {g}',
+      whLblGross: '税引前の金額',
+      whLblNet: '受け取る金額',
+      whReadGross: '税引前の額から計算',
+      whReadNet: '受け取った額から逆算',
+      truncOn: '10ウォン未満を切り捨て',
+      truncOff: '1ウォンまでそのまま',
+      whBoxBiz: '支払額の3%を所得税として、その10%を地方所得税として源泉徴収します。事業所得には1回ごとの下限がないので、1ウォンでも課税されます。',
+      whBoxOther: '支払額の60%を経費とみなし、残り40%に20%をかけます。12万5,000ウォン以下なら課税対象が5万ウォンの下限を下回り、源泉徴収はありません。',
+      whBoxOtherSmall: '支払額が12万5,000ウォン以下なので課税対象が5万ウォン未満になり、下限が適用されて所得税は0です。',
+      whCopyLine: '税引前 {g} · 所得税 {i} · 地方税 {l} · 手取り {n}',
+      ch30m: '3,000万',
+      ch48m: '4,800万',
+      ch60m: '6,000万',
+      ch80m: '8,000万',
+      ch104m: '1億400万',
+      ch10m: '1,000万',
+      ch20m: '2,000万',
+      ch100k: '10万',
+      ch500k: '50万',
+      ch1m: '100万',
+      ch3m: '300万',
+      salesChipsAria: '売上のクイック入力',
+      buyChipsAria: '仕入のクイック入力',
+      revRateAria: '付加価値税率',
+      revChipsAria: 'クイック入力',
+      whChipsAria: 'クイック入力',
+      ref150k: '150,000ウォン',
+      ref200k: '200,000ウォン',
+      ref250k: '250,000ウォン',
+      ref300k: '300,000ウォン',
+      ref400k: '400,000ウォン'
+    },
+    'zh-Hant': {
+      docTitle: 'TaxVat — 韓國加值稅、簡易課稅與扣繳計算 | Kim Yihyung',
+      metaTitle: 'TaxVat — 加值稅、簡易課稅與扣繳計算(2026)',
+      metaDesc: '年銷售 6,000 萬韓元、進貨 2,000 萬韓元的餐廳，一般課稅約 364 萬韓元、簡易課稅 80 萬韓元的加值稅。兩種一起比、把 11 萬韓元拆成 10 萬加 1 萬、看 3.3% 與 8.8% 扣繳後剩多少，都在這個分頁裡；依 2026 年韓國規則，輸入的內容不會被儲存。',
+      langLabel: '切換語言',
+      brandAria: 'Kim Yihyung — 作品集',
+      back: '← 所有工具',
+      eyebrow: 'TaxVat · 加值稅 · 扣繳 · 零上傳',
+      h1: '要繳多少稅。<br><span class="soft">稅前的金額是多少。</span><br><span class="gold">把數字放進去。</span>',
+      lede: '年銷售 6,000 萬韓元、進貨 2,000 萬韓元的餐廳，一般課稅要繳約<strong>364 萬韓元</strong>、簡易課稅約<strong>80 萬韓元</strong>的加值稅。兩種一起比、把<strong>11 萬韓元拆成 10 萬 + 1 萬</strong>、看 3.3% 或 8.8% 扣繳後還剩多少 — 依 2026 年韓國規則，全部在這個分頁裡完成。輸入的內容不會被儲存。',
+      pillRef: '2026 年基準',
+      pillDate: '2026-11-18 確認',
+      pillUp: '上傳 0 位元組',
+      pillNet: '外部請求 0 次',
+      pillLaw: '國稅廳 · 加值稅法施行令 第111條',
+      workAria: '稅務試算',
+      tabAria: '計算機',
+      tab1: '一般 vs 簡易',
+      tab2: '拆出加值稅',
+      tab3: '扣繳 3.3 · 8.8',
+      cTitle: '同一筆銷售，兩種課稅方式',
+      cNote: '2026 年 · 全年',
+      fSales: '銷售額(含稅)',
+      unitIncl: '含稅',
+      fSalesAria: '銷售額(含加值稅)',
+      fBuy: '進貨(含稅)',
+      unitIncl2: '發票・信用卡',
+      fBuyAria: '進貨(含加值稅)',
+      won: '韓元',
+      won2: '韓元',
+      won3: '韓元',
+      won4: '韓元',
+      fSector: '業別(附加價值率)',
+      unitRate: '比率',
+      fSectorAria: '業別',
+      g15: '附加價值率 15%',
+      g20: '附加價值率 20%',
+      g25: '附加價值率 25%',
+      g30: '附加價值率 30%',
+      g40: '附加價值率 40%',
+      oRetail: '零售 · 餐飲 · 再生資源',
+      oMake: '製造 · 農林漁業 · 快遞',
+      oStay: '住宿',
+      oBuild: '營建 · 運輸倉儲 · 資通訊',
+      oOther: '其他服務',
+      oFin: '金融保險 · 專業科學技術 · 不動產出租',
+      kScale: '銷售規模',
+      kExempt: '簡易課稅免繳',
+      kGap: '差額',
+      hGeneral: '一般課稅納稅人',
+      gBadge: '稅率 10%',
+      hSimple: '簡易課稅納稅人',
+      payLabel: '應繳加值稅',
+      payLabel2: '應繳加值稅',
+      kOutTax: '銷項稅額(總額 × 10/110)',
+      kInTax: '進項稅額(進貨 × 10/110)',
+      kEff: '實質負擔率',
+      kSimpOut: '銷項稅額(總額 × 附加價值率 × 10%)',
+      kSimpCredit: '進項扣抵(進貨 × 0.5%)',
+      kEff2: '實質負擔率',
+      cmpFoot: '這裡只比較加值稅。進貨一律假設有<b>稅金計算書、營業用信用卡或現金收據</b>；信用卡銷售扣抵(簡易課稅為 1.3%)、電子申報扣抵、視同進項稅額、已繳的中間預繳都沒有計入。要選哪種方式不能只看稅額，退稅、開立計算書的義務、申報頻率也都是考量。',
+      rTitle: '把 11 萬韓元拆成供給金額與稅',
+      rNote: '供給金額 ↔ 稅 ↔ 合計',
+      rModeLbl: '你已知的是哪一個?',
+      rModeAria: '起點',
+      rModeTotal: '合計(含稅)',
+      rModeSupply: '供給金額',
+      rModeTax: '只有稅額',
+      rAria: '金額',
+      rRate: '加值稅率',
+      rRateNote: '標準 10%',
+      rRateZero: '免稅 0%',
+      rSupply: '供給金額',
+      rTax: '加值稅',
+      rTotal: '合計(含稅)',
+      rSupplyLbl: '供給金額',
+      copyBtn: '複製結果',
+      copyBtn2: '複製結果',
+      thTotal: '合計',
+      thSupply: '供給金額',
+      thTax: '加值稅',
+      revFoot: '供給金額是合計除以 1.1 後<b>四捨五入到韓元</b>，加值稅是<b>合計 − 供給金額</b>，所以兩者相加一定回到你輸入的數字。單張稅金計算書上，因捨去規則可能會差 1 韓元。',
+      wTitle: '100 萬韓元的 3.3% 之後，剩 967,000 韓元',
+      wNote: '總額 ↔ 實拿',
+      wKindLbl: '所得種類',
+      wKindAria: '所得種類',
+      wBiz: '事業所得 3.3%',
+      wOther: '其他所得 8.8%',
+      wDirLbl: '你已知的是哪一個?',
+      wDirAria: '方向',
+      wDirGross: '稅前金額',
+      wDirNet: '實拿金額',
+      whAria: '金額',
+      wTrunc: '未滿 10 韓元捨去',
+      wTruncNote: '常見實務',
+      wTruncOn: '把未滿 10 韓元的尾數捨去',
+      wNetLbl: '實拿金額',
+      wGross: '稅前(支付額)',
+      wIncome: '所得稅',
+      wLocal: '地方所得稅',
+      wTax: '扣繳合計',
+      wNet2: '實拿金額',
+      wBoxH: '這裡的假設',
+      wFoot: '3.3% 是<b>所得稅 3% + 地方所得稅 0.3%</b>。8.8% 把支付額的 60% 視為必要費用，對剩下的 40% 課<b>所得稅 20% + 地方 2%</b> — 等於支付額的 8.8%。2026 年提出的法案擬自 2027-01-01 起的支付把 3% 降為 2%，但到 2026-11-18 仍未通過，本計算機仍用 3%。',
+      sideHead: '這個畫面的規則',
+      sVat: '加值稅率',
+      sRate: '業別附加價值率',
+      sSimpBase: '簡易課稅上限',
+      sSimpBaseV: '銷售 1 億 400 萬韓元',
+      sExempt: '免繳',
+      sExemptV: '未滿 4,800 萬韓元',
+      sCredit: '簡易課稅進項扣抵',
+      sCreditV: '進貨的 0.5%',
+      sWithhold: '扣繳',
+      sideNote: '基準與限制',
+      sideDate: '2026-11-18 確認',
+      sideDateP: '依加值稅法施行令 <b>第111條</b>(業別附加價值率)、<b>第69條</b>(免繳)、國稅廳簡易課稅問答，以及所得稅法 第129條。',
+      sideEst: '是估算，不是建議',
+      sideEstP: '稅法每年都在變，實際金額還取決於<b>不能扣抵的進項稅額、各種扣抵、已繳的中間預繳</b>。請把它當成理解結構、抓出量級的工具；申報前請用 Hometax 的預填資料或詢問稅務專業人士。',
+      rateTitle: '簡易課稅：業別附加價值率',
+      rateNote: '2021-07-01 之後的銷售',
+      thSector: '業別',
+      thRate: '比率',
+      thEff: '實質',
+      thPer10: '每 1,000 萬韓元銷售',
+      rateFoot: '實質稅率 = 附加價值率 × 10%。進貨另外可扣 <b>0.5%</b>，年銷售未滿 <b>4,800 萬韓元</b>免繳(仍須申報)。專業・科學・技術業中的肖像與活動錄影為 <b>30%</b>。',
+      howTitle: '數字是怎麼組出來的',
+      howNote: '公式原文',
+      n1h: '一般課稅納稅人',
+      n1p: '銷項稅額 = 總額 × <code>10/110</code>。進項稅額 = 進貨總額 × <code>10/110</code>。應繳 = 銷項 − 進項，負數就是<b>退稅</b>。銷售 6,000 萬、進貨 2,000 萬時：5,454,545 − 1,818,182 = <b>3,636,363 韓元</b>。',
+      n1p2: '不是每一筆進貨都能扣抵：沒有計算書的進貨、非營業用自小客車、交際費，以及與免稅銷售相關的進貨都會被排除。',
+      n2h: '簡易課稅納稅人',
+      n2p: '銷項稅額 = 總額 × 業別附加價值率 × 10%。進項扣抵 = 進貨總額 × <code>0.5%</code>。應繳 = 銷項 − 扣抵，<b>扣抵有剩也不會退，直接消失</b>。同一個例子(餐飲・15%)：900,000 − 100,000 = <b>800,000 韓元</b>。',
+      n2p2: '年銷售未滿 <b>4,800 萬韓元</b>免繳，但一月仍要申報；七月繳的中間預繳(前期稅額的一半，未滿 50 萬韓元可省略)另外結算。',
+      n3h: '扣繳',
+      n3p: '事業所得 3.3% = 支付額的所得稅 3% 加上地方所得稅 0.3%。其他所得 8.8% = (支付額 − 60% 視同費用) × 20% 再加地方 2%，結果剛好是支付額的 8.8%。',
+      n3p2: '其他所得有<b>單筆下限</b>：課稅金額(支付額的 40%)在 5 萬韓元以下 — 也就是支付額 <b>12 萬 5,000 韓元以下</b> — 就不扣所得稅。沒有 60% 費用扣除的獎金型報酬，按 22% 課稅。',
+      faqTitle: '常見問題',
+      faqNote: '方式 · 退稅 · 扣繳',
+      q1: '怎麼知道自己是簡易課稅納稅人?',
+      a1: '<b>前一年銷售額</b>未滿 <b>1 億 400 萬韓元</b>的個人事業主就是簡易課稅納稅人；不動產出租與娛樂場所的門檻是 <b>4,800 萬韓元</b>。法人一律是一般課稅，礦業、批發業與部分地區被排除在簡易課稅之外。國稅廳每年 7 月 1 日切換身分並通知。',
+      q2: '為什麼簡易課稅永遠不會退稅?',
+      a2: '因為進貨不是全額扣抵，只扣進貨總額的 <b>0.5%</b>。超過銷項稅額的扣抵直接被忽略，自然不會產生退稅。開業時若裝潢支出很大，登記為一般課稅反而有利，因為進項稅額可以退。',
+      q3: '3.3% 和 8.8% 差在哪裡?',
+      a3: '<b>3.3%</b> 是對<b>事業所得</b> — 獨立且<b>持續</b>提供的服務 — 扣繳，所得稅 3% 加地方稅 0.3%。<b>8.8%</b> 適用<b>其他所得</b>：一次性的演講、顧問、稿件。60% 視為必要費用，剩下的 40% 課 20%，再加地方稅。',
+      q4: '怎麼從含稅總額算出供給金額?',
+      a4: '把合計除以 <b>1.1</b>。11 萬韓元變成供給金額 10 萬 + 稅 1 萬；110 萬韓元變成 100 萬 + 10 萬。反過來就是供給金額加 10%；只知道稅額就乘以 10。',
+      q5: '可以用這些數字申報嗎?',
+      a5: '僅供參考。這裡假設所有進貨都能扣抵，沒有反映<b>不能扣抵的進項稅額</b>、信用卡銷售扣抵(簡易課稅 1.3%，2026 年底前每年上限 1,000 萬韓元)、電子申報扣抵、視同進項稅額，以及<b>已繳的中間預繳</b>。請用 Hometax 的預填資料申報。',
+      q6: '2027 年扣繳率會變嗎?',
+      a6: '2026 年 8 月公布的政府方案，擬把 2027-01-01 之後支付的事業所得扣繳率從 <b>3% 降為 2%</b>。到 2026-11-18 仍在國會審議、尚未通過，所以本計算機對 2026 年的支付用 <b>3.3%</b>。',
+      footCopy: '© 2026 Kim Yihyung · 在瀏覽器裡，為瀏覽器而做。',
+      footNet: '外部請求',
+      footP1: '作品集',
+      footP2: '所有工具',
+      footP3: '原始碼',
+      mono: '不上傳 · 不追蹤',
+      toggleTo: '切換語言',
+      wonUnit: '韓元',
+      eok: '億',
+      salesRead: '供給金額 {s} · 稅 {t}',
+      buyRead: '供給金額 {s} · 進項稅額 {t}',
+      sectorRead: '實質 {e} · 銷項稅額 = 總額 × {r} × 10%',
+      scaleUnder: '可用簡易課稅',
+      scaleOver: '超過上限',
+      scaleUnderS: '年未滿 1 億 400 萬韓元',
+      scaleOverS: '年 1 億 400 萬韓元以上 — 一般課稅',
+      exemptYes: '免繳',
+      exemptNo: '未達免繳',
+      exemptYesS: '仍須申報',
+      exemptNoS: '4,800 萬韓元以上',
+      gapLabel: '{x}',
+      genPayNote: '銷項 − 進項',
+      genRefund: '可退 {x} — 只有一般課稅拿得到',
+      genNotePos: '銷項稅額減進項稅額。',
+      simpNoteExempt: '銷售未滿 4,800 萬韓元，免繳。算出的 {x} 僅供參考。',
+      simpNoteNoRefund: '超過銷項稅額的扣抵不會退(扣抵 {x})。',
+      simpNotePos: '銷售的 {e} 就是實質負擔率。',
+      verdictSame: '兩種方式的加值稅一樣。',
+      verdictGen: '一般課稅少 <b>{x}</b>。',
+      verdictSimp: '簡易課稅少 <b>{x}</b>。',
+      verdictGenS: '可扣抵的進貨越多，一般課稅越有利。',
+      verdictSimpS: '業別附加價值率越低，差距越大。',
+      verdictOver: '銷售超過簡易課稅上限，這個比較僅供參考。',
+      revLblTotal: '合計金額',
+      revLblSupply: '供給金額',
+      revLblTax: '加值稅',
+      revReadTotal: '從合計計算',
+      revReadSupply: '從供給金額計算',
+      revReadTax: '從稅額計算',
+      revRateRead: '加值稅率 {r}',
+      copied: '已複製。',
+      copyFail: '複製失敗。',
+      revCopyLine: '供給金額 {s} · 稅 {t} · 合計 {g}',
+      whLblGross: '稅前金額',
+      whLblNet: '實拿金額',
+      whReadGross: '從稅前金額計算',
+      whReadNet: '從實拿金額回推',
+      truncOn: '未滿 10 韓元捨去',
+      truncOff: '每一韓元都保留',
+      whBoxBiz: '支付額的 3% 扣所得稅、其中的 10% 扣地方所得稅。事業所得沒有單筆下限，連 1 韓元都會課稅。',
+      whBoxOther: '支付額的 60% 視為費用，對剩下的 40% 課 20%。12 萬 5,000 韓元以下時課稅金額低於 5 萬韓元下限，不會扣繳。',
+      whBoxOtherSmall: '支付額在 12 萬 5,000 韓元以下，課稅金額未滿 5 萬韓元 — 適用下限，所得稅為 0。',
+      whCopyLine: '稅前 {g} · 所得稅 {i} · 地方稅 {l} · 實拿 {n}',
+      ch30m: '3,000 萬',
+      ch48m: '4,800 萬',
+      ch60m: '6,000 萬',
+      ch80m: '8,000 萬',
+      ch104m: '1 億 400 萬',
+      ch10m: '1,000 萬',
+      ch20m: '2,000 萬',
+      ch100k: '10 萬',
+      ch500k: '50 萬',
+      ch1m: '100 萬',
+      ch3m: '300 萬',
+      salesChipsAria: '銷售快速輸入',
+      buyChipsAria: '進貨快速輸入',
+      revRateAria: '加值稅率',
+      revChipsAria: '快速輸入',
+      whChipsAria: '快速輸入',
+      ref150k: '150,000 韓元',
+      ref200k: '200,000 韓元',
+      ref250k: '250,000 韓元',
+      ref300k: '300,000 韓元',
+      ref400k: '400,000 韓元'
     }
   };
 
   var LANG_KEY = 'taxvat.lang';
   var SHARED_KEY = 'kyh.lang';
+  var LANGS = ['ko', 'en', 'ja', 'zh-Hant'];
+  var DEFAULT_LANG = normLang(document.documentElement.getAttribute('lang')) || 'ko';
+  function normLang(v) {
+    var s = String(v == null ? '' : v).trim().toLowerCase().replace(/_/g, '-');
+    if (s === 'ko' || s === 'kr' || s === 'ko-kr') return 'ko';
+    if (s === 'en' || s === 'en-us' || s === 'en-gb' || s === 'en-au') return 'en';
+    if (s === 'ja' || s === 'jp' || s === 'ja-jp') return 'ja';
+    if (s === 'zh-hant' || s === 'zh-tw' || s === 'zh-hk' || s === 'zh-mo' || s === 'tw' || s === 'zh' || s === 'zh-hant-tw') return 'zh-Hant';
+    return '';
+  }
+  function readStoredLang(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  /* read-only: per-language title/description for the static /en/ /ja/ /zh-tw/ builder.
+     A getter, so it is computed when read (the builder runs after this script). */
+  Object.defineProperty(window, '__I18N_META__', {
+    configurable: true,
+    get: function () {
+      var out = {};
+      var ogl = { ko: 'ko_KR', en: 'en_US', ja: 'ja_JP', 'zh-Hant': 'zh_TW' };
+      Object.keys(I18N || {}).forEach(function (lg) {
+        var d = I18N[lg] || {};
+        out[lg] = { htmlLang: lg, ogLocale: ogl[lg] || 'en_US',
+                    title: d.metaTitle || d.docTitle || '', description: d.metaDesc || '' };
+      });
+      return out;
+    }
+  });
   var VAT_RATE = 0.1;
   var SIMPLE_LIMIT = 104000000;
   var EXEMPT_LIMIT = 48000000;
@@ -1452,21 +1988,28 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
   /* ═════════════════════ language ═════════════════════ */
   function readLang(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function initialLang() {
-    var q = '';
-    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
-    if (q === 'ko' || q === 'en') return q;
-    return readLang(SHARED_KEY) || readLang(LANG_KEY) || 'ko';
+    var l = normLang(window.__FORCED_LANG__);
+    if (l) return l;
+    try { l = normLang(new URLSearchParams(location.search).get('lang')); } catch (e) { l = ''; }
+    if (l) return l;
+    l = normLang(readStoredLang(SHARED_KEY)) || normLang(readStoredLang(LANG_KEY));
+    if (l) return l;
+    return normLang(document.documentElement.getAttribute('lang')) || DEFAULT_LANG;
   }
   function setMeta(sel, attr, val) {
     var el = document.querySelector(sel);
     if (el) el.setAttribute(attr, val);
   }
   function applyLang(lang) {
-    state.lang = lang === 'en' ? 'en' : 'ko';
-    nf = null;
+    state.lang = normLang(lang) || DEFAULT_LANG;
     document.documentElement.setAttribute('lang', state.lang);
     document.title = t('docTitle');
-    setMeta('meta[property="og:title"]', 'content', t('docTitle').split('|')[0].trim());
+    setMeta('meta[name="description"]', 'content', t('metaDesc'));
+    setMeta('meta[property="og:title"]', 'content', t('metaTitle'));
+    setMeta('meta[property="og:description"]', 'content', t('metaDesc'));
+    setMeta('meta[name="twitter:title"]', 'content', t('metaTitle'));
+    setMeta('meta[name="twitter:description"]', 'content', t('metaDesc'));
+    setMeta('meta[property="og:locale"]', 'content', state.lang === 'zh-Hant' ? 'zh_TW' : (state.lang === 'ja' ? 'ja_JP' : (state.lang === 'ko' ? 'ko_KR' : 'en_US')));
     var nodes = document.querySelectorAll('[data-i18n]');
     for (var i = 0; i < nodes.length; i++) {
       var v = t(nodes[i].getAttribute('data-i18n'));
@@ -1489,10 +2032,13 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
     }
     var lt = $('langToggle');
     if (lt) {
-      var spans = lt.querySelectorAll('[data-lt]');
-      for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
-      lt.setAttribute('aria-label', t('toggleTo'));
-      lt.setAttribute('title', t('toggleTo'));
+      var lbs = lt.querySelectorAll('[data-lt]');
+      for (i = 0; i < lbs.length; i++) {
+        var _on = lbs[i].getAttribute('data-lt') === state.lang;
+        lbs[i].classList.toggle('on', _on);
+        lbs[i].setAttribute('aria-pressed', _on ? 'true' : 'false');
+      }
+      lt.setAttribute('aria-label', t('langLabel'));
     }
     /* unit suffixes and inputs re-render per language */
     $('sales').value = group(state.sales);
@@ -1503,9 +2049,14 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
     renderAll();    syncChips(); syncRevChips(); syncWhChips();
     try { localStorage.setItem(LANG_KEY, state.lang); localStorage.setItem(SHARED_KEY, state.lang); } catch (e) { /* blocked */ }
   }
-  $('langToggle').addEventListener('click', function () {
-    applyLang(state.lang === 'ko' ? 'en' : 'ko');
-  });
+  var ltRoot = $('langToggle');
+  if (ltRoot) {
+    ltRoot.addEventListener('click', function (ev) {
+      var b = ev.target && ev.target.closest ? ev.target.closest('[data-lt]') : null;
+      if (!b) return;
+      applyLang(b.getAttribute('data-lt'));
+    });
+  }
 
   /* ═════════════════════ boot ═════════════════════ */
   var netCount = 0;

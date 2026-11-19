@@ -156,6 +156,10 @@ button, input, select, textarea { font-family: inherit; color: inherit; }
 .lang-toggle:active { transform: scale(.94); }
 .lang-toggle .lt.on { color: var(--accent); }
 .lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+
+.lang-toggle .lt { cursor: pointer; padding: 0 2px; }
+.lang-toggle .lt:hover { color: var(--ink); }
+@media (max-width: 400px) { .lang-toggle { gap: 4px; padding: 0 7px; } .lang-toggle .lt { font-size: 9.5px; letter-spacing: .02em; } }
 .topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
 .topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
 
@@ -381,7 +385,7 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
 .foot .net b { color: var(--ok); }
 
 @media (max-width: 640px) {
-  .wrap { padding: 0 14px 36px; }
+  .wrap { padding: 0 16px 36px; }
   .topbar { padding: 14px 0 8px; }
   .brand-txt { font-size: 12px; letter-spacing: .1em; }
   .hero { padding: 16px 0 12px; }
@@ -406,10 +410,14 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
       <span class="brand-txt">Kim Yihyung</span>
     </a>
     <div class="top-actions">
-      <button class="lang-toggle" id="langToggle" type="button" title="한국어로 보기" aria-label="한국어로 보기">
-        <span class="lt on" data-lt="en">EN</span>
-        <span class="lsep" aria-hidden="true">|</span>
+      <button class="lang-toggle" id="langToggle" type="button" title="Language" aria-label="Language">
         <span class="lt" data-lt="ko">KO</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="en">EN</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="ja">JA</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="zh-Hant">繁中</span>
       </button>
       <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← All tools</a>
     </div>
@@ -653,39 +661,71 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
       eyebrow: 'ImgCrop · ratios · zero upload',
       h1: 'One frame, every ratio.<br><span class="soft">Drag, zoom, rotate — the crop stays honest.</span><br><span class="gold">The pixels never leave.</span>',
       lede: 'Drop a PNG, JPG or WebP and fit it into <strong>1:1, 4:5, 9:16, 16:9 or 1.91:1</strong> — or any width:height you type. Move it with a drag, zoom it, turn it 90°, flip it, pad the edges with a <strong>blur or a flat colour</strong>, and export <strong>PNG · WebP · JPG</strong> at the exact pixel size, with the real file size measured before you download.',
-      pillUp: '0 bytes uploaded', pillNet: '0 external requests',
-      pillRatios: '1:1 · 4:5 · 9:16 · 16:9 · 1.91:1', pillOut: 'PNG · WebP · JPG',
+      pillUp: '0 bytes uploaded',
+      pillNet: '0 external requests',
+      pillRatios: '1:1 · 4:5 · 9:16 · 16:9 · 1.91:1',
+      pillOut: 'PNG · WebP · JPG',
       workAria: 'Crop workspace',
       dropTitle: 'Drop a PNG, JPG or WebP',
       dropSub: 'Any size, any shape. Ctrl+V pastes from the clipboard too.',
-      pickBtn: 'Choose image', sampleStudio: 'Studio sample', sampleSky: 'Landscape sample',
+      pickBtn: 'Choose image',
+      sampleStudio: 'Studio sample',
+      sampleSky: 'Landscape sample',
       dropMeta: 'Nothing loaded yet — pick a file or try a sample.',
       stageTitle: 'The frame',
       stageEmpty: 'The frame is waiting for an image.',
       stageHint: 'Drag to move · pull a corner to zoom · arrow keys nudge',
       cvAria: 'Crop preview — drag to move the image',
-      ratioLbl: 'Aspect ratio', ratioAria: 'Aspect ratio',
-      r11: 'Profile', r45: 'Feed', r916: 'Reels · Shorts', r169: 'YouTube', r191: 'OG card',
-      rFree: 'Free', rFreeSub: 'W : H', freeLbl: 'W : H',
-      zoomLbl: 'Zoom', zoomAria: 'Zoom',
-      rotBtn: 'Rotate 90°', flipBtn: 'Flip ↔', centerBtn: 'Centre', resetBtn: 'Reset', changeBtn: 'Change image',
-      padLbl: 'Edge padding', padAria: 'Edge padding',
-      padModeAria: 'Padding fill', padBlur: 'Blur fill', padSolid: 'Solid fill',
-      outHead: 'Export', fmtLbl: 'Format', fmtAria: 'Output format',
-      qLbl: 'Quality', qAria: 'Quality', widthLbl: 'Output width', widthAria: 'Output width',
+      ratioLbl: 'Aspect ratio',
+      ratioAria: 'Aspect ratio',
+      r11: 'Profile',
+      r45: 'Feed',
+      r916: 'Reels · Shorts',
+      r169: 'YouTube',
+      r191: 'OG card',
+      rFree: 'Free',
+      rFreeSub: 'W : H',
+      freeLbl: 'W : H',
+      zoomLbl: 'Zoom',
+      zoomAria: 'Zoom',
+      rotBtn: 'Rotate 90°',
+      flipBtn: 'Flip ↔',
+      centerBtn: 'Centre',
+      resetBtn: 'Reset',
+      changeBtn: 'Change image',
+      padLbl: 'Edge padding',
+      padAria: 'Edge padding',
+      padModeAria: 'Padding fill',
+      padBlur: 'Blur fill',
+      padSolid: 'Solid fill',
+      outHead: 'Export',
+      fmtLbl: 'Format',
+      fmtAria: 'Output format',
+      qLbl: 'Quality',
+      qAria: 'Quality',
+      widthLbl: 'Output width',
+      widthAria: 'Output width',
       outBytesUnit: 'encoded',
       dlBtn: 'Download crop',
       outFoot: 'The size above is measured from the <b>encoded bytes</b>, not estimated — every change re-encodes the frame in this tab.',
       infoHead: 'What goes out',
-      kSrc: 'Source', kCrop: 'Crop from source', kOut: 'Output', kRatio: 'Ratio', kZoom: 'Zoom', kTurn: 'Turn · flip', kBytes: 'Encoded size',
-      howTitle: 'How the frame works', howNote: 'measured on a canvas',
+      kSrc: 'Source',
+      kCrop: 'Crop from source',
+      kOut: 'Output',
+      kRatio: 'Ratio',
+      kZoom: 'Zoom',
+      kTurn: 'Turn · flip',
+      kBytes: 'Encoded size',
+      howTitle: 'How the frame works',
+      howNote: 'measured on a canvas',
       n1h: 'Cover, then move',
       n1p: '100% zoom means the image <b>covers</b> the frame with no gaps: the scale is the larger of frame-width ÷ image-width and frame-height ÷ image-height. Dragging changes an offset that is clamped to the overhang, so you can never pull an empty corner into the crop. The slider multiplies that cover scale, which is why 200% gives half the field of view rather than twice the picture size.',
       n2h: 'Padding, blur and solid',
       n2p: 'Padding is a share of the frame\'s <b>shorter side</b>, so the border looks the same on 720 px and 2048 px. The inset leaves a border that is filled first — with a <b>blurred, over-scaled copy of the same photo</b> (radius ≈ 2.2% of width, painted 16% larger so the blur has no transparent rim) or with one flat colour. Then the photo itself is drawn inside the inset at the same rules as above.',
       n3h: 'One decode, one encode',
       n3p: 'The file is decoded once, drawn at the output size, and encoded once — PNG for lossless (alpha kept), WebP for the smallest file at a given quality, JPG when something else must open it (alpha flattened to white). The number under the download button is the byte length of that encode, and it moves when the image moves, because a crop with less detail really is smaller.',
-      faqTitle: 'Questions', faqNote: 'crop · pad · export',
+      faqTitle: 'Questions',
+      faqNote: 'crop · pad · export',
       q1: 'Does cropping re-compress my photo?',
       a1: 'Once, and only once. The file is decoded to pixels, the crop is drawn onto a fresh canvas at the output size, and that canvas is encoded in the format you pick. A PNG export of a PNG stays lossless; a JPG export is one generation of JPEG at the quality you set — which is why <b>quality 92</b> is the default and why the size is shown before you download.',
       q2: 'Which ratio do I need?',
@@ -695,9 +735,12 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
       q4: 'Where do the saved files go?',
       a4: 'Straight to your browser\'s normal downloads — named after the ratio and the real pixel size, for example <b>imgcrop-16x9-1080x608.png</b>. Nothing is written to a server, a cookie or local storage: the footer counts external requests and it stays at <b>0</b>.',
       footCopy: '© 2026 Kim Yihyung · Built in the browser, for the browser.',
-      footNet: 'external requests', footP1: 'Portfolio', footP2: 'All tools', footP3: 'Source',
-      mono: 'NO UPLOADS · NO TRACKING', toggleTo: 'View in Korean',
-      /* dynamic */
+      footNet: 'external requests',
+      footP1: 'Portfolio',
+      footP2: 'All tools',
+      footP3: 'Source',
+      mono: 'NO UPLOADS · NO TRACKING',
+      toggleTo: 'Change language',
       stReady: 'Ready — drop an image, then drag it inside the frame.',
       stLoaded: 'Loaded {name} · {w}×{h}. Drag to move, slide to zoom.',
       stNoImg: 'That file did not open as an image.',
@@ -713,12 +756,15 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
       stSaved: 'Saved {name}.',
       stEst: 'Encoding…',
       stSmall: 'The output is wider than the source — it will be upscaled.',
-      fmtPng: 'PNG · lossless', fmtWebp: 'WebP · {q}', fmtJpg: 'JPG · {q}',
+      fmtPng: 'PNG · lossless',
+      fmtWebp: 'WebP · {q}',
+      fmtJpg: 'JPG · {q}',
       lossless: 'lossless',
       bytesNone: '—',
       nA: '—',
       degFmt: '{d}°',
-      turnNone: '0° · none', turnFlip: 'flipped',
+      turnNone: '0° · none',
+      turnFlip: 'flipped',
       srcLabel: '{w}×{h}'
     },
     ko: {
@@ -728,39 +774,71 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
       eyebrow: 'ImgCrop · 비율 · 업로드 0',
       h1: '프레임 하나로, 모든 비율.<br><span class="soft">끌고 키우고 돌려도 잘린 곳은 정확하게.</span><br><span class="gold">픽셀은 이 탭을 떠나지 않습니다.</span>',
       lede: 'PNG·JPG·WebP를 떨어뜨려 <strong>1:1, 4:5, 9:16, 16:9, 1.91:1</strong> 아니면 직접 입력한 비율에 맞춰 넣습니다. 끌어서 위치를 잡고, 확대하고, 90도씩 돌리고, 좌우로 뒤집고, 남는 가장자리를 <strong>블러나 단색으로 채운 뒤</strong> <strong>PNG · WebP · JPG</strong>로 원하는 픽셀 크기 그대로 내보냅니다. 내려받기 전에 실제 파일 크기를 재서 보여 줍니다.',
-      pillUp: '업로드 0바이트', pillNet: '외부 요청 0건',
-      pillRatios: '1:1 · 4:5 · 9:16 · 16:9 · 1.91:1', pillOut: 'PNG · WebP · JPG',
+      pillUp: '업로드 0바이트',
+      pillNet: '외부 요청 0건',
+      pillRatios: '1:1 · 4:5 · 9:16 · 16:9 · 1.91:1',
+      pillOut: 'PNG · WebP · JPG',
       workAria: '자르기 작업대',
       dropTitle: 'PNG·JPG·WebP를 떨어뜨리세요',
       dropSub: '크기·비율 상관없습니다. Ctrl+V 붙여넣기도 됩니다.',
-      pickBtn: '이미지 선택', sampleStudio: '스튜디오 예시', sampleSky: '풍경 예시',
+      pickBtn: '이미지 선택',
+      sampleStudio: '스튜디오 예시',
+      sampleSky: '풍경 예시',
       dropMeta: '아직 불러온 이미지가 없습니다 — 파일을 고르거나 예시를 눌러 보세요.',
       stageTitle: '프레임',
       stageEmpty: '프레임이 이미지를 기다리고 있습니다.',
       stageHint: '끌어서 옮기기 · 모서리를 끌면 확대 · 방향키로 미세 조정',
       cvAria: '자르기 미리보기 — 끌어서 이미지를 옮기세요',
-      ratioLbl: '가로세로 비율', ratioAria: '가로세로 비율',
-      r11: '프로필', r45: '피드', r916: '릴스·쇼츠', r169: '유튜브', r191: 'OG 카드',
-      rFree: '자유', rFreeSub: '가로 : 세로', freeLbl: '가로 : 세로',
-      zoomLbl: '확대', zoomAria: '확대',
-      rotBtn: '90° 회전', flipBtn: '좌우 반전', centerBtn: '가운데', resetBtn: '초기화', changeBtn: '이미지 바꾸기',
-      padLbl: '가장자리 여백', padAria: '가장자리 여백',
-      padModeAria: '여백 채우기', padBlur: '블러 채우기', padSolid: '단색 채우기',
-      outHead: '내보내기', fmtLbl: '형식', fmtAria: '출력 형식',
-      qLbl: '품질', qAria: '품질', widthLbl: '출력 가로', widthAria: '출력 가로',
+      ratioLbl: '가로세로 비율',
+      ratioAria: '가로세로 비율',
+      r11: '프로필',
+      r45: '피드',
+      r916: '릴스·쇼츠',
+      r169: '유튜브',
+      r191: 'OG 카드',
+      rFree: '자유',
+      rFreeSub: '가로 : 세로',
+      freeLbl: '가로 : 세로',
+      zoomLbl: '확대',
+      zoomAria: '확대',
+      rotBtn: '90° 회전',
+      flipBtn: '좌우 반전',
+      centerBtn: '가운데',
+      resetBtn: '초기화',
+      changeBtn: '이미지 바꾸기',
+      padLbl: '가장자리 여백',
+      padAria: '가장자리 여백',
+      padModeAria: '여백 채우기',
+      padBlur: '블러 채우기',
+      padSolid: '단색 채우기',
+      outHead: '내보내기',
+      fmtLbl: '형식',
+      fmtAria: '출력 형식',
+      qLbl: '품질',
+      qAria: '품질',
+      widthLbl: '출력 가로',
+      widthAria: '출력 가로',
       outBytesUnit: '인코딩 실측',
       dlBtn: '자른 이미지 내려받기',
       outFoot: '위 크기는 짐작이 아니라 <b>인코딩된 바이트</b>를 그대로 잰 값입니다 — 무엇이든 바꾸면 이 탭에서 다시 인코딩합니다.',
       infoHead: '나가는 것',
-      kSrc: '원본', kCrop: '원본에서 잘라 쓰는 영역', kOut: '출력', kRatio: '비율', kZoom: '확대', kTurn: '회전·반전', kBytes: '인코딩 크기',
-      howTitle: '프레임은 이렇게 계산합니다', howNote: '캔버스에서 실측',
+      kSrc: '원본',
+      kCrop: '원본에서 잘라 쓰는 영역',
+      kOut: '출력',
+      kRatio: '비율',
+      kZoom: '확대',
+      kTurn: '회전·반전',
+      kBytes: '인코딩 크기',
+      howTitle: '프레임은 이렇게 계산합니다',
+      howNote: '캔버스에서 실측',
       n1h: '먼저 덮고, 그다음 옮기기',
       n1p: '확대 100%는 이미지가 프레임을 <b>빈틈없이 덮는</b> 상태입니다. 배율은 프레임 가로÷이미지 가로와 프레임 세로÷이미지 세로 중 큰 쪽입니다. 끌면 남는 여유분 안에서만 이동하도록 제한되므로 빈 모서리가 잘린 영역에 들어올 수 없습니다. 슬라이더는 이 덮는 배율에 곱해지기 때문에 200%는 그림이 두 배로 커지는 게 아니라 보이는 범위가 절반이 되는 것입니다.',
       n2h: '여백 — 블러와 단색',
       n2p: '여백은 프레임 <b>짧은 변</b>에 대한 비율이라 720px에서도 2048px에서도 같은 두께로 보입니다. 안쪽으로 들어간 만큼 생긴 테두리를 먼저 채웁니다 — 같은 사진을 <b>크게 늘려 흐리게</b> 깔거나(반경 ≈ 가로의 2.2%, 테두리에 투명한 선이 생기지 않게 16% 크게 그림) 단색 한 가지로 칠합니다. 그다음 사진을 안쪽 영역에 같은 규칙으로 그립니다.',
       n3h: '디코딩 한 번, 인코딩 한 번',
       n3p: '파일을 한 번 풀고, 출력 크기로 그리고, 한 번 인코딩합니다 — 무손실이면 PNG(알파 유지), 같은 품질에서 가장 작으면 WebP, 다른 프로그램이 열어야 하면 JPG(알파는 흰색으로). 내려받기 버튼 아래 숫자는 그 인코딩의 바이트 길이라, 이미지를 옮기면 같이 달라집니다. 디테일이 덜 남은 크롭은 실제로 더 작기 때문입니다.',
-      faqTitle: '자주 묻는 것', faqNote: '자르기 · 여백 · 내보내기',
+      faqTitle: '자주 묻는 것',
+      faqNote: '자르기 · 여백 · 내보내기',
       q1: '자르면 사진이 다시 압축되나요?',
       a1: '한 번만 압축됩니다. 파일을 픽셀로 풀고, 자른 결과를 출력 크기의 새 캔버스에 그린 뒤, 고른 형식으로 인코딩합니다. PNG를 PNG로 내보내면 무손실 그대로이고, JPG는 설정한 품질로 한 세대만 지나갑니다. 기본 품질을 <b>92</b>로 두고 내려받기 전에 크기를 보여 주는 이유입니다.',
       q2: '어떤 비율을 골라야 하나요?',
@@ -770,9 +848,12 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
       q4: '저장한 파일은 어디로 가나요?',
       a4: '브라우저의 평소 내려받기 폴더로 바로 갑니다. 파일 이름에는 비율과 실제 픽셀 크기가 들어갑니다(예: <b>imgcrop-16x9-1080x608.png</b>). 서버에도, 쿠키에도, 로컬 스토리지에도 아무것도 쓰지 않습니다. 아래 카운터가 외부 요청을 세고 있고 <b>0</b>에 머뭅니다.',
       footCopy: '© 2026 Kim Yihyung · 브라우저 안에서, 브라우저를 위해.',
-      footNet: '외부 요청', footP1: '포트폴리오', footP2: '도구 전체', footP3: '소스',
-      mono: '업로드 없음 · 추적 없음', toggleTo: 'View in English',
-      /* dynamic */
+      footNet: '외부 요청',
+      footP1: '포트폴리오',
+      footP2: '도구 전체',
+      footP3: '소스',
+      mono: '업로드 없음 · 추적 없음',
+      toggleTo: '언어 변경',
       stReady: '준비됐습니다 — 이미지를 넣고 프레임 안에서 끌어 보세요.',
       stLoaded: '{name} 불러옴 · {w}×{h}. 끌어서 옮기고 슬라이더로 확대하세요.',
       stNoImg: '이 파일은 이미지로 열리지 않았습니다.',
@@ -788,15 +869,244 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
       stSaved: '{name} 저장했습니다.',
       stEst: '인코딩 중…',
       stSmall: '출력이 원본보다 큽니다 — 확대되어 저장됩니다.',
-      fmtPng: 'PNG · 무손실', fmtWebp: 'WebP · {q}', fmtJpg: 'JPG · {q}',
+      fmtPng: 'PNG · 무손실',
+      fmtWebp: 'WebP · {q}',
+      fmtJpg: 'JPG · {q}',
       lossless: '무손실',
       bytesNone: '—',
       nA: '—',
       degFmt: '{d}°',
-      turnNone: '0° · 없음', turnFlip: '반전',
+      turnNone: '0° · 없음',
+      turnFlip: '반전',
+      srcLabel: '{w}×{h}'
+    },
+    ja: {
+      docTitle: 'ImgCrop — 任意の比率で切り抜き・リサイズ、アップロードなし | Kim Yihyung',
+      brandAria: 'Kim Yihyung — ポートフォリオ',
+      back: '← ツール一覧',
+      eyebrow: 'ImgCrop · 比率 · アップロード 0',
+      h1: '一つの枠で、あらゆる比率へ。<br><span class="soft">動かして、拡大して、回しても、切り取る位置は正確に。</span><br><span class="gold">ピクセルは外に出ません。</span>',
+      lede: 'PNG・JPG・WebP を落とすと、<strong>1:1、4:5、9:16、16:9、1.91:1</strong>、または自分で入力した比率に合わせて収めます。ドラッグで位置を決め、拡大し、90 度ずつ回し、左右反転し、余った縁を<strong>ぼかしや単色で埋めて</strong>から、指定したピクセルサイズのまま <strong>PNG · WebP · JPG</strong> で書き出します。保存の前に実際のファイルサイズを測って表示します。',
+      pillUp: 'アップロード 0 バイト',
+      pillNet: '外部リクエスト 0 件',
+      pillRatios: '1:1 · 4:5 · 9:16 · 16:9 · 1.91:1',
+      pillOut: 'PNG · WebP · JPG',
+      workAria: '切り抜き作業エリア',
+      dropTitle: 'PNG・JPG・WebP を落としてください',
+      dropSub: 'サイズも形も自由です。Ctrl+V の貼り付けにも対応します。',
+      pickBtn: '画像を選ぶ',
+      sampleStudio: 'スタジオ例',
+      sampleSky: '風景例',
+      dropMeta: 'まだ画像がありません — ファイルを選ぶか例を押してください。',
+      stageTitle: '枠',
+      stageEmpty: '枠が画像を待っています。',
+      stageHint: 'ドラッグで移動 · 角を引いて拡大 · 矢印キーで微調整',
+      cvAria: '切り抜きプレビュー — ドラッグで画像を動かします',
+      ratioLbl: '縦横比',
+      ratioAria: '縦横比',
+      r11: 'プロフィール',
+      r45: 'フィード',
+      r916: 'リール・ショート',
+      r169: 'YouTube',
+      r191: 'OG カード',
+      rFree: '自由',
+      rFreeSub: '幅 : 高さ',
+      freeLbl: '幅 : 高さ',
+      zoomLbl: '拡大',
+      zoomAria: '拡大',
+      rotBtn: '90° 回転',
+      flipBtn: '左右反転',
+      centerBtn: '中央',
+      resetBtn: 'リセット',
+      changeBtn: '画像を変える',
+      padLbl: '縁の余白',
+      padAria: '縁の余白',
+      padModeAria: '余白の塗り',
+      padBlur: 'ぼかしで塗る',
+      padSolid: '単色で塗る',
+      outHead: '書き出し',
+      fmtLbl: '形式',
+      fmtAria: '出力形式',
+      qLbl: '品質',
+      qAria: '品質',
+      widthLbl: '出力幅',
+      widthAria: '出力幅',
+      outBytesUnit: '実測エンコード',
+      dlBtn: '切り抜いた画像を保存',
+      outFoot: '上のサイズは推測ではなく<b>エンコード後のバイト数</b>をそのまま測った値です — 何かを変えるたび、このタブで再エンコードします。',
+      infoHead: '出ていくもの',
+      kSrc: '元画像',
+      kCrop: '元画像から使う範囲',
+      kOut: '出力',
+      kRatio: '比率',
+      kZoom: '拡大',
+      kTurn: '回転・反転',
+      kBytes: 'エンコード容量',
+      howTitle: '枠の計算方法',
+      howNote: 'キャンバス上で実測',
+      n1h: 'まず覆って、それから動かす',
+      n1p: '拡大 100% は、画像が枠を<b>すき間なく覆っている</b>状態です。倍率は「枠の幅÷画像の幅」と「枠の高さ÷画像の高さ」の大きいほうです。ドラッグでは余りの分だけ動かせるよう制限されるので、空いた角が切り抜き範囲に入ることはありません。スライダーはこの覆う倍率に掛かるため、200% は絵が二倍になるのではなく、見える範囲が半分になります。',
+      n2h: '余白 — ぼかしと単色',
+      n2p: '余白は枠の<b>短い辺</b>に対する割合なので、720 px でも 2048 px でも同じ太さに見えます。内側に寄った分の枠を先に塗ります — 同じ写真を<b>大きくしてぼかしたもの</b>（半径は幅の約 2.2%、縁に透明な線が出ないよう 16% 大きく描画）か、単色一色です。そのうえで写真を内側の領域に同じ規則で描きます。',
+      n3h: 'デコード一回、エンコード一回',
+      n3p: 'ファイルは一度だけデコードし、出力サイズで描き、一度だけエンコードします — 可逆なら PNG（アルファ保持）、同じ品質で最小なら WebP、他のソフトで開くなら JPG（アルファは白に）。保存ボタンの下の数字はそのエンコードのバイト数で、画像を動かせば一緒に変わります。細部が減った切り抜きは実際に小さくなるからです。',
+      faqTitle: 'よくある質問',
+      faqNote: '切り抜き · 余白 · 書き出し',
+      q1: '切り抜くと写真は再圧縮されますか？',
+      a1: '一度だけです。ファイルをピクセルに戻し、切り抜いた結果を出力サイズの新しいキャンバスに描き、選んだ形式でエンコードします。PNG を PNG で書き出せば可逆のまま、JPG は設定した品質で一世代だけ通します。既定の品質を <b>92</b> にし、保存前にサイズを見せるのはそのためです。',
+      q2: 'どの比率を選べばいいですか？',
+      a2: 'プロフィール写真や多くのフリマ出品は<b>1:1</b>、Instagram のフィードが切らずに見せる最も縦長の比率が<b>4:5</b>、リール・ショート・ストーリーズは<b>9:16</b>、YouTube のサムネイルは<b>16:9</b>、リンクプレビューカードは<b>1.91:1</b>です。1080 × 1350 を求められたら 4:5 で出力幅 1080 を選べば、高さはちょうど 1350 になります。',
+      q3: '残したい部分が切れてしまいます。',
+      a3: '比率は入る分しか残さないからです。拡大を 100% にしてドラッグで残す範囲を選ぶか、余白を足してください。9:16 の枠に 12〜16% の余白を置くと、横長の写真全体がぼけた縁の中に収まります。縦のストーリーズに横の写真を入れるときの定番です。<b>中央</b>は拡大はそのままに、枠だけを画像の中心へ戻します。',
+      q4: '保存したファイルはどこに行きますか？',
+      a4: 'ブラウザー通常のダウンロード先へ直接入ります。ファイル名には比率と実際のピクセルサイズが入ります（例: <b>imgcrop-16x9-1080x608.png</b>）。サーバーにも、クッキーにも、ローカルストレージにも何も書きません。下のカウンターが外部リクエストを数えており、<b>0</b> のままです。',
+      footCopy: '© 2026 Kim Yihyung · ブラウザーの中で、ブラウザーのために。',
+      footNet: '外部リクエスト',
+      footP1: 'ポートフォリオ',
+      footP2: 'ツール一覧',
+      footP3: 'ソース',
+      mono: 'アップロードなし · 追跡なし',
+      toggleTo: '言語を変更',
+      stReady: '準備できました — 画像を入れて枠の中でドラッグしてください。',
+      stLoaded: '{name} を読み込みました · {w}×{h}。ドラッグで移動、スライダーで拡大できます。',
+      stNoImg: 'このファイルは画像として開けませんでした。',
+      stPick: '先に画像を入れてください。',
+      stRot: '{deg}° に回しました。',
+      stFlip: '左右に反転しました。',
+      stFlipOff: '反転を解除しました。',
+      stCenter: '枠を画像の中央に合わせました。',
+      stReset: 'リセット: 1:1、拡大・回転・余白なし。',
+      stRatio: '枠は {r} です。',
+      stFree: '自由な枠 {r}。',
+      stEncoded: '{fmt} · {kw}×{kh} px · {size}。',
+      stSaved: '{name} を保存しました。',
+      stEst: 'エンコード中…',
+      stSmall: '出力が元画像より大きいため、拡大して保存されます。',
+      fmtPng: 'PNG · 可逆',
+      fmtWebp: 'WebP · {q}',
+      fmtJpg: 'JPG · {q}',
+      lossless: '可逆',
+      bytesNone: '—',
+      nA: '—',
+      degFmt: '{d}°',
+      turnNone: '0° · なし',
+      turnFlip: '反転',
+      srcLabel: '{w}×{h}'
+    },
+    'zh-Hant': {
+      docTitle: 'ImgCrop — 任意比例裁切與縮放，零上傳 | Kim Yihyung',
+      brandAria: 'Kim Yihyung — 作品集',
+      back: '← 所有工具',
+      eyebrow: 'ImgCrop · 比例 · 零上傳',
+      h1: '一個畫框，所有比例。<br><span class="soft">拖曳、縮放、旋轉，裁切範圍依然精準。</span><br><span class="gold">像素不會離開這個分頁。</span>',
+      lede: '拖入 PNG、JPG 或 WebP，就能放進 <strong>1:1、4:5、9:16、16:9、1.91:1</strong>，或你自行輸入的寬高比。拖曳移動、縮放、每次旋轉 90 度、左右翻轉，再用<strong>模糊或單色填滿</strong>留白的邊緣，最後以指定的像素尺寸輸出 <strong>PNG · WebP · JPG</strong>，下載前先量出真實檔案大小。',
+      pillUp: '上傳 0 位元組',
+      pillNet: '外部請求 0 次',
+      pillRatios: '1:1 · 4:5 · 9:16 · 16:9 · 1.91:1',
+      pillOut: 'PNG · WebP · JPG',
+      workAria: '裁切工作區',
+      dropTitle: '拖入 PNG、JPG 或 WebP',
+      dropSub: '大小、形狀都不拘。也支援 Ctrl+V 貼上。',
+      pickBtn: '選擇圖片',
+      sampleStudio: '棚拍範例',
+      sampleSky: '風景範例',
+      dropMeta: '尚未載入圖片 — 選一個檔案，或點一下範例。',
+      stageTitle: '畫框',
+      stageEmpty: '畫框正在等一張圖片。',
+      stageHint: '拖曳移動 · 拉角落縮放 · 方向鍵微調',
+      cvAria: '裁切預覽 — 拖曳即可移動圖片',
+      ratioLbl: '長寬比',
+      ratioAria: '長寬比',
+      r11: '大頭照',
+      r45: '貼文',
+      r916: 'Reels · Shorts',
+      r169: 'YouTube',
+      r191: 'OG 卡片',
+      rFree: '自由',
+      rFreeSub: '寬 : 高',
+      freeLbl: '寬 : 高',
+      zoomLbl: '縮放',
+      zoomAria: '縮放',
+      rotBtn: '旋轉 90°',
+      flipBtn: '左右翻轉',
+      centerBtn: '置中',
+      resetBtn: '重設',
+      changeBtn: '換一張圖片',
+      padLbl: '邊緣留白',
+      padAria: '邊緣留白',
+      padModeAria: '留白填色',
+      padBlur: '模糊填色',
+      padSolid: '單色填色',
+      outHead: '輸出',
+      fmtLbl: '格式',
+      fmtAria: '輸出格式',
+      qLbl: '品質',
+      qAria: '品質',
+      widthLbl: '輸出寬度',
+      widthAria: '輸出寬度',
+      outBytesUnit: '實測編碼',
+      dlBtn: '下載裁切結果',
+      outFoot: '上面的容量不是估算，而是<b>編碼後的位元組</b>實測值 — 任何改動都會在這個分頁重新編碼。',
+      infoHead: '送出的內容',
+      kSrc: '原圖',
+      kCrop: '從原圖取用的範圍',
+      kOut: '輸出',
+      kRatio: '比例',
+      kZoom: '縮放',
+      kTurn: '旋轉 · 翻轉',
+      kBytes: '編碼容量',
+      howTitle: '畫框怎麼算',
+      howNote: '在畫布上實測',
+      n1h: '先覆蓋，再移動',
+      n1p: '縮放 100% 表示圖片<b>完整覆蓋</b>畫框、沒有空隙：倍率取「框寬÷圖寬」與「框高÷圖高」中較大者。拖曳只會在剩餘範圍內移動，所以空白角落不會被拉進裁切區。滑桿是乘在這個覆蓋倍率上，因此 200% 不是圖變兩倍大，而是可見範圍剩一半。',
+      n2h: '留白 — 模糊與單色',
+      n2p: '留白是畫框<b>短邊</b>的比例，所以 720 px 與 2048 px 看起來一樣厚。往內縮出的邊框會先填滿 — 用同一張照片<b>放大後模糊</b>的版本（半徑約寬度的 2.2%，放大 16% 描繪以免邊緣出現透明線），或一種單色。接著照片本身再依同樣規則畫在內側區域。',
+      n3h: '解碼一次，編碼一次',
+      n3p: '檔案只解碼一次、以輸出尺寸描繪、再編碼一次 — 無損就用 PNG（保留透明），同品質下檔案最小用 WebP，要給其他程式開啟則用 JPG（透明轉為白色）。下載鈕下方的數字就是那次編碼的位元組長度，圖片一動它也跟著變，因為細節變少的裁切確實更小。',
+      faqTitle: '常見問題',
+      faqNote: '裁切 · 留白 · 輸出',
+      q1: '裁切會讓照片再被壓縮嗎？',
+      a1: '只會一次。檔案先解成像素，裁切結果畫到輸出尺寸的新畫布，再用你選的格式編碼。PNG 匯出成 PNG 仍為無損；JPG 只在你設定的品質下經過一代。這也是預設品質為 <b>92</b>、並在下載前先顯示容量的原因。',
+      q2: '我該選哪一種比例？',
+      a2: '大頭照與多數拍賣平台用<b>1:1</b>，Instagram 貼文不會被裁掉的最長比例是<b>4:5</b>，Reels、Shorts、限時動態是<b>9:16</b>，YouTube 縮圖是<b>16:9</b>，連結預覽卡是<b>1.91:1</b>。若平台要求 1080 × 1350，那正是寬 1080 的 4:5 — 選 4:5、輸出寬度設 1080，高度就會剛好是 1350。',
+      q3: '想保留的部分被裁掉了。',
+      a3: '因為比例只留下放得進去的部分。把縮放調回 100%，拖曳選擇要保留的範圍，或加上留白：9:16 畫框加上 12〜16% 留白，橫向照片就能完整收在模糊邊框裡，這是把橫圖放進直式限時動態的常用做法。<b>置中</b>會在不動縮放的情況下，把畫框移回圖片中心。',
+      q4: '儲存的檔案跑到哪裡去了？',
+      a4: '直接進到瀏覽器平常的下載資料夾，檔名帶有比例與真實像素尺寸，例如 <b>imgcrop-16x9-1080x608.png</b>。不會寫進伺服器、Cookie 或本機儲存空間：下方的計數器正在計算外部請求，一直維持 <b>0</b>。',
+      footCopy: '© 2026 Kim Yihyung · 在瀏覽器裡打造，為瀏覽器而生。',
+      footNet: '外部請求',
+      footP1: '作品集',
+      footP2: '所有工具',
+      footP3: '原始碼',
+      mono: '不上傳 · 不追蹤',
+      toggleTo: '變更語言',
+      stReady: '準備好了 — 放入圖片，然後在畫框裡拖曳。',
+      stLoaded: '已載入 {name} · {w}×{h}。拖曳可移動，滑桿可縮放。',
+      stNoImg: '這個檔案無法當作圖片開啟。',
+      stPick: '請先放入圖片。',
+      stRot: '已旋轉至 {deg}°。',
+      stFlip: '已左右翻轉。',
+      stFlipOff: '已取消翻轉。',
+      stCenter: '已將畫框對齊圖片中央。',
+      stReset: '已重設：1:1，無縮放、旋轉與留白。',
+      stRatio: '畫框為 {r}。',
+      stFree: '自由畫框 {r}。',
+      stEncoded: '{fmt} · {kw}×{kh} px · {size}。',
+      stSaved: '已儲存 {name}。',
+      stEst: '編碼中…',
+      stSmall: '輸出比原圖更大 — 會以放大方式儲存。',
+      fmtPng: 'PNG · 無損',
+      fmtWebp: 'WebP · {q}',
+      fmtJpg: 'JPG · {q}',
+      lossless: '無損',
+      bytesNone: '—',
+      nA: '—',
+      degFmt: '{d}°',
+      turnNone: '0° · 無',
+      turnFlip: '翻轉',
       srcLabel: '{w}×{h}'
     }
-  };
+  };;
 
   var LANG_KEY = 'imgcrop.lang';
   var SHARED_KEY = 'kyh.lang';
@@ -1408,18 +1718,40 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
   /* ═════════════════════ language ═════════════════════ */
   function readLang(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function initialLang() {
-    var q = '';
-    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
-    if (q === 'ko' || q === 'en') return q;
-    return readLang(SHARED_KEY) || readLang(LANG_KEY) || 'en';
+    var f = forcedLang();
+    if (f) return f;
+    var saved = '';
+    try { saved = localStorage.getItem(SHARED_KEY) || localStorage.getItem(LANG_KEY) || ''; } catch (e) { saved = ''; }
+    saved = normLang(saved);
+    if (saved) return saved;
+    return normLang(document.documentElement.getAttribute('lang')) || 'en';
   }
   function setMeta(sel, attr, val) {
     var el = document.querySelector(sel);
     if (el) el.setAttribute(attr, val);
   }
+  /* ── four languages: KO · EN · JA · 繁中 ── */
+  var LANGS = ['ko', 'en', 'ja', 'zh-Hant'];
+  function normLang(l) {
+    var s = String(l == null ? '' : l).toLowerCase().replace(/_/g, '-');
+    if (s === 'zh-hant' || s === 'zh-tw' || s === 'zh-hk' || s === 'zh' || s === 'tw' || s === 'hant') return 'zh-Hant';
+    if (s === 'ja' || s === 'jp' || s === 'ja-jp') return 'ja';
+    if (s === 'ko' || s === 'kr' || s === 'ko-kr') return 'ko';
+    if (s === 'en' || s === 'en-us' || s === 'en-gb') return 'en';
+    return '';
+  }
+  function forcedLang() {
+    var f = window.__FORCED_LANG__;
+    if (f) return normLang(f);
+    var q = '';
+    try { q = String(new URLSearchParams(location.search).get('lang') || ''); } catch (e) { q = ''; }
+    return q ? normLang(q) : '';
+  }
+
   function applyLang(lang) {
-    state.lang = lang === 'ko' ? 'ko' : 'en';
+    state.lang = normLang(lang) || 'en';
     document.documentElement.setAttribute('lang', state.lang);
+    try { document.dispatchEvent(new CustomEvent('opyeb:lang', { detail: state.lang })); } catch (e) { /* old engines */ }
     document.title = t('docTitle');
     setMeta('meta[property="og:title"]', 'content', t('docTitle').split('|')[0].trim());
     var nodes = document.querySelectorAll('[data-i18n]');
@@ -1448,8 +1780,17 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
     if (lastStatusKey) status(fmt(t(lastStatusKey), lastStatusVars || {}), lastStatusKind);
     try { localStorage.setItem(LANG_KEY, state.lang); localStorage.setItem(SHARED_KEY, state.lang); } catch (e) { /* blocked */ }
   }
-  $('langToggle').addEventListener('click', function () {
-    applyLang(state.lang === 'ko' ? 'en' : 'ko');
+  $('langToggle').addEventListener('click', function (e) {
+    var s = e.target && e.target.closest ? e.target.closest('[data-lt]') : null;
+    var next = s ? s.getAttribute('data-lt') : LANGS[(LANGS.indexOf(state.lang) + 1) % LANGS.length];
+    applyLang(next);
+  });
+  $('langToggle').addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var s = e.target && e.target.closest ? e.target.closest('[data-lt]') : null;
+    if (!s) return;
+    e.preventDefault();
+    applyLang(s.getAttribute('data-lt'));
   });
 
   /* ═════════════════════ boot ═════════════════════ */

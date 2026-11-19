@@ -387,7 +387,7 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
 .foot .net b { color: var(--ok); }
 
 @media (max-width: 640px) {
-  .wrap { padding: 0 14px 36px; }
+  .wrap { padding: 0 16px 36px; }
   .topbar { padding: 14px 0 8px; }
   .brand-txt { font-size: 12px; letter-spacing: .1em; }
   .hero { padding: 14px 0 10px; }
@@ -403,6 +403,22 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
   .bignum b { font-size: 20px; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* ═══ 4-language switch: KO | EN | JA | 繁中 ═══ */
+.lang-toggle { padding: 0 3px; gap: 0; cursor: default; }
+.lang-toggle .lt {
+  appearance: none; -webkit-appearance: none; border: 0; background: transparent; color: var(--muted2);
+  height: 100%; padding: 0 6px; margin: 0; font-family: inherit; font-size: 11px; font-weight: 700;
+  letter-spacing: .02em; line-height: 1; cursor: pointer; border-radius: 8px;
+  transition: color .15s, background .15s;
+}
+.lang-toggle .lt:hover { color: var(--ink); }
+.lang-toggle .lt.on { color: var(--accent); }
+@media (max-width: 430px) {
+  .lang-toggle { height: 30px; }
+  .lang-toggle .lt { padding: 0 4px; font-size: 10px; }
+}
+:lang(ja) body, :lang(zh-Hant) body { word-break: normal; overflow-wrap: break-word; line-break: strict; }
 </style>
 </head>
 <body>
@@ -414,11 +430,15 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       <span class="brand-txt">Kim Yihyung</span>
     </a>
     <div class="top-actions">
-      <button class="lang-toggle" id="langToggle" type="button" title="View in English" aria-label="View in English">
-        <span class="lt on" data-lt="ko">KO</span>
+      <div class="lang-toggle" id="langToggle" role="group" aria-label="Language · 언어 · 言語 · 語言">
+        <button class="lt on" type="button" data-lang="ko" aria-pressed="true">KO</button>
         <span class="lsep" aria-hidden="true">|</span>
-        <span class="lt" data-lt="en">EN</span>
-      </button>
+        <button class="lt" type="button" data-lang="en" aria-pressed="false">EN</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lang="ja" aria-pressed="false">JA</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lang="zh-Hant" aria-pressed="false">繁中</button>
+      </div>
       <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← 도구 전체</a>
     </div>
   </header>
@@ -478,12 +498,12 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
                 <span class="suffix" data-i18n="won">원</span>
               </div>
               <div class="chip-wrap" id="giftChips">
-                <button class="chip" type="button" data-amt="50000000">5천만</button>
-                <button class="chip" type="button" data-amt="100000000">1억</button>
-                <button class="chip" type="button" data-amt="150000000">1.5억</button>
-                <button class="chip" type="button" data-amt="300000000">3억</button>
-                <button class="chip" type="button" data-amt="500000000">5억</button>
-                <button class="chip" type="button" data-amt="1000000000">10억</button>
+                <button class="chip" type="button" data-amt="50000000" data-i18n="chip50">5천만</button>
+                <button class="chip" type="button" data-amt="100000000" data-i18n="chip100">1억</button>
+                <button class="chip" type="button" data-amt="150000000" data-i18n="chip150">1.5억</button>
+                <button class="chip" type="button" data-amt="300000000" data-i18n="chip300">3억</button>
+                <button class="chip" type="button" data-amt="500000000" data-i18n="chip500">5억</button>
+                <button class="chip" type="button" data-amt="1000000000" data-i18n="chip1000">10억</button>
               </div>
             </div>
 
@@ -554,12 +574,12 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
                 <tr><th data-i18n="thRel">증여자</th><th class="num" data-i18n="thLimit">공제 한도</th><th data-i18n="thLaw">근거</th></tr>
               </thead>
               <tbody>
-                <tr><td class="kr" data-i18n="rSpouse">배우자</td><td class="num">6억원</td><td>§53①1</td></tr>
-                <tr><td class="kr" data-i18n="rAscAdult">직계존속 · 수증자 성년</td><td class="num">5,000만원</td><td>§53①2</td></tr>
-                <tr><td class="kr" data-i18n="rAscMinor">직계존속 · 수증자 미성년</td><td class="num">2,000만원</td><td>§53①2</td></tr>
-                <tr><td class="kr" data-i18n="rDesc">직계비속</td><td class="num">5,000만원</td><td>§53①3</td></tr>
-                <tr><td class="kr" data-i18n="rOther">기타친족 (6촌 이내 혈족·4촌 이내 인척)</td><td class="num">1,000만원</td><td>§53①4</td></tr>
-                <tr><td class="kr" data-i18n="rMarriage">혼인·출산 증여재산 공제 (직계존속)</td><td class="num">+1억원</td><td>§53의2</td></tr>
+                <tr><td class="kr" data-i18n="rSpouse">배우자</td><td class="num" data-i18n="dedSpouse">6억원</td><td>§53①1</td></tr>
+                <tr><td class="kr" data-i18n="rAscAdult">직계존속 · 수증자 성년</td><td class="num" data-i18n="dedAscAdult">5,000만원</td><td>§53①2</td></tr>
+                <tr><td class="kr" data-i18n="rAscMinor">직계존속 · 수증자 미성년</td><td class="num" data-i18n="dedAscMinor">2,000만원</td><td>§53①2</td></tr>
+                <tr><td class="kr" data-i18n="rDesc">직계비속</td><td class="num" data-i18n="dedDesc">5,000만원</td><td>§53①3</td></tr>
+                <tr><td class="kr" data-i18n="rOther">기타친족 (6촌 이내 혈족·4촌 이내 인척)</td><td class="num" data-i18n="dedOther">1,000만원</td><td>§53①4</td></tr>
+                <tr><td class="kr" data-i18n="rMarriage">혼인·출산 증여재산 공제 (직계존속)</td><td class="num" data-i18n="dedMarriage">+1억원</td><td>§53-2</td></tr>
               </tbody>
             </table>
           </div>
@@ -572,11 +592,11 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
                 <tr><th data-i18n="thBase">과세표준</th><th data-i18n="thRate2">세율</th><th class="num" data-i18n="thProg">누진공제</th></tr>
               </thead>
               <tbody>
-                <tr><td class="kr">1억원 이하</td><td>10%</td><td class="num">0원</td></tr>
-                <tr><td class="kr">1억원 초과 ~ 5억원 이하</td><td>20%</td><td class="num">1,000만원</td></tr>
-                <tr><td class="kr">5억원 초과 ~ 10억원 이하</td><td>30%</td><td class="num">6,000만원</td></tr>
-                <tr><td class="kr">10억원 초과 ~ 30억원 이하</td><td>40%</td><td class="num">1억 6,000만원</td></tr>
-                <tr><td class="kr">30억원 초과</td><td>50%</td><td class="num">4억 6,000만원</td></tr>
+                <tr><td class="kr" data-i18n="refB1">1억원 이하</td><td>10%</td><td class="num" data-i18n="refP1">0원</td></tr>
+                <tr><td class="kr" data-i18n="refB2">1억원 초과 ~ 5억원 이하</td><td>20%</td><td class="num" data-i18n="refP2">1,000만원</td></tr>
+                <tr><td class="kr" data-i18n="refB3">5억원 초과 ~ 10억원 이하</td><td>30%</td><td class="num" data-i18n="refP3">6,000만원</td></tr>
+                <tr><td class="kr" data-i18n="refB4">10억원 초과 ~ 30억원 이하</td><td>40%</td><td class="num" data-i18n="refP4">1억 6,000만원</td></tr>
+                <tr><td class="kr" data-i18n="refB5">30억원 초과</td><td>50%</td><td class="num" data-i18n="refP5">4억 6,000만원</td></tr>
               </tbody>
             </table>
           </div>
@@ -719,6 +739,36 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
   var I18N = {
     ko: {
       docTitle: 'GiftTax — 2026 증여세·혼인출산 공제 계산기 | Kim Yihyung',
+      dedSpouse: "6억원",
+      dedAscAdult: "5,000만원",
+      dedAscMinor: "2,000만원",
+      dedDesc: "5,000만원",
+      dedOther: "1,000만원",
+      dedMarriage: "+1억원",
+      chip50: "5천만",
+      chip100: "1억",
+      chip150: "1.5억",
+      chip300: "3억",
+      chip500: "5억",
+      chip1000: "10억",
+      refB1: "1억원 이하",
+      refB2: "1억원 초과 ~ 5억원 이하",
+      refB3: "5억원 초과 ~ 10억원 이하",
+      refB4: "10억원 초과 ~ 30억원 이하",
+      refB5: "30억원 초과",
+      refP1: "0원",
+      refP2: "1,000만원",
+      refP3: "6,000만원",
+      refP4: "1억 6,000만원",
+      refP5: "4억 6,000만원",
+      metaTitle: "GiftTax — 2026 증여세·혼인출산 공제 계산기",
+      metaDesc: "부모에게 1억 5천만원을 받아 세액이 0원이 되는 이유부터, 같은 돈을 공제 없이 받으면 970만원이 되는 계산까지. 관계별 공제·10년 합산·세대생략 할증·신고세액공제를 한 화면에서 계산하고 구간별로 어디서 세금이 붙는지 확인합니다.",
+      relShortAsc: "직계존속",
+      relShortDesc: "직계비속",
+      relShortSpouse: "배우자",
+      relShortOther: "기타친족",
+      relShortNone: "그 외",
+      copyMinor: "수증자 미성년",
       brandAria: 'Kim Yihyung — 포트폴리오',
       back: '← 도구 전체',
       eyebrow: 'GiftTax · 증여세 · 혼인출산 공제 · 업로드 0',
@@ -880,6 +930,36 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
     },
     en: {
       docTitle: 'GiftTax — Korea Gift Tax &amp; Marriage Deduction Calculator 2026 | Kim Yihyung',
+      dedSpouse: "₩600M",
+      dedAscAdult: "₩50M",
+      dedAscMinor: "₩20M",
+      dedDesc: "₩50M",
+      dedOther: "₩10M",
+      dedMarriage: "+₩100M",
+      chip50: "₩50M",
+      chip100: "₩100M",
+      chip150: "₩150M",
+      chip300: "₩300M",
+      chip500: "₩500M",
+      chip1000: "₩1B",
+      refB1: "Up to ₩100M",
+      refB2: "₩100M – ₩500M",
+      refB3: "₩500M – ₩1B",
+      refB4: "₩1B – ₩3B",
+      refB5: "Over ₩3B",
+      refP1: "₩0",
+      refP2: "₩10M",
+      refP3: "₩60M",
+      refP4: "₩160M",
+      refP5: "₩460M",
+      metaTitle: "GiftTax — Korea Gift Tax & Marriage Deduction Calculator 2026",
+      metaDesc: "Why a 150-million-won gift from a parent comes to zero with the marriage deduction, and the same gift without it comes to 9.7 million. Deductions by relationship, ten-year aggregation, the generation-skipping surcharge and the 3% filing credit, bracket by bracket.",
+      relShortAsc: "lineal ascendant",
+      relShortDesc: "lineal descendant",
+      relShortSpouse: "spouse",
+      relShortOther: "other relatives",
+      relShortNone: "unrelated",
+      copyMinor: "minor",
       brandAria: 'Kim Yihyung — portfolio',
       back: '← All tools',
       eyebrow: 'GiftTax · gift tax · marriage deduction · 0 uploads',
@@ -1037,7 +1117,399 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       copyFoot: '— GiftTax, computed in the browser only',
       marriageOff: 'The marriage deduction applies only to gifts from a lineal ascendant.',
       nowon: 'KRW'
-    }
+    },
+      ja: {
+        docTitle: "GiftTax — 2026年 韓国の贈与税・婚姻出産控除の計算機 | Kim Yihyung",
+        dedSpouse: "6億ウォン",
+        dedAscAdult: "5,000万ウォン",
+        dedAscMinor: "2,000万ウォン",
+        dedDesc: "5,000万ウォン",
+        dedOther: "1,000万ウォン",
+        dedMarriage: "+1億ウォン",
+        chip50: "5千万",
+        chip100: "1億",
+        chip150: "1.5億",
+        chip300: "3億",
+        chip500: "5億",
+        chip1000: "10億",
+        refB1: "1億ウォン以下",
+        refB2: "1億超〜5億以下",
+        refB3: "5億超〜10億以下",
+        refB4: "10億超〜30億以下",
+        refB5: "30億超",
+        refP1: "0ウォン",
+        refP2: "1,000万ウォン",
+        refP3: "6,000万ウォン",
+        refP4: "1億6,000万ウォン",
+        refP5: "4億6,000万ウォン",
+        metaTitle: "GiftTax — 2026年 韓国の贈与税・婚姻出産控除の計算機",
+        metaDesc: "親から1億5千万ウォンをもらって税額0円になる理由から、同じ金額を控除なしでもらえば970万ウォンになる計算まで。関係別の控除・10年合算・世代飛ばし加算・申告税額控除を1画面で計算し、区分ごとにどこから課税されるかを確認します。",
+        brandAria: "Kim Yihyung — ポートフォリオ",
+        back: "← ツール一覧",
+        eyebrow: "GiftTax · 贈与税 · 婚姻出産控除 · アップロード0",
+        h1: "贈与税、<br><span class=\"soft\">控除まで入れて。</span><br><span class=\"gold\">2026年の基準で。</span>",
+        lede: "親から<strong>1億5千万ウォン</strong>をもらって税額が<strong>0ウォン</strong>になる理由から、同じお金を控除なしでもらえば<strong>970万ウォン</strong>になる計算まで。関係別の控除・10年合算・世代飛ばし加算・申告税額控除を1画面で計算し、<strong>区分ごとにどこから税が付くか</strong>を確認します。入力した金額は保存されません。",
+        pillLaw: "2026年施行",
+        pillDate: "確認日 2026-11-19",
+        pillUp: "アップロード0バイト",
+        pillNet: "外部リクエスト0件",
+        pillCite: "相続贈与税法 §53 · §56 · §57 · §69",
+        workAria: "贈与税計算機",
+        tabAria: "画面",
+        tab1: "贈与税の計算",
+        tab2: "控除・税率の基準表",
+        cTitle: "誰が誰にいくらを",
+        cNote: "10年合算 · 2026年税法",
+        fRel: "贈与者との関係",
+        fRelHint: "控除の限度を決めます",
+        fRelAria: "贈与者との関係",
+        relAsc: "直系尊属 — 親・祖父母",
+        relDesc: "直系卑属 — 子・孫",
+        relSpouse: "配偶者",
+        relOther: "その他の親族 — 6親等以内の血族・4親等以内の姻族",
+        relNone: "それ以外 — 控除なし",
+        fGift: "今回の贈与財産価額",
+        fGiftHint: "時価基準",
+        fGiftAria: "今回の贈与財産価額",
+        fPrior: "10年以内に同じ人から受けた贈与",
+        fPriorHint: "合算",
+        fPriorAria: "10年以内に合算する贈与財産価額",
+        fPaid: "その贈与で既に納めた税額",
+        fPaidHint: "既納付税額",
+        fPaidAria: "既納付税額",
+        won: "ウォン",
+        chkMinor: "<b>受贈者が未成年</b> — 直系尊属の控除が2,000万ウォンに減り、20億超の贈与は世代飛ばし加算が40%になります。",
+        chkMarriage: "<b>婚姻・出産控除1億ウォン</b> — 直系尊属から婚姻届の前後2年、または出生日から2年以内に受けた場合。",
+        chkSkip: "<b>世代飛ばし加算30%</b> — 祖父母から孫へなど、一世代を飛ばした贈与です。",
+        chkFiling: "<b>申告税額控除3%</b> — 申告期限（贈与日の属する月の末日から3か月）内に申告します。",
+        bigCap: "納付する贈与税",
+        stGift: "贈与財産価額",
+        stGiftSub: "今回の贈与",
+        stDed: "控除合計",
+        stBase: "課税標準",
+        stBaseSub: "税率を掛ける金額",
+        stRaw: "算出税額",
+        stRawSub: "加算前",
+        thBand: "区分",
+        thPortion: "この場合の金額",
+        thRate: "税率",
+        thTax: "税額",
+        bandNote: "区分ごとの税額の合計は、速算控除を適用した算出税額と同じです。どの区分から税が重くなるかを目で確かめてください。",
+        refTitle: "控除の限度と税率",
+        refNote: "相続税及び贈与税法",
+        refDedHead: "贈与財産控除 · 10年合算",
+        thRel: "贈与者",
+        thLimit: "控除の限度",
+        thLaw: "根拠",
+        rSpouse: "配偶者",
+        rAscAdult: "直系尊属 · 受贈者が成年",
+        rAscMinor: "直系尊属 · 受贈者が未成年",
+        rDesc: "直系卑属",
+        rOther: "その他の親族（6親等以内の血族・4親等以内の姻族）",
+        rMarriage: "婚姻・出産の贈与財産控除（直系尊属）",
+        refDedNote: "控除は<b>10年以内に同じ贈与者</b>から受けた贈与を合わせて一度だけ適用します。直系尊属が贈与者ならその配偶者も同じ人とみなします。婚姻・出産控除は一生で1億ウォンが限度で、基本控除とは別に加算され、最大1億5,000万ウォンになります。",
+        refRateHead: "贈与税率 · 5区分",
+        thBase: "課税標準",
+        thRate2: "税率",
+        thProg: "速算控除",
+        refRateNote: "算出税額 = 課税標準 × 税率 − 速算控除。これに世代飛ばし加算（30%・未成年で20億超は40%）を足し、申告税額控除3%と既納付税額を引きます。",
+        refOrderHead: "計算の順序",
+        refOrder: "① 贈与財産価額 ＋ 10年以内の合算額 − 控除 = <b>課税標準</b> ② 課税標準 × 税率 − 速算控除 = <b>算出税額</b> ③ 世代飛ばし加算（＋） ④ 申告税額控除3%（−） ⑤ 既納付税額（−）= <b>納付する税額</b>",
+        sumTitle: "要約",
+        copyBtn: "カカオトーク用の要約をコピー",
+        discHead: "免責",
+        disclaimer: "この計算機は2026年の現行税法に基づく模擬計算です。債務引受（負担付贈与）、鑑定評価、事業承継の特例、公益法人への出捐、災害損失控除、申告期限の延長は反映していません。実際の申告前に税理士の確認を受けてください。",
+        tipTitle: "知っておくとよいこと",
+        tip1k: "10年が区切り",
+        tip1: "贈与税は10年ごとにやり直しです。同じ人から10年後にまた贈与を受けると、控除もまた適用されます。",
+        tip2k: "申告期限",
+        tip2: "贈与日の属する月の末日から3か月です。期限を過ぎると3%の控除が消え、無申告加算税20%が付きます。",
+        tip3k: "両親は一人とみなす",
+        tip3: "父と母に分けてもらっても、直系尊属の配偶者は同じ人とみなされ一つに合算されます。",
+        howTitle: "税が付く地点",
+        howNote: "数字で見る構造",
+        n1t: "控除が先",
+        n1b: "贈与税はもらった金額の全体には掛かりません。関係別の控除を引いた課税標準にだけ税率が掛かります。直系尊属5,000万ウォン＋婚姻・出産1億ウォンなら1億5,000万ウォンまで課税標準は0ウォンです。",
+        n2t: "10%の壁",
+        n2b: "課税標準1億ウォンまでは10%です。1億を超えると超えた部分から20%が掛かり、速算控除1,000万ウォンが一緒に適用されます。",
+        n3t: "3%の大きさ",
+        n3b: "算出税額1,000万ウォンなら申告税額控除で30万ウォン減り970万ウォンになります。3%は小さく見えますが、期限を過ぎるとこの30万ウォンに無申告加算税200万ウォンが加わります。",
+        n4t: "実効税率",
+        n4b: "納付する税額を贈与財産価額で割った値です。控除が大きいほど実効税率は急に下がるので、同じ1億ウォンでも誰が誰に贈与するかで負担が変わります。",
+        faqTitle: "よくある質問",
+        faqNote: "6つ",
+        q1: "親から1億5千万ウォンをもらうと贈与税は0ウォンですか？",
+        a1: "婚姻届の前後2年以内、または子の出生日から2年以内に直系尊属から受けた財産ならそうです。基本控除5,000万ウォンに婚姻・出産控除1億ウォンが加わり、<b>1億5,000万ウォンまで控除</b>されます。2つの控除は同じ人から受けた贈与を10年合算して一度だけ適用され、婚姻・出産控除は一生で1億ウォンが限度です。",
+        q2: "婚姻・出産控除は親からだけですか？",
+        a2: "<b>直系尊属</b>、つまり親と祖父母から受けた財産だけが対象です。配偶者・兄弟・叔父から受けた贈与は対象外です。祖父母なら直系尊属なので適用されますが、受贈者が孫なので<b>世代飛ばし加算</b>が一緒に付くことがあります。",
+        q3: "10年合算はどう計算しますか？",
+        a3: "贈与日の前10年以内に同じ人から受けた贈与財産価額を今回の贈与に足して課税標準を求め、その算出税額から既に納めた税額を引きます。<b>直系尊属が贈与者ならその配偶者も同じ人</b>とみなすため、父と母に分けてもらったお金は合算されます。",
+        q4: "世代飛ばし加算はいつ付きますか？",
+        a4: "祖父母から孫へ贈与するように<b>一世代を飛ばした贈与</b>に算出税額の30%が加わります。受贈者が未成年で贈与財産価額が20億ウォンを超えると40%です。親から子への贈与には付きません。",
+        q5: "申告税額控除3%とは何ですか？",
+        a5: "課税標準を申告期限（贈与日の属する月の末日から3か月）内に申告すると、算出税額の3%が控除されます。世代飛ばし加算額も含めて計算します。期限を過ぎると控除が消え、<b>無申告加算税20%</b>と納付遅延加算税が付きます。",
+        q6: "この結果をそのまま申告に使えますか？",
+        a6: "模擬計算です。<b>負担付贈与（債務引受）、非上場株の鑑定評価、事業承継の特例、公益法人への出捐、災害損失控除、申告期限の延長</b>は反映していません。金額が大きい場合や財産の種類が複雑な場合は税理士の確認を受けてください。",
+        footCopy: "© 2026 Kim Yihyung · ブラウザで、ブラウザのために。",
+        footNet: "外部リクエスト",
+        footP1: "ポートフォリオ",
+        footP2: "ツール一覧",
+        footP3: "ソース",
+        mono: "アップロードなし · 追跡なし",
+        toggleTo: "言語を切り替え",
+        relReadAsc: "直系尊属の基本控除 {x}",
+        relReadDesc: "直系卑属の基本控除 {x}",
+        relReadSpouse: "配偶者の基本控除 {x}",
+        relReadOther: "その他の親族の基本控除 {x}",
+        relReadNone: "控除なし — もらった金額のすべてが課税対象です",
+        dedParts: "基本 {a} ＋ 婚姻・出産 {b}",
+        dedBasicOnly: "基本控除のみ",
+        dedNone: "控除なし",
+        stepGift: "贈与財産価額",
+        stepPrior: "10年以内の合算",
+        stepDed: "贈与財産控除",
+        stepBase: "課税標準",
+        stepRaw: "算出税額",
+        stepSur: "世代飛ばし加算（{r}）",
+        stepCredit: "申告税額控除3%",
+        stepPaid: "既納付税額",
+        stepPayable: "納付する税額",
+        stepEff: "実効税率",
+        effSub: "納付税額 ÷ 贈与財産価額",
+        bandLabel: "1億以下",
+        bandLabel2: "1億〜5億",
+        bandLabel3: "5億〜10億",
+        bandLabel4: "10億〜30億",
+        bandLabel5: "30億超",
+        bandNone: "該当なし",
+        verdictZero: "控除の範囲内です。課税標準が<b>0ウォン</b>なので納める贈与税はありません。",
+        verdictMarriage: "婚姻・出産控除のおかげで課税標準が<b>{x}</b>減りました。",
+        verdictNormal: "課税標準<b>{b}</b>に{r}の税率が適用され算出税額<b>{t}</b>。申告期限内に申告すれば<b>{c}</b>の控除を受けられます。",
+        verdictPaid: "10年合算で算出した税額から既に納めた<b>{p}</b>を引き、残りが今回の納付額です。",
+        verdictSkip: "世代飛ばし加算<b>{s}</b>が加わりました。",
+        sumLine: "{rel} · {gift} · 納付 {pay}",
+        sumHeadZero: "納付する税額 0ウォン — 控除の範囲内です。",
+        sumHeadNormal: "納付する税額 {pay} · 実効税率 {eff}",
+        copied: "要約をコピーしました。",
+        copyFail: "コピーできませんでした。下の要約を直接選択してください。",
+        copyTitle: "[贈与税の模擬計算 · 2026]",
+        copyRel: "関係",
+        copyGift: "贈与財産価額",
+        copyPrior: "10年以内の合算",
+        copyDed: "控除",
+        copyBase: "課税標準",
+        copyRaw: "算出税額",
+        copySur: "世代飛ばし加算",
+        copyCredit: "申告税額控除3%",
+        copyPaid: "既納付税額",
+        copyPay: "納付する税額",
+        copyEff: "実効税率",
+        copyFoot: "— GiftTax、ブラウザの中だけで計算",
+        marriageOff: "婚姻・出産控除は直系尊属から受けた贈与にのみ該当します。",
+        nowon: "ウォン",
+        relShortAsc: "直系尊属",
+        relShortDesc: "直系卑属",
+        relShortSpouse: "配偶者",
+        relShortOther: "その他の親族",
+        relShortNone: "それ以外",
+        copyMinor: "受贈者未成年",
+      },
+      "zh-Hant": {
+        docTitle: "GiftTax — 2026 年韓國贈與稅・結婚生育扣除計算器 | Kim Yihyung",
+        dedSpouse: "6 億韓元",
+        dedAscAdult: "5,000 萬韓元",
+        dedAscMinor: "2,000 萬韓元",
+        dedDesc: "5,000 萬韓元",
+        dedOther: "1,000 萬韓元",
+        dedMarriage: "+1 億韓元",
+        chip50: "5 千萬",
+        chip100: "1 億",
+        chip150: "1.5 億",
+        chip300: "3 億",
+        chip500: "5 億",
+        chip1000: "10 億",
+        refB1: "1 億韓元以下",
+        refB2: "1 億～5 億",
+        refB3: "5 億～10 億",
+        refB4: "10 億～30 億",
+        refB5: "超過 30 億",
+        refP1: "0 韓元",
+        refP2: "1,000 萬韓元",
+        refP3: "6,000 萬韓元",
+        refP4: "1 億 6,000 萬韓元",
+        refP5: "4 億 6,000 萬韓元",
+        metaTitle: "GiftTax — 2026 年韓國贈與稅・結婚生育扣除計算器",
+        metaDesc: "從父母給 1 億 5 千萬韓元稅額為 0 的原因，到同樣金額在沒有扣除時要繳 970 萬韓元的計算。關係別扣除、10 年合計、跨代加徵與申報稅額扣除在同一個畫面算出，並按級距標出稅從哪裡開始。",
+        brandAria: "Kim Yihyung — 作品集",
+        back: "← 所有工具",
+        eyebrow: "GiftTax · 贈與稅 · 結婚生育扣除 · 零上傳",
+        h1: "贈與稅，<br><span class=\"soft\">把扣除一起算進去。</span><br><span class=\"gold\">依 2026 年基準。</span>",
+        lede: "從父母給<strong>1 億 5 千萬韓元</strong>而稅額為<strong>0 韓元</strong>的理由，到同樣的錢在沒有扣除時要繳<strong>970 萬韓元</strong>的計算。關係別扣除、10 年合計、跨代加徵與申報稅額扣除都在同一畫面算出，並<strong>按級距看稅從哪裡開始</strong>。輸入的金額不會被儲存。",
+        pillLaw: "2026 年施行",
+        pillDate: "確認日 2026-11-19",
+        pillUp: "零位元組上傳",
+        pillNet: "零次外部請求",
+        pillCite: "相續贈與稅法 §53 · §56 · §57 · §69",
+        workAria: "贈與稅計算器",
+        tabAria: "畫面",
+        tab1: "計算贈與稅",
+        tab2: "扣除・稅率基準表",
+        cTitle: "誰給誰多少",
+        cNote: "10 年合計 · 2026 年稅法",
+        fRel: "與贈與人的關係",
+        fRelHint: "決定扣除限額",
+        fRelAria: "與贈與人的關係",
+        relAsc: "直系尊親屬 — 父母・祖父母",
+        relDesc: "直系卑親屬 — 子女・孫子女",
+        relSpouse: "配偶",
+        relOther: "其他親屬 — 六親等內血親・四親等內姻親",
+        relNone: "其他 — 無扣除",
+        fGift: "本次贈與財產價額",
+        fGiftHint: "以市價為準",
+        fGiftAria: "本次贈與財產價額",
+        fPrior: "10 年內自同一人受贈的金額",
+        fPriorHint: "合計",
+        fPriorAria: "10 年內要合計的贈與財產價額",
+        fPaid: "該贈與已繳的稅額",
+        fPaidHint: "已納稅額",
+        fPaidAria: "已納稅額",
+        won: "韓元",
+        chkMinor: "<b>受贈人為未成年</b> — 直系尊親屬的扣除降為 2,000 萬韓元，超過 20 億韓元的贈與跨代加徵為 40%。",
+        chkMarriage: "<b>結婚・生育扣除 1 億韓元</b> — 自直系尊親屬於結婚登記前後 2 年、或出生日起 2 年內受贈。",
+        chkSkip: "<b>跨代加徵 30%</b> — 由祖父母給孫子女，跳過一個世代的贈與。",
+        chkFiling: "<b>申報稅額扣除 3%</b> — 在申報期限（贈與日所屬月份月底起 3 個月）內申報。",
+        bigCap: "應納贈與稅",
+        stGift: "贈與財產價額",
+        stGiftSub: "本次贈與",
+        stDed: "扣除合計",
+        stBase: "課稅標準",
+        stBaseSub: "乘上稅率的金額",
+        stRaw: "計算稅額",
+        stRawSub: "加徵前",
+        thBand: "級距",
+        thPortion: "此級距金額",
+        thRate: "稅率",
+        thTax: "稅額",
+        bandNote: "各級距稅額的合計等於套用累進扣除後的計算稅額。用眼睛確認從哪個級距開始變重。",
+        refTitle: "扣除限額與稅率",
+        refNote: "相續稅及贈與稅法",
+        refDedHead: "贈與財產扣除 · 10 年合計",
+        thRel: "贈與人",
+        thLimit: "扣除限額",
+        thLaw: "依據",
+        rSpouse: "配偶",
+        rAscAdult: "直系尊親屬 · 受贈人成年",
+        rAscMinor: "直系尊親屬 · 受贈人未成年",
+        rDesc: "直系卑親屬",
+        rOther: "其他親屬（六親等內血親・四親等內姻親）",
+        rMarriage: "結婚・生育贈與財產扣除（直系尊親屬）",
+        refDedNote: "扣除以<b>10 年內自同一贈與人</b>受贈的金額合計後只適用一次。直系尊親屬為贈與人時，其配偶也視為同一人。結婚・生育扣除一生以 1 億韓元為限，與基本扣除分開加計，最高可達 1 億 5,000 萬韓元。",
+        refRateHead: "贈與稅率 · 5 級距",
+        thBase: "課稅標準",
+        thRate2: "稅率",
+        thProg: "累進扣除",
+        refRateNote: "計算稅額 = 課稅標準 × 稅率 − 累進扣除。再加上跨代加徵（30%，未成年且超過 20 億韓元為 40%），減去申報稅額扣除 3% 與已納稅額。",
+        refOrderHead: "計算順序",
+        refOrder: "① 贈與財產價額 ＋ 10 年內合計額 − 扣除 = <b>課稅標準</b> ② 課稅標準 × 稅率 − 累進扣除 = <b>計算稅額</b> ③ 跨代加徵（＋） ④ 申報稅額扣除 3%（−） ⑤ 已納稅額（−）= <b>應納稅額</b>",
+        sumTitle: "摘要",
+        copyBtn: "複製 KakaoTalk 摘要",
+        discHead: "免責",
+        disclaimer: "本計算器是依 2026 年現行稅法做的模擬計算。債務承擔（附負擔贈與）、鑑價、家業繼承特例、公益法人捐贈、災害損失敗失扣除、申報期限延長皆未納入。實際申報前請先與稅務士確認。",
+        tipTitle: "知道會有幫助的事",
+        tip1k: "10 年為一個單位",
+        tip1: "贈與稅每 10 年重新起算。同一人 10 年後再次贈與，扣除也會重新適用。",
+        tip2k: "申報期限",
+        tip2: "贈與日所屬月份月底起 3 個月。超過期限 3% 扣除消失，並加徵 20% 未申報加算稅。",
+        tip3k: "父母視為同一人",
+        tip3: "即使分別從父親與母親受贈，直系尊親屬的配偶視為同一人，會合併計算。",
+        howTitle: "稅開始的地方",
+        howNote: "用數字看結構",
+        n1t: "先扣再課",
+        n1b: "贈與稅不是對收到的全額課稅，只對扣除關係別扣除後的課稅標準套用稅率。直系尊親屬 5,000 萬韓元＋結婚生育 1 億韓元，則 1 億 5,000 萬韓元以內課稅標準為 0。",
+        n2t: "10% 的門檻",
+        n2b: "課稅標準 1 億韓元以內為 10%。超過 1 億韓元的部分套用 20%，並同時適用累進扣除 1,000 萬韓元。",
+        n3t: "3% 有多大",
+        n3b: "計算稅額 1,000 萬韓元時，申報稅額扣除可減 30 萬韓元，成為 970 萬韓元。3% 看起來很小，但過了期限，這 30 萬韓元之外還會加上 200 萬韓元的未申報加算稅。",
+        n4t: "實質稅率",
+        n4b: "應納稅額除以贈與財產價額。扣除越大實質稅率下降越快，所以同樣 1 億韓元，誰給誰會讓負擔不同。",
+        faqTitle: "常見問題",
+        faqNote: "六個",
+        q1: "從父母收到 1 億 5 千萬韓元真的免贈與稅嗎？",
+        a1: "若是在結婚登記前後 2 年內，或子女出生日起 2 年內自直系尊親屬受贈，就是如此。基本扣除 5,000 萬韓元加上結婚・生育扣除 1 億韓元，<b>最高可扣 1 億 5,000 萬韓元</b>。兩項扣除以 10 年合計只適用一次，結婚・生育扣除一生以 1 億韓元為限。",
+        q2: "結婚・生育扣除只適用父母嗎？",
+        a2: "僅限<b>直系尊親屬</b>，也就是父母與祖父母。配偶、兄弟姊妹、叔伯的贈與不適用。祖父母屬直系尊親屬，但受贈人是孫子女，可能同時加計<b>跨代加徵</b>。",
+        q3: "10 年合計怎麼算？",
+        a3: "把贈與日前 10 年內自同一人受贈的金額加進本次贈與算出課稅標準，再從計算稅額減去已繳稅額。<b>直系尊親屬為贈與人時其配偶也視為同一人</b>，所以分別從父親與母親收到的錢會合併。",
+        q4: "跨代加徵什麼時候適用？",
+        a4: "像祖父母給孫子女這樣<b>跳過一個世代</b>的贈與，加徵計算稅額的 30%。受贈人未成年且贈與財產價額超過 20 億韓元時為 40%。父母給子女的贈與不會加徵。",
+        q5: "申報稅額扣除 3% 是什麼？",
+        a5: "在申報期限（贈與日所屬月份月底起 3 個月）內申報課稅標準，可扣除計算稅額的 3%，跨代加徵額也一併計算。超過期限扣除消失，並加徵<b>20% 未申報加算稅</b>與滯納加算稅。",
+        q6: "這個結果可以直接拿去申報嗎？",
+        a6: "這是模擬計算。<b>附負擔贈與（債務承擔）、非上市股票鑑價、家業繼承特例、公益法人捐贈、災害損失敗失扣除、申報期限延長</b>皆未納入。金額龐大或財產種類複雜時，請與稅務士確認。",
+        footCopy: "© 2026 Kim Yihyung · 在瀏覽器裡，為瀏覽器而做。",
+        footNet: "外部請求",
+        footP1: "作品集",
+        footP2: "所有工具",
+        footP3: "原始碼",
+        mono: "不上傳 · 不追蹤",
+        toggleTo: "切換語言",
+        relReadAsc: "直系尊親屬基本扣除 {x}",
+        relReadDesc: "直系卑親屬基本扣除 {x}",
+        relReadSpouse: "配偶基本扣除 {x}",
+        relReadOther: "其他親屬基本扣除 {x}",
+        relReadNone: "無扣除 — 收到的全額都是課稅對象",
+        dedParts: "基本 {a} ＋ 結婚・生育 {b}",
+        dedBasicOnly: "僅基本扣除",
+        dedNone: "無扣除",
+        stepGift: "贈與財產價額",
+        stepPrior: "10 年內合計",
+        stepDed: "贈與財產扣除",
+        stepBase: "課稅標準",
+        stepRaw: "計算稅額",
+        stepSur: "跨代加徵（{r}）",
+        stepCredit: "申報稅額扣除 3%",
+        stepPaid: "已納稅額",
+        stepPayable: "應納稅額",
+        stepEff: "實質稅率",
+        effSub: "應納稅額 ÷ 贈與財產價額",
+        bandLabel: "1 億以下",
+        bandLabel2: "1 億～5 億",
+        bandLabel3: "5 億～10 億",
+        bandLabel4: "10 億～30 億",
+        bandLabel5: "超過 30 億",
+        bandNone: "未達",
+        verdictZero: "在扣除範圍內。課稅標準為<b>0 韓元</b>，沒有應納贈與稅。",
+        verdictMarriage: "因結婚・生育扣除，課稅標準減少<b>{x}</b>。",
+        verdictNormal: "課稅標準<b>{b}</b> 適用 {r} 稅率，計算稅額<b>{t}</b>。期限內申報可扣除<b>{c}</b>。",
+        verdictPaid: "從 10 年合計算出的稅額減去已繳的<b>{p}</b>，剩下的就是本次應納金額。",
+        verdictSkip: "已加計跨代加徵<b>{s}</b>。",
+        sumLine: "{rel} · {gift} · 應納 {pay}",
+        sumHeadZero: "應納稅額 0 韓元 — 在扣除範圍內。",
+        sumHeadNormal: "應納稅額 {pay} · 實質稅率 {eff}",
+        copied: "已複製摘要。",
+        copyFail: "無法複製。請直接選取下方的摘要。",
+        copyTitle: "[贈與稅模擬計算 · 2026]",
+        copyRel: "關係",
+        copyGift: "贈與財產價額",
+        copyPrior: "10 年內合計",
+        copyDed: "扣除",
+        copyBase: "課稅標準",
+        copyRaw: "計算稅額",
+        copySur: "跨代加徵",
+        copyCredit: "申報稅額扣除 3%",
+        copyPaid: "已納稅額",
+        copyPay: "應納稅額",
+        copyEff: "實質稅率",
+        copyFoot: "— GiftTax，只在瀏覽器裡計算",
+        marriageOff: "結婚・生育扣除僅適用於自直系尊親屬受贈的情形。",
+        nowon: "韓元",
+        relShortAsc: "直系尊親屬",
+        relShortDesc: "直系卑親屬",
+        relShortSpouse: "配偶",
+        relShortOther: "其他親屬",
+        relShortNone: "其他",
+        copyMinor: "受贈人未成年",
+      }
   };
 
   var LANG_KEY = 'gifttax.lang';
@@ -1064,13 +1536,6 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
     return String(s).replace(/\{(\w+)\}/g, function (m, k) { return (o && o[k] != null) ? o[k] : m; });
   }
   function readLang(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
-  function initialLang() {
-    var q = '';
-    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
-    if (q === 'ko' || q === 'en') return q;
-    var stored = readLang(SHARED_KEY) || readLang(LANG_KEY);
-    return (stored === 'ko' || stored === 'en') ? stored : 'ko';
-  }
   function setMeta(sel, attr, val) { var el = document.querySelector(sel); if (el) el.setAttribute(attr, val); }
 
   /* ═════════════════════ number helpers ═════════════════════ */
@@ -1087,19 +1552,22 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
   function won(n) { return group(Math.round(n)); }
   function shortWon(n) {
     var abs = Math.abs(n);
-    if (state.lang === 'ko') {
+    if (state.lang !== 'en') {
+      var eokU = state.lang === 'ko' ? '억' : '億';
+      var manU = state.lang === 'ja' ? '万' : state.lang === 'zh-Hant' ? '萬' : '만';
+      var wonU = t('nowon');
       if (abs >= 100000000) {
         var eok = Math.floor(abs / 100000000);
         var rest = abs % 100000000;
-        if (rest === 0) return group(eok) + '억원';
-        return group(eok) + '억 ' + group(rest / 10000) + '만원';
+        if (rest === 0) return group(eok) + eokU + wonU;
+        return group(eok) + eokU + ' ' + group(rest / 10000) + manU + wonU;
       }
       if (abs >= 10000) {
         var man = Math.floor(abs / 10000);
         var rem = abs % 10000;
-        return group(man) + '만' + (rem ? ' ' + group(rem) + '원' : '원');
+        return group(man) + manU + (rem ? ' ' + group(rem) + wonU : wonU);
       }
-      return won(n) + '원';
+      return won(n) + wonU;
     }
     if (abs >= 1000000000) return group(Math.round(n / 10000000) / 100) + ' billion KRW';
     if (abs >= 1000000) return group(Math.round(n / 100000) / 10) + ' million KRW';
@@ -1177,11 +1645,8 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
 
   /* ═════════════════════ render ═════════════════════ */
   function relLabel(rel) {
-    if (rel === 'asc') return state.lang === 'ko' ? '직계존속' : 'lineal ascendant';
-    if (rel === 'desc') return state.lang === 'ko' ? '직계비속' : 'lineal descendant';
-    if (rel === 'spouse') return state.lang === 'ko' ? '배우자' : 'spouse';
-    if (rel === 'other') return state.lang === 'ko' ? '기타친족' : 'other relatives';
-    return state.lang === 'ko' ? '그 외' : 'unrelated';
+    var k = rel === 'asc' ? 'relShortAsc' : rel === 'desc' ? 'relShortDesc' : rel === 'spouse' ? 'relShortSpouse' : rel === 'other' ? 'relShortOther' : 'relShortNone';
+    return t(k);
   }
 
   function renderAll() {
@@ -1207,7 +1672,7 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
     $('minor').closest('.chk').classList.toggle('is-off', state.rel !== 'asc');
 
     /* big number */
-    $('bigVal').textContent = won(r.payable) + (state.lang === 'ko' ? '원' : ' KRW');
+    $('bigVal').textContent = won(r.payable) + (state.lang === 'ko' ? '원' : ' ' + t('nowon'));
     $('bigBox').classList.toggle('is-zero', r.payable === 0);
 
     /* stats */
@@ -1308,10 +1773,10 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
   /* ═════════════════════ copy ═════════════════════ */
   function summaryText() {
     var r = state.last || calc();
-    var cur = state.lang === 'ko' ? '원' : ' KRW';
+    var cur = state.lang === 'ko' ? '원' : ' ' + t('nowon');
     var L = [];
     L.push(t('copyTitle'));
-    L.push(t('copyRel') + ': ' + relLabel(r.rel) + (r.minor ? (state.lang === 'ko' ? ' · 수증자 미성년' : ' · minor') : ''));
+    L.push(t('copyRel') + ': ' + relLabel(r.rel) + (r.minor ? ' · ' + t('copyMinor') : ''));
     L.push(t('copyGift') + ': ' + won(r.gift) + cur);
     if (r.prior > 0) L.push(t('copyPrior') + ': ' + won(r.prior) + cur);
     L.push(t('copyDed') + ': ' + won(r.deduction) + cur + (r.dedExtra ? ' (' + fmt(t('dedParts'), { a: won(r.dedBase), b: won(r.dedExtra) }) + ')' : ''));
@@ -1380,10 +1845,61 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
   });
 
   /* ═════════════════════ language ═════════════════════ */
+  var DEFAULT_LANG = 'ko';
+  /* ═══ 4-language switch (ko · en · ja · zh-Hant) ═══ */
+  var LANGS4 = ['ko', 'en', 'ja', 'zh-Hant'];
+  function normLang(v) {
+    v = String(v == null ? '' : v).toLowerCase().replace(/_/g, '-');
+    if (v === 'ko' || v === 'ko-kr' || v === 'kr') return 'ko';
+    if (v === 'ja' || v === 'ja-jp' || v === 'jp') return 'ja';
+    if (v === 'zh-hant' || v === 'zh-tw' || v === 'zh' || v === 'tw' || v === 'zh-hk') return 'zh-Hant';
+    if (v === 'en' || v === 'en-us' || v === 'en-gb') return 'en';
+    return '';
+  }
+  function loc4() { return state.lang === 'ko' ? 'ko-KR' : state.lang === 'ja' ? 'ja-JP' : state.lang === 'zh-Hant' ? 'zh-TW' : 'en-US'; }
+  function lsGet4(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function initialLang() {
+    var f = (typeof window.__FORCED_LANG__ !== 'undefined' && window.__FORCED_LANG__) ? window.__FORCED_LANG__ : '';
+    if (f && normLang(f)) return normLang(f);
+    var q = '';
+    try { q = new URLSearchParams(location.search).get('lang') || ''; } catch (e) { q = ''; }
+    if (q && normLang(q)) return normLang(q);
+    var stored = lsGet4(typeof SHARED_KEY !== 'undefined' ? SHARED_KEY : 'kyh.lang') || lsGet4(typeof LANG_KEY !== 'undefined' ? LANG_KEY : '');
+    if (stored && normLang(stored)) return normLang(stored);
+    var h = normLang(document.documentElement.getAttribute('lang'));
+    if (h) return h;
+    return typeof DEFAULT_LANG !== 'undefined' ? DEFAULT_LANG : 'ko';
+  }
+  function syncLangUI() {
+    var lt = document.getElementById('langToggle');
+    if (!lt) return;
+    var btns = lt.querySelectorAll('[data-lang]');
+    for (var i = 0; i < btns.length; i++) {
+      var on = btns[i].getAttribute('data-lang') === state.lang;
+      btns[i].classList.toggle('on', on);
+      btns[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+  }
+  function bindLangToggle() {
+    var lt = document.getElementById('langToggle');
+    if (!lt) return;
+    lt.addEventListener('click', function (ev) {
+      var t4 = ev.target.closest('[data-lang]');
+      if (!t4) return;
+      applyLang(t4.getAttribute('data-lang'));
+    });
+  }
+
   function applyLang(lang) {
-    state.lang = lang === 'en' ? 'en' : 'ko';
+    state.lang = normLang(lang) || 'ko';
     document.documentElement.setAttribute('lang', state.lang);
     document.title = t('docTitle').replace(/&amp;/g, '&');
+    var _md4 = t('metaDesc');
+    if (_md4 && _md4 !== 'metaDesc') {
+      var _mde = document.querySelector('meta[name="description"]'); if (_mde) _mde.setAttribute('content', _md4);
+      var _ode = document.querySelector('meta[property="og:description"]'); if (_ode) _ode.setAttribute('content', _md4);
+      var _tde = document.querySelector('meta[name="twitter:description"]'); if (_tde) _tde.setAttribute('content', _md4);
+    }
     setMeta('meta[property="og:title"]', 'content', t('docTitle').split('|')[0].replace(/&amp;/g, '&').trim());
     var nodes = document.querySelectorAll('[data-i18n]');
     for (var i = 0; i < nodes.length; i++) {
@@ -1402,18 +1918,16 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
     }
     var lt = $('langToggle');
     if (lt) {
-      var spans = lt.querySelectorAll('[data-lt]');
-      for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
-      lt.setAttribute('aria-label', t('toggleTo'));
-      lt.setAttribute('title', t('toggleTo'));
+      syncLangUI();
     }
     document.querySelectorAll('.suffix').forEach(function (el) { el.textContent = t('won'); });
     syncInputs();
     renderAll();
     try { localStorage.setItem(LANG_KEY, state.lang); localStorage.setItem(SHARED_KEY, state.lang); } catch (e) { /* blocked */ }
   }
-  $('langToggle').addEventListener('click', function () {
-    applyLang(state.lang === 'ko' ? 'en' : 'ko');
+  $('langToggle').addEventListener('click', function (ev) {
+    var _t4 = ev.target.closest('[data-lang]');
+    if (_t4) applyLang(_t4.getAttribute('data-lang'));
   });
 
   /* ═════════════════════ boot ═════════════════════ */

@@ -155,6 +155,9 @@ button, input, select, textarea { font-family: inherit; color: inherit; }
 .lang-toggle:active { transform: scale(.94); }
 .lang-toggle .lt.on { color: var(--accent); }
 .lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.lang-toggle .lt { appearance: none; border: 0; background: none; color: inherit; font: inherit; letter-spacing: inherit; line-height: 1; padding: 1px 0; cursor: pointer; transition: color .2s; }
+.lang-toggle .lt:hover { color: var(--ink); }
+.lang-toggle .lt:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 .topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
 .topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
 
@@ -366,7 +369,7 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
 .foot .net b { color: var(--ok); }
 
 @media (max-width: 640px) {
-  .wrap { padding: 0 14px 36px; }
+  .wrap { padding: 0 16px 36px; }
   .topbar { padding: 14px 0 8px; }
   .brand-txt { font-size: 12px; letter-spacing: .1em; }
   .hero { padding: 12px 0 10px; }
@@ -392,11 +395,15 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       <span class="brand-txt">Kim Yihyung</span>
     </a>
     <div class="top-actions">
-      <button class="lang-toggle" id="langToggle" type="button" title="View in English" aria-label="View in English">
-        <span class="lt on" data-lt="ko">KO</span>
+      <div class="lang-toggle" id="langToggle" role="group" aria-label="Language">
+        <button class="lt" type="button" data-lt="ko" lang="ko">KO</button>
         <span class="lsep" aria-hidden="true">|</span>
-        <span class="lt" data-lt="en">EN</span>
-      </button>
+        <button class="lt" type="button" data-lt="en" lang="en">EN</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lt="ja" lang="ja">JA</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lt="zh-Hant" lang="zh-Hant">繁中</button>
+      </div>
       <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← 도구 전체</a>
     </div>
   </header>
@@ -754,10 +761,40 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
 
   var LANG_KEY = 'loancalc.lang';
   var SHARED_KEY = 'kyh.lang';
+  var LANGS = ['ko', 'en', 'ja', 'zh-Hant'];
+  var DEFAULT_LANG = normLang(document.documentElement.getAttribute('lang')) || 'ko';
+  function normLang(v) {
+    var s = String(v == null ? '' : v).trim().toLowerCase().replace(/_/g, '-');
+    if (s === 'ko' || s === 'kr' || s === 'ko-kr') return 'ko';
+    if (s === 'en' || s === 'en-us' || s === 'en-gb' || s === 'en-au') return 'en';
+    if (s === 'ja' || s === 'jp' || s === 'ja-jp') return 'ja';
+    if (s === 'zh-hant' || s === 'zh-tw' || s === 'zh-hk' || s === 'zh-mo' || s === 'tw' || s === 'zh' || s === 'zh-hant-tw') return 'zh-Hant';
+    return '';
+  }
+  function setMeta(sel, attr, val) { var el = document.querySelector(sel); if (el && val != null) el.setAttribute(attr, val); }
+  function readStoredLang(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  /* read-only: per-language title/description for the static /en/ /ja/ /zh-tw/ builder.
+     A getter, so it is computed when read (the builder runs after this script). */
+  Object.defineProperty(window, '__I18N_META__', {
+    configurable: true,
+    get: function () {
+      var out = {};
+      var ogl = { ko: 'ko_KR', en: 'en_US', ja: 'ja_JP', 'zh-Hant': 'zh_TW' };
+      Object.keys(I18N || {}).forEach(function (lg) {
+        var d = I18N[lg] || {};
+        out[lg] = { htmlLang: lg, ogLocale: ogl[lg] || 'en_US',
+                    title: d.metaTitle || d.docTitle || '', description: d.metaDesc || '' };
+      });
+      return out;
+    }
+  });
   var CHECK_DATE = '2026-11-18';
 
   var I18N = {
     ko: {
+      langLabel: '언어',
+      metaTitle: 'LoanCalc — 원리금균등·원금균등·만기일시 비교와 스트레스 DSR',
+      metaDesc: '같은 3억원·연 4.2%·30년이라도 원리금균등은 첫 달 1,467,052원, 원금균등은 1,883,333원이고 총이자는 반대로 3,800만원 넘게 차이납니다. 거치기간, 스트레스 DSR 한도, 월별 상환표까지 이 페이지에서 확인하며 입력한 내용은 탭을 떠나지 않습니다.',
       docTitle: 'LoanCalc — 원리금균등·원금균등·만기일시 비교, 스트레스 DSR, 상환 스케줄 | Kim Yihyung',
       brandAria: 'Kim Yihyung — 포트폴리오',
       back: '← 도구 전체',
@@ -923,6 +960,9 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       schedFootPrin: '원금'
     },
     en: {
+      langLabel: 'Language',
+      metaTitle: 'LoanCalc — annuity vs equal principal vs bullet, with stress DSR',
+      metaDesc: 'On ₩300M at 4.2% over 30 years the annuity method takes ₩1,467,052 in month one while equal principal takes ₩1,883,333 — and the total interest differs by more than ₩38M the other way. Add a grace period, test a stress DSR limit and read the month-by-month schedule — nothing you type leaves the tab.',
       docTitle: 'LoanCalc — annuity vs equal principal vs bullet, stress DSR and amortisation | Kim Yihyung',
       brandAria: 'Kim Yihyung — portfolio',
       back: '← All tools',
@@ -1087,6 +1127,318 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       schedFootPay: 'payment',
       schedFootInt: 'interest',
       schedFootPrin: 'principal'
+    },
+    'ja': {
+      docTitle: 'LoanCalc — 元利均等・元金均等・満期一括の比較、ストレスDSRと返済表 | Kim Yihyung',
+      metaTitle: 'LoanCalc — 3つの返済方式の比較とストレスDSR',
+      metaDesc: '同じ3億ウォン・年4.2%・30年でも、元利均等の初回は1,467,052ウォン、元金均等は1,883,333ウォン。総利息は逆に3,800万ウォン以上変わります。据置期間、ストレスDSR上限、月ごとの返済表までこのページで確認でき、入力した内容はタブの外に出ません。',
+      langLabel: '言語を切り替え',
+      brandAria: 'Kim Yihyung — ポートフォリオ',
+      back: '← ツール一覧',
+      eyebrow: 'LoanCalc · 3つの返済方式 · ストレスDSR · アップロードゼロ',
+      h1: '同じローンでも、<br><span class="soft">方式で支払う額が変わる。</span><br><span class="gold">横に並べて比べる。</span>',
+      lede: '3億ウォン・年4.2%・30年なら、元利均等の初回は 1,467,052ウォン、元金均等は 1,883,333ウォン。ところが総利息は逆に3,800万ウォン以上変わります。据置期間を入れ、ストレスDSRの上限を試し、月ごとの返済表までここで読めます。入力した内容はタブの外に出ません。',
+      pillUp: 'アップロード 0 バイト',
+      pillNet: '外部リクエスト 0 件',
+      pillWon: 'ウォン単位で四捨五入',
+      pillCsv: 'Excel対応 CSV · BOM',
+      workAria: 'ローン計算',
+      tabAria: 'ツール',
+      tab1: '3方式の比較',
+      tab2: 'ストレスDSR',
+      tab3: '返済表 · CSV',
+      cTitle: '同じ条件から3つの方式を',
+      cNote: '据置期間を含む',
+      fPrincipal: '借入元金',
+      unitWon: 'ウォン',
+      fRate: '年利率',
+      unitYearRate: '年',
+      graceHint: '利息',
+      unitShareLimit: '所得比',
+      fTerm: '期間',
+      unitYear: '年',
+      unitMonth: 'か月',
+      fGrace: '据置期間',
+      unitMonthShort: 'か月',
+      thMethod: '方式',
+      thFirst: '初回返済額',
+      thPeak: '最高返済額',
+      thInterest: '総利息',
+      thTotal: '返済総額',
+      m_annuity: '元利均等',
+      m_principal: '元金均等',
+      m_bullet: '満期一括',
+      mAnnuity: '元利均等',
+      mPrincipal: '元金均等',
+      mBullet: '満期一括',
+      dTitle: '所得からいくら借りられるか',
+      dNote: 'ストレスバッファー込み',
+      fIncome: '年所得',
+      fExisting: '既存ローンの年間返済額',
+      fNewLoan: '新規借入元金',
+      fDsrRate: '新規ローンの金利',
+      fDsrYears: '期間',
+      unitYearShort: '年',
+      fStress: 'ストレス加算',
+      fLimit: 'DSR上限',
+      sExisting: '既存のDSR',
+      sExistingSub: '既存ローンだけ',
+      sStress: 'ストレスDSR',
+      sStressSub: '新規ローンを含む',
+      sPlain: 'バッファーなしのDSR',
+      sPlainSub: '参考値',
+      sMax: '借入可能な最大元金',
+      thDsrRow: '項目',
+      thAnnual: '年間返済額',
+      thDsr: 'DSR',
+      dInfoHead: '基準',
+      dInfo: '<b>ストレスDSR第3段階</b>(2025年7月1日施行)に基づきます: 加算 <b>1.50%p</b>、ソウル・京畿・仁川以外の住宅ローンは <b>0.75%p</b>、信用ローンは1億ウォン超のみに適用。混合金利・変動金利の住宅ローンはバッファーの一部(変動は100%)を使います。上限は銀行 40%、ノンバンク 50% で、政策は変わり得ます — 実際の数字は金融機関の与信審査で決まります。確認日 <b>{d}</b>。',
+      scTitle: '月ごとの返済表',
+      scNote: '繰上返済のシミュレーション付き',
+      schedAria: '返済方式',
+      fExtra: '毎月の追加返済',
+      fSim: '結果',
+      btnCsv: 'CSVをダウンロード (BOM)',
+      thRound: '回',
+      thPay: '返済額',
+      thInt: '利息',
+      thPrin: '元金',
+      thBal: '残高',
+      scCaveat: '返済表は<code>ウォン</code>単位に四捨五入し、残高は最終回で清算します。CSVは<b>UTF-8 BOM</b>付きで書き出すので Excel でも韓国語が正しく開けます。最終行に繰上返済シミュレーションの結果が入ります。',
+      sideHead: '選択中の方式',
+      sideFirstUnit: '初回返済額',
+      sideMethod: '方式',
+      sidePeak: '最高返済額',
+      sideInterest: '総利息',
+      sideTotal: '返済総額',
+      sideRatio: '利息の割合',
+      sideCaveat: '比較表の行をクリックするとその方式が選ばれ、返済表タブもそれに従います。',
+      defHead: 'どこが違うか',
+      def1k: '元利均等',
+      def1v: '毎月の返済額が同じ',
+      def2k: '元金均等',
+      def2v: '毎月の元金が同じ',
+      def3k: '満期一括',
+      def3v: '利息だけ払い、元金は満期に',
+      defCaveat: '元利均等は<b>毎月の返済額が一定</b>で計画しやすく、元金均等は<b>総額が少なく</b>済みますが初めが重い。満期一括は<b>毎月の負担が最も軽く、総利息は最も大きい</b>。同じ金利と期間ならこの順序は変わりません。',
+      basisHead: '基準と限界',
+      basis: '実際に支払う額は<b>金利・手数料・税金</b>で変わります。このページが計算するのは元金と利息だけです: 繰上返済手数料、印紙税、抵当権設定費用、保証料は含みません。政策は <b>{d}</b> 時点で、金利はすべて入力した数字です。',
+      howTitle: '数字が何をしているか',
+      howNote: '3つの落とし穴',
+      n1h: '初回だけでは判断できない',
+      n1p: '元金均等の初回 1,883,333ウォンは<b>最も重い月</b>で、元利均等の 1,467,052ウォンは<b>30年間まったく同じ</b>です。並べると元金均等が高く見えますが、最終回は83万ウォン台です。<b>総額</b>と<b>毎月の資金繰り</b>は分けて見てください。',
+      n2h: '据置期間は無料ではない',
+      n2p: '据置中は利息だけを払うので毎月の額は下がります — そして元金は1ウォンも減りません。3億ウォンで1年の据置を置くと<b>利息だけで1,260万ウォン</b>かかり、同じ3億ウォンを29年に分けるので、返済額も総利息も上がります。',
+      n3h: '繰上返済は利息から効く',
+      n3p: '追加で払った分は<b>元金</b>を削り、減った元金が翌月の利息を減らします。だから1年目に払う100万ウォンは、20年目に払う100万ウォンよりずっと多くを節約します。このシミュレーションは<b>毎月同じ額</b>を追加し、繰上返済手数料は差し引きません。',
+      faqTitle: 'よくある質問',
+      faqNote: '方式 · DSR · 手数料',
+      q1: '銀行の試算と少し違うのはなぜですか?',
+      a1: 'このページは<b>ウォン単位で四捨五入</b>し、利息を<b>毎月・単利</b>で計算します。銀行は実行日から返済日までの実日数で利息を計算し、印紙税・登記費用・保証料・繰上返済手数料を加えます。総額で数万ウォン違うことはありますが、<b>方式どうしの比較</b>はほとんど変わりません。',
+      q2: 'DSR 40% は給与の40%を返済に使えるという意味ですか?',
+      a2: 'すべてのローンの<b>年間の元金と利息</b>を合わせて所得の40%以下に収める、という意味です。利息だけでなく元金も数え、新規ローンは<b>ストレス金利</b>で審査されます。銀行は40%、ノンバンクは50%です。',
+      q3: '満期一括が最も高くつくのはなぜですか?',
+      a3: '<b>元金を1ウォンも返さない</b>まま満期を迎えるからです。利息は残高に付くので、3億ウォン全額が30年間利息を生みます。元利均等は毎月少しずつ残高を減らし、元金均等は最も速く減らします。その代わり満期一括は、ある一日に<b>3億ウォン全額</b>を用意する必要があります。',
+      q4: '入力した内容は保存されますか?',
+      a4: 'いいえ。所得や借入額はこのタブのメモリ上にだけあり、サーバーには届きません。他のホストからフォントやスクリプトを読み込むこともなく、フッターは<b>PerformanceObserver</b>で数えたクロスオリジン要求を0と表示します。タブを閉じれば数字は消えます。',
+      footCopy: '© 2026 Kim Yihyung · ブラウザで、ブラウザのために。',
+      footNet: '外部リクエスト',
+      footP1: 'ポートフォリオ',
+      footP2: 'ツール一覧',
+      footP3: 'ソース',
+      toggleTo: '言語を切り替え',
+      stReady: '値を変えるとすぐに再計算します。',
+      stBad: '入力を確認してください — 元金と期間は0より大きくする必要があります。',
+      stSaved: 'CSVを保存しました。',
+      stCopy: 'クリップボードにコピーしました。',
+      stCopyFail: 'ブラウザがクリップボードをブロックしました。',
+      readMonths: '{n} か月',
+      readTerm: '{m} か月 · {y} 年',
+      readRate: '月 {r}% · 3億ウォンで月 {i}',
+      readGrace: '据置中は利息のみ',
+      readGraceNone: '据置期間なし',
+      readStress: '首都圏 1.50 · 地方 0.75',
+      readNone: 'なし',
+      readLimit: '銀行 40 · ノンバンク 50',
+      readExtra: '追加返済なし',
+      readExtra2: '元金に充当',
+      simNone: '追加返済を入れると、短くなる月数と減る利息が出ます。',
+      simLine: '{m} か月短縮',
+      simLine0: '短縮なし',
+      simSaved: '利息 {n} を節約',
+      simFail: '追加返済が毎月の返済額を超えています — 残高は1回で完済します。',
+      dsrLineExisting: '既存ローン',
+      dsrLineNew: '新規ローン(ストレス)',
+      dsrLineTotal: '合計',
+      dsrMaxSub: '{y}年 · 上限 {l}%',
+      dsrOver: '上限超過',
+      dsrUnder: '上限内',
+      dsrNoIncome: '年所得を入力してください。',
+      dsrZero: '余力なし',
+      dsrMaxNote: '既存ローンをそのままに、残った余力のすべてを新規ローンに充てた場合',
+      dsrOverBy: '余力 {n} が残ります',
+      dsrOverNeg: '上限を {n} 超過',
+      schedMeta: '{n} 回 · 利息 {i}',
+      schedFootRound: '合計',
+      schedFootPay: '返済額',
+      schedFootInt: '利息',
+      schedFootPrin: '元金'
+    },
+    'zh-Hant': {
+      docTitle: 'LoanCalc — 本息攤還、本金攤還與到期還本比較，壓力 DSR 與還款表 | Kim Yihyung',
+      metaTitle: 'LoanCalc — 三種還款方式比較與壓力 DSR',
+      metaDesc: '同樣 3 億韓元、年利率 4.2%、30 年，本息攤還第一期是 1,467,052 韓元，本金攤還是 1,883,333 韓元，但總利息反過來差超過 3,800 萬韓元。可加入寬限期、試算壓力 DSR 上限，並看逐月還款表；輸入的內容不會離開分頁。',
+      langLabel: '切換語言',
+      brandAria: 'Kim Yihyung — 作品集',
+      back: '← 所有工具',
+      eyebrow: 'LoanCalc · 三種還款方式 · 壓力 DSR · 零上傳',
+      h1: '同一筆貸款，<br><span class="soft">方式不同，付的錢也不同。</span><br><span class="gold">並排比給你看。</span>',
+      lede: '3 億韓元、年利率 4.2%、30 年，本息攤還第一期是 1,467,052 韓元，本金攤還是 1,883,333 韓元 — 但總利息反過來差超過 3,800 萬韓元。可以在這裡加入寬限期、試算壓力 DSR 上限、讀逐月還款表。輸入的內容不會離開這個分頁。',
+      pillUp: '上傳 0 位元組',
+      pillNet: '外部請求 0 次',
+      pillWon: '四捨五入到韓元',
+      pillCsv: 'Excel 可用 CSV · BOM',
+      workAria: '貸款試算',
+      tabAria: '工具',
+      tab1: '三種方式比較',
+      tab2: '壓力 DSR',
+      tab3: '還款表 · CSV',
+      cTitle: '同一組條件，三種方式',
+      cNote: '含寬限期',
+      fPrincipal: '貸款本金',
+      unitWon: '韓元',
+      fRate: '年利率',
+      unitYearRate: '年',
+      graceHint: '利息',
+      unitShareLimit: '占所得',
+      fTerm: '期間',
+      unitYear: '年',
+      unitMonth: '個月',
+      fGrace: '寬限期',
+      unitMonthShort: '個月',
+      thMethod: '方式',
+      thFirst: '第一期還款',
+      thPeak: '最高還款',
+      thInterest: '總利息',
+      thTotal: '還款總額',
+      m_annuity: '本息攤還',
+      m_principal: '本金攤還',
+      m_bullet: '到期還本',
+      mAnnuity: '本息攤還',
+      mPrincipal: '本金攤還',
+      mBullet: '到期還本',
+      dTitle: '多少所得能貸多少',
+      dNote: '含壓力緩衝',
+      fIncome: '年所得',
+      fExisting: '現有貸款年還款額',
+      fNewLoan: '新貸款本金',
+      fDsrRate: '新貸款利率',
+      fDsrYears: '期間',
+      unitYearShort: '年',
+      fStress: '壓力加碼',
+      fLimit: 'DSR 上限',
+      sExisting: '現有 DSR',
+      sExistingSub: '只算現有貸款',
+      sStress: '壓力 DSR',
+      sStressSub: '含新貸款',
+      sPlain: '未加緩衝的 DSR',
+      sPlainSub: '僅供參考',
+      sMax: '可貸最高本金',
+      thDsrRow: '項目',
+      thAnnual: '年還款額',
+      thDsr: 'DSR',
+      dInfoHead: '基準',
+      dInfo: '依 <b>壓力 DSR 第三階段</b>(2025 年 7 月 1 日上路)：加碼 <b>1.50%p</b>，首爾、京畿、仁川以外的房貸為 <b>0.75%p</b>，信用貸款只適用 1 億韓元以上。混合利率與機動利率房貸只套用一部分緩衝(機動為 100%)。上限銀行 40%、非銀行 50%，政策可能變動 — 實際數字由金融機構的授信審查決定。確認日 <b>{d}</b>。',
+      scTitle: '逐月還款表',
+      scNote: '附提前還款模擬',
+      schedAria: '還款方式',
+      fExtra: '每月多還',
+      fSim: '結果',
+      btnCsv: '下載 CSV (BOM)',
+      thRound: '期',
+      thPay: '還款',
+      thInt: '利息',
+      thPrin: '本金',
+      thBal: '餘額',
+      scCaveat: '還款表四捨五入到<code>韓元</code>，餘額在最後一期一次結清。CSV 以 <b>UTF-8 BOM</b> 寫出，Excel 開啟韓文不會亂碼，最後一行放提前還款的模擬結果。',
+      sideHead: '目前選用的方式',
+      sideFirstUnit: '第一期還款',
+      sideMethod: '方式',
+      sidePeak: '最高還款',
+      sideInterest: '總利息',
+      sideTotal: '還款總額',
+      sideRatio: '利息占比',
+      sideCaveat: '點比較表的那一列就會選用該方式，還款表分頁也跟著切換。',
+      defHead: '差在哪裡',
+      def1k: '本息攤還',
+      def1v: '每月還一樣多',
+      def2k: '本金攤還',
+      def2v: '每月還的本金一樣多',
+      def3k: '到期還本',
+      def3v: '只付利息，本金到期一次還',
+      defCaveat: '本息攤還的<b>每月金額固定</b>、好規劃；本金攤還<b>總額較省</b>但一開始較重。到期還本的<b>每月負擔最輕，總利息最多</b>。同樣的利率與期間，這個順序不會變。',
+      basisHead: '基準與限制',
+      basis: '實際要付多少還取決於<b>利率、手續費與稅費</b>。這個頁面只算本金與利息：不含提前還款違約金、印花稅、抵押權設定費、保證費。政策以 <b>{d}</b> 為準，利率都是你輸入的數字。',
+      howTitle: '這些數字在做什麼',
+      howNote: '三個陷阱',
+      n1h: '不能只看第一個月',
+      n1p: '本金攤還的第一期 1,883,333 韓元是<b>最重的一個月</b>；本息攤還的 1,467,052 韓元<b>三十年都不變</b>。並排看起來本金攤還比較貴，但它最後一期只剩 83 萬多韓元。<b>總額</b>和<b>現金流</b>要分開比較。',
+      n2h: '寬限期不是免費的',
+      n2p: '寬限期內只付利息，所以每月金額下降 — 而本金完全不會減少。3 億韓元加一年寬限期，<b>光是利息就要 1,260 萬韓元</b>，同樣的 3 億再分到 29 年，還款金額和總利息都跟著上升。',
+      n3h: '提前還款先減利息',
+      n3p: '多付的錢削的是<b>本金</b>，本金變小，下個月的利息就變少。所以第一年多付的 100 萬韓元，比第二十年才付的 100 萬韓元省得多。這個模擬是<b>每月固定多付</b>，且不扣提前還款違約金。',
+      faqTitle: '常見問題',
+      faqNote: '方式 · DSR · 費用',
+      q1: '為什麼跟銀行試算有一點差距?',
+      a1: '這個頁面<b>四捨五入到韓元</b>，利息按<b>每月單利</b>計算。銀行按撥款日到還款日的實際天數計息，再加上印花稅、設定費、保證費與提前還款違約金。總額可能差幾萬韓元，但<b>方式之間的高下</b>幾乎不變。',
+      q2: 'DSR 40% 是指薪水的 40% 可以拿去還款嗎?',
+      a2: '意思是所有貸款的<b>每年本金加利息</b>合計要壓在所得的 40% 以內。本金也要算，不只利息；新貸款還用<b>壓力利率</b>去審。銀行是 40%，非銀行是 50%。',
+      q3: '為什麼到期還本最貴?',
+      a3: '因為到期前<b>本金一元都沒還</b>。利息跟著餘額走，等於 3 億韓元全額背了三十年的利息。本息攤還每月把餘額削掉一點，本金攤還削得最快。代價是到期還本要在同一天準備好<b>整整 3 億韓元</b>。',
+      q4: '我輸入的內容會被儲存嗎?',
+      a4: '不會。所得和貸款金額只存在這個分頁的記憶體裡，不會送到任何伺服器。頁面不從其他主機載入字型或腳本，頁尾用 <b>PerformanceObserver</b> 統計的跨網域請求是 0。關掉分頁，數字就沒了。',
+      footCopy: '© 2026 Kim Yihyung · 在瀏覽器裡，為瀏覽器而做。',
+      footNet: '外部請求',
+      footP1: '作品集',
+      footP2: '所有工具',
+      footP3: '原始碼',
+      toggleTo: '切換語言',
+      stReady: '改一個數字就立刻重算。',
+      stBad: '請檢查輸入 — 本金和期間必須大於零。',
+      stSaved: '已儲存 CSV。',
+      stCopy: '已複製到剪貼簿。',
+      stCopyFail: '瀏覽器阻擋了剪貼簿。',
+      readMonths: '{n} 個月',
+      readTerm: '{m} 個月 · {y} 年',
+      readRate: '月 {r}% · 3 億韓元每月 {i}',
+      readGrace: '寬限期只付利息',
+      readGraceNone: '沒有寬限期',
+      readStress: '首都圈 1.50 · 地方 0.75',
+      readNone: '無',
+      readLimit: '銀行 40 · 非銀行 50',
+      readExtra: '沒有多還',
+      readExtra2: '沖抵本金',
+      simNone: '填入每月多還的金額，就會看到縮短幾個月、省下多少利息。',
+      simLine: '縮短 {m} 個月',
+      simLine0: '沒有縮短',
+      simSaved: '省下利息 {n}',
+      simFail: '多還的金額超過每月還款額 — 餘額會一次結清。',
+      dsrLineExisting: '現有貸款',
+      dsrLineNew: '新貸款(壓力)',
+      dsrLineTotal: '合計',
+      dsrMaxSub: '{y} 年 · 上限 {l}%',
+      dsrOver: '超過上限',
+      dsrUnder: '在上限內',
+      dsrNoIncome: '請輸入年所得。',
+      dsrZero: '沒有餘裕',
+      dsrMaxNote: '保留現有貸款，把剩下的餘裕全部放在新貸款上',
+      dsrOverBy: '還剩 {n} 的餘裕',
+      dsrOverNeg: '超過上限 {n}',
+      schedMeta: '{n} 期 · 利息 {i}',
+      schedFootRound: '合計',
+      schedFootPay: '還款',
+      schedFootInt: '利息',
+      schedFootPrin: '本金'
     }
   };
 
@@ -1580,9 +1932,15 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
   }
 
   function applyLang(lang) {
-    state.lang = lang === 'en' ? 'en' : 'ko';
+    state.lang = normLang(lang) || DEFAULT_LANG;
     document.documentElement.setAttribute('lang', state.lang);
     document.title = t('docTitle');
+    setMeta('meta[name="description"]', 'content', t('metaDesc'));
+    setMeta('meta[property="og:title"]', 'content', t('metaTitle'));
+    setMeta('meta[property="og:description"]', 'content', t('metaDesc'));
+    setMeta('meta[name="twitter:title"]', 'content', t('metaTitle'));
+    setMeta('meta[name="twitter:description"]', 'content', t('metaDesc'));
+    setMeta('meta[property="og:locale"]', 'content', state.lang === 'zh-Hant' ? 'zh_TW' : (state.lang === 'ja' ? 'ja_JP' : (state.lang === 'ko' ? 'ko_KR' : 'en_US')));
     var nodes = document.querySelectorAll('[data-i18n]');
     for (var i = 0; i < nodes.length; i++) {
       var v = t(nodes[i].getAttribute('data-i18n'));
@@ -1599,10 +1957,16 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       if (v) nodes[i].setAttribute('aria-label', v);
     }
     var lt = $('langToggle');
-    var spans = lt.querySelectorAll('[data-lt]');
-    for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
-    lt.setAttribute('aria-label', t('toggleTo'));
-    lt.setAttribute('title', t('toggleTo'));
+    if (lt) {
+      var lbs = lt.querySelectorAll('[data-lt]');
+      for (i = 0; i < lbs.length; i++) {
+        var _on = lbs[i].getAttribute('data-lt') === state.lang;
+        lbs[i].classList.toggle('on', _on);
+        lbs[i].setAttribute('aria-pressed', _on ? 'true' : 'false');
+      }
+      lt.setAttribute('aria-label', t('langLabel'));
+    }
+
 
     renderCompare();
     renderDsr();
@@ -1614,14 +1978,25 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
   }
 
   function initialLang() {
-    var saved = null;
-    try { saved = localStorage.getItem(SHARED_KEY) || localStorage.getItem(LANG_KEY); } catch (e) { }
-    return saved === 'en' ? 'en' : 'ko';
+    var l = normLang(window.__FORCED_LANG__);
+    if (l) return l;
+    try { l = normLang(new URLSearchParams(location.search).get('lang')); } catch (e) { l = ''; }
+    if (l) return l;
+    l = normLang(readStoredLang(SHARED_KEY)) || normLang(readStoredLang(LANG_KEY));
+    if (l) return l;
+    return normLang(document.documentElement.getAttribute('lang')) || DEFAULT_LANG;
   }
 
   /* ═════════════════════ events ═════════════════════ */
 
-  $('langToggle').addEventListener('click', function () { applyLang(state.lang === 'ko' ? 'en' : 'ko'); });
+  var ltRoot = $('langToggle');
+  if (ltRoot) {
+    ltRoot.addEventListener('click', function (ev) {
+      var b = ev.target && ev.target.closest ? ev.target.closest('[data-lt]') : null;
+      if (!b) return;
+      applyLang(b.getAttribute('data-lt'));
+    });
+  }
 
   var tabEls = document.querySelectorAll('.tabs button');
   for (var ti = 0; ti < tabEls.length; ti++) {

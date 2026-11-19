@@ -522,6 +522,22 @@ input[type="range"]::-moz-range-thumb {
     transition-duration: .001ms !important;
   }
 }
+
+/* ═══ 4-language switch: KO | EN | JA | 繁中 ═══ */
+.lang-toggle { padding: 0 3px; gap: 0; cursor: default; }
+.lang-toggle .lt {
+  appearance: none; -webkit-appearance: none; border: 0; background: transparent; color: var(--muted2);
+  height: 100%; padding: 0 6px; margin: 0; font-family: inherit; font-size: 11px; font-weight: 700;
+  letter-spacing: .02em; line-height: 1; cursor: pointer; border-radius: 8px;
+  transition: color .15s, background .15s;
+}
+.lang-toggle .lt:hover { color: var(--ink); }
+.lang-toggle .lt.on { color: var(--accent); }
+@media (max-width: 430px) {
+  .lang-toggle { height: 30px; }
+  .lang-toggle .lt { padding: 0 4px; font-size: 10px; }
+}
+:lang(ja) body, :lang(zh-Hant) body { word-break: normal; overflow-wrap: break-word; line-break: strict; }
 </style>
 </head>
 <body>
@@ -533,11 +549,15 @@ input[type="range"]::-moz-range-thumb {
       <span class="brand-txt">Kim Yihyung</span>
     </a>
     <div class="top-actions">
-      <button class="lang-toggle" id="langToggle" type="button" title="View in Korean" aria-label="View in Korean">
-        <span class="lt on" data-lt="en">EN</span>
+      <div class="lang-toggle" id="langToggle" role="group" aria-label="Language · 언어 · 言語 · 語言">
+        <button class="lt" type="button" data-lang="ko" aria-pressed="false">KO</button>
         <span class="lsep" aria-hidden="true">|</span>
-        <span class="lt" data-lt="ko">KO</span>
-      </button>
+        <button class="lt on" type="button" data-lang="en" aria-pressed="true">EN</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lang="ja" aria-pressed="false">JA</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lang="zh-Hant" aria-pressed="false">繁中</button>
+      </div>
       <a class="back" href="../" data-i18n="backTools">← Tools</a>
     </div>
   </header>
@@ -858,6 +878,8 @@ window.addEventListener('unhandledrejection', function (e) {
   var I18N = {
     en: {
       docTitle: 'QRForge — Zero-Upload QR Code Generator & Image Decoder | Kim Yihyung',
+      metaTitle: "QRForge — Zero-Upload QR Code Generator & Image Decoder",
+      bytesUnit: "bytes",
       metaDesc: 'Generate QR codes for links, text, Wi-Fi and contacts with custom colours, quiet zone and error correction, download as PNG or SVG, and read any QR image or camera frame back — all in your browser with zero uploads and zero external requests.',
       ogTitle: 'QRForge — Zero-Upload QR Code Generator & Decoder',
       ogDesc: 'Make a QR code — link, text, Wi-Fi, contact — in custom colours, then read one back from an image or the camera. 0 bytes uploaded, 0 external requests.',
@@ -979,6 +1001,8 @@ window.addEventListener('unhandledrejection', function (e) {
     },
     ko: {
       docTitle: 'QRForge — 업로드 없는 QR 코드 생성기·이미지 판독기 | Kim Yihyung',
+      metaTitle: "QRForge — 업로드 없는 QR 코드 생성기·이미지 판독기",
+      bytesUnit: "바이트",
       metaDesc: '링크·텍스트·Wi-Fi·연락처 QR을 색상과 여백, 오류 정정 단계까지 조절해 만들고 PNG·SVG로 내려받으며, 이미지나 카메라 화면의 QR을 그 자리에서 읽어 냅니다. 업로드도 외부 요청도 없이 브라우저 안에서 끝납니다.',
       ogTitle: 'QRForge — 업로드 없는 QR 생성기·판독기',
       ogDesc: '링크·텍스트·Wi-Fi·연락처 QR을 원하는 색으로 만들고, 이미지나 카메라로 다시 읽어 냅니다. 업로드 0바이트, 외부 요청 0건.',
@@ -1097,7 +1121,249 @@ window.addEventListener('unhandledrejection', function (e) {
       netLabel: '이 페이지의 외부 요청',
       back: '← 포트폴리오',
       footTools: '도구 전체'
-    }
+    },
+      ja: {
+        docTitle: "QRForge — アップロード不要のQRコード作成・画像読み取り | Kim Yihyung",
+        metaTitle: "QRForge — アップロード不要のQRコード作成・画像読み取り",
+        metaDesc: "リンク・テキスト・Wi-Fi・連絡先のQRを色・余白・誤り訂正レベルまで調整して作り、PNG・SVGで保存。画像やカメラ越しのQRをその場で読み取ります。アップロードも外部リクエストもなく、ブラウザの中で完結します。",
+        ogTitle: "QRForge — アップロード不要のQR作成・読み取り",
+        ogDesc: "リンク・テキスト・Wi-Fi・連絡先のQRを好きな色で作り、画像やカメラから読み取り直します。アップロード0バイト、外部リクエスト0件。",
+        brandAria: "Kim Yihyung — ポートフォリオ",
+        backTools: "← ツール",
+        toggleTo: "言語を切り替え",
+        tabAria: "モード",
+        tabGen: "作成",
+        tabDec: "読み取り",
+        pillLive: "アップロード0バイト",
+        pillLocal: "ブラウザの中で<b>100%ローカル</b>",
+        pillOut: "<b>PNG · SVG</b>書き出し · <b>画像</b>読み取り",
+        h1: "QRコードを作って、<br><span class=\"dim\">また読み取ります。</span>",
+        lede: "1つのページに作成と読み取りの両方を置きました。リンク・メモ・Wi-Fi・連絡先を入れてPNGかSVGで持ち出し、QRの写真を落とせば中の内容を読み取ります。どちらもこのタブの中で動きます。アップロードも、アカウントも、CDNから読み込むライブラリもありません。",
+        prevTitle: "プレビュー",
+        prevAria: "QRコードのプレビュー",
+        emptyState: "内容を入力するとここにコードが現れます。",
+        dlPng: "PNG",
+        dlSvg: "SVG",
+        tooLong: "QRコードに入れるには内容が多すぎます — {n}バイトで上限{max}バイトを超えました。内容を減らすか、誤り訂正をLに下げてください。",
+        lowContrast: "コントラストが低いです。スキャナが読めないことがあります。明るい背景に暗い前景が最もよく読めます。",
+        inverted: "背景が前景より暗い — 反転したコードです。読めるアプリもありますが、多くは失敗します。",
+        metaPat: "{bytes}バイト · v{ver} · {mods}×{mods}モジュール · 訂正 {ec}",
+        metaEmpty: "入力待ち",
+        typeAria: "QRの内容の種類",
+        tUrl: "URL",
+        tText: "テキスト",
+        tWifi: "Wi-Fi",
+        tCard: "連絡先",
+        urlLabel: "アドレス",
+        urlHint: "ドメインだけなら先頭に https:// を付けます。実際にエンコードされる文字列はプレビューの下にそのまま表示されます。",
+        textLabel: "テキスト",
+        ssidLabel: "ネットワーク名(SSID)",
+        passLabel: "パスワード",
+        secLabel: "セキュリティ",
+        secWpa: "WPA / WPA2 / WPA3",
+        secWep: "WEP",
+        secNone: "なし(オープン)",
+        hiddenLabel: "ステルスネットワーク",
+        wifiWarn: "Wi-FiのQRにはパスワードがそのまま入ります。スマートフォンが入力なしで接続する仕組みがそうだからです。印刷したコードはパスワードと同じように扱ってください。",
+        nameLabel: "名前",
+        phoneLabel: "電話",
+        emailLabel: "メール",
+        orgLabel: "所属",
+        cardUrlLabel: "ウェブサイト",
+        wifiNeedSsid: "Wi-Fiコードを作るにはネットワーク名が必要です。",
+        cardNeedName: "連絡先コードを作るには名前が必要です。",
+        styleTitle: "スタイル・出力",
+        fgLabel: "前景色",
+        bgLabel: "背景色",
+        fgAria: "前景色",
+        bgAria: "背景色",
+        swapColors: "色を入れ替え",
+        marginLabel: "余白",
+        marginAria: "余白(モジュール)",
+        marginHint: "スキャナが期待する標準の余白は4モジュールです。2モジュール未満は危険です。",
+        marginValue: "{n}モジュール",
+        marginValueOne: "1モジュール",
+        ecLabel: "誤り訂正",
+        ecHint: "高いほど傷や反射に強い代わりに、入る量が減ります。SVGにはサイズの制限がありません。",
+        sizeLabel: "PNGサイズ",
+        decInTitle: "画像",
+        dropAria: "QR画像を選ぶかここに落としてください",
+        dropTitle: "QR画像をここに落としてください",
+        dropSub: "または押して選択 · ⌘V / Ctrl+Vで貼り付け",
+        dropFmt: "PNG · JPG · WebP · GIF · BMP · AVIF — このブラウザが開ける形式",
+        dropNote: "ファイルはディスクからこのタブのキャンバスピクセルとして読まれます。どこにもコピーされません。",
+        camAria: "カメラの画面",
+        camStart: "カメラでスキャン",
+        camStop: "カメラを止める",
+        camNote: "カメラのフレームはこのタブで読み取られ、端末の外に出ません。",
+        camScanning: "カメラをコードに向けてください。画面に入ればすぐ読み取ります。",
+        camDenied: "カメラの権限が拒否されました。画像ファイルの読み取りはそのまま使えます。",
+        camUnsupported: "このブラウザではカメラを使えません。画像を落としてください。",
+        camFailed: "カメラを起動できませんでした({why})。画像ファイルはそのまま使えます。",
+        resTitle: "結果",
+        resEmpty: "まだ読み取った結果がありません。",
+        thumbAlt: "読み取った画像のプレビュー",
+        copy: "コピー",
+        copied: "コピー済み",
+        openLink: "リンクを開く",
+        clear: "消す",
+        copyBlocked: "ブラウザがクリップボードへのアクセスを止めました。テキストを選択して手動でコピーしてください。",
+        decoding: "画像を読み取り中…",
+        notFound: "QRコードが見つかりませんでした。より鮮明な元画像か、コード全体が入った写真で試してください。",
+        notImage: "このブラウザが開けないファイルです。",
+        decMeta: "{w}×{h}px · {n}回試行 · {t}ms",
+        kindUrl: "リンク",
+        kindWifi: "Wi-Fi",
+        kindCard: "連絡先",
+        kindMail: "メール",
+        kindTel: "電話",
+        kindGeo: "場所",
+        kindText: "テキスト",
+        notesAria: "仕組み",
+        note1h: "<span>01</span> 開くだけで、アップロードはなし",
+        note1d: "落とした画像はメモリ上でキャンバスのピクセルになり、読み取られたあと捨てられます。送る先がそもそもなく、ページ最下部のカウンタがこのページが実際に出したリクエストを示します。",
+        note2h: "<span>02</span> 本物のQRコード",
+        note2d: "出力は ISO/IEC 18004 に従います。バイトモード、1〜40のうち内容に合う最小バージョン、自動マスク選択、L〜Hの誤り訂正。余白と2色はファイル自体に刻まれます。",
+        note3h: "<span>03</span> 読み取りもローカルで",
+        note3d: "読み取りはCDNではなくこのサイトが一緒に配信するjsQRが担当し、入力は自分のファイルから出たピクセルです。複数の倍率と通常・反転のピクセルを順に試してから初めて諦めます。",
+        faqTitle: "よくある質問",
+        q1: "コードや画像は端末を離れますか？",
+        a1: "いいえ。どちらもこのタブのJavaScriptだけで動きます。ページ下部のカウンタがこのページのネットワーク要求を数えるので、このサイトの外と通信していないことを自分で確認できます。",
+        q2: "印刷するときはどの設定が大事ですか？",
+        a2: "余白は4モジュール以上、前景は背景より暗く、ふつうはM、汚れたり一部が隠れる場所ならQかHを使ってください。印刷幅が2cmを下回るとスマートフォンのカメラが苦しくなります。",
+        q3: "Wi-Fiコードを配っても大丈夫ですか？",
+        a3: "Wi-FiのQRにはパスワードがそのまま入ります。スマートフォンが入力なしで接続する仕組みだからです。読み取った人は誰でもネットワークに入れるので、パスワードを渡すのと同じ基準で扱い、コードが広まったらパスワードを変えてください。",
+        q4: "画像が読めない理由は何ですか？",
+        a4: "小さい、切れている、ぼやけている、斜め、光が反射している、がよくある原因です。読み取りは複数のサイズや反転ピクセルまで試しますが、コード全体がピントに入った鮮明な元画像が結局の答えです。",
+        caveat: "<strong>参考。</strong>QRコードは検査できるリンクではなく、データを描いた絵です。他人からもらったコードは、何が開くか確かめてから信じてください。印刷物が疑わしいときは試し刷りをして自分のスマートフォンで先に読んでみてください。",
+        lic: "エンコーダ: <a href=\"https://github.com/kazuhikoarase/qrcode-generator\" target=\"_blank\" rel=\"noopener\">QR Code Generator for JavaScript</a>(MIT) · デコーダ: <a href=\"https://github.com/cozmo/jsQR\" target=\"_blank\" rel=\"noopener\">jsQR</a>(Apache-2.0) — どちらもCDNではなく、このサイトがページと一緒に配信します。“QR Code”は DENSO WAVE INCORPORATED の登録商標です。",
+        foot1: "アップロード0 · サーバー0 · クッキー0",
+        netLabel: "このページの外部リクエスト",
+        back: "← ポートフォリオ",
+        footTools: "ツール一覧",
+        bytesUnit: "バイト",
+      },
+      "zh-Hant": {
+        docTitle: "QRForge — 不上傳的 QR 碼產生器・圖片讀取器 | Kim Yihyung",
+        metaTitle: "QRForge — 不上傳的 QR 碼產生器・圖片讀取器",
+        metaDesc: "製作連結、文字、Wi-Fi、聯絡人的 QR，可調整顏色、留白與錯誤更正等級並匯出 PNG、SVG；也能當場讀出圖片或相機畫面裡的 QR。沒有上傳也沒有外部請求，全部在瀏覽器內完成。",
+        ogTitle: "QRForge — 不上傳的 QR 產生器・讀取器",
+        ogDesc: "用喜歡的顏色製作連結、文字、Wi-Fi、聯絡人的 QR，再從圖片或相機讀回來。零位元組上傳、零次外部請求。",
+        brandAria: "Kim Yihyung — 作品集",
+        backTools: "← 工具",
+        toggleTo: "切換語言",
+        tabAria: "模式",
+        tabGen: "產生",
+        tabDec: "解碼",
+        pillLive: "零位元組上傳",
+        pillLocal: "瀏覽器內<b>100% 本機</b>",
+        pillOut: "<b>PNG · SVG</b> 匯出 · <b>圖片</b> 讀取",
+        h1: "製作 QR 碼，<br><span class=\"dim\">再把它讀回來。</span>",
+        lede: "同一頁放了產生器與讀取器。輸入連結、備註、Wi-Fi 或聯絡人，帶走 PNG 或 SVG；把 QR 照片拖進來，就能讀出裡面的內容。兩個方向都在這個分頁裡執行。沒有上傳、沒有帳號，也沒有從 CDN 載入的程式庫。",
+        prevTitle: "預覽",
+        prevAria: "QR 碼預覽",
+        emptyState: "輸入內容後，這裡就會出現條碼。",
+        dlPng: "PNG",
+        dlSvg: "SVG",
+        tooLong: "內容太多，放不進 QR 碼 — {n} 位元組超過 {max} 位元組的上限。請縮短內容或把錯誤更正降到 L。",
+        lowContrast: "對比太低，掃描器可能讀不到。淺背景配深前景最好讀。",
+        inverted: "背景比前景暗 — 這是反轉的條碼。有些掃描 App 能讀，多數會失敗。",
+        metaPat: "{bytes} 位元組 · v{ver} · {mods}×{mods} 模組 · 更正 {ec}",
+        metaEmpty: "等待輸入",
+        typeAria: "QR 內容類型",
+        tUrl: "URL",
+        tText: "文字",
+        tWifi: "Wi-Fi",
+        tCard: "聯絡人",
+        urlLabel: "網址",
+        urlHint: "只寫網域時會在前面補上 https://。實際編碼的字串會原樣顯示在預覽下方。",
+        textLabel: "文字",
+        ssidLabel: "網路名稱（SSID）",
+        passLabel: "密碼",
+        secLabel: "安全性",
+        secWpa: "WPA / WPA2 / WPA3",
+        secWep: "WEP",
+        secNone: "無（開放）",
+        hiddenLabel: "隱藏網路",
+        wifiWarn: "Wi-Fi 的 QR 會把密碼原樣放進去，因為手機就是這樣不輸入也能連上。印出來的條碼請當成密碼一樣保管。",
+        nameLabel: "姓名",
+        phoneLabel: "電話",
+        emailLabel: "電子郵件",
+        orgLabel: "單位",
+        cardUrlLabel: "網站",
+        wifiNeedSsid: "要製作 Wi-Fi 條碼需要網路名稱。",
+        cardNeedName: "要製作聯絡人條碼需要姓名。",
+        styleTitle: "樣式・輸出",
+        fgLabel: "前景色",
+        bgLabel: "背景色",
+        fgAria: "前景色",
+        bgAria: "背景色",
+        swapColors: "互換顏色",
+        marginLabel: "留白",
+        marginAria: "留白（模組）",
+        marginHint: "掃描器期待的標準留白是 4 個模組，低於 2 個模組就有風險。",
+        marginValue: "{n} 個模組",
+        marginValueOne: "1 個模組",
+        ecLabel: "錯誤更正",
+        ecHint: "越高越能耐刮傷與反光，但能放的內容變少。SVG 沒有尺寸上限。",
+        sizeLabel: "PNG 尺寸",
+        decInTitle: "圖片",
+        dropAria: "選擇 QR 圖片或拖到這裡",
+        dropTitle: "把 QR 圖片拖到這裡",
+        dropSub: "或按一下選擇 · 用 ⌘V / Ctrl+V 貼上",
+        dropFmt: "PNG · JPG · WebP · GIF · BMP · AVIF — 這個瀏覽器能開的格式",
+        dropNote: "檔案從磁碟讀成這個分頁的畫布像素，不會被複製到任何地方。",
+        camAria: "相機畫面",
+        camStart: "用相機掃描",
+        camStop: "關閉相機",
+        camNote: "相機畫面在這個分頁裡解碼，不會離開裝置。",
+        camScanning: "把相機對準條碼，進入畫面就會立刻讀取。",
+        camDenied: "相機權限被拒絕。讀取圖片檔仍可照常使用。",
+        camUnsupported: "這個瀏覽器無法使用相機，請改拖入圖片。",
+        camFailed: "無法啟動相機（{why}）。圖片檔仍可照常使用。",
+        resTitle: "結果",
+        resEmpty: "還沒有解碼結果。",
+        thumbAlt: "已解碼圖片的預覽",
+        copy: "複製",
+        copied: "已複製",
+        openLink: "開啟連結",
+        clear: "清除",
+        copyBlocked: "瀏覽器阻止了剪貼簿存取。請選取文字後手動複製。",
+        decoding: "正在讀取圖片…",
+        notFound: "找不到 QR 碼。請用更清晰的原始檔，或包含完整條碼的照片再試一次。",
+        notImage: "這個瀏覽器無法開啟此檔案。",
+        decMeta: "{w}×{h}px · 嘗試 {n} 次 · {t}ms",
+        kindUrl: "連結",
+        kindWifi: "Wi-Fi",
+        kindCard: "聯絡人",
+        kindMail: "郵件",
+        kindTel: "電話",
+        kindGeo: "位置",
+        kindText: "文字",
+        notesAria: "運作方式",
+        note1h: "<span>01</span> 只開啟，從不上傳",
+        note1d: "拖進來的圖片在記憶體中變成畫布像素，解碼後就丟棄。根本沒有可以送出的端點，頁面最下方的計數器會顯示這個頁面實際發出的每一次請求。",
+        note2h: "<span>02</span> 真正的 QR 碼",
+        note2d: "輸出遵循 ISO/IEC 18004：位元組模式、1～40 中符合內容的最小版本、自動遮罩選擇、L～H 的錯誤更正。留白與兩個顏色都寫進檔案本身。",
+        note3h: "<span>03</span> 解碼器也留在本機",
+        note3d: "解碼由這個網站隨頁面一起提供的 jsQR 負責，而不是 CDN，輸入是來自你自己檔案的像素。會依序嘗試多種倍率與正常、反轉的像素後才放棄。",
+        faqTitle: "常見問題",
+        q1: "條碼或圖片會離開裝置嗎？",
+        a1: "不會。兩個方向都只靠這個分頁的 JavaScript 執行。頁面下方的計數器計算這個頁面的網路請求，所以你可以自己確認它沒有和這個網站以外通訊。",
+        q2: "列印時哪些設定重要？",
+        a2: "留白 4 個模組以上、前景比背景暗，一般用途用 M，容易沾污或會被遮住的地方用 Q 或 H。列印寬度低於 2cm 時，手機相機會開始吃力。",
+        q3: "把 Wi-Fi 條碼給別人可以嗎？",
+        a3: "Wi-Fi 的 QR 會原樣帶著密碼，因為手機就是這樣不用輸入也能連線。掃到的人都能拿到網路，請用對待密碼的標準處理；條碼若流傳出去，請更換密碼。",
+        q4: "圖片為什麼讀不出來？",
+        a4: "太小、被裁切、模糊、角度太斜、反光，都是常見原因。解碼器會嘗試多種尺寸甚至反轉像素，但最有效的還是條碼完整入鏡、對焦清楚的原始檔。",
+        caveat: "<strong>提醒。</strong>QR 碼不是可以檢查的連結，而是把資料畫成圖。別人給的條碼，先確認它會開啟什麼再相信。對印刷品有疑慮時，先試印一份用自己的手機讀讀看。",
+        lic: "編碼器：<a href=\"https://github.com/kazuhikoarase/qrcode-generator\" target=\"_blank\" rel=\"noopener\">QR Code Generator for JavaScript</a>（MIT）· 解碼器：<a href=\"https://github.com/cozmo/jsQR\" target=\"_blank\" rel=\"noopener\">jsQR</a>（Apache-2.0）— 兩者都由這個網站隨頁面提供，不經 CDN。“QR Code” 是 DENSO WAVE INCORPORATED 的註冊商標。",
+        foot1: "零上傳 · 零伺服器 · 零 cookie",
+        netLabel: "這個頁面的外部請求",
+        back: "← 作品集",
+        footTools: "所有工具",
+        bytesUnit: "位元組",
+      }
   };
 
   var state = {
@@ -1615,8 +1881,53 @@ window.addEventListener('unhandledrejection', function (e) {
     }
   }
 
+  var DEFAULT_LANG = 'en';
+  /* ═══ 4-language switch (ko · en · ja · zh-Hant) ═══ */
+  var LANGS4 = ['ko', 'en', 'ja', 'zh-Hant'];
+  function normLang(v) {
+    v = String(v == null ? '' : v).toLowerCase().replace(/_/g, '-');
+    if (v === 'ko' || v === 'ko-kr' || v === 'kr') return 'ko';
+    if (v === 'ja' || v === 'ja-jp' || v === 'jp') return 'ja';
+    if (v === 'zh-hant' || v === 'zh-tw' || v === 'zh' || v === 'tw' || v === 'zh-hk') return 'zh-Hant';
+    if (v === 'en' || v === 'en-us' || v === 'en-gb') return 'en';
+    return '';
+  }
+  function loc4() { return state.lang === 'ko' ? 'ko-KR' : state.lang === 'ja' ? 'ja-JP' : state.lang === 'zh-Hant' ? 'zh-TW' : 'en-US'; }
+  function lsGet4(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function initialLang() {
+    var f = (typeof window.__FORCED_LANG__ !== 'undefined' && window.__FORCED_LANG__) ? window.__FORCED_LANG__ : '';
+    if (f && normLang(f)) return normLang(f);
+    var q = '';
+    try { q = new URLSearchParams(location.search).get('lang') || ''; } catch (e) { q = ''; }
+    if (q && normLang(q)) return normLang(q);
+    var stored = lsGet4(typeof SHARED_KEY !== 'undefined' ? SHARED_KEY : 'kyh.lang') || lsGet4(typeof LANG_KEY !== 'undefined' ? LANG_KEY : '');
+    if (stored && normLang(stored)) return normLang(stored);
+    var h = normLang(document.documentElement.getAttribute('lang'));
+    if (h) return h;
+    return typeof DEFAULT_LANG !== 'undefined' ? DEFAULT_LANG : 'ko';
+  }
+  function syncLangUI() {
+    var lt = document.getElementById('langToggle');
+    if (!lt) return;
+    var btns = lt.querySelectorAll('[data-lang]');
+    for (var i = 0; i < btns.length; i++) {
+      var on = btns[i].getAttribute('data-lang') === state.lang;
+      btns[i].classList.toggle('on', on);
+      btns[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+  }
+  function bindLangToggle() {
+    var lt = document.getElementById('langToggle');
+    if (!lt) return;
+    lt.addEventListener('click', function (ev) {
+      var t4 = ev.target.closest('[data-lang]');
+      if (!t4) return;
+      applyLang(t4.getAttribute('data-lang'));
+    });
+  }
+
   function applyLang(lang) {
-    state.lang = lang === 'ko' ? 'ko' : 'en';
+    state.lang = normLang(lang) || 'en';
     document.documentElement.setAttribute('lang', state.lang);
 
     document.title = t('docTitle');
@@ -1649,13 +1960,7 @@ window.addEventListener('unhandledrejection', function (e) {
       if (v) nodes[i].setAttribute('alt', v);
     }
 
-    var spans = document.querySelectorAll('#langToggle [data-lt]');
-    for (i = 0; i < spans.length; i++) {
-      spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
-    }
-    var lt = $('langToggle');
-    lt.setAttribute('title', t('toggleTo'));
-    lt.setAttribute('aria-label', t('toggleTo'));
+      syncLangUI();
 
     $('marginOut').textContent = marginLabel(state.margin);
     if (!state.result) {
@@ -1673,7 +1978,7 @@ window.addEventListener('unhandledrejection', function (e) {
     var el = $('textCount');
     if (!el) return;
     var n = bytesOf($('inText').value || '');
-    el.textContent = n + ' / ' + MAX_BYTES + (state.lang === 'ko' ? '바이트' : ' bytes');
+    el.textContent = n + ' / ' + MAX_BYTES + ' ' + t('bytesUnit');
   }
 
   function selectTab(name) {
@@ -1885,14 +2190,16 @@ window.addEventListener('unhandledrejection', function (e) {
     updateTextCount();
     setColor('fg', state.fg, true);
     setColor('bg', state.bg, true);
-    applyLang(readLang() || 'en');
+    applyLang(initialLang());
   }
 
   function lt_init() {
     var btn = $('langToggle');
-    btn.addEventListener('click', function () {
-      var next = state.lang === 'ko' ? 'en' : 'ko';
-      try { localStorage.setItem(LANG_KEY, next); } catch (e) {}
+    btn.addEventListener('click', function (ev) {
+      var _t4 = ev.target.closest('[data-lang]');
+      if (!_t4) return;
+      var next = normLang(_t4.getAttribute('data-lang'));
+      try { localStorage.setItem(LANG_KEY, next); localStorage.setItem('kyh.lang', next); } catch (e) {}
       applyLang(next);
     });
   }

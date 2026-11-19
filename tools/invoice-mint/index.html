@@ -156,6 +156,9 @@ button, input, select, textarea { font-family: inherit; color: inherit; }
 .lang-toggle:active { transform: scale(.94); }
 .lang-toggle .lt.on { color: var(--accent); }
 .lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.lang-toggle .lt { appearance: none; border: 0; background: none; color: inherit; font: inherit; letter-spacing: inherit; line-height: 1; padding: 1px 0; cursor: pointer; transition: color .2s; }
+.lang-toggle .lt:hover { color: var(--ink); }
+.lang-toggle .lt:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 .topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
 .topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
 
@@ -397,7 +400,7 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
 .foot .net b { color: var(--ok); }
 
 @media (max-width: 640px) {
-  .wrap { padding: 0 14px 36px; }
+  .wrap { padding: 0 16px 36px; }
   .topbar { padding: 14px 0 8px; }
   .brand-txt { font-size: 12px; letter-spacing: .1em; }
   .hero { padding: 16px 0 12px; }
@@ -432,11 +435,15 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       <span class="brand-txt">Kim Yihyung</span>
     </a>
     <div class="top-actions">
-      <button class="lang-toggle" id="langToggle" type="button" title="View in English" aria-label="View in English">
-        <span class="lt on" data-lt="ko">KO</span>
+      <div class="lang-toggle" id="langToggle" role="group" aria-label="Language">
+        <button class="lt" type="button" data-lt="ko" lang="ko">KO</button>
         <span class="lsep" aria-hidden="true">|</span>
-        <span class="lt" data-lt="en">EN</span>
-      </button>
+        <button class="lt" type="button" data-lt="en" lang="en">EN</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lt="ja" lang="ja">JA</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lt="zh-Hant" lang="zh-Hant">繁中</button>
+      </div>
       <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← 도구 전체</a>
     </div>
   </header>
@@ -552,11 +559,11 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
               <div class="row-actions">
                 <button class="btn btn--sm" id="stampPick" type="button" data-i18n="stampPick">도장 PNG 넣기</button>
                 <button class="btn btn--sm btn--ghost" id="stampClear" type="button" hidden data-i18n="stampClear">빼기</button>
-                <input type="file" id="stampFile" accept="image/png,image/webp,image/*" class="sr-only" aria-label="도장 PNG">
+                <input type="file" id="stampFile" accept="image/png,image/webp,image/*" class="sr-only" aria-label="도장 PNG" data-i18n-aria="stampFileAria">
               </div>
               <div id="stampScaleWrap" hidden>
                 <label class="lbl" for="stampScale" style="margin:0 0 2px" data-i18n="stampScale">크기</label>
-                <input type="range" id="stampScale" min="60" max="140" step="5" value="100" aria-label="도장 크기">
+                <input type="range" id="stampScale" min="60" max="140" step="5" value="100" aria-label="도장 크기" data-i18n-aria="stampScaleAria">
               </div>
             </div>
           </div>
@@ -734,6 +741,11 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
   /* ═════════════════════ language ═════════════════════ */
   var I18N = {
     ko: {
+      langLabel: '언어',
+      metaTitle: 'InvoiceMint — 견적서·거래명세서·청구서 작성, A4 인쇄·PDF',
+      metaDesc: '품명과 단가를 입력하면 공급가액·부가세·합계가 계산되고 합계는 한글 금액으로도 표기됩니다. 미리보기는 실제 A4 210×297mm 페이지이며 인쇄 대화상자에서 PDF로, 또는 1240×1754 PNG로 저장할 수 있습니다. 모든 처리는 브라우저 안에서 끝나고 업로드는 0바이트입니다.',
+      stampFileAria: '도장 PNG',
+      stampScaleAria: '도장 크기',
       docTitle: 'InvoiceMint — 견적서·거래명세서·인보이스 작성, A4 인쇄·PDF·PNG 저장 | Kim Yihyung',
       brandAria: 'Kim Yihyung — 포트폴리오', back: '← 도구 전체',
       eyebrow: 'InvoiceMint · 견적서·인보이스 · 업로드 0',
@@ -791,6 +803,11 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       toggleTo: 'View in English'
     },
     en: {
+      langLabel: 'Language',
+      metaTitle: 'InvoiceMint — quotation, statement & invoice builder with A4 print',
+      metaDesc: 'Type item names and unit prices and the supply amount, VAT and total are computed, with the total written out in Korean words. The preview is a real A4 210×297mm page: save it as PDF from the print dialog or straight to a 1240×1754 PNG — entirely in your browser, zero uploads.',
+      stampFileAria: 'Stamp PNG',
+      stampScaleAria: 'Stamp size',
       docTitle: 'InvoiceMint — Korean quotation, statement & invoice builder with A4 print, PDF and PNG | Kim Yihyung',
       brandAria: 'Kim Yihyung — portfolio', back: '← All tools',
       eyebrow: 'InvoiceMint · quotes & invoices · zero upload',
@@ -846,6 +863,232 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       footCopy: '© 2026 Kim Yihyung · Built in the browser, for the browser.', footNet: 'external requests',
       footP1: 'Portfolio', footP2: 'All tools', footP3: 'Source',
       toggleTo: '한국어로 보기'
+    },
+    'ja': {
+      docTitle: 'InvoiceMint — 見積書・取引明細書・請求書を作成、A4 印刷・PDF・PNG | Kim Yihyung',
+      metaTitle: 'InvoiceMint — 見積書・請求書ビルダー、A4 印刷と PDF',
+      metaDesc: '品名と単価を入力すると供給価額・付加価値税・合計を自動計算し、合計は韓国語の大字でも表記します。プレビューは実寸の A4 210×297mm で、印刷ダイアログから PDF に、または 1240×1754 の PNG に保存できます。すべてブラウザ内で完結し、アップロードは 0 バイトです。',
+      langLabel: '言語を切り替え',
+      brandAria: 'Kim Yihyung — ポートフォリオ',
+      back: '← ツール一覧',
+      eyebrow: 'InvoiceMint · 見積・請求 · アップロードゼロ',
+      h1: '紙一枚、サーバーなし。<br><span class="soft">見積書・取引明細書・請求書。</span><br><span class="gold">A4 印刷、PDF、PNG。</span>',
+      lede: '品名と単価を入力すると<strong>供給価額・付加価値税・合計</strong>が計算され、合計は韓国語の大字(<code>일금 일백일십만원정</code>)でも書き出されます。プレビューは実寸の<strong>A4 210×297mm</strong> ページで、印刷ダイアログから PDF として保存するか、そのまま<strong>1240×1754 の PNG</strong> にできます。<a href="/portfolio/tools/stamp-snap/">StampSnap</a> で作った印鑑 PNG を捺印位置に重ねられます。',
+      pillUp: 'アップロード 0 バイト',
+      pillNet: '外部リクエスト 0 件',
+      pillPrint: 'A4 印刷に対応',
+      pillPng: '1240×1754 PNG',
+      workAria: '書類ビルダー',
+      docTypeLbl: '様式',
+      docTypeAria: '様式',
+      tQuote: '見積書',
+      tStatement: '取引明細書',
+      tInvoice: '請求書',
+      sheetLangLbl: '書類の言語',
+      sheetLangAria: '書類の言語',
+      sheetKo: '韓国語',
+      sheetEn: '英語',
+      vatLbl: '付加価値税',
+      vatAria: '付加価値税',
+      vatSep: '10% 加算',
+      vatInc: '含む',
+      vatEx: '免税',
+      docSec: '書類',
+      fDocNo: '書類番号',
+      fDate: '作成日',
+      dueQuote: '有効期限',
+      dueStatement: '取引日',
+      dueInvoice: '支払期限',
+      sellerSec: '供給者',
+      buyerSec: '需要者',
+      itemsSec: '明細',
+      paySec: '備考と印鑑',
+      fName: '商号',
+      fBiz: '事業者番号',
+      fCeo: '代表者',
+      fTel: '電話',
+      fMail: 'メール',
+      fBank: '振込先口座',
+      fAddr: '住所',
+      bName: '商号',
+      bCeo: '担当者',
+      colName: '品名',
+      colSpec: '仕様',
+      colQty: '数量',
+      colPrice: '単価',
+      delRow: '行を削除',
+      addRow: '+ 明細を追加',
+      rowLimit: '1枚に最大 16 行まで入ります。',
+      rowSum: '金額 {s} · 税 {v}',
+      fMemo: '備考',
+      memoPh: '例: 税込、着手金 30%',
+      stampEmpty: '印鑑なし',
+      stampPick: '印鑑 PNG を追加',
+      stampClear: '削除',
+      stampScale: '大きさ',
+      stampNote: '印鑑はあくまで画像です — このページが印影を描くことはありません。<a href="/portfolio/tools/stamp-snap/">StampSnap</a> で透過 PNG を作り、ここに追加してください。ファイルはブラウザのメモリから出ません。',
+      resetAll: 'フォームを空にする',
+      fillSample: '例を入力する',
+      previewLbl: 'プレビュー · A4 210 × 297 mm',
+      printBtn: '印刷 · PDF',
+      pngBtn: 'PNG で保存',
+      previewNote: '印刷ダイアログの出力先で <b>PDF に保存</b> を選んでください。用紙 A4、余白 <b>なし</b>、背景グラフィック <b>オン</b> が最も近くなります。PNG は 1240×1754(150 dpi)で描き直すので、文字がぼやけません。',
+      sumHead: '合計',
+      sumNote: '付加価値税は行ごとにウォン単位で四捨五入するため、発行する書類と 1〜2 ウォンずれることがあります。発行前に合計を確認してください。',
+      sumSupply: '供給価額',
+      sumVat: '付加価値税',
+      sumTotal: '合計',
+      sumRowLbl: '明細',
+      sumRowUnit: '{n} 行',
+      stReady: '準備完了 — 右側のプレビューは実寸の A4 です。',
+      stReset: 'フォームを空にしました。書類の設定はそのままです。',
+      stSample: '例の内容を入力しました。',
+      stPrint: '印刷ダイアログを開きました — そこで PDF に保存を選んでください。',
+      stPng: 'PNG を保存しました · {w}×{h} · {n}',
+      stPngFail: 'PNG を作成できませんでした。もう一度お試しください。',
+      stStamp: '印鑑を追加しました · {n}',
+      stStampBad: '画像ファイルではありません。PNG を使ってください。',
+      stRowLimit: '1枚に入るのは最大 16 行までです。',
+      stNone: '—',
+      howTitle: '金額の計算方法',
+      howNote: '付加価値税 · 韓国語の大字 · A4',
+      n1h: '付加価値税の3つの方式',
+      n1p: '<b>加算</b>は単価を税抜として扱い、行ごとに 10% を足します。<b>含む</b>は入力した金額を税込として扱うので、供給価額は金額 ÷ 1.1、差額が付加価値税になります — 110,000 と入れれば供給価額 100,000、税 10,000 です。<b>免税</b>は税を 0 にします。合計は行ごとに丸めた額の合計です。',
+      n2h: '韓国語の大字での表記',
+      n2p: '合計は4桁ごとに区切り、そのあとに <b>만 · 억 · 조</b> を付け、各桁には 일 · 십 · 백 · 천 が付きます。1,100,000 は 일백일십만 となり、<b>일금 일백일십만원정</b> と書きます。12,345 は <b>일금 일만이천삼백사십오원정</b> です。英語の書類では同じ金額を英語の単語でつづります。',
+      n3h: '画面も紙も同じ A4',
+      n3p: 'プレビューは実寸の 210×297mm で組み、列に収まるよう<b>縮小表示</b>しているだけです。印刷用スタイルは画面全体を隠して用紙だけを残すので、ブラウザは余白もヘッダーもない1ページを書き出します。PNG 書き出しは同じレイアウトを 1240×1754 のキャンバスに描き直します。',
+      faqTitle: 'よくある質問',
+      faqNote: '付加価値税 · 印刷 · プライバシー',
+      q1: '見積書・取引明細書・請求書はどう違いますか?',
+      a1: '<b>見積書</b>は作業の前に価格を提示するものなので有効期限を持ち、<b>取引明細書</b>(거래명세서)はすでに行われた取引を確認するものなので取引日を持ち、<b>請求書</b>は支払いを求めるものなので支払期限と振込先が要になります。このページは表題・日付の行・結びの文を切り替え、明細表は1つに保ちます。',
+      q2: '印刷すると2ページになったり余白が付いたりします。',
+      a2: '用紙を <b>A4</b>、倍率を <b>100%</b>、余白を <b>なし</b> に設定し、ブラウザのヘッダーとフッターが出る場合は切ってください。明細が 16 行を超えると1枚に収まらないので、行を減らすか2つの書類に分けてください。',
+      q3: '事業者番号にハイフンは必要ですか?',
+      a3: '入力したとおりに印刷されるので、<b>000-00-00000</b> の形が見栄えよく仕上がります。このページは番号を検証したり税務当局に問い合わせたりはせず、書式に載せるだけです。',
+      q4: '入力した内容はどこかに保存されますか?',
+      a4: 'いいえ。サーバーもアカウントもなく、読み込み後にページが外部へ送るものはありません(フッターのカウンターは 0 のままです)。タブを閉じると入力は消えるので、<b>PDF か PNG</b> を残してください。印鑑画像もブラウザのメモリ上で合成するだけです。',
+      footCopy: '© 2026 Kim Yihyung · ブラウザで、ブラウザのために。',
+      footNet: '外部リクエスト',
+      footP1: 'ポートフォリオ',
+      footP2: 'ツール一覧',
+      footP3: 'ソース',
+      toggleTo: '言語を切り替え',
+      stampFileAria: 'スタンプ PNG',
+      stampScaleAria: 'スタンプの大きさ'
+    },
+    'zh-Hant': {
+      docTitle: 'InvoiceMint — 報價單、交易明細與發票製作，A4 列印、PDF 與 PNG | Kim Yihyung',
+      metaTitle: 'InvoiceMint — 報價單、發票製作，支援 A4 列印與 PDF',
+      metaDesc: '輸入品名與單價，自動算出供給金額、加值稅與合計，合計還會以韓文大寫數字寫出。預覽是實際尺寸的 A4 210×297mm 頁面，可從列印對話框存成 PDF，或直接輸出 1240×1754 的 PNG。全部在瀏覽器內完成，上傳 0 位元組。',
+      langLabel: '切換語言',
+      brandAria: 'Kim Yihyung — 作品集',
+      back: '← 所有工具',
+      eyebrow: 'InvoiceMint · 報價與請款 · 零上傳',
+      h1: '一張紙，不用伺服器。<br><span class="soft">報價單、交易明細、發票。</span><br><span class="gold">A4 列印、PDF 與 PNG。</span>',
+      lede: '輸入品名與單價，就會算出<strong>供給金額、加值稅與合計</strong>，合計同時以韓文大寫數字(<code>일금 일백일십만원정</code>)寫出。預覽是真正的<strong>A4 210×297mm</strong> 頁面：可從列印對話框存成 PDF，或直接存成<strong>1240×1754 的 PNG</strong>。用 <a href="/portfolio/tools/stamp-snap/">StampSnap</a> 做的印章 PNG 也能蓋在印鑑位置。',
+      pillUp: '上傳 0 位元組',
+      pillNet: '外部請求 0 次',
+      pillPrint: '支援 A4 列印',
+      pillPng: '1240×1754 PNG',
+      workAria: '文件製作',
+      docTypeLbl: '表單',
+      docTypeAria: '表單',
+      tQuote: '報價單',
+      tStatement: '交易明細',
+      tInvoice: '發票',
+      sheetLangLbl: '文件語言',
+      sheetLangAria: '文件語言',
+      sheetKo: '韓文',
+      sheetEn: '英文',
+      vatLbl: '加值稅',
+      vatAria: '加值稅',
+      vatSep: '外加 10%',
+      vatInc: '內含',
+      vatEx: '免稅',
+      docSec: '文件',
+      fDocNo: '文件編號',
+      fDate: '日期',
+      dueQuote: '有效期限',
+      dueStatement: '交易日期',
+      dueInvoice: '付款期限',
+      sellerSec: '賣方',
+      buyerSec: '買方',
+      itemsSec: '明細',
+      paySec: '備註與印鑑',
+      fName: '公司名稱',
+      fBiz: '統一編號',
+      fCeo: '負責人',
+      fTel: '電話',
+      fMail: '電子郵件',
+      fBank: '匯款帳號',
+      fAddr: '地址',
+      bName: '公司名稱',
+      bCeo: '聯絡人',
+      colName: '品名',
+      colSpec: '規格',
+      colQty: '數量',
+      colPrice: '單價',
+      delRow: '刪除列',
+      addRow: '+ 新增明細',
+      rowLimit: '一張最多可放 16 列。',
+      rowSum: '金額 {s} · 稅 {v}',
+      fMemo: '備註',
+      memoPh: '例：含稅、先付 30% 訂金',
+      stampEmpty: '沒有印鑑',
+      stampPick: '加入印鑑 PNG',
+      stampClear: '移除',
+      stampScale: '大小',
+      stampNote: '印鑑只是圖片 — 這個頁面不會自己畫出印章。請用 <a href="/portfolio/tools/stamp-snap/">StampSnap</a> 做一張透明 PNG 再放進來。檔案只留在瀏覽器記憶體裡。',
+      resetAll: '清空表單',
+      fillSample: '填入範例',
+      previewLbl: '預覽 · A4 210 × 297 mm',
+      printBtn: '列印 · PDF',
+      pngBtn: '存成 PNG',
+      previewNote: '在列印對話框的輸出目的地選 <b>另存為 PDF</b>。紙張選 A4、邊界選 <b>無</b>、<b>開啟</b>背景圖形，會最接近原樣。PNG 會以 1240×1754(150 dpi)重繪，文字不會糊掉。',
+      sumHead: '合計',
+      sumNote: '加值稅每列四捨五入到韓元，所以跟正式開立的發票可能差一、兩韓元。開立前請再確認合計。',
+      sumSupply: '供給金額',
+      sumVat: '加值稅',
+      sumTotal: '合計',
+      sumRowLbl: '明細',
+      sumRowUnit: '{n} 列',
+      stReady: '就緒 — 右邊的預覽是實際尺寸的 A4。',
+      stReset: '已清空表單，文件設定沒有改變。',
+      stSample: '已填入範例內容。',
+      stPrint: '已開啟列印對話框 — 在那裡選擇另存為 PDF。',
+      stPng: '已儲存 PNG · {w}×{h} · {n}',
+      stPngFail: '無法產生 PNG，請再試一次。',
+      stStamp: '已加入印鑑 · {n}',
+      stStampBad: '這不是圖片檔，請使用 PNG。',
+      stRowLimit: '一張紙最多 16 列。',
+      stNone: '—',
+      howTitle: '金額怎麼算出來的',
+      howNote: '加值稅 · 韓文數字 · A4',
+      n1h: '三種加值稅模式',
+      n1p: '<b>外加</b>把單價當成未稅價，每列加上 10%。<b>內含</b>把輸入的金額當成含稅價，供給金額就是金額 ÷ 1.1，差額是加值稅 — 輸入 110,000 會得到供給金額 100,000、稅 10,000。<b>免稅</b>把稅設為 0。合計是各列四捨五入後相加。',
+      n2h: '以韓文大寫數字表示金額',
+      n2p: '合計每四位一組，後面接 <b>만 · 억 · 조</b>，每一位再帶 일 · 십 · 백 · 천。1,100,000 變成 일백일십만，寫作 <b>일금 일백일십만원정</b>；12,345 寫作 <b>일금 일만이천삼백사십오원정</b>。英文文件則用英文單字拼出同一筆金額。',
+      n3h: '螢幕和紙上是同一個 A4',
+      n3p: '預覽以實際 210×297mm 排版，只是為了塞進欄位而<b>等比縮小</b>。列印樣式會把整個介面藏起來、只留下紙張，所以瀏覽器會輸出一頁、沒有邊界也沒有頁首頁尾。PNG 匯出把同樣的版面重繪到 1240×1754 的畫布上。',
+      faqTitle: '常見問題',
+      faqNote: '加值稅 · 列印 · 隱私',
+      q1: '報價單、交易明細和發票有什麼不同?',
+      a1: '<b>報價單</b>是在工作之前提出價格，所以帶有效期限；<b>交易明細</b>(거래명세서)是確認已經發生的交易，所以帶交易日期；<b>發票</b>是請對方付款，重點在付款期限和匯款帳號。這個頁面切換標題、日期那一列和結尾語句，明細表則共用一個。',
+      q2: '列印出來變成兩頁，或多了邊界。',
+      a2: '紙張設 <b>A4</b>、縮放 <b>100%</b>、邊界設 <b>無</b>；若出現瀏覽器的頁首頁尾就把它關掉。明細超過 16 列就放不進一張，請刪減列數或拆成兩份文件。',
+      q3: '統一編號需要加連字號嗎?',
+      a3: '會照輸入的樣子印出，所以寫成 <b>000-00-00000</b> 最好看。這個頁面不驗證號碼、也不連線查稅，只是把它放上表單。',
+      q4: '輸入的內容會被存在哪裡嗎?',
+      a4: '不會。沒有伺服器也沒有帳號，頁面載入後不會再送出任何請求(頁尾計數一直是 0)。關掉分頁輸入就消失，請留存 <b>PDF 或 PNG</b>。印鑑圖片也只在瀏覽器記憶體裡合成。',
+      footCopy: '© 2026 Kim Yihyung · 在瀏覽器裡，為瀏覽器而做。',
+      footNet: '外部請求',
+      footP1: '作品集',
+      footP2: '所有工具',
+      footP3: '原始碼',
+      toggleTo: '切換語言',
+      stampFileAria: '印章 PNG',
+      stampScaleAria: '印章大小'
     }
   };
 
@@ -879,6 +1122,32 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
 
   var LANG_KEY = 'yihyung.lang';
   var SHARED_KEY = 'yihyung:lang';
+  var LANGS = ['ko', 'en', 'ja', 'zh-Hant'];
+  var DEFAULT_LANG = normLang(document.documentElement.getAttribute('lang')) || 'ko';
+  function normLang(v) {
+    var s = String(v == null ? '' : v).trim().toLowerCase().replace(/_/g, '-');
+    if (s === 'ko' || s === 'kr' || s === 'ko-kr') return 'ko';
+    if (s === 'en' || s === 'en-us' || s === 'en-gb' || s === 'en-au') return 'en';
+    if (s === 'ja' || s === 'jp' || s === 'ja-jp') return 'ja';
+    if (s === 'zh-hant' || s === 'zh-tw' || s === 'zh-hk' || s === 'zh-mo' || s === 'tw' || s === 'zh' || s === 'zh-hant-tw') return 'zh-Hant';
+    return '';
+  }
+  function readStoredLang(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  /* read-only: per-language title/description for the static /en/ /ja/ /zh-tw/ builder.
+     A getter, so it is computed when read (the builder runs after this script). */
+  Object.defineProperty(window, '__I18N_META__', {
+    configurable: true,
+    get: function () {
+      var out = {};
+      var ogl = { ko: 'ko_KR', en: 'en_US', ja: 'ja_JP', 'zh-Hant': 'zh_TW' };
+      Object.keys(I18N || {}).forEach(function (lg) {
+        var d = I18N[lg] || {};
+        out[lg] = { htmlLang: lg, ogLocale: ogl[lg] || 'en_US',
+                    title: d.metaTitle || d.docTitle || '', description: d.metaDesc || '' };
+      });
+      return out;
+    }
+  });
   var MAX_ROWS = 16;
   var MIN_BLANK = 5;
   var PXMM = 1240 / 210;
@@ -1687,10 +1956,15 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
     $('lblDue').textContent = t(S.type === 'quote' ? 'dueQuote' : S.type === 'statement' ? 'dueStatement' : 'dueInvoice');
   }
   function applyLang(lang) {
-    S.lang = lang === 'en' ? 'en' : 'ko';
+    S.lang = normLang(lang) || DEFAULT_LANG;
     document.documentElement.setAttribute('lang', S.lang);
     document.title = t('docTitle');
-    setMeta('meta[property="og:title"]', 'content', t('docTitle').split('—')[0].trim());
+    setMeta('meta[name="description"]', 'content', t('metaDesc'));
+    setMeta('meta[property="og:title"]', 'content', t('metaTitle'));
+    setMeta('meta[property="og:description"]', 'content', t('metaDesc'));
+    setMeta('meta[name="twitter:title"]', 'content', t('metaTitle'));
+    setMeta('meta[name="twitter:description"]', 'content', t('metaDesc'));
+    setMeta('meta[property="og:locale"]', 'content', S.lang === 'zh-Hant' ? 'zh_TW' : (S.lang === 'ja' ? 'ja_JP' : (S.lang === 'ko' ? 'ko_KR' : 'en_US')));
     var nodes = document.querySelectorAll('[data-i18n]');
     for (var i = 0; i < nodes.length; i++) {
       var v = t(nodes[i].getAttribute('data-i18n'));
@@ -1713,10 +1987,13 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
     }
     var lt = $('langToggle');
     if (lt) {
-      var spans = lt.querySelectorAll('[data-lt]');
-      for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === S.lang);
-      lt.setAttribute('aria-label', t('toggleTo'));
-      lt.setAttribute('title', t('toggleTo'));
+      var lbs = lt.querySelectorAll('[data-lt]');
+      for (i = 0; i < lbs.length; i++) {
+        var _on = lbs[i].getAttribute('data-lt') === S.lang;
+        lbs[i].classList.toggle('on', _on);
+        lbs[i].setAttribute('aria-pressed', _on ? 'true' : 'false');
+      }
+      lt.setAttribute('aria-label', t('langLabel'));
     }
     paintLabels();
     renderItems();
@@ -1728,12 +2005,22 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
     } catch (e) { /* storage may be blocked */ }
   }
   function initialLang() {
-    var saved = null;
-    try { saved = localStorage.getItem(SHARED_KEY) || localStorage.getItem(LANG_KEY); } catch (e) { }
-    if (saved === 'ko' || saved === 'en') return saved;
-    return 'ko';
+    var l = normLang(window.__FORCED_LANG__);
+    if (l) return l;
+    try { l = normLang(new URLSearchParams(location.search).get('lang')); } catch (e) { l = ''; }
+    if (l) return l;
+    l = normLang(readStoredLang(SHARED_KEY)) || normLang(readStoredLang(LANG_KEY));
+    if (l) return l;
+    return normLang(document.documentElement.getAttribute('lang')) || DEFAULT_LANG;
   }
-  $('langToggle').addEventListener('click', function () { applyLang(S.lang === 'ko' ? 'en' : 'ko'); });
+  var ltRoot = $('langToggle');
+  if (ltRoot) {
+    ltRoot.addEventListener('click', function (ev) {
+      var b = ev.target && ev.target.closest ? ev.target.closest('[data-lt]') : null;
+      if (!b) return;
+      applyLang(b.getAttribute('data-lt'));
+    });
+  }
 
   /* ═════════════════════ external request counter ═════════════════════ */
   var netCount = 0;

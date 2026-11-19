@@ -363,7 +363,7 @@ select.sel {
 /* ── footer ── */
 .foot {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
-  gap: 10px 20px; margin-top: 44px; padding: 20px 0 40px;
+  gap: 10px 20px; margin-top: 44px; padding-top: 20px; padding-bottom: 40px;
   border-top: 1px solid var(--line); font-size: 11.5px; color: var(--muted2);
 }
 .foot .net b { color: var(--ok); font-family: var(--mono); }
@@ -386,6 +386,22 @@ select.sel {
   .tab .n { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+/* ═══ 4-language switch: KO | EN | JA | 繁中 ═══ */
+.lang-toggle { padding: 0 3px; gap: 0; cursor: default; }
+.lang-toggle .lt {
+  appearance: none; -webkit-appearance: none; border: 0; background: transparent; color: var(--muted2);
+  height: 100%; padding: 0 6px; margin: 0; font-family: inherit; font-size: 11px; font-weight: 700;
+  letter-spacing: .02em; line-height: 1; cursor: pointer; border-radius: 8px;
+  transition: color .15s, background .15s;
+}
+.lang-toggle .lt:hover { color: var(--ink); }
+.lang-toggle .lt.on { color: var(--accent); }
+@media (max-width: 430px) {
+  .lang-toggle { height: 30px; }
+  .lang-toggle .lt { padding: 0 4px; font-size: 10px; }
+}
+:lang(ja) body, :lang(zh-Hant) body { word-break: normal; overflow-wrap: break-word; line-break: strict; }
 </style>
 </head>
 <body>
@@ -397,11 +413,15 @@ select.sel {
       <span class="brand-txt">Kim Yihyung</span>
     </a>
     <div class="top-actions">
-      <button class="lang-toggle" id="langToggle" type="button" title="한국어로 보기" aria-label="한국어로 보기">
-        <span class="lt on" data-lt="en">EN</span>
+      <div class="lang-toggle" id="langToggle" role="group" aria-label="Language · 언어 · 言語 · 語言">
+        <button class="lt" type="button" data-lang="ko" aria-pressed="false">KO</button>
         <span class="lsep" aria-hidden="true">|</span>
-        <span class="lt" data-lt="ko">KO</span>
-      </button>
+        <button class="lt on" type="button" data-lang="en" aria-pressed="true">EN</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lang="ja" aria-pressed="false">JA</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lang="zh-Hant" aria-pressed="false">繁中</button>
+      </div>
       <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← All tools</a>
     </div>
   </header>
@@ -650,6 +670,8 @@ select.sel {
   var I18N = {
     en: {
       docTitle: 'SvgForge — SVG Optimizer, React JSX & Multi-Size PNG | Kim Yihyung',
+      metaTitle: "SvgForge — SVG Optimizer, React JSX & Multi-Size PNG",
+      metaDesc: "Strips comments, metadata, editor namespaces, empty groups and long decimals with the browser parser, weighs the original against the result byte for byte, then exports SVG, a React component, a CSS data URI or five PNG sizes — zero uploads.",
       brandAria: 'Kim Yihyung — portfolio',
       back: '← All tools',
       eyebrow: 'SvgForge · optimize · JSX · data URI · PNG · zero upload',
@@ -719,6 +741,8 @@ select.sel {
     },
     ko: {
       docTitle: 'SvgForge — SVG 최적화·React JSX·다중 해상도 PNG | Kim Yihyung',
+      metaTitle: "SvgForge — SVG 최적화·React JSX·다중 해상도 PNG",
+      metaDesc: "에디터가 남긴 주석·메타데이터·네임스페이스·빈 그룹·긴 소수점을 브라우저 파서로 정리하고, 원본과 최적화본의 바이트를 나란히 재어 SVG·React 컴포넌트·CSS 데이터 URI·PNG 5종으로 내보냅니다. 업로드 0바이트.",
       brandAria: 'Kim Yihyung — 포트폴리오',
       back: '← 도구 전체',
       eyebrow: 'SvgForge · 최적화 · JSX · 데이터 URI · PNG · 업로드 0',
@@ -785,7 +809,233 @@ select.sel {
       footNet: '외부 요청', footP1: '포트폴리오', footP2: '도구 전체', footP3: '소스',
       footMono: '업로드 없음 · 추적 없음',
       jsxName: 'SvgForgeIcon'
-    }
+    },
+      ja: {
+        docTitle: "SvgForge — SVG最適化・React JSX・多解像度PNG | Kim Yihyung",
+        metaTitle: "SvgForge — SVG最適化・React JSX・多解像度PNG",
+        metaDesc: "エディタから書き出したSVGのコメント・メタデータ・エディタ名前空間・空グループ・長い小数をブラウザのパーサで整理し、元ファイルと最適化後のバイト数を並べて比べ、SVG・Reactコンポーネント・CSSデータURI・PNG 5サイズで書き出します。アップロード0バイト。",
+        brandAria: "Kim Yihyung — ポートフォリオ",
+        back: "← ツール一覧",
+        eyebrow: "SvgForge · 最適化 · JSX · データURI · PNG · アップロード0",
+        h1: "SVGは軽く。<br><span class=\"soft\">絵はそのまま。</span><br><span class=\"gold\">JSX・CSS・PNGへ一度に。</span>",
+        lede: "エディタから書き出したSVGを落とすと、<strong>コメント・メタデータ・エディタの名前空間・空のグループ・長い小数</strong>がブラウザのパーサで整理されます。元ファイルと最適化後のバイト数を並べて比べ、<strong>SVG・Reactコンポーネント・CSSデータURI・PNG 5種</strong>で書き出します。",
+        pillUp: "アップロード0バイト",
+        pillNet: "外部リクエスト0件",
+        pillPrec: "小数1〜4桁",
+        pillPng: "64 · 128 · 256 · 512 · 1024 PNG",
+        labAria: "SVG最適化",
+        inHead: "1 · SVGを入れる",
+        inK: "読み込み",
+        dropAria: "SVGファイルを落とすか選択",
+        dropBig: ".svgファイルをここに",
+        dropSmall: "またはクリックして選択 — ファイルはこのタブを離れません",
+        sample1: "サンプル · ブランドマーク",
+        sample2: "サンプル · アイコンセット",
+        clearIn: "クリア",
+        pasteAria: "SVGソース",
+        pastePlaceholder: "…またはSVGソースをここに貼り付けてください。",
+        optComments: "XMLコメント",
+        optCommentsH: "エディタが残したメモ — 描画されません",
+        optMeta: "メタデータ",
+        optMetaH: "<metadata>ブロックとRDFの説明",
+        optTitle: "<title> · <desc>",
+        optTitleH: "アクセシビリティのため残すのがおすすめです",
+        optNs: "エディタの名前空間",
+        optNsH: "inkscape · sodipodi · sketch · figma · adobe",
+        optEmpty: "空のグループ",
+        optEmptyH: "中が空の<g> — 最も内側から",
+        optWs: "タグ間の空白",
+        optWsH: "文字を含むファイルでは自動で飛ばします",
+        optPrec: "小数点以下の桁数",
+        optPrecH: "パスデータ・points・変換・幾何属性に適用",
+        optPrecAria: "小数点以下の桁数",
+        errLabel: "エラー",
+        errParse: "正しいSVGではありません。パーサのメッセージ: ",
+        errRoot: "ルート要素が<svg>ではないため、整理するものがありません。",
+        errEmpty: "まずSVGを入れてください — ファイルを落とすか、コードを貼り付けるか、サンプルを選んでください。",
+        outHead: "2 · 結果",
+        outK: "実測",
+        stSrc: "元のバイト数",
+        stOut: "最適化後のバイト数",
+        stSaved: "削減",
+        stNodes: "減ったノード",
+        previewAlt: "最適化されたSVGのプレビュー",
+        outAria: "最適化されたSVG",
+        copyOut: "SVGをコピー",
+        dlOut: "SVGをダウンロード",
+        savedLine: "{n}バイト削減 · {p}%小さく",
+        rmHead: "何が外れたか",
+        rmK: "実測",
+        rmComments: "XMLコメント",
+        rmMeta: "メタデータブロック",
+        rmTitle: "<title> · <desc>",
+        rmNs: "エディタのノード・属性",
+        rmEmpty: "空のグループ",
+        rmRound: "丸めた数字",
+        rmHint: "この実行で実際に消した数です — 切ってあるスイッチは0のままで、隣のプレビューは残ったファイルそのものです。",
+        sameLine: "この設定ではこれ以上削るものがありません",
+        copyDone: "コピーしました",
+        copyFail: "テキストを選択してコピーしてください",
+        convTitle: "3 · まとめて書き出し",
+        convNote: "最適化後のテキスト基準",
+        tabsAria: "出力形式",
+        tabJsx: "React JSX",
+        tabCss: "CSSデータURI",
+        tabPng: "PNG書き出し",
+        jsxAria: "React JSX出力",
+        cssAria: "CSSデータURI出力",
+        copyJsx: "コンポーネントをコピー",
+        dlJsx: ".jsxを保存",
+        jsxHint: "属性はキャメルケースに（<b>stroke-width → strokeWidth</b>）、<b>class → className</b>、<b>style</b>はオブジェクトになり、ルートに<b>{...props}</b>が付きます。",
+        copyCss: "CSSをコピー",
+        dlCss: ".cssを保存",
+        cssHint: "SVGをパーセントエンコードするので<b>#</b>・<b>&lt;</b>・<b>\"</b>がurlの中で生き残ります。引用符・括弧・シングルクォートまでエンコードするため、style属性に入れても規則が壊れません。",
+        genPng: "PNGをレンダリング",
+        dlAllPng: "5種すべてダウンロード",
+        dl: "ダウンロード",
+        pngHint: "各サイズは<b>透明な正方形キャンバス</b>に絵を比率どおり収めて中央に置きます — 白い背景も、切れもありません。1024を最大にしたのは、それ以上ではアイコンが持つ細部よりファイルの方が速く大きくなるからです。",
+        pngReady: "PNG {n}種をレンダリング · {ms}ms",
+        pngRendering: "レンダリング中…",
+        pngFail: "このSVGはキャンバスに描けませんでした — フィルタや外部画像の参照が妨げている可能性があります。",
+        howTitle: "何が外れ、なぜ外れるのか",
+        howNote: "バンドラが数えるのと同じバイト",
+        n1h: "絵ではなくエディタの状態",
+        n1p: "Inkscape・Sketchのファイルは、レイヤー名・ガイド・ページ色・アプリの状態を自前の名前空間に持ちます。ブラウザはそれを全部読み飛ばします。その要素と<b>xmlns</b>宣言を消すのが、書き出したロゴで最も大きな削減になります — 絵は変わりません。",
+        n2h: "小数は見た目より高くつく",
+        n2p: "小数6桁はピクセル格子の上では1つの数字に<b>8文字</b>です。アイコンの大きさなら2桁で1000分の1ピクセル未満です。小さくすべきファイルは1桁、パスが細かく丸めが見えるようなら4桁まで開いてあります。",
+        n3h: "推測せずに測る",
+        n3p: "2つのテキストを<b>TextEncoder</b>でUTF-8に符号化してバイト単位で数え、プレビューとすべての書き出しは最適化後のテキストそのものから作ります。パーサが拒否したらエラーを見せ、元ファイルには触れません。",
+        faqTitle: "質問",
+        faqNote: "正直な答え4つ",
+        q1: "最適化しても絵は同じですか？",
+        a1: "同じ要素が同じ塗り・線・パスで描きます。外れるのはレンダラが無視するもの — コメント・メタデータ・エディタ属性・空のグループです。幾何に触れる設定は桁数だけなので既定の2桁にし、プレビューも結果から描いています。配布前に2つを見比べてください。",
+        q2: "<title>・<desc>はなぜ残すのですか？",
+        a2: "スクリーンリーダーが<b>&lt;title&gt;</b>を図の名前として、<b>&lt;desc&gt;</b>を説明として読み上げます。コストは数十バイトです。スイッチは既定でオフで、周囲のマークアップが名前を代わりに与える装飾用アイコンなら、オンにして両方消せば済みます。",
+        q3: "JSX出力をそのまま使えますか？",
+        a3: "使えます — ルートに<b>{...props}</b>が付いたdefault exportのコンポーネントなので<b>&lt;SvgForgeIcon className=\"h-5 w-5\" /&gt;</b>として使えます。属性はキャメルケース、<b>class</b>は<b>className</b>、<b>style</b>はJSXオブジェクトになります。グラデーションのidはそのままなので、同じファイルを1画面に2回描くならidを固有にしてください。",
+        q4: "ファイルはどこへ行きますか？",
+        a4: "どこにも行きません。ブラウザがファイルを読み、<b>DOMParser</b>が解析し、ダウンロードするファイルはこのタブで作ったblobです。サーバも分析も保存もないため下の外部リクエスト数は0から動かず、タブを閉じればすべて消えます。",
+        footCopy: "© 2026 Kim Yihyung · ブラウザで、ブラウザのために作りました。",
+        footNet: "外部リクエスト",
+        footP1: "ポートフォリオ",
+        footP2: "ツール一覧",
+        footP3: "ソース",
+        footMono: "アップロードなし · 追跡なし",
+        jsxName: "SvgForgeIcon",
+      },
+      "zh-Hant": {
+        docTitle: "SvgForge — SVG 最佳化・React JSX・多尺寸 PNG | Kim Yihyung",
+        metaTitle: "SvgForge — SVG 最佳化・React JSX・多尺寸 PNG",
+        metaDesc: "用瀏覽器內建解析器清除 SVG 的註解、中繼資料、編輯器命名空間、空的群組與過長小數，並列比對原始與最佳化後的位元組數，再匯出 SVG、React 元件、CSS 資料 URI 與五種尺寸的 PNG。零位元組上傳。",
+        brandAria: "Kim Yihyung — 作品集",
+        back: "← 所有工具",
+        eyebrow: "SvgForge · 最佳化 · JSX · 資料 URI · PNG · 零上傳",
+        h1: "SVG 要輕。<br><span class=\"soft\">畫面照舊。</span><br><span class=\"gold\">JSX・CSS・PNG 一次出去。</span>",
+        lede: "把編輯器匯出的 SVG 拖進來，<strong>註解、中繼資料、編輯器命名空間、空群組與過長的小數</strong>就會由瀏覽器解析器整理掉。原始檔與最佳化後的位元組數並列秤過後，再以 <strong>SVG、React 元件、CSS 資料 URI、五種 PNG</strong> 匯出。",
+        pillUp: "零位元組上傳",
+        pillNet: "零次外部請求",
+        pillPrec: "小數 1～4 位",
+        pillPng: "64 · 128 · 256 · 512 · 1024 PNG",
+        labAria: "SVG 最佳化",
+        inHead: "1 · 放入 SVG",
+        inK: "載入",
+        dropAria: "拖入或選擇 SVG 檔案",
+        dropBig: ".svg 檔放到這裡",
+        dropSmall: "或點一下選擇 — 檔案不會離開這個分頁",
+        sample1: "範例 · 品牌標誌",
+        sample2: "範例 · 圖示組",
+        clearIn: "清空",
+        pasteAria: "SVG 原始碼",
+        pastePlaceholder: "…或把 SVG 原始碼貼在這裡。",
+        optComments: "XML 註解",
+        optCommentsH: "編輯器留下的備註 — 不會被繪製",
+        optMeta: "中繼資料",
+        optMetaH: "<metadata> 區塊與 RDF 描述",
+        optTitle: "<title> · <desc>",
+        optTitleH: "為了無障礙建議保留",
+        optNs: "編輯器命名空間",
+        optNsH: "inkscape · sodipodi · sketch · figma · adobe",
+        optEmpty: "空群組",
+        optEmptyH: "內容為空的 <g> — 由最內層開始",
+        optWs: "標籤間空白",
+        optWsH: "檔案含文字時會自動跳過",
+        optPrec: "小數位數",
+        optPrecH: "套用於路徑資料、points、變換與幾何屬性",
+        optPrecAria: "小數位數",
+        errLabel: "錯誤",
+        errParse: "這不是有效的 SVG。解析器訊息：",
+        errRoot: "根元素不是 <svg>，沒有可整理的內容。",
+        errEmpty: "請先放入 SVG — 拖入檔案、貼上程式碼或選一個範例。",
+        outHead: "2 · 結果",
+        outK: "實測",
+        stSrc: "原始位元組",
+        stOut: "最佳化位元組",
+        stSaved: "節省",
+        stNodes: "減少的節點",
+        previewAlt: "最佳化後的 SVG 預覽",
+        outAria: "最佳化後的 SVG",
+        copyOut: "複製 SVG",
+        dlOut: "下載 SVG",
+        savedLine: "省下 {n} 位元組 · 縮小 {p}%",
+        rmHead: "少了什麼",
+        rmK: "實測",
+        rmComments: "XML 註解",
+        rmMeta: "中繼資料區塊",
+        rmTitle: "<title> · <desc>",
+        rmNs: "編輯器節點・屬性",
+        rmEmpty: "空群組",
+        rmRound: "四捨五入的數字",
+        rmHint: "這是這一次實際刪掉的數量 — 關閉的開關維持 0，旁邊的預覽就是剩下的檔案本身。",
+        sameLine: "在這些設定下已無可刪",
+        copyDone: "已複製",
+        copyFail: "請選取文字後複製",
+        convTitle: "3 · 一次匯出",
+        convNote: "以最佳化後的文字為準",
+        tabsAria: "輸出格式",
+        tabJsx: "React JSX",
+        tabCss: "CSS 資料 URI",
+        tabPng: "匯出 PNG",
+        jsxAria: "React JSX 輸出",
+        cssAria: "CSS 資料 URI 輸出",
+        copyJsx: "複製元件",
+        dlJsx: "儲存 .jsx",
+        jsxHint: "屬性改為駝峰式（<b>stroke-width → strokeWidth</b>）、<b>class → className</b>、<b>style</b> 變成物件，根元素加上 <b>{...props}</b>。",
+        copyCss: "複製 CSS",
+        dlCss: "儲存 .css",
+        cssHint: "SVG 以百分比編碼，讓 <b>#</b>、<b>&lt;</b>、<b>\"</b> 在 url 裡存活。引號、括號、單引號也一併編碼，放進 style 屬性也不會破壞規則。",
+        genPng: "渲染 PNG",
+        dlAllPng: "下載全部 5 種",
+        dl: "下載",
+        pngHint: "每個尺寸都畫在<b>透明的正方形畫布</b>上，圖案依比例縮放並置中 — 沒有白底，也不會被裁切。最大只到 1024，是因為再上去檔案變大的速度會超過圖示本身的細節。",
+        pngReady: "已渲染 {n} 種 PNG · {ms}ms",
+        pngRendering: "渲染中…",
+        pngFail: "這個 SVG 無法畫到畫布上 — 可能是濾鏡或外部圖片參照阻擋。",
+        howTitle: "少了什麼，為什麼少",
+        howNote: "與打包工具計算的相同位元組",
+        n1h: "留下的是圖，不是編輯器狀態",
+        n1p: "Inkscape、Sketch 的檔案會把圖層名稱、參考線、頁面顏色、應用程式狀態放在自己的命名空間裡，瀏覽器全部略過。刪掉那些元素與 <b>xmlns</b> 宣告，是匯出標誌上最大的一筆節省 — 圖不會變。",
+        n2h: "小數比看起來更貴",
+        n2p: "六位小數在像素格上等於每個數字<b>8 個字元</b>。圖示大小下兩位就已經低於千分之一像素。要小的檔案用 1 位，路徑細到看得出四捨五入時再開到 4 位。",
+        n3h: "不估算，直接量",
+        n3p: "兩段文字都用 <b>TextEncoder</b> 編成 UTF-8 逐位元組計算，預覽與所有匯出都直接用那段最佳化後的文字產生。解析器拒絕時顯示錯誤，完全不動原始檔。",
+        faqTitle: "問題",
+        faqNote: "四個誠實的回答",
+        q1: "最佳化後畫面一樣嗎？",
+        a1: "相同的元素、相同的填色、線與路徑來繪製。消失的是繪製引擎本來就忽略的東西 — 註解、中繼資料、編輯器屬性、空群組。唯一碰到幾何的設定是小數位數，所以預設兩位，預覽也由結果繪製 — 上線前把兩者比一比。",
+        q2: "為什麼保留 <title>・<desc>？",
+        a2: "螢幕閱讀器會把 <b>&lt;title&gt;</b> 當成圖的名稱、<b>&lt;desc&gt;</b> 當成說明唸出來，代價只有幾十位元組。開關預設關閉，若圖示只是裝飾、周邊標記已提供名稱，打開開關把兩者都刪掉即可。",
+        q3: "JSX 輸出可以直接用嗎？",
+        a3: "可以 — 它是根元素帶 <b>{...props}</b> 的 default export 元件，直接寫 <b>&lt;SvgForgeIcon className=\"h-5 w-5\" /&gt;</b> 就能用。屬性改為駝峰式、<b>class</b> 變 <b>className</b>、<b>style</b> 變成 JSX 物件。漸層 id 會原樣保留，若同一頁要畫兩次相同檔案，請把 id 改成唯一。",
+        q4: "檔案會去哪裡？",
+        a4: "哪裡都不去。瀏覽器讀檔、<b>DOMParser</b> 解析，下載的檔案是這個分頁產生的 blob。沒有伺服器、沒有分析、沒有儲存，下方外部請求數一直停在 0，關掉分頁就全部消失。",
+        footCopy: "© 2026 Kim Yihyung · 在瀏覽器裡，為瀏覽器而做。",
+        footNet: "外部請求",
+        footP1: "作品集",
+        footP2: "所有工具",
+        footP3: "原始碼",
+        footMono: "不上傳 · 不追蹤",
+        jsxName: "SvgForgeIcon",
+      }
   };
 
   var state = { lang: 'en', raw: '', out: '', svgEl: null, tab: 'jsx', png: {}, pngToken: 0 };
@@ -793,11 +1043,63 @@ select.sel {
   function $(id) { return document.getElementById(id); }
   function t(key) { return (I18N[state.lang] && I18N[state.lang][key]) || I18N.en[key] || key; }
 
+  var DEFAULT_LANG = 'en';
+  /* ═══ 4-language switch (ko · en · ja · zh-Hant) ═══ */
+  var LANGS4 = ['ko', 'en', 'ja', 'zh-Hant'];
+  function normLang(v) {
+    v = String(v == null ? '' : v).toLowerCase().replace(/_/g, '-');
+    if (v === 'ko' || v === 'ko-kr' || v === 'kr') return 'ko';
+    if (v === 'ja' || v === 'ja-jp' || v === 'jp') return 'ja';
+    if (v === 'zh-hant' || v === 'zh-tw' || v === 'zh' || v === 'tw' || v === 'zh-hk') return 'zh-Hant';
+    if (v === 'en' || v === 'en-us' || v === 'en-gb') return 'en';
+    return '';
+  }
+  function loc4() { return state.lang === 'ko' ? 'ko-KR' : state.lang === 'ja' ? 'ja-JP' : state.lang === 'zh-Hant' ? 'zh-TW' : 'en-US'; }
+  function lsGet4(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function initialLang() {
+    var f = (typeof window.__FORCED_LANG__ !== 'undefined' && window.__FORCED_LANG__) ? window.__FORCED_LANG__ : '';
+    if (f && normLang(f)) return normLang(f);
+    var q = '';
+    try { q = new URLSearchParams(location.search).get('lang') || ''; } catch (e) { q = ''; }
+    if (q && normLang(q)) return normLang(q);
+    var stored = lsGet4(typeof SHARED_KEY !== 'undefined' ? SHARED_KEY : 'kyh.lang') || lsGet4(typeof LANG_KEY !== 'undefined' ? LANG_KEY : '');
+    if (stored && normLang(stored)) return normLang(stored);
+    var h = normLang(document.documentElement.getAttribute('lang'));
+    if (h) return h;
+    return typeof DEFAULT_LANG !== 'undefined' ? DEFAULT_LANG : 'ko';
+  }
+  function syncLangUI() {
+    var lt = document.getElementById('langToggle');
+    if (!lt) return;
+    var btns = lt.querySelectorAll('[data-lang]');
+    for (var i = 0; i < btns.length; i++) {
+      var on = btns[i].getAttribute('data-lang') === state.lang;
+      btns[i].classList.toggle('on', on);
+      btns[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+  }
+  function bindLangToggle() {
+    var lt = document.getElementById('langToggle');
+    if (!lt) return;
+    lt.addEventListener('click', function (ev) {
+      var t4 = ev.target.closest('[data-lang]');
+      if (!t4) return;
+      applyLang(t4.getAttribute('data-lang'));
+    });
+  }
+
   function applyLang(lang) {
-    state.lang = lang;
-    var dict = I18N[lang];
-    document.documentElement.lang = lang;
+    state.lang = normLang(lang) || 'en';
+    var dict = I18N[state.lang] || I18N.en;
+    document.documentElement.lang = state.lang;
     document.title = dict.docTitle;
+    var _md4 = dict.metaDesc || '';
+    if (_md4) {
+      var _me = document.querySelector('meta[name="description"]'); if (_me) _me.setAttribute('content', _md4);
+      var _oe = document.querySelector('meta[property="og:description"]'); if (_oe) _oe.setAttribute('content', _md4);
+      var _te = document.querySelector('meta[name="twitter:description"]'); if (_te) _te.setAttribute('content', _md4);
+    }
+    var _ot = document.querySelector('meta[property="og:title"]'); if (_ot) _ot.setAttribute('content', String(dict.metaTitle || dict.docTitle).split('|')[0].trim());
     Array.prototype.forEach.call(document.querySelectorAll('[data-i18n]'), function (el) {
       var v = dict[el.getAttribute('data-i18n')];
       if (typeof v === 'string') el.textContent = v;
@@ -818,16 +1120,8 @@ select.sel {
       var v = dict[el.getAttribute('data-i18n-alt')];
       if (typeof v === 'string') el.setAttribute('alt', v);
     });
-    var lt = document.querySelectorAll('.lang-toggle .lt');
-    Array.prototype.forEach.call(lt, function (el) {
-      el.classList.toggle('on', el.getAttribute('data-lt') === lang);
-    });
-    var tog = $('langToggle');
-    if (tog) {
-      var next = lang === 'en' ? '한국어로 보기' : 'View in English';
-      tog.setAttribute('title', next);
-      tog.setAttribute('aria-label', next);
-    }
+      syncLangUI();
+      try { localStorage.setItem('kyh.lang', state.lang); } catch (e) { /* storage may be blocked */ }
     render();
   }
 
@@ -1478,13 +1772,14 @@ select.sel {
     $('tab' + key.charAt(0).toUpperCase() + key.slice(1)).addEventListener('click', function () { showTab(key); });
   });
 
-  $('langToggle').addEventListener('click', function () {
-    applyLang(state.lang === 'en' ? 'ko' : 'en');
+  $('langToggle').addEventListener('click', function (ev) {
+    var _t4 = ev.target.closest('[data-lang]');
+    if (_t4) applyLang(_t4.getAttribute('data-lang'));
   });
 
   /* ═════════════════════ boot ═════════════════════ */
   setInput(SAMPLE_1, 'sample-brand-mark.svg');
-  applyLang('en');
+  applyLang(initialLang());
   paintNet();
 })();
 </script>

@@ -157,6 +157,9 @@ button, input, select, textarea { font-family: inherit; color: inherit; }
 .lang-toggle:active { transform: scale(.94); }
 .lang-toggle .lt.on { color: var(--accent); }
 .lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.lang-toggle .lt { appearance: none; border: 0; background: none; color: inherit; font: inherit; letter-spacing: inherit; line-height: 1; padding: 1px 0; cursor: pointer; transition: color .2s; }
+.lang-toggle .lt:hover { color: var(--ink); }
+.lang-toggle .lt:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 .topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
 .topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
 
@@ -323,7 +326,7 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
 .foot .net b { color: var(--ok); }
 
 @media (max-width: 640px) {
-  .wrap { padding: 0 14px 36px; }
+  .wrap { padding: 0 16px 36px; }
   .topbar { padding: 14px 0 8px; }
   .brand-txt { font-size: 12px; letter-spacing: .1em; }
   .hero { padding: 16px 0 12px; }
@@ -344,11 +347,15 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
       <span class="brand-txt">Kim Yihyung</span>
     </a>
     <div class="top-actions">
-      <button class="lang-toggle" id="langToggle" type="button" title="View in English" aria-label="View in English">
-        <span class="lt on" data-lt="ko">KO</span>
+      <div class="lang-toggle" id="langToggle" role="group" aria-label="Language">
+        <button class="lt" type="button" data-lt="ko" lang="ko">KO</button>
         <span class="lsep" aria-hidden="true">|</span>
-        <span class="lt" data-lt="en">EN</span>
-      </button>
+        <button class="lt" type="button" data-lt="en" lang="en">EN</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lt="ja" lang="ja">JA</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lt="zh-Hant" lang="zh-Hant">繁中</button>
+      </div>
       <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← 도구 전체</a>
     </div>
   </header>
@@ -662,6 +669,8 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
   /* ═════════════════════ 언어 사전 ═════════════════════ */
   var I18N = {
     ko: {
+      langLabel: '언어',
+      metaTitle: 'CarCost — 자동차 취득세·할부·유류비 계산',
       docTitle: 'CarCost — 차량 취등록세·할부·유류비 계산기 | Kim Yihyung',
       metaDesc: '차량가액에 부가세를 빼고 10원 미만을 버린 과세표준으로 차종별 취득세를 계산하고, 경차·전기차·수소차·다자녀 감면과 2026년 세법 기준일을 반영해 합산 초기비용과 월 유지비 리포트를 냅니다. 할부 원리금균등 월납입금과 월 유류비·충전비까지 한 화면에서, 브라우저 안에서만.',
       ogTitle: 'CarCost — 취등록세·할부·유지비 계산',
@@ -762,6 +771,8 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
       sumTax: '취득세'
     },
     en: {
+      langLabel: 'Language',
+      metaTitle: 'CarCost — acquisition tax, instalments, fuel cost',
       docTitle: 'CarCost — Korean Car Acquisition Tax, Loan & Fuel Cost | Kim Yihyung',
       metaDesc: 'Korean vehicle acquisition tax from the taxable base with VAT removed and the last 10 won floored, rate by vehicle type with compact-car, EV/hydrogen and multi-child reductions on 2026 law with the effective date stated, plus an instalment calculator and monthly fuel or charging cost — all in the browser.',
       ogTitle: 'CarCost — acquisition tax, loan, running cost',
@@ -855,6 +866,366 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
       sumLoan: 'Instalment / month', sumLoanTotal: 'Total paid',
       sumFuel: 'Fuel / month', sumFuelYear: 'Fuel / year',
       sumTax: 'Acquisition tax'
+    },
+    'ja': {
+      docTitle: 'CarCost — 韓国の自動車取得税・分割払い・燃料費 | Kim Yihyung',
+      metaTitle: 'CarCost — 自動車取得税・分割払い・燃料費(2026年)',
+      metaDesc: '韓国の自動車取得税は、VATを除いた課税標準に車種別の税率をかけ、10ウォン未満を切り捨てて計算します。軽自動車・EV・水素車・多子家庭の減免を2026年法(適用日明記)で反映し、分割払いと月々の燃料・充電費までまとめてブラウザ内で計算します。',
+      ogTitle: 'CarCost — 取得税・分割払い・維持費',
+      ogDesc: 'VATを除いた課税標準、車種別の税率、軽自動車・EV・水素・多子の減免を2026年法で、分割払いと月々の燃料費までこのタブで。',
+      langLabel: '言語を切り替え',
+      brandAria: 'Kim Yihyung — ポートフォリオ',
+      back: '← ツール一覧',
+      eyebrow: 'CarCost · 取得税 · 分割払い · 燃料 · アップロードゼロ',
+      h1: 'クルマに本当にかかる金額。<br><span class="soft">税金からガソリン代まで。</span><br><span class="gold">計算はすべてこのタブの中で。</span>',
+      lede: '<strong>課税標準</strong>からVATを除いて車種別の税率をかけ、<strong>軽自動車・エコカー・多子家庭の減免</strong>を<strong>適用日を明記した2026年法</strong>で差し引きます。<strong>分割払いの計算</strong>、<strong>月々の燃料・充電費</strong>、そしてまとめたレポートまで。入力した内容は保存も送信もされません。',
+      pillUp: 'アップロード 0 バイト',
+      pillNet: '外部リクエスト 0 件',
+      pill2026: '2026年税法',
+      pillCopy: 'カカオトーク用の要約をコピー',
+      calcAria: 'カーコスト計算',
+      tabAria: '計算の種類',
+      tab1: '取得税',
+      tab2: '分割払い',
+      tab3: '燃料 · 充電',
+      taxTitle: '取得税 · 登録',
+      taxNote: '課税標準 ÷1.1 · 10ウォン未満切り捨て',
+      tPrice: '車両価格(VAT込み)',
+      unitWon: ' ウォン',
+      tType: '車種',
+      ttPass: '自家用乗用(7%)',
+      ttCompact: '軽自動車(4% · 75万ウォン減)',
+      ttVan: 'バン · トラック(5%)',
+      ttComm: '営業用(4%)',
+      ecoAria: 'エコカー',
+      ecoNone: '内燃機関',
+      ecoEv: '電気 · 水素',
+      none0: 'なし',
+      kids2: '2人(50%)',
+      kids3: '3人以上',
+      tPlate: 'ナンバープレート · 手数料',
+      taxCaveat: '韓国の自動車取得税には<b>地方教育税が付きません</b>(地方税法 第150条第1項 — 車両は除外)。減免は<b>重ねて</b>適用されず、<b>地方税特例制限法 第180条</b>により<b>最も大きい一つ</b>だけが適用されます。地方開発債は税ではなく、地域・車種・排気量で変わるため含めていません。',
+      loanTitle: '新車の分割払い',
+      loanNote: '元利均等 · 12〜72か月',
+      lPrice: '車両価格',
+      lDown: '頭金',
+      lRate: '年利率',
+      lMonths: '期間',
+      unitMo: ' か月',
+      lHead1: '毎月 · 総額',
+      lHead2: '期間を変えてみる',
+      loanCaveat: '元利均等は<b>月利 = 年利 ÷ 12</b> を残高にかける方式で、韓国のリースやオートローンの大半がこの方式です。<b>個人</b>は分割の利息を課税標準に含めず、<b>法人</b>は含めます。',
+      fuelTitle: '月々の燃料 · 充電',
+      fuelNote: '距離 × 燃費 × 単価',
+      fKm: '1か月の走行距離',
+      fEff: '燃費',
+      fPrice: '燃料単価 / L',
+      fuelAria: '燃料の種類',
+      kGas: 'ガソリン',
+      kDiesel: 'ディーゼル',
+      kEv: '電気(km/kWh)',
+      fuelCaveat: '電気自動車は<b>km/kWh</b> の効率と <b>1kWhあたりの単価</b>で計算します。高速代・駐車代・保険は車と地域で差が大きすぎるため組み込んでいません — レポートの<b>その他の固定費</b>欄に入力してください。',
+      repHead: 'まとめレポート — 初期費用 + 毎月',
+      rk0: '① 車両価格',
+      rk1: '② 取得税(減免後)',
+      rk2: '③ ナンバープレート · 手数料',
+      rk3: '④ 保険(年 ÷ 12)',
+      rkInit: '初期費用の合計',
+      rk4: '⑤ 燃料 · 充電',
+      rk5: '⑥ 自動車税(年 ÷ 12)',
+      rk6: '⑦ 分割の返済額',
+      rk7: '⑦ その他の固定費',
+      rkMonth: '毎月の合計',
+      oIns: '保険 / 年',
+      oCarTax: '自動車税 / 年',
+      oOther: 'その他の固定費 / 月',
+      oCc: '排気量(cc)',
+      copyBtn: 'カカオトーク用の要約としてコピー',
+      lawHead: '適用中の税率 · 減免',
+      l1k: '自家用乗用',
+      l2k: '軽自動車(1,000cc以下)',
+      l2v: '4% · 75万ウォン減',
+      l3k: 'バン · トラック',
+      l4k: '営業用',
+      l5k: '電気 · 水素',
+      l5v: '140万ウォンまで免税',
+      l6k: '水素トラック',
+      l6v: '50%減 · 2028年まで',
+      l7k: '多子家庭(6人乗り以下)',
+      l7v: '3人で140万 · 2人で70万',
+      l8k: '減免の重複',
+      l8v: '最も大きい一つだけ(第180条)',
+      l9k: '法を確認した日',
+      l9v: '2026-11-18',
+      lawNote: 'この日付は<b>税率と減免条項を確認した日</b>で、このページを書いた日ではありません。債券の割当と地方条例は<b>自治体ごとに違い、よく変わります</b> — 登録前に区役所やウィテク(車両登録代行)で最終金額を確認してください。',
+      howTitle: '税額の計算方法',
+      howNote: '約束ではなく式',
+      n1h: '課税標準 — VATを抜き、10ウォン未満を切り捨て',
+      n1p: '取得税の課税標準は<b>実際に支払った価格</b>で、請求書上の<b>供給価額</b>です(地方税法 第10条の3および同施行令)。VAT込みなら <b>1.1</b> で割り、税額は<b>10ウォン未満を切り捨て</b>ます。VAT込み4,400万ウォンの車なら課税標準4,000万ウォン、自家用乗用の税率で280万ウォンです。個人は分割の利息を除き、法人は含めます。',
+      n2h: '減免 — 軽自動車 · エコカー · 子ども',
+      tReduce: '減免',
+      tHow: '適用条件',
+      tr1: '軽自動車(自家用)',
+      tr1v: '最大75万ウォン · 2027年まで',
+      tr2: '電気',
+      tr2v: '最大140万ウォン · 2026年まで',
+      tr3: '水素',
+      tr3v: '最大140万ウォン · 2027年まで',
+      tr4: '水素トラック',
+      tr4v: '50%減 · 2028年まで',
+      tr5: '子ども3人以上',
+      tr5v: '6人乗り以下で140万ウォン上限 · 2027年まで',
+      tr6: '子ども2人',
+      tr6v: '50%、6人乗り以下で70万ウォン上限 · 2027年まで',
+      n2p: '<b>第180条</b>により最も大きい減免だけが適用されます。税額が50万ウォン以下なら課税されません。',
+      n3h: '登録時にかかるその他の費用',
+      n3p: '登録では<b>地方開発債</b>(税ではなく債券)、ナンバープレート代、わずかな登録手数料もかかります。債券の割当は地域・車種・排気量で違い、割引で買い戻せるので、このツールはプレートと手数料だけを尋ね、債券は請求書に任せます。自動車税は排気量1ccあたり年80/140/200ウォンを段階別に課し、教育税が30%加わります。',
+      faqTitle: 'よくある質問',
+      faqNote: '課税標準 · 減免 · 債券',
+      q1: 'なぜ車に地方教育税が付かないのですか?',
+      a1: '地方税法 第150条第1項が車両を教育税の対象から外しています。住宅や建物には付きますが車には付かないので、自家用乗用車の実質税率は<b>7%そのまま</b>です。7%に教育税の%を足している解説は、条文と合っていません。',
+      q2: '電気自動車はいくら得ですか?',
+      a2: '計算した税額が<b>140万ウォン以下</b>なら全額免除、それを超える場合は140万ウォンを差し引きます(特例制限法 第66条第4項、2026年12月31日まで)。水素の乗用・バンは同じ140万ウォン上限が2027年12月31日まで、水素<b>トラック</b>は2028年まで50%減です。多子減免とは重複せず、大きいほうだけが適用されます。',
+      q3: 'なぜ債券が計算に入っていないのですか?',
+      a3: '地方開発債は税ではなく<b>債券</b>です。割当は地域・車種・排気量・登録日で変わり、すぐ売却すると割引分の損が出ます。同じ日に登録した同じ車でも、ソウルと原州で債券が違うことがあります。請求書の金額を初期費用に手で足してください。',
+      q4: '多子減免は誰が、どの車で受けられますか?',
+      a4: '登録日時点で<b>18歳未満の子どもを2人以上</b>育てている人が、<b>最初に申請する1台</b>について受けられます(特例制限法 第22条の2、2027年12月31日まで)。<b>6人乗り以下の乗用車</b>では、3人なら140万ウォンまで免税、2人なら50%で70万ウォンまで。7〜10人乗り、15人乗りまでのバン、1トンまでのトラックでは、3人で200万ウォンまで免税、それを超える分は15%です。<b>1年以内に売却</b>すると減免は取り戻されます(死亡・婚姻を除く)。',
+      footCopy: '© 2026 Kim Yihyung · ブラウザで、ブラウザのために。',
+      footNet: '外部リクエスト',
+      footP1: 'ポートフォリオ',
+      footP2: 'ツール一覧',
+      footP3: 'ソース',
+      mono: 'アップロードなし · 追跡なし',
+      toggleTo: '言語を切り替え',
+      stReady: '準備完了 — 計算はすべてこのタブで動きます。',
+      copied: 'クリップボードにコピーしました。',
+      copyFail: 'コピーできませんでした — 要約を選んで手動でコピーしてください。',
+      rPrice: '車両価格(VAT込み)',
+      rBase: '課税標準(÷1.1、切り捨て)',
+      rGrossTax: '計算した税額',
+      rCut: '減免額',
+      rTax: '納付する取得税',
+      rPlate: 'ナンバープレート · 手数料',
+      rInitTotal: '初期費用の合計(税 + 手数料)',
+      mBase: '課税標準',
+      mRate: '税率',
+      cNone: '減免なし',
+      cCompact: '軽自動車減免 75万ウォン',
+      cEco: 'エコカー減免 140万ウォン',
+      cKid3: '多子減免 140万ウォン',
+      cKid2: '多子減免 70万ウォン(50%)',
+      cNoted: '減免は適用されませんでした',
+      stCap: '減免が税額を上回ったため、納付はありません。',
+      rLoan: '融資金額',
+      rMonthly: '毎月の返済額',
+      rTotal: '支払総額',
+      rInterest: '利息の合計',
+      rDown: '頭金',
+      lTermNote: '{m} か月なら同じ条件で毎月 {p} · 利息 {i}',
+      rFuelUse: '毎月の使用量',
+      rFuelMonthly: '毎月の燃料費',
+      rFuelYear: '年間の燃料費',
+      rPerKm: '1kmあたりの費用',
+      fEffL: 'km/L',
+      fEffE: 'km/kWh',
+      fPriceLabel: '燃料単価 / L',
+      fPriceLabelE: '充電単価 / kWh',
+      rOthers: 'その他(保険・自動車税・固定費)',
+      sumTaxHead: '取得税',
+      sumLoanHead: '分割払い',
+      sumFuelHead: '燃料 · 充電',
+      sumInit: '初期費用の合計',
+      sumMonth: '毎月の合計',
+      sumFoot: '参考値です。韓国法は2026-11-18時点で確認したもの。債券と地方条例は別枠なので、登録前に区役所で確認してください。',
+      repTitle: '[CarCost] カーコストのまとめ',
+      sumType: '車種',
+      sumPrice: '車両価格',
+      sumLoan: '分割 / 月',
+      sumLoanTotal: '支払総額',
+      sumFuel: '燃料 / 月',
+      sumFuelYear: '燃料 / 年',
+      sumTax: '取得税',
+      tKids: '18歳未満の子ども'
+    },
+    'zh-Hant': {
+      docTitle: 'CarCost — 韓國汽車取得稅、分期與燃料費 | Kim Yihyung',
+      metaTitle: 'CarCost — 汽車取得稅、分期與燃料費(2026)',
+      metaDesc: '韓國汽車取得稅以扣除加值稅後的課稅標準乘上車種稅率，再捨去未滿 10 韓元計算；同時套用輕型車、電動氫能車與多子女家庭的減免(2026 年法、標明施行日)，並附分期試算與每月燃料或充電費，全部在瀏覽器內完成。',
+      ogTitle: 'CarCost — 取得稅、分期、養車成本',
+      ogDesc: '扣除加值稅的課稅標準、車種稅率、輕型車與電動氫能及多子女減免(2026 年法)、分期付款與每月燃料費，都在這個分頁裡。',
+      langLabel: '切換語言',
+      brandAria: 'Kim Yihyung — 作品集',
+      back: '← 所有工具',
+      eyebrow: 'CarCost · 取得稅 · 分期 · 燃料 · 零上傳',
+      h1: '一台車真正花多少錢。<br><span class="soft">從稅金到油錢。</span><br><span class="gold">每一筆計算都留在這個分頁。</span>',
+      lede: '<strong>課稅標準</strong>先扣掉加值稅、乘上車種稅率，再減去<strong>輕型車、環保車與多子女減免</strong>，全部依<strong>標明施行日的 2026 年法</strong>。<strong>分期試算</strong>、<strong>每月燃料或充電費</strong>，以及一份彙總報告。輸入的內容不會被儲存或傳送。',
+      pillUp: '上傳 0 位元組',
+      pillNet: '外部請求 0 次',
+      pill2026: '2026 年稅法',
+      pillCopy: '複製 KakaoTalk 摘要',
+      calcAria: '汽車成本試算',
+      tabAria: '試算類型',
+      tab1: '取得稅',
+      tab2: '分期',
+      tab3: '燃料 · 充電',
+      taxTitle: '取得稅 · 領牌',
+      taxNote: '課稅標準 ÷1.1 · 捨去未滿 10 韓元',
+      tPrice: '車價(含加值稅)',
+      unitWon: ' 韓元',
+      tType: '車種',
+      ttPass: '自用客車(7%)',
+      ttCompact: '輕型車(4% · 減 75 萬)',
+      ttVan: '廂型車 · 貨車(5%)',
+      ttComm: '營業用(4%)',
+      ecoAria: '環保車',
+      ecoNone: '燃油車',
+      ecoEv: '電動 · 氫能',
+      none0: '無',
+      kids2: '2 名(50%)',
+      kids3: '3 名以上',
+      tPlate: '車牌 · 規費',
+      taxCaveat: '韓國汽車取得稅<b>不課地方教育稅</b>(地方稅法 第150條第1項 — 車輛排除在外)。減免<b>不能</b>疊加，依<b>地方稅特例限制法 第180條</b>只適用<b>最大的一項</b>。地方開發債不是稅，且依地區、車種、排氣量而異，因此未計入。',
+      loanTitle: '新車分期',
+      loanNote: '本息攤還 · 12〜72 期',
+      lPrice: '車價',
+      lDown: '自備款',
+      lRate: '年利率',
+      lMonths: '期數',
+      unitMo: ' 期',
+      lHead1: '每月 · 總額',
+      lHead2: '換個期數看看',
+      loanCaveat: '本息攤還以<b>月利率 = 年利率 ÷ 12</b> 對餘額計息，韓國多數租賃與車貸都用這種方式。<b>個人</b>的課稅標準不含分期利息，<b>公司</b>則要計入。',
+      fuelTitle: '每月燃料 · 充電',
+      fuelNote: '里程 × 效率 × 單價',
+      fKm: '每月行駛里程',
+      fEff: '能耗',
+      fPrice: '燃料單價 / L',
+      fuelAria: '燃料種類',
+      kGas: '汽油',
+      kDiesel: '柴油',
+      kEv: '電動(km/kWh)',
+      fuelCaveat: '電動車以 <b>km/kWh</b> 的效率與 <b>每度電單價</b>計算。過路費、停車費與保險因車、因地差異太大，沒有內建 — 請填進報告裡的<b>其他固定費用</b>欄位。',
+      repHead: '彙總報告 — 初期費用 + 每月',
+      rk0: '① 車價',
+      rk1: '② 取得稅(減免後)',
+      rk2: '③ 車牌 · 規費',
+      rk3: '④ 保險(年 ÷ 12)',
+      rkInit: '初期費用合計',
+      rk4: '⑤ 燃料 · 充電',
+      rk5: '⑥ 汽車稅(年 ÷ 12)',
+      rk6: '⑦ 分期還款',
+      rk7: '⑦ 其他固定費用',
+      rkMonth: '每月合計',
+      oIns: '保險 / 年',
+      oCarTax: '汽車稅 / 年',
+      oOther: '其他固定 / 月',
+      oCc: '排氣量(cc)',
+      copyBtn: '複製成 KakaoTalk 摘要',
+      lawHead: '目前適用的稅率 · 減免',
+      l1k: '自用客車',
+      l2k: '輕型車(1,000cc 以下)',
+      l2v: '4% · 減 75 萬',
+      l3k: '廂型車 · 貨車',
+      l4k: '營業用',
+      l5k: '電動 · 氫能',
+      l5v: '140 萬以下免稅',
+      l6k: '氫能貨車',
+      l6v: '減 50% · 至 2028 年',
+      l7k: '多子女(6 人座以下)',
+      l7v: '3 名 140 萬 · 2 名 70 萬',
+      l8k: '減免疊加',
+      l8v: '只取最大一項(第180條)',
+      l9k: '法規確認日',
+      l9v: '2026-11-18',
+      lawNote: '這個日期是<b>確認稅率與減免條款</b>的時間，不是這頁寫成的時間。債券配額與地方自治條例<b>各市區不同、也常變動</b> — 領牌前請向區公所或代辦確認最終金額。',
+      howTitle: '稅額怎麼算',
+      howNote: '是公式，不是承諾',
+      n1h: '課稅標準 — 扣掉加值稅、捨去未滿 10 韓元',
+      n1p: '取得稅的課稅標準是<b>實際支付的價格</b>，也就是發票上的<b>供給金額</b>(地方稅法 第10條之3及其施行令)。含加值稅時除以 <b>1.1</b>，稅額再<b>捨去未滿 10 韓元</b>。含稅 4,400 萬韓元的車，課稅標準 4,000 萬，自用客車稅率是 280 萬韓元。個人不含分期利息，公司要含。',
+      n2h: '減免 — 輕型車 · 環保車 · 子女',
+      tReduce: '減免',
+      tHow: '適用條件',
+      tr1: '輕型車(自用)',
+      tr1v: '最多 75 萬 · 至 2027 年',
+      tr2: '電動',
+      tr2v: '最多 140 萬 · 至 2026 年',
+      tr3: '氫能',
+      tr3v: '最多 140 萬 · 至 2027 年',
+      tr4: '氫能貨車',
+      tr4v: '減 50% · 至 2028 年',
+      tr5: '子女 3 名以上',
+      tr5v: '6 人座以下上限 140 萬 · 至 2027 年',
+      tr6: '子女 2 名',
+      tr6v: '50%，6 人座以下上限 70 萬 · 至 2027 年',
+      n2p: '依<b>第180條</b>只適用最大的一項減免。稅額在 50 萬韓元以下就不課稅。',
+      n3h: '領牌時還要付什麼',
+      n3p: '領牌還會有<b>地方開發債</b>(債券，不是稅)、車牌規費與少許登記費。債券配額依地區、車種、排氣量不同，而且可以打折買回，所以這個工具只問車牌與規費，債券留給帳單。汽車稅按排氣量每 cc 每年 80/140/200 韓元分級課徵，再加 30% 教育稅。',
+      faqTitle: '常見問題',
+      faqNote: '課稅標準 · 減免 · 債券',
+      q1: '為什麼汽車沒有地方教育稅?',
+      a1: '地方稅法 第150條第1項把車輛排除在教育稅之外。住宅與建物要繳，車不繳，所以自用客車的實質稅率就是<b>7% 整</b>。在 7% 之上再加教育稅百分比的說明，跟條文不符。',
+      q2: '電動車能省多少?',
+      a2: '算出的稅額在<b>140 萬韓元以下</b>就全免，超過則扣 140 萬(特例限制法 第66條第4項，至 2026 年 12 月 31 日)。氫能客車與廂型車同樣 140 萬上限到 2027 年 12 月 31 日，氫能<b>貨車</b>減 50% 到 2028 年。不能與多子女減免疊加，只取較大的一項。',
+      q3: '為什麼計算裡沒有債券?',
+      a3: '地方開發債是<b>債券</b>不是稅：配額依地區、車種、排氣量與領牌日不同，立刻賣掉還會有折價損失。同一天領牌的同一款車，在首爾和原州可能配額不同。請把帳單上的金額自行加到初期費用。',
+      q4: '多子女減免是誰、哪台車可以?',
+      a4: '領牌日當下<b>育有 2 名以上未滿 18 歲子女</b>的人，對<b>第一台申請的車</b>適用(特例限制法 第22條之2，至 2027 年 12 月 31 日)。<b>6 人座以下客車</b>：3 名子女免稅到 140 萬，2 名減 50% 到 70 萬。7〜10 人座、15 人座以下廂型車、1 噸以下貨車：3 名子女免稅到 200 萬，超過部分課 15%。<b>一年內賣車</b>會被追回減免(死亡、結婚除外)。',
+      footCopy: '© 2026 Kim Yihyung · 在瀏覽器裡，為瀏覽器而做。',
+      footNet: '外部請求',
+      footP1: '作品集',
+      footP2: '所有工具',
+      footP3: '原始碼',
+      mono: '不上傳 · 不追蹤',
+      toggleTo: '切換語言',
+      stReady: '就緒 — 所有計算都在這個分頁裡跑。',
+      copied: '已複製到剪貼簿。',
+      copyFail: '複製失敗 — 請選取摘要手動複製。',
+      rPrice: '車價(含加值稅)',
+      rBase: '課稅標準(÷1.1、捨去)',
+      rGrossTax: '算出的稅額',
+      rCut: '減免',
+      rTax: '應繳取得稅',
+      rPlate: '車牌 · 規費',
+      rInitTotal: '初期費用合計(稅 + 規費)',
+      mBase: '課稅標準',
+      mRate: '稅率',
+      cNone: '沒有減免',
+      cCompact: '輕型車減 75 萬',
+      cEco: '環保車減 140 萬',
+      cKid3: '多子女減 140 萬',
+      cKid2: '多子女減 70 萬(50%)',
+      cNoted: '未套用減免',
+      stCap: '減免超過稅額，因此不用繳。',
+      rLoan: '貸款金額',
+      rMonthly: '每月還款',
+      rTotal: '支付總額',
+      rInterest: '利息合計',
+      rDown: '自備款',
+      lTermNote: '{m} 期時，同樣條件每月 {p} · 利息 {i}',
+      rFuelUse: '每月用量',
+      rFuelMonthly: '每月燃料費',
+      rFuelYear: '每年燃料費',
+      rPerKm: '每公里成本',
+      fEffL: 'km/L',
+      fEffE: 'km/kWh',
+      fPriceLabel: '燃料單價 / L',
+      fPriceLabelE: '充電單價 / kWh',
+      rOthers: '其他(保險、汽車稅、固定費)',
+      sumTaxHead: '取得稅',
+      sumLoanHead: '分期',
+      sumFuelHead: '燃料 · 充電',
+      sumInit: '初期費用合計',
+      sumMonth: '每月合計',
+      sumFoot: '僅供參考，韓國法規以 2026-11-18 確認的為準。債券與地方條例另計，領牌前請向區公所確認。',
+      repTitle: '[CarCost] 汽車成本摘要',
+      sumType: '車種',
+      sumPrice: '車價',
+      sumLoan: '分期 / 月',
+      sumLoanTotal: '支付總額',
+      sumFuel: '燃料 / 月',
+      sumFuelYear: '燃料 / 年',
+      sumTax: '取得稅',
+      tKids: '未滿 18 歲子女'
     }
   };
 
@@ -876,6 +1247,32 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
   var state = { lang: 'ko', tab: 'tax', eco: 'none', fuelKind: 'gasoline' };
   var LANG_KEY = 'carcost.lang';
   var SHARED_KEY = 'kyh.lang';
+  var LANGS = ['ko', 'en', 'ja', 'zh-Hant'];
+  var DEFAULT_LANG = normLang(document.documentElement.getAttribute('lang')) || 'ko';
+  function normLang(v) {
+    var s = String(v == null ? '' : v).trim().toLowerCase().replace(/_/g, '-');
+    if (s === 'ko' || s === 'kr' || s === 'ko-kr') return 'ko';
+    if (s === 'en' || s === 'en-us' || s === 'en-gb' || s === 'en-au') return 'en';
+    if (s === 'ja' || s === 'jp' || s === 'ja-jp') return 'ja';
+    if (s === 'zh-hant' || s === 'zh-tw' || s === 'zh-hk' || s === 'zh-mo' || s === 'tw' || s === 'zh' || s === 'zh-hant-tw') return 'zh-Hant';
+    return '';
+  }
+  function readStoredLang(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  /* read-only: per-language title/description for the static /en/ /ja/ /zh-tw/ builder.
+     A getter, so it is computed when read (the builder runs after this script). */
+  Object.defineProperty(window, '__I18N_META__', {
+    configurable: true,
+    get: function () {
+      var out = {};
+      var ogl = { ko: 'ko_KR', en: 'en_US', ja: 'ja_JP', 'zh-Hant': 'zh_TW' };
+      Object.keys(I18N || {}).forEach(function (lg) {
+        var d = I18N[lg] || {};
+        out[lg] = { htmlLang: lg, ogLocale: ogl[lg] || 'en_US',
+                    title: d.metaTitle || d.docTitle || '', description: d.metaDesc || '' };
+      });
+      return out;
+    }
+  });
 
   function $(id) { return document.getElementById(id); }
   function floor10(v) { return Math.floor(v / 10) * 10; }
@@ -894,10 +1291,13 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
     try { var v = localStorage.getItem(k); return v === 'ko' || v === 'en' ? v : ''; } catch (e) { return ''; }
   }
   function initialLang() {
-    var q = '';
-    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
-    if (q === 'ko' || q === 'en') return q;
-    return readLang(SHARED_KEY) || readLang(LANG_KEY) || 'ko';
+    var l = normLang(window.__FORCED_LANG__);
+    if (l) return l;
+    try { l = normLang(new URLSearchParams(location.search).get('lang')); } catch (e) { l = ''; }
+    if (l) return l;
+    l = normLang(readStoredLang(SHARED_KEY)) || normLang(readStoredLang(LANG_KEY));
+    if (l) return l;
+    return normLang(document.documentElement.getAttribute('lang')) || DEFAULT_LANG;
   }
 
   /* ═════════════════════ 01 취득세 ═════════════════════ */
@@ -1191,14 +1591,15 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
     if (el) el.setAttribute(attr, val);
   }
   function applyLang(lang) {
-    state.lang = lang === 'en' ? 'en' : 'ko';
+    state.lang = normLang(lang) || DEFAULT_LANG;
     document.documentElement.setAttribute('lang', state.lang);
     document.title = t('docTitle');
     setMeta('meta[name="description"]', 'content', t('metaDesc'));
-    setMeta('meta[property="og:title"]', 'content', t('ogTitle'));
-    setMeta('meta[property="og:description"]', 'content', t('ogDesc'));
-    setMeta('meta[name="twitter:title"]', 'content', t('ogTitle'));
-    setMeta('meta[name="twitter:description"]', 'content', t('ogDesc'));
+    setMeta('meta[property="og:title"]', 'content', t('metaTitle'));
+    setMeta('meta[property="og:description"]', 'content', t('metaDesc'));
+    setMeta('meta[name="twitter:title"]', 'content', t('metaTitle'));
+    setMeta('meta[name="twitter:description"]', 'content', t('metaDesc'));
+    setMeta('meta[property="og:locale"]', 'content', state.lang === 'zh-Hant' ? 'zh_TW' : (state.lang === 'ja' ? 'ja_JP' : (state.lang === 'ko' ? 'ko_KR' : 'en_US')));
     var nodes = document.querySelectorAll('[data-i18n]');
     for (var i = 0; i < nodes.length; i++) {
       var v = t(nodes[i].getAttribute('data-i18n'));
@@ -1216,10 +1617,13 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
     }
     var lt = $('langToggle');
     if (lt) {
-      var spans = lt.querySelectorAll('[data-lt]');
-      for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
-      lt.setAttribute('aria-label', t('toggleTo'));
-      lt.setAttribute('title', t('toggleTo'));
+      var lbs = lt.querySelectorAll('[data-lt]');
+      for (i = 0; i < lbs.length; i++) {
+        var _on = lbs[i].getAttribute('data-lt') === state.lang;
+        lbs[i].classList.toggle('on', _on);
+        lbs[i].setAttribute('aria-pressed', _on ? 'true' : 'false');
+      }
+      lt.setAttribute('aria-label', t('langLabel'));
     }
     applyFuelKind(state.fuelKind);
     paintAll();
@@ -1229,9 +1633,14 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
     } catch (e) { /* 저장 실패는 무해 */ }
   }
 
-  $('langToggle').addEventListener('click', function () {
-    applyLang(state.lang === 'ko' ? 'en' : 'ko');
-  });
+  var ltRoot = $('langToggle');
+  if (ltRoot) {
+    ltRoot.addEventListener('click', function (ev) {
+      var b = ev.target && ev.target.closest ? ev.target.closest('[data-lt]') : null;
+      if (!b) return;
+      applyLang(b.getAttribute('data-lt'));
+    });
+  }
 
   /* ═════════════════════ 시작 ═════════════════════ */
   applyLang(initialLang());

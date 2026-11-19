@@ -160,6 +160,9 @@ button, input, select, textarea { font-family: inherit; color: inherit; }
 .lang-toggle:active { transform: scale(.94); }
 .lang-toggle .lt.on { color: var(--accent); }
 .lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.lang-toggle .lt { appearance: none; border: 0; background: none; color: inherit; font: inherit; letter-spacing: inherit; line-height: 1; padding: 1px 0; cursor: pointer; transition: color .2s; }
+.lang-toggle .lt:hover { color: var(--ink); }
+.lang-toggle .lt:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 .topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
 .topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
 
@@ -355,7 +358,7 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
 .row-actions { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
 
 @media (max-width: 640px) {
-  .wrap { padding: 0 14px 36px; }
+  .wrap { padding: 0 16px 36px; }
   .topbar { padding: 14px 0 8px; }
   .brand-txt { font-size: 12px; letter-spacing: .1em; }
   .hero { padding: 16px 0 12px; }
@@ -377,11 +380,15 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
       <span class="brand-txt">Kim Yihyung</span>
     </a>
     <div class="top-actions">
-      <button class="lang-toggle" id="langToggle" type="button" title="한국어로 보기" aria-label="한국어로 보기">
-        <span class="lt on" data-lt="en">EN</span>
+      <div class="lang-toggle" id="langToggle" role="group" aria-label="Language">
+        <button class="lt" type="button" data-lt="ko" lang="ko">KO</button>
         <span class="lsep" aria-hidden="true">|</span>
-        <span class="lt" data-lt="ko">KO</span>
-      </button>
+        <button class="lt" type="button" data-lt="en" lang="en">EN</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lt="ja" lang="ja">JA</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lt="zh-Hant" lang="zh-Hant">繁中</button>
+      </div>
       <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← All tools</a>
     </div>
   </header>
@@ -584,6 +591,9 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
   /* ═════════════════════ language ═════════════════════ */
   var I18N = {
     en: {
+      langLabel: 'Language',
+      metaTitle: 'RegexLab — live regex tester, group highlighter and replacer',
+      metaDesc: 'Write a pattern, paste the text, and watch each match light up with its capture groups in their own colour — plus the index and $1 table, a replace preview that rewrites itself on every keystroke, and a guard that stops a runaway pattern before it freezes the tab.',
       docTitle: 'RegexLab — Live Regex Tester, Group Highlighter & Replacer | Kim Yihyung',
       brandAria: 'Kim Yihyung — portfolio',
       back: '← All tools',
@@ -657,6 +667,9 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
       safeMode: 'worker unavailable — matching on the main thread, capped at 20,000 characters'
     },
     ko: {
+      langLabel: '언어',
+      metaTitle: 'RegexLab — 실시간 정규식 테스터, 그룹 강조·치환',
+      metaDesc: '패턴을 쓰고 텍스트를 붙이면 일치한 곳이 빛나고 캡처 그룹이 각자의 색으로 강조됩니다. 인덱스와 $1 표, 키 입력마다 다시 계산되는 치환 미리보기, 폭주하는 패턴이 탭을 멈추게 하기 전에 끊는 가드까지 모두 브라우저 안에서 동작합니다.',
       docTitle: 'RegexLab — 실시간 정규식 테스트·그룹 하이라이트·치환 | Kim Yihyung',
       brandAria: 'Kim Yihyung — 포트폴리오',
       back: '← 도구 전체',
@@ -727,6 +740,240 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
       tableEmpty: '아직 매칭이 없습니다 — 패턴과 글이 만나면 표가 채워집니다.',
       idxZero: '길이 0',
       safeMode: '워커를 쓸 수 없어 메인 스레드에서 2만 자까지만 검사합니다'
+    },
+    'ja': {
+      docTitle: 'RegexLab — リアルタイム正規表現テスター、グループ強調と置換 | Kim Yihyung',
+      metaTitle: 'RegexLab — 正規表現テスター、グループ強調と置換',
+      metaDesc: 'パターンを書いてテキストを貼ると、一致した箇所が光り、キャプチャグループがそれぞれの色で強調されます。インデックスと $1 の一覧、キー入力ごとに書き換わる置換プレビュー、そして暴走するパターンがタブを固める前に止めるガードまで。すべてブラウザ内で動きます。',
+      langLabel: '言語を切り替え',
+      brandAria: 'Kim Yihyung — ポートフォリオ',
+      back: '← ツール一覧',
+      eyebrow: 'RegexLab · 一致 · グループ · 置換 · アップロードゼロ',
+      h1: 'すべての一致を、すべてのグループを。<br><span class="soft">入力しながら色で。</span><br><span class="gold">何もこのタブの外に出ません。</span>',
+      lede: 'パターンを書いてテキストを貼れば、<strong>一致した箇所が光り</strong>、<strong>キャプチャグループはそれぞれの色</strong>で強調されます — インデックスと<strong>$1 の表</strong>、1文字打つたびに書き換わる置換プレビュー、そして<strong>暴走するパターンがタブを固める前に止める</strong>ガード付きです。',
+      pillUp: 'アップロード 0 バイト',
+      pillNet: '外部リクエスト 0 件',
+      pillFlags: 'フラグ g · i · m · s · u',
+      pillGuard: 'ReDoS ガード · 1.2 秒',
+      labAria: '正規表現テスター',
+      patTitle: 'パターン',
+      patNote: 'JavaScript RegExp',
+      patAria: '正規表現パターン',
+      flagsAria: 'フラグ',
+      flagG: '全体 (global)',
+      flagI: '大文字小文字を無視',
+      flagM: '複数行',
+      flagS: 'ドットが改行に一致',
+      flagU: 'Unicode',
+      errLabel: 'エラー',
+      textTitle: 'テスト文字列',
+      textNote: '何でも貼り付け',
+      textAria: 'テスト文字列',
+      textPlaceholder: '検索するテキストを貼り付けてください — ログの1行、CSVの1行、段落など。',
+      hlTitle: '一致',
+      hlNote: '先頭 200 件を描画',
+      lgMatch: '一致',
+      stMatches: '件一致',
+      stGroups: 'グループ',
+      stChars: '文字',
+      stTime: 'ミリ秒',
+      copyPat: 'パターンをコピー',
+      clearAll: 'クリア',
+      repHead: '置換',
+      repAria: '置換文字列',
+      repPlaceholder: '$2-$1',
+      repHint: 'グループは <b>$1</b>…<b>$9</b>、一致全体は <b>$&amp;</b>、名前付きグループは <b>$&lt;name&gt;</b>、リテラルのドル記号は <b>$$</b> で指定します。',
+      repOutAria: '置換後のテキスト',
+      copyRep: '結果をコピー',
+      dlRep: '.txt で保存',
+      grpHead: 'キャプチャグループ',
+      grpHint: 'グループの色は括弧の左から順に付きます。その一致に参加しなかったグループは、0ではなく空のセルで表示されます。',
+      prHead: '何度も打ち直す12のパターン',
+      prNote: 'ワンタップ · パターン + フラグ + サンプル',
+      prFoot: '各プリセットはパターン、適切なフラグ、サンプルテキストを読み込むので、結果がすぐに見えます。何も固定されません — 読み込んだあとにパターンを編集すれば、表もそれに従います。',
+      howHead: 'ガードの仕組み',
+      howNote: '約束ではなく実測',
+      n1h: '一致の実行はワーカーで',
+      n1p: 'キー入力のたびに、このページ内の文字列から組み立てたワーカーへ処理を送るので、パターンは独自の時間予算を持つ別スレッドで動きます。<b>1.2 秒</b>以内に答えが返らなければ — <code>(a+)+$</code> を長い <code>a</code> の連続に当てたときのような、壊滅的バックトラックの兆候です — ワーカーを<b>終了</b>し、停止したと表示します。タブは動いたままで、テキストはそのままです。',
+      n2h: 'グループの位置は d フラグから',
+      n2p: 'キャプチャグループに色を塗るには、値だけでなく開始と終了の位置が要ります。<b>d</b> フラグ(内部で付け、画面には出しません)によって <code>exec</code> が <code>indices</code> を返すので、<code>$1</code> が捉えた文字の上に正確に色を置けます。<b>d</b> フラグのないブラウザでは、グループの色は一致の色に戻り、表には値がすべて残ります。',
+      tFlag: 'フラグ',
+      tMeans: '変わること',
+      tG: '最初の一致ではなく全件',
+      tI: '大文字小文字を区別しない',
+      tM: '^ と $ が行ごと',
+      tS: '. が改行にも一致',
+      tU: '完全な Unicode モード',
+      n3h: '限界はそのまま書いておく',
+      n3p: 'テキストは<b>10万文字</b>まで検査し、<b>500 件</b>の一致を集め、先頭 <b>200 件</b>を描画します。それを超える場合は、一覧が完全だと装わずにそう表示します。長さ0の一致(<code>^</code>、<code>\\b</code>)は1文字ずつ進めるので、ループは必ず終わります — 素朴なテスターが固まるのはこの種の実行です。',
+      faqTitle: 'よくある質問',
+      faqNote: '方言 · ガード · 限界',
+      q1: 'これはどの正規表現方言ですか?',
+      a1: 'ブラウザ自身の JavaScript <b>RegExp</b> です — あなたのコードが使うのと同じエンジンで、名前付きグループ、後読み、Unicode プロパティエスケープもブラウザが対応していれば使えます。他の方言に翻訳しないので、ここで通ったパターンはそこでそのまま動きます。',
+      q2: '「パターンが高くつきすぎる」と止まったのはなぜですか?',
+      a2: '同じ文字に量化子が入れ子になっている — <b>(a+)+</b>、<b>(.*)*</b> — と、エンジンは指数関数的な分割を試します。ガードはタブを落とす代わりに 1.2 秒で実行を打ち切りました。<b>[^,]*</b> のような形や原子グループ相当に書き換えれば、マイクロ秒で終わります。',
+      q3: '置換プレビューはテキストを書き換えますか?',
+      a3: 'いいえ。置換はコピーの上で計算し、専用の枠に表示します。テスト文字列は入力したままです。正しければ結果をコピーするか <b>.txt</b> で保存してください — 貼り付けたテキストがその場で編集されることはありません。',
+      q4: '入力したテキストはどこへ行きますか?',
+      a4: 'どこにも行きません。送るサーバーも、解析も、保存もありません。パターンとテキストはこのタブとワーカーの中だけにあり、閉じれば消えます。フッターが数える外部リクエストは <b>0</b> のままです。',
+      footCopy: '© 2026 Kim Yihyung · ブラウザで、ブラウザのために。',
+      footNet: '外部リクエスト',
+      footP1: 'ポートフォリオ',
+      footP2: 'ツール一覧',
+      footP3: 'ソース',
+      mono: 'アップロードなし · 追跡なし',
+      toggleTo: '言語を切り替え',
+      stReady: '準備完了 — パターンを入力するか、プリセットを選んでください。',
+      stFound: '{ms} ミリ秒で {n} 件一致。',
+      stNone: '一致しません。パターンより先にフラグを確認してください。',
+      stCut: '{t} 件のうち先頭 {n} 件を表示しています。',
+      stZero: '長さ0の一致が {n} 件 — 1文字ずつ進めています。',
+      stBad: 'そのパターンは有効な JavaScript ではありません。',
+      stStop: '停止 — パターンが 1.2 秒を超えてバックトラックし、終了させました。',
+      stTrim: 'テキストが10万文字を超えています: 先頭10万文字だけを検査しました。',
+      stCopied: '{v} をコピーしました。',
+      stCopyFail: 'コピーできませんでした — テキストを選んで手動でコピーしてください。',
+      stSaved: '{name} を保存しました。',
+      stNoPat: 'まだコピーするものがありません — 先にパターンを書いてください。',
+      stReplaced: '{n} 件置換 · {len} 文字の出力。',
+      stNoRep: '置換文字列がまだありません — 結果は入力と同じままです。',
+      stPreset: 'プリセット「{name}」を読み込みました — {flags}。',
+      notEmpty: '—',
+      groupsNone: 'このパターンにキャプチャグループはありません。',
+      g1: '$1',
+      g2: '$2',
+      g3: '$3',
+      g4: '$4',
+      more: '他 {n} 件',
+      grpCol: 'グループ',
+      grpVal: '最初の値',
+      grpCount: '件',
+      tblTitle: '一致の表',
+      tblNote: 'インデックス · 一致 · $1',
+      tableNo: '#',
+      tableIdx: '位置',
+      tableMatch: '一致',
+      tableGroups: 'グループ',
+      tableEmpty: 'まだ一致がありません — パターンとテキストが揃えばすぐに表が埋まります。',
+      idxZero: '長さ0',
+      safeMode: 'ワーカーが使えません — メインスレッドで照合し、2万文字までに制限します'
+    },
+    'zh-Hant': {
+      docTitle: 'RegexLab — 即時正規表達式測試、群組標色與取代 | Kim Yihyung',
+      metaTitle: 'RegexLab — 正規表達式測試、群組標色與取代',
+      metaDesc: '寫好樣式、貼上文字，每一處符合都會亮起，捕獲群組各自用不同顏色標出，還附索引與 $1 對照表、每敲一個鍵就重算的取代預覽，以及能在失控樣式把分頁卡死前把它停下來的防護。全部在瀏覽器裡執行。',
+      langLabel: '切換語言',
+      brandAria: 'Kim Yihyung — 作品集',
+      back: '← 所有工具',
+      eyebrow: 'RegexLab · 比對 · 群組 · 取代 · 零上傳',
+      h1: '每一處符合，每一個群組。<br><span class="soft">邊打字邊上色。</span><br><span class="gold">沒有任何東西離開這個分頁。</span>',
+      lede: '寫好樣式、貼上文字，<strong>每一處符合都會亮起</strong>，<strong>捕獲群組各自用專屬顏色</strong>標出 — 還有索引與<strong>$1 對照表</strong>、每敲一鍵就重寫的取代預覽，以及<strong>在失控樣式讓分頁凍住之前先把它停下來的</strong>防護。',
+      pillUp: '上傳 0 位元組',
+      pillNet: '外部請求 0 次',
+      pillFlags: '旗標 g · i · m · s · u',
+      pillGuard: 'ReDoS 防護 · 1.2 秒',
+      labAria: '正規表達式測試',
+      patTitle: '樣式',
+      patNote: 'JavaScript RegExp',
+      patAria: '正規表達式樣式',
+      flagsAria: '旗標',
+      flagG: '全部 (global)',
+      flagI: '忽略大小寫',
+      flagM: '多行',
+      flagS: '點也對到換行',
+      flagU: 'Unicode',
+      errLabel: '錯誤',
+      textTitle: '測試字串',
+      textNote: '什麼都能貼',
+      textAria: '測試字串',
+      textPlaceholder: '貼上要搜尋的文字 — 一行日誌、一列 CSV、一段文章都可以。',
+      hlTitle: '符合處',
+      hlNote: '只畫前 200 處',
+      lgMatch: '符合',
+      stMatches: '處符合',
+      stGroups: '群組',
+      stChars: '字元',
+      stTime: '毫秒',
+      copyPat: '複製樣式',
+      clearAll: '清除',
+      repHead: '取代',
+      repAria: '取代字串',
+      repPlaceholder: '$2-$1',
+      repHint: '群組用 <b>$1</b>…<b>$9</b>，整個符合用 <b>$&amp;</b>，具名群組用 <b>$&lt;name&gt;</b>，要打真正的錢字號用 <b>$$</b>。',
+      repOutAria: '取代後的文字',
+      copyRep: '複製結果',
+      dlRep: '存成 .txt',
+      grpHead: '捕獲群組',
+      grpHint: '群組顏色依括號由左至右。沒有參與該次符合的群組會顯示成空白格，而不是 0。',
+      prHead: '你老是重打的 12 個樣式',
+      prNote: '一點 · 樣式 + 旗標 + 範例',
+      prFoot: '每個預設會載入樣式、正確的旗標與範例文字，結果立刻出現。沒有任何東西被鎖住 — 載入後照樣改樣式，表格也會跟著更新。',
+      howHead: '防護怎麼運作',
+      howNote: '是實測，不是承諾',
+      n1h: '比對在 worker 裡跑',
+      n1p: '每次按鍵都會送進一個由本頁字串組出來的 worker，樣式在另一條執行緒上用獨立的時間預算跑。若 <b>1.2 秒</b>內沒有回應 — 這是災難性回溯的典型徵兆，例如 <code>(a+)+$</code> 對上一長串 <code>a</code> — worker 會被<b>終止</b>，頁面顯示已停止。分頁仍可操作，你的文字原封不動。',
+      n2h: '群組位置來自 d 旗標',
+      n2p: '要為捕獲群組上色，需要它的起點與終點，不只值。<b>d</b> 旗標(內部加上、不顯示)讓 <code>exec</code> 回傳 <code>indices</code>，所以 <code>$1</code> 能精準蓋在它抓到的字元上。瀏覽器沒有 <b>d</b> 旗標時，群組顏色退回符合處的顏色，表格仍保留每一個值。',
+      tFlag: '旗標',
+      tMeans: '改變什麼',
+      tG: '不只第一處，全部都要',
+      tI: '不分大小寫',
+      tM: '^ 與 $ 逐行',
+      tS: '. 也對到換行',
+      tU: '完整 Unicode 模式',
+      n3h: '把限制講清楚',
+      n3p: '文字最多檢查 <b>10 萬字元</b>，收集前 <b>500 處</b>符合，只畫前 <b>200 處</b>。超過時表格會直接說出來，不會假裝清單完整。長度為零的符合(<code>^</code>、<code>\\b</code>)每次前進一個字元，迴圈一定結束 — 這正是樸素測試器會卡死的情況。',
+      faqTitle: '常見問題',
+      faqNote: '方言 · 防護 · 限制',
+      q1: '這是哪一種正規表達式方言?',
+      a1: '就是瀏覽器自己的 JavaScript <b>RegExp</b> — 跟你的程式會用的同一個引擎，瀏覽器支援時也有具名群組、後顧與 Unicode 屬性轉義。不會翻成別的方言，所以在這裡過得了的樣式，在那裡也跑得動。',
+      q2: '為什麼顯示「樣式太昂貴」而停下?',
+      a2: '同一批字元外頭套了好幾層量詞 — <b>(a+)+</b>、<b>(.*)*</b> — 引擎就會嘗試指數級的分割。防護在 1.2 秒把它切斷，而不是讓分頁死掉。改寫成 <b>[^,]*</b> 這類形狀或原子群組的寫法，就會在微秒內結束。',
+      q3: '取代預覽會改動文字嗎?',
+      a3: '不會。取代是在副本上算好、顯示在自己的框裡，測試字串維持你輸入的樣子。確定正確時再複製結果或存成 <b>.txt</b> — 貼上的文字不會被就地編輯。',
+      q4: '我的文字會去哪裡?',
+      a4: '哪裡都不去。沒有伺服器可送、沒有分析、沒有儲存；樣式與文字只存在這個分頁和 worker 裡，關掉就消失。頁尾統計的外部請求一直是 <b>0</b>。',
+      footCopy: '© 2026 Kim Yihyung · 在瀏覽器裡，為瀏覽器而做。',
+      footNet: '外部請求',
+      footP1: '作品集',
+      footP2: '所有工具',
+      footP3: '原始碼',
+      mono: '不上傳 · 不追蹤',
+      toggleTo: '切換語言',
+      stReady: '就緒 — 輸入樣式或選一個預設。',
+      stFound: '{ms} 毫秒內 {n} 處符合。',
+      stNone: '沒有符合。先確認旗標再看樣式。',
+      stCut: '{t} 處之中顯示前 {n} 處。',
+      stZero: '有 {n} 處長度為零的符合 — 每次前進一個字元。',
+      stBad: '這個樣式不是有效的 JavaScript。',
+      stStop: '停止 — 樣式回溯超過 1.2 秒，已被終止。',
+      stTrim: '文字超過 10 萬字元：只檢查了前 10 萬字元。',
+      stCopied: '已複製 {v}。',
+      stCopyFail: '複製失敗 — 請選取文字手動複製。',
+      stSaved: '已儲存 {name}。',
+      stNoPat: '還沒有東西可複製 — 先寫一個樣式。',
+      stReplaced: '{n} 處取代 · 輸出 {len} 字元。',
+      stNoRep: '還沒有取代字串 — 結果與輸入相同。',
+      stPreset: '已載入預設「{name}」— {flags}。',
+      notEmpty: '—',
+      groupsNone: '這個樣式沒有捕獲群組。',
+      g1: '$1',
+      g2: '$2',
+      g3: '$3',
+      g4: '$4',
+      more: '還有 {n} 個',
+      grpCol: '群組',
+      grpVal: '第一個值',
+      grpCount: '符合處',
+      tblTitle: '符合對照表',
+      tblNote: '索引 · 符合 · $1',
+      tableNo: '#',
+      tableIdx: '位置',
+      tableMatch: '符合',
+      tableGroups: '群組',
+      tableEmpty: '還沒有符合 — 樣式和文字一湊上，表格就會填滿。',
+      idxZero: '長度零',
+      safeMode: 'worker 無法使用 — 改在主執行緒比對，上限 2 萬字元'
     }
   };
 
@@ -734,6 +981,32 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
                 result: null, error: '', stopped: false, truncated: false, presetOn: '', seq: 0, compat: false };
   var LANG_KEY = 'regexlab.lang';
   var SHARED_KEY = 'kyh.lang';
+  var LANGS = ['ko', 'en', 'ja', 'zh-Hant'];
+  var DEFAULT_LANG = normLang(document.documentElement.getAttribute('lang')) || 'ko';
+  function normLang(v) {
+    var s = String(v == null ? '' : v).trim().toLowerCase().replace(/_/g, '-');
+    if (s === 'ko' || s === 'kr' || s === 'ko-kr') return 'ko';
+    if (s === 'en' || s === 'en-us' || s === 'en-gb' || s === 'en-au') return 'en';
+    if (s === 'ja' || s === 'jp' || s === 'ja-jp') return 'ja';
+    if (s === 'zh-hant' || s === 'zh-tw' || s === 'zh-hk' || s === 'zh-mo' || s === 'tw' || s === 'zh' || s === 'zh-hant-tw') return 'zh-Hant';
+    return '';
+  }
+  function readStoredLang(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  /* read-only: per-language title/description for the static /en/ /ja/ /zh-tw/ builder.
+     A getter, so it is computed when read (the builder runs after this script). */
+  Object.defineProperty(window, '__I18N_META__', {
+    configurable: true,
+    get: function () {
+      var out = {};
+      var ogl = { ko: 'ko_KR', en: 'en_US', ja: 'ja_JP', 'zh-Hant': 'zh_TW' };
+      Object.keys(I18N || {}).forEach(function (lg) {
+        var d = I18N[lg] || {};
+        out[lg] = { htmlLang: lg, ogLocale: ogl[lg] || 'en_US',
+                    title: d.metaTitle || d.docTitle || '', description: d.metaDesc || '' };
+      });
+      return out;
+    }
+  });
   var LIMIT = 500;
 
   function $(id) { return document.getElementById(id); }
@@ -752,10 +1025,13 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
     try { var v = localStorage.getItem(k); return v === 'ko' || v === 'en' ? v : ''; } catch (e) { return ''; }
   }
   function initialLang() {
-    var q = '';
-    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
-    if (q === 'ko' || q === 'en') return q;
-    return readLang(SHARED_KEY) || readLang(LANG_KEY) || 'en';
+    var l = normLang(window.__FORCED_LANG__);
+    if (l) return l;
+    try { l = normLang(new URLSearchParams(location.search).get('lang')); } catch (e) { l = ''; }
+    if (l) return l;
+    l = normLang(readStoredLang(SHARED_KEY)) || normLang(readStoredLang(LANG_KEY));
+    if (l) return l;
+    return normLang(document.documentElement.getAttribute('lang')) || DEFAULT_LANG;
   }
   function flagString() {
     var f = '';
@@ -1293,10 +1569,15 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
     if (el) el.setAttribute(attr, val);
   }
   function applyLang(lang) {
-    state.lang = lang === 'ko' ? 'ko' : 'en';
+    state.lang = normLang(lang) || DEFAULT_LANG;
     document.documentElement.setAttribute('lang', state.lang);
     document.title = t('docTitle');
-    setMeta('meta[property="og:title"]', 'content', t('docTitle').split('|')[0].trim());
+    setMeta('meta[name="description"]', 'content', t('metaDesc'));
+    setMeta('meta[property="og:title"]', 'content', t('metaTitle'));
+    setMeta('meta[property="og:description"]', 'content', t('metaDesc'));
+    setMeta('meta[name="twitter:title"]', 'content', t('metaTitle'));
+    setMeta('meta[name="twitter:description"]', 'content', t('metaDesc'));
+    setMeta('meta[property="og:locale"]', 'content', state.lang === 'zh-Hant' ? 'zh_TW' : (state.lang === 'ja' ? 'ja_JP' : (state.lang === 'ko' ? 'ko_KR' : 'en_US')));
     var nodes = document.querySelectorAll('[data-i18n]');
     for (var i = 0; i < nodes.length; i++) {
       var v = t(nodes[i].getAttribute('data-i18n'));
@@ -1319,10 +1600,13 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
     }
     var lt = $('langToggle');
     if (lt) {
-      var spans = lt.querySelectorAll('[data-lt]');
-      for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
-      lt.setAttribute('aria-label', t('toggleTo'));
-      lt.setAttribute('title', t('toggleTo'));
+      var lbs = lt.querySelectorAll('[data-lt]');
+      for (i = 0; i < lbs.length; i++) {
+        var _on = lbs[i].getAttribute('data-lt') === state.lang;
+        lbs[i].classList.toggle('on', _on);
+        lbs[i].setAttribute('aria-pressed', _on ? 'true' : 'false');
+      }
+      lt.setAttribute('aria-label', t('langLabel'));
     }
     paintPresets();
     paintResult();
@@ -1332,9 +1616,14 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
     } catch (e) { /* storage may be blocked */ }
   }
 
-  $('langToggle').addEventListener('click', function () {
-    applyLang(state.lang === 'ko' ? 'en' : 'ko');
-  });
+  var ltRoot = $('langToggle');
+  if (ltRoot) {
+    ltRoot.addEventListener('click', function (ev) {
+      var b = ev.target && ev.target.closest ? ev.target.closest('[data-lt]') : null;
+      if (!b) return;
+      applyLang(b.getAttribute('data-lt'));
+    });
+  }
 
   /* ═════════════════════ boot ═════════════════════ */
   worker = makeWorker();

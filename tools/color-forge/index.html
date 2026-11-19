@@ -337,7 +337,7 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
 .foot .net b { color: var(--ok); }
 
 @media (max-width: 640px) {
-  .wrap { padding: 0 14px 36px; }
+  .wrap { padding: 0 16px 36px; }
   .topbar { padding: 14px 0 8px; }
   .brand-txt { font-size: 12px; letter-spacing: .1em; }
   .hero { padding: 16px 0 12px; }
@@ -348,6 +348,22 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
   .sw-top { height: 62px; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* ═══ 4-language switch: KO | EN | JA | 繁中 ═══ */
+.lang-toggle { padding: 0 3px; gap: 0; cursor: default; }
+.lang-toggle .lt {
+  appearance: none; -webkit-appearance: none; border: 0; background: transparent; color: var(--muted2);
+  height: 100%; padding: 0 6px; margin: 0; font-family: inherit; font-size: 11px; font-weight: 700;
+  letter-spacing: .02em; line-height: 1; cursor: pointer; border-radius: 8px;
+  transition: color .15s, background .15s;
+}
+.lang-toggle .lt:hover { color: var(--ink); }
+.lang-toggle .lt.on { color: var(--accent); }
+@media (max-width: 430px) {
+  .lang-toggle { height: 30px; }
+  .lang-toggle .lt { padding: 0 4px; font-size: 10px; }
+}
+:lang(ja) body, :lang(zh-Hant) body { word-break: normal; overflow-wrap: break-word; line-break: strict; }
 </style>
 </head>
 <body>
@@ -359,11 +375,15 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
       <span class="brand-txt">Kim Yihyung</span>
     </a>
     <div class="top-actions">
-      <button class="lang-toggle" id="langToggle" type="button" title="한국어로 보기" aria-label="한국어로 보기">
-        <span class="lt on" data-lt="en">EN</span>
+      <div class="lang-toggle" id="langToggle" role="group" aria-label="Language · 언어 · 言語 · 語言">
+        <button class="lt" type="button" data-lang="ko" aria-pressed="false">KO</button>
         <span class="lsep" aria-hidden="true">|</span>
-        <span class="lt" data-lt="ko">KO</span>
-      </button>
+        <button class="lt on" type="button" data-lang="en" aria-pressed="true">EN</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lang="ja" aria-pressed="false">JA</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lang="zh-Hant" aria-pressed="false">繁中</button>
+      </div>
       <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← All tools</a>
     </div>
   </header>
@@ -588,6 +608,9 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
   var I18N = {
     en: {
       docTitle: 'ColorForge — Palette Extractor & WCAG Contrast Checker | Kim Yihyung',
+      metaTitle: "ColorForge — Palette Extractor & WCAG Contrast Checker",
+      metaDesc: "Six main colours out of any image as HEX, RGB and HSL, a live WCAG AA/AAA contrast ratio for any pair, and export to CSS variables, Tailwind v4 @theme, JSON or a 1080x1080 PNG card — pixels read on this device only.",
+      sampled: "sampled",
       brandAria: 'Kim Yihyung — portfolio',
       back: '← All tools',
       eyebrow: 'ColorForge · palette & contrast · zero upload',
@@ -662,6 +685,9 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
     },
     ko: {
       docTitle: 'ColorForge — 이미지 팔레트 추출·WCAG 명도 대비 검사기 | Kim Yihyung',
+      metaTitle: "ColorForge — 이미지 팔레트 추출·WCAG 명도 대비 검사기",
+      metaDesc: "이미지에서 주요 6색을 뽑아 HEX·RGB·HSL로 보여 주고, 어떤 조합이든 WCAG AA/AAA 명도 대비를 실시간으로 재며, 팔레트를 CSS 변수·Tailwind v4 @theme·JSON·1080×1080 PNG 카드로 내보냅니다. 픽셀은 이 기기에서만 읽습니다.",
+      sampled: "표본",
       brandAria: 'Kim Yihyung — 포트폴리오',
       back: '← 도구 전체',
       eyebrow: 'ColorForge · 팔레트·대비 · 업로드 0',
@@ -732,7 +758,213 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
       bestPair: '{b} 위의 {a} · {r}:1',
       imgNone: '—',
       modeHint: '모든 줄은 위 팔레트에서 생성되므로 새 이미지를 넣으면 바로 바뀝니다.'
-    }
+    },
+      ja: {
+        docTitle: "ColorForge — 画像パレット抽出・WCAG コントラスト検査 | Kim Yihyung",
+        metaTitle: "ColorForge — 画像パレット抽出・WCAG コントラスト検査",
+        metaDesc: "画像から主要6色を抽出してHEX・RGB・HSLで表示し、任意の組み合わせのWCAG AA/AAAコントラスト比をその場で測り、CSS変数・Tailwind v4 @theme・JSON・1080×1080 PNGカードに書き出します。ピクセルはこの端末だけで読みます。",
+        brandAria: "Kim Yihyung — ポートフォリオ",
+        back: "← ツール一覧",
+        eyebrow: "ColorForge · パレット・コントラスト · アップロード0",
+        h1: "画像1枚から色を6つ。<br><span class=\"soft\">コントラストは推測ではなく実測。</span><br><span class=\"gold\">タブの外には何も出ません。</span>",
+        lede: "スクリーンショット・写真・ロゴを落とすと<strong>主要6色</strong>がHEX・RGB・HSLで出て、どの組み合わせでも<strong>WCAG AA/AAAコントラスト</strong>をリアルタイムで測り、パレットを<strong>CSS変数、Tailwind v4 <code>@theme</code>、JSON、1080×1080 PNGカード</strong>に書き出します。ピクセルはこの端末でだけ読みます。",
+        pillUp: "アップロード0バイト",
+        pillNet: "外部リクエスト0件",
+        pillWcag: "WCAG AA · AAA",
+        pillOut: "CSS · Tailwind · JSON · PNG",
+        buildAria: "パレット抽出",
+        dropTitle: "PNG・JPG・WebP・SVGを落としてください",
+        dropSub: "サイズも比率も問いません。Ctrl+Vの貼り付けも使えます。",
+        pickBtn: "画像を選ぶ",
+        sampleGeo: "幾何学サンプル",
+        sampleMono: "モノグラムサンプル",
+        dropMeta: "まだ画像を読み込んでいません — ファイルを選ぶかサンプルを押してください。",
+        palTitle: "主要パレット",
+        palNote: "色キューブ集計 · 6色",
+        autoBtn: "1番の色に最も読みやすい文字",
+        swapBtn: "入れ替え",
+        resetBtn: "リセット",
+        cHead: "コントラスト検査",
+        fgLabel: "前景（文字）",
+        bgLabel: "背景",
+        fgAria: "前景の色",
+        bgAria: "背景の色",
+        ratioLabel: "コントラスト比",
+        lblAA: "AA · 本文",
+        lblAAA: "AAA · 本文",
+        lblAAL: "AA · 大きな文字",
+        cNote: "本文の文字はAAで<b>4.5:1</b>、AAAで<b>7:1</b>が必要で、大きな文字（24px、または太字18.66px）は<b>3:1</b>・<b>4.5:1</b>です。比は相対輝度から<b>(L1 + 0.05) ÷ (L2 + 0.05)</b>で求めます。",
+        sumHead: "パレットを一覧で",
+        kImg: "画像",
+        kSampled: "サンプルピクセル",
+        kBest: "最良の組み合わせ",
+        exHead: "持ち帰る",
+        exNote: "コピーまたはダウンロード",
+        exAria: "書き出し形式",
+        copyCode: "コードをコピー",
+        dlCode: "ファイルに保存",
+        cardBtn: "1080×1080カード",
+        exFoot: "カードはこのタブのキャンバスに<b>1080×1080</b>で描いてPNGで保存します。今のパレットと選んだ組み合わせ、コントラスト比が一緒に入ります。",
+        cardHead: "パレットカード",
+        dlCard: "PNGをダウンロード",
+        wcTitle: "数字はこう出ます",
+        wcNote: "約束ではなく実測",
+        n1h: "6色を、数えてから間引く",
+        n1p: "画像を長辺200pxに縮め、透明なピクセルと<b>縁のアンチエイリアス部分を除きます</b> — 混ざった境界色がパレットに入らないようにするためです。残ったピクセルを<b>32×32×32の色キューブ</b>に畳み込み、ピクセルが最も多いキューブから選び、そのキューブから一定距離以内のキューブは飛ばします。6回選べば実際に異なる6色になり、単色の背景は3枠を占めず1色で残ります。",
+        n2h: "コントラスト比、WCAG 2",
+        n2p: "相対輝度は各チャンネルを線形化してから<b>0.2126 R + 0.7152 G + 0.0722 B</b>で足します。比は<b>(L1 + 0.05) ÷ (L2 + 0.05)</b>で、明るい側が上に来るので1:1から21:1の間に収まります。判定は解釈ではなく、数字との比較です。",
+        tLvl: "等級",
+        tNorm: "本文",
+        tLarge: "大きな文字",
+        n3h: "パレットの使い方",
+        n3p: "1番の色は最も多いピクセルなので普通はベースになり、5・6番は画像を面白くしたアクセントです。実際に画面に載せる組み合わせはすべて測ってください — 見本で通った比も、透明度・グラデーション・写真が後ろに敷かれると落ちます。",
+        faqTitle: "よくある質問",
+        faqNote: "パレット · コントラスト · 書き出し",
+        q1: "写真だと色が濁るのはなぜですか？",
+        a1: "写真は場所ごとに数千の似た色があるため、6つの箱がどれも広い範囲を平均して灰色寄りになります。画像に忠実な結果で、その色が実際の<b>主要色</b>です。ブランドのパレットが要るときは写真ではなく単色のロゴやスクリーンショットを入れてください。6つの箱がはっきり分かれます。",
+        q2: "色が6つに満たないときはどうなりますか？",
+        a2: "単色のロゴでは箱が2〜3個しか出ません。余った枠は<b>主要色から派生した明度段階</b>で埋めるので、モノグラムでも空欄のない使える6段階になります。派生色の比率はピクセルが届いていないため0%と表示します。",
+        q3: "Tailwindの書き出しはv4ですか、v3ですか？",
+        a3: "v4です。<b>@theme</b>ブロックに<b>--color-cf-1</b>から<b>--color-cf-6</b>まで書くのがv4のテーマ宣言で、設定ファイルなしで<b>bg-cf-1</b>・<b>text-cf-1</b>・<b>border-cf-1</b>が使えます。v3のプロジェクトなら1つ目のタブのCSS変数を<b>:root</b>にそのまま貼ってください。",
+        q4: "画像はどこかに保存されますか？",
+        a4: "いいえ。アップロード先も分析ツールもピクセルの保存もありません。ファイルは<b>&lt;img&gt;</b>として読まれ、キャンバスに描かれて測られたあと、タブを閉じれば消えます。下の外部リクエスト数は<b>0</b>から動きません。",
+        footCopy: "© 2026 Kim Yihyung · ブラウザで、ブラウザのために作りました。",
+        footNet: "外部リクエスト",
+        footP1: "ポートフォリオ",
+        footP2: "ツール一覧",
+        footP3: "ソース",
+        mono: "アップロードなし · 追跡なし",
+        toggleTo: "言語を切り替え",
+        copyHex: "HEX",
+        copyRgb: "RGB",
+        copyHsl: "HSL",
+        share: "比率",
+        pass: "合格",
+        fail: "不足",
+        passLarge: "大きな文字のみ",
+        stReady: "準備完了 — 画像を落とすとパレットが出ます。",
+        stLoaded: "{ms}msで{n}色のパレットを作りました。",
+        stReal: "{n}色を見つけ、主要色から{d}段階を追加しました。",
+        stNoImg: "このファイルは画像として開けませんでした。",
+        stEmpty: "この画像には不透明なピクセルがありません。",
+        stCopied: "{v} をコピーしました。",
+        stCopyFail: "コピーできませんでした — 文字を選んで手動でコピーしてください。",
+        stDownloaded: "{name} を保存しました。",
+        stCard: "カード準備完了 · {w}×{h} · {kb} KB。",
+        stBig: "{c} に黒か白の読みやすい方を選びました — {r}:1。",
+        unsaved: "まだパレットがありません — 先に画像を読み込んでください。",
+        cardLabel: "PALETTE",
+        cardPair: "背景の上の文字",
+        cardSource: "元画像",
+        cardFoot: "ColorForge · アップロードなし · ブラウザの中で",
+        bestPair: "{b} 上の {a} · {r}:1",
+        imgNone: "—",
+        modeHint: "すべての行は上のパレットから作られるので、新しい画像を入れるとすぐ変わります。",
+        sampled: "サンプル",
+      },
+      "zh-Hant": {
+        docTitle: "ColorForge — 圖片色盤擷取・WCAG 對比檢查器 | Kim Yihyung",
+        metaTitle: "ColorForge — 圖片色盤擷取・WCAG 對比檢查器",
+        metaDesc: "從圖片取出六個主要顏色並以 HEX、RGB、HSL 顯示，即時量測任兩色的 WCAG AA/AAA 對比比例，並可匯出 CSS 變數、Tailwind v4 @theme、JSON 或 1080×1080 PNG 卡片。像素只在這台裝置上讀取。",
+        brandAria: "Kim Yihyung — 作品集",
+        back: "← 所有工具",
+        eyebrow: "ColorForge · 色盤與對比 · 零上傳",
+        h1: "一張圖片裡的六個顏色。<br><span class=\"soft\">對比是量出來的，不是猜的。</span><br><span class=\"gold\">任何東西都不會離開這個分頁。</span>",
+        lede: "把截圖、照片或標誌拖進來，就會以 HEX、RGB、HSL 列出<strong>六個主要顏色</strong>，即時量測任一組合的<strong>WCAG AA/AAA 對比</strong>，並把色盤匯出成<strong>CSS 變數、Tailwind v4 <code>@theme</code>、JSON 或 1080×1080 PNG 卡片</strong>。像素只在這個裝置上讀取。",
+        pillUp: "零位元組上傳",
+        pillNet: "零次外部請求",
+        pillWcag: "WCAG AA · AAA",
+        pillOut: "CSS · Tailwind · JSON · PNG",
+        buildAria: "色盤擷取器",
+        dropTitle: "拖入 PNG、JPG、WebP 或 SVG",
+        dropSub: "尺寸與比例不拘，也可以按 Ctrl+V 貼上。",
+        pickBtn: "選擇圖片",
+        sampleGeo: "幾何範例",
+        sampleMono: "字母標誌範例",
+        dropMeta: "還沒有載入圖片 — 選一個檔案或試試範例。",
+        palTitle: "主要色盤",
+        palNote: "色立方統計 · 6 色",
+        autoBtn: "第1色上最易讀的文字",
+        swapBtn: "互換",
+        resetBtn: "重設",
+        cHead: "對比檢查",
+        fgLabel: "前景（文字）",
+        bgLabel: "背景",
+        fgAria: "前景顏色",
+        bgAria: "背景顏色",
+        ratioLabel: "對比比例",
+        lblAA: "AA · 內文",
+        lblAAA: "AAA · 內文",
+        lblAAL: "AA · 大字",
+        cNote: "內文文字 AA 需要 <b>4.5:1</b>、AAA 需要 <b>7:1</b>；大字（24px 或粗體 18.66px）則是 <b>3:1</b>、<b>4.5:1</b>。比例以相對亮度計算：<b>(L1 + 0.05) ÷ (L2 + 0.05)</b>。",
+        sumHead: "色盤一眼看",
+        kImg: "圖片",
+        kSampled: "取樣像素",
+        kBest: "最佳組合",
+        exHead: "帶走",
+        exNote: "複製或下載",
+        exAria: "匯出格式",
+        copyCode: "複製程式碼",
+        dlCode: "存成檔案",
+        cardBtn: "1080×1080 卡片",
+        exFoot: "卡片會在這個分頁的畫布上以 <b>1080×1080</b> 繪製並存成 PNG，連同目前的色盤、選定的組合與對比比例一起。",
+        cardHead: "色盤卡片",
+        dlCard: "下載 PNG",
+        wcTitle: "數字是這樣來的",
+        wcNote: "實測，不是承諾",
+        n1h: "六個顏色，先數再隔開",
+        n1p: "先把圖片縮到長邊 200px，再<b>去掉透明像素與邊緣的反鋸齒像素</b>，免得混色的邊界變成色盤的一員。剩下的像素收進 <b>32×32×32 色立方</b>，從像素最多的立方開始取，並跳過與它距離太近的立方。取六次就得到六個真正不同的顏色，單色背景也只佔一格而不是三格。",
+        n2h: "對比比例，WCAG 2",
+        n2p: "相對亮度先把每個通道線性化，再以 <b>0.2126 R + 0.7152 G + 0.0722 B</b> 相加。比例是 <b>(L1 + 0.05) ÷ (L2 + 0.05)</b>，亮的放上面，所以落在 1:1 到 21:1 之間。判定不是解讀，而是和數字的比較。",
+        tLvl: "等級",
+        tNorm: "內文",
+        tLarge: "大字",
+        n3h: "色盤怎麼用",
+        n3p: "第1色是像素最多的顏色，通常會當底色；第5、6色是讓圖片有趣的亮點。實際上線的組合請全部量過 — 在色票上通過的比例，一旦文字後面有透明度、漸層或照片就會掉下來。",
+        faqTitle: "常見問題",
+        faqNote: "色盤 · 對比 · 匯出",
+        q1: "照片為什麼會取到濁濁的顏色？",
+        a1: "照片每個區域都有數千個相近的顏色，六個色箱都平均了很大的範圍，因此偏向灰色。這是忠於圖片的結果，那個顏色就是實際的<b>主要色</b>。要品牌色盤時，請放單色標誌或截圖而不是照片，六個色箱就會清楚分開。",
+        q2: "顏色不到六個時怎麼辦？",
+        a2: "單色標誌只會產生兩三個色箱。剩下的格子會用<b>主色衍生的明度階</b>補滿，所以字母標誌也能得到沒有空格、可用的六階。衍生色的比重因為沒有像素落在上面，顯示為 0%。",
+        q3: "Tailwind 匯出是 v4 還是 v3？",
+        a3: "是 v4。在 <b>@theme</b> 區塊寫 <b>--color-cf-1</b> 到 <b>--color-cf-6</b> 就是 v4 的主題宣告，不必設定檔就能用 <b>bg-cf-1</b>、<b>text-cf-1</b>、<b>border-cf-1</b>。v3 的專案則可把第一個分頁的 CSS 變數貼進 <b>:root</b>。",
+        q4: "圖片會被存到某個地方嗎？",
+        a4: "不會。沒有上傳端點、沒有分析工具、也不儲存像素。檔案被讀進 <b>&lt;img&gt;</b>、畫到畫布上量完之後，關掉分頁就消失。頁尾的外部請求數一直停在 <b>0</b>。",
+        footCopy: "© 2026 Kim Yihyung · 在瀏覽器裡，為瀏覽器而做。",
+        footNet: "外部請求",
+        footP1: "作品集",
+        footP2: "所有工具",
+        footP3: "原始碼",
+        mono: "不上傳 · 不追蹤",
+        toggleTo: "切換語言",
+        copyHex: "HEX",
+        copyRgb: "RGB",
+        copyHsl: "HSL",
+        share: "比重",
+        pass: "通過",
+        fail: "未達",
+        passLarge: "僅大字",
+        stReady: "就緒 — 拖入圖片就會產生色盤。",
+        stLoaded: "{ms}ms 內做出 {n} 色的色盤。",
+        stReal: "找到 {n} 色，並從主色衍生 {d} 階。",
+        stNoImg: "這個檔案沒能當成圖片開啟。",
+        stEmpty: "這張圖片沒有不透明的像素。",
+        stCopied: "已複製 {v}。",
+        stCopyFail: "複製失敗 — 請選取文字後手動複製。",
+        stDownloaded: "已儲存 {name}。",
+        stCard: "卡片就緒 · {w}×{h} · {kb} KB。",
+        stBig: "為 {c} 選了黑或白中較易讀的一邊 — {r}:1。",
+        unsaved: "還沒有色盤 — 請先載入圖片。",
+        cardLabel: "PALETTE",
+        cardPair: "背景上的文字",
+        cardSource: "原圖",
+        cardFoot: "ColorForge · 零上傳 · 在瀏覽器裡",
+        bestPair: "{b} 上的 {a} · {r}:1",
+        imgNone: "—",
+        modeHint: "每一行都由上方色盤產生，換一張圖片就會立刻改變。",
+        sampled: "取樣",
+      }
   };
 
   var state = { lang: 'en', palette: [], fg: '#0b0b0d', bg: '#e5b45c', mode: 'css', imgW: 0, imgH: 0, imgName: '', sampled: 0, cardBlob: null };
@@ -751,12 +983,6 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
   }
   function readLang(k) {
     try { var v = localStorage.getItem(k); return v === 'ko' || v === 'en' ? v : ''; } catch (e) { return ''; }
-  }
-  function initialLang() {
-    var q = '';
-    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
-    if (q === 'ko' || q === 'en') return q;
-    return readLang(SHARED_KEY) || readLang(LANG_KEY) || 'en';
   }
 
   /* ═════════════════════ colour maths ═════════════════════ */
@@ -972,7 +1198,7 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
     pv.alt = name;
     $('pvName').textContent = name;
     $('pvSize').textContent = w + ' × ' + h + ' px';
-    $('pvPixels').textContent = px.length.toLocaleString(state.lang === 'ko' ? 'ko-KR' : 'en-US') + ' sampled';
+    $('pvPixels').textContent = px.length.toLocaleString(loc4()) + ' ' + t('sampled');
     $('fileMeta').innerHTML = '<b>' + esc(name) + '</b> · ' + w + '×' + h + ' · ' + px.length.toLocaleString() + ' px';
 
     paintAll();
@@ -1377,10 +1603,61 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
     var el = document.querySelector(sel);
     if (el) el.setAttribute(attr, val);
   }
+  var DEFAULT_LANG = 'en';
+  /* ═══ 4-language switch (ko · en · ja · zh-Hant) ═══ */
+  var LANGS4 = ['ko', 'en', 'ja', 'zh-Hant'];
+  function normLang(v) {
+    v = String(v == null ? '' : v).toLowerCase().replace(/_/g, '-');
+    if (v === 'ko' || v === 'ko-kr' || v === 'kr') return 'ko';
+    if (v === 'ja' || v === 'ja-jp' || v === 'jp') return 'ja';
+    if (v === 'zh-hant' || v === 'zh-tw' || v === 'zh' || v === 'tw' || v === 'zh-hk') return 'zh-Hant';
+    if (v === 'en' || v === 'en-us' || v === 'en-gb') return 'en';
+    return '';
+  }
+  function loc4() { return state.lang === 'ko' ? 'ko-KR' : state.lang === 'ja' ? 'ja-JP' : state.lang === 'zh-Hant' ? 'zh-TW' : 'en-US'; }
+  function lsGet4(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function initialLang() {
+    var f = (typeof window.__FORCED_LANG__ !== 'undefined' && window.__FORCED_LANG__) ? window.__FORCED_LANG__ : '';
+    if (f && normLang(f)) return normLang(f);
+    var q = '';
+    try { q = new URLSearchParams(location.search).get('lang') || ''; } catch (e) { q = ''; }
+    if (q && normLang(q)) return normLang(q);
+    var stored = lsGet4(typeof SHARED_KEY !== 'undefined' ? SHARED_KEY : 'kyh.lang') || lsGet4(typeof LANG_KEY !== 'undefined' ? LANG_KEY : '');
+    if (stored && normLang(stored)) return normLang(stored);
+    var h = normLang(document.documentElement.getAttribute('lang'));
+    if (h) return h;
+    return typeof DEFAULT_LANG !== 'undefined' ? DEFAULT_LANG : 'ko';
+  }
+  function syncLangUI() {
+    var lt = document.getElementById('langToggle');
+    if (!lt) return;
+    var btns = lt.querySelectorAll('[data-lang]');
+    for (var i = 0; i < btns.length; i++) {
+      var on = btns[i].getAttribute('data-lang') === state.lang;
+      btns[i].classList.toggle('on', on);
+      btns[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+  }
+  function bindLangToggle() {
+    var lt = document.getElementById('langToggle');
+    if (!lt) return;
+    lt.addEventListener('click', function (ev) {
+      var t4 = ev.target.closest('[data-lang]');
+      if (!t4) return;
+      applyLang(t4.getAttribute('data-lang'));
+    });
+  }
+
   function applyLang(lang) {
-    state.lang = lang === 'ko' ? 'ko' : 'en';
+    state.lang = normLang(lang) || 'en';
     document.documentElement.setAttribute('lang', state.lang);
     document.title = t('docTitle');
+    var _md4 = t('metaDesc');
+    if (_md4 && _md4 !== 'metaDesc') {
+      var _mde = document.querySelector('meta[name="description"]'); if (_mde) _mde.setAttribute('content', _md4);
+      var _ode = document.querySelector('meta[property="og:description"]'); if (_ode) _ode.setAttribute('content', _md4);
+      var _tde = document.querySelector('meta[name="twitter:description"]'); if (_tde) _tde.setAttribute('content', _md4);
+    }
     setMeta('meta[property="og:title"]', 'content', t('docTitle').split('|')[0].trim());
     var nodes = document.querySelectorAll('[data-i18n]');
     for (var i = 0; i < nodes.length; i++) {
@@ -1399,10 +1676,7 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
     }
     var lt = $('langToggle');
     if (lt) {
-      var spans = lt.querySelectorAll('[data-lt]');
-      for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
-      lt.setAttribute('aria-label', t('toggleTo'));
-      lt.setAttribute('title', t('toggleTo'));
+      syncLangUI();
     }
     paintAll();
     paintCard();
@@ -1412,8 +1686,9 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
     } catch (e) { /* storage may be blocked */ }
   }
 
-  $('langToggle').addEventListener('click', function () {
-    applyLang(state.lang === 'ko' ? 'en' : 'ko');
+  $('langToggle').addEventListener('click', function (ev) {
+    var _t4 = ev.target.closest('[data-lang]');
+    if (_t4) applyLang(_t4.getAttribute('data-lang'));
   });
 
   /* ═════════════════════ boot ═════════════════════ */

@@ -334,7 +334,7 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
 .foot .net b { color: var(--ok); }
 
 @media (max-width: 640px) {
-  .wrap { padding: 0 14px 36px; }
+  .wrap { padding: 0 16px 36px; }
   .topbar { padding: 14px 0 8px; }
   .brand-txt { font-size: 12px; letter-spacing: .1em; }
   .hero { padding: 16px 0 12px; }
@@ -344,6 +344,22 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
   .sec-head h2 { font-size: 16px; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* ═══ 4-language switch: KO | EN | JA | 繁中 ═══ */
+.lang-toggle { padding: 0 3px; gap: 0; cursor: default; }
+.lang-toggle .lt {
+  appearance: none; -webkit-appearance: none; border: 0; background: transparent; color: var(--muted2);
+  height: 100%; padding: 0 6px; margin: 0; font-family: inherit; font-size: 11px; font-weight: 700;
+  letter-spacing: .02em; line-height: 1; cursor: pointer; border-radius: 8px;
+  transition: color .15s, background .15s;
+}
+.lang-toggle .lt:hover { color: var(--ink); }
+.lang-toggle .lt.on { color: var(--accent); }
+@media (max-width: 430px) {
+  .lang-toggle { height: 30px; }
+  .lang-toggle .lt { padding: 0 4px; font-size: 10px; }
+}
+:lang(ja) body, :lang(zh-Hant) body { word-break: normal; overflow-wrap: break-word; line-break: strict; }
 </style>
 </head>
 <body>
@@ -355,11 +371,15 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
       <span class="brand-txt">Kim Yihyung</span>
     </a>
     <div class="top-actions">
-      <button class="lang-toggle" id="langToggle" type="button" title="View in English" aria-label="View in English">
-        <span class="lt on" data-lt="ko">KO</span>
+      <div class="lang-toggle" id="langToggle" role="group" aria-label="Language · 언어 · 言語 · 語言">
+        <button class="lt on" type="button" data-lang="ko" aria-pressed="true">KO</button>
         <span class="lsep" aria-hidden="true">|</span>
-        <span class="lt" data-lt="en">EN</span>
-      </button>
+        <button class="lt" type="button" data-lang="en" aria-pressed="false">EN</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lang="ja" aria-pressed="false">JA</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lang="zh-Hant" aria-pressed="false">繁中</button>
+      </div>
       <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← 도구 전체</a>
     </div>
   </header>
@@ -582,7 +602,7 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
             <tbody>
               <tr><td data-i18n="tNps">국민연금</td><td>9.5%</td><td>4.75%</td></tr>
               <tr><td data-i18n="tHealth">건강보험</td><td>7.19%</td><td>3.595%</td></tr>
-              <tr><td data-i18n="tLtc">장기요양</td><td colspan="2">건강보험료 × 13.14%</td></tr>
+              <tr><td data-i18n="tLtc">장기요양</td><td colspan="2" data-i18n="r3v">건강보험료 × 13.14%</td></tr>
               <tr><td data-i18n="tEmp">고용보험</td><td>1.8%</td><td>0.9%</td></tr>
               <tr><td data-i18n="tSang">산재보험</td><td colspan="2" data-i18n="tSangV">사업주 전액 (업종별)</td></tr>
             </tbody>
@@ -646,6 +666,8 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
   var I18N = {
     ko: {
       docTitle: 'PaySnap — 연봉 실수령액 · 3.3% 원천징수 · 시급 주휴수당 계산기 | Kim Yihyung',
+      metaTitle: "PaySnap — 연봉 실수령액 · 3.3% 원천징수 · 시급 주휴수당 계산기",
+      wonUnit: "원",
       metaDesc: '2026년 4대보험 요율과 비과세 식대를 반영한 연봉·월급 실수령액, 프리랜서 3.3%와 기타소득 8.8% 원천징수 정산·역산, 시급과 주휴수당 주간·월간 실수령을 한 페이지에서. 모두 브라우저 안에서 계산하고 업로드 0바이트.',
       ogTitle: 'PaySnap — 연봉 실수령 · 3.3% 정산 · 시급 주휴수당',
       ogDesc: '2026년 요율로 연봉 실수령액, 프리랜서 3.3%·기타소득 8.8% 원천징수와 역산, 시급·주휴수당 주간·월간 실수령을 한 화면에서. 브라우저 안에서만 계산합니다.',
@@ -723,6 +745,8 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
     },
     en: {
       docTitle: 'PaySnap — Korean Take-Home Pay, 3.3% Withholding & Hourly Pay | Kim Yihyung',
+      metaTitle: "PaySnap — Korean Take-Home Pay, 3.3% Withholding & Hourly Pay",
+      wonUnit: "KRW",
       metaDesc: 'Korean take-home pay from an annual salary with the 2026 four-insurance rates and the tax-free meal allowance, freelance 3.3% and other-income 8.8% withholding with a reverse calculation, and hourly pay with weekly holiday allowance — all computed in your browser with zero uploads.',
       ogTitle: 'PaySnap — take-home pay, 3.3% withholding, hourly pay',
       ogDesc: 'Annual take-home pay on 2026 rates, freelance 3.3% and other-income 8.8% withholding with reverse calculation, and hourly pay with the weekly holiday allowance — in the tab.',
@@ -796,7 +820,335 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
       sumNeed: 'Contract needed for the target', sumDays: 'days', sumWeek: 'week', sumMonth: 'month', sumWeeklyNet: 'Weekly take-home',
       sumFoot: 'Reference only, 2026 rates. Your payslip, the year-end settlement and the May filing decide the final numbers.',
       copied: 'Copied to the clipboard.', copyFail: 'Copy failed — select the summary and copy it by hand.'
-    }
+    },
+      ja: {
+        docTitle: "PaySnap — 年俸の手取り・3.3%源泉徴収・時給の週休手当 計算機 | Kim Yihyung",
+        metaTitle: "PaySnap — 年俸の手取り・3.3%源泉徴収・時給の週休手当",
+        metaDesc: "2026年の4大保険料率と非課税の食事代を反映した年俸・月給の手取り、フリーランス3.3%とその他所得8.8%の源泉徴収の精算・逆算、時給と週休手当の週間・月間手取りを1ページで。すべてブラウザの中で計算し、アップロード0バイト。",
+        ogTitle: "PaySnap — 年俸の手取り・3.3%精算・時給の週休手当",
+        ogDesc: "2026年の料率で年俸の手取り、フリーランス3.3%・その他所得8.8%の源泉徴収と逆算、時給・週休手当の週間・月間手取りを1画面で。ブラウザの中だけで計算します。",
+        brandAria: "Kim Yihyung — ポートフォリオ",
+        back: "← ツール一覧",
+        eyebrow: "PaySnap · 年俸・3.3%・時給 · アップロード0",
+        h1: "手取りが気になるとき、<br><span class=\"soft\">3つの道を一度に。</span><br><span class=\"gold\">このタブの外には出ません。</span>",
+        lede: "2026年の4大保険料率と<strong>非課税の食事代20万ウォン</strong>を反映した<strong>年俸・月給の手取り</strong>、フリーランス<strong>3.3%</strong>とその他所得<strong>8.8%</strong>の源泉徴収の精算と<strong>目標手取りからの逆算</strong>、時給と<strong>週休手当</strong>の週間・月間手取りまで。入力した金額はどこにも保存されません。",
+        pillUp: "アップロード0バイト",
+        pillNet: "外部リクエスト0件",
+        pill2026: "2026年の料率基準",
+        pillCopy: "カカオトーク用の要約をコピー",
+        calcAria: "給与計算機",
+        tabAria: "計算の種類",
+        tab1: "手取り",
+        tab2: "3.3% · 8.8%",
+        tab3: "時給・週休",
+        sTitle: "年俸・月給の手取り",
+        sNote: "2026 4大保険 · 非課税の食事代",
+        sSalary: "税引前の年俸",
+        unitMan: "万ウォン",
+        sMeal: "非課税の食事代（月）",
+        sFamily: "扶養家族（本人含む）",
+        sChild: "8〜20歳の子ども",
+        lgNet: "手取り",
+        lgIns: "4大保険",
+        lgTax: "所得税・地方税",
+        sCaveat: "4大保険は<b>非課税の食事代を引いた月給</b>に料率を掛けます。国民年金は基準所得月額の上限<b>659万ウォン</b>（2026年7月〜2027年6月）までで、報酬が下限41万ウォンより低い場合は実際の報酬で計算します（事業場ごとの下限・納付免除により異なります）。所得税は国税庁の簡易税額表をそのまま写さず、同じ算式（勤労所得控除・基本控除・年金保険料控除・特別所得控除の概算値・勤労所得税額控除）で計算した<b>見込み</b>で、実際の源泉徴収額と月3万ウォン前後の差が出ることがあります。年末精算で精算されます。",
+        fTitle: "フリーランスの源泉徴収精算",
+        fNote: "3.3% · 8.8%",
+        fTypeAria: "所得の種類",
+        fBiz: "フリーランス 3.3%",
+        fGipo: "その他所得 8.8%",
+        fAmount: "契約金額（税引前）",
+        unitWon: "ウォン",
+        fTarget: "目標の手取り額",
+        fHead1: "契約金額から",
+        fHead2: "目標額に必要な契約金額",
+        fCaveat: "<b>3.3%</b>は事業所得の源泉徴収（所得税3%＋地方所得税0.3%）で、<b>8.8%</b>はその他所得の源泉徴収（所得税8%＋地方0.8%）です。その他所得は必要経費<b>60%</b>が認められ、実際には収入の40%にだけ税率がかかるため、8.8%を引かれても実効負担は<b>3.52%</b>です。いずれも源泉徴収は<b>前払いの税金</b>で、翌年5月の総合所得税の申告で精算されます。",
+        hTitle: "時給・週休手当の手取り",
+        hNote: "週間 · 月間",
+        hWage: "時給",
+        unitHour: "時間",
+        hHours: "週の所定労働時間",
+        hDays: "週の勤務日数",
+        unitDay: "日",
+        hHead1: "週間",
+        hHead2: "月間（週休を含む）",
+        hCopy: "この計算をカカオトーク用にコピー",
+        hCaveat: "週15時間以上なら週休手当が付きます。週40時間未満は<b>（週労働時間 ÷ 40）× 8時間</b>分、40時間以上は8時間分です。月換算は<b>（週勤務＋週休）× 4.345週</b>で計算します。2026年の最低賃金は時給<b>10,320ウォン</b>（週40時間で月2,156,880ウォン、209時間基準）です。ここでの金額は4大保険と所得税を引いた<b>参考値</b>で、事業場の給与体系と精算により変わります。",
+        sumHead: "要約 — カカオトークに貼り付け",
+        copyBtn: "要約をコピー",
+        rateHead: "2026年 労働者負担",
+        r1k: "国民年金",
+        r2k: "健康保険",
+        r3k: "介護保険",
+        r3v: "健康保険料 × 13.14%",
+        r4k: "雇用保険",
+        r5k: "非課税の食事代",
+        r5v: "月20万ウォン",
+        r6k: "最低賃金",
+        r6v: "10,320ウォン / 時間",
+        rateNote: "労災保険は事業主が全額負担するため給与から引かれません。国民年金は基準所得月額<b>659万ウォン</b>までで、下限41万ウォン未満は事業場ごとの扱い（下限適用・納付免除）に従います。",
+        rateTitle: "2026年 4大保険料率表",
+        rateNote2: "労働者負担分",
+        t1h: "事業所加入者",
+        tItem: "項目",
+        tTotal: "全体",
+        tMine: "労働者",
+        tNps: "国民年金",
+        tHealth: "健康保険",
+        tLtc: "介護保険",
+        tEmp: "雇用保険",
+        tSang: "労災保険",
+        tSangV: "事業主全額（業種別）",
+        tNote: "2026年の国民年金は1998年以来はじめて<b>9% → 9.5%</b>、健康保険は<b>7.09% → 7.19%</b>に上がりました。",
+        t2h: "順序",
+        t2p: "① 非課税の食事代を引いた<b>課税給与</b>を求め ② 国民年金・健康保険・介護保険・雇用保険をそれぞれ<b>10ウォン未満切り捨て</b>で引き ③ 12か月分に換算して<b>勤労所得控除・基本控除・年金保険料控除</b>を引き基本税率を適用し ④ <b>勤労所得税額控除</b>と子ども税額控除を引き ⑤ 12で割って毎月の所得税を決め ⑥ その10%を<b>地方所得税</b>として足します。",
+        t3h: "源泉徴収は前払い",
+        t3p: "毎月引かれる所得税は確定した税額ではなく<b>前払いのお金</b>です。カード・医療費・教育費・年金貯蓄の控除は簡易税額表に入っていないため、翌年2月の年末精算で計算し直し、払いすぎは戻り、足りなければ追加で納めます。フリーランスは5月の総合所得税の申告で精算されます。",
+        faqTitle: "よくある質問",
+        faqNote: "料率 · 3.3% · 週休",
+        q1: "食事代20万ウォンを非課税で受け取るとどれだけ増えますか？",
+        a1: "税引前の年俸が同じでも、食事代が<b>非課税</b>なら4大保険料と所得税がその分減り、手取りが増えます。年俸4,500万ウォン・単身世帯で月<b>4万ウォン前後</b>、年間で50万ウォン近い差になります。上の計算機の食事代の欄を0と20に変えて比べてみてください。",
+        q2: "3.3%を引かれたら終わりですか？",
+        a2: "いいえ。3.3%は<b>源泉徴収</b>にすぎず、フリーランスは翌年5月の<b>総合所得税</b>で改めて精算します。年収が1,400万ウォン以下なら多くの場合還付で、所得が増えれば3.3%より多く納めることもあります。3.3%は事業所得なので、<b>黄色い傘共済・年金貯蓄</b>などの所得控除を使えば実際の負担は減ります。",
+        q3: "8.8%はなぜ3.3%より実効負担が低いのですか？",
+        a3: "その他所得は<b>必要経費60%</b>が認められます。100万ウォンを受け取ると所得金額は40万ウォンで、これに8%を掛けると所得税3万2千ウォン、地方所得税3,200ウォンで合計<b>3万5,200ウォン（3.52%）</b>です。ただしその他所得は事業所得のように経費を別に認められないため、続く業務なら事業所得として扱う方が有利なことがあります。",
+        q4: "週休手当がもらえない場合もありますか？",
+        a4: "週の所定労働時間が<b>15時間未満</b>なら週休手当は発生しません。またその週に<b>皆勤</b>する必要があるため、欠勤があればその週の週休手当はありません。遅刻・早退は皆勤を崩しませんが、無断欠勤は崩します。支払いは通常、次の給与日にまとめて行われます。",
+        footCopy: "© 2026 Kim Yihyung · ブラウザで、ブラウザのために作りました。",
+        footNet: "外部リクエスト",
+        footP1: "ポートフォリオ",
+        footP2: "ツール一覧",
+        footP3: "ソース",
+        mono: "アップロードなし · 追跡なし",
+        toggleTo: "言語を切り替え",
+        perMonth: "/ 月",
+        perDeal: "/ 件",
+        lblAnnualNet: "年間手取り",
+        lblGrossMonth: "税引前の月給",
+        lblDeduct: "月の控除合計",
+        rMonthlyGross: "税引前の月給",
+        rMeal: "非課税の食事代",
+        rTaxable: "課税給与",
+        rNps: "国民年金 (4.75%)",
+        rHealth: "健康保険 (3.595%)",
+        rLtc: "介護保険",
+        rEmp: "雇用保険 (0.9%)",
+        rIncome: "所得税",
+        rLocal: "地方所得税",
+        rInsTotal: "4大保険合計",
+        rTaxBase: "年間課税標準",
+        rNetMonth: "月の手取り額",
+        lblWithheld: "源泉徴収合計",
+        lblRate: "実効税率",
+        lblType: "種類",
+        fGipoShort: "その他所得 8.8%",
+        fBizShort: "事業所得 3.3%",
+        rGross: "契約金額",
+        rExpense: "必要経費 60%",
+        rTaxableGipo: "所得金額 (40%)",
+        rWithheld: "源泉徴収合計",
+        rNet: "手取り額",
+        rTarget: "目標の手取り額",
+        rNeed: "必要な契約金額",
+        rTaxableGipo2: "課税基準",
+        fGipoNote: "その他所得は必要経費60%が認められるため、実効税率は{r}%です。",
+        fBizNote: "事業所得3.3%は翌年5月の総合所得税で改めて精算されます。",
+        lblWeeklyNet: "週の手取り",
+        lblHoliday: "週休手当",
+        lblMonthGross: "月換算の税引前",
+        rWage: "時給",
+        rHours: "週の所定労働",
+        rHolidayHours: "週休の時間",
+        rHolidayPay: "週休手当",
+        rWeeklyGross: "週給合計",
+        rMonthGross2: "月換算の税引前給与",
+        hShort: "週15時間未満のため4大保険の控除はしていません（事業場により異なります）。",
+        hBelow: "2026年の最低賃金{w}ウォンより低いです。",
+        hMinOk: "2026年の最低賃金{w}ウォン · 週40時間で月{m}ウォン（209時間基準）",
+        sumSalaryHead: "年俸の手取り",
+        sumFreeHead: "源泉徴収の精算",
+        sumHourlyHead: "時給・週休の手取り",
+        sumGross: "税引前",
+        sumNet: "手取り",
+        sumYear: "年",
+        sumMetaMeal: "食事代",
+        sumMetaFamily: "扶養家族",
+        sumBizHead: "フリーランス 3.3% 精算",
+        sumGipoHead: "その他所得 8.8% 精算",
+        sumNeed: "目標額に必要な契約金額",
+        sumDays: "日",
+        sumWeek: "週",
+        sumMonth: "月",
+        sumWeeklyNet: "週の手取り",
+        sumFoot: "※ 2026年の料率による参考値。実際の明細書と年末精算・総合所得税の申告で精算されます。",
+        copied: "クリップボードにコピーしました。",
+        copyFail: "コピーできませんでした — 要約を選択して手動でコピーしてください。",
+        wonUnit: "ウォン",
+      },
+      "zh-Hant": {
+        docTitle: "PaySnap — 年薪實領・3.3% 預扣・時薪週休津貼計算器 | Kim Yihyung",
+        metaTitle: "PaySnap — 年薪實領・3.3% 預扣・時薪週休津貼",
+        metaDesc: "依 2026 年四大保險費率與免稅伙食費計算年薪、月薪實領金額，自由工作者 3.3% 與其他所得 8.8% 的預扣結算與回推，以及時薪與週休津貼的週、月實領，全部在同一頁。所有計算都在瀏覽器內完成，零位元組上傳。",
+        ogTitle: "PaySnap — 年薪實領・3.3% 結算・時薪週休",
+        ogDesc: "用 2026 年費率算年薪實領、自由工作者 3.3% 與其他所得 8.8% 預扣與回推、時薪與週休津貼的週月實領，全部在同一畫面。只在瀏覽器內計算。",
+        brandAria: "Kim Yihyung — 作品集",
+        back: "← 所有工具",
+        eyebrow: "PaySnap · 年薪・3.3%・時薪 · 零上傳",
+        h1: "想知道實際拿到多少時，<br><span class=\"soft\">三條路一次算。</span><br><span class=\"gold\">不會離開這個分頁。</span>",
+        lede: "依 2026 年四大保險費率與<strong>免稅伙食費 20 萬韓元</strong>計算的<strong>年薪・月薪實領金額</strong>、自由工作者<strong>3.3%</strong>與其他所得<strong>8.8%</strong>的預扣結算與<strong>由目標實領回推</strong>、時薪與<strong>週休津貼</strong>的週、月實領。輸入的金額不會儲存在任何地方。",
+        pillUp: "零位元組上傳",
+        pillNet: "零次外部請求",
+        pill2026: "依 2026 年費率",
+        pillCopy: "複製 KakaoTalk 摘要",
+        calcAria: "薪資計算器",
+        tabAria: "計算種類",
+        tab1: "實領金額",
+        tab2: "3.3% · 8.8%",
+        tab3: "時薪・週休",
+        sTitle: "年薪・月薪實領金額",
+        sNote: "2026 四大保險 · 免稅伙食費",
+        sSalary: "稅前年薪",
+        unitMan: "萬韓元",
+        sMeal: "免稅伙食費（月）",
+        sFamily: "扶養親屬（含本人）",
+        sChild: "8～20 歲子女",
+        lgNet: "實領",
+        lgIns: "四大保險",
+        lgTax: "所得稅・地方稅",
+        sCaveat: "四大保險以<b>扣除免稅伙食費後的月薪</b>乘上費率。國民年金只計到標準所得月額上限<b>659 萬韓元</b>（2026 年 7 月～2027 年 6 月），報酬低於下限 41 萬韓元時以實際報酬計算（依各事業場所的下限與繳納免除而不同）。所得稅不是直接照抄國稅廳簡易稅額表，而是用相同算式（勤勞所得扣除、基本扣除、年金保險費扣除、特別所得扣除的概略值、勤勞所得稅額扣除）算出的<b>估計值</b>，與實際預扣金額每月可能有 3 萬韓元左右的差距，會在年末結算時調整。",
+        fTitle: "自由工作者預扣結算",
+        fNote: "3.3% · 8.8%",
+        fTypeAria: "所得類型",
+        fBiz: "自由工作者 3.3%",
+        fGipo: "其他所得 8.8%",
+        fAmount: "合約金額（稅前）",
+        unitWon: "韓元",
+        fTarget: "目標實領金額",
+        fHead1: "以合約金額計算",
+        fHead2: "達到目標所需的合約金額",
+        fCaveat: "<b>3.3%</b>是事業所得預扣（所得稅 3% ＋ 地方所得稅 0.3%），<b>8.8%</b>是其他所得預扣（所得稅 8% ＋ 地方 0.8%）。其他所得可認列<b>60% 必要費用</b>，實際上只有收入的 40% 被課稅，所以即使扣 8.8%，實質負擔是<b>3.52%</b>。兩者都只是<b>預繳的稅</b>，會在隔年 5 月綜合所得稅申報時重新結算。",
+        hTitle: "時薪・週休津貼實領",
+        hNote: "週間 · 月間",
+        hWage: "時薪",
+        unitHour: "小時",
+        hHours: "每週約定工時",
+        hDays: "每週上班日數",
+        unitDay: "日",
+        hHead1: "週間",
+        hHead2: "月間（含週休）",
+        hCopy: "把這個計算複製成 KakaoTalk 訊息",
+        hCaveat: "每週 15 小時以上就有週休津貼。每週未滿 40 小時為<b>（週工時 ÷ 40）× 8 小時</b>，40 小時以上為 8 小時。月換算採<b>（週工時 ＋ 週休）× 4.345 週</b>。2026 年最低工資為時薪<b>10,320 韓元</b>（每週 40 小時月薪 2,156,880 韓元，以 209 小時計）。這裡的金額是扣除四大保險與所得稅後的<b>參考值</b>，會依事業場所的薪資制度與結算方式而不同。",
+        sumHead: "摘要 — 貼到 KakaoTalk",
+        copyBtn: "複製摘要",
+        rateHead: "2026 年勞工負擔",
+        r1k: "國民年金",
+        r2k: "健康保險",
+        r3k: "長期照護",
+        r3v: "健康保險費 × 13.14%",
+        r4k: "僱用保險",
+        r5k: "免稅伙食費",
+        r5v: "每月 20 萬韓元",
+        r6k: "最低工資",
+        r6v: "10,320 韓元 / 小時",
+        rateNote: "職災保險由雇主全額負擔，不會從薪水扣除。國民年金只計到標準所得月額<b>659 萬韓元</b>，低於下限 41 萬韓元時依各事業場所的處理方式（套用下限或繳納免除）。",
+        rateTitle: "2026 年四大保險費率表",
+        rateNote2: "勞工負擔部分",
+        t1h: "事業單位投保者",
+        tItem: "項目",
+        tTotal: "合計",
+        tMine: "勞工",
+        tNps: "國民年金",
+        tHealth: "健康保險",
+        tLtc: "長期照護",
+        tEmp: "僱用保險",
+        tSang: "職災保險",
+        tSangV: "雇主全額（依行業）",
+        tNote: "2026 年國民年金自 1998 年以來首次由 <b>9% → 9.5%</b>，健康保險由 <b>7.09% → 7.19%</b> 調升。",
+        t2h: "順序",
+        t2p: "① 先求扣除免稅伙食費後的<b>課稅薪資</b> ② 國民年金、健康保險、長期照護、僱用保險各自<b>捨去未滿 10 韓元</b>後扣除 ③ 換算成 12 個月，扣除<b>勤勞所得扣除、基本扣除、年金保險費扣除</b>並套用基本稅率 ④ 扣除<b>勤勞所得稅額扣除</b>與子女稅額扣除 ⑤ 除以 12 決定每月所得稅 ⑥ 再加上其 10% 的<b>地方所得稅</b>。",
+        t3h: "預扣是預繳",
+        t3p: "每月扣的所得稅不是確定的稅額，而是<b>先付的錢</b>。信用卡、醫療費、教育費、年金儲蓄等扣除不在簡易稅額表內，會在隔年 2 月的年末結算重新計算，多繳的退回、少繳的補繳。自由工作者則在 5 月綜合所得稅申報時結算。",
+        faqTitle: "常見問題",
+        faqNote: "費率 · 3.3% · 週休",
+        q1: "伙食費 20 萬韓元以免稅方式領取會多多少？",
+        a1: "稅前年薪相同時，伙食費若列為<b>免稅</b>，四大保險費與所得稅都會減少，實領金額就增加。以年薪 4,500 萬韓元、單身家戶計算，每月約 <b>4 萬韓元</b>，一年接近 50 萬韓元。把上方計算器的伙食費欄位改成 0 與 20 比較看看。",
+        q2: "扣了 3.3% 就結束了嗎？",
+        a2: "不是。3.3% 只是<b>預扣</b>，自由工作者會在隔年 5 月的<b>綜合所得稅</b>重新結算。年所得約 1,400 萬韓元以下通常是退稅，所得增加時可能要比 3.3% 繳更多。3.3% 屬事業所得，善用<b>黃色傘共濟、年金儲蓄</b>等所得扣除可以降低實際負擔。",
+        q3: "為什麼 8.8% 的實質負擔比 3.3% 低？",
+        a3: "其他所得可認列<b>60% 必要費用</b>。收到 100 萬韓元時所得金額是 40 萬韓元，乘上 8% 是所得稅 3 萬 2 千韓元、地方所得稅 3,200 韓元，合計<b>3 萬 5,200 韓元（3.52%）</b>。不過其他所得不能像事業所得那樣另行認列費用，若是持續性的工作，改以事業所得處理可能較有利。",
+        q4: "週休津貼也有領不到的情況嗎？",
+        a4: "每週約定工時<b>未滿 15 小時</b>就不會有週休津貼。另外那一週必須<b>全勤</b>，有缺勤就沒有該週的週休津貼。遲到、早退不算破壞全勤，曠職則算。發放時間通常併入下一次發薪日。",
+        footCopy: "© 2026 Kim Yihyung · 在瀏覽器裡，為瀏覽器而做。",
+        footNet: "外部請求",
+        footP1: "作品集",
+        footP2: "所有工具",
+        footP3: "原始碼",
+        mono: "不上傳 · 不追蹤",
+        toggleTo: "切換語言",
+        perMonth: "/ 月",
+        perDeal: "/ 件",
+        lblAnnualNet: "年實領",
+        lblGrossMonth: "稅前月薪",
+        lblDeduct: "月扣除合計",
+        rMonthlyGross: "稅前月薪",
+        rMeal: "免稅伙食費",
+        rTaxable: "課稅薪資",
+        rNps: "國民年金 (4.75%)",
+        rHealth: "健康保險 (3.595%)",
+        rLtc: "長期照護",
+        rEmp: "僱用保險 (0.9%)",
+        rIncome: "所得稅",
+        rLocal: "地方所得稅",
+        rInsTotal: "四大保險合計",
+        rTaxBase: "年度課稅標準",
+        rNetMonth: "月實領金額",
+        lblWithheld: "預扣合計",
+        lblRate: "實質稅率",
+        lblType: "類型",
+        fGipoShort: "其他所得 8.8%",
+        fBizShort: "事業所得 3.3%",
+        rGross: "合約金額",
+        rExpense: "必要費用 60%",
+        rTaxableGipo: "所得金額 (40%)",
+        rWithheld: "預扣合計",
+        rNet: "實領金額",
+        rTarget: "目標實領金額",
+        rNeed: "所需合約金額",
+        rTaxableGipo2: "課稅基準",
+        fGipoNote: "其他所得可認列 60% 必要費用，實質稅率為 {r}%。",
+        fBizNote: "事業所得 3.3% 會在隔年 5 月綜合所得稅重新結算。",
+        lblWeeklyNet: "週實領",
+        lblHoliday: "週休津貼",
+        lblMonthGross: "月換算稅前",
+        rWage: "時薪",
+        rHours: "每週約定工時",
+        rHolidayHours: "週休時數",
+        rHolidayPay: "週休津貼",
+        rWeeklyGross: "週薪合計",
+        rMonthGross2: "月換算稅前薪資",
+        hShort: "每週未滿 15 小時，因此未扣四大保險（依事業場所而異）。",
+        hBelow: "低於 2026 年最低工資 {w} 韓元。",
+        hMinOk: "2026 年最低工資 {w} 韓元 · 每週 40 小時月薪 {m} 韓元（以 209 小時計）",
+        sumSalaryHead: "年薪實領",
+        sumFreeHead: "預扣結算",
+        sumHourlyHead: "時薪・週休實領",
+        sumGross: "稅前",
+        sumNet: "實領",
+        sumYear: "年",
+        sumMetaMeal: "伙食費",
+        sumMetaFamily: "扶養親屬",
+        sumBizHead: "自由工作者 3.3% 結算",
+        sumGipoHead: "其他所得 8.8% 結算",
+        sumNeed: "達到目標所需的合約金額",
+        sumDays: "日",
+        sumWeek: "週",
+        sumMonth: "月",
+        sumWeeklyNet: "週實領",
+        sumFoot: "※ 依 2026 年費率的參考值。實際薪資單與年末結算・綜合所得稅申報會決定最終金額。",
+        copied: "已複製到剪貼簿。",
+        copyFail: "複製失敗 — 請選取摘要後手動複製。",
+        wonUnit: "韓元",
+      }
   };
 
   /* ═════════════════════ 2026 기준값 ═════════════════════ */
@@ -831,8 +1183,8 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
   function $(id) { return document.getElementById(id); }
   function floor10(v) { return Math.floor(v / 10) * 10; }
   function num(id) { var v = parseFloat($(id).value); return isNaN(v) ? 0 : v; }
-  function won(v) { return Math.round(v).toLocaleString(state.lang === 'ko' ? 'ko-KR' : 'en-US'); }
-  function wonW(v) { return won(v) + (state.lang === 'ko' ? '원' : ' KRW'); }
+  function won(v) { return Math.round(v).toLocaleString(loc4()); }
+  function wonW(v) { return won(v) + ' ' + t('wonUnit'); }
   function t(key) {
     var d = I18N[state.lang] || I18N.ko;
     if (d[key] != null) return d[key];
@@ -1224,8 +1576,53 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
     var el = document.querySelector(sel);
     if (el) el.setAttribute(attr, val);
   }
+  var DEFAULT_LANG = 'ko';
+  /* ═══ 4-language switch (ko · en · ja · zh-Hant) ═══ */
+  var LANGS4 = ['ko', 'en', 'ja', 'zh-Hant'];
+  function normLang(v) {
+    v = String(v == null ? '' : v).toLowerCase().replace(/_/g, '-');
+    if (v === 'ko' || v === 'ko-kr' || v === 'kr') return 'ko';
+    if (v === 'ja' || v === 'ja-jp' || v === 'jp') return 'ja';
+    if (v === 'zh-hant' || v === 'zh-tw' || v === 'zh' || v === 'tw' || v === 'zh-hk') return 'zh-Hant';
+    if (v === 'en' || v === 'en-us' || v === 'en-gb') return 'en';
+    return '';
+  }
+  function loc4() { return state.lang === 'ko' ? 'ko-KR' : state.lang === 'ja' ? 'ja-JP' : state.lang === 'zh-Hant' ? 'zh-TW' : 'en-US'; }
+  function lsGet4(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function initialLang() {
+    var f = (typeof window.__FORCED_LANG__ !== 'undefined' && window.__FORCED_LANG__) ? window.__FORCED_LANG__ : '';
+    if (f && normLang(f)) return normLang(f);
+    var q = '';
+    try { q = new URLSearchParams(location.search).get('lang') || ''; } catch (e) { q = ''; }
+    if (q && normLang(q)) return normLang(q);
+    var stored = lsGet4(typeof SHARED_KEY !== 'undefined' ? SHARED_KEY : 'kyh.lang') || lsGet4(typeof LANG_KEY !== 'undefined' ? LANG_KEY : '');
+    if (stored && normLang(stored)) return normLang(stored);
+    var h = normLang(document.documentElement.getAttribute('lang'));
+    if (h) return h;
+    return typeof DEFAULT_LANG !== 'undefined' ? DEFAULT_LANG : 'ko';
+  }
+  function syncLangUI() {
+    var lt = document.getElementById('langToggle');
+    if (!lt) return;
+    var btns = lt.querySelectorAll('[data-lang]');
+    for (var i = 0; i < btns.length; i++) {
+      var on = btns[i].getAttribute('data-lang') === state.lang;
+      btns[i].classList.toggle('on', on);
+      btns[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+  }
+  function bindLangToggle() {
+    var lt = document.getElementById('langToggle');
+    if (!lt) return;
+    lt.addEventListener('click', function (ev) {
+      var t4 = ev.target.closest('[data-lang]');
+      if (!t4) return;
+      applyLang(t4.getAttribute('data-lang'));
+    });
+  }
+
   function applyLang(lang) {
-    state.lang = lang === 'en' ? 'en' : 'ko';
+    state.lang = normLang(lang) || 'ko';
     document.documentElement.setAttribute('lang', state.lang);
     document.title = t('docTitle');
     setMeta('meta[name="description"]', 'content', t('metaDesc'));
@@ -1250,10 +1647,7 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
     }
     var lt = $('langToggle');
     if (lt) {
-      var spans = lt.querySelectorAll('[data-lt]');
-      for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
-      lt.setAttribute('aria-label', t('toggleTo'));
-      lt.setAttribute('title', t('toggleTo'));
+      syncLangUI();
     }
     paintAll();
     try {
@@ -1262,8 +1656,9 @@ details.qa .a b { color: var(--ink); font-weight: 600; }
     } catch (e) { /* 저장 실패는 무해 */ }
   }
 
-  $('langToggle').addEventListener('click', function () {
-    applyLang(state.lang === 'ko' ? 'en' : 'ko');
+  $('langToggle').addEventListener('click', function (ev) {
+    var _t4 = ev.target.closest('[data-lang]');
+    if (_t4) applyLang(_t4.getAttribute('data-lang'));
   });
 
   /* ═════════════════════ 시작 ═════════════════════ */

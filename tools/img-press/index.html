@@ -156,6 +156,9 @@ button, input, select, textarea { font-family: inherit; color: inherit; }
 .lang-toggle:active { transform: scale(.94); }
 .lang-toggle .lt.on { color: var(--accent); }
 .lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+.lang-toggle .lt { appearance: none; border: 0; background: none; color: inherit; font: inherit; letter-spacing: inherit; line-height: 1; padding: 1px 0; cursor: pointer; transition: color .2s; }
+.lang-toggle .lt:hover { color: var(--ink); }
+.lang-toggle .lt:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 .topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
 .topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
 
@@ -344,7 +347,7 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
 .foot .net b { color: var(--ok); }
 
 @media (max-width: 640px) {
-  .wrap { padding: 0 14px 36px; }
+  .wrap { padding: 0 16px 36px; }
   .topbar { padding: 14px 0 8px; }
   .brand-txt { font-size: 12px; letter-spacing: .1em; }
   .hero { padding: 16px 0 12px; }
@@ -372,11 +375,15 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       <span class="brand-txt">Kim Yihyung</span>
     </a>
     <div class="top-actions">
-      <button class="lang-toggle" id="langToggle" type="button" title="한국어로 보기" aria-label="한국어로 보기">
-        <span class="lt on" data-lt="en">EN</span>
+      <div class="lang-toggle" id="langToggle" role="group" aria-label="Language">
+        <button class="lt" type="button" data-lt="ko" lang="ko">KO</button>
         <span class="lsep" aria-hidden="true">|</span>
-        <span class="lt" data-lt="ko">KO</span>
-      </button>
+        <button class="lt" type="button" data-lt="en" lang="en">EN</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lt="ja" lang="ja">JA</button>
+        <span class="lsep" aria-hidden="true">|</span>
+        <button class="lt" type="button" data-lt="zh-Hant" lang="zh-Hant">繁中</button>
+      </div>
       <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← All tools</a>
     </div>
   </header>
@@ -567,6 +574,9 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
   /* ═════════════════════ language ═════════════════════ */
   var I18N = {
     en: {
+      langLabel: 'Language',
+      metaTitle: 'ImgPress — batch image compression, zero upload',
+      metaDesc: 'Drop up to 20 photos and compress them in one pass: WebP, JPEG or PNG at a quality you choose, resize to a maximum side, flatten transparency onto any colour, and download the set as a ZIP — entirely in your browser with zero uploads.',
       docTitle: 'ImgPress — Batch Compress Images to WebP, JPG or PNG, Zero Upload | Kim Yihyung',
       brandAria: 'Kim Yihyung — portfolio',
       back: '← All tools',
@@ -657,6 +667,9 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       rowSave: '−{p}%', rowGrow: '+{p}%'
     },
     ko: {
+      langLabel: '언어',
+      metaTitle: 'ImgPress — 이미지 일괄 압축, 업로드 0',
+      metaDesc: '사진 최대 20장을 한 번에 압축합니다. WebP·JPEG·PNG 중 고르고, 품질과 최대 크기를 지정하고, 투명한 부분은 원하는 색으로 채울 수 있습니다. 파일마다 압축 전후 크기를 실측해 보여 주고 ZIP으로 한꺼번에 내려받습니다. 모든 처리는 브라우저 안에서 끝나며 업로드는 0바이트입니다.',
       docTitle: 'ImgPress — 이미지 여러 장 한 번에 압축, 업로드 0 | Kim Yihyung',
       brandAria: 'Kim Yihyung — 포트폴리오',
       back: '← 도구 전체',
@@ -745,11 +758,283 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       rowWait: '대기 중…',
       rowBad: '압축 실패',
       rowSave: '−{p}%', rowGrow: '+{p}%'
+    },
+    'ja': {
+      docTitle: 'ImgPress — 画像をまとめて WebP・JPG・PNG に圧縮、アップロードゼロ | Kim Yihyung',
+      metaTitle: 'ImgPress — 画像をまとめて WebP・JPG・PNG に圧縮',
+      metaDesc: '最大20枚の写真を一度に圧縮。WebP・JPEG・PNG を選び、画質と最大サイズを指定し、透過部分は任意の色で塗りつぶせます。ファイルごとの前後サイズを実測表示し、まとめて ZIP でダウンロード。すべてブラウザ内で完結し、アップロードは 0 バイトです。',
+      langLabel: '言語を切り替え',
+      brandAria: 'Kim Yihyung — ポートフォリオ',
+      back: '← ツール一覧',
+      eyebrow: 'ImgPress · 一括処理 · アップロードゼロ',
+      h1: '写真20枚を入れて、<br><span class="soft">1回で軽くなります。</span><br><span class="gold">ファイルはタブから出ません。</span>',
+      lede: '最大 <strong>20 枚</strong>の画像をまとめて一度に圧縮します。<strong>WebP・JPEG・PNG</strong> を選び、画質を決め、最大の幅・高さに縮小し、透過部分は白・黒・好きな色で塗りつぶせます。ファイルごとに元のサイズ、圧縮後のサイズ、実際に減った率を表示し、全体は<strong>1つの ZIP</strong> でダウンロードできます。ZIP もこのタブの中で組み立てます。',
+      pillUp: 'アップロード 0 バイト',
+      pillNet: '外部リクエスト 0 件',
+      pillBatch: '一度に 20 ファイル',
+      pillZip: 'ZIP · 無圧縮 + CRC32',
+      workAria: '圧縮ワークスペース',
+      dropTitle: '画像を最大 20 枚ドロップ',
+      dropSub: 'PNG · JPG · WebP · GIF(先頭フレーム) · ブラウザが読める AVIF。Ctrl+V でクリップボードから貼り付けもできます。',
+      pickBtn: '画像を選ぶ',
+      sampleBtn: 'サンプル3枚で試す',
+      dropMeta: 'まだ何も読み込んでいません — ファイルを選ぶか、サンプルを押すと数字が動きます。',
+      dropMore: '{n} 枚読み込み済み · あと {left} 枚',
+      dropFull: '20/20 枚 — 1枚消さないと追加できません',
+      stSrc: '元のサイズ',
+      stOut: '圧縮後',
+      savedLabel: '削減',
+      stZip: 'ZIP',
+      files0: '0 ファイル',
+      zipNote: '無圧縮で保存',
+      barAria: '元サイズに対する圧縮サイズ',
+      listTitle: 'ビフォー・アフター',
+      listAria: 'ファイル一覧',
+      listEmpty: 'まだファイルがありません。上のエリアにまとめてドロップできます。',
+      zipBtn: 'まとめてダウンロード (.zip)',
+      reBtn: 'もう一度圧縮',
+      clearBtn: 'クリア',
+      zipFoot: 'ZIP はこのページの中で書き出します — ファイルごとのローカルヘッダー、中央ディレクトリ、そして各ファイルの <b>CRC32</b>。ライブラリもサーバーとの往復もありません。すでに圧縮済みの画像を二度圧縮しない無圧縮(store)方式です。',
+      outHead: '出力設定',
+      fmtLbl: '形式',
+      fmtAria: '出力形式',
+      qLbl: '画質',
+      qAria: '画質',
+      sizeLbl: '最大サイズ',
+      wShort: '幅',
+      hShort: '高',
+      maxWAria: '最大幅(ピクセル)',
+      maxHAria: '最大高さ(ピクセル)',
+      dimNone: '指定なし',
+      sizeNote: '両方空欄なら元のピクセルのままです。縦横比は変えません。',
+      bgLbl: 'JPEG の背景色',
+      bgAria: 'JPEG の背景色',
+      bgWhite: '白',
+      bgBlack: '黒',
+      bgCustom: '任意の色',
+      bgColorAria: '任意の背景色',
+      bgNote: 'JPEG だけに必要な設定です — アルファチャンネルがないためです。WebP と PNG は透過をそのまま保ちます。',
+      infoHead: '出力される内容',
+      kFmt: '形式 · 画質',
+      kResize: 'リサイズ',
+      kFiles: 'ファイル',
+      kBiggest: '最大の削減',
+      kTotal: '合計の削減',
+      exifNote: '出力はすべてキャンバスから再エンコードするため、<b>EXIF・GPS・カメラ情報も一緒に消えます</b>。公開する写真にはむしろ利点です。',
+      howTitle: 'ファイルに実際に起きること',
+      howNote: '推定ではなく実測',
+      n1h: '一度デコードして、描き直す',
+      n1p: '各ファイルはブラウザ自身の画像デコーダーで一度展開され、指定したサイズのキャンバスに描かれます。最大サイズを決めると倍率は <b>min(1, 最大幅 ÷ 幅, 最大高さ ÷ 高さ)</b> — 小さいほうを採るので引き伸ばされることはなく、すでに上限内のファイルは元のピクセルのままです。',
+      n2h: '形式が上限を決める',
+      n2p: '<b>WebP</b> は写真でたいてい最も小さく、透過も保ちます。<b>JPEG</b> は互換性が最も高く、細部の少ない写真なら最小になりますが、アルファがないので透過部分は背景色で塗られます。<b>PNG</b> は可逆圧縮で、グラフィックやスクリーンショットに強く、写真では逆に<b>大きくなる</b>ことが多い — 表はそれを隠さず表示します。',
+      n3h: 'サイズはバイトの実測値',
+      n3p: '各ファイルの下に出る新しいサイズは<b>エンコード済みブロブ</b>の長さで、合計はその総和です。画質スライダーを1目盛り動かすたびに全ファイルを再エンコードして測り直すので、削減率は公式による推定ではなく、実際に減った値になります。',
+      faqTitle: 'よくある質問',
+      faqNote: '一括 · 形式 · ZIP',
+      q1: '写真はどれくらい小さくなりますか?',
+      a1: 'どこから始めるかによります。スマホの JPEG を <b>WebP 画質80</b> に再エンコードすると、たいてい元の 25〜60% になります。スクリーンショットの PNG を WebP 80 で保存すると <b>80% 以上</b> 減ることもよくあります。写真を PNG で保存するとたいてい大きくなります — PNG はすべてのピクセルを可逆で保持するからです。このページの数字は、設定を変えるたびにファイルごとに実測した値です。',
+      q2: 'どの形式を選べばいいですか?',
+      a2: 'ウェブに載せるもの、透過が必要なロゴは <b>WebP</b>。jpg しか受け付けないサービスや、細部の多い写真で最小のファイルが欲しいときは <b>JPEG</b>。スクリーンショットやラインアート、単色の図版のように1ピクセルが重要な場合、または透過を保ちたいのに WebP が使えない場合は <b>PNG</b> です。',
+      q3: 'なぜファイルが大きくなったのですか?',
+      a3: '選んだ形式が元より多くの情報を抱えるからです。PNG は可逆なので、JPEG の写真を PNG にすると数倍に膨らみます。WebP 画質100 も控えめな JPEG より大きくなることがあります。行に赤い <b>+%</b> が出たら形式を変えてみてください — 同じ写真を WebP 80 にすると、たいてい両方よりずっと小さくなります。',
+      q4: 'ZIP はライブラリかサーバーが作るのですか?',
+      a4: 'どちらでもありません。このページの中の小さな<b>無圧縮 ZIP ライター</b>が、ファイルごとのローカルヘッダー、エンコード済みバイトに対する CRC32 チェックサム、中央ディレクトリ、終端レコードまで組み立てます。無圧縮(store)なので二度目の圧縮はしません — すでに圧縮済みの画像を再度 deflate しても時間を食うだけです。どの解凍ツールでも開けます。',
+      footCopy: '© 2026 Kim Yihyung · ブラウザで、ブラウザのために。',
+      footNet: '外部リクエスト',
+      footP1: 'ポートフォリオ',
+      footP2: 'ツール一覧',
+      footP3: 'ソース',
+      mono: 'アップロードなし · 追跡なし',
+      toggleTo: '言語を切り替え',
+      qWebp: 'WebP は透過を保ち、写真でたいてい最も小さくなります。75〜85 が適正で、60 を下回ると滑らかな部分がにじみ始めます。',
+      qJpeg: 'JPEG にはアルファがありません。写真はふつう 80〜85 が適正で、60 を下回ると空や壁のような滑らかな面に縞が出ます。',
+      qPng: 'PNG は可逆なので画質スライダーは効きません。写真は大きく、スクリーンショットは小さくなります。',
+      stReady: '準備完了 — 画像をドロップし、右側で出力を調整してください。',
+      stWorking: '圧縮中 {i} / {n}…',
+      stDone: '完了 — {n} ファイル、{src} → {size}。',
+      stDone0: '完了。',
+      stAdded: '{n} 個のファイルを追加しました。',
+      stLimit: '上限は 20 ファイルです — 最初の 20 個だけを残しました。',
+      stDrop: 'ブラウザが読み取れないファイルでした。',
+      stNone: '圧縮するファイルがありません。',
+      stSaved: '{name} を保存しました。',
+      stZipOk: 'ZIP の準備ができました — {n} ファイル、{size}。',
+      stZipFail: 'ZIP を作成できませんでした。',
+      stCleared: 'クリアしました。',
+      stQuality: '画質 {q} · {fmt}。',
+      stResize: '{w}×{h} px に合わせて縮小しました。',
+      stNoEnc: 'このブラウザは {fmt} でエンコードできないため、JPEG に切り替えました。',
+      stBusy: '処理中…',
+      fmtWebp: 'WebP · {q}',
+      fmtJpeg: 'JPEG · {q}',
+      fmtPng: 'PNG · 可逆',
+      savedWord: '削減',
+      resizeNone: '元のまま',
+      resizeLine: '{w}×{h} に合わせる',
+      filesLine: '{n} / 20',
+      savingNone: '—',
+      pct: '{p}%',
+      sizeOf: '{a} / {b}',
+      okRow: '{w}×{h} · {size}',
+      rowMeta: '{sw}×{sh} · {a} → {b}',
+      rowWait: '待機中…',
+      rowBad: '圧縮できませんでした',
+      rowSave: '−{p}%',
+      rowGrow: '+{p}%'
+    },
+    'zh-Hant': {
+      docTitle: 'ImgPress — 批次壓縮圖片為 WebP、JPG、PNG，零上傳 | Kim Yihyung',
+      metaTitle: 'ImgPress — 批次壓縮圖片為 WebP、JPG、PNG',
+      metaDesc: '一次壓縮最多 20 張照片。選擇 WebP、JPEG 或 PNG，設定品質與最大尺寸，把透明處填成指定顏色，每個檔案都顯示壓縮前後的實際大小，整組打包成 ZIP 下載。全部在瀏覽器裡完成，上傳 0 位元組。',
+      langLabel: '切換語言',
+      brandAria: 'Kim Yihyung — 作品集',
+      back: '← 所有工具',
+      eyebrow: 'ImgPress · 批次 · 零上傳',
+      h1: '放入 20 張照片，<br><span class="soft">一次就變輕。</span><br><span class="gold">檔案不離開這個分頁。</span>',
+      lede: '一次拖入最多 <strong>20 張圖片</strong>，全部一起壓縮 — 可選擇 <strong>WebP、JPEG 或 PNG</strong>、設定品質、縮到指定的最大寬高，並把透明區域填成白色、黑色或自訂顏色。每個檔案都顯示原始大小、壓縮後大小與實際省下的比例，整組以<strong>一個 ZIP</strong> 下載，ZIP 也在這個分頁裡自行組裝。',
+      pillUp: '上傳 0 位元組',
+      pillNet: '外部請求 0 次',
+      pillBatch: '一次 20 個檔案',
+      pillZip: 'ZIP · 不壓縮 + CRC32',
+      workAria: '壓縮工作區',
+      dropTitle: '拖入最多 20 張圖片',
+      dropSub: 'PNG · JPG · WebP · GIF(第一格)· 瀏覽器讀得懂的 AVIF。也可用 Ctrl+V 從剪貼簿貼上。',
+      pickBtn: '選擇圖片',
+      sampleBtn: '用 3 張範例試試',
+      dropMeta: '尚未載入任何檔案 — 選擇檔案，或按範例看看數字怎麼變。',
+      dropMore: '已載入 {n} 張 · 還能再加 {left} 張',
+      dropFull: '已載入 20/20 張 — 移除一張才能再加',
+      stSrc: '原始大小',
+      stOut: '壓縮後',
+      savedLabel: '節省',
+      stZip: 'ZIP',
+      files0: '0 個檔案',
+      zipNote: '僅儲存',
+      barAria: '壓縮後大小對原始大小',
+      listTitle: '壓縮前後',
+      listAria: '檔案清單',
+      listEmpty: '尚無檔案。上方區域一次就能全部接收。',
+      zipBtn: '全部下載 (.zip)',
+      reBtn: '重新壓縮',
+      clearBtn: '清除',
+      zipFoot: 'ZIP 在這個頁面裡直接寫出 — 每個檔案的本機標頭、中央目錄，以及每個檔案的 <b>CRC32</b>；不用函式庫，也沒有伺服器往返。採僅儲存(store)方式，因為這些圖片早就壓縮過了。',
+      outHead: '輸出設定',
+      fmtLbl: '格式',
+      fmtAria: '輸出格式',
+      qLbl: '品質',
+      qAria: '品質',
+      sizeLbl: '最大尺寸',
+      wShort: '寬',
+      hShort: '高',
+      maxWAria: '最大寬度(像素)',
+      maxHAria: '最大高度(像素)',
+      dimNone: '不限',
+      sizeNote: '兩欄都留空就保留原始像素，長寬比不會被改變。',
+      bgLbl: 'JPEG 背景色',
+      bgAria: 'JPEG 背景顏色',
+      bgWhite: '白色',
+      bgBlack: '黑色',
+      bgCustom: '自訂',
+      bgColorAria: '自訂背景顏色',
+      bgNote: '只有 JPEG 需要 — 它沒有 alpha 通道。WebP 與 PNG 會完整保留透明度。',
+      infoHead: '輸出內容',
+      kFmt: '格式 · 品質',
+      kResize: '縮放',
+      kFiles: '檔案',
+      kBiggest: '最大節省',
+      kTotal: '合計節省',
+      exifNote: '所有輸出都會從畫布重新編碼，因此 <b>EXIF、GPS 與相機資訊也一併移除</b>。對要公開的照片反而是優點。',
+      howTitle: '檔案實際經歷了什麼',
+      howNote: '實測，不是估算',
+      n1h: '先解碼一次，再重繪',
+      n1p: '每個檔案都由瀏覽器自己的解碼器解開一次，再畫到指定尺寸的畫布上。設定上限後，縮放比例是 <b>min(1, 最大寬 ÷ 寬, 最大高 ÷ 高)</b> — 取較小的一個，所以絕不會被拉長；本來就在上限內的檔案保持原本的像素。',
+      n2h: '格式決定上限',
+      n2p: '<b>WebP</b> 在照片上通常最小，也保留透明。<b>JPEG</b> 相容性最好，細節少的照片能做到最小，但沒有 alpha，透明處會被背景色蓋上。<b>PNG</b> 無損：適合平面圖形與截圖，用在照片上常常反而<b>變大</b> — 表格會照實顯示，不會藏起來。',
+      n3h: '大小是實際位元組數',
+      n3p: '每個檔案下方的新大小是<b>編碼後 blob</b> 的長度，總計就是這些 blob 的總和。品質滑桿動一格，所有檔案都會重新編碼、重新量一次，所以節省比例是實際量到的數值，而不是用公式推算。',
+      faqTitle: '常見問題',
+      faqNote: '批次 · 格式 · ZIP',
+      q1: '照片能變多小?',
+      a1: '要看起點。手機 JPEG 重新編碼成 <b>WebP 品質 80</b>，通常會落在原檔的 25〜60%。截圖 PNG 存成 WebP 80，常常直接少掉 <b>80% 以上</b>。照片存成 PNG 通常會變大，因為 PNG 無損保存每一個像素。本頁的數字是每次改設定就逐檔實測出來的。',
+      q2: '該選哪種格式?',
+      a2: '要放上網頁的、需要透明的標誌用 <b>WebP</b>。只收 jpg 的服務，或想讓細節多的照片檔案最小，用 <b>JPEG</b>。截圖、線稿、單色圖形這種一個像素都關鍵的情況，或必須保留透明而對方不收 WebP，就用 <b>PNG</b>。',
+      q3: '為什麼檔案反而變大了?',
+      a3: '因為目標格式存的比來源多。PNG 無損，所以 JPEG 照片轉成 PNG 會膨脹好幾倍。WebP 品質 100 也可能比一般的 JPEG 還大。看到那一行出現紅色的 <b>+%</b> 就換個格式 — 同一張照片用 WebP 80 通常比兩者都小得多。',
+      q4: 'ZIP 是函式庫或伺服器做的嗎?',
+      a4: '都不是。這一頁裡的小型<b>僅儲存 ZIP 寫入器</b>自己組出整份封存：每個檔案的本機標頭、對編碼後位元組計算的 CRC32 檢核碼、中央目錄與結尾記錄。僅儲存代表不做第二次壓縮 — 圖片早就壓縮過，再把 JPEG deflate 一次只是浪費時間。任何解壓工具都打得開。',
+      footCopy: '© 2026 Kim Yihyung · 在瀏覽器裡，為瀏覽器而做。',
+      footNet: '外部請求',
+      footP1: '作品集',
+      footP2: '所有工具',
+      footP3: '原始碼',
+      mono: '不上傳 · 不追蹤',
+      toggleTo: '切換語言',
+      qWebp: 'WebP 保留透明度，在照片上通常最小。75〜85 最合適；低於 60 平滑區域會開始糊掉。',
+      qJpeg: 'JPEG 沒有 alpha。照片通常 80〜85 最合適，低於 60 天空、牆面這類平滑處會出現色階斷層。',
+      qPng: 'PNG 無損，品質滑桿不適用。照片會很大，截圖很小。',
+      stReady: '就緒 — 拖入圖片，再到右邊調整輸出設定。',
+      stWorking: '壓縮中 {i} / {n}…',
+      stDone: '完成 — {n} 個檔案，{src} → {size}。',
+      stDone0: '完成。',
+      stAdded: '已加入 {n} 個檔案。',
+      stLimit: '上限是 20 個檔案 — 只保留前 20 個。',
+      stDrop: '這不是瀏覽器讀得懂的圖片。',
+      stNone: '沒有可壓縮的檔案。',
+      stSaved: '已儲存 {name}。',
+      stZipOk: 'ZIP 已備妥 — {n} 個檔案，{size}。',
+      stZipFail: '無法建立 ZIP。',
+      stCleared: '已清除。',
+      stQuality: '品質 {q} · {fmt}。',
+      stResize: '已縮放至 {w}×{h} px。',
+      stNoEnc: '這個瀏覽器無法編碼 {fmt}，已改用 JPEG。',
+      stBusy: '處理中…',
+      fmtWebp: 'WebP · {q}',
+      fmtJpeg: 'JPEG · {q}',
+      fmtPng: 'PNG · 無損',
+      savedWord: '節省',
+      resizeNone: '原始',
+      resizeLine: '縮至 {w}×{h}',
+      filesLine: '{n} / 20',
+      savingNone: '—',
+      pct: '{p}%',
+      sizeOf: '{a} / {b}',
+      okRow: '{w}×{h} · {size}',
+      rowMeta: '{sw}×{sh} · {a} → {b}',
+      rowWait: '等待中…',
+      rowBad: '無法壓縮',
+      rowSave: '−{p}%',
+      rowGrow: '+{p}%'
     }
   };
 
   var LANG_KEY = 'imgpress.lang';
   var SHARED_KEY = 'kyh.lang';
+  var LANGS = ['ko', 'en', 'ja', 'zh-Hant'];
+  var DEFAULT_LANG = normLang(document.documentElement.getAttribute('lang')) || 'ko';
+  function normLang(v) {
+    var s = String(v == null ? '' : v).trim().toLowerCase().replace(/_/g, '-');
+    if (s === 'ko' || s === 'kr' || s === 'ko-kr') return 'ko';
+    if (s === 'en' || s === 'en-us' || s === 'en-gb' || s === 'en-au') return 'en';
+    if (s === 'ja' || s === 'jp' || s === 'ja-jp') return 'ja';
+    if (s === 'zh-hant' || s === 'zh-tw' || s === 'zh-hk' || s === 'zh-mo' || s === 'tw' || s === 'zh' || s === 'zh-hant-tw') return 'zh-Hant';
+    return '';
+  }
+  function readStoredLang(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  /* read-only: per-language title/description for the static /en/ /ja/ /zh-tw/ builder.
+     A getter, so it is computed when read (the builder runs after this script). */
+  Object.defineProperty(window, '__I18N_META__', {
+    configurable: true,
+    get: function () {
+      var out = {};
+      var ogl = { ko: 'ko_KR', en: 'en_US', ja: 'ja_JP', 'zh-Hant': 'zh_TW' };
+      Object.keys(I18N || {}).forEach(function (lg) {
+        var d = I18N[lg] || {};
+        out[lg] = { htmlLang: lg, ogLocale: ogl[lg] || 'en_US',
+                    title: d.metaTitle || d.docTitle || '', description: d.metaDesc || '' };
+      });
+      return out;
+    }
+  });
   var MAX_FILES = 20;
 
   var state = {
@@ -1391,20 +1676,28 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
   /* ═════════════════════ language ═════════════════════ */
   function readLang(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function initialLang() {
-    var q = '';
-    try { q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase(); } catch (e) { q = ''; }
-    if (q === 'ko' || q === 'en') return q;
-    return readLang(SHARED_KEY) || readLang(LANG_KEY) || 'en';
+    var l = normLang(window.__FORCED_LANG__);
+    if (l) return l;
+    try { l = normLang(new URLSearchParams(location.search).get('lang')); } catch (e) { l = ''; }
+    if (l) return l;
+    l = normLang(readStoredLang(SHARED_KEY)) || normLang(readStoredLang(LANG_KEY));
+    if (l) return l;
+    return normLang(document.documentElement.getAttribute('lang')) || DEFAULT_LANG;
   }
   function setMeta(sel, attr, val) {
     var el = document.querySelector(sel);
     if (el) el.setAttribute(attr, val);
   }
   function applyLang(lang) {
-    state.lang = lang === 'ko' ? 'ko' : 'en';
+    state.lang = normLang(lang) || DEFAULT_LANG;
     document.documentElement.setAttribute('lang', state.lang);
     document.title = t('docTitle');
-    setMeta('meta[property="og:title"]', 'content', t('docTitle').split('|')[0].trim());
+    setMeta('meta[name="description"]', 'content', t('metaDesc'));
+    setMeta('meta[property="og:title"]', 'content', t('metaTitle'));
+    setMeta('meta[property="og:description"]', 'content', t('metaDesc'));
+    setMeta('meta[name="twitter:title"]', 'content', t('metaTitle'));
+    setMeta('meta[name="twitter:description"]', 'content', t('metaDesc'));
+    setMeta('meta[property="og:locale"]', 'content', state.lang === 'zh-Hant' ? 'zh_TW' : (state.lang === 'ja' ? 'ja_JP' : (state.lang === 'ko' ? 'ko_KR' : 'en_US')));
     var nodes = document.querySelectorAll('[data-i18n]');
     for (var i = 0; i < nodes.length; i++) {
       var v = t(nodes[i].getAttribute('data-i18n'));
@@ -1422,10 +1715,13 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
     }
     var lt = $('langToggle');
     if (lt) {
-      var spans = lt.querySelectorAll('[data-lt]');
-      for (i = 0; i < spans.length; i++) spans[i].classList.toggle('on', spans[i].getAttribute('data-lt') === state.lang);
-      lt.setAttribute('aria-label', t('toggleTo'));
-      lt.setAttribute('title', t('toggleTo'));
+      var lbs = lt.querySelectorAll('[data-lt]');
+      for (i = 0; i < lbs.length; i++) {
+        var _on = lbs[i].getAttribute('data-lt') === state.lang;
+        lbs[i].classList.toggle('on', _on);
+        lbs[i].setAttribute('aria-pressed', _on ? 'true' : 'false');
+      }
+      lt.setAttribute('aria-label', t('langLabel'));
     }
     $('qOut').textContent = String(Math.round(state.quality * 100));
     $('qNote').textContent = state.fmt === 'image/png' ? t('qPng') : (state.fmt === 'image/jpeg' ? t('qJpeg') : t('qWebp'));
@@ -1434,9 +1730,14 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
     if (state.lastKey) status(fmt(t(state.lastKey), state.lastVars || {}), state.lastKind);
     try { localStorage.setItem(LANG_KEY, state.lang); localStorage.setItem(SHARED_KEY, state.lang); } catch (e) { /* blocked */ }
   }
-  $('langToggle').addEventListener('click', function () {
-    applyLang(state.lang === 'ko' ? 'en' : 'ko');
-  });
+  var ltRoot = $('langToggle');
+  if (ltRoot) {
+    ltRoot.addEventListener('click', function (ev) {
+      var b = ev.target && ev.target.closest ? ev.target.closest('[data-lt]') : null;
+      if (!b) return;
+      applyLang(b.getAttribute('data-lt'));
+    });
+  }
 
   /* ═════════════════════ boot ═════════════════════ */
   var netCount = 0;

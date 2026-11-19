@@ -157,6 +157,10 @@ button, input, select, textarea { font-family: inherit; color: inherit; }
 .lang-toggle:active { transform: scale(.94); }
 .lang-toggle .lt.on { color: var(--accent); }
 .lang-toggle .lsep { color: var(--line2); font-weight: 400; }
+
+.lang-toggle .lt { cursor: pointer; padding: 0 2px; }
+.lang-toggle .lt:hover { color: var(--ink); }
+@media (max-width: 400px) { .lang-toggle { gap: 4px; padding: 0 7px; } .lang-toggle .lt { font-size: 9.5px; letter-spacing: .02em; } }
 .topbar-link { font-size: 12.5px; color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 1px; white-space: nowrap; }
 .topbar-link:hover { color: var(--ink); border-bottom-color: var(--line2); }
 
@@ -441,7 +445,7 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
 .foot .net b { color: var(--ok); }
 
 @media (max-width: 640px) {
-  .wrap { padding: 0 14px 36px; }
+  .wrap { padding: 0 16px 36px; }
   .topbar { padding: 14px 0 8px; }
   .brand-txt { font-size: 12px; letter-spacing: .1em; }
   .hero { padding: 12px 0 10px; }
@@ -465,10 +469,14 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       <span class="brand-txt">Kim Yihyung</span>
     </a>
     <div class="top-actions">
-      <button class="lang-toggle" id="langToggle" type="button" title="한국어로 보기" aria-label="한국어로 보기">
-        <span class="lt on" data-lt="en">EN</span>
-        <span class="lsep" aria-hidden="true">|</span>
+      <button class="lang-toggle" id="langToggle" type="button" title="Language" aria-label="Language">
         <span class="lt" data-lt="ko">KO</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="en">EN</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="ja">JA</span>
+        <span class="lsep" aria-hidden="true">|</span>
+        <span class="lt" data-lt="zh-Hant">繁中</span>
       </button>
       <a class="topbar-link" href="/portfolio/tools/" data-i18n="back">← All tools</a>
     </div>
@@ -799,7 +807,6 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       tab2: 'Tree & paths',
       tab3: 'TypeScript · Zod',
       tab4: 'JSON ↔ CSV',
-
       fTitle: 'Format, minify, validate',
       fNote: 'the error is the feature',
       ioIn: 'JSON input',
@@ -819,7 +826,6 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       badgeEmpty: 'Waiting for JSON',
       badgeValid: 'Valid JSON',
       badgeInvalid: 'Invalid JSON',
-
       trTitle: 'Walk the document',
       trNote: 'click any node · copies its path',
       expandAll: 'Expand all',
@@ -830,7 +836,6 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       treeNodes: 'nodes rendered',
       keysN: 'keys',
       moreN: 'more — click to load',
-
       tTitle: 'Types from a sample',
       tNote: 'inference, not a contract',
       rootLabel: 'Root type name',
@@ -838,7 +843,6 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       tCaveat: 'An object that appears as <code>{...}</code> inside an array is merged across every element: a field missing from some elements becomes <code>?</code> / <code>.optional()</code>, and a field that is a string in one and a number in another becomes a union. Empty arrays cannot say what they hold, so they come out as <code>unknown</code> — type them by hand.',
       tEmpty: 'No JSON to infer from yet.',
       copy: 'COPY',
-
       cTitle: 'Flatten to rows',
       cNote: 'dotted columns · round trip',
       csvDirAria: 'Direction',
@@ -853,7 +857,6 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       optRenest: 'Dotted headers → nested',
       jsonOutLabel: 'JSON',
       csvEmpty: 'The document has no rows to flatten.',
-
       stHead: 'This document',
       stNodes: 'nodes',
       stDepth: 'depth',
@@ -863,7 +866,6 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       stBytes: 'source bytes',
       stMin: 'minified',
       stCaveat: 'A depth of 1 means a single object at the root, so <code>"user": {"id": 1}</code> already counts as depth 2. Bytes are the UTF-8 length of what you pasted, not of the file it came from.',
-
       pitHead: 'Why JSON breaks',
       pit1: 'a comma before } or ]',
       pit2: 'a // or /* comment',
@@ -872,7 +874,6 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       pit5: 'NaN · Infinity',
       pit6: 'a BOM before {',
       pitCaveat: 'JSON is a strict subset of JavaScript object syntax, not the same thing. All six are legal in a JS file and none of them are legal in JSON — which is why a config that runs in <code>node</code> can still fail a <code>JSON.parse</code>.',
-
       howTitle: 'What the parse actually does',
       howNote: 'three things people conflate',
       n1h: 'One error at a time',
@@ -891,14 +892,12 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       a3: 'No, and that is a property of JSON worth knowing: an object is an unordered set of name/value pairs, so a consumer that depends on key order is depending on something the spec never promised. Two arrays, on the other hand, are ordered, and this page never reorders them.',
       q4: 'Is any of this sent anywhere?',
       a4: 'No. The page loads no font, no script and no stylesheet from another host, and makes no request after the first paint. The footer counts cross-origin requests with a <b>PerformanceObserver</b> and it stays at 0 — the honest version of the claim, rather than a promise in a marketing line.',
-
       footCopy: '© 2026 Kim Yihyung · Built in the browser, for the browser.',
       footNet: 'external requests',
       footP1: 'Portfolio',
       footP2: 'All tools',
       footP3: 'Source',
-      toggleTo: '한국어로 보기',
-
+      toggleTo: 'Change language',
       stReady: 'Paste JSON to begin — ⌘/Ctrl + Enter formats.',
       stEmpty: 'Nothing to parse.',
       stValid: 'Valid JSON · {n} nodes · depth {d}',
@@ -915,7 +914,6 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       stNoJson: 'Paste valid JSON first.',
       noteSpace: '{n}-space',
       noteTab: 'tab indent',
-
       errAtLine: 'line {l}, column {c}',
       errPos: 'character {p}',
       hint_trailing: 'A trailing comma before <code>}</code> or <code>]</code>. JSON does not allow it — JavaScript does, which is where the habit comes from.',
@@ -924,7 +922,13 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       hint_unclosed: 'A bracket or brace was opened and never closed — usually a value truncated mid-download.',
       hint_extraAfter: 'Something follows the closing brace. A JSON document holds exactly one value, so a second object or a log line has to go.',
       hint_token: 'An unquoted key or a bare word. Every name and string value needs double quotes.',
-      hint_generic: 'JSON is strict: no trailing commas, no comments, no single quotes, no unquoted keys, and nothing after the top-level value.'
+      hint_generic: 'JSON is strict: no trailing commas, no comments, no single quotes, no unquoted keys, and nothing after the top-level value.',
+      nKeys: '{n} keys',
+      nRows: '{n} rows',
+      nCols: '{n} columns',
+      csvTableNote: 'The table shows the first 60 rows; copy and download include all {n}.',
+      nRow1: '1 row',
+      nCol1: '1 column'
     },
     ko: {
       docTitle: 'JsonForge — JSON 포매터 · 트리 뷰어 · TypeScript·Zod 생성기 | Kim Yihyung',
@@ -943,7 +947,6 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       tab2: '트리 · 경로',
       tab3: 'TypeScript · Zod',
       tab4: 'JSON ↔ CSV',
-
       fTitle: '포맷하고, 압축하고, 검증합니다',
       fNote: '핵심은 오류 위치',
       ioIn: 'JSON 입력',
@@ -963,7 +966,6 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       badgeEmpty: 'JSON을 기다리는 중',
       badgeValid: '정상 JSON',
       badgeInvalid: '깨진 JSON',
-
       trTitle: '문서를 따라 걸어갑니다',
       trNote: '노드를 누르면 경로가 복사됩니다',
       expandAll: '전부 펼치기',
@@ -974,7 +976,6 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       treeNodes: '개 노드 표시',
       keysN: '개 키',
       moreN: '개 더 — 눌러서 불러오기',
-
       tTitle: '샘플에서 타입을 뽑습니다',
       tNote: '계약이 아니라 추론',
       rootLabel: '루트 타입 이름',
@@ -982,7 +983,6 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       tCaveat: '배열 안의 <code>{...}</code> 객체는 모든 원소를 합쳐 판단합니다. 일부 원소에만 없는 필드는 <code>?</code> / <code>.optional()</code>이 되고, 어떤 원소에서는 문자열이고 다른 원소에서는 숫자인 필드는 유니온이 됩니다. 빈 배열은 무엇이 들었는지 알 수 없어 <code>unknown</code>으로 나오니 직접 지정하세요.',
       tEmpty: '아직 추론할 JSON이 없습니다.',
       copy: '복사',
-
       cTitle: '행으로 펼칩니다',
       cNote: '점 표기 열 · 왕복 변환',
       csvDirAria: '방향',
@@ -997,7 +997,6 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       optRenest: '점 표기 헤더 → 중첩',
       jsonOutLabel: 'JSON',
       csvEmpty: '이 문서에는 펼칠 행이 없습니다.',
-
       stHead: '이 문서',
       stNodes: '개 노드',
       stDepth: '깊이',
@@ -1007,7 +1006,6 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       stBytes: '원본 바이트',
       stMin: '압축 시',
       stCaveat: '깊이 1은 루트에 객체 하나라는 뜻이라, <code>"user": {"id": 1}</code>만 해도 깊이 2입니다. 바이트는 붙여넣은 텍스트의 UTF-8 길이이며 원본 파일 크기와 다를 수 있습니다.',
-
       pitHead: 'JSON이 깨지는 이유',
       pit1: '} 나 ] 앞의 쉼표',
       pit2: '// 또는 /* 주석',
@@ -1016,7 +1014,6 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       pit5: 'NaN · Infinity',
       pit6: '{ 앞의 BOM',
       pitCaveat: 'JSON은 JavaScript 객체 문법의 엄격한 부분집합이지 같은 것이 아닙니다. 여섯 가지 모두 JS 파일에서는 합법이고 JSON에서는 전부 불법입니다. <code>node</code>에서 잘 도는 설정이 <code>JSON.parse</code>에서 깨지는 이유입니다.',
-
       howTitle: '파싱이 실제로 하는 일',
       howNote: '자주 헷갈리는 세 가지',
       n1h: '오류는 한 번에 하나',
@@ -1035,14 +1032,12 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       a3: '아니요. 이는 알아둘 만한 JSON의 성질입니다. 객체는 이름/값 쌍의 순서 없는 집합이므로, 키 순서에 의존하는 소비자는 명세가 약속한 적 없는 것에 의존하는 것입니다. 반면 배열은 순서가 있고, 이 페이지는 배열 순서를 절대 바꾸지 않습니다.',
       q4: '여기 입력한 내용이 어디로 전송되나요?',
       a4: '아무 데도 가지 않습니다. 이 페이지는 다른 호스트에서 폰트도 스크립트도 스타일시트도 불러오지 않고, 첫 렌더 뒤에는 요청 자체가 없습니다. 바닥의 카운터가 <b>PerformanceObserver</b>로 다른 출처 요청을 세며 0을 유지합니다. 광고 문구의 약속이 아니라 확인 가능한 형태로요.',
-
       footCopy: '© 2026 Kim Yihyung · 브라우저에서, 브라우저를 위해.',
       footNet: '외부 요청',
       footP1: '포트폴리오',
       footP2: '도구 전체',
       footP3: '소스',
-      toggleTo: 'View in English',
-
+      toggleTo: '언어 변경',
       stReady: 'JSON을 붙여넣으세요 — ⌘/Ctrl + Enter로 포맷합니다.',
       stEmpty: '파싱할 내용이 없습니다.',
       stValid: '정상 JSON · {n}개 노드 · 깊이 {d}',
@@ -1059,7 +1054,6 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       stNoJson: '먼저 정상 JSON을 넣어 주세요.',
       noteSpace: '{n}칸 들여쓰기',
       noteTab: '탭 들여쓰기',
-
       errAtLine: '{l}행 {c}열',
       errPos: '{p}번째 글자',
       hint_trailing: '<code>}</code>나 <code>]</code> 앞의 쉼표입니다. JSON은 허용하지 않는데 JavaScript는 허용해서 생기는 습관입니다.',
@@ -1068,9 +1062,295 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       hint_unclosed: '괄호나 중괄호를 열고 닫지 않았습니다. 다운로드가 중간에 끊긴 값에서 흔합니다.',
       hint_extraAfter: '닫는 중괄호 뒤에 무언가 더 있습니다. JSON 문서는 값 하나만 담으므로 두 번째 객체나 로그 줄은 빠져야 합니다.',
       hint_token: '따옴표 없는 키나 맨 단어입니다. 모든 이름과 문자열 값에는 큰따옴표가 필요합니다.',
-      hint_generic: 'JSON은 엄격합니다. 끝 쉼표, 주석, 작은따옴표, 따옴표 없는 키, 그리고 최상위 값 뒤의 어떤 것도 허용하지 않습니다.'
+      hint_generic: 'JSON은 엄격합니다. 끝 쉼표, 주석, 작은따옴표, 따옴표 없는 키, 그리고 최상위 값 뒤의 어떤 것도 허용하지 않습니다.',
+      nKeys: '{n}개 키',
+      nRows: '{n}행',
+      nCols: '{n}열',
+      csvTableNote: '표에는 앞 60행만 보입니다. 복사·저장은 전체 {n}행입니다.',
+      nRow1: '{n}행',
+      nCol1: '{n}열'
+    },
+    ja: {
+      docTitle: 'JsonForge — JSON フォーマッター、ツリービューア、TypeScript・Zod 生成 | Kim Yihyung',
+      brandAria: 'Kim Yihyung — ポートフォリオ',
+      back: '← ツール一覧',
+      eyebrow: 'JsonForge · JSON · アップロード 0',
+      h1: 'JSON が自分の誤りを指します。<br><span class="soft">行、列、そしてその文字。</span><br><span class="gold">このタブで解析します。</span>',
+      lede: '<code>Unexpected token</code> は午前三時に何も教えてくれません。貼り付ければ、JsonForge が<strong>解析の壊れた行・列とその文字</strong>を指し、整形し、<strong>どのノードの JSONPath でもコピーできるツリー</strong>を開き、サンプルが含意する<strong>TypeScript インターフェース</strong>や<strong>Zod スキーマ</strong>を書き、<strong>CSV</strong> に平坦化します。',
+      pillUp: 'アップロード 0 バイト',
+      pillNet: '外部リクエスト 0 件',
+      pillParse: 'ブラウザーの JSON.parse',
+      pillOffline: 'オフラインで動作',
+      forgeAria: 'JSON ツール',
+      tabAria: 'ツール',
+      tab1: '整形・検証',
+      tab2: 'ツリー・パス',
+      tab3: 'TypeScript · Zod',
+      tab4: 'JSON ↔ CSV',
+      fTitle: '整形し、圧縮し、検証する',
+      fNote: '主役は誤りの位置',
+      ioIn: 'JSON 入力',
+      ioInLabel: 'JSON 入力',
+      jsonPh: 'JSON、レスポンス本文、壊れたファイルの途中まででも貼ってください。',
+      btnFormat: '整形',
+      btnMinify: '圧縮',
+      btnSample: 'サンプル',
+      btnClear: '消去',
+      errAt: '解析エラー',
+      ioOut: '結果',
+      indentLabel: 'インデント',
+      indentAria: 'インデント',
+      sortKeys: 'キーを A → Z で並べる',
+      btnCopy: 'コピー',
+      btnDownload: '.json を保存',
+      badgeEmpty: 'JSON を待っています',
+      badgeValid: '正常な JSON',
+      badgeInvalid: '壊れた JSON',
+      trTitle: '文書を歩く',
+      trNote: 'ノードを押すとパスをコピー',
+      expandAll: 'すべて開く',
+      collapseAll: 'すべて閉じる',
+      pathIdle: 'ノードに重ねると JSONPath が出て、押すとコピーできます。',
+      treeCaveat: '識別子に使えないキーは <code>$["a-b"].items[0]</code> のようにブラケット表記でコピーされ、JSONPath のクエリにそのまま貼れます。非常に大きい配列は一度に 300 件ずつ描きます。',
+      treeEmpty: '最初のタブで正常な JSON を入れると、ここで歩けます。',
+      treeNodes: '個のノードを表示',
+      keysN: '個のキー',
+      moreN: '件さらに — 押して読み込む',
+      tTitle: 'サンプルから型を出す',
+      tNote: '契約ではなく推論',
+      rootLabel: 'ルート型の名前',
+      optOptional: '省略可能なフィールドを推論',
+      tCaveat: '配列の中の <code>{...}</code> はすべての要素を合わせて判断します。一部の要素にないフィールドは <code>?</code> / <code>.optional()</code> になり、ある要素では文字列で別の要素では数値のフィールドはユニオンになります。空の配列は中身が分からないので <code>unknown</code> で出るため、手で指定してください。',
+      tEmpty: 'まだ推論する JSON がありません。',
+      copy: 'コピー',
+      cTitle: '行に平坦化する',
+      cNote: 'ドット表記の列 · 往復変換',
+      csvDirAria: '方向',
+      dirTo: 'JSON → CSV',
+      dirFrom: 'CSV → JSON',
+      btnCopyCsv: 'CSV をコピー',
+      btnDlCsv: '.csv を保存',
+      csvCaveat: 'ネストしたオブジェクトは <code>user.address.city</code> のようなドット表記の列になります。配列は列数が決まらないので圧縮 JSON 一つのセルに入れます。空のセルは <code>null</code> と存在しないフィールドです。保存する CSV には Excel で韓国語が崩れないよう UTF-8 BOM を付けます。',
+      csvInLabel: 'CSV 入力',
+      csvPh: 'id,name,total\nA-1001,Kim Minsu,129000\nA-1002,Lee Seoyeon,38000',
+      optCoerce: '数値は数値として',
+      optRenest: 'ドット表記のヘッダー → ネスト',
+      jsonOutLabel: 'JSON',
+      csvEmpty: 'この文書には平坦化する行がありません。',
+      stHead: 'この文書',
+      stNodes: '個のノード',
+      stDepth: '深さ',
+      stKeys: 'キー',
+      stObjects: 'オブジェクト',
+      stArrays: '配列',
+      stBytes: '元のバイト',
+      stMin: '圧縮時',
+      stCaveat: '深さ 1 はルートにオブジェクトが一つという意味で、<code>"user": {"id": 1}</code> だけで深さ 2 になります。バイトは貼り付けたテキストの UTF-8 長で、元ファイルのサイズとは違います。',
+      pitHead: 'JSON が壊れる理由',
+      pit1: '} や ] の前のカンマ',
+      pit2: '// や /* のコメント',
+      pit3: 'シングルクォート',
+      pit4: '引用符のないキー',
+      pit5: 'NaN · Infinity',
+      pit6: '{ の前の BOM',
+      pitCaveat: 'JSON は JavaScript のオブジェクト構文の厳密な部分集合であって、同じものではありません。六つとも JS ファイルでは合法で、JSON ではすべて不正です。それが <code>node</code> で動く設定が <code>JSON.parse</code> で落ちる理由です。',
+      howTitle: '解析が実際にしていること',
+      howNote: '混同されやすい三つ',
+      n1h: '誤りは一度に一つ',
+      n1p: '<code>JSON.parse</code> は受け付けられない最初のトークンで止まるので、指摘された文字を直すと次の誤りが現れます。道具が怠けているのではなく、文法上、不正なトークンの先へ進む方法がないため、どのパーサーもこう動きます。直して、貼り直して、繰り返します。',
+      n2h: '重複キーは合法',
+      n2p: 'RFC 8259 は名前が一意であるべきと<b>推奨</b>するだけで禁止はせず、どのエンジンも最後の値を黙って採用します。<code>"port"</code> が二つある設定も解析は通り、読む前に上書きされた値で一時間を使うことになります。',
+      n3h: '数値は精度を失う',
+      n3p: 'JSON の数値は IEEE-754 の倍精度になるため、<code>9007199254740993</code> のような id は値が変わって戻り、19 桁の口座参照番号は静かに狂います。長い識別子は両側とも文字列でやり取りしてください。',
+      faqTitle: 'よくある質問',
+      faqNote: '誤り · プライバシー · 型',
+      q1: '文法は正しいのにアプリが拒否します。なぜ？',
+      a1: '文法検査は最も安い検査です。次の失敗はすべて意味の問題です。スキーマが要求するフィールドがない、文字列の場所に <code>null</code>、日付の形式が違う、数値を文字列で送った。実際に受け取った応答を <b>TypeScript · Zod</b> タブに入れて、コードが期待するものと比べてください。違いはたいてい省略可能なフィールド一つか、型一つです。',
+      q2: '巨大なファイルでも作業を続けられますか？',
+      a2: '数メガバイトまでは快適に貼れます。整形と統計は線形で、編集ごとに一度だけ走ります。ツリーは 300 件ずつ遅延描画するので、2 万行の配列でもタブは固まりません。およそ 10&nbsp;MB を超えると textarea 自体が遅くなりますが、それはページではなくブラウザーの限界です。',
+      q3: 'キーを並べ替えると意味が変わりますか？',
+      a3: 'いいえ。これは知っておく価値のある JSON の性質です。オブジェクトは名前と値の組の順序のない集合なので、キーの順序に依存する利用側は仕様が約束していないものに依存しています。一方、配列には順序があり、このページは配列の順序を決して変えません。',
+      q4: '入力した内容はどこかに送られますか？',
+      a4: 'どこにも行きません。このページは他のホストからフォントもスクリプトもスタイルシートも読み込まず、最初の描画後にリクエスト自体がありません。フッターのカウンターが <b>PerformanceObserver</b> で別オリジンの要求を数え、0 のままです — 宣伝文句の約束ではなく、確認できる形の主張です。',
+      footCopy: '© 2026 Kim Yihyung · ブラウザーの中で、ブラウザーのために。',
+      footNet: '外部リクエスト',
+      footP1: 'ポートフォリオ',
+      footP2: 'ツール一覧',
+      footP3: 'ソース',
+      toggleTo: '言語を変更',
+      stReady: 'JSON を貼って始めます — ⌘/Ctrl + Enter で整形します。',
+      stEmpty: '解析する内容がありません。',
+      stValid: '正常な JSON · {n} ノード · 深さ {d}',
+      stInvalid: '壊れた JSON — 入力欄の下の行を見てください。',
+      stFormatted: '整形完了 · {n} バイト',
+      stMinified: '圧縮完了 · {n} バイト',
+      stCopied: '{n} 文字をコピーしました。',
+      stCopyFail: 'ブラウザーがクリップボードを拒否しました。',
+      stCleared: '消去しました。',
+      stSampled: 'サンプルを読み込みました。',
+      stDownloaded: '{n} として保存しました。',
+      stPathCopied: '{p} をコピーしました',
+      stCsvCopied: 'CSV をコピーしました — {n} 文字。',
+      stNoJson: '先に正常な JSON を入れてください。',
+      noteSpace: '{n} スペース',
+      noteTab: 'タブインデント',
+      errAtLine: '{l} 行 {c} 列',
+      errPos: '{p} 文字目',
+      hint_trailing: '<code>}</code> や <code>]</code> の前のカンマです。JSON は許しませんが JavaScript は許すので、その癖が残ります。',
+      hint_comment: 'コメントです。JSON にはありません。<code>//</code> と <code>/* */</code> を消すか、<code>"_comment"</code> のような実際のキーへ移してください。',
+      hint_quote: 'シングルクォートです。JSON の文字列とキーは二重引用符でなければならず、シングルクォートの文字列は JSON の文字列ではありません。',
+      hint_unclosed: '括弧や中括弧を開いたまま閉じていません。ダウンロードが途中で切れた値でよく起きます。',
+      hint_extraAfter: '閉じる中括弧の後に何かが続いています。JSON 文書は値を一つだけ持つので、二つ目のオブジェクトやログ行は外してください。',
+      hint_token: '引用符のないキーか裸の単語です。すべての名前と文字列値に二重引用符が必要です。',
+      hint_generic: 'JSON は厳格です。末尾のカンマ、コメント、シングルクォート、引用符のないキー、そして最上位値の後の何も許しません。',
+      nKeys: '{n} 個のキー',
+      nRows: '{n} 行',
+      nCols: '{n} 列',
+      csvTableNote: '表には先頭 60 行だけを表示します。コピーと保存は全 {n} 行です。',
+      nRow1: '{n} 行',
+      nCol1: '{n} 列'
+    },
+    'zh-Hant': {
+      docTitle: 'JsonForge — JSON 格式化、樹狀檢視、TypeScript 與 Zod 產生器 | Kim Yihyung',
+      brandAria: 'Kim Yihyung — 作品集',
+      back: '← 所有工具',
+      eyebrow: 'JsonForge · JSON · 零上傳',
+      h1: 'JSON 自己指出錯誤在哪。<br><span class="soft">行、欄，以及那個字元。</span><br><span class="gold">都在這個分頁裡解析。</span>',
+      lede: '<code>Unexpected token</code> 在凌晨三點什麼都告訴不了你。貼上來，JsonForge 會標出<strong>解析失敗的行、欄與那個字元</strong>，接著格式化、打開<strong>可複製任何節點 JSONPath 的樹狀檢視</strong>、寫出範例隱含的 <strong>TypeScript 介面</strong>或 <strong>Zod schema</strong>，並攤平成 <strong>CSV</strong>。',
+      pillUp: '上傳 0 位元組',
+      pillNet: '外部請求 0 次',
+      pillParse: '瀏覽器原生 JSON.parse',
+      pillOffline: '可離線運作',
+      forgeAria: 'JSON 工具',
+      tabAria: '工具',
+      tab1: '格式化・驗證',
+      tab2: '樹狀・路徑',
+      tab3: 'TypeScript · Zod',
+      tab4: 'JSON ↔ CSV',
+      fTitle: '格式化、壓縮、驗證',
+      fNote: '重點是錯誤位置',
+      ioIn: 'JSON 輸入',
+      ioInLabel: 'JSON 輸入',
+      jsonPh: '貼上 JSON、回應內容，或壞掉檔案的前半段都可以。',
+      btnFormat: '格式化',
+      btnMinify: '壓縮',
+      btnSample: '範例',
+      btnClear: '清空',
+      errAt: '解析錯誤',
+      ioOut: '結果',
+      indentLabel: '縮排',
+      indentAria: '縮排',
+      sortKeys: '鍵依 A → Z 排序',
+      btnCopy: '複製',
+      btnDownload: '下載 .json',
+      badgeEmpty: '等待 JSON',
+      badgeValid: '有效 JSON',
+      badgeInvalid: '無效 JSON',
+      trTitle: '沿著文件走',
+      trNote: '點任一節點 · 複製它的路徑',
+      expandAll: '全部展開',
+      collapseAll: '全部收合',
+      pathIdle: '游標移到節點上會顯示 JSONPath，按一下即複製。',
+      treeCaveat: '不能當識別字使用的鍵會以括號寫法複製，例如 <code>$["a-b"].items[0]</code>，可直接貼進 JSONPath 查詢。非常大的陣列一次只列出 300 筆。',
+      treeEmpty: '在第一個分頁放入有效 JSON，就能在這裡沿著走。',
+      treeNodes: '個節點已繪製',
+      keysN: '個鍵',
+      moreN: '筆更多 — 點一下載入',
+      tTitle: '從範例推出型別',
+      tNote: '是推論，不是契約',
+      rootLabel: '根型別名稱',
+      optOptional: '推論可選欄位',
+      tCaveat: '陣列中的 <code>{...}</code> 會合併所有元素判斷：只出現在部分元素的欄位會變成 <code>?</code> / <code>.optional()</code>，某些元素是字串、另一些是數字的欄位則變成聯合型別。空陣列無法說明內容，因此輸出 <code>unknown</code>，請手動指定。',
+      tEmpty: '還沒有可推論的 JSON。',
+      copy: '複製',
+      cTitle: '攤平成資料列',
+      cNote: '點號欄位 · 來回轉換',
+      csvDirAria: '方向',
+      dirTo: 'JSON → CSV',
+      dirFrom: 'CSV → JSON',
+      btnCopyCsv: '複製 CSV',
+      btnDlCsv: '下載 .csv',
+      csvCaveat: '巢狀物件會變成 <code>user.address.city</code> 這樣的點號欄位；陣列沒有固定欄數，因此放在單一儲存格裡成壓縮 JSON。空白儲存格代表 <code>null</code> 與不存在的欄位。下載的 CSV 帶 UTF-8 BOM，Excel 開啟韓文不會變成亂碼。',
+      csvInLabel: 'CSV 輸入',
+      csvPh: 'id,name,total\nA-1001,Kim Minsu,129000\nA-1002,Lee Seoyeon,38000',
+      optCoerce: '數字轉為數字',
+      optRenest: '點號標頭 → 巢狀',
+      jsonOutLabel: 'JSON',
+      csvEmpty: '這份文件沒有可攤平的資料列。',
+      stHead: '這份文件',
+      stNodes: '個節點',
+      stDepth: '深度',
+      stKeys: '鍵',
+      stObjects: '物件',
+      stArrays: '陣列',
+      stBytes: '原始位元組',
+      stMin: '壓縮後',
+      stCaveat: '深度 1 代表根只有一個物件，因此 <code>"user": {"id": 1}</code> 已經是深度 2。位元組是你貼上文字的 UTF-8 長度，與原始檔案大小不同。',
+      pitHead: 'JSON 為什麼會壞',
+      pit1: '} 或 ] 前面的逗號',
+      pit2: '// 或 /* 註解',
+      pit3: '單引號',
+      pit4: '沒有引號的鍵',
+      pit5: 'NaN · Infinity',
+      pit6: '{ 前面的 BOM',
+      pitCaveat: 'JSON 是 JavaScript 物件語法的嚴格子集，不是同一件事。這六種在 JS 檔案裡全合法，在 JSON 裡全不合法 — 這就是為什麼能在 <code>node</code> 跑的設定，仍然過不了 <code>JSON.parse</code>。',
+      howTitle: '解析實際做的事',
+      howNote: '三件常被混為一談的事',
+      n1h: '一次只報一個錯',
+      n1p: '<code>JSON.parse</code> 遇到第一個不能接受的 token 就停，所以修好被指出的字元，往往會露出下一個。這不是工具偷懶 — 文法上沒有辦法越過不合法的 token，每個解析器都這樣。修好、重貼、再來一次。',
+      n2h: '重複的鍵是合法的',
+      n2p: 'RFC 8259 只<b>建議</b>名稱應唯一，並未禁止，而每個引擎都默默保留最後一個。有兩個 <code>"port"</code> 的設定照樣解析成功，你會為一個在讀到之前就被覆蓋的値花上一小時。',
+      n3h: '數字會失去精度',
+      n3p: 'JSON 數字會變成 IEEE-754 倍精度，因此 <code>9007199254740993</code> 這樣的 id 回來時已經變了，19 位數的帳戶編號也會悄悄出錯。長識別碼請在兩端都以字串處理。',
+      faqTitle: '常見問題',
+      faqNote: '錯誤 · 隱私 · 型別',
+      q1: '語法正確，App 卻一直拒絕，為什麼？',
+      a1: '語法檢查是最便宜的一關。接下來失敗的原因都是語意：schema 要求的欄位缺少、該是字串的地方給了 <code>null</code>、日期格式不同、數字用字串送出。把你實際收到的回應放進 <b>TypeScript · Zod</b> 分頁，和程式期待的樣子比對 — 差別通常是一個可選欄位或一個型別。',
+      q2: '超大檔案也能繼續作業嗎？',
+      a2: '幾 MB 以內都能順暢貼上；格式化與統計是線性，每次編輯只跑一次。樹狀檢視每次延遲繪製 300 個子節點，所以兩萬列的陣列也不會鎖住分頁。超過大約 10&nbsp;MB 後，變慢的是 textarea 本身，那是瀏覽器的限制，不是這個頁面的限制。',
+      q3: '排序鍵會改變意義嗎？',
+      a3: '不會，而這是值得知道的 JSON 性質：物件是名稱／值組的無序集合，因此依賴鍵順序的取用方是在依賴規格從未承諾的事。相對地，陣列是有序的，這個頁面從不重排陣列。',
+      q4: '這些內容會被送到哪裡嗎？',
+      a4: '不會。這個頁面不從其他主機載入字型、腳本或樣式表，首次繪製後也不再發出任何請求。頁尾用 <b>PerformanceObserver</b> 計算跨來源請求並維持在 0 — 這是可驗證的說法，而不是行銷文案裡的承諾。',
+      footCopy: '© 2026 Kim Yihyung · 在瀏覽器裡打造，為瀏覽器而生。',
+      footNet: '外部請求',
+      footP1: '作品集',
+      footP2: '所有工具',
+      footP3: '原始碼',
+      toggleTo: '變更語言',
+      stReady: '貼上 JSON 開始 — ⌘/Ctrl + Enter 格式化。',
+      stEmpty: '沒有可解析的內容。',
+      stValid: '有效 JSON · {n} 個節點 · 深度 {d}',
+      stInvalid: '無效 JSON — 請看輸入框下方那一行。',
+      stFormatted: '已格式化 · {n} 位元組',
+      stMinified: '已壓縮 · {n} 位元組',
+      stCopied: '已複製 {n} 個字元。',
+      stCopyFail: '瀏覽器封鎖了剪貼簿。',
+      stCleared: '已清空。',
+      stSampled: '已載入範例。',
+      stDownloaded: '已存成 {n}。',
+      stPathCopied: '已複製 {p}',
+      stCsvCopied: '已複製 CSV — {n} 個字元。',
+      stNoJson: '請先放入有效的 JSON。',
+      noteSpace: '{n} 個空白',
+      noteTab: '定位點縮排',
+      errAtLine: '第 {l} 行第 {c} 欄',
+      errPos: '第 {p} 個字元',
+      hint_trailing: '<code>}</code> 或 <code>]</code> 前面的逗號。JSON 不允許，JavaScript 允許，習慣就是這樣來的。',
+      hint_comment: '註解。JSON 沒有註解：請刪掉 <code>//</code> 與 <code>/* */</code>，或把說明移到 <code>"_comment"</code> 這樣的真實鍵裡。',
+      hint_quote: '單引號。JSON 的字串與鍵必須用雙引號，單引號字串根本不是 JSON 字串。',
+      hint_unclosed: '括號或大括號開了卻沒關 — 常見於下載中斷的內容。',
+      hint_extraAfter: '結尾大括號後面還有東西。一份 JSON 文件只放一個值，所以第二個物件或一行日誌必須拿掉。',
+      hint_token: '沒有引號的鍵或裸字。每個名稱與字串値都需要雙引號。',
+      hint_generic: 'JSON 很嚴格：沒有尾逗號、沒有註解、沒有單引號、沒有無引號的鍵，最上層的值後面也不能有任何東西。',
+      nKeys: '{n} 個鍵',
+      nRows: '{n} 列',
+      nCols: '{n} 欄',
+      csvTableNote: '表格只顯示前 60 列；複製與下載包含全部 {n} 列。',
+      nRow1: '{n} 列',
+      nCol1: '{n} 欄'
     }
-  };
+  };;;
 
   var $ = function (id) { return document.getElementById(id); };
   var enc = new TextEncoder();
@@ -1396,7 +1676,7 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
     if (Array.isArray(v)) return '[' + v.length + ']';
     if (v && typeof v === 'object') {
       var k = Object.keys(v).length;
-      return '{' + k + (state.lang === 'ko' ? '개 키}' : (k === 1 ? ' key}' : ' keys}'));
+      return '{' + t('nKeys').replace('{n}', k) + '}';
     }
     if (typeof v === 'string') {
       var s = v.length > 64 ? v.slice(0, 64) + '…' : v;
@@ -1901,10 +2181,9 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
       });
       body.appendChild(tr);
     });
-    $('csvMeta').textContent = group(flat.length) + (state.lang === 'ko' ? '행 · ' : (flat.length === 1 ? ' row · ' : ' rows · ')) + group(cols.length) + (state.lang === 'ko' ? '열' : (cols.length === 1 ? ' column' : ' columns'));
-    $('csvNote').textContent = flat.length > 60
-      ? (state.lang === 'ko' ? '표에는 앞 60행만 보입니다. 복사·저장은 전체 ' + group(flat.length) + '행입니다.' : 'The table shows the first 60 rows; copy and download include all ' + group(flat.length) + '.')
-      : '';
+    $('csvMeta').textContent = (flat.length === 1 ? t('nRow1') : t('nRows')).replace('{n}', group(flat.length))
+      + ' · ' + (cols.length === 1 ? t('nCol1') : t('nCols')).replace('{n}', group(cols.length));
+    $('csvNote').textContent = flat.length > 60 ? t('csvTableNote').replace('{n}', group(flat.length)) : '';
     state.csvText = toCsv(cols, flat);
     state.dirty.csv = false;
   }
@@ -1984,9 +2263,32 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
 
   /* ═════════════════════ language ═════════════════════ */
 
+  /* ── four languages: KO · EN · JA · 繁中 ── */
+  var LANGS = ['ko', 'en', 'ja', 'zh-Hant'];
+  function normLang(l) {
+    var s = String(l == null ? '' : l).toLowerCase().replace(/_/g, '-');
+    if (s === 'zh-hant' || s === 'zh-tw' || s === 'zh-hk' || s === 'zh' || s === 'tw' || s === 'hant') return 'zh-Hant';
+    if (s === 'ja' || s === 'jp' || s === 'ja-jp') return 'ja';
+    if (s === 'ko' || s === 'kr' || s === 'ko-kr') return 'ko';
+    if (s === 'en' || s === 'en-us' || s === 'en-gb') return 'en';
+    return '';
+  }
+  function forcedLang() {
+    var f = window.__FORCED_LANG__;
+    if (f) return normLang(f);
+    var q = '';
+    try { q = String(new URLSearchParams(location.search).get('lang') || ''); } catch (e) { q = ''; }
+    return q ? normLang(q) : '';
+  }
+  function locTag(l) {
+    l = l || state.lang;
+    return l === 'ko' ? 'ko-KR' : l === 'ja' ? 'ja-JP' : l === 'zh-Hant' ? 'zh-TW' : 'en-US';
+  }
+
   function applyLang(lang) {
-    state.lang = lang === 'ko' ? 'ko' : 'en';
+    state.lang = normLang(lang) || 'en';
     document.documentElement.setAttribute('lang', state.lang);
+    try { document.dispatchEvent(new CustomEvent('opyeb:lang', { detail: state.lang })); } catch (e) { /* old engines */ }
     document.title = t('docTitle');
     var nodes = document.querySelectorAll('[data-i18n]');
     for (var i = 0; i < nodes.length; i++) {
@@ -2031,16 +2333,36 @@ details.qa .a code { font-family: var(--mono); color: var(--accent); font-size: 
   }
 
   function initialLang() {
-    var saved = null;
-    try { saved = localStorage.getItem(SHARED_KEY) || localStorage.getItem(LANG_KEY); } catch (e) { }
-    if (saved === 'ko' || saved === 'en') return saved;
-    var nav = (navigator.language || 'en').toLowerCase();
-    return nav.indexOf('ko') === 0 ? 'ko' : 'en';
+    var f = forcedLang();
+    if (f) return f;
+    var saved = '';
+    try { saved = localStorage.getItem(SHARED_KEY) || localStorage.getItem(LANG_KEY) || ''; } catch (e) { saved = ''; }
+    saved = normLang(saved);
+    if (saved) return saved;
+    return normLang(document.documentElement.getAttribute('lang')) || 'en';
   }
 
   /* ═════════════════════ events ═════════════════════ */
 
-  $('langToggle').addEventListener('click', function () { applyLang(state.lang === 'ko' ? 'en' : 'ko'); });
+  $('langToggle').addEventListener('click', function (e) {
+    var s = e.target && e.target.closest ? e.target.closest('[data-lt]') : null;
+    var next = s ? s.getAttribute('data-lt') : LANGS[(LANGS.indexOf(state.lang) + 1) % LANGS.length];
+    applyLang(next);
+  });
+  $('langToggle').addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var s = e.target && e.target.closest ? e.target.closest('[data-lt]') : null;
+    if (!s) return;
+    e.preventDefault();
+    applyLang(s.getAttribute('data-lt'));
+  });
+  $('langToggle').addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var s = e.target && e.target.closest ? e.target.closest('[data-lt]') : null;
+    if (!s) return;
+    e.preventDefault();
+    applyLang(s.getAttribute('data-lt'));
+  });
 
   var tabEls = document.querySelectorAll('.tabs button');
   for (var ti = 0; ti < tabEls.length; ti++) {

@@ -433,7 +433,7 @@ button { font-family: inherit; color: inherit; }
 /* ---------- mobile sticky meter ---------- */
 .sticky-meter {
   display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
-  padding: 8px 14px calc(8px + env(safe-area-inset-bottom));
+  padding: 8px 16px calc(8px + env(safe-area-inset-bottom));
   background: rgba(11,11,13,.94); border-top: 1px solid var(--line);
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
 }
@@ -456,7 +456,7 @@ button { font-family: inherit; color: inherit; }
   body { padding-bottom: 62px; }
 }
 @media (max-width: 720px) {
-  .wrap { padding: 0 15px 30px; }
+  .wrap { padding: 0 16px 30px; }
   .hero { padding: 8px 0 16px; }
   .hero h1 { font-size: clamp(25px, 7.4vw, 34px); }
   .lede { font-size: 13.6px; }
