@@ -987,6 +987,21 @@ window.YH_EN = {
     '프리마 히아두스': 'Prima Hyadum', '헤제': 'Heze'
   },
   after: function (api) {
+    /* Phone first impression: start with the sky, not a list covering it.
+       The 게임's own panel toggle (펼치기) is right there to open the guide. */
+    try {
+      if (window.innerWidth <= 900) {
+        /* Orion is pre-selected at boot and its panel would cover the whole
+           phone screen — start on the sky, with the guide collapsed. */
+        var dp = document.getElementById('detailPanel');
+        if (dp) dp.classList.add('hidden');
+        var lp = document.getElementById('listPanel');
+        if (lp) lp.style.display = '';
+        window.selected = null;
+        if (window.renderList) window.renderList();
+        if (window.setListCollapsed) window.setListCollapsed(true);
+      }
+    } catch (e) {}
     /* Re-render the list and the open detail panel in the new language, so
        the row text (season, star count) and the description follow EN|KO. */
     api.onLang(function (lang) {
